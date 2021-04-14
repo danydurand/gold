@@ -25,7 +25,7 @@ class RecepcionNde extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
-        $this->lblTituForm->Text = 'Recepcion NDE';
+        $this->lblTituForm->Text = 'Recibir Manifiesto';
 
         $this->lstClieCorp_Create();
 
@@ -58,7 +58,7 @@ class RecepcionNde extends FormularioBaseKaizen {
 
     protected function lstNotaEntr_Create() {
         $this->lstNotaEntr = new QListBox($this);
-        $this->lstNotaEntr->Name = QApplication::Translate('Nota de Entrega');
+        $this->lstNotaEntr->Name = QApplication::Translate('Manfiesto');
         $this->lstNotaEntr->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
         $this->lstNotaEntr->Width = 280;
         $this->lstNotaEntr->AddAction(new QChangeEvent(), new QAjaxAction('lstNotaEntr_Change'));
@@ -221,7 +221,7 @@ class RecepcionNde extends FormularioBaseKaizen {
             return false;
         }
         if (is_null($this->lstNotaEntr->SelectedValue)) {
-            $this->danger('Debe seleccionar una Nota de Entrega');
+            $this->danger('Debe seleccionar un Manifiesto');
             return false;
         }
         if (strlen($this->txtNumePiez->Text) == 0) {
@@ -246,7 +246,7 @@ class RecepcionNde extends FormularioBaseKaizen {
     protected function btnSave_Click() {
         $objNotaEntr = NotaEntrega::Load($this->lstNotaEntr->SelectedValue);
         $arrPiezNota = $objNotaEntr->piezasDeLaNota();
-        t('La nde tiene: '.count($arrPiezNota).' piezas');
+        t('El Manif tiene: '.count($arrPiezNota).' piezas');
         $arrIdxxPiez = [];
         foreach ($arrPiezNota as $objPiezNota) {
             $arrIdxxPiez[] = $objPiezNota->Id;
@@ -279,7 +279,7 @@ class RecepcionNde extends FormularioBaseKaizen {
                         $intCantSobr++;
                         $arrRelaSobr[] = $objGuiaPiez->IdPieza;
                         $this->txtNumePiez->Text = $objGuiaPiez->IdPieza.' (SOB)'. chr(13);
-                        t('La pieza existe, pero no pertenece a la nota de entrega, es un sobrante');
+                        t('La pieza existe, pero no pertenece al manifiesto, es un sobrante');
                         continue;
                     }
                     t('La pieza si pertenece a la nde');
@@ -317,7 +317,7 @@ class RecepcionNde extends FormularioBaseKaizen {
             t('Hay sobrandes: '.$strRelaSobr);
         }
         //------------------------------------------------------------------------
-        // La NDE se actualiza el estatus y los contadores de la nota de entrega
+        // Se actualiza el estatus y los contadores del Manifiesto
         //------------------------------------------------------------------------
         $objNotaEntr->Estatus           = 'RECIBID@';
         $objNotaEntr->Recibidas         = $intCantPick;

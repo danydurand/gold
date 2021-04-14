@@ -17,7 +17,7 @@
     <!-- Tamaños Mediano y Largo -->
     <!-------------------------- -->
     <div class="hidden-xs hidden-sm col-md-7 col-lg-5" style="text-align: center; margin-top: -0.25em;">
-        <?php $this->btnVolvList->Render(); ?>
+        <?php $this->btnCancel->Render(); ?>
         <?php $this->btnNuevRegi->Render(); ?>
         <?php $this->btnSave->Render(); ?>
         <?php $this->btnDelete->Render(); ?>

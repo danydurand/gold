@@ -84,6 +84,14 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 	// Aqui se crean los objetos 
 	//----------------------------
 
+    protected function btnCancel_Create() {
+        $this->btnCancel = new QButton($this);
+        $this->btnCancel->Text = '<i class="fa fa-mail-reply fa-lg"></i> Cancelar';
+        $this->btnCancel->CssClass = 'btn btn-warning btn-sm';
+        $this->btnCancel->HtmlEntities = false;
+        $this->btnCancel->AddAction(new QClickEvent(), new QAjaxAction('btnCancel_Click'));
+    }
+
 
     protected function lstEstatus_Create() {
 	    $this->lstEstatus = new QListBox($this);

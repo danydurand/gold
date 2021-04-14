@@ -83,10 +83,10 @@
         <?php if ($this->mctFacturas->Facturas->CountNotaEntregasAsFactura() > 0) { ?>
             <div class="row" style="margin-top: 1em">
                 <div class="col-md-6">
-                    <div class="titulo">Manifiestos</div>
+                    <div class="titulo">Manifiestos (click p/info detallada)</div>
                 </div>
                 <div class="col-md-6">
-                    <div class="titulo">Pagos</div>
+                    <div class="titulo">Pagos (click p/info detallada)</div>
                 </div>
                 <div class="col-md-6">
                     <?php $this->dtgNotaFact->Render(); ?>

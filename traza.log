@@ -308,3 +308,623 @@
 2021-04-14|10:15:48|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
 2021-04-14|10:15:48|guia_list_new|La cantidad de checkpoint es: 1|
 2021-04-14|10:15:48|guia_list_new|Tiene una sola pieza, se retorna: 11:00|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: AR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-03|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 17:29|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-26|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 22:18|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-26|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 22:18|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-29|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 10:37|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-29|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 10:37|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-29|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 10:37|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-05|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 15:55|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-05|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 14:44|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-05|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 14:45|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-07|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 11:00|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-07|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 11:03|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:13|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-07|
+2021-04-14|11:13:13|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:13|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:13|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:13|guia_list_new|Tiene una sola pieza, se retorna: 11:00|
+2021-04-14|11:13:15|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:15|guia_list_new|SQL: select *   from v_last_checkpoint_guia where guia_id = 35|
+2021-04-14|11:13:15|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:15|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: AR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-03|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000042 (id: 34)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 34|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 17:29|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-26|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000043 (id: 35)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 35|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 22:18|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000044 (id: 36)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 36|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-26|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000045 (id: 37)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 37|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 22:18|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000046 (id: 38)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 38|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-29|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000047 (id: 39)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 39|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 10:37|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-29|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000048 (id: 40)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 40|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 10:37|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000049 (id: 41)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 41|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-03-29|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000050 (id: 42)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 42|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 10:37|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-05|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000154 (id: 134)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 134|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 15:55|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-05|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000155 (id: 135)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 135|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 14:44|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000156 (id: 136)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 136|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000157 (id: 137)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 137|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Las piezas tienen checkpoints diferentes, estatus Mixto|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000158 (id: 138)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 138|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: NR|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-05|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000159 (id: 139)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 139|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 14:45|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000187 (id: 167)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 167|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 2|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-07|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000188 (id: 168)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 168|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 11:00|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-07|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000189 (id: 169)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 169|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 11:03|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000190 (id: 170)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 170|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 3|
+2021-04-14|11:13:17|guia_list_new|Mismo checkpoint para todas las piezas|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: PU|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: CCS|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 2021-04-07|
+2021-04-14|11:13:17|guia_list_new|Buscando ultimo checkpoint de la guia: 00000191 (id: 171)|
+2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
+2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
+2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 11:00|

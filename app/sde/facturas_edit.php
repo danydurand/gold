@@ -118,6 +118,9 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgNotaFact->CssClass = 'datagrid';
         $this->dtgNotaFact->AlternateRowStyle->CssClass = 'alternate';
 
+        $this->dtgNotaFact->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgNotaFact->AddRowAction(new QClickEvent(), new QAjaxAction('dtgNotaFactRow_Click'));
+
         $this->dtgNotaFact->UseAjax = true;
 
         $this->dtgNotaFact->SetDataBinder('dtgNotaFact_Bind');
@@ -127,6 +130,11 @@ class FacturasEditForm extends FacturasEditFormBase {
 
     protected function dtgNotaFact_Bind() {
         $this->dtgNotaFact->DataSource = $this->mctFacturas->Facturas->GetNotaEntregaAsFacturaArray();
+    }
+
+    public function dtgNotaFactRow_Click($strFormId, $strControlId, $strParameter) {
+        $intId = intval($strParameter);
+        QApplication::Redirect(__SIST__."/nota_entrega_edit.php/$intId");
     }
 
     protected function dtgNotaFactColumns() {
@@ -182,6 +190,9 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgPagoFact->CssClass = 'datagrid';
         $this->dtgPagoFact->AlternateRowStyle->CssClass = 'alternate';
 
+        $this->dtgPagoFact->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgPagoFact->AddRowAction(new QClickEvent(), new QAjaxAction('dtgPagoFactRow_Click'));
+
         $this->dtgPagoFact->UseAjax = true;
 
         $this->dtgPagoFact->SetDataBinder('dtgPagoFact_Bind');
@@ -191,6 +202,11 @@ class FacturasEditForm extends FacturasEditFormBase {
 
     protected function dtgPagoFact_Bind() {
         $this->dtgPagoFact->DataSource = $this->mctFacturas->Facturas->GetPagosCorpAsFacturaPagoCorpArray();
+    }
+
+    public function dtgPagoFactRow_Click($strFormId, $strControlId, $strParameter) {
+        $intId = intval($strParameter);
+        QApplication::Redirect(__SIST__."/pagos_corp_edit.php/$intId");
     }
 
     protected function dtgPagoFactColumns() {

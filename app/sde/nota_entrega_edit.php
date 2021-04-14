@@ -305,11 +305,25 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
         $this->btnLogxCamb->Visible = Log::CountByTablaRef('NotaEntrega',$this->mctNotaEntrega->NotaEntrega->Id);
     }
 
+    protected function btnCancel_Create() {
+        $this->btnCancel = new QButton($this);
+        $this->btnCancel->Text = '<i class="fa fa-mail-reply fa-lg"></i> Volver';
+        $this->btnCancel->CssClass = 'btn btn-warning btn-sm';
+        $this->btnCancel->HtmlEntities = false;
+        $this->btnCancel->AddAction(new QClickEvent(), new QAjaxAction('btnCancel_Click'));
+    }
 
 
     //-----------------------------------
 	// Acciones relativas a los objetos 
 	//-----------------------------------
+
+    protected function RedirectToListPage() {
+        $objUltiAcce = PilaAcceso::Pop('D');
+        //t('Ultimo Programa: '.$objUltiAcce->Programa.' | Parametro: '.$objUltiAcce->Parametros);
+        //t('Acceso: '.$objUltiAcce->__toString());
+        QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
+    }
 
     protected function btnCalcConc_Click() {
         $arrConcActi = Conceptos::conceptosActivos('NAC');

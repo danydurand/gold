@@ -1,5 +1,5 @@
 <?php
-$strPageTitle = QApplication::Translate('Recepcion NDE');
+$strPageTitle = QApplication::Translate('Recibir Manifiesto');
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
     <div class="titulo-formulario">
