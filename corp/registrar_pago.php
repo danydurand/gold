@@ -328,6 +328,19 @@ class RegistrarPago extends PagosCorpEditFormBase {
         }
     }
 
+    protected function Form_Validate()
+    {
+        $blnTodoOkey = parent::Form_Validate();
+        if ($blnTodoOkey) {
+            if (count($this->arrFactIdxx) == 0) {
+                $strTextMens = 'No ha seleccionado la(s) Factura(s) que desea pagar. Para ello click sobre el(los) registro(s) de la lista superior derecha';
+                $this->danger($strTextMens);
+                return false;
+            }
+        }
+        return $blnTodoOkey;
+    }
+
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         /* @var $objFactPaga Facturas */
 		//--------------------------------------------

@@ -35,6 +35,8 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->lblTituForm->Text = 'Pagos';
+
 		// Instantiate the Meta DataGrid
 		$this->dtgPagosCorps = new PagosCorpDataGrid($this);
 		$this->dtgPagosCorps->FontSize = 13;
@@ -47,6 +49,10 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 		// Add Pagination (if desired)
 		$this->dtgPagosCorps->Paginator = new QPaginator($this->dtgPagosCorps);
 		$this->dtgPagosCorps->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+
+		$objClauOrde   = QQ::Clause();
+		$objClauOrde[] = QQ::OrderBy(QQN::PagosCorp()->Id,false);
+		$this->dtgPagosCorps->AdditionalClauses = $objClauOrde;
 
 		// Higlight the datagrid rows when mousing over them
 		$this->dtgPagosCorps->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));

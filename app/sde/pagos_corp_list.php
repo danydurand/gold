@@ -40,6 +40,8 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->lblTituForm->Text = 'Pagos Corp';
+
 		// Instantiate the Meta DataGrid
 		$this->dtgPagosCorps = new PagosCorpDataGrid($this);
 		$this->dtgPagosCorps->FontSize = 13;
