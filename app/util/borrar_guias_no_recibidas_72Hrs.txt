@@ -1,0 +1,111 @@
+
+Borrar Guias No Recibidas_72Hrs
+=============================
+2018-02-20 02:33
+
+Se encontraron 0 guia(s) No Recibidas
+--------------------------------------
+Guias No Recibidas convertidas a Recolectas Pendientes: 0
+------------------------------------------------------
+
+Guia Nro: 1107391 Emitida el: 04/11/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107393 Emitida el: 04/11/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107397 Emitida el: 07/11/2016 del Cliente: EVILOG PUERTO ORDAZ
+Guia Nro: 1107399 Emitida el: 07/11/2016 del Cliente: EVILOG PUERTO ORDAZ
+Guia Nro: 1107401 Emitida el: 07/11/2016 del Cliente: EVILOG PUERTO ORDAZ
+Guia Nro: 1107405 Emitida el: 07/11/2016 del Cliente: EVILOG PUERTO ORDAZ
+Guia Nro: 1107409 Emitida el: 08/12/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107411 Emitida el: 09/12/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107431 Emitida el: 14/12/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107435 Emitida el: 14/12/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107437 Emitida el: 15/12/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107439 Emitida el: 19/12/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107441 Emitida el: 19/12/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107445 Emitida el: 17/04/2017 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107513 Emitida el: 05/06/2017 del Cliente: OSIBECA AUTOPARTES C.A
+Guia Nro: 1107514 Emitida el: 05/06/2017 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107515 Emitida el: 05/06/2017 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 1107516 Emitida el: 05/06/2017 del Cliente: OSIBECA AUTOPARTES C.A
+Guia Nro: 1107615 Emitida el: 02/11/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 1107621 Emitida el: 02/11/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 1107622 Emitida el: 02/11/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 1107623 Emitida el: 02/11/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 1107624 Emitida el: 02/11/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 1107626 Emitida el: 02/11/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 1107680 Emitida el: 20/11/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 1107703 Emitida el: 06/12/2017 del Cliente: INVERSIONES JETES, C.A
+Guia Nro: 2372931 Emitida el: 11/09/2013 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2372933 Emitida el: 17/09/2013 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373007 Emitida el: 05/09/2014 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373009 Emitida el: 05/09/2014 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373011 Emitida el: 05/09/2014 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373013 Emitida el: 05/09/2014 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373015 Emitida el: 05/09/2014 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373017 Emitida el: 05/09/2014 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373303 Emitida el: 10/06/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373305 Emitida el: 10/06/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373473 Emitida el: 27/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373475 Emitida el: 27/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373477 Emitida el: 27/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373479 Emitida el: 27/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373481 Emitida el: 27/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373483 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373485 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373487 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373489 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373491 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373493 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373495 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373497 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373499 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373501 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373505 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373507 Emitida el: 29/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373509 Emitida el: 30/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373511 Emitida el: 30/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373513 Emitida el: 30/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373515 Emitida el: 30/10/2015 del Cliente: AUTO REPUESTOS KIOTO, C.A
+Guia Nro: 2373657 Emitida el: 28/01/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2373665 Emitida el: 04/02/2016 del Cliente: BANCO DE LA GENTE EMPRENDEDORA(BANGENTE) C.A
+Guia Nro: 2373667 Emitida el: 04/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373671 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373673 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373675 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373677 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373679 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373685 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373687 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373689 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373691 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373695 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373697 Emitida el: 05/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373871 Emitida el: 23/02/2016 del Cliente: JORGE FRIEDMAN
+Guia Nro: 2373965 Emitida el: 28/04/2016 del Cliente: MERCANTIL GOMEZ, C.A.
+Guia Nro: 2374101 Emitida el: 19/08/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374141 Emitida el: 28/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374143 Emitida el: 28/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374145 Emitida el: 29/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374147 Emitida el: 29/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374149 Emitida el: 29/09/2016 del Cliente: VENCONTROLS SISTEMAS C.A
+Guia Nro: 2374155 Emitida el: 03/10/2016 del Cliente: OSIBECA AUTOPARTES C.A
+Guia Nro: 2374157 Emitida el: 03/10/2016 del Cliente: OSIBECA AUTOPARTES C.A
+Guia Nro: 2374165 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374167 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374169 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374171 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374173 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A.
+Guia Nro: 2374175 Emitida el: 03/10/2016 del Cliente: J. HURTADOS REPRESENTACIONES, C
+Guia Nro: 2374177 Emitida el: 03/10/2016 del Cliente: J. HURTADOS REPRESENTACIONES, C
+Guia Nro: 2374179 Emitida el: 03/10/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 2374181 Emitida el: 14/10/2016 del Cliente: ENVILOG 2008. C. A.
+Guia Nro: 2374183 Emitida el: 14/10/2016 del Cliente: ENVILOG 2008. C. A.
+
+Cantidad de Recolectas Pendientes borradas: 91
+-------------------------------------------
+
+
+No se encontraron Visitados sin Recolecta para Borrar
+----------------------------------------------------
+
+
+Total Guías borradas: 91

@@ -1,0 +1,3 @@
+[02-Jun-2017 18:05:14 America/La_Paz] PHP Parse error:  syntax error, unexpected 'if' (T_IF) in /var/www/html/newliberty/yamaguchi/guia_list.php on line 604
+[05-Jun-2017 13:02:37 America/La_Paz] PHP Parse error:  syntax error, unexpected ';' in /var/www/html/newliberty/yamaguchi/guia_list.php on line 425
+[05-Jun-2017 16:58:56 America/La_Paz] PHP Parse error:  syntax error, unexpected '$strMensErro' (T_VARIABLE) in /var/www/html/newliberty/yamaguchi/cargar_guia.php on line 552

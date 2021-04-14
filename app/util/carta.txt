@@ -1,0 +1,6 @@
+From: danydurand@gmail.com
+subject: Correo de Prueba
+
+Este es el texto del correo de prueba desde mi locahost
+
+

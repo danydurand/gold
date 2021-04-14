@@ -1,0 +1,20 @@
+[02-Jun-2017 13:55:27 America/La_Paz] PHP Parse error:  syntax error, unexpected 'RepoRecolectas' (T_STRING), expecting function (T_FUNCTION) in /var/www/html/newliberty/app/sde/repo_entregas.php on line 213
+[02-Jun-2017 13:55:43 America/La_Paz] PHP Parse error:  syntax error, unexpected 'RepoRecolectas' (T_STRING), expecting function (T_FUNCTION) in /var/www/html/newliberty/app/sde/repo_entregas.php on line 213
+[02-Jun-2017 13:56:53 America/La_Paz] PHP Parse error:  syntax error, unexpected 'RepoEntregas' (T_STRING), expecting function (T_FUNCTION) in /var/www/html/newliberty/app/sde/repo_entregas.php on line 213
+[16-Jun-2017 10:34:35 America/La_Paz] PHP Parse error:  syntax error, unexpected ')' in /var/www/html/newliberty/app/sde/guia_search.php on line 127
+[16-Jun-2017 11:07:33 America/La_Paz] PHP Parse error:  syntax error, unexpected ')' in /var/www/html/newliberty/app/sde/guia_search.php on line 302
+[19-Jun-2017 16:22:12 America/La_Paz] PHP Parse error:  syntax error, unexpected '}' in /var/www/html/newliberty/app/sde/master_cliente_edit.php on line 268
+[19-Jun-2017 16:22:13 America/La_Paz] PHP Parse error:  syntax error, unexpected '}' in /var/www/html/newliberty/app/sde/master_cliente_edit.php on line 268
+[19-Jun-2017 16:22:13 America/La_Paz] PHP Parse error:  syntax error, unexpected '}' in /var/www/html/newliberty/app/sde/master_cliente_edit.php on line 268
+[20-Jun-2017 14:19:04 America/La_Paz] PHP Parse error:  syntax error, unexpected 'protected' (T_PROTECTED) in /var/www/html/newliberty/app/sde/master_cliente_edit.php on line 315
+[20-Jun-2017 14:19:05 America/La_Paz] PHP Parse error:  syntax error, unexpected 'protected' (T_PROTECTED) in /var/www/html/newliberty/app/sde/master_cliente_edit.php on line 315
+[20-Jun-2017 14:19:05 America/La_Paz] PHP Parse error:  syntax error, unexpected 'protected' (T_PROTECTED) in /var/www/html/newliberty/app/sde/master_cliente_edit.php on line 315
+[03-Jul-2017 10:24:42 America/Caracas] PHP Fatal error:  Call to undefined function RedactarEmail() in /var/www/html/newliberty/app/sde/resetear_clave.php on line 122
+[03-Jul-2017 10:33:21 America/Caracas] PHP Fatal error:  Call to undefined function RedactarEmail() in /var/www/html/newliberty/app/sde/resetear_clave.php on line 122
+[03-Jul-2017 13:45:41 America/Caracas] PHP Fatal error:  Call to undefined function RedactarEmail() in /var/www/html/newliberty/app/sde/resetear_clave.php on line 122
+[03-Jul-2017 14:11:56 America/Caracas] PHP Fatal error:  Call to undefined function RedactarEmail() in /var/www/html/newliberty/app/sde/resetear_clave.php on line 123
+[03-Jul-2017 17:37:36 America/La_Paz] PHP Parse error:  syntax error, unexpected '.2' (T_DNUMBER), expecting ',' or ';' in /var/www/html/newliberty/app/sde/resetear_clave.php on line 97
+[03-Jul-2017 17:38:45 America/La_Paz] PHP Parse error:  syntax error, unexpected '' | '' (T_CONSTANT_ENCAPSED_STRING), expecting ',' or ';' in /var/www/html/newliberty/app/sde/resetear_clave.php on line 58
+[03-Jul-2017 17:39:02 America/La_Paz] PHP Parse error:  syntax error, unexpected '' acá toy! |'' (T_CONSTANT_ENCAPSED_STRING), expecting ',' or ';' in /var/www/html/newliberty/app/sde/resetear_clave.php on line 97
+[03-Jul-2017 17:39:41 America/La_Paz] PHP Parse error:  syntax error, unexpected '}' in /var/www/html/newliberty/app/sde/resetear_clave.php on line 109
+[06-Jul-2017 09:44:27 America/La_Paz] PHP Parse error:  syntax error, unexpected ';' in /var/www/html/newliberty/app/sde/consulta_guia.php on line 386

@@ -1,0 +1,46 @@
+
+Eliminar Guias Anuladas
+=======================
+2018-02-22 07:53
+
+Se encontraron 38 guia(s) con SoftDelete
+Guia Nro: 2373965 Emitida el: 28/04/2016 del Cliente: MERCANTIL GOMEZ, C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374101 Emitida el: 19/08/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374141 Emitida el: 28/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374143 Emitida el: 28/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374145 Emitida el: 29/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374147 Emitida el: 29/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374149 Emitida el: 29/09/2016 del Cliente: VENCONTROLS SISTEMAS C.A Eliminada el: 20/02/2018
+Guia Nro: 2374155 Emitida el: 03/10/2016 del Cliente: OSIBECA AUTOPARTES C.A Eliminada el: 20/02/2018
+Guia Nro: 2374157 Emitida el: 03/10/2016 del Cliente: OSIBECA AUTOPARTES C.A Eliminada el: 20/02/2018
+Guia Nro: 2374165 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374167 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374169 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374171 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374173 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374175 Emitida el: 03/10/2016 del Cliente: J. HURTADOS REPRESENTACIONES, C Eliminada el: 20/02/2018
+Guia Nro: 2374177 Emitida el: 03/10/2016 del Cliente: J. HURTADOS REPRESENTACIONES, C Eliminada el: 20/02/2018
+Guia Nro: 2374179 Emitida el: 03/10/2016 del Cliente: ENVILOG 2008. C. A. Eliminada el: 20/02/2018
+Guia Nro: 2374181 Emitida el: 14/10/2016 del Cliente: ENVILOG 2008. C. A. Eliminada el: 20/02/2018
+Guia Nro: 2374183 Emitida el: 14/10/2016 del Cliente: ENVILOG 2008. C. A. Eliminada el: 20/02/2018
+Guia Nro: 2373965 Emitida el: 28/04/2016 del Cliente: MERCANTIL GOMEZ, C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374101 Emitida el: 19/08/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374141 Emitida el: 28/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374143 Emitida el: 28/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374145 Emitida el: 29/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374147 Emitida el: 29/09/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374149 Emitida el: 29/09/2016 del Cliente: VENCONTROLS SISTEMAS C.A Eliminada el: 20/02/2018
+Guia Nro: 2374155 Emitida el: 03/10/2016 del Cliente: OSIBECA AUTOPARTES C.A Eliminada el: 20/02/2018
+Guia Nro: 2374157 Emitida el: 03/10/2016 del Cliente: OSIBECA AUTOPARTES C.A Eliminada el: 20/02/2018
+Guia Nro: 2374165 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374167 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374169 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374171 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374173 Emitida el: 03/10/2016 del Cliente: REPUESTOS Y ACCSESORIOS MATOS C.A. Eliminada el: 20/02/2018
+Guia Nro: 2374175 Emitida el: 03/10/2016 del Cliente: J. HURTADOS REPRESENTACIONES, C Eliminada el: 20/02/2018
+Guia Nro: 2374177 Emitida el: 03/10/2016 del Cliente: J. HURTADOS REPRESENTACIONES, C Eliminada el: 20/02/2018
+Guia Nro: 2374179 Emitida el: 03/10/2016 del Cliente: ENVILOG 2008. C. A. Eliminada el: 20/02/2018
+Guia Nro: 2374181 Emitida el: 14/10/2016 del Cliente: ENVILOG 2008. C. A. Eliminada el: 20/02/2018
+Guia Nro: 2374183 Emitida el: 14/10/2016 del Cliente: ENVILOG 2008. C. A. Eliminada el: 20/02/2018
+
+Cantidad de Guias Eliminadas Soft: 38

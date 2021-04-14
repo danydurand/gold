@@ -1,0 +1,72 @@
+
+
+Subiendo Clientes
+=================
+Fecha: 2015-12-01  Hora: 17:09
+
+
+
+Subiendo Clientes
+=================
+Fecha: 2015-12-01  Hora: 17:10
+
+
+
+Subiendo Clientes
+=================
+Fecha: 2015-12-01  Hora: 17:11
+
+Existe(n) 8 Cliente(s) nuevo(s) que debe(n) ser procesado(s)
+
+Voy a procesar al Cliente: JUAN DURAN (3)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: TREMEBUNDO LOPEZ (1)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: MARIA PEREZ (4)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: DANIEL DURAND (6)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: ALEXANDER PATIñO (7)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: LUIS MUJICA (9)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: ANASTASIA GONZALEZ (8)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: GRACIELA MONCADA (10)
+Ocurrio algun error con el Cliente 
+
+
+**** El proceso ha culminado ****
+
+
+Subiendo Clientes
+=================
+Fecha: 2015-12-01  Hora: 17:12
+
+Existe(n) 8 Cliente(s) nuevo(s) que debe(n) ser procesado(s)
+
+Voy a procesar al Cliente: JUAN DURAN (3)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: TREMEBUNDO LOPEZ (1)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: MARIA PEREZ (4)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: DANIEL DURAND (6)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: ALEXANDER PATIñO (7)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: LUIS MUJICA (9)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: ANASTASIA GONZALEZ (8)
+Ocurrio algun error con el Cliente 
+Voy a procesar al Cliente: GRACIELA MONCADA (10)
+Ocurrio algun error con el Cliente 
+
+
+**** El proceso ha culminado ****
+
+
+Subiendo Clientes
+=================
+Fecha: 2015-12-29  Hora: 16:09
+

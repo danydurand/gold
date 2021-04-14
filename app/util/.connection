@@ -1,0 +1,6 @@
+<?php
+$dbhost   = 'srvlibertydb';
+$dbuser   = 'accliberty';
+$dbpasswd = 'Jawzn20#';
+$dbname   = 'liberty';
+?>

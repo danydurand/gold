@@ -1,0 +1,174 @@
+Agency|2015-08-30|13:07:56|ddurand|I|2|SERVIEXPRESS|1|ALEXANDER RUIZ|LMENDOZA@GMAIL.COM|02122374512|123|
+|2015-08-30|13:08:35|ddurand|D|2|SERVIEXPRESS|1|ALEXANDER RUIZ|LMENDOZA@GMAIL.COM|02122374512|123|
+Option|2015-09-01|08:38:45|ddurand|M|3|Login|tok|1|index.php|0||0|3||NULL|
+Option|2015-09-01|08:39:44|ddurand|M|3|Login|tok|1|index.php|0||0|NULL||NULL|
+Option|2015-09-01|08:43:03|ddurand|M|3|Login|tok|1|index.php|0||0|NULL||0|
+Option|2015-09-02|07:33:13|ddurand|M|2|Tables|tok|0|tables|1|tokio|2|1||0|
+Option|2015-09-02|11:27:14|ddurand|M|4|Agency|tok|1|agency_list.php|1|tokio|1|2|imagen|1|
+Option|2015-09-02|14:24:05|ddurand|I|8|Rate|tok|1|rate_list.pgp|1|tokio|2|2|carpeta_roja.png|1|
+Option|2015-09-02|14:28:52|ddurand|I|9|Country|tok|1|country_list.php|1|tokio|3|2|carpeta_verde.png|1|
+Option|2015-09-02|14:29:54|ddurand|I|10|Insert/Edit Rate|tok|1|rate_edit.php|1|tokio|4|2||1|
+Option|2015-09-02|14:30:26|ddurand|I|11|Insert/Edit Country|tok|1|country_edit.php|1|tokio|5|2||1|
+Option|2015-09-02|14:31:04|ddurand|M|10|Insert/Edit Rate|tok|1|rate_edit.php|0|tokio|4|2||1|
+Option|2015-09-02|14:31:16|ddurand|M|11|Insert/Edit Country|tok|1|country_edit.php|0|tokio|5|2||1|
+Option|2015-09-02|14:34:27|ddurand|M|2|Tables|tok|0|tables|1|tokio|2|2||0|
+Option|2015-09-02|14:34:31|ddurand|M|4|Agency|tok|1|agency_list.php|1|tokio|1|2|agency.png|1|
+Option|2015-09-02|14:35:33|ddurand|M|2|Tables|tok|0|tables|1|tokio|2|1||0|
+|2015-09-03|07:35:12|ddurand|D|8|Rate|tok|1|rate_list.pgp|1|tokio|2|2|carpeta_roja.png|1|
+Option|2015-09-03|09:29:03|ddurand|I|12|EDIT MENU|tok|1|OPTION_EDIT_MENU.PHP|0|TOKIO|1|0||0|
+Option|2015-09-03|09:29:52|ddurand|I|13|EDIT MENU|tok|1|OPTION_EDIT_MENU.PHP|0|TOKIO|1|0||0|
+Option|2015-09-03|09:30:27|ddurand|I|14|EDIT MENU|tok|1|OPTION_EDIT_MENU.PHP|0|TOKIO|1|0||0|
+|2015-09-03|09:30:35|ddurand|D|13|EDIT MENU|tok|1|OPTION_EDIT_MENU.PHP|0|TOKIO|1|0||0|
+|2015-09-03|09:30:39|ddurand|D|14|EDIT MENU|tok|1|OPTION_EDIT_MENU.PHP|0|TOKIO|1|0||0|
+Option|2015-09-03|09:33:25|ddurand|M|12|Edit Menu|tok|1|option_edit_menu.php|0|tokio|1|0||0|
+Option|2015-09-03|09:37:39|ddurand|M|6|Logout|tok|1|logout.php|1|tokio|0|3||0|
+Option|2015-09-03|09:41:33|ddurand|I|15|Admin|tok|0|admin|1|tokio|2|1|configuration.png|1|
+Option|2015-09-03|09:43:10|ddurand|I|16|Admin|tok|0|admin|1|tokio|2|1|configuracion.png|1|
+Option|2015-09-03|09:43:29|ddurand|I|17|Admin|tok|0|admin|1|tokio|2|1|configuracion.png|1|
+Option|2015-09-03|09:44:15|ddurand|I|18|Parameter|tok|1|parameter_list.php|1|tokio|1|17|carpeta_roja.png|1|
+Option|2015-09-03|09:44:55|ddurand|I|19|Create/Edit Parameter|tok|1|parameter_edit.php|1|tokio|NULL|17||1|
+|2015-09-03|14:35:28|ddurand|D|18|Parameter|tok|1|parameter_list.php|1|tokio|1|17|carpeta_roja.png|1|
+|2015-09-03|14:35:28|ddurand|D|19|Create/Edit Parameter|tok|1|parameter_edit.php|1|tokio|NULL|17||1|
+|2015-09-03|14:35:28|ddurand|D|17|Admin|tok|0|admin|1|tokio|2|1|configuracion.png|0|
+|2015-09-03|14:41:40|ddurand|D|9|Country|tok|1|country_list.php|1|tokio|3|2|carpeta_verde.png|1|
+|2015-09-03|14:41:40|ddurand|D|10|Insert/Edit Rate|tok|1|rate_edit.php|0|tokio|4|2||1|
+|2015-09-03|14:41:40|ddurand|D|11|Insert/Edit Country|tok|1|country_edit.php|0|tokio|5|2||1|
+Option|2015-09-03|15:45:34|ddurand|I|24|Tables|tok|0|tables|1|tokio|2|21|mantenimiento.png|0|
+Option|2015-09-03|15:47:34|ddurand|I|26|Agency|tok|1|agency_list.php|1|tokio|1|24|agency.png|1|
+Option|2015-09-03|15:48:11|ddurand|I|27|Create/Edit Agency|tok|1|agency_edit.php|1|tokio|NULL|24||NULL|
+Option|2015-09-03|15:49:38|ddurand|I|28|Country|tok|1|country_list.php|1|tokio|2|24|Link.png|1|
+Option|2015-09-03|15:50:05|ddurand|I|29|Create/Edit Country|tok|1|country_edit.php|1|tokio|NULL|24||NULL|
+Option|2015-09-03|15:56:27|ddurand|I|30|Storage|tok|1|storage_list.php|1|tokio|3|24|storage.png|1|
+Option|2015-09-03|15:56:54|ddurand|M|29|Create/Edit Country|tok|1|country_edit.php|0|tokio|NULL|24||NULL|
+Option|2015-09-03|15:57:07|ddurand|M|27|Create/Edit Agency|tok|1|agency_edit.php|0|tokio|NULL|24||NULL|
+Option|2015-09-03|16:01:14|ddurand|I|31|Checkpoints|tok|1|checkpoint_list.php|1|tokio|4|24|preferencias.gif|1|
+Option|2015-09-03|16:01:42|ddurand|I|32|Create/Edit Checkpoint|tok|1|checkpoint_edit.php|0|tokio|NULL|24||NULL|
+Option|2015-09-03|16:07:18|ddurand|I|33|Create/Edit Storage|tok|1|storage_edit.php|0|tokio|NULL|24||NULL|
+Checkpoint|2015-09-03|16:09:14|ddurand|I|PU|PICK-UP|1|0|1|1|PICK-UP|
+Checkpoint|2015-09-03|16:09:40|ddurand|I|AR|ARRIVAL|1|0|1|0|ARRIVAL|
+Option|2015-09-03|16:10:31|ddurand|M|29|Create/Edit Country|tok|1|country_edit.php|0|tokio|NULL|28||NULL|
+Option|2015-09-03|16:10:56|ddurand|M|32|Create/Edit Checkpoint|tok|1|checkpoint_edit.php|0|tokio|NULL|31||NULL|
+Option|2015-09-03|16:11:21|ddurand|M|33|Create/Edit Storage|tok|1|storage_edit.php|0|tokio|NULL|30||NULL|
+Option|2015-09-03|16:11:32|ddurand|M|27|Create/Edit Agency|tok|1|agency_edit.php|0|tokio|NULL|26||NULL|
+Option|2015-09-03|16:13:45|ddurand|I|34|Admin|tok|0|admin|1|tokio|3|21|configuracion.pbg|0|
+Option|2015-09-03|16:15:04|ddurand|I|35|Parameter|tok|1|parameter_list.php|1|tokio|1|34|parametros.png|1|
+Option|2015-09-03|16:15:35|ddurand|I|36|Create/Edit Parameter|tok|1|parameter_edit.php|0|tokio|NULL|35||NULL|
+Option|2015-09-03|16:16:41|ddurand|I|37|Group|tok|1|group_list.php|1|tokio|2|34|grupos.png|1|
+Option|2015-09-03|16:17:13|ddurand|I|38|Create/Edit Group|tok|1|group_edit.php|0|tokio|NULL|37||NULL|
+Option|2015-09-03|16:18:23|ddurand|I|39|Users|tok|1|user_tokio_list.php|1|tokio|3|34|usuario2.png|1|
+Option|2015-09-03|16:18:48|ddurand|I|40|Create/Edit User|tok|1|user_tokio_edit.php|0|tokio|NULL|39||NULL|
+Option|2015-09-03|16:19:10|ddurand|M|34|Admin|tok|0|admin|1|tokio|3|21|configuracion.png|0|
+Option|2015-09-03|16:20:53|ddurand|M|37|Groups|tok|1|group_tokio_list.php|1|tokio|2|34|grupos.png|1|
+Option|2015-09-03|16:21:00|ddurand|M|35|Parameters|tok|1|parameter_list.php|1|tokio|1|34|parametros.png|1|
+Option|2015-09-04|07:30:09|ddurand|M|26|Agency|tok|1|agency_list.php|1|tokio|1|24|agency.png1|1|
+Option|2015-09-19|05:49:22|ddurand|I|42|Create/Edit Option|tok|1|grupo_tokio_edit.php|1|tokio|NULL|20||NULL|
+Option|2015-09-21|04:56:02|ddurand|I|43|Create/Edit User|tok|1|user_tokio_edit.php|1|tokio|NULL|39||NULL|
+Option|2015-09-21|05:04:44|ddurand|I|44|Create/Edit Group|tok|1|group_edit.php|1|tokio|NULL|37||NULL|
+Option|2015-09-21|05:13:01|ddurand|M|44|Create/Edit Group|tok|1|group_tokio_edit.php|1|tokio|NULL|37||NULL|
+Option|2015-09-22|15:06:45|ddurand|M|20|Options|tok|1|option_list.php|1|tokio|1|34|carpeta_verde.png|0|
+Option|2015-09-22|15:07:07|ddurand|M|20|Options|tok|1|option_list.php|1|tokio|1|34|carpeta_verde.png|1|
+Opcion|2015-10-02|07:53:48|ddurand|I|7|CLIENTES|oki|1|1|CLIENTE_LIST.PHP|OKINAWA|1|4|ADMINISTRADOR|1|
+Opcion|2015-10-03|15:47:16|ddurand|I|7|Grupos|oki|1|1|grupo_list.php|okinawa|1|4|grupos.png|1|
+Opcion|2015-10-03|15:48:46|ddurand|I|8|Crear/Editar Grupo|oki|1|0|grupo_edit.php|okinawa|NULL|7||1|
+Opcion|2015-10-03|15:49:54|ddurand|M|7|Grupos|oki|1|1|grupo_list.php|okinawa|1|3|grupos.png|1|
+Opcion|2015-10-03|15:54:28|ddurand|M|5|Opciones|oki|1|1|opcion_list.php|okinawa|2|3|carpeta_verde.png|1|
+Opcion|2015-10-03|15:55:54|ddurand|I|9|Sucursales|oki|1|1|sucursal_list.php|okinawa|1|4|estacion.png|1|
+Opcion|2015-10-03|15:56:25|ddurand|I|10|Crear/Editar Sucursal|oki|1|0|sucursa_edit.php|okinawa|NULL|9||1|
+Opcion|2015-10-03|15:57:28|ddurand|I|11|Usuarios|oki|1|1|usuario_list.php|okinawa|3|3|usuario2.png|1|
+Opcion|2015-10-03|15:58:07|ddurand|I|12|Crear/Editar Usuario|oki|1|0|usuario_edit.php|okinawa|NULL|11||1|
+Opcion|2015-10-03|16:02:56|ddurand|I|13|Medios Pub|oki|1|1|medio_pub_list.php|okinawa|2|4|publicidad2.png|1|
+Opcion|2015-10-03|16:03:26|ddurand|I|14|Crear/Editar Medio Pub|oki|1|0|medio_pub_edit.php|okinawa|NULL|13||1|
+Opcion|2015-10-03|16:05:58|ddurand|I|15|Tipos Vend|oki|1|1|tipo_vendedor_list.php|okinawa|3|4|carpeta_humano.png|1|
+Opcion|2015-10-03|16:06:36|ddurand|I|16|Crear/Editar Tipo Vend|oki|1|0|tipo_vendedor_edit.php|okinawa|NULL|15||1|
+Opcion|2015-10-03|16:11:41|ddurand|I|17|Vendedores|oki|1|1|vendedor_list.php|okinawa|4|4|vendedores.png|1|
+Opcion|2015-10-03|16:12:07|ddurand|I|18|Crear/Editar Vendedor|oki|1|0|vendedor_edit.php|okinawa|NULL|17||1|
+Opcion|2015-10-03|16:55:25|ddurand|I|19|Estados|oki|1|1|estado_list.php|okinawa|5|4|estados.png|1|
+Opcion|2015-10-03|16:55:49|ddurand|I|20|Crear/Editar Estado|oki|1|0|estado_edit.php|okinawa|NULL|19||1|
+Opcion|2015-10-03|16:56:39|ddurand|I|21|Ciudades|oki|1|1|ciudades_list.php|okinawa|6|4|ciudades.png|1|
+Opcion|2015-10-03|16:57:11|ddurand|M|21|Ciudades|oki|1|1|ciudad_list.php|okinawa|6|4|ciudades.png|1|
+Opcion|2015-10-03|16:57:39|ddurand|I|22|Crear/Editar Ciudad|oki|1|0|ciudad_edit.php|okinawa|NULL|21||1|
+Opcion|2015-10-05|07:06:21|ddurand|I|23|Parametros|oki|1|1|parametro_list.php|okinawa|4|3|carpeta_roja.png|1|
+Opcion|2015-10-05|07:06:45|ddurand|I|24|Crear/Editar Parametro|oki|1|0|parametro_edit.php|okinawa|NULL|23||1|
+Opcion|2015-10-05|07:09:27|ddurand|I|25|Checkpoints|oki|1|1|checkpoint_list.php|okinawa|7|4|preferencias.gif|1|
+Opcion|2015-10-05|07:10:06|ddurand|I|26|Crear/Editar Checkpoint|oki|1|0|checkpoint_edit.php|okinawa|NULL|25||1|
+Opcion|2015-10-05|07:12:51|ddurand|I|27|Clientes|oki|1|1|cliente_list.php|okinawa|8|4|contactos.gif|1|
+Opcion|2015-10-05|07:13:13|ddurand|I|28|Crear/Editar Cliente|oki|1|0|cliente_edit.php|okinawa|NULL|27||1|
+Opcion|2015-10-05|07:39:56|ddurand|I|29|Aliados|oki|1|1|aliado_list.php|okinawa|9|4|aliado.png|1|
+Opcion|2015-10-05|07:42:23|ddurand|I|30|Crear/Editar Aliado|oki|1|0|alidado_edit.php|okinawa|NULL|29||1|
+Opcion|2015-10-05|07:45:03|ddurand|I|31|Couriers Int.|oki|1|1|courier_i_list.php|okinawa|10|4|provider.png|1|
+Opcion|2015-10-05|07:45:25|ddurand|I|32|Crear/Editar Courier Int|oki|1|0|courier_i_edit.php|okinawa|NULL|31||1|
+Opcion|2015-10-05|07:53:29|ddurand|I|33|Couriers Nac.|oki|1|1|courier_n_list.php|okinawa|11|4|courier_n.png|1|
+Opcion|2015-10-05|07:54:08|ddurand|I|34|Crear/Editar Courier Nac.|oki|1|0|courier_n_edit.php|okinawa|NULL|33||1|
+Opcion|2015-10-05|09:06:41|ddurand|M|4|Tablas|oki|1|1|tablas|okinawa|2|2|mantenimiento.png|0|
+Opcion|2015-10-05|09:06:58|ddurand|M|3|Admin|oki|1|1|admin|okinawa|1|2|administracion.png|0|
+Opcion|2015-10-05|12:25:28|ddurand|I|35|QCubed|oki|1|1|index_install.php|../|5|3||1|
+Opcion|2015-10-05|12:25:57|ddurand|M|35|QCubed|oki|1|1|index_install.php|../../|5|3||1|
+Opcion|2015-10-05|12:29:38|ddurand|M|35|QCubed|oki|1|1|index_install.php|../|5|3||1|
+Opcion|2015-10-05|12:30:36|ddurand|M|35|QCubed|oki|1|1|index_install.php|..|5|3||1|
+Opcion|2015-10-05|12:31:49|ddurand|M|3|Admin|oki|0|1|admin|okinawa|1|2|configuracion.png|0|
+Opcion|2015-10-05|12:32:53|ddurand|M|35|QCubed|oki|1|1|index_install.php|..|5|3|Star.png|1|
+Opcion|2015-10-05|12:40:51|ddurand|M|35|QCubed|oki|0|1|qcubed|okinawa|5|3|Star.png|1|
+Opcion|2015-10-05|12:43:14|ddurand|I|36|Instalacion Actual|oki|1|1|index_install.php|..|1|35|noti1.png|2|
+Opcion|2015-10-05|12:44:21|ddurand|I|37|Example Site|oki|1|1|index.php|../../ejem|2|35|noti2.png|2|
+Opcion|2015-10-05|12:45:06|ddurand|M|36|Okinawa|oki|1|1|index_install.php|..|1|35|noti1.png|2|
+Opcion|2015-10-05|12:49:20|ddurand|M|37|Example Site|oki|1|1|index.php|../../ejemplo|2|35|noti2.png|2|
+Usuario|2015-10-05|13:14:39|ddurand|M|1|DANIEL DURAND|ddurand |fd9c46372f5fbbb5975f423df99a5b16|1|1|CCS|danydurand@gmail.com|0|2015-10-05|2015-10-01|
+Usuario|2015-10-05|14:00:28|ddurand|M|1|DANIEL DURAND.|ddurand |81dc9bdb52d04dc20036dbd8313ed055|1|1|CCS|danydurand@gmail.com|0|2015-10-05|2015-10-01|
+Usuario|2015-10-05|14:03:15|ddurand|I|7|ALEX RUIZ|aruiz|81dc9bdb52d04dc20036dbd8313ed055|1|1|CCS|aruiz@serviexpress.com|0|2015-10-05|2015-10-05|
+Usuario|2015-10-05|14:38:46|ddurand|M|7|ALEX RUIZ|aruiz   |81dc9bdb52d04dc20036dbd8313ed055|1|1|CCS|aruiz@serviexpress.com|0|2015-10-05|2015-10-05|
+Usuario|2015-10-05|14:49:14|ddurand|I|8|MARIA EUGENIA|mariu|81dc9bdb52d04dc20036dbd8313ed055|5|1|CCS|mariu@serviexpress.com|0|2015-10-05|2015-10-05|
+Usuario|2015-10-05|14:52:50|ddurand|M|8|MARIA EUGENIA|mary|81dc9bdb52d04dc20036dbd8313ed055|5|1|CCS|mariu@serviexpress.com|0|2015-10-05|2015-10-05|
+Opcion|2015-10-05|15:17:15|ddurand|M|10|Crear/Editar Sucursal|oki|1|0|sucursal_edit.php|okinawa|NULL|9||1|
+Opcion|2015-10-05|15:19:50|ddurand|M|10|Crear/Editar Sucursal|oki|1|0|sucursa_edit.php|okinawa|NULL|9||1|
+Opcion|2015-10-05|15:47:02|ddurand|M|10|Crear/Editar Sucursal|oki|1|0|sucursal_edit.php|okinawa|NULL|9||1|
+Usuario|2015-10-06|06:31:25|ddurand|M|1|DANIEL DURAND|ddurand |81dc9bdb52d04dc20036dbd8313ed055|1|1|CCS|danydurand@gmail.com|0|2015-10-06|2015-10-01|
+Cliente|2015-10-06|11:44:31|ddurand|M|2|DANIEL DURAND|10781582|danydurand@gmail.com|1234|04242349157|02123835269|1971-03-14|MONTAÑA ALTA|M|1|2|4|CCS|NULL||0|NULL|NULL|NULL||2015-10-02|ddurand |NULL||
+Cliente|2015-10-06|11:44:32|ddurand|M|2|DANIEL DURAND|10781582|danydurand@gmail.com|1234|04242349157|02123835269|1971-03-14|MONTAÑA ALTA|M|1|2|4|CCS|NULL||0|NULL|NULL|NULL||2015-10-02|ddurand |2015-10-06 11:44:32|ddurand |
+Opcion|2015-10-06|12:41:17|ddurand|I|38|+Tablas|oki|0|1|mas_tablas|okinawa|12|4|mas.png|1|
+Opcion|2015-10-06|12:41:52|ddurand|M|31|Couriers Int.|oki|1|1|courier_i_list.php|okinawa|1|38|provider.png|2|
+Opcion|2015-10-06|12:42:13|ddurand|M|33|Couriers Nac.|oki|1|1|courier_n_list.php|okinawa|2|38|courier_n.png|2|
+Opcion|2015-10-06|12:44:07|ddurand|I|39|Tarifas|oki|1|1|tarifa_list.php|okinawa|3|38|coins.png|2|
+Opcion|2015-10-06|12:44:30|ddurand|I|40|Crear/Editar Tarifa|oki|1|0|tarifa_edit.php|okinawa|NULL|39||2|
+Opcion|2015-10-06|14:31:39|ddurand|I|41|Productos|oki|1|1|producto_list.php|okinawa|4|38|categories.png|2|
+Opcion|2015-10-06|14:48:33|ddurand|M|38|+Tablas|oki|0|1|mas_tablas|okinawa|1|4|mas.png|1|
+Opcion|2015-10-06|14:49:23|ddurand|M|38|+Tablas|oki|0|1|mas_tablas|okinawa|1|4|mas.png|1|
+Opcion|2015-10-06|14:49:23|ddurand|M|9|Sucursales|oki|1|1|sucursal_list.php|okinawa|2|4|estacion.png|1|
+Opcion|2015-10-06|14:50:16|ddurand|M|13|Medios Pub|oki|1|1|medio_pub_list.php|okinawa|3|4|publicidad2.png|1|
+Opcion|2015-10-06|14:50:16|ddurand|M|15|Tipos Vend|oki|1|1|tipo_vendedor_list.php|okinawa|4|4|carpeta_humano.png|1|
+Opcion|2015-10-06|14:53:21|ddurand|M|17|Vendedores|oki|1|1|vendedor_list.php|okinawa|5|4|vendedores.png|1|
+Opcion|2015-10-06|14:53:21|ddurand|M|19|Estados|oki|1|1|estado_list.php|okinawa|6|4|estados.png|1|
+Opcion|2015-10-06|14:57:54|ddurand|M|21|Ciudades|oki|1|1|ciudad_list.php|okinawa|7|4|ciudades.png|1|
+Opcion|2015-10-06|14:57:54|ddurand|M|25|Checkpoints|oki|1|1|checkpoint_list.php|okinawa|8|4|preferencias.gif|1|
+Opcion|2015-10-06|15:02:42|ddurand|M|38|+Tablas|oki|0|1|mas_tablas|okinawa|4|4|mas.png|1|
+Opcion|2015-10-06|15:02:42|ddurand|M|15|Tipos Vend|oki|1|1|tipo_vendedor_list.php|okinawa|5|4|carpeta_humano.png|1|
+Opcion|2015-10-06|15:02:42|ddurand|M|17|Vendedores|oki|1|1|vendedor_list.php|okinawa|6|4|vendedores.png|1|
+Opcion|2015-10-06|15:02:42|ddurand|M|19|Estados|oki|1|1|estado_list.php|okinawa|7|4|estados.png|1|
+Opcion|2015-10-06|15:02:42|ddurand|M|21|Ciudades|oki|1|1|ciudad_list.php|okinawa|8|4|ciudades.png|1|
+Opcion|2015-10-06|15:02:42|ddurand|M|27|Clientes|oki|1|1|cliente_list.php|okinawa|9|4|contactos.gif|1|
+Opcion|2015-10-06|15:02:42|ddurand|M|29|Aliados|oki|1|1|aliado_list.php|okinawa|10|4|aliado.png|1|
+Opcion|2015-10-06|15:03:22|ddurand|M|38|+Tablas|oki|0|1|mas_tablas|okinawa|1|4|mas.png|1|
+Opcion|2015-10-06|15:03:37|ddurand|M|21|Ciudades|oki|1|1|ciudad_list.php|okinawa|9|4|ciudades.png|1|
+Opcion|2015-10-06|15:03:37|ddurand|M|27|Clientes|oki|1|1|cliente_list.php|okinawa|10|4|contactos.gif|1|
+Opcion|2015-10-06|15:03:37|ddurand|M|29|Aliados|oki|1|1|aliado_list.php|okinawa|11|4|aliado.png|1|
+Opcion|2015-10-06|15:10:33|ddurand|M|41|Productos|oki|1|1|producto_list.php|okinawa|3|38|categories.png|2|
+Opcion|2015-10-06|15:10:33|ddurand|M|39|Tarifas|oki|1|1|tarifa_list.php|okinawa|4|38|coins.png|2|
+Tarifa|2015-10-06|15:11:24|ddurand|I|1|1|2015-10-01|1050|100|250|300|350|2015-10-06|ddurand |NULL||
+Opcion|2015-10-06|15:14:54|ddurand|I|42|Impuestos|oki|1|1|impuesto_list.php|okinawa|5|38|dollar_coin.png|2|
+Tarifa|2015-10-06|16:26:24|ddurand|M|1|1|2015-10-01|1050|100|250|9999|350|2015-10-06|ddurand |NULL|        |
+Tarifa|2015-10-06|16:26:24|ddurand|M|1|1|2015-10-01|1050|100|250|9999|350|2015-10-06|ddurand |2015-10-06 16:26:24|ddurand |
+Opcion|2015-10-06|16:47:36|ddurand|I|43|Calcular Tarifa|oki|1|1|calcular_tarifa.php|okinawa|1|2|punto_venta.png|1|
+Opcion|2015-10-06|16:47:36|ddurand|M|3|Admin|oki|0|1|admin|okinawa|2|2|configuracion.png|0|
+Opcion|2015-10-06|16:47:36|ddurand|M|4|Tablas|oki|0|1|tablas|okinawa|3|2|mantenimiento.png|0|
+Cliente|2015-10-07|15:42:07|ddurand|M|3|JUAN DURAN|18465770|eredior@gmail.com|juancho|04168315127|02123729096|1986-08-21|ZONA INDUSTRIAL DE LAS MINAS|M|1|2|3|CCS|NULL||0|NULL|NULL|NULL||2015-10-07|ddurand |NULL||
+Cliente|2015-10-07|15:42:07|ddurand|M|3|JUAN DURAN|18465770|eredior@gmail.com|juancho|04168315127|02123729096|1986-08-21|ZONA INDUSTRIAL DE LAS MINAS|M|1|2|3|CCS|NULL||0|NULL|NULL|NULL||2015-10-07|ddurand |2015-10-07 15:42:07|ddurand |
+Opcion|2015-10-07|16:11:52|ddurand|I|44|WebSite|oki|1|1|index.html|../web|6|3|browser.png|1|
+Usuario|2015-10-08|13:10:08|ddurand|M|1|DANIEL DURAND|ddurand |fd9c46372f5fbbb5975f423df99a5b16|1|1|CCS|danydurand@gmail.com|0|2015-10-08|2015-10-08 13:10:08|
+Usuario|2015-10-08|14:45:26|ddurand|M|1|DANIEL DURAND|ddurand |9a34be0100654253057294d872730c66|1|1|CCS|danydurand@gmail.com|0|2015-10-08|2015-10-08 14:45:25|
+Usuario|2015-10-08|14:47:12|ddurand|M|1|DANIEL DURAND|ddurand |fd9c46372f5fbbb5975f423df99a5b16|1|1|CCS|danydurand@gmail.com|0|2015-10-08|2015-10-08 14:47:12|
+Opcion|2015-10-09|09:10:38|ddurand|I|45|Aranceles|oki|1|1|arancel_list.php|okinawa|6|38|tipo_producto.png|2|
+Opcion|2015-10-09|09:11:05|ddurand|I|46|Crear/Editar Arancel|oki|1|0|arancel_edit.php|okinawa|NULL|45||2|
+Opcion|2015-10-09|12:44:45|ddurand|I|47|Crear/Editar Impuesto|oki|1|0|impuesto_edit.php|okinawa|NULL|42||2|
+|2015-10-12|10:09:46|ddurand|D|4|MARIA GABRIELA PEREZ|14986166|magap2117@gmail.com|flacabella|04242337854|02123835269|1977-05-17|MONTAÑA ALTA, TORRE 8|F|1|2|4|CCS|NULL|NULL|NULL|NULL|NULL|NULL|NULL|2015-10-12|ddurand |NULL|NULL|
+|2015-10-12|11:24:13|ddurand|D|5|MARIA GABRIELA PEREZ|14986166|magap2117@gmail.com|flacabella|04242337854|02123835269|1977-05-17|MONTAÑA ALTA|F|1|2|4|CCS|NULL|NULL|NULL|NULL|NULL|NULL|NULL|2015-10-12|pweb    |NULL|NULL|
+|2015-10-12|11:35:58|ddurand|D|6|MARIA GABRIELA PEREZ|14986166|magap2117@gmail.com|bella|04242337854|02123835269|1977-05-17|MONTAÑA ALTA|F|1|2|4|CCS|NULL|NULL|NULL|NULL|NULL|NULL|NULL|2015-10-12|pweb    |NULL|NULL|
+|2015-10-14|10:34:37|ddurand|D|7|MICHELLE DURAND|29569874|michelle@gmail.com||04242359687|02418521463|2001-02-14|VALENCIA.|F|1|3|6|CCS|NULL|        |0|3|1|NULL||2015-10-14|ddurand |2015-10-14|ddurand |

@@ -1,0 +1,929 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6174541e-2cf6-4b22-9f86-837a2d1107ff" name="Default" comment="Conciliación de Pagos.-&#10;- La consulta de la factura, ahora muestra los pagos relacionados a la misma&#10;- La lista de facturas, ahora muestra el estatus del pago&#10;- La consulta de los pagos, ahora muestra el saldo del Cliente&#10;- La lista de pagos, ahora permite cambiar el estatus de varios pagos en lote" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="gold@localhost" type="e3449647:DbNodeDescriptor" />
+      </path>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="gold@localhost" type="e3449647:DbNodeDescriptor" />
+        <item name="gold" type="e3449647:DbNodeDescriptor" />
+      </path>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="gold@localhost" type="e3449647:DbNodeDescriptor" />
+        <item name="gold" type="e3449647:DbNodeDescriptor" />
+        <item name="" type="fce03ad6:DatabaseStructure$GroupNode" />
+      </path>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="gold@localhost" type="e3449647:DbNodeDescriptor" />
+        <item name="gold" type="e3449647:DbNodeDescriptor" />
+        <item name="" type="fce03ad6:DatabaseStructure$GroupNode" />
+        <item name="forma_pago" type="e3449647:DbNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>btnEditGuia_Create</find>
+      <find>btnEditGuia_Click</find>
+      <find>Cancel_cl</find>
+      <find>save</find>
+      <find>VolvL</find>
+      <find>btnVolvList_Click</find>
+      <find>btnCancel_Click</find>
+      <find>Filtro</find>
+      <find>dtgPiezNota</find>
+      <find>cargarClientes</find>
+      <find>RefeMani</find>
+      <find>new Nota</find>
+      <find>txtImagen</find>
+      <find>NumePr</find>
+      <find>dtgNotaFact</find>
+      <find>dtgGuiasesRow_Click</find>
+      <find>dtgFactClieRow_Click</find>
+      <find>$this-&gt;mensa</find>
+      <find>mensaje</find>
+      <find>https</find>
+      <find>INCONCILIABLE</find>
+      <find>save_</find>
+      <find>btnImprFact_Click</find>
+      <find>dtgFacturasesAsFacturaPagoCorpSelect_Created</find>
+      <find>colFacturasAsFacturaPagoCorpSelected</find>
+      <find>dtgFacturasesAsFacturaPagoCorp_Update</find>
+      <find>GetChangedIds</find>
+      <find>btnExpoExce_Create</find>
+      <find>dtgPagosCorps_Selected</find>
+      <find>Checked</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>strFechEntr</replace>
+      <replace>intCodiRuta</replace>
+      <replace>Checkpoints::LoadByCodigo</replace>
+      <replace>$objGuiaPieza</replace>
+      <replace>$intCodiRuta</replace>
+      <replace>$objGuiaPiez</replace>
+      <replace>strCkptRece</replace>
+      <replace>PiezGuia</replace>
+      <replace>FormPago</replace>
+      <replace>RangConc</replace>
+      <replace>Guias()</replace>
+      <replace>$this-&gt;objNotaEntr</replace>
+      <replace>lblTotaLibr</replace>
+      <replace>$objNotaConc</replace>
+      <replace>t</replace>
+      <replace>$objTariClie</replace>
+      <replace>$peso_excedente</replace>
+      <replace>dtgNotaConc</replace>
+      <replace>$objCondicion</replace>
+      <replace>Guias::</replace>
+      <replace>$objFactura</replace>
+      <replace>lstClieCorp</replace>
+      <replace>lstNotaEntr</replace>
+      <replace>txtNumePiez</replace>
+      <replace>lblNotaEntr</replace>
+      <replace>CkptRece</replace>
+      <replace>SinxDosx</replace>
+      <replace>PiezUnox</replace>
+      <replace>dtgNotaFact</replace>
+      <replace>dtgFactClie</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$</dir>
+      <dir>$PROJECT_DIR$/corp</dir>
+      <dir>$PROJECT_DIR$/app</dir>
+      <dir>$PROJECT_DIR$/app/sde</dir>
+      <dir>$PROJECT_DIR$/includes/qcubed/_core/codegen/templates</dir>
+      <dir>$PROJECT_DIR$/includes/qcubed/_core</dir>
+      <dir>$PROJECT_DIR$/includes/qcubed</dir>
+      <dir>$PROJECT_DIR$/includes</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/app/reportes/repo_pu_sin_ok.php" />
+        <option value="$PROJECT_DIR$/app/reportes/rhtml/reporte_pu_sin_ok_html.php" />
+        <option value="$PROJECT_DIR$/app/reportes/rhtml/reporte_ar_sin_av_html.php" />
+        <option value="$PROJECT_DIR$/includes/model/Guias.class.php" />
+        <option value="$PROJECT_DIR$/corp/consulta_guia.tpl.php" />
+        <option value="$PROJECT_DIR$/includes/model/GuiaPiezas.class.php" />
+        <option value="$PROJECT_DIR$/corp/guia_list_new.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/guias_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/guias_edit.php" />
+        <option value="$PROJECT_DIR$/includes/model/NotaEntrega.class.php" />
+        <option value="$PROJECT_DIR$/corp/nota_entrega_list.php" />
+        <option value="$PROJECT_DIR$/corp/costos_envio.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/consulta_guia.php" />
+        <option value="$PROJECT_DIR$/app/comun/new_opcion_edit.php" />
+        <option value="$PROJECT_DIR$/app/sde/nota_entrega_edit.php" />
+        <option value="$PROJECT_DIR$/app/sde/emitir_factura_corp.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/nota_entrega_edit.php" />
+        <option value="$PROJECT_DIR$/corp/carga_masiva_guias.php" />
+        <option value="$PROJECT_DIR$/corp/carga_masiva_instrucciones.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/guia_list_new.php" />
+        <option value="$PROJECT_DIR$/app/sde/rhtml/factura.php" />
+        <option value="$PROJECT_DIR$/app/sde/new_opcion_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/new_opcion_edit.php" />
+        <option value="$PROJECT_DIR$/corp/new_opcion_edit.php" />
+        <option value="$PROJECT_DIR$/corp/new_opcion_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/facturas_list.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/facturas_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/nota_entrega_list.php" />
+        <option value="$PROJECT_DIR$/includes/model/Facturas.class.php" />
+        <option value="$PROJECT_DIR$/drafts/pagos_corp_edit.php" />
+        <option value="$PROJECT_DIR$/corp/pagos_corp_list.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/guia_search_new.php" />
+        <option value="$PROJECT_DIR$/corp/pagos_corp_list.php" />
+        <option value="$PROJECT_DIR$/includes/meta_controls/PagosCorpMetaControl.class.php" />
+        <option value="$PROJECT_DIR$/corp/pagos_corp_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/facturas_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/corp/facturas_edit.php" />
+        <option value="$PROJECT_DIR$/includes/formbase_classes_generated/PagosCorpEditFormBase.class.php" />
+        <option value="$PROJECT_DIR$/corp/pagos_corp_edit.php" />
+        <option value="$PROJECT_DIR$/includes/qcubed/codegen/templates/db_orm/drafts/_qform_edit_base.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/pagos_corp_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/includes/model/PagosCorp.class.php" />
+        <option value="$PROJECT_DIR$/app/sde/emitir_factura_corp.php" />
+        <option value="$PROJECT_DIR$/app/sde/facturas_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/facturas_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/facturas_edit.php" />
+        <option value="$PROJECT_DIR$/corp/registrar_pago.php" />
+        <option value="$PROJECT_DIR$/app/sde/pagos_corp_edit.php" />
+        <option value="$PROJECT_DIR$/includes/formbase_classes_generated/PagosCorpListFormBase.class.php" />
+        <option value="$PROJECT_DIR$/app/sde/pagos_corp_list.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/pagos_corp_list.php" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="1366" />
+    <option name="height" value="768" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="gold" type="b2602c69:ProjectViewProjectNode" />
+              <item name="gold" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/sde/rhtml/partials" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/sde" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/sde" />
+      <recent name="$PROJECT_DIR$/corp" />
+      <recent name="$PROJECT_DIR$/app/reportes/rhtml" />
+      <recent name="$PROJECT_DIR$/app/reportes" />
+      <recent name="$PROJECT_DIR$/app/sde/rhtml" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6174541e-2cf6-4b22-9f86-837a2d1107ff" name="Default" comment="" />
+      <created>1615065690537</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1615065690537</updated>
+      <workItem from="1615065699009" duration="1341000" />
+      <workItem from="1615134261191" duration="7147000" />
+      <workItem from="1615162321238" duration="18268000" />
+      <workItem from="1615298822068" duration="39334000" />
+      <workItem from="1615424458367" duration="4432000" />
+      <workItem from="1615478334724" duration="13294000" />
+      <workItem from="1615508885755" duration="30708000" />
+      <workItem from="1615642255866" duration="20039000" />
+      <workItem from="1615747711325" duration="70531000" />
+      <workItem from="1616076116859" duration="29997000" />
+      <workItem from="1616429679246" duration="13253000" />
+      <workItem from="1616463518313" duration="34405000" />
+      <workItem from="1616684270877" duration="303000" />
+      <workItem from="1616691846628" duration="8021000" />
+      <workItem from="1616705852710" duration="7411000" />
+      <workItem from="1616760574539" duration="35533000" />
+      <workItem from="1616867721541" duration="3774000" />
+      <workItem from="1616883410284" duration="26219000" />
+      <workItem from="1616974142066" duration="6030000" />
+      <workItem from="1617027066844" duration="21372000" />
+      <workItem from="1617118579114" duration="60826000" />
+      <workItem from="1617463186342" duration="59824000" />
+      <workItem from="1617799103182" duration="15419000" />
+      <workItem from="1618002491779" duration="3002000" />
+      <workItem from="1618094240741" duration="20585000" />
+      <workItem from="1618172564606" duration="10535000" />
+      <workItem from="1618276287693" duration="2736000" />
+      <workItem from="1618338113120" duration="14420000" />
+      <workItem from="1618407291738" duration="68000" />
+    </task>
+    <task id="LOCAL-00001" summary="Commit Inicial">
+      <created>1615213574727</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1615213574728</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Tablas y Mejoras&#10;- Se incorporaron las tablas necesarias para el Retail&#10;- Se corrigieron algunos formularios que fallan debido alos cambios introducidos con las nuevas tablas&#10;- Se cambiaron los colores de las barras de navegación y la imagen de fondo en el login">
+      <created>1615308634083</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1615308634083</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Busqeuda, Lista y Consulta de Guias&#10;- Se trabajo de criterios de busqueda para las guias&#10;- Se avanzo igualmente con la lista y la consulta detallada de las guias">
+      <created>1615428873175</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1615428873175</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Mejoras Login y Consulta de Guia&#10;- El login ahora selecciona automaticamente el Sistema&#10;- Se incoraron nuevos criterios de busqueda para las guías">
+      <created>1615492203282</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1615492203282</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Correcciones&#10;- Se pusieron operativas los programas de opciones, borrar guía y recuperar guia&#10;- El programa de las incidencias tambien se trabajo para adapatarlo a las piezas&#10;- Se crearon filtros y querys en las tablas involucradas con los procesos operativos">
+      <created>1615593128331</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1615593128331</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Consulta Detallada, Busqueda por Manifiesto y Envalijar&#10;- Se agrego la lista de checkpoints a la consulta detallada de la guia&#10;- Se agrego el Nro de Manifiesto, como criterio de busqueda de guias&#10;- Se implemento la opción de Envalijar">
+      <created>1615849374713</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1615849374713</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Nuevas tablas para los Contenedores&#10;- Se crearon nuevas tablas para manejar el proceso de containerización de las piezas&#10;- Se modifico la opcion envalijar para usar las nuevas tablas&#10;- Se modifico la rutina que graba checkpoints a un contenedor para usar las nuevas tablas&#10;- Se incorporaron las nuevas opciones al menu">
+      <created>1615927839421</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1615927839421</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Recepcion de Carga&#10;- Se implemento la opcion de Recepcion de Carga haciendo uso de las nuevas tablas y rutinas">
+      <created>1615949682664</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1615949682664</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Mejora en el registro de Checkpoints y Auditoria de Carga&#10;- Se efectuaron mejoras en la rutina que graba checkpoints para la piezas&#10;- Se implemento la opción de Auditoria de Carga&#10;- Se modificaron los programa de Envalijar, Sacar a Ruta y Recepción de Carga para implementar las mejoras de la rutina que graba los checkpoints">
+      <created>1616005122678</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1616005122678</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Grabar Checkpoints&#10;- La rutina que registra los checkpoints, ahora considera grabar un registro de &quot;notificaciones&quot; pendientes, cuando el caso lo amerite.&#10;- Se implementó el cambio en todos los programas del menu de distribución">
+      <created>1616016281233</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1616016281233</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Ubicación Fisica&#10;- Se agrego la columna de la ubicacion fisica a la piezas y la opcion de Inventario de Almacen&#10;utiliza ahora esa campo de la tabla&#10;- Se agrego la ubicacion fisica a la lista de piezas en la consulta del container&#10;- Se agrego la lista de las piezas a la consulta detallada de la guia&#10;- Se modificó el algoritmo de busqueda por Ubicacion Fisica, para considerar el nuevo campo de las piezas.">
+      <created>1616023611606</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1616023611606</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Conceptos&#10;- Se agrego al menu la opcion para CRUD de los Conceptos&#10;- Se modifico la lista y edicion de los conceptos para hacer lo mas practico, flexible y eficiente posible">
+      <created>1616099880678</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1616099880678</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Rangos de los Conceptos, Servicio de Entrega e Importacion&#10;- El sistema ahora permite la agregar, editar y modificar valores de los rangos de un concepto, directamente desde la pantalla del concepto.&#10;- Las guías ahora tienen un Servicio de Entrega (DOM o REC) y un Servicio de Importacion (AER o MAR)&#10;- Se creó un nueva tabla llamada nota_entrega para controlar la carga masiva de guías desde el Connect.  Esto aun esta por desarrollarse, solo se creo la tabla.">
+      <created>1616684554784</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1616684554784</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Carga Masiva de Guias o Notas de Entrega&#10;- Se modificó casi en su totalidad el programa de carga masiva de guias en el Connect&#10;- Se agregaron instrucciones al Usuario para hacer el proceso mas amigable&#10;- Se agrego la lista de las guías&#10;- Se agrego al formulario la lista de las Sucursales sustituyendo el anterior de las Estaciones&#10;- Se agregaron la fecha y la hora a la tabla de checkpoints, así como a la guia">
+      <created>1616812148435</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1616812148435</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Clientes Facturables y Formulario de Emision de Facturas&#10;- La tabla de Cliente tiene un campo adicional que permite especificar, si es facturable o no&#10;- Se creo una opcion para visualizar las Notas de Entrega&#10;- Se creo una opcion que permite especificar los criterios de busqueda de las notas de entrega que seran facturadas.&#10;- Se creo una funcion que facilita mostrar mensajes informativos al Usuario">
+      <created>1616897766676</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1616897766676</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Emision de Facturas&#10;- El formulario de Clientes, ya tiene el campo que permite especificar si los clientes son facturables o no&#10;- La emision de facturas ya funciona aunque necesita adaptarse para calcular los conceptos por cada guía y acumular los totales en la nde.&#10;- Se creo una opción para visualizar la lista y el detalle de las facturas&#10;- Así mismo, se implemento la lista y detalle de la notas de entrega&#10;- La carga masiva de guías, ahora almacena todas las transacciones usando el usuario generico &quot;connect&quot;&#10;- En el Connect, el Usuario ahora solo visualiza las nde de su empresa.&#10;- Se crearon metodos en la clase base de los formulario, que facilita el envio de mensajes al Usuario.">
+      <created>1617046577008</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1617046577008</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Calcular Conceptos de la Guia, Cliente Facturable y Facturacion&#10;- Se creo una rutina que permite calcular los conceptos de la guia desde el formulario de consulta&#10;- Se optimizo y mejoro todo el proceso de facturacion: ahora se calculan los concetpos de cada guia, se acumulan en la nota de entrega y se acumulan en la Factura&#10;- Se implemento la opción de &quot;Borrado de Factura&quot;&#10;- Se agrego a la tabla de conceptos, una columna llamada condicion, que almacena un metodo que debera ejecutarse, y que debe devolver true, como requisito para calcular el concepto.&#10;- Se crearon rutinas para calcular los conceptos en la guia.">
+      <created>1617071997974</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1617071997974</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Consulta de Guia Connect, Lineas Aereas y Ultimo Ckpt&#10;- Se implemento la consulta detalla de la guia en el Connect incluyendo las piezas, los checkpoints y los conceptos&#10;- Se creo la tabla y el crud de las lineas aereas, con miras a implementar la Exportacion&#10;- Se crearon las vistas que permiten obtener los datos del último checkpoint de cada guía">
+      <created>1617217359160</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1617217359160</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Carga Masiva y Consulta de Guia&#10;- La carga masiva de guias en el Connect, ahora establece el producto como IMP&#10;- La consulta detallada de guia en en Connect, muestra más información de la guia y solo los checkpoint publicos.">
+      <created>1617229847645</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1617229847645</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Impresion de Factura&#10;- Se agregaron a la tabla de facturas, un par de campos para grabar la fecha y numero de referencia.&#10;- Se inicio el programa de impresion de la factura.&#10;- Se agrego el boton de impresion al formulario edit de la factura">
+      <created>1617320710082</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1617320710082</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Impresion de Factura HTML2PDF&#10;- Se implemento la libreria html2pdf para la impresion de las facturas">
+      <created>1617403978534</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1617403978534</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Consulta de Guia, Recepcion de NDEs y Reporte Excel&#10;- La consulta de la guia ahora incluye el Nro de la Nota de Entrega y el Nro de la Factura&#10;- Se implemento el modulo de recepción de notas de entrega&#10;- La consulta de la nde, ahora muestra las guias relacionadas&#10;- El reporte Excel ahora: la nde, la factura, los kilos, las libras y los pies cubicos">
+      <created>1617557552318</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1617557552318</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Manifiesto y Hoja de Entrega.-&#10;- Implementaron los reportes: Manifiesto de Carga y Hoja de Entrega">
+      <created>1617581697280</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1617581697280</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Recibidas y Sobrantes&#10;- La recepción de las nde, ahora cambia el estatus de la nde a recibida y registra la cantidad de recibidas y los sobrantes&#10;- La consulta de la nde, ahora muestra las recibidas y los sobrantes, tanto en el SisCO como en el Connect&#10;- Ahora, cuando se consulta una nde, aparecen los sobrantes en color rojo.">
+      <created>1617658874822</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1617658874822</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Reportes de Control.-&#10;- Se implementaron reporte de control operativo, para cada etapa del transito de las guias">
+      <created>1617665122699</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1617665122699</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Emision de Facturas, Edicion de Guias en el Connect&#10;- El formulario de facturacion, ahora muestra la notas de entrega aptas para facturar&#10;- El proceso de facturacion, ahora cambiar el estatus de las notas de entrega&#10;- Se creo una opcion que permite al cliente editar la guia incluso despues de haberla recibido en Gold Coast.">
+      <created>1617934724244</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1617934724244</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Manifiestos x Notas de Entrega&#10;- Para evitar confusiones, se cambiaron todas la referencias de Notas de Entrega a Manifiestos&#10;- Se agregaron campos a la lista de Manifiestos tanto en el Connect como en el SisCO">
+      <created>1618005042935</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1618005042935</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Facturacion y Pagos&#10;- En el programa de emision de facturas, se mejoro la seleccion de los manifestos a facturar&#10;- En la impresion de la factura, se cambiaron los datos bancarios y se ajusto el tamano de la letra&#10;- La lista de facturas ahora incluye la referencia y se ajusto el formato de la fecha&#10;- Se corrigio una falla en el programa de busqueda de guías&#10;- Se acomodo el formato de la fecha en la lista de manifiestos&#10;- Se crearon las tablas y se implementaron en el Connect, las opciones que permite registrar los pagos.&#10;- Se cambiaron todas las menciones a Notas de Entrega, por Manifiestos.&#10;- Se implemento la lista y consulta de facturas en el Connect con el fin de que el Cliente vea sus facturas y los estatus de las mismas.&#10;- Se agrego un campo a la tabla de Formas de Pago, para distinguir las que se usan en el Connect y las que se usan en el Retail&#10;- Se agrego un campo a la tabla de clientes, para guardar la deuda o saldo excedente de los pagos.&#10;- Se corrigio un error en la generacion de la referencia de la Factura">
+      <created>1618183032260</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1618183032260</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Conciliación de Pagos.-&#10;- La consulta de la factura, ahora muestra los pagos relacionados a la misma&#10;- La lista de facturas, ahora muestra el estatus del pago&#10;- La consulta de los pagos, ahora muestra el saldo del Cliente&#10;- La lista de pagos, ahora permite cambiar el estatus de varios pagos en lote">
+      <created>1618363837480</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1618363837480</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="578827000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1366" height="732" extended-state="6" />
+    <layout>
+      <window_info id="Project" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2818448" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.215959" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.549273" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Correcciones&#10;- Se pusieron operativas los programas de opciones, borrar guía y recuperar guia&#10;- El programa de las incidencias tambien se trabajo para adapatarlo a las piezas&#10;- Se crearon filtros y querys en las tablas involucradas con los procesos operativos" />
+    <MESSAGE value="Consulta Detallada, Busqueda por Manifiesto y Envalijar&#10;- Se agrego la lista de checkpoints a la consulta detallada de la guia&#10;- Se agrego el Nro de Manifiesto, como criterio de busqueda de guias&#10;- Se implemento la opción de Envalijar" />
+    <MESSAGE value="Nuevas tablas para los Contenedores&#10;- Se crearon nuevas tablas para manejar el proceso de containerización de las piezas&#10;- Se modifico la opcion envalijar para usar las nuevas tablas&#10;- Se modifico la rutina que graba checkpoints a un contenedor para usar las nuevas tablas&#10;- Se incorporaron las nuevas opciones al menu" />
+    <MESSAGE value="Recepcion de Carga&#10;- Se implemento la opcion de Recepcion de Carga haciendo uso de las nuevas tablas y rutinas" />
+    <MESSAGE value="Mejora en el registro de Checkpoints y Auditoria de Carga&#10;- Se efectuaron mejoras en la rutina que graba checkpoints para la piezas&#10;- Se implemento la opción de Auditoria de Carga&#10;- Se modificaron los programa de Envalijar, Sacar a Ruta y Recepción de Carga para implementar las mejoras de la rutina que graba los checkpoints" />
+    <MESSAGE value="Grabar Checkpoints&#10;- La rutina que registra los checkpoints, ahora considera grabar un registro de &quot;notificaciones&quot; pendientes, cuando el caso lo amerite.&#10;- Se implementó el cambio en todos los programas del menu de distribución" />
+    <MESSAGE value="Ubicación Fisica&#10;- Se agrego la columna de la ubicacion fisica a la piezas y la opcion de Inventario de Almacen&#10;utiliza ahora esa campo de la tabla&#10;- Se agrego la ubicacion fisica a la lista de piezas en la consulta del container&#10;- Se agrego la lista de las piezas a la consulta detallada de la guia&#10;- Se modificó el algoritmo de busqueda por Ubicacion Fisica, para considerar el nuevo campo de las piezas." />
+    <MESSAGE value="Conceptos&#10;- Se agrego al menu la opcion para CRUD de los Conceptos&#10;- Se modifico la lista y edicion de los conceptos para hacer lo mas practico, flexible y eficiente posible" />
+    <MESSAGE value="Rangos de los Conceptos, Servicio de Entrega e Importacion&#10;- El sistema ahora permite la agregar, editar y modificar valores de los rangos de un concepto, directamente desde la pantalla del concepto.&#10;- Las guías ahora tienen un Servicio de Entrega (DOM o REC) y un Servicio de Importacion (AER o MAR)&#10;- Se creó un nueva tabla llamada nota_entrega para controlar la carga masiva de guías desde el Connect.  Esto aun esta por desarrollarse, solo se creo la tabla." />
+    <MESSAGE value="Carga Masiva de Guias o Notas de Entrega&#10;- Se modificó casi en su totalidad el programa de carga masiva de guias en el Connect&#10;- Se agregaron instrucciones al Usuario para hacer el proceso mas amigable&#10;- Se agrego la lista de las guías&#10;- Se agrego al formulario la lista de las Sucursales sustituyendo el anterior de las Estaciones&#10;- Se agregaron la fecha y la hora a la tabla de checkpoints, así como a la guia" />
+    <MESSAGE value="Clientes Facturables y Formulario de Emision de Facturas&#10;- La tabla de Cliente tiene un campo adicional que permite especificar, si es facturable o no&#10;- Se creo una opcion para visualizar las Notas de Entrega&#10;- Se creo una opcion que permite especificar los criterios de busqueda de las notas de entrega que seran facturadas.&#10;- Se creo una funcion que facilita mostrar mensajes informativos al Usuario" />
+    <MESSAGE value="Emision de Facturas&#10;- El formulario de Clientes, ya tiene el campo que permite especificar si los clientes son facturables o no&#10;- La emision de facturas ya funciona aunque necesita adaptarse para calcular los conceptos por cada guía y acumular los totales en la nde.&#10;- Se creo una opción para visualizar la lista y el detalle de las facturas&#10;- Así mismo, se implemento la lista y detalle de la notas de entrega&#10;- La carga masiva de guías, ahora almacena todas las transacciones usando el usuario generico &quot;connect&quot;&#10;- En el Connect, el Usuario ahora solo visualiza las nde de su empresa.&#10;- Se crearon metodos en la clase base de los formulario, que facilita el envio de mensajes al Usuario." />
+    <MESSAGE value="Calcular Conceptos de la Guia, Cliente Facturable y Facturacion&#10;- Se creo una rutina que permite calcular los conceptos de la guia desde el formulario de consulta&#10;- Se optimizo y mejoro todo el proceso de facturacion: ahora se calculan los concetpos de cada guia, se acumulan en la nota de entrega y se acumulan en la Factura&#10;- Se implemento la opción de &quot;Borrado de Factura&quot;&#10;- Se agrego a la tabla de conceptos, una columna llamada condicion, que almacena un metodo que debera ejecutarse, y que debe devolver true, como requisito para calcular el concepto.&#10;- Se crearon rutinas para calcular los conceptos en la guia." />
+    <MESSAGE value="Consulta de Guia Connect, Lineas Aereas y Ultimo Ckpt&#10;- Se implemento la consulta detalla de la guia en el Connect incluyendo las piezas, los checkpoints y los conceptos&#10;- Se creo la tabla y el crud de las lineas aereas, con miras a implementar la Exportacion&#10;- Se crearon las vistas que permiten obtener los datos del último checkpoint de cada guía" />
+    <MESSAGE value="Carga Masiva y Consulta de Guia&#10;- La carga masiva de guias en el Connect, ahora establece el producto como IMP&#10;- La consulta detallada de guia en en Connect, muestra más información de la guia y solo los checkpoint publicos." />
+    <MESSAGE value="Impresion de Factura&#10;- Se agregaron a la tabla de facturas, un par de campos para grabar la fecha y numero de referencia.&#10;- Se inicio el programa de impresion de la factura.&#10;- Se agrego el boton de impresion al formulario edit de la factura" />
+    <MESSAGE value="Impresion de Factura HTML2PDF&#10;- Se implemento la libreria html2pdf para la impresion de las facturas" />
+    <MESSAGE value="Consulta de Guia, Recepcion de NDEs y Reporte Excel&#10;- La consulta de la guia ahora incluye el Nro de la Nota de Entrega y el Nro de la Factura&#10;- Se implemento el modulo de recepción de notas de entrega&#10;- La consulta de la nde, ahora muestra las guias relacionadas&#10;- El reporte Excel ahora: la nde, la factura, los kilos, las libras y los pies cubicos" />
+    <MESSAGE value="Manifiesto y Hoja de Entrega.-&#10;- Implementaron los reportes: Manifiesto de Carga y Hoja de Entrega" />
+    <MESSAGE value="Recibidas y Sobrantes&#10;- La recepción de las nde, ahora cambia el estatus de la nde a recibida y registra la cantidad de recibidas y los sobrantes&#10;- La consulta de la nde, ahora muestra las recibidas y los sobrantes, tanto en el SisCO como en el Connect&#10;- Ahora, cuando se consulta una nde, aparecen los sobrantes en color rojo." />
+    <MESSAGE value="Reportes de Control.-&#10;- Se implementaron reporte de control operativo, para cada etapa del transito de las guias" />
+    <MESSAGE value="Emision de Facturas, Edicion de Guias en el Connect&#10;- El formulario de facturacion, ahora muestra la notas de entrega aptas para facturar&#10;- El proceso de facturacion, ahora cambiar el estatus de las notas de entrega&#10;- Se creo una opcion que permite al cliente editar la guia incluso despues de haberla recibido en Gold Coast." />
+    <MESSAGE value="Manifiestos x Notas de Entrega&#10;- Para evitar confusiones, se cambiaron todas la referencias de Notas de Entrega a Manifiestos&#10;- Se agregaron campos a la lista de Manifiestos tanto en el Connect como en el SisCO" />
+    <MESSAGE value="Facturacion y Pagos&#10;- En el programa de emision de facturas, se mejoro la seleccion de los manifestos a facturar&#10;- En la impresion de la factura, se cambiaron los datos bancarios y se ajusto el tamano de la letra&#10;- La lista de facturas ahora incluye la referencia y se ajusto el formato de la fecha&#10;- Se corrigio una falla en el programa de busqueda de guías&#10;- Se acomodo el formato de la fecha en la lista de manifiestos&#10;- Se crearon las tablas y se implementaron en el Connect, las opciones que permite registrar los pagos.&#10;- Se cambiaron todas las menciones a Notas de Entrega, por Manifiestos.&#10;- Se implemento la lista y consulta de facturas en el Connect con el fin de que el Cliente vea sus facturas y los estatus de las mismas.&#10;- Se agrego un campo a la tabla de Formas de Pago, para distinguir las que se usan en el Connect y las que se usan en el Retail&#10;- Se agrego un campo a la tabla de clientes, para guardar la deuda o saldo excedente de los pagos.&#10;- Se corrigio un error en la generacion de la referencia de la Factura" />
+    <MESSAGE value="Conciliación de Pagos.-&#10;- La consulta de la factura, ahora muestra los pagos relacionados a la misma&#10;- La lista de facturas, ahora muestra el estatus del pago&#10;- La consulta de los pagos, ahora muestra el saldo del Cliente&#10;- La lista de pagos, ahora permite cambiar el estatus de varios pagos en lote" />
+    <option name="LAST_COMMIT_MESSAGE" value="Conciliación de Pagos.-&#10;- La consulta de la factura, ahora muestra los pagos relacionados a la misma&#10;- La lista de facturas, ahora muestra el estatus del pago&#10;- La consulta de los pagos, ahora muestra el saldo del Cliente&#10;- La lista de pagos, ahora permite cambiar el estatus de varios pagos en lote" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/corp/facturas_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="109" column="0" lean-forward="true" selection-start-line="105" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/facturas_list.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/model/Facturas.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="36" column="9" lean-forward="true" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/drafts/pagos_corp_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="952">
+          <caret line="56" column="8" lean-forward="false" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/nota_entrega_list.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/nota_entrega_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/guia_search_new.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="568" column="21" lean-forward="true" selection-start-line="568" selection-start-column="21" selection-end-line="568" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/guias_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="183" column="0" lean-forward="false" selection-start-line="182" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/meta_controls/PagosCorpDataGrid.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="50" lean-forward="false" selection-start-line="20" selection-start-column="50" selection-end-line="20" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/meta_controls/generated/PagosCorpDataGridGen.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4187">
+          <caret line="20" column="10" lean-forward="false" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/emitir_factura_corp.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/pagos_corp_list.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/meta_controls/PagosCorpMetaControl.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/facturas_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="95" column="36" lean-forward="true" selection-start-line="95" selection-start-column="36" selection-end-line="95" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/facturas_edit.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="71" column="43" lean-forward="false" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/formbase_classes_generated/PagosCorpEditFormBase.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="520" column="38" lean-forward="false" selection-start-line="520" selection-start-column="38" selection-end-line="520" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/pagos_corp_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="112" column="0" lean-forward="true" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/pagos_corp_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="97" column="0" lean-forward="true" selection-start-line="90" selection-start-column="0" selection-end-line="97" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/pagos_corp_edit.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="52" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/_core/codegen/templates/db_orm/class_subclass/_main.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-243">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/_core/codegen/templates/db_orm/drafts/_qform_edit_base.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2147">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/_core/codegen/templates/db_orm/drafts/_qform_edit_include.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-192">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/_core/codegen/templates/db_orm/drafts/_qform_list_base.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-838">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/_core/codegen/templates/db_type/class_subclass/_main.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/codegen/templates/db_orm/drafts/_qform_edit_include.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-138">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/codegen/templates/db_orm/drafts/_qform_list_base.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2225">
+          <caret line="162" column="20" lean-forward="true" selection-start-line="162" selection-start-column="20" selection-end-line="162" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/codegen/templates/db_orm/drafts/_qform_edit_base.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="511" column="38" lean-forward="false" selection-start-line="511" selection-start-column="38" selection-end-line="511" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/qcubed.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/configuration/codegen_settings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/qcubed/_LICENSE.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="77" lean-forward="true" selection-start-line="10" selection-start-column="77" selection-end-line="10" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/configuration/_README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/configuration/_LICENSE.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-65">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/configuration/prepend.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="10" lean-forward="false" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protected.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="46" lean-forward="false" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="23" lean-forward="false" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/configuration/configuration.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/model/PagosCorp.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="43" column="0" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/emitir_factura_corp.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="507">
+          <caret line="267" column="37" lean-forward="true" selection-start-line="267" selection-start-column="37" selection-end-line="267" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/facturas_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="85" column="56" lean-forward="false" selection-start-line="85" selection-start-column="56" selection-end-line="85" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/pagos_corp_edit.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="27" column="34" lean-forward="false" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/model/FormaPago.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="15" column="10" lean-forward="false" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/facturas_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="309" column="87" lean-forward="false" selection-start-line="309" selection-start-column="87" selection-end-line="309" selection-end-column="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/facturas_edit.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="79" column="43" lean-forward="false" selection-start-line="79" selection-start-column="43" selection-end-line="79" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/registrar_pago.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="50" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/app_includes/botonera_list.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corp/registrar_pago.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="379" column="49" lean-forward="true" selection-start-line="379" selection-start-column="49" selection-end-line="379" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/formbase_classes_generated/PagosCorpListFormBase.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="130" column="45" lean-forward="false" selection-start-line="130" selection-start-column="45" selection-end-line="130" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/pagos_corp_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2613">
+          <caret line="157" column="44" lean-forward="true" selection-start-line="157" selection-start-column="44" selection-end-line="157" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/pagos_corp_list.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="32" lean-forward="false" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/pagos_corp_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="39" column="78" lean-forward="true" selection-start-line="39" selection-start-column="78" selection-end-line="39" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/meta_controls/generated/PagosCorpMetaControlGen.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="904" column="40" lean-forward="true" selection-start-line="904" selection-start-column="16" selection-end-line="904" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

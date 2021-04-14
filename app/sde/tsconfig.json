@@ -1,0 +1,51 @@
+{
+  "chart":{
+    "caption":"Gr\u00e1fico de Consumo",
+    "xAxisName":"Meses",
+    "yAxisName":"Cantidad de Gu\u00edas",
+    "theme":"fusion"
+  },
+  "categories":[
+    {
+      "category":[
+        {"label":"Ene"},
+        {"label":"Feb"},
+        {"label":"Mar"},
+        {"label":"Abr"},
+        {"label":"May"},
+        {"label":"Jun"},
+        {"label":"Jul"},
+        {"label":"Ago"},
+        {"label":"Sep"},
+        {"label":"Oct"},
+        {"label":"Nov"},
+        {"label":"Dic"}
+      ]
+    }
+  ],
+  "dataset":[
+    {
+      "seriesname":2016,
+      "data":[]
+    },
+    {
+      "seriesname":2017,
+      "data":[]
+    },
+    {
+      "seriesname":2018,
+      "data":[
+        {"value":3},
+        {"value":5}
+      ]
+    },
+    {
+      "seriesname":2019,
+      "data":[
+        {"value":3},
+        {"value":5},
+        {"value":2}
+      ]
+    }
+  ]
+}

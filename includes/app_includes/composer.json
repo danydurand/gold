@@ -1,0 +1,8 @@
+{
+    "require": {
+        "raveren/kint": "0.9",
+        "monolog/monolog": "1.17.2",
+        "php2wsdl/php2wsdl": "0.5",
+        "taq/phpr": "0.0.1"
+    }
+}
