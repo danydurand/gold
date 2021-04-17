@@ -21,7 +21,7 @@
 	 * @property string $Telefono the value for strTelefono (Not Null)
 	 * @property integer $EstadoId the value for intEstadoId (Not Null)
 	 * @property integer $Zona the value for intZona (Not Null)
-	 * @property boolean $EsExport the value for blnEsExport (Not Null)
+	 * @property boolean $EsExport the value for blnEsExport 
 	 * @property boolean $EsExenta the value for blnEsExenta 
 	 * @property boolean $EsPrincipal the value for blnEsPrincipal 
 	 * @property boolean $EsAreaMetropolitana the value for blnEsAreaMetropolitana 
@@ -2186,7 +2186,7 @@
 
 				case 'EsExport':
 					/**
-					 * Gets the value for blnEsExport (Not Null)
+					 * Gets the value for blnEsExport 
 					 * @return boolean
 					 */
 					return $this->blnEsExport;
@@ -2774,7 +2774,7 @@
 
 				case 'EsExport':
 					/**
-					 * Sets the value for blnEsExport (Not Null)
+					 * Sets the value for blnEsExport 
 					 * @param boolean $mixValue
 					 * @return boolean
 					 */

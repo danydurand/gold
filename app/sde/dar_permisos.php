@@ -33,9 +33,7 @@ class DarPermisos extends FormularioBaseKaizen {
 
         $arrUsuaAuto = array();
         $arrUsuaAuto[] = "ddurand";
-        $arrUsuaAuto[] = "yroth";
-        $arrUsuaAuto[] = "oerojas";
-        $arrUsuaAuto[] = "juansilv";
+        $arrUsuaAuto[] = "mtovar";
 
         $this->blnDarxQuit = true;
         if (!in_array($this->objUsuario->LogiUsua,$arrUsuaAuto)) {
@@ -90,11 +88,13 @@ class DarPermisos extends FormularioBaseKaizen {
     }
 
     protected function dtgUsuaPerm_Bind() {
+        t('Cargando el DataGrid de Usuarios...');
+        t('Voy a buscar IndiPara: '.trim($this->strIndiPara));
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::Parametro()->IndiPara,$this->strIndiPara);
+        $objClauWher[] = QQ::Equal(QQN::Parametro()->IndiPara,trim($this->strIndiPara));
         $objClauWher[] = QQ::Equal(QQN::Parametro()->ParaVal1,SinoType::SI);
         $arrUsuaPerm   = Parametro::QueryArray(QQ::AndCondition($objClauWher));
-
+        t('Encontré: '.count($arrUsuaPerm).' usuarios con ese permiso');
         $this->dtgUsuaPerm->TotalItemCount = count($arrUsuaPerm);
         // Bind the datasource to the datagrid
         $this->dtgUsuaPerm->DataSource = Parametro::QueryArray(
@@ -127,7 +127,7 @@ class DarPermisos extends FormularioBaseKaizen {
             if (strlen($objParaUsua->CodiPara) > 0) {
                 $objUsuaReal = Usuario::LoadByLogiUsua($objParaUsua->CodiPara);
                 if ($objUsuaReal) {
-                    $strSucuUsua = $objUsuaReal->CodiEsta;
+                    $strSucuUsua = $objUsuaReal->Sucursal->Iata;
                 }
             }
         }
@@ -138,13 +138,13 @@ class DarPermisos extends FormularioBaseKaizen {
         $this->lstPermProc = new QListBox($this);
         $this->lstPermProc->Name = QApplication::Translate("Permiso");
         $this->lstPermProc->Required = true;
-        $this->lstPermProc->Width = 300;
-        $this->lstPermProc->AddItem(QApplication::Translate("- Seleccione Uno -",null));
+        $this->lstPermProc->Width = 310;
+        $this->lstPermProc->AddItem("- Seleccione Uno -",null);
         $objClauOrde   = QQ::Clause();
         $objClauOrde[] = QQ::OrderBy(QQN::Parametro()->DescPara);
         $arrListPerm   = Parametro::LoadArrayByIndiPara('VariPerm', $objClauOrde);
         foreach ($arrListPerm as $objPermiso) {
-            $this->lstPermProc->AddItem(trim($objPermiso->DescPara)." (".$objPermiso->CodiPara.")",$objPermiso);
+            $this->lstPermProc->AddItem(trim($objPermiso->DescPara)." (".$objPermiso->CodiPara.")",$objPermiso->IndiPara.'|'.$objPermiso->CodiPara);
         }
         $this->lstPermProc->AddAction(new QChangeEvent(), new QAjaxAction("lstPermProc_Change"));
     }
@@ -196,10 +196,20 @@ class DarPermisos extends FormularioBaseKaizen {
         $this->txtLogiUsua->Text = '';
         $this->txtTextExpl->Text = '';
         $this->strIndiPara       = '';
+        t('Parametro seleccionado: '.$this->lstPermProc->SelectedValue);
         if (!is_null($this->lstPermProc->SelectedValue)) {
-            $this->txtTextExpl->Text = $this->lstPermProc->SelectedValue->ParaTxt1;
-            $this->strIndiPara       = $this->lstPermProc->SelectedValue->CodiPara;
-            $this->dtgUsuaPerm->Refresh();
+            list($strIndiPara, $strCodiPara) = explode('|',$this->lstPermProc->SelectedValue);
+            t('Indi: '.$strIndiPara);
+            t('Codi: '.$strCodiPara);
+            $objParaSele = Parametro::LoadByIndiParaCodiPara($strIndiPara, $strCodiPara);
+            if ($objParaSele) {
+                t('Encontre el parametro...');
+                t('Explicacion: '.$objParaSele->ParaTxt1);
+                t('CodiPara: '.$objParaSele->CodiPara);
+                $this->txtTextExpl->Text = $objParaSele->ParaTxt1;
+                $this->strIndiPara       = $objParaSele->CodiPara;
+                $this->dtgUsuaPerm->Refresh();
+            }
         }
     }
 

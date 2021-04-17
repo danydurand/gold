@@ -168,7 +168,7 @@ class ParametroEditForm extends ParametroEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/parametro_edit.php/'.$this->strCodiRegi;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','',__iCHEC__);
+                $this->success('Transacción Exitosa');
 			}
 		} else {
             $this->strCodiRegi = $this->mctParametro->Parametro->__codigoRegistro();
@@ -178,7 +178,7 @@ class ParametroEditForm extends ParametroEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/parametro_edit.php/'.$this->strCodiRegi;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa!','','',__iCHEC__);
+            $this->success('Transacción Exitosa!');
 		}
 	}
 
@@ -191,8 +191,7 @@ class ParametroEditForm extends ParametroEditFormBase {
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
 
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->mensaje(sprintf('Existen registros relacionados en %s',$strTablRela),'m','d','exclamation-triangle');
+            $this->danger(sprintf('Existen registros relacionados en %s',$strTablRela));
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {

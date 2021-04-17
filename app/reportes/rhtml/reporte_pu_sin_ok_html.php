@@ -50,7 +50,12 @@ $strTextMens = "Piezas con PickUp sin Entrega +72Hrs";
                 <td style="width: 80px; text-align: center">Ubicacion</td>
             </tr>
             <?php foreach ($arrSinxDosx as $objPiezUnox) { ?>
-                <?php $strLogiUsua = Usuario::Load($objPiezUnox->CreatedBy)->LogiUsua; ?>
+                <?php
+                    $strLogiUsua = 'N/A';
+                    //if (!is_null($objPiezUnox->CreatedBy)) {
+                    //    $strLogiUsua = Usuario::Load($objPiezUnox->CreatedBy)->LogiUsua;
+                    //}
+                ?>
                 <tr>
                     <td><?= $objPiezUnox->Pieza->IdPieza ?></td>
                     <td style="text-align: left"><?= $objPiezUnox->Pieza->Guia->NombreRemitente ?></td>

@@ -91,7 +91,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         $this->btnPagoPend_Create();
         $this->btnNuevRegi->Visible = false;
 
-        $this->mensaje('Utlice Doble-Click para acceder al detalle del Pago','m','i',__iINFO__);
+        $this->info('Utlice Doble-Click para acceder al detalle del Pago');
     }
 
     protected function btnConcPago_Create() {
@@ -137,7 +137,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 					$arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$objPagoSele->Id;
 					LogDeCambios($arrLogxCamb);
 
-					$objPagoSele->replicarEstatusPago($objPagoSele->Estatus);
+					$objPagoSele->conciliarPago();
 
 					$this->colPagoSele->SetCheckbox($objPagoSele->Id,false);
 					$intConcPago ++;
@@ -146,14 +146,14 @@ class PagosCorpListForm extends PagosCorpListFormBase {
             if ($intConcPago > 0) {
                 $this->dtgPagosCorps->Refresh();
                 $strTextMens = "Transaccion Exitosa | <b>$intConcPago Pago(s) Conciliado(s)</b> !!!";
-                $this->mensaje($strTextMens, 'm', 's', __iCHEC__);
+                $this->success($strTextMens);
             } else {
                 $strTextMens = "Ningún Pago fue procesado !!!";
-                $this->mensaje($strTextMens, 'm', 'i', __iINFO__);
+                $this->info($strTextMens);
             }
         } else {
         	$strTextMens = 'Debe seleccionar al menos un Pago en estatus PENDIENTE ó INCONCILIABLE';
-            $this->mensaje($strTextMens,'m','w',__iEXCL__);
+            $this->warning($strTextMens);
         }
     }
 
@@ -184,14 +184,14 @@ class PagosCorpListForm extends PagosCorpListFormBase {
             if ($intIncoPago > 0) {
                 $this->dtgPagosCorps->Refresh();
                 $strTextMens = "Transaccion Exitosa | <b>$intIncoPago Pago(s) marcado(s) como Inconciliable(s)</b>";
-                $this->mensaje($strTextMens,'m','w',__iEXCL__);
+                $this->success($strTextMens);
             } else {
                 $strTextMens = "Ningún Pago fue procesado !!!";
-                $this->mensaje($strTextMens, 'm', 'i', __iINFO__);
+                $this->info($strTextMens);
             }
         } else {
         	$strTextMens = 'Debe seleccionar al menos un Pago en estatus PENDIENTE ó CONCILIADO';
-            $this->mensaje($strTextMens,'m','w',__iEXCL__);
+            $this->warning($strTextMens);
         }
     }
 
@@ -222,14 +222,14 @@ class PagosCorpListForm extends PagosCorpListFormBase {
             if ($intPagoPend > 0) {
                 $this->dtgPagosCorps->Refresh();
                 $strTextMens = "Transaccion Exitosa | <b>$intPagoPend Pago(s) marcado(s) como Pendiente(s)</b>";
-                $this->mensaje($strTextMens,'m','s',__iCHEC__);
+                $this->success($strTextMens);
             } else {
                 $strTextMens = "Ningún Pago fue procesado !!!";
-                $this->mensaje($strTextMens, 'm', 'i', __iINFO__);
+                $this->info($strTextMens);
             }
         } else {
         	$strTextMens = 'Debe seleccionar al menos un Pago en estatus INCONCILIABLE ó CONCILIADO';
-            $this->mensaje($strTextMens,'m','w',__iEXCL__);
+            $this->warning($strTextMens);
         }
     }
 

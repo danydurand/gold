@@ -74,16 +74,8 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->FormaPago);
         $colFechPago = new QDataGridColumn('FECHA','<?= $_FORM->FechPago_Render($_ITEM) ?>');
         $this->dtgPagosCorps->AddColumn($colFechPago);
-		//$this->dtgPagosCorps->MetaAddColumn('Fecha');
 		$this->dtgPagosCorps->MetaAddColumn('Monto');
 		$this->dtgPagosCorps->MetaAddColumn('Estatus');
-		//$this->dtgPagosCorps->MetaAddColumn('Observacion');
-		//$this->dtgPagosCorps->MetaAddColumn('CreatedAt');
-		//$this->dtgPagosCorps->MetaAddColumn('UpdatedAt');
-		//$this->dtgPagosCorps->MetaAddColumn('DeletedAt');
-		//$this->dtgPagosCorps->MetaAddColumn('CreatedBy');
-		//$this->dtgPagosCorps->MetaAddColumn('UpdatedBy');
-		//$this->dtgPagosCorps->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
 

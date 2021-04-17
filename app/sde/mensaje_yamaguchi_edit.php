@@ -681,9 +681,9 @@ class MensajeYamaguchiEditForm extends MensajeYamaguchiEditFormBase {
         //--------------------------------------------------------------------------------
         // t('Terminando el proceso $blnTodoOkey: '.$blnTodoOkey);
         if ($blnTodoOkey) {
-            $this->mensaje($strMensUsua,'','s',__iCHEC__);
+            $this->success($strMensUsua);
         } else {
-            $this->mensaje($strMensUsua,'','d',__iHAND__);
+            $this->danger($strMensUsua);
         }
 	}
 

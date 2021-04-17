@@ -99,8 +99,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 										<?php $this->txtNumeDrif->RenderWithName(); ?>
 									</div>
 									<div class="col-md-6">
-                                        <?php $this->chkVendClie->RenderWithName(); ?>
-                                        <?php $this->lstVendClie->RenderWithName(); ?>
+										<?php $this->txtSaldExce->RenderWithName(); ?>
 										<?php $this->txtEntrFact->RenderWithName(); ?>
 										<?php $this->chkTariClie->RenderWithName(); ?>
 										<?php $this->lstTariClie->RenderWithName(); ?>
@@ -115,6 +114,8 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 							<div class="media">
 								<div class="media-body"><br>
 									<div class="col-md-6">
+                                        <?php $this->chkVendClie->RenderWithName(); ?>
+                                        <?php $this->lstVendClie->RenderWithName(); ?>
                                         <?php $this->txtPersConb->RenderWithName(); ?>
                                         <?php $this->txtTeleConb->RenderWithName(); ?>
 										<?php $this->txtDireReco->RenderWithName(); ?>

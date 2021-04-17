@@ -26,6 +26,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected $lstCodiEsta;
     protected $txtDireFisc;
     protected $txtNumeDrif;
+    protected $txtSaldExce;
     protected $chkVendClie;
     protected $lstVendClie;
     protected $txtEntrFact;
@@ -146,6 +147,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->lstCodiEsta_Create();
         $this->txtDireFisc_Create();
         $this->txtNumeDrif_Create();
+        $this->txtSaldExce_Create();
 
         $this->chkVendClie_Create();
         $this->lstVendClie_Create();
@@ -727,6 +729,20 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $this->txtNumeDrif->Text = $this->objMasterCliente->NumeDrif;
         }
         $this->txtNumeDrif->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+    }
+
+    protected function txtSaldExce_Create() {
+        $this->txtSaldExce = new QTextBox($this);
+        $this->txtSaldExce->Name = 'Saldo';
+        $this->txtSaldExce->Required = true;
+        if ($this->blnEditMode) {
+            $this->txtSaldExce->Text = $this->objMasterCliente->SaldoExcedente;
+        }
+        $blnSaldClie = BuscarParametro("SaldClie", $this->objUsuario->LogiUsua, "Val1", 0);
+        if (!$blnSaldClie) {
+            $this->txtSaldExce = disableControl($this->txtSaldExce);
+        }
+
     }
 
     protected function chkVendClie_Create() {

@@ -928,3 +928,249 @@
 2021-04-14|11:13:17|guia_list_new|SQL: select *   from v_last_checkpoint_guia_publico where guia_id = 171|
 2021-04-14|11:13:17|guia_list_new|La cantidad de checkpoint es: 1|
 2021-04-14|11:13:17|guia_list_new|Tiene una sola pieza, se retorna: 11:00|
+2021-04-14|11:24:55|===========================================|
+2021-04-14|11:24:55|Entrando a SetupValoresDeSesion en el Index|
+2021-04-14|11:48:30|mg|Reporte PU sin TR|
+2021-04-14|11:48:30|mg|Fecha de referencia: 2021-04-13|
+2021-04-14|11:48:30|mg|El vector de piezas con: PU tiene: 27|
+2021-04-14|12:08:50|mg|Reporte PU sin TR|
+2021-04-14|12:08:50|mg|Fecha de referencia: 2021-04-13|
+2021-04-14|12:08:50|mg|El vector de piezas con: PU tiene: 27|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 9 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 11 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 12 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 81 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 89 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 84 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 85 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 87 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 87 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 125 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 126 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 133 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 129 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 134 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 127 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 128 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 130 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 131 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 132 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 135 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 136 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 137 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 138 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 139 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 140 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 141 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Voy a verificar si la pieza: 142 tiene TR|
+2021-04-14|12:08:50|mg|No tiene, va para el reporte...|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:08:50|mg|Si hay un usuario...|
+2021-04-14|12:08:50|mg|El login es: ddurand|
+2021-04-14|12:12:20|mg|Reporte PU sin TR|
+2021-04-14|12:13:48|mg|Reporte PU sin TR|
+2021-04-14|12:13:48|mg|Pieza: 00000008-001|
+2021-04-14|12:13:48|mg|Pieza: 00000009-001|
+2021-04-14|12:13:48|mg|Pieza: 00000010-001|
+2021-04-14|12:13:48|mg|Pieza: XYZ214587-001|
+2021-04-14|12:13:48|mg|Pieza: LKJ784512-002|
+2021-04-14|12:13:48|mg|Pieza: ASD251436-002|
+2021-04-14|12:13:48|mg|Pieza: POI142536-001|
+2021-04-14|12:13:48|mg|Pieza: POI142536-003|
+2021-04-14|12:13:48|mg|Pieza: POI142536-003|
+2021-04-14|12:13:48|mg|Pieza: 00000185-001|
+2021-04-14|12:13:48|mg|Pieza: 00000186-001|
+2021-04-14|12:13:48|mg|Pieza: GFR9879887-003|
+2021-04-14|12:13:49|mg|Pieza: KST344567-001|
+2021-04-14|12:13:49|mg|Pieza: YTR4563621-001|
+2021-04-14|12:13:49|mg|Pieza: RST567482-001|
+2021-04-14|12:13:49|mg|Pieza: RST567482-002|
+2021-04-14|12:13:49|mg|Pieza: FRD312654-001|
+2021-04-14|12:13:49|mg|Pieza: GFR9879887-001|
+2021-04-14|12:13:49|mg|Pieza: GFR9879887-002|
+2021-04-14|12:13:49|mg|Pieza: RGT665743-001|
+2021-04-14|12:13:49|mg|Pieza: RGT665743-002|
+2021-04-14|12:13:49|mg|Pieza: HJT98876784-001|
+2021-04-14|12:13:49|mg|Pieza: HJT98876784-002|
+2021-04-14|12:13:49|mg|Pieza: 00000194-001|
+2021-04-14|12:13:49|mg|Pieza: 00000195-001|
+2021-04-14|12:13:49|mg|Pieza: 00000196-001|
+2021-04-14|12:13:49|mg|Pieza: 00000198-001|
+2021-04-14|12:14:36|mg|C1|
+2021-04-14|12:14:36|mg|C2|
+2021-04-14|12:14:36|mg|C3|
+2021-04-14|12:15:49|guia_search_new|C1|
+2021-04-14|12:15:49|guia_search_new|C2|
+2021-04-14|12:15:49|guia_search_new|C3|
+2021-04-14|12:17:47|consulta_masiva_new|Reporte PU sin TR|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000008-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000009-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000010-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: XYZ214587-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: LKJ784512-002|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: ASD251436-002|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: POI142536-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: POI142536-003|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: POI142536-003|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000185-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000186-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: GFR9879887-003|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: KST344567-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: YTR4563621-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: RST567482-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: RST567482-002|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: FRD312654-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: GFR9879887-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: GFR9879887-002|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: RGT665743-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: RGT665743-002|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: HJT98876784-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: HJT98876784-002|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000194-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000195-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000196-001|
+2021-04-14|12:17:47|consulta_masiva_new|Pieza: 00000198-001|
+2021-04-14|12:21:01|guias_list|C1|
+2021-04-14|12:21:01|guias_list|C2|
+2021-04-14|12:21:01|guias_list|C3|
+2021-04-14|12:22:06|guias_list|C1|
+2021-04-14|12:22:06|guias_list|C2|
+2021-04-14|12:22:06|guias_list|C3|
+2021-04-14|12:22:16|consulta_masiva_new|00000042-001 tiene un guion...|
+2021-04-14|12:22:16|consulta_masiva_new|Ahora voy a buscar: -|
+2021-04-14|12:25:21|guias_list|C1|
+2021-04-14|12:25:21|guias_list|C2|
+2021-04-14|12:25:21|guias_list|C3|
+2021-04-14|12:25:24|consulta_masiva_new|00000042-001 tiene un guion...|
+2021-04-14|12:25:24|consulta_masiva_new|Ahora voy a buscar: 00000042|
+2021-04-15|13:21:02|===========================================|
+2021-04-15|13:21:02|Entrando a SetupValoresDeSesion en el Index|
+2021-04-15|15:53:57|===========================================|
+2021-04-15|15:53:57|Entrando a SetupValoresDeSesion en el Index|
+2021-04-15|16:15:21|dar_permisos|Parametro seleccionado: VariPerm - CambCamp|
+2021-04-15|16:15:34|dar_permisos|Parametro seleccionado: VariPerm - SaldClie|
+2021-04-15|16:20:33|dar_permisos|Parametro seleccionado: VariPerm - ModaGuia|
+2021-04-15|16:20:45|dar_permisos|Parametro seleccionado: VariPerm|SucuRece|
+2021-04-15|16:20:52|dar_permisos|Parametro seleccionado: VariPerm|SaldClie|
+2021-04-15|16:22:29|dar_permisos|Parametro seleccionado: VariPerm|SaldClie|
+2021-04-15|16:22:29|dar_permisos|Indi: VariPerm|
+2021-04-15|16:22:29|dar_permisos|Codi: SaldClie|
+2021-04-15|16:22:29|dar_permisos|Encontre el parametro...|
+2021-04-15|16:31:14|dar_permisos|Parametro seleccionado: VariPerm|SaldClie|
+2021-04-15|16:31:14|dar_permisos|Indi: VariPerm|
+2021-04-15|16:31:14|dar_permisos|Codi: SaldClie|
+2021-04-15|16:31:14|dar_permisos|Encontre el parametro...|
+2021-04-15|16:31:14|dar_permisos|Explicacion: MODIFICAR EL SALDO DE UN CLIENTE.|
+2021-04-15|16:31:14|dar_permisos|CodiPara: SaldClie|
+2021-04-15|16:32:00|dar_permisos|Parametro seleccionado: VariPerm|CargAdua|
+2021-04-15|16:32:00|dar_permisos|Indi: VariPerm|
+2021-04-15|16:32:00|dar_permisos|Codi: CargAdua|
+2021-04-15|16:32:00|dar_permisos|Encontre el parametro...|
+2021-04-15|16:32:00|dar_permisos|Explicacion: CARGAR ADUANA|
+2021-04-15|16:32:00|dar_permisos|CodiPara: CargAdua|
+2021-04-15|16:32:06|dar_permisos|Parametro seleccionado: VariPerm|SaldClie|
+2021-04-15|16:32:06|dar_permisos|Indi: VariPerm|
+2021-04-15|16:32:06|dar_permisos|Codi: SaldClie|
+2021-04-15|16:32:06|dar_permisos|Encontre el parametro...|
+2021-04-15|16:32:06|dar_permisos|Explicacion: MODIFICAR EL SALDO DE UN CLIENTE.|
+2021-04-15|16:32:06|dar_permisos|CodiPara: SaldClie|
+2021-04-15|16:34:38|dar_permisos|Parametro seleccionado: VariPerm|SucuRece|
+2021-04-15|16:34:38|dar_permisos|Indi: VariPerm|
+2021-04-15|16:34:38|dar_permisos|Codi: SucuRece|
+2021-04-15|16:34:38|dar_permisos|Encontre el parametro...|
+2021-04-15|16:34:38|dar_permisos|Explicacion: PERMITE CAMBIAR LA SUCURSAL Y/O LA RECEPTORIA DE UNA GUIA|
+2021-04-15|16:34:38|dar_permisos|CodiPara: SucuRece|
+2021-04-15|16:35:17|dar_permisos|Parametro seleccionado: VariPerm|SaldClie|
+2021-04-15|16:35:17|dar_permisos|Indi: VariPerm|
+2021-04-15|16:35:17|dar_permisos|Codi: SaldClie|
+2021-04-15|16:35:17|dar_permisos|Encontre el parametro...|
+2021-04-15|16:35:17|dar_permisos|Explicacion: MODIFICAR EL SALDO DE UN CLIENTE.|
+2021-04-15|16:35:17|dar_permisos|CodiPara: SaldClie|
+2021-04-15|16:35:17|dar_permisos|Cargando el DataGrid de Usuarios...|
+2021-04-15|16:35:17|dar_permisos|Voy a buscar IndiPara: SaldClie|
+2021-04-15|16:35:17|dar_permisos|Encontré: 1 usuarios con ese permiso|
+2021-04-15|16:36:21|dar_permisos|Parametro seleccionado: VariPerm|CambCamp|
+2021-04-15|16:36:21|dar_permisos|Indi: VariPerm|
+2021-04-15|16:36:21|dar_permisos|Codi: CambCamp|
+2021-04-15|16:36:21|dar_permisos|Encontre el parametro...|
+2021-04-15|16:36:21|dar_permisos|Explicacion: .|
+2021-04-15|16:36:21|dar_permisos|CodiPara: CambCamp|
+2021-04-15|16:36:21|dar_permisos|Cargando el DataGrid de Usuarios...|
+2021-04-15|16:36:21|dar_permisos|Voy a buscar IndiPara: CambCamp|
+2021-04-15|16:36:21|dar_permisos|Encontré: 1 usuarios con ese permiso|
+2021-04-15|16:36:26|dar_permisos|Parametro seleccionado: VariPerm|SaldClie|
+2021-04-15|16:36:26|dar_permisos|Indi: VariPerm|
+2021-04-15|16:36:26|dar_permisos|Codi: SaldClie|
+2021-04-15|16:36:26|dar_permisos|Encontre el parametro...|
+2021-04-15|16:36:26|dar_permisos|Explicacion: MODIFICAR EL SALDO DE UN CLIENTE.|
+2021-04-15|16:36:26|dar_permisos|CodiPara: SaldClie|
+2021-04-15|16:36:26|dar_permisos|Cargando el DataGrid de Usuarios...|
+2021-04-15|16:36:26|dar_permisos|Voy a buscar IndiPara: SaldClie|
+2021-04-15|16:36:26|dar_permisos|Encontré: 1 usuarios con ese permiso|
+2021-04-15|21:56:35|===========================================|
+2021-04-15|21:56:35|Entrando a SetupValoresDeSesion en el Index|
+2021-04-17|10:37:26|===========================================|
+2021-04-17|10:37:26|Entrando a SetupValoresDeSesion en el Index|
+2021-04-17|12:29:20|===========================================|
+2021-04-17|12:29:20|Entrando a SetupValoresDeSesion en el Index|

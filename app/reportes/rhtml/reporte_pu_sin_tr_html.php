@@ -1,10 +1,10 @@
 <?php
 require_once('qcubed.inc.php');
 
+t('Reporte PU sin TR');
 $dttFechDhoy = date("Y-m-d");
 $dttFechRepo = SumaRestaDiasAFecha($dttFechDhoy,1,'-');
 $strLimiDere = '650px';
-
 $strCkptUnox = 'PU';
 $strCkptDosx = 'TR';
 $arrSinxTras = [];
@@ -50,7 +50,13 @@ $strTextMens = "Piezas con Pick-Up sin Traslado +24Hrs";
                 <td style="width: 80px; text-align: center">Ubicacion</td>
             </tr>
             <?php foreach ($arrSinxTras as $objPiezPick) { ?>
-                <?php $strLogiUsua = Usuario::Load($objPiezPick->CreatedBy)->LogiUsua; ?>
+                <?php
+                    $strLogiUsua = 'N/A';
+                    if (!is_null($objPiezPick->CreatedBy)) {
+                        $objUsuaRepo = Usuario::Load($objPiezPick->CreatedBy);
+                        $strLogiUsua = $objUsuaRepo->LogiUsua;
+                    }
+                ?>
                 <tr>
                     <td><?= $objPiezPick->Pieza->IdPieza ?></td>
                     <td style="text-align: left"><?= $objPiezPick->Pieza->Guia->NombreRemitente ?></td>
@@ -60,6 +66,7 @@ $strTextMens = "Piezas con Pick-Up sin Traslado +24Hrs";
                     <td style="text-align: center"><?= $strLogiUsua ?></td>
                     <td style="text-align: center"><?= $objPiezPick->Pieza->Ubicacion ?></td>
                 </tr>
+                <?php t('Pieza: '.$objPiezPick->Pieza->IdPieza); ?>
             <?php } ?>
         </table>
     </page_header>

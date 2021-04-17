@@ -27,10 +27,90 @@
 			return sprintf('%s',  $this->Referencia);
 		}
 
+		public function conciliarPago() {
+		    t('=====================');
+		    t('Rutina: conciliarPago');
+		    $objDatabase = PagosCorp::GetDatabase();
+            $objDatabase->TransactionBegin();
+            //------------------------------------------------
+            // Se obtienen las facturas relacionadas al Pago
+            //------------------------------------------------
+            $blnSaldDisp = true;
+            $arrFactPago = $this->GetFacturasAsFacturaPagoCorpArray();
+            t('El pago de referencia: '.$this->Referencia.' tiene: '.count($arrFactPago).' facturas relacionadas');
+            $decMontPago = $this->Monto;
+            t('El monto del pago es: '.$decMontPago);
+            foreach ($arrFactPago as $objFactPago) {
+                t('Procesando la factura: '.$objFactPago->Referencia.' por un total de: '.$objFactPago->Total);
+                t('El saldo actual es: '.$decMontPago);
+                if ( ($decMontPago < 0) &&  ($this->ClienteCorp->SaldoExcedente > 0) && ($blnSaldDisp)) {
+                    t('El saldo es negativo, voy a sumar el saldo excedente del Cliente');
+                    $decMontPago += $this->ClienteCorp->SaldoExcedente;
+                    $blnSaldDisp = false;
+                }
+                if ($decMontPago > 0) {
+                    t('Saldo positivo voy a descontar la factura: '.$decMontPago);
+                    if ($decMontPago >= $objFactPago->Total) {
+                        t('Se cubre el monto completo de la factura, se marca como CONCILIADO');
+                        $strEstaPago = 'CONCILIADO';
+                        $objFactPago->EstatusPago  = $strEstaPago;
+                        $objFactPago->MontoCobrado = $objFactPago->Total;
+                    } else {
+                        t('No cubre el monto de la factura, se marca como PAGOPARCIAL');
+                        $strEstaPago = 'PAGOPARCIAL';
+                        $objFactPago->EstatusPago  = $strEstaPago;
+                        $objFactPago->MontoCobrado = $objFactPago->Total - $decMontPago;
+                    }
+                } else {
+                    $strEstaPago = 'PENDIENTE';
+                    $objFactPago->EstatusPago  = $strEstaPago;
+                    $objFactPago->MontoCobrado = 0;
+                }
+                $objFactPago->Save();
+                $decMontPago -= $objFactPago->Total;
+                t('El saldo de los pagos esta en: '.$decMontPago);
+                //----------------------------------------------
+                // Se debe registro en el Log de transacciones
+                //----------------------------------------------
+                $arrLogxCamb['strNombTabl'] = 'Facturas';
+                $arrLogxCamb['intRefeRegi'] = $objFactPago->Id;
+                $arrLogxCamb['strNombRegi'] = $objFactPago->Referencia;
+                $arrLogxCamb['strDescCamb'] = 'Pago: '.$objFactPago->Referencia.' ('.$strEstaPago.')';
+                $arrLogxCamb['strEnlaEnti'] = __SIST__.'/facturas_edit.php/'.$objFactPago->Id;
+                LogDeCambios($arrLogxCamb);
+            }
+            t('Termine de procesar los pagos');
+            //----------------------------------------------------------------
+            // Si el saldo de los pagos se actualiza en la ficha del Cliente
+            //----------------------------------------------------------------
+            $this->ClienteCorp->SaldoExcedente = $decMontPago;
+            $this->ClienteCorp->Save();
+            t('El Saldo Excente del Cliente quedo en: '.$decMontPago);
+            //----------------------------------------------
+            // Se debe registro en el Log de transacciones
+            //----------------------------------------------
+            $arrLogxCamb['strNombTabl'] = 'MasterClient';
+            $arrLogxCamb['intRefeRegi'] = $this->ClienteCorpId;
+            $arrLogxCamb['strNombRegi'] = $$this>$this->ClienteCorp->NombClie;
+            $arrLogxCamb['strDescCamb'] = 'Pago Procesando: '.$this->Referencia.' (Saldo: '.$decMontPago.')';
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_cliente_edit.php/'.$this->ClienteCorpId;
+            LogDeCambios($arrLogxCamb);
+            //-----------------------------------------------------------------------
+            // Si el saldo es positivo, se crea automaticamente una nota de credito
+            //-----------------------------------------------------------------------
+            if ($decMontPago > 0) {
+                t('Se debe crear una nota de credito');
+            }
+            $objDatabase->TransactionCommit();
+            t('El proceso de conciliacion ha terminado');
+            t('***************************************');
+        }
+
 		public function replicarEstatusPago($strEstaPago) {
 		    $arrFactPago = $this->GetFacturasAsFacturaPagoCorpArray();
             foreach ($arrFactPago as $objFactPago) {
-                $objFactPago->EstatusPago = $strEstaPago;
+                $objFactPago->EstatusPago  = $strEstaPago;
+                $objFactPago->MontoCobrado = 0;
                 $objFactPago->Save();
                 //----------------------------------------------
                 // Se debe registro en el Log de transacciones

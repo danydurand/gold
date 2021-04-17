@@ -28,7 +28,7 @@
             </div>
             <div class="row">
                 <div class="visible-lg col-lg-2" style="margin-top: 1em;"></div>
-                <div class="col-md-9 col-lg-6" style="margin-top: 1em;">
+                <div class="col-md-9 col-lg-7" style="margin-top: 1em;">
                     <?php $this->lstPermProc->RenderWithName(); ?>
                     <?php $this->txtTextExpl->RenderWithName(); ?>
                     <?php $this->txtLogiUsua->RenderWithName(); ?>

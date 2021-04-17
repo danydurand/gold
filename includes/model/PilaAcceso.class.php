@@ -53,7 +53,7 @@
             $strLogiUsua = PilaAcceso::LoginUsuario();
             $strCadeSqlx = "delete
                               from pila_acceso
-                             where login = '".$strLogiUsua."'";
+                             where login = '$strLogiUsua'";
             $objDataBase = Usuario::GetDatabase();
             $objDataBase->NonQuery($strCadeSqlx);
         }

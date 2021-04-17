@@ -139,6 +139,9 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
         //-----------------------------------------------------------------------------
         foreach ($arrListTemp as $strNumeGuia) {
             if (strlen($strNumeGuia) > 0) {
+                if (strpos($strNumeGuia,'-')) {
+                    $strNumeGuia = explode('-',$strNumeGuia)[0];
+                }
                 $this->arrListNume[] = $strNumeGuia;
             }
         }

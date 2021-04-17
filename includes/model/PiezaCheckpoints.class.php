@@ -37,7 +37,7 @@
         public static function CheckpointEnFecha($strCodiCkpt, $dttFechRefe) {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);
-            $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Fecha,$dttFechRefe);
+            $objClauWher[] = QQ::LessOrEqual(QQN::PiezaCheckpoints()->Fecha,$dttFechRefe);
             $arrPiezCkpt   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClauWher));
             return $arrPiezCkpt;
         }
