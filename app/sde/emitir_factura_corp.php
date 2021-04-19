@@ -263,6 +263,9 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                 $objFactClie->EstatusPago      = 'PENDIENTE';
                 $objFactClie->Tasa             = 1;
                 $objFactClie->Total            = 0;
+                $objFactClie->MontoDscto       = 0;
+                $objFactClie->MontoCobrado     = 0;
+                $objFactClie->MontoPendiente   = 0;
                 $objFactClie->Save();
             } catch (Exception $e) {
                 $blnTodoOkey = false;
@@ -335,7 +338,8 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
             //-----------------------------------------------------------------------------------
             // Se actualiza el total de la factura con la sumatoria de los totales de sus nde's
             //-----------------------------------------------------------------------------------
-            $objFactClie->Total = $decSumaNota;
+            $objFactClie->Total          = $decSumaNota;
+            $objFactClie->MontoPendiente = $decSumaNota;
             $objFactClie->Save();
             $intCantFact++;
             t('Se actualizo el total de la factura con: '.$decSumaNota."\n");

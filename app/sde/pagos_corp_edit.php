@@ -44,6 +44,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		// Call MetaControl's methods to create qcontrols based on PagosCorp's data fields
 		$this->lblId = $this->mctPagosCorp->lblId_Create();
 		$this->lstClienteCorp = $this->mctPagosCorp->lstClienteCorp_Create();
+		$this->lstClienteCorp->Name = $this->enlaceCliente();
 		$this->lstFormaPago = $this->mctPagosCorp->lstFormaPago_Create();
 		$this->txtReferencia = $this->mctPagosCorp->txtReferencia_Create();
 		$this->calFecha = $this->mctPagosCorp->calFecha_Create();
@@ -59,7 +60,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		$this->txtCreatedBy = $this->mctPagosCorp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctPagosCorp->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctPagosCorp->txtDeletedBy_Create();
-        $this->dtgFacturasesAsFacturaPagoCorp = $this->mctPagosCorp->dtgFacturasesAsFacturaPagoCorp_Create();
+        //$this->dtgFacturasesAsFacturaPagoCorp = $this->mctPagosCorp->dtgFacturasesAsFacturaPagoCorp_Create();
 
         $this->dtgFactClie_Create();
 
@@ -71,18 +72,19 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         $this->calFecha       = disableControl($this->calFecha);
         $this->txtMonto       = disableControl($this->txtMonto);
 
-        $decSaldClie = nf($this->mctPagosCorp->PagosCorp->ClienteCorp->SaldoExcedente);
-        if ($decSaldClie > 0) {
-            $this->ninfo('Saldo a favor del Cliente: <b>'.$decSaldClie.'</b>');
-        } else {
-            $this->nwarning('Deuda del Cliente: <b>'.$decSaldClie.'</b>');
-        }
+        $this->mostrarSaldoCliente($this->mctPagosCorp->PagosCorp->ClienteCorp);
 
     }
 
 	//----------------------------
 	// Aqui se crean los objetos 
 	//----------------------------
+
+    protected function enlaceCliente() {
+	    $strLinkClie = '<a href='.__SIST__.'/master_cliente_edit.php/'.$this->lstClienteCorp->SelectedValue.' 
+                style="color: #0d6aad; text-decoration: none" ><i class="fa fa-link"></i> Cliente Corp </a>';
+	    return $strLinkClie;
+    }
 
     protected function btnCancel_Create() {
         $this->btnCancel = new QButton($this);
@@ -152,6 +154,12 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         $colMontCobr->Width = 70;
         $this->dtgFactClie->AddColumn($colMontCobr);
 
+        $colMontPend = new QDataGridColumn($this);
+        $colMontPend->Name = QApplication::Translate('Pendiente');
+        $colMontPend->Html = '<?= nf($_ITEM->MontoPendiente) ?>';
+        $colMontPend->Width = 70;
+        $this->dtgFactClie->AddColumn($colMontPend);
+
     }
 
     protected function determinarPosicion() {
@@ -184,10 +192,47 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
     }
 
 
-
     //-----------------------------------
 	// Acciones relativas a los objetos 
 	//-----------------------------------
+
+    protected function mostrarSaldoCliente(MasterCliente $objCliePago) {
+        $decSaldClie = $objCliePago->__saldoExcedente();
+        if ($decSaldClie > 0) {
+            $this->ninfo('Saldo a favor del Cliente: <b>'.$decSaldClie.'</b>');
+        } else {
+            $this->nwarning('Deuda del Cliente: <b>'.$decSaldClie.'</b>');
+        }
+    }
+
+    protected function actualizarEstatusDelPago($strEstaPago) {
+	    $strTipoMens = 'success';
+	    switch ($strEstaPago) {
+            case 'CONCILIADO':
+                $intCantFact = $this->mctPagosCorp->PagosCorp->conciliarPago();
+                $strMensTran = "Pago CONCILIADO | $intCantFact Facturas Procesadas";
+                $this->mctPagosCorp->PagosCorp->logDeCambios($strMensTran);
+                $strTextMens = "Transaccion Exitosa | <b>$intCantFact Facturas Procesadas | Pago Conciliado !!!</b>";
+                break;
+            case 'PENDIENTE':
+                $intCantFact = $this->mctPagosCorp->PagosCorp->replicarEstatusPago('PORCONCILIAR');
+                $strMensTran = "Pago marcado como PENDIENTE | $intCantFact Facturas marcadas como 'PORCONCILIAR'";
+                $this->mctPagosCorp->PagosCorp->logDeCambios($strMensTran);
+                $strTextMens = "Transaccion Exitosa | <b>$intCantFact Facturas Procesadas | Pago marcado como 'Pendiente'</b>";
+                break;
+            case 'INCONCILIABLE':
+                $intCantFact = $this->mctPagosCorp->PagosCorp->replicarEstatusPago('INCONCILIABLE');
+                $strMensTran = "Pago marcado como INCONCILIABLE | $intCantFact Facturas Procesadas'";
+                $this->mctPagosCorp->PagosCorp->logDeCambios($strMensTran);
+                $strTextMens = "Transaccion Exitosa | <b>$intCantFact Facturas Procesadas | Pago marcado como 'Pendiente'</b>";
+                break;
+            default:
+                $strTextMens = 'Estatus del Pago no Procesable !!!';
+                $strTipoMens = 'danger';
+                break;
+        }
+        return [$strTextMens, $strTipoMens];
+    }
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
@@ -215,13 +260,14 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
+        $strTipoMens = 'success';
 		$objRegiViej = clone $this->mctPagosCorp->PagosCorp;
 		$this->txtEstatus->Text = $this->lstEstatus->SelectedValue;
 		$this->mctPagosCorp->SavePagosCorp();
 		if ($this->mctPagosCorp->EditMode) {
 			//---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
-			// de algun cambio en algun dato 
+			// de algun cambio en algun dato
 			//---------------------------------------------------------------------
 			$objRegiNuev = $this->mctPagosCorp->PagosCorp;
 			$objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
@@ -229,26 +275,24 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 				//------------------------------------------
 				// En caso de que el objeto haya cambiado 
 				//------------------------------------------
-				$arrLogxCamb['strNombTabl'] = 'PagosCorp';
-				$arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->Id;
-				$arrLogxCamb['strNombRegi'] = $this->mctPagosCorp->PagosCorp->Referencia;
-				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
-                $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$this->mctPagosCorp->PagosCorp->Id;
-				LogDeCambios($arrLogxCamb);
-                //-----------------------------------------------------------------------------
-                // El Estatus del pago, debe replicarse en el estatus de pago de las facturas
-                //-----------------------------------------------------------------------------
-                $this->mctPagosCorp->PagosCorp->replicarEstatusPago($this->txtEstatus->Text);
+                $this->mctPagosCorp->PagosCorp->logDeCambios(implode(',',$objResuComp->DifferentFields));
                 $this->dtgFactClie->Refresh();
-                $this->success('Transacción Exitosa');
+                $strTextMens = 'Transaccion Exitosa !!!';
+                if ($objRegiViej->Estatus != $objRegiNuev->Estatus) {
+                    //-----------------------------------------------------------------------------
+                    // El Estatus del pago, debe replicarse en el estatus de pago de las facturas
+                    //-----------------------------------------------------------------------------
+                    list($strTextMens,$strTipoMens) = $this->actualizarEstatusDelPago($objRegiNuev->Estatus);
+                }
+                if ($strTipoMens == 'danger') {
+                    $this->danger($strTextMens);
+                } else {
+                    $this->success($strTextMens);
+                }
+                $this->mostrarSaldoCliente($this->mctPagosCorp->PagosCorp->ClienteCorp);
 			}
 		} else {
-			$arrLogxCamb['strNombTabl'] = 'PagosCorp';
-			$arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->Id;
-			$arrLogxCamb['strNombRegi'] = $this->mctPagosCorp->PagosCorp->Referencia;
-			$arrLogxCamb['strDescCamb'] = "Creado";
-            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$this->mctPagosCorp->PagosCorp->Id;
-			LogDeCambios($arrLogxCamb);
+		    $this->mctPagosCorp->PagosCorp->logDeCambios("Creado");
             $this->success('Transacción Exitosa');
 		}
 	}
@@ -261,8 +305,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         $arrTablRela = $this->mctPagosCorp->TablasRelacionadasPagosCorp();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
+            $this->warning(sprintf('Existen registros relacionados en %s',$strTablRela));
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {

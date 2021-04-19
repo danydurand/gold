@@ -112,6 +112,8 @@
 	 * @property-read MasCartaDevo[] $_MasCartaDevoAsCodiClieArray the value for the private _objMasCartaDevoAsCodiClieArray (Read-Only) if set due to an ExpandAsArray on the mas_carta_devo.codi_clie reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsCodiDepe the value for the private _objMasterClienteAsCodiDepe (Read-Only) if set due to an expansion on the master_cliente.codi_depe reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsCodiDepeArray the value for the private _objMasterClienteAsCodiDepeArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.codi_depe reverse relationship
+	 * @property-read NotaCreditoCorp $_NotaCreditoCorpAsClienteCorp the value for the private _objNotaCreditoCorpAsClienteCorp (Read-Only) if set due to an expansion on the nota_credito_corp.cliente_corp_id reverse relationship
+	 * @property-read NotaCreditoCorp[] $_NotaCreditoCorpAsClienteCorpArray the value for the private _objNotaCreditoCorpAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the nota_credito_corp.cliente_corp_id reverse relationship
 	 * @property-read NotaEntrega $_NotaEntregaAsClienteCorp the value for the private _objNotaEntregaAsClienteCorp (Read-Only) if set due to an expansion on the nota_entrega.cliente_corp_id reverse relationship
 	 * @property-read NotaEntrega[] $_NotaEntregaAsClienteCorpArray the value for the private _objNotaEntregaAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega.cliente_corp_id reverse relationship
 	 * @property-read PagosCorp $_PagosCorpAsClienteCorp the value for the private _objPagosCorpAsClienteCorp (Read-Only) if set due to an expansion on the pagos_corp.cliente_corp_id reverse relationship
@@ -855,6 +857,22 @@
 		 * @var MasterCliente[] _objMasterClienteAsCodiDepeArray;
 		 */
 		private $_objMasterClienteAsCodiDepeArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single NotaCreditoCorpAsClienteCorp object
+		 * (of type NotaCreditoCorp), if this MasterCliente object was restored with
+		 * an expansion on the nota_credito_corp association table.
+		 * @var NotaCreditoCorp _objNotaCreditoCorpAsClienteCorp;
+		 */
+		private $_objNotaCreditoCorpAsClienteCorp;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaCreditoCorpAsClienteCorp objects
+		 * (of type NotaCreditoCorp[]), if this MasterCliente object was restored with
+		 * an ExpandAsArray on the nota_credito_corp association table.
+		 * @var NotaCreditoCorp[] _objNotaCreditoCorpAsClienteCorpArray;
+		 */
+		private $_objNotaCreditoCorpAsClienteCorpArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single NotaEntregaAsClienteCorp object
@@ -2114,6 +2132,21 @@
 					$objToReturn->_objMasterClienteAsCodiDepeArray[] = MasterCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'masterclienteascodidepe__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objMasterClienteAsCodiDepe)) {
 					$objToReturn->_objMasterClienteAsCodiDepe = MasterCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'masterclienteascodidepe__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for NotaCreditoCorpAsClienteCorp Virtual Binding
+			$strAlias = $strAliasPrefix . 'notacreditocorpasclientecorp__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notacreditocorpasclientecorp']) ? null : $objExpansionAliasArray['notacreditocorpasclientecorp']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaCreditoCorpAsClienteCorpArray)
+				$objToReturn->_objNotaCreditoCorpAsClienteCorpArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaCreditoCorpAsClienteCorpArray[] = NotaCreditoCorp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notacreditocorpasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaCreditoCorpAsClienteCorp)) {
+					$objToReturn->_objNotaCreditoCorpAsClienteCorp = NotaCreditoCorp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notacreditocorpasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -4064,6 +4097,22 @@
 					 */
 					return $this->_objMasterClienteAsCodiDepeArray;
 
+				case '_NotaCreditoCorpAsClienteCorp':
+					/**
+					 * Gets the value for the private _objNotaCreditoCorpAsClienteCorp (Read-Only)
+					 * if set due to an expansion on the nota_credito_corp.cliente_corp_id reverse relationship
+					 * @return NotaCreditoCorp
+					 */
+					return $this->_objNotaCreditoCorpAsClienteCorp;
+
+				case '_NotaCreditoCorpAsClienteCorpArray':
+					/**
+					 * Gets the value for the private _objNotaCreditoCorpAsClienteCorpArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_credito_corp.cliente_corp_id reverse relationship
+					 * @return NotaCreditoCorp[]
+					 */
+					return $this->_objNotaCreditoCorpAsClienteCorpArray;
+
 				case '_NotaEntregaAsClienteCorp':
 					/**
 					 * Gets the value for the private _objNotaEntregaAsClienteCorp (Read-Only)
@@ -5336,6 +5385,9 @@
 			}
 			if ($this->CountMasterClientesAsCodiDepe()) {
 				$arrTablRela[] = 'master_cliente';
+			}
+			if ($this->CountNotaCreditoCorpsAsClienteCorp()) {
+				$arrTablRela[] = 'nota_credito_corp';
 			}
 			if ($this->CountNotaEntregasAsClienteCorp()) {
 				$arrTablRela[] = 'nota_entrega';
@@ -7150,6 +7202,155 @@
 		}
 
 
+		// Related Objects' Methods for NotaCreditoCorpAsClienteCorp
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaCreditoCorpsAsClienteCorp as an array of NotaCreditoCorp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaCreditoCorp[]
+		*/
+		public function GetNotaCreditoCorpAsClienteCorpArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiClie)))
+				return array();
+
+			try {
+				return NotaCreditoCorp::LoadArrayByClienteCorpId($this->intCodiClie, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaCreditoCorpsAsClienteCorp
+		 * @return int
+		*/
+		public function CountNotaCreditoCorpsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				return 0;
+
+			return NotaCreditoCorp::CountByClienteCorpId($this->intCodiClie);
+		}
+
+		/**
+		 * Associates a NotaCreditoCorpAsClienteCorp
+		 * @param NotaCreditoCorp $objNotaCreditoCorp
+		 * @return void
+		*/
+		public function AssociateNotaCreditoCorpAsClienteCorp(NotaCreditoCorp $objNotaCreditoCorp) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaCreditoCorpAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objNotaCreditoCorp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaCreditoCorpAsClienteCorp on this MasterCliente with an unsaved NotaCreditoCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_credito_corp`
+				SET
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaCreditoCorp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaCreditoCorpAsClienteCorp
+		 * @param NotaCreditoCorp $objNotaCreditoCorp
+		 * @return void
+		*/
+		public function UnassociateNotaCreditoCorpAsClienteCorp(NotaCreditoCorp $objNotaCreditoCorp) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objNotaCreditoCorp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsClienteCorp on this MasterCliente with an unsaved NotaCreditoCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_credito_corp`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaCreditoCorp->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaCreditoCorpsAsClienteCorp
+		 * @return void
+		*/
+		public function UnassociateAllNotaCreditoCorpsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_credito_corp`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaCreditoCorpAsClienteCorp
+		 * @param NotaCreditoCorp $objNotaCreditoCorp
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaCreditoCorpAsClienteCorp(NotaCreditoCorp $objNotaCreditoCorp) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objNotaCreditoCorp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsClienteCorp on this MasterCliente with an unsaved NotaCreditoCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_credito_corp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaCreditoCorp->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaCreditoCorpsAsClienteCorp
+		 * @return void
+		*/
+		public function DeleteAllNotaCreditoCorpsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_credito_corp`
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+
 		// Related Objects' Methods for NotaEntregaAsClienteCorp
 		//-------------------------------------------------------------------
 
@@ -8115,6 +8316,7 @@
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteCorp
      * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiClie
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsCodiDepe
+     * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
      * @property-read QQReverseReferenceNodePagosCorp $PagosCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsCliente
@@ -8297,6 +8499,8 @@
 					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodiclie', 'reverse_reference', 'codi_clie', 'MasCartaDevoAsCodiClie');
 				case 'MasterClienteAsCodiDepe':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteascodidepe', 'reverse_reference', 'codi_depe', 'MasterClienteAsCodiDepe');
+				case 'NotaCreditoCorpAsClienteCorp':
+					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaCreditoCorpAsClienteCorp');
 				case 'NotaEntregaAsClienteCorp':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaAsClienteCorp');
 				case 'PagosCorpAsClienteCorp':
@@ -8405,6 +8609,7 @@
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteCorp
      * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiClie
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsCodiDepe
+     * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
      * @property-read QQReverseReferenceNodePagosCorp $PagosCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsCliente
@@ -8587,6 +8792,8 @@
 					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodiclie', 'reverse_reference', 'codi_clie', 'MasCartaDevoAsCodiClie');
 				case 'MasterClienteAsCodiDepe':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteascodidepe', 'reverse_reference', 'codi_depe', 'MasterClienteAsCodiDepe');
+				case 'NotaCreditoCorpAsClienteCorp':
+					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaCreditoCorpAsClienteCorp');
 				case 'NotaEntregaAsClienteCorp':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaAsClienteCorp');
 				case 'PagosCorpAsClienteCorp':

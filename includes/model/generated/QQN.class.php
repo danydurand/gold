@@ -685,6 +685,12 @@
 			return new QQNodeNotaCredito('nota_credito', null, null);
 		}
 		/**
+		 * @return QQNodeNotaCreditoCorp
+		 */
+		static public function NotaCreditoCorp() {
+			return new QQNodeNotaCreditoCorp('nota_credito_corp', null, null);
+		}
+		/**
 		 * @return QQNodeNotaCreditoItems
 		 */
 		static public function NotaCreditoItems() {

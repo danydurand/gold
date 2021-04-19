@@ -61,6 +61,8 @@
 	 * @property-read FacturaNotas[] $_FacturaNotasAsFacturaArray the value for the private _objFacturaNotasAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the factura_notas.factura_id reverse relationship
 	 * @property-read FacturaPagos $_FacturaPagosAsFactura the value for the private _objFacturaPagosAsFactura (Read-Only) if set due to an expansion on the factura_pagos.factura_id reverse relationship
 	 * @property-read FacturaPagos[] $_FacturaPagosAsFacturaArray the value for the private _objFacturaPagosAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the factura_pagos.factura_id reverse relationship
+	 * @property-read NotaCreditoCorp $_NotaCreditoCorpAsFactura the value for the private _objNotaCreditoCorpAsFactura (Read-Only) if set due to an expansion on the nota_credito_corp.factura_id reverse relationship
+	 * @property-read NotaCreditoCorp[] $_NotaCreditoCorpAsFacturaArray the value for the private _objNotaCreditoCorpAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the nota_credito_corp.factura_id reverse relationship
 	 * @property-read NotaEntrega $_NotaEntregaAsFactura the value for the private _objNotaEntregaAsFactura (Read-Only) if set due to an expansion on the nota_entrega.factura_id reverse relationship
 	 * @property-read NotaEntrega[] $_NotaEntregaAsFacturaArray the value for the private _objNotaEntregaAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega.factura_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -407,6 +409,22 @@
 		 * @var FacturaPagos[] _objFacturaPagosAsFacturaArray;
 		 */
 		private $_objFacturaPagosAsFacturaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single NotaCreditoCorpAsFactura object
+		 * (of type NotaCreditoCorp), if this Facturas object was restored with
+		 * an expansion on the nota_credito_corp association table.
+		 * @var NotaCreditoCorp _objNotaCreditoCorpAsFactura;
+		 */
+		private $_objNotaCreditoCorpAsFactura;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaCreditoCorpAsFactura objects
+		 * (of type NotaCreditoCorp[]), if this Facturas object was restored with
+		 * an ExpandAsArray on the nota_credito_corp association table.
+		 * @var NotaCreditoCorp[] _objNotaCreditoCorpAsFacturaArray;
+		 */
+		private $_objNotaCreditoCorpAsFacturaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single NotaEntregaAsFactura object
@@ -1265,6 +1283,21 @@
 					$objToReturn->_objFacturaPagosAsFacturaArray[] = FacturaPagos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturapagosasfactura__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objFacturaPagosAsFactura)) {
 					$objToReturn->_objFacturaPagosAsFactura = FacturaPagos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturapagosasfactura__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for NotaCreditoCorpAsFactura Virtual Binding
+			$strAlias = $strAliasPrefix . 'notacreditocorpasfactura__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notacreditocorpasfactura']) ? null : $objExpansionAliasArray['notacreditocorpasfactura']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaCreditoCorpAsFacturaArray)
+				$objToReturn->_objNotaCreditoCorpAsFacturaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaCreditoCorpAsFacturaArray[] = NotaCreditoCorp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notacreditocorpasfactura__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaCreditoCorpAsFactura)) {
+					$objToReturn->_objNotaCreditoCorpAsFactura = NotaCreditoCorp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notacreditocorpasfactura__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2307,6 +2340,22 @@
 					 */
 					return $this->_objFacturaPagosAsFacturaArray;
 
+				case '_NotaCreditoCorpAsFactura':
+					/**
+					 * Gets the value for the private _objNotaCreditoCorpAsFactura (Read-Only)
+					 * if set due to an expansion on the nota_credito_corp.factura_id reverse relationship
+					 * @return NotaCreditoCorp
+					 */
+					return $this->_objNotaCreditoCorpAsFactura;
+
+				case '_NotaCreditoCorpAsFacturaArray':
+					/**
+					 * Gets the value for the private _objNotaCreditoCorpAsFacturaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_credito_corp.factura_id reverse relationship
+					 * @return NotaCreditoCorp[]
+					 */
+					return $this->_objNotaCreditoCorpAsFacturaArray;
+
 				case '_NotaEntregaAsFactura':
 					/**
 					 * Gets the value for the private _objNotaEntregaAsFactura (Read-Only)
@@ -2912,6 +2961,9 @@
 			if ($this->CountFacturaPagosesAsFactura()) {
 				$arrTablRela[] = 'factura_pagos';
 			}
+			if ($this->CountNotaCreditoCorpsAsFactura()) {
+				$arrTablRela[] = 'nota_credito_corp';
+			}
 			if ($this->CountNotaEntregasAsFactura()) {
 				$arrTablRela[] = 'nota_entrega';
 			}
@@ -3515,6 +3567,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`factura_pagos`
+				WHERE
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for NotaCreditoCorpAsFactura
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaCreditoCorpsAsFactura as an array of NotaCreditoCorp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaCreditoCorp[]
+		*/
+		public function GetNotaCreditoCorpAsFacturaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return NotaCreditoCorp::LoadArrayByFacturaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaCreditoCorpsAsFactura
+		 * @return int
+		*/
+		public function CountNotaCreditoCorpsAsFactura() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return NotaCreditoCorp::CountByFacturaId($this->intId);
+		}
+
+		/**
+		 * Associates a NotaCreditoCorpAsFactura
+		 * @param NotaCreditoCorp $objNotaCreditoCorp
+		 * @return void
+		*/
+		public function AssociateNotaCreditoCorpAsFactura(NotaCreditoCorp $objNotaCreditoCorp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaCreditoCorpAsFactura on this unsaved Facturas.');
+			if ((is_null($objNotaCreditoCorp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaCreditoCorpAsFactura on this Facturas with an unsaved NotaCreditoCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_credito_corp`
+				SET
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaCreditoCorp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaCreditoCorpAsFactura
+		 * @param NotaCreditoCorp $objNotaCreditoCorp
+		 * @return void
+		*/
+		public function UnassociateNotaCreditoCorpAsFactura(NotaCreditoCorp $objNotaCreditoCorp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsFactura on this unsaved Facturas.');
+			if ((is_null($objNotaCreditoCorp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsFactura on this Facturas with an unsaved NotaCreditoCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_credito_corp`
+				SET
+					`factura_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaCreditoCorp->Id) . ' AND
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaCreditoCorpsAsFactura
+		 * @return void
+		*/
+		public function UnassociateAllNotaCreditoCorpsAsFactura() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsFactura on this unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_credito_corp`
+				SET
+					`factura_id` = null
+				WHERE
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaCreditoCorpAsFactura
+		 * @param NotaCreditoCorp $objNotaCreditoCorp
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaCreditoCorpAsFactura(NotaCreditoCorp $objNotaCreditoCorp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsFactura on this unsaved Facturas.');
+			if ((is_null($objNotaCreditoCorp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsFactura on this Facturas with an unsaved NotaCreditoCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_credito_corp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaCreditoCorp->Id) . ' AND
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaCreditoCorpsAsFactura
+		 * @return void
+		*/
+		public function DeleteAllNotaCreditoCorpsAsFactura() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaCreditoCorpAsFactura on this unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_credito_corp`
 				WHERE
 					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -4156,6 +4357,7 @@
      * @property-read QQReverseReferenceNodeFacturaItems $FacturaItemsAsFactura
      * @property-read QQReverseReferenceNodeFacturaNotas $FacturaNotasAsFactura
      * @property-read QQReverseReferenceNodeFacturaPagos $FacturaPagosAsFactura
+     * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsFactura
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsFactura
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -4248,6 +4450,8 @@
 					return new QQReverseReferenceNodeFacturaNotas($this, 'facturanotasasfactura', 'reverse_reference', 'factura_id', 'FacturaNotasAsFactura');
 				case 'FacturaPagosAsFactura':
 					return new QQReverseReferenceNodeFacturaPagos($this, 'facturapagosasfactura', 'reverse_reference', 'factura_id', 'FacturaPagosAsFactura');
+				case 'NotaCreditoCorpAsFactura':
+					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasfactura', 'reverse_reference', 'factura_id', 'NotaCreditoCorpAsFactura');
 				case 'NotaEntregaAsFactura':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasfactura', 'reverse_reference', 'factura_id', 'NotaEntregaAsFactura');
 
@@ -4308,6 +4512,7 @@
      * @property-read QQReverseReferenceNodeFacturaItems $FacturaItemsAsFactura
      * @property-read QQReverseReferenceNodeFacturaNotas $FacturaNotasAsFactura
      * @property-read QQReverseReferenceNodeFacturaPagos $FacturaPagosAsFactura
+     * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsFactura
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsFactura
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -4400,6 +4605,8 @@
 					return new QQReverseReferenceNodeFacturaNotas($this, 'facturanotasasfactura', 'reverse_reference', 'factura_id', 'FacturaNotasAsFactura');
 				case 'FacturaPagosAsFactura':
 					return new QQReverseReferenceNodeFacturaPagos($this, 'facturapagosasfactura', 'reverse_reference', 'factura_id', 'FacturaPagosAsFactura');
+				case 'NotaCreditoCorpAsFactura':
+					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasfactura', 'reverse_reference', 'factura_id', 'NotaCreditoCorpAsFactura');
 				case 'NotaEntregaAsFactura':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasfactura', 'reverse_reference', 'factura_id', 'NotaEntregaAsFactura');
 

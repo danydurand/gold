@@ -27,7 +27,7 @@ require(__YAMAGUCHI__APP_INCLUDES__ . '/header.inc.php');
                 <?php //$this->txtEstatus->RenderWithName(); ?>
                 <?php $this->txtObservacion->RenderWithName(); ?>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="titulo">Facturas pendientes de Pago (click para incluir en el pago)</div>
                 <?php $this->dtgFactClie->Render(); ?>
                 <br>

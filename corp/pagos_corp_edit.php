@@ -64,7 +64,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		$this->txtCreatedBy = $this->mctPagosCorp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctPagosCorp->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctPagosCorp->txtDeletedBy_Create();
-        $this->dtgFacturasesAsFacturaPagoCorp = $this->mctPagosCorp->dtgFacturasesAsFacturaPagoCorp_Create();
+        //$this->dtgFacturasesAsFacturaPagoCorp = $this->mctPagosCorp->dtgFacturasesAsFacturaPagoCorp_Create();
 
         $this->txtEstatus = disableControl($this->txtEstatus);
 

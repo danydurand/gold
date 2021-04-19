@@ -5,7 +5,7 @@
 	// Be sure to move this out of the generated/ subdirectory before modifying to ensure that subsequent
 	// code re-generations do not overwrite your changes.
 
-	$strPageTitle = 'NotaEntrega' . ' - ' . $this->mctNotaEntrega->TitleVerb;
+	$strPageTitle = 'Manifiesto' . ' - ' . $this->mctNotaEntrega->TitleVerb;
 	require(__APP_INCLUDES__ . '/header.inc.php');
 	//require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
 ?>
@@ -88,9 +88,11 @@
             </div>
         </div>
         <div class="row" style="margin-top: 1em">
+            <?php if ($this->mctNotaEntrega->NotaEntrega->CountGuiases() > 0) { ?>
             <div class="col-md-6">
                 <?php $this->dtgGuiaNota->Render(); ?>
             </div>
+            <?php } ?>
             <?php if ($this->mctNotaEntrega->NotaEntrega->CountNotaConceptoses() > 0) { ?>
             <div class="col-md-6">
                 <?php $this->dtgNotaConc->Render(); ?>

@@ -797,6 +797,13 @@
 		QApplicationBase::$ClassFile['notacreditometacontrol'] = __META_CONTROLS__ . '/NotaCreditoMetaControl.class.php';
 		QApplicationBase::$ClassFile['notacreditodatagrid'] = __META_CONTROLS__ . '/NotaCreditoDataGrid.class.php';
 
+	// ClassPaths for the NotaCreditoCorp class
+		QApplicationBase::$ClassFile['notacreditocorp'] = __MODEL__ . '/NotaCreditoCorp.class.php';
+		QApplicationBase::$ClassFile['qqnodenotacreditocorp'] = __MODEL__ . '/NotaCreditoCorp.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodenotacreditocorp'] = __MODEL__ . '/NotaCreditoCorp.class.php';
+		QApplicationBase::$ClassFile['notacreditocorpmetacontrol'] = __META_CONTROLS__ . '/NotaCreditoCorpMetaControl.class.php';
+		QApplicationBase::$ClassFile['notacreditocorpdatagrid'] = __META_CONTROLS__ . '/NotaCreditoCorpDataGrid.class.php';
+
 	// ClassPaths for the NotaCreditoItems class
 		QApplicationBase::$ClassFile['notacreditoitems'] = __MODEL__ . '/NotaCreditoItems.class.php';
 		QApplicationBase::$ClassFile['qqnodenotacreditoitems'] = __MODEL__ . '/NotaCreditoItems.class.php';

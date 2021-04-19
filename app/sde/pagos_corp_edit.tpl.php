@@ -65,7 +65,7 @@
                 <?php $this->lstEstatus->RenderWithName(); ?>
                 <?php $this->txtObservacion->RenderWithName(); ?>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <div class="titulo">Facturas incluidas en este Pago</div>
                 <?php $this->dtgFactClie->Render(); ?>
                 <?php //$this->lblCreatedAt->RenderWithName(); ?>

@@ -1,11 +1,9 @@
 <?php
 require_once('qcubed.inc.php');
 
+/* @var $objCliente MasterCliente */
 
-$arrPiezPick = PiezaCheckpoints::CheckpointEnFecha('PU',date('Y-m-d'));
-//print_r($arrPiezPick);
-/* @var $objPiezCkpt PiezaCheckpoints */
-foreach ($arrPiezPick as $objPiezCkpt) {
-    echo 'Guia: '.$objPiezCkpt->Pieza->Guia->Tracking."<br>";
-    echo 'Pieza: '.$objPiezCkpt->Pieza->IdPieza."<br>";
-}
+$objCliente = MasterCliente::Load(1684);
+echo "Saldo: $objCliente->SaldoExcedente";
+echo "<br>";
+echo "Saldo: ".$objCliente->__saldoExcedente();

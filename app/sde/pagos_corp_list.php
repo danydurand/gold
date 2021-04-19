@@ -55,7 +55,11 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 		$this->dtgPagosCorps->Paginator = new QPaginator($this->dtgPagosCorps);
 		$this->dtgPagosCorps->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-		// Higlight the datagrid rows when mousing over them
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::PagosCorp()->Id,false);
+        $this->dtgPagosCorps->AdditionalClauses = $objClauOrde;
+
+        // Higlight the datagrid rows when mousing over them
 		$this->dtgPagosCorps->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
 		$this->dtgPagosCorps->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
@@ -78,10 +82,14 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         $this->dtgPagosCorps->MetaAddColumn('Id');
 		$this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->ClienteCorp);
         $this->dtgPagosCorps->MetaAddColumn('Referencia');
+        $colCantFact = new QDataGridColumn('C.FACT','<?= $_ITEM->CountFacturasesAsFacturaPagoCorp(); ?>');
+        $this->dtgPagosCorps->AddColumn($colCantFact);
         $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->FormaPago);
         $colFechPago = new QDataGridColumn('FECHA','<?= $_FORM->FechPago_Render($_ITEM) ?>');
         $this->dtgPagosCorps->AddColumn($colFechPago);
-		$this->dtgPagosCorps->MetaAddColumn('Monto');
+        //$this->dtgPagosCorps->MetaAddColumn('Monto');
+        $colMontPago = new QDataGridColumn('MONTO','<?= nf($_ITEM->Monto) ?>');
+        $this->dtgPagosCorps->AddColumn($colMontPago);
 		$this->dtgPagosCorps->MetaAddColumn('Estatus');
 		$this->dtgPagosCorps->MetaAddColumn('Observacion');
 
@@ -104,7 +112,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 
     protected function btnIncoPago_Create() {
         $this->btnIncoPago = new QButton($this);
-        $this->btnIncoPago->Text = '<i class="fa fa-file-text-o fa-lg"></i> In-Conciliar';
+        $this->btnIncoPago->Text = '<i class="fa fa-file-text-o fa-lg"></i> In-Conciliable';
         $this->btnIncoPago->CssClass = 'btn btn-warning btn-sm';
         $this->btnIncoPago->HtmlEntities = false;
         $this->btnIncoPago->AddAction(new QClickEvent(), new QAjaxAction('btnIncoPago_Click'));
@@ -119,12 +127,27 @@ class PagosCorpListForm extends PagosCorpListFormBase {
     }
 
 
+    public function FechPago_Render(PagosCorp $objPagoCorp) {
+        if (!is_null($objPagoCorp->Fecha)) {
+            return $objPagoCorp->Fecha->__toString("DD/MM/YYYY");
+        } else {
+            return null;
+        }
+    }
+
+
+
     protected function btnConcPago_Click() {
 		$this->mensaje();
         $arrIdxxSele = $this->colPagoSele->GetChangedIds();
         if (count($arrIdxxSele)) {
-            $arrPasoSele = PagosCorp::QueryArray(QQ::In(QQN::PagosCorp()->Id, array_keys($arrIdxxSele)));
-            $intConcPago = 0;
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::PagosCorp()->Id, array_keys($arrIdxxSele));
+            $objClauOrde   = QQ::Clause();
+            $objClauOrde[] = QQ::OrderBy(QQN::PagosCorp()->Id,true);
+            $arrPasoSele   = PagosCorp::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+            $intConcPago   = 0;
+            $intCantFact   = 0;
             foreach ($arrPasoSele as $objPagoSele) {
                 if (in_array($objPagoSele->Estatus,['INCONCILIABLE','PENDIENTE'])) {
 					$objPagoSele->Estatus = 'CONCILIADO';
@@ -137,7 +160,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 					$arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$objPagoSele->Id;
 					LogDeCambios($arrLogxCamb);
 
-					$objPagoSele->conciliarPago();
+					$intCantFact += $objPagoSele->conciliarPago();
 
 					$this->colPagoSele->SetCheckbox($objPagoSele->Id,false);
 					$intConcPago ++;
@@ -145,7 +168,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
             }
             if ($intConcPago > 0) {
                 $this->dtgPagosCorps->Refresh();
-                $strTextMens = "Transaccion Exitosa | <b>$intConcPago Pago(s) Conciliado(s)</b> !!!";
+                $strTextMens = "Transaccion Exitosa | <b>$intCantFact Facturas Procesadas | $intConcPago Pago(s) Conciliado(s)</b> !!!";
                 $this->success($strTextMens);
             } else {
                 $strTextMens = "Ningún Pago fue procesado !!!";
@@ -161,8 +184,13 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 		$this->mensaje();
         $arrIdxxSele = $this->colPagoSele->GetChangedIds();
         if (count($arrIdxxSele)) {
-            $arrPasoSele = PagosCorp::QueryArray(QQ::In(QQN::PagosCorp()->Id, array_keys($arrIdxxSele)));
-            $intIncoPago = 0;
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::PagosCorp()->Id, array_keys($arrIdxxSele));
+            $objClauOrde   = QQ::Clause();
+            $objClauOrde[] = QQ::OrderBy(QQN::PagosCorp()->Id,true);
+            $arrPasoSele   = PagosCorp::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+            $intIncoPago   = 0;
+            $intCantFact   = 0;
             foreach ($arrPasoSele as $objPagoSele) {
             	if (in_array($objPagoSele->Estatus,['CONCILIADO','PENDIENTE'])) {
                     $objPagoSele->Estatus = 'INCONCILIABLE';
@@ -175,7 +203,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
                     $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$objPagoSele->Id;
                     LogDeCambios($arrLogxCamb);
 
-                    $objPagoSele->replicarEstatusPago($objPagoSele->Estatus);
+                    $intCantFact += $objPagoSele->replicarEstatusPago($objPagoSele->Estatus);
 
                     $this->colPagoSele->SetCheckbox($objPagoSele->Id,false);
                     $intIncoPago ++;
@@ -183,7 +211,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
             }
             if ($intIncoPago > 0) {
                 $this->dtgPagosCorps->Refresh();
-                $strTextMens = "Transaccion Exitosa | <b>$intIncoPago Pago(s) marcado(s) como Inconciliable(s)</b>";
+                $strTextMens = "Transaccion Exitosa | <b>$intCantFact Facturas Procesadas | $intIncoPago Pago(s) marcado(s) como 'Inconciliable(s)'</b>";
                 $this->success($strTextMens);
             } else {
                 $strTextMens = "Ningún Pago fue procesado !!!";
@@ -196,12 +224,22 @@ class PagosCorpListForm extends PagosCorpListFormBase {
     }
 
     protected function btnPagoPend_Click() {
-		$this->mensaje();
+        t('===================');
+        t('Pagos por Conciliar');
+
+        $this->mensaje();
         $arrIdxxSele = $this->colPagoSele->GetChangedIds();
         if (count($arrIdxxSele)) {
-            $arrPasoSele = PagosCorp::QueryArray(QQ::In(QQN::PagosCorp()->Id, array_keys($arrIdxxSele)));
-            $intPagoPend = 0;
+            t('Hay '.count($arrIdxxSele).' tanto registros marcados...');
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::PagosCorp()->Id, array_keys($arrIdxxSele));
+            $objClauOrde   = QQ::Clause();
+            $objClauOrde[] = QQ::OrderBy(QQN::PagosCorp()->Id,true);
+            $arrPasoSele   = PagosCorp::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+            $intPagoPend   = 0;
+            $intCantFact   = 0;
             foreach ($arrPasoSele as $objPagoSele) {
+                t('Procesando pago: '.$objPagoSele->Referencia.' en estatus: '.$objPagoSele->Estatus);
             	if (in_array($objPagoSele->Estatus,['CONCILIADO','INCONCILIABLE'])) {
                     $objPagoSele->Estatus = 'PENDIENTE';
                     $objPagoSele->Save();
@@ -209,11 +247,11 @@ class PagosCorpListForm extends PagosCorpListFormBase {
                     $arrLogxCamb['strNombTabl'] = 'PagosCorp';
                     $arrLogxCamb['intRefeRegi'] = $objPagoSele->Id;
                     $arrLogxCamb['strNombRegi'] = $objPagoSele->Referencia;
-                    $arrLogxCamb['strDescCamb'] = 'Pago PENDIENTE';
+                    $arrLogxCamb['strDescCamb'] = 'Pago PORCONCILIAR';
                     $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$objPagoSele->Id;
                     LogDeCambios($arrLogxCamb);
 
-                    $objPagoSele->replicarEstatusPago($objPagoSele->Estatus);
+                    $intCantFact += $objPagoSele->replicarEstatusPago('PORCONCILIAR');
 
                     $this->colPagoSele->SetCheckbox($objPagoSele->Id,false);
                     $intPagoPend ++;
@@ -221,7 +259,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
             }
             if ($intPagoPend > 0) {
                 $this->dtgPagosCorps->Refresh();
-                $strTextMens = "Transaccion Exitosa | <b>$intPagoPend Pago(s) marcado(s) como Pendiente(s)</b>";
+                $strTextMens = "Transaccion Exitosa | <b>$intCantFact Facturas Procesadas | $intPagoPend Pago(s) marcado(s) como 'Pendientes'</b>";
                 $this->success($strTextMens);
             } else {
                 $strTextMens = "Ningún Pago fue procesado !!!";
@@ -233,14 +271,6 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         }
     }
 
-
-    public function FechPago_Render(PagosCorp $objPagoCorp) {
-        if (!is_null($objPagoCorp->Fecha)) {
-            return $objPagoCorp->Fecha->__toString("DD/MM/YYYY");
-        } else {
-            return null;
-        }
-    }
 
     public function dtgPagosCorpsRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);

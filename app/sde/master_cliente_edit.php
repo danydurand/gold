@@ -111,6 +111,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected $btnRecuClie;
     protected $calFechElim;
     protected $txtMotiElim;
+    protected $strAcciClie;
 
     protected function ClienteSetup() {
         $intCodiClie = QApplication::PathInfo(0);
@@ -123,6 +124,9 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         } else {
             $this->objMasterCliente = new MasterCliente();
             $this->blnEditMode = false;
+        }
+        if (strlen(QApplication::PathInfo(1))) {
+            $this->strAcciClie = QApplication::PathInfo(1);
         }
     }
 
@@ -321,8 +325,30 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
         $this->btnSave->Visible = !$this->btnRecuClie->Visible;
 
+        //----------------------------------------------------------------------------------
+        // Luego de crear todos los elementos del formuario, se ejecuta cualquier acción
+        // determinada por el segundo parametro de invocacion del programa (cuando exista)
+        //----------------------------------------------------------------------------------
+        if (strlen($this->strAcciClie) > 0) {
+            switch ($this->strAcciClie) {
+                case 'calcularSaldo':
+                    $this->obtenerSaldoDelCliente();
+                    break;
+                default:
+                    $this->danger("Accion: ".$this->strAcciClie." no especificada");
+            }
+        }
     }
 
+    //----------------------------------
+    // Acciones relativas al Cliente
+    //----------------------------------
+
+    protected function obtenerSaldoDelCliente() {
+        $decSaldExce = $this->objMasterCliente->calcularSaldoExcedente();
+        $this->txtSaldExce->Text = $decSaldExce;
+        $this->info("El Saldo del Cliente es: ".$decSaldExce);
+    }
 
     protected function datosParaGraficos() {
         $intCodiClie = $this->objMasterCliente->CodiClie;
@@ -1559,6 +1585,10 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 __SIST__.'/carga_masiva_clientes.php/'.$this->objMasterCliente->CodiClie,
                 TextoIcono('briefcase','Carga Sub-Clientes')
             );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/calcularSaldo',
+                TextoIcono('bank','Calcular Saldo')
+            );
         }
 
         $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
@@ -1978,6 +2008,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->objMasterCliente->PesoParaDscto = $this->txtPesoDcto->Text;
         $this->objMasterCliente->DsctoPorPeso = $this->txtDctoPeso->Text;
         $this->objMasterCliente->DescuentoCaducaEl = new QDateTime($this->dttDctoCadu->DateTime);
+        $this->objMasterCliente->SaldoExcedente = $this->txtSaldExce->Text;
     }
 
     protected function limpiarFormulario() {

@@ -119,8 +119,16 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 		$colNombClie->Name = 'Nombre del Cliente';
 		$colNombClie->Width = 400;
 
+		$colSaldExce = new QDataGridColumn('SALDO','<?= $_ITEM->__saldoExcedente(); ?>');
+		$colSaldExce->Width = 200;
+		$this->dtgMasterClientes->AddColumn($colSaldExce);
+
 		$colSucuClie = $this->dtgMasterClientes->MetaAddColumn(QQN::MasterCliente()->Sucursal->Iata);
 		$colSucuClie->Name = 'Suc';
+		$colSucuClie->Width = 100;
+
+		$colSucuClie = $this->dtgMasterClientes->MetaAddColumn(QQN::MasterCliente()->DireMail);
+		$colSucuClie->Name = 'E-mail';
 		$colSucuClie->Width = 100;
 
         /*$colRankGuia = new QDataGridColumn('RANK G.','<?= $_FORM->dtgRankGuia_Render($_ITEM); ?>');*/

@@ -85,21 +85,27 @@ class RegistrarPago extends PagosCorpEditFormBase {
 	//----------------------------
 
     public function dtgFactClieRow_Click($strFormId, $strControlId, $strParameter) {
-	    $this->arrFactIdxx[] = (int)$strParameter;
-	    $this->dtgFactPaga->Refresh();
+        $this->arrFactIdxx[] = (int)$strParameter;
+        t('El vector de IDs tiene: '.count($this->arrFactIdxx));
+        $this->dtgFactPaga->Refresh();
 	    $this->dtgFactClie->Refresh();
         sleep(1);
+        t('Ya espere un segundo');
 	    $decTotaPaga = 0;
 	    $arrFactPaga = Facturas::QueryArray(QQ::AndCondition(QQ::In(QQN::Facturas()->Id,$this->arrFactIdxx)));
+	    t('El vector de facturas tiene: '.count($arrFactPaga));
         foreach ($arrFactPaga as $objFactPaga) {
-            $decTotaPaga += $objFactPaga->Total;
+            $decTotaPaga += $objFactPaga->MontoPendiente > 0
+                ? $objFactPaga->MontoPendiente
+                : $objFactPaga->Total;
 	    }
+	    t('Ya calcule el monto a pagar: '.nf($decTotaPaga));
         $this->info('Monto a Pagar: '.nf($decTotaPaga));
     }
 
     public function dtgFactPagaRow_Click($strFormId, $strControlId, $strParameter) {
-	    $intCancIdxx = (int)$strParameter;
-	    for ($i = 0; $i < count($this->arrFactIdxx); $i++) {
+        $intCancIdxx = (int)$strParameter;
+        for ($i = 0; $i < count($this->arrFactIdxx); $i++) {
 	        if ($this->arrFactIdxx[$i] == $intCancIdxx) {
                 unset($this->arrFactIdxx[$i]);
             }
@@ -110,7 +116,9 @@ class RegistrarPago extends PagosCorpEditFormBase {
 	    $decTotaPaga = 0;
 	    $arrFactPaga = Facturas::QueryArray(QQ::AndCondition(QQ::In(QQN::Facturas()->Id,$this->arrFactIdxx)));
         foreach ($arrFactPaga as $objFactPaga) {
-            $decTotaPaga += $objFactPaga->Total;
+            $decTotaPaga += $objFactPaga->MontoPendiente > 0
+                ? $objFactPaga->MontoPendiente
+                : $objFactPaga->Total;
 	    }
         $this->info('Monto a Pagar: '.nf($decTotaPaga));
     }
@@ -196,7 +204,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
     protected function dtgFactClie_Bind() {
 	    $objClauWher   = QQ::Clause();
 	    $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objUsuaConn->ClienteId);
-	    $objClauWher[] = QQ::Equal(QQN::Facturas()->EstatusPago,'PENDIENTE');
+	    $objClauWher[] = QQ::In(QQN::Facturas()->EstatusPago,array('PENDIENTE','PAGOPARCIAL'));
 	    $objClauWher[] = QQ::NotIn(QQN::Facturas()->Id,$this->arrFactIdxx);
 	    $objClauOrde   = QQ::Clause();
 	    $objClauOrde[] = QQ::OrderBy(QQN::Facturas()->Fecha,false);
@@ -234,6 +242,12 @@ class RegistrarPago extends PagosCorpEditFormBase {
         $colMontCobr->Html = '<?= nf($_ITEM->MontoCobrado) ?>';
         $colMontCobr->Width = 70;
         $this->dtgFactClie->AddColumn($colMontCobr);
+
+        $colMontPend = new QDataGridColumn($this);
+        $colMontPend->Name = QApplication::Translate('Pendiente');
+        $colMontPend->Html = '<?= nf($_ITEM->MontoPendiente) ?>';
+        $colMontPend->Width = 70;
+        $this->dtgFactClie->AddColumn($colMontPend);
 
     }
 
@@ -293,40 +307,6 @@ class RegistrarPago extends PagosCorpEditFormBase {
     }
 
 
-    protected function controlSaldoExcedente() {
-        //------------------------------
-        // Control de Saldo Excedente
-        //------------------------------
-        $arrTodoFact = $this->mctPagosCorp->PagosCorp->ClienteCorp->GetFacturasAsClienteCorpArray();
-        $decDeudTota = 0;
-        foreach ($arrTodoFact as $objFactClie) {
-            $decDeudTota += $objFactClie->Total;
-        }
-        $arrTodoPago = $this->mctPagosCorp->PagosCorp->ClienteCorp->GetPagosCorpAsClienteCorpArray();
-        $decPagoTota = 0;
-        foreach ($arrTodoPago as $objPagoClie) {
-            $decPagoTota += $objPagoClie->Monto;
-        }
-        $decSaldExce = $decPagoTota - $decDeudTota;
-        //------------------------------------
-        // Se actualiza el saldo del Cliente
-        //------------------------------------
-        $this->mctPagosCorp->PagosCorp->ClienteCorp->SaldoExcedente = $decSaldExce;
-        $this->mctPagosCorp->PagosCorp->ClienteCorp->Save();
-        $arrLogxCamb['strNombTabl'] = 'MasterCliente';
-        $arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->ClienteCorp->CodiClie;
-        $arrLogxCamb['strNombRegi'] = $this->mctPagosCorp->PagosCorp->ClienteCorp->NombClie;
-        $arrLogxCamb['strDescCamb'] = "Se actualiza el Saldo Excedente a: ".$decSaldExce;
-        LogDeCambios($arrLogxCamb);
-        //-------------------------------------------------------
-        // Se comunica al Usuario el Saldo Excedente o la Deuda
-        //-------------------------------------------------------
-        if ($decSaldExce > 0) {
-            $this->ninfo('Saldo a su favor: '.nf($decSaldExce));
-        } else {
-            $this->nwarning('Monto de la Deuda: '.nf($decSaldExce*-1));
-        }
-    }
 
     protected function Form_Validate()
     {
@@ -409,7 +389,6 @@ class RegistrarPago extends PagosCorpEditFormBase {
 			LogDeCambios($arrLogxCamb);
             $this->success('Transacción Exitosa');
 		}
-		$this->controlSaldoExcedente();
 	}
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
@@ -440,7 +419,6 @@ class RegistrarPago extends PagosCorpEditFormBase {
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
 
-            $this->controlSaldoExcedente();
             $this->RedirectToListPage();
         }
     }

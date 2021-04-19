@@ -27,8 +27,38 @@ class MasterCliente extends MasterClienteGen {
         return sprintf('%s',  $this->strNombClie);
     }
 
+    public function __saldoExcedente() {
+        return nf($this->SaldoExcedente);
+    }
+
     public function __toStringConCodigoInterno() {
         return sprintf('%s - %s', $this->strCodigoInterno, $this->strNombClie);
+    }
+
+    public function calcularSaldoExcedente() {
+        /* @var $objFactClie Facturas  */
+        /* @var $objPagoClie PagosCorp */
+        $arrTodoFact = $this->GetFacturasAsClienteCorpArray();
+        $decDeudTota = 0;
+        foreach ($arrTodoFact as $objFactClie) {
+            $decDeudTota += $objFactClie->MontoPendiente;
+        }
+        $arrTodoNota = $this->GetNotaCreditoCorpAsClienteCorpArray();
+        $decCredTota = 0;
+        foreach ($arrTodoNota as $objNotaClie) {
+            $decCredTota += $objNotaClie->Monto;
+        }
+        $decDeudTota = $decCredTota + $decDeudTota;
+        //------------------------------------
+        // Se actualiza el saldo del Cliente
+        //------------------------------------
+        $this->SaldoExcedente = $decDeudTota;
+        $this->Save();
+        //----------------------------------------------
+        // Se deja registro en el log de transacciones
+        //----------------------------------------------
+        $this->logDeCambios("Se actualiza el Saldo Excedente a: ".$decDeudTota);
+        return nf($decDeudTota);
     }
 
     public function _ranking() {
@@ -39,6 +69,15 @@ class MasterCliente extends MasterClienteGen {
         $objDbResult  = $objDataBase->Query($strCadeSqlx);
         $mixRegistro  = $objDbResult->FetchArray();
         return !is_null($mixRegistro['rnk']) ? '(Top: '.$mixRegistro['rnk'].')' : null;
+    }
+
+    public function logDeCambios($strMensTran) {
+        $arrLogxCamb['strNombTabl'] = 'MasterCliente';
+        $arrLogxCamb['intRefeRegi'] = $this->CodiClie;
+        $arrLogxCamb['strNombRegi'] = $this->NombClie;
+        $arrLogxCamb['strDescCamb'] = $strMensTran;
+        $arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_cliente_edit.php/'.$this->CodiClie;
+        LogDeCambios($arrLogxCamb);
     }
 
     /*
