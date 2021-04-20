@@ -92,7 +92,7 @@ if (!empty($arrOpciExcl)) {
 $arrOpciMenu = NewOpcion::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
 $strHtmlMenu = "<ul class='nav' id='side-menu'>\n";
 foreach ($arrOpciMenu as $objOpcion) {
-    $strHtmlMenu .= $objOpcion->HtmlMenuConnectBootstrap();
+    $strHtmlMenu .= $objOpcion->HtmlMenuConnectBootstrap(__CORP__);
 }
 $strHtmlMenu .= "</ul>\n";
 ?>

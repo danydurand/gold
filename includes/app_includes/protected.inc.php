@@ -21,7 +21,7 @@ if (!($objUser instanceof Usuario)) {
     //QApplication::Redirect(__SUBDIRECTORY__.'/index.php');
 }
 if (!defined('__SIST__')) {
-    //define ('__SIST__', '/newliberty/app/'.$_SESSION['Sistema']);
+    //define ('__SIST__', '/gold/app/'.$_SESSION['Sistema']);
     define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 }
 //---------------------------------------------------------------------------------

@@ -234,18 +234,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->lstReceDest->Visible = false;
     }
 
-    //protected function txtNombRemi_Create() {
-    //    $this->txtNombRemi = new QTextBox($this);
-    //    $this->txtNombRemi->Name = QApplication::Translate('Nombre del Remitente');
-    //    $this->txtNombRemi->Width = 181;
-    //}
-    //
-    //protected function txtNombDest_Create() {
-    //    $this->txtNombDest = new QTextBox($this);
-    //    $this->txtNombDest->Name = QApplication::Translate('Nombre del Destinatario');
-    //    $this->txtNombDest->Width = 181;
-    //}
-
     protected function lstCodiVend_Create() {
         $this->lstCodiVend = new QListBox($this);
         $this->lstCodiVend->Name = QApplication::Translate('Vendedor');
@@ -300,31 +288,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtUsuaPodx->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
     }
 
-    //protected function txtUsuaCrea_Create() {
-    //    $this->txtUsuaCrea = new QTextBox($this);
-    //    $this->txtUsuaCrea->Name = QApplication::Translate('Usuario Creacion');
-    //    $this->txtUsuaCrea->Width = 80;
-    //    $this->txtUsuaCrea->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
-    //}
-
     protected function txtUbicFisi_Create() {
         $this->txtUbicFisi = new QTextBox($this);
         $this->txtUbicFisi->Name = 'Ubicación Física';
         $this->txtUbicFisi->Placeholder = 'Ubicación en Almacén';
         $this->txtUbicFisi->Width = 150;
     }
-
-    //protected function lstCodiCkpt_Create() {
-    //    $this->lstCodiCkpt = new QListBox($this);
-    //    $this->lstCodiCkpt->Name = QApplication::Translate('Estatus');
-    //    $this->lstCodiCkpt->Width = 180;
-    //    $arrCodiCkpt = SdeCheckpoint::LoadCheckpointsActivos();
-    //    $intCantRegi = count($arrCodiCkpt);
-    //    $this->lstCodiCkpt->AddItem(QApplication::Translate('- Seleccione Uno - ('.$intCantRegi.')'),null);
-    //    foreach ($arrCodiCkpt as $objStatus) {
-    //        $this->lstCodiCkpt->AddItem($objStatus->__toString(),$objStatus->CodiCkpt);
-    //    }
-    //}
 
     protected function chkMostQuer_Create() {
         $this->chkMostQuer = new QCheckBox($this);
@@ -336,12 +305,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
             $this->chkMostQuer->Visible = false;
         }
     }
-
-    //protected function chkConxDesc_Create() {
-    //    $this->chkConxDesc = new QCheckBox($this);
-    //    $this->chkConxDesc->Name = QApplication::Translate('Con Descuento ?');
-    //    $this->chkConxDesc->Checked = false;
-    //}
 
     protected function btnExpoExce_Create() {
         $this->btnExpoExce = new QButton($this);
@@ -536,16 +499,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $blnTodoOkey = false;
             }
         }
-        //if (strlen($this->txtUsuaCrea->Text)) {
-        //    //--------------------------------------------------
-        //    // Se trata de un usuario creador de la(s) guía(s).
-        //    //--------------------------------------------------
-        //    $objUsuaCrea = Usuario::LoadByLogiUsua($this->txtUsuaCrea->Text);
-        //    if (!$objUsuaCrea) {
-        //        $this->mensaje('El Usuario <b>'.$this->txtUsuaCrea->Text.'</b> no existe!','','d','i','hand-stop-o');
-        //        $blnTodoOkey = false;
-        //    }
-        //}
         if ($blnTodoOkey) {
             //--------------------------------------------------------------------------------------------------
             // Se Arma el SQL para la busqueda de registros, comenzando con la determinación del tipo de envío.
@@ -635,14 +588,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $objClausula[]= QQ::Equal(QQN::Guias()->ReceptoriaDestinoId,$this->lstReceDest->SelectedValue);
                 $strCadeSqlx  .= " and g.receptoria_destino_id = '".$this->lstReceDest->SelectedValue."'";
             }
-            //if (strlen($this->txtNombRemi->Text)) {
-            //    $objClausula[] = QQ::Like(QQN::Guias()->NombreRemitente,trim($this->txtNombRemi->Text).'%');
-            //    $strCadeSqlx  .= " and g.nombre_remitente like '".$this->txtNombRemi->Text."%'";
-            //}
-            //if (strlen($this->txtNombDest->Text)) {
-            //    $objClausula[] = QQ::Like(QQN::Guias()->NombreDestinatario,trim($this->txtNombDest->Text).'%');
-            //    $strCadeSqlx  .= " and g.nombre_destinatario like '".$this->txtNombDest->Text."%'";
-            //}
             if (!is_null($this->lstCodiVend->SelectedValue)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->VendedorId,$this->lstCodiVend->SelectedValue);
                 $strCadeSqlx  .= " and g.vendedor_id = ".$this->lstCodiVend->SelectedValue;
@@ -668,10 +613,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $objClausula[] = QQ::Like(QQN::Guias()->GuiaPod->CreatedBy,$objUsuaPodx->CodiUsua);
                 $strCadeSqlx  .= " and gp.created_by = ".$objUsuaPodx->CodiUsua;
             }
-            //if (strlen($this->txtUsuaCrea->Text)) {
-            //    $objClausula[] = QQ::Like(QQN::Guias()->CreatedBy,trim($objUsuaCrea->CodiUsua).'%');
-            //    $strCadeSqlx  .= " and g.created_by = ".$objUsuaCrea->CodiUsua;
-            //}
             if (!is_null($this->lstTariIdxx->SelectedValue)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->TarifaId,$this->lstTariIdxx->SelectedValue);
                 $strCadeSqlx  .= " and g.tarifa_id = ".$this->lstTariIdxx->SelectedValue;

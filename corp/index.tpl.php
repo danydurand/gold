@@ -1,5 +1,5 @@
 <?php
-$_SESSION['NombPlat'] = 'CORP';
+$_SESSION['NombPlat'] = 'Connect';
 $strPageTitle = QApplication::Translate('SISPAQ - '.$_SESSION['NombPlat']);
 require(__APP_INCLUDES__ . '/corp/header_login.inc.php');
 ?>

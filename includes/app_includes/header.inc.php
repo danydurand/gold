@@ -25,16 +25,16 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
 	<style type="text/css">@import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles_plus.css");</style>
 
     <!-- Bootstrap Core CSS -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/bootstrap/dist/css/bootstrap.css"?> rel="stylesheet">
+    <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/bower_components/bootstrap/dist/css/bootstrap.css"?> rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/metisMenu/dist/metisMenu.min.css"?> rel="stylesheet">
+    <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/bower_components/metisMenu/dist/metisMenu.min.css"?> rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/dist/css/sb-admin-2.css"?> rel="stylesheet">
+    <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/dist/css/sb-admin-2.css"?> rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/font-awesome/css/font-awesome.min.css"?> rel="stylesheet" type="text/css">
+    <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/bower_components/font-awesome/css/font-awesome.min.css"?> rel="stylesheet" type="text/css">
     <!--<link href=<?/*= __APP_CSS_ASSETS__ ."/bootstrap4.css"*/?> rel="stylesheet" type="text/css">-->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
 

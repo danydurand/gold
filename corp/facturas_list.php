@@ -98,6 +98,7 @@ class FacturasListForm extends FacturasListFormBase {
 		//$this->dtgFacturases->MetaAddColumn('TieneRetencion');
 		//$this->dtgFacturases->MetaAddColumn('NotaCreditoId');
 
+		$this->btnNuevRegi->Visible = false;
         $this->btnExpoExce_Create();
 
     }

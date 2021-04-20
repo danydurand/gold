@@ -13,8 +13,7 @@ $strPageTitle = 'SISPAQ';
 		<!-- Custom Fonts -->
 		<link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/bower_components/font-awesome/css/font-awesome.min.css"?> rel="stylesheet" type="text/css">
 	</head>
-	<body background="<?php _p(__VIRTUAL_DIRECTORY__ . __APP_IMAGE_ASSETS__); ?>/mapamundi2.jpg">
-	<!--<body background="--><?php //_p(__VIRTUAL_DIRECTORY__ . __APP_IMAGE_ASSETS__); ?><!--/mapamundi_plata3.png">-->
+	<body background="<?php _p(__VIRTUAL_DIRECTORY__ . __APP_IMAGE_ASSETS__); ?>/usa1.jpg">
 		<?php
 			$strNombEmpr = 'Gold-Coast<br>SISPAQ - Sistema de Paqueteria';
 			$strDatoUsua = '';

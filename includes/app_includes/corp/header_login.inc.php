@@ -10,7 +10,7 @@
 		<!-- Custom Fonts -->
 		<link href=<?= __APP_CSS_ASSETS__ ."/bower_components/font-awesome/css/font-awesome.min.css"?> rel="stylesheet" type="text/css">
 	</head>
-	<body background="<?php _p(__APP_IMAGE_ASSETS__); ?>/mapamundi.jpg">
+	<body background="<?php _p(__APP_IMAGE_ASSETS__); ?>/usa2.jpg">
 		<?php
 			$strNombEmpr = 'Gold Coast<br>SISPAQ - Modulo Connect';
 			$strDatoUsua = '';

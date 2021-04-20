@@ -1,12 +1,12 @@
 <?php
-$strPageTitle = QApplication::Translate('SISPAQ: Gold-Coast');
+$strPageTitle = 'SISPAQ: Gold-Coast';
 require(__APP_INCLUDES__ . '/header_login.inc.php');
 ?>
 	<div id="formulario_login">
 		<br/>
 		<?php $this->txtLogiUsua->RenderWithName(); ?>
 		<?php $this->txtClavAcce->RenderWithName(); ?>
-		<?php $this->lstCodiSist->RenderWithName(); ?>
+		<?php //$this->lstCodiSist->RenderWithName(); ?>
 		<br />
 		<div style="text-align: center; padding-bottom: 10px">
 			<div class="form-save"><?php $this->btnAcceSist->Render(); ?></div>

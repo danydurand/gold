@@ -137,9 +137,10 @@
             return $strHtmlMenu;
         }
 
-        public function HtmlMenuConnectBootstrap() {
+        public function HtmlMenuConnectBootstrap($strDireSist='') {
             $objCliente = unserialize($_SESSION['ClieMast']);
-            $strDireProg = "/".$this->strDirectorio."/";
+            //$strDireProg = "/".$this->strDirectorio."/";
+            $strDireProg = "$strDireSist/";
             //----------------------------------------
             // Se identifica la Opción de Cargar Guía
             //----------------------------------------
