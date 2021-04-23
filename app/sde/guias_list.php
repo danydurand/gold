@@ -82,7 +82,11 @@ class GuiasListForm extends GuiasListFormBase {
 		$this->dtgGuiases->Paginator = new QPaginator($this->dtgGuiases);
 		$this->dtgGuiases->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-		// Higlight the datagrid rows when mousing over them
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::Guias()->Id,false);
+        $this->dtgGuiases->AdditionalClauses = $objClauOrde;
+
+        // Higlight the datagrid rows when mousing over them
 		$this->dtgGuiases->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
 		$this->dtgGuiases->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
@@ -107,16 +111,16 @@ class GuiasListForm extends GuiasListFormBase {
 		//$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteCorp,'Name=C.Corp');
 		//$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteInt, 'Name=C.Int');
 
-        $colFechGuia = new QDataGridColumn('Fecha','<?= substr($_ITEM->CreatedAt,0,10) ?>');
-        $colFechGuia->OrderByClause = QQ::OrderBy(QQN::Guias()->CreatedAt, false);
-        $colFechGuia->ReverseOrderByClause = QQ::OrderBy(QQN::Guias()->CreatedAt);
+        $colFechGuia = new QDataGridColumn('Fecha','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
+        $colFechGuia->OrderByClause = QQ::OrderBy(QQN::Guias()->Fecha, false);
+        $colFechGuia->ReverseOrderByClause = QQ::OrderBy(QQN::Guias()->Fecha);
         $this->dtgGuiases->AddColumn($colFechGuia);
 
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaOrigen->Siglas,'Name=R.Ori');
+        //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaOrigen->Siglas,'Name=R.Ori');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
-        $this->dtgGuiases->MetaAddColumn('ServicioEntrega','Name=S.Entr.');
+        //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
+        $this->dtgGuiases->MetaAddColumn('ServicioImportacion','Name=S.Impor');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Producto, 'Name=Prod');
         $this->dtgGuiases->MetaAddColumn('FormaPago','Name=F.Pago');
         $this->dtgGuiases->MetaAddColumn('NombreRemitente', 'Name=Remitente');

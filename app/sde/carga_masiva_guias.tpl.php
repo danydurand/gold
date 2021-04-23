@@ -2,59 +2,87 @@
 $strPageTitle = QApplication::Translate('Carga Masiva de Guías');
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
-    <div class="titulo-formulario">
-        <div class="col-xs-4 col-md-4 col-lg-4" style="text-align: left; margin-left: -0.8em; margin-top: -0.30em">
-            <?php $this->lblTituForm->Render(); ?>
-        </div>
-        <div class="hidden-xs hidden-sm col-md-4 col-lg-8" style="text-align: center; margin-top: -0.25em;">
-            <?php $this->btnCancel->Render(); ?>
-            <?php $this->btnImpoGuia->Render(); ?>
-            <?php $this->btnSave->Render(); ?>
-            <?php $this->btnAjusGuia->Render(); ?>
-            <?php $this->btnErroProc->Render(); ?>
-        </div>
-        <div class="hidden-sm col-md-4 col-lg-4"></div>
+<div class="titulo-formulario">
+    <div class="col-xs-12 col-md-3 col-lg-3" style="text-align: left; margin-left: -0.8em; margin-top: -0.30em">
+        <?php $this->lblTituForm->Render(); ?>
     </div>
-    <div class="form-controls">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12" style="min-height: 1.3em; text-align: left; margin-top: 0.8em; margin-left: -1em;">
-                    <?php $this->lblMensUsua->Render(); ?>
-                </div>
-            </div>
-            <div class="row" style="margin-top: 0.8em">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-8">
-                    <?php $this->lstClieSele->RenderWithName(); ?>
-                    <?php $this->txtCargArch->RenderWithName(); ?>
-                    <?php $this->lblNumeCarg->RenderWithName(); ?>
-                    <?php $this->lblNumePend->RenderWithName(); ?>
-                    <?php $this->lblNumeAjus->RenderWithName(); ?>
-                    <?php $this->lblNumeProc->RenderWithName(); ?>
-                    <?php $this->lblNumeClie->RenderWithName(); ?>
-                    <?php $this->lblNumeErro->RenderWithName(); ?>
-                </div>
-                <div class="col-sm-2"></div>
-            </div>
-            <div class="row" style="margin-top: 0.5em;">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-8">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading" style="text-align: left">
-                            Estructura del Archivo y sus Datos
-                        </div>
-                        <div class="panel-body" style="text-align: left; padding-left: 0px">
-                            <ul>
-                                <li class="text-info">
-                                    Se espera un archivo plano con extensión ".csv", ".txt" o ".dat", con columnas
-                                    separadas por punto y coma (";"); este archivo es representativo de un lote de guías.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2"></div>
+    <div class="hidden-xs hidden-sm col-md-6 col-lg-6" style="text-align: center; margin-top: -0.25em;">
+        <?php $this->btnCancel->Render(); ?>
+        <?php $this->btnImpoGuia->Render(); ?>
+        <?php $this->btnAjusGuia->Render(); ?>
+        <?php $this->btnSave->Render(); ?>
+        <?php $this->btnBorrNota->Render(); ?>
+        <?php $this->btnErroProc->Render(); ?>
+        <?php $this->btnMostSucu->Render(); ?>
+        <?php //$this->btnImprDesp->Render(); ?>
+    </div>
+</div>
+<div class="form-controls">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" style="min-height: 1.3em; text-align: left; margin-top: 0.4em; margin-left: -1em;">
+                <?php $this->lblMensUsua->Render(); ?>
             </div>
         </div>
+        <div class="row" style="margin-top: 0.8em">
+            <div class="col-xs-4" style="margin-top: 1em">
+                <?php $this->lstClieCarg->RenderWithName(); ?>
+                <?php $this->txtCargArch->RenderWithName(); ?>
+                <?php $this->lstServImpo->RenderWithName(); ?>
+                <?php $this->txtNumeRefe->RenderWithName(); ?>
+                <?php $this->txtNombArch->RenderWithName(); ?>
+            </div>
+            <div class="col-xs-3">
+                <?php $this->lblNumeCarg->RenderWithName(); ?>
+                <?php $this->lblNumePend->RenderWithName(); ?>
+                <?php $this->lblNumeAjus->RenderWithName(); ?>
+                <?php $this->lblNumeProc->RenderWithName(); ?>
+            </div>
+            <div class="col-xs-2">
+                <?php $this->lblCantReci->RenderWithName(); ?>
+                <?php $this->lblTotaLibr->RenderWithName(); ?>
+                <?php $this->lblTotaPies->RenderWithName(); ?>
+                <?php $this->lblTotaVolu->RenderWithName(); ?>
+            </div>
+            <div class="col-xs-2">
+                <?php $this->lblFechNota->RenderWithName(); ?>
+                <?php $this->lblHoraNota->RenderWithName(); ?>
+                <?php $this->lblUsuaNota->RenderWithName(); ?>
+                <?php $this->lblEstaNota->RenderWithName(); ?>
+            </div>
+        </div>
+        <?php if (strlen($this->lblRelaSobr->Text) > 0) { ?>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-1" style="text-align: left;">
+                <b>Sobrantes:</b><br>
+                <?php $this->lblRelaSobr->Render(); ?>
+            </div>
+        </div>
+        <?php } ?>
+        <?php if ($this->lblNumeProc->Text > 0) { ?>
+        <div class="row" style="margin-top: 1em;">
+            <div class="col-xs-12">
+                <?php $this->dtgPiezNota->Render(); ?>
+            </div>
+        </div>
+        <?php } ?>
+        <?php if ($this->lblNumeCarg->Text == 0) { ?>
+        <div class="row" style="margin-top: 1em;">
+            <?php include('carga_masiva_instrucciones.tpl.php'); ?>
+        </div>
+        <?php } ?>
+        <?php if ($this->lblNumeAjus->Text > 0) { ?>
+        <div class="row" style="margin-top: 1em;">
+            <?php include('carga_masiva_ajustes.tpl.php'); ?>
+        </div>
+        <?php } ?>
     </div>
+</div>
+<style>
+    .req {
+        font-weight: bold;
+        color: red;
+    }
+</style>
 <?php require(__APP_INCLUDES__ .'/footer.inc.php'); ?>

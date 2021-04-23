@@ -54,10 +54,10 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
 		$this->calFechCarg->Name = 'Fecha';
 
 		$this->txtNumeGuia = $this->mctGuiaCacesa->lblNumeGuia_Create();
-		$this->txtNumeGuia->Name = 'Guía Liberty';
+		$this->txtNumeGuia->Name = 'Guía Gold';
 
 		$this->txtGuiaExte = $this->mctGuiaCacesa->lblGuiaExte_Create();
-		$this->txtGuiaExte->Name = 'Guía Externa';
+		$this->txtGuiaExte->Name = 'Guía Cliente';
 
 		$this->txtOrigGuia = $this->mctGuiaCacesa->lblOrigGuia_Create();
 		$this->txtOrigGuia->Name = 'Origen';
@@ -87,7 +87,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
         $this->txtDireDest->Name = 'Dirección del Destinatario';
         $this->txtDireDest->TextMode = QTextMode::MultiLine;
         $this->txtDireDest->Width = 246;
-        $this->txtDireDest->Height = 80;
+        $this->txtDireDest->Rows = 4;
 
         $this->txtTeleDest = $this->mctGuiaCacesa->txtTeleDest_Create();
         $this->txtTeleDest->Name = 'Teléfono(s) del Destinatario';
@@ -97,7 +97,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
         $this->txtDescCont->Name = 'Descripción del Contenido';
         $this->txtDescCont->TextMode = QTextMode::MultiLine;
         $this->txtDescCont->Width = 246;
-        $this->txtDescCont->Height = 80;
+        $this->txtDescCont->Rows = 3;
 
         $this->txtCantPiez = $this->mctGuiaCacesa->txtCantPiez_Create();
         $this->txtCantPiez->Width = 40;
@@ -154,7 +154,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
 
     protected function lstSucuDest_Create() {
         $this->lstSucuDest = new QListBox($this);
-        $this->lstSucuDest->Name = QApplication::Translate('Seleccione la Sucursal a relacionar');
+        $this->lstSucuDest->Name = QApplication::Translate('Sucursal Válida');
         $this->lstSucuDest->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
         $this->CargarDestinos();
         $this->lstSucuDest->Width = 200;
@@ -170,9 +170,9 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
 	//-----------------------------------
 
     protected function CargarDestinos() {
-        foreach (Estacion::LoadArrayByCodiStat(1) as $objSucursal) {
-            if ($objSucursal->EsUnAlmacen == SinoType::NO) {
-                $this->lstSucuDest->AddItem($objSucursal->__toString(),$objSucursal->CodiEsta);
+        foreach (Sucursales::LoadAll() as $objSucursal) {
+            if ($objSucursal->EsAlmacen == SinoType::NO) {
+                $this->lstSucuDest->AddItem($objSucursal->__toString(),$objSucursal->Id);
             }
         }
     }
@@ -212,74 +212,27 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-        //---------------------------------------------------------------------
-        // Se verifican y setean los valores de la guía a guardar o actualizar
-        //---------------------------------------------------------------------
-        $this->chkAjustar->Checked = false;
-        $intGuiaAsig = 0;
-
         //------------------------------------------------------------------
         // Si se ha seleccionado una Sucursal, se asigna la misma a la guia
         //------------------------------------------------------------------
         if ($this->lstSucuDest->SelectedValue) {
             $this->txtDestGuia->Text = $this->lstSucuDest->SelectedValue;
-
-            //---------------------------------------------------------------------------------------------
-            // Si se eligió relacionar el Destino actual con la Sucursal seleccionada, entonces se elabora
-            // dicha relación.
-            //---------------------------------------------------------------------------------------------
-            if ($this->chkAsigDest->Checked) {
-                $objSucuSele = Estacion::LoadByCodiEsta($this->txtDestGuia->Text);
-                $objSucuSele->PalabraRelacionada = !$objSucuSele->PalabraRelacionada ? $this->txtOtroDestino->Text : $objSucuSele->PalabraRelacionada.', '.$this->txtOtroDestino->Text;
-                $objSucuSele->Save();
-
-                //--------------------------------------------------------------------------------------
-                // Luego, se obtienen las guías que poseen el mismo Destino actual, y a cada una se les
-                // asigna la Sucursal relacionada.
-                //--------------------------------------------------------------------------------------
-                $objClauWher = QQ::Clause();
-                $objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->OtroDestino,$this->txtOtroDestino->Text);
-                $objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->Ajustar,true);
-
-                $arrGuiaAsig = GuiaCacesa::QueryArray(QQ::AndCondition($objClauWher));
-
-                foreach ($arrGuiaAsig as $objGuiaAsig) {
-                    $objRegiViej = clone $objGuiaAsig;
-                    $objGuiaAsig->DestGuia = $objSucuSele->CodiEsta;
-                    $objGuiaAsig->OtroDestino = '';
-                    $objGuiaAsig->Ajustar = false;
-                    $objGuiaAsig->Save();
-
-                    $objRegiNuev = $objGuiaAsig;
-                    $objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
-                    if ($objResuComp->FriendlyComparisonStatus == 'different') {
-                        //------------------------------------------
-                        // En caso de que el objeto haya cambiado
-                        //------------------------------------------
-                        $arrLogxCamb['strNombTabl'] = 'GuiaCacesa';
-                        $arrLogxCamb['intRefeRegi'] = $objGuiaAsig->Id;
-                        $arrLogxCamb['strNombRegi'] = 'Guia Importada ('.$objGuiaAsig->NumeGuia.') del Cliente '.$objGuiaAsig->Cliente->NombClie;
-                        $arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
-                        $arrLogxCamb['strEnlaEnti'] = __SIST__.'/guia_cacesa_edit.php/'.$objGuiaAsig->Id;
-                        LogDeCambios($arrLogxCamb);
-                    }
-
-                    $intGuiaAsig++;
-                }
-            }
-
             $this->txtOtroDestino->Text = '';
         }
-
-        $blnTodoOkey = $this->VerificarDatos();
-
-        if ($blnTodoOkey) {
+        if ($this->VerificarDatos()) {
             //--------------------------------------------
             // Se clona el objeto para verificar cambios
             //--------------------------------------------
             $objRegiViej = clone $this->mctGuiaCacesa->GuiaCacesa;
+            $this->chkAjustar->Checked = false;
+            $this->mctGuiaCacesa->GuiaCacesa->Observacion = '';
+            $this->mctGuiaCacesa->GuiaCacesa->Ajustar = SinoType::NO;
             $this->mctGuiaCacesa->SaveGuiaCacesa();
             if ($this->mctGuiaCacesa->EditMode) {
+                $objNotaEntr = $this->mctGuiaCacesa->GuiaCacesa->NotaEntrega;
+                $objNotaEntr->PorCorregir -= 1;
+                $objNotaEntr->PorProcesar  = $objNotaEntr->Cargadas - $objNotaEntr->PorCorregir;
+                $objNotaEntr->Save();
                 //---------------------------------------------------------------------
                 // Si estamos en modo Edicion, entonces se verifican la existencia
                 // de algun cambio en algun dato
@@ -305,14 +258,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/guia_cacesa_edit.php/'.$this->mctGuiaCacesa->GuiaCacesa->Id;
                 LogDeCambios($arrLogxCamb);
             }
-
-            $strMensUsua = 'Transacción Exitosa!';
-
-            if ($intGuiaAsig > 0) {
-                $strMensUsua .= ' La sucursal '.$this->txtDestGuia->Text.' ha sido asignada a '.$intGuiaAsig.'Guía(s) más como Destino!';
-            }
-
-            $this->mensaje($strMensUsua,'','','check');
+            $this->success('Transacción Exitosa !!!');
         }
 	}
 
@@ -345,100 +291,63 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
     //------------------------------
 
     protected function VerificarDatos() {
-        $blnTodoOkey = true;
-        $strMensUsua = "<br>";
-
         if (strlen($this->txtOtroDestino->Text) > 0) {
-            $blnTodoOkey = false;
-            $strMensUsua = QApplication::Translate('El destino no es valido!');
+            $this->danger('El destino no es valido !!!');
+            return false;
         }
-
-        if ($blnTodoOkey) {
-            if (strlen($this->txtNombDest->Text) == 0) {
-                $blnTodoOkey = false;
-                $strMensUsua = QApplication::Translate('El nombre del destinatario es requerido!');
-            }
+        if (strlen($this->txtNombDest->Text) == 0) {
+            $this->danger('El nombre del destinatario es requerido !!!');
+            return false;
         }
-
-        if ($blnTodoOkey) {
-            if (strlen($this->txtDireDest->Text) == 0) {
-                $blnTodoOkey = false;
-                $strMensUsua = QApplication::Translate('La direccion del destinatario es requerida!');
-            }
+        if (strlen($this->txtDireDest->Text) == 0) {
+            $this->danger('La direccion del destinatario es requerida !!!');
+            return false;
         }
-
-        if ($blnTodoOkey) {
-            if (strlen($this->txtTeleDest->Text) == 0) {
-                $blnTodoOkey = false;
-                $strMensUsua = QApplication::Translate('El telefono del destinatario es requerido!');
-            } else {
-                $this->txtTeleDest->Text = DejarSoloLosNumeros2($this->txtTeleDest->Text);
-                //-------------------------------------------------------------------------------
-                // En la cadena del campo, se verifica de que exista más de un teléfono
-                // del destinatario, mediante un signo divisor reglamentario entre los
-                // mismos. En este caso estos números deben estar separador por un slash ("/").
-                //-------------------------------------------------------------------------------
-                $arrTeleDest = explode('/',$this->txtTeleDest->Text);
-                if ($arrTeleDest !== false) {
-                    //------------------------------------------------------------------------------------------
-                    // Si existe más de un número, se iteran uno por uno, validando su formato correspondiente.
-                    //------------------------------------------------------------------------------------------
-                    $intErroDest = 0;
-                    foreach  ($arrTeleDest as $strTeleDest) {
-                        $strTeleDest = DejarSoloLosNumeros($strTeleDest);
-                        if (strlen($strTeleDest) > 11) {
-                            //-----------------------------------------------------------------------------------------
-                            // Si el número iterado posee más de la cantidad reglamentaria de caracteres, se considera
-                            // como formato no válido, y se incrementa el contador de errores.
-                            //-----------------------------------------------------------------------------------------
-                            $intErroDest++;
-                        }
-                    }
-                    //--------------------------------------------------------------------------------------
-                    // Si existe al menos un teléfono con formato errado, se notifica un alerta al usuario.
-                    //--------------------------------------------------------------------------------------
-                    if ($intErroDest > 0) {
-                        $blnTodoOkey = false;
-                        $strMensUsua = QApplication::Translate('Cantidad de caracteres inválida de '.$intErroDest.' Teléfono(s) del Destinatario. No debe ser mayor a 11');
-                    }
-                } else {
-                    //-----------------------------------------------------------------------------------------------
-                    // Se entiende que existe solamente un número del destinatario, y se valida el formato del mismo
-                    //-----------------------------------------------------------------------------------------------
-                    if (strlen($this->txtTeleDest->Text) > 11) {
-                        $blnTodoOkey = false;
-                        $strMensUsua = QApplication::Translate('Cantidad de caracteres de Teléfono del Destinatario no debe ser mayor a 11');
-                    }
+        if (strlen($this->txtDescCont->Text) == 0) {
+            $this->danger('La descripcion del contenido de la guia es requerida !!!');
+            return false;
+        }
+        if ((strlen($this->txtCantPiez->Text) == 0) || ($this->txtCantPiez->Text == 0)) {
+            $this->danger('La cantidad de piezas es requerida !!!');
+            return false;
+        }
+        if ((strlen($this->txtPesoGuia->Text) == 0) || ($this->txtPesoGuia->Text == 0)) {
+            $this->danger('El peso de la guia es requerido !!!');
+            return false;
+        }
+        if (strlen($this->txtTeleDest->Text) == 0) {
+            $this->danger('El telefono del destinatario es requerido !!!');
+            return false;
+        }
+        $this->txtTeleDest->Text = DejarSoloLosNumeros2($this->txtTeleDest->Text);
+        //-------------------------------------------------------------------------------
+        // En la cadena del campo, se verifica de que exista más de un teléfono
+        // del destinatario, mediante un signo divisor reglamentario entre los
+        // mismos. En este caso estos números deben estar separador por un slash ("/").
+        //-------------------------------------------------------------------------------
+        $arrTeleDest = explode('/',$this->txtTeleDest->Text);
+        if ($arrTeleDest !== false) {
+            //------------------------------------------------------------------------------------------
+            // Si existe más de un número, se iteran uno por uno, validando su formato correspondiente.
+            //------------------------------------------------------------------------------------------
+            foreach  ($arrTeleDest as $strTeleDest) {
+                $strTeleDest = DejarSoloLosNumeros($strTeleDest);
+                if (strlen($strTeleDest) > 11) {
+                    $this->danger('Cada Nro de Teléfono debe tener 11 caracteres');
+                    return false;
                 }
             }
-        }
-
-        if ($blnTodoOkey) {
-            if (strlen($this->txtDescCont->Text) == 0) {
-                $blnTodoOkey = false;
-                $strMensUsua = QApplication::Translate('La descripcion del contenido de la guia es requerida!');
+        } else {
+            //-----------------------------------------------------------------------------------------------
+            // Se entiende que existe solamente un número del destinatario, y se valida el formato del mismo
+            //-----------------------------------------------------------------------------------------------
+            if (strlen($this->txtTeleDest->Text) > 11) {
+                $this->danger('El Teléfono debe tener 11 caracteres');
+                return false;
             }
         }
 
-        if ($blnTodoOkey) {
-            if ((strlen($this->txtCantPiez->Text) == 0) || ($this->txtCantPiez->Text == 0)) {
-                $blnTodoOkey = false;
-                $strMensUsua = QApplication::Translate('La cantidad de piezas es requerida!');
-            }
-        }
-
-        if ($blnTodoOkey) {
-            if ((strlen($this->txtPesoGuia->Text) == 0) || ($this->txtPesoGuia->Text == 0)) {
-                $blnTodoOkey = false;
-                $strMensUsua = QApplication::Translate('el peso de la guia es requerido!');
-            }
-        }
-
-        if (!$blnTodoOkey) {
-            $this->mensaje($strMensUsua,'m','d','hand-stop-o');
-        }
-
-        return $blnTodoOkey;
+        return true;
     }
 }
 

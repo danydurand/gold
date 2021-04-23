@@ -133,7 +133,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 										<?php //$this->txtClavSweb->RenderWithName(); ?>
 										<?php //$this->txtCaduGuia->RenderWithName(); ?>
 										<?php //$this->lstMostExte->RenderWithName(); ?>
-										<?php //$this->chkCargMasi->RenderWithName(); ?>
+										<?php $this->chkCargMasi->RenderWithName(); ?>
 										<?php $this->calFechElim->RenderWithName(); ?>
 										<?php $this->txtMotiElim->RenderWithName(); ?>
 									</div>
@@ -164,12 +164,12 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 								<div class="media-body">
 									<div class="col-md-6">
 										<div class="row" style="padding: 0.1em">
-											<div class="titulo">Sistema CORPorativo</div>
+											<div class="titulo">Sistema Connect</div>
 										</div>
 										<div class="row" style="margin-top: .5em;">
 											<?php $this->chkGuiaYama->RenderWithName(); ?>
 											<?php $this->txtGuiaXcar->RenderWithName(); ?>
-											<?php $this->chkDestFrec->RenderWithName(); ?>
+											<?php //$this->chkDestFrec->RenderWithName(); ?>
 											<?php $this->txtDestXcar->RenderWithName(); ?>
 											<?php $this->txtDestXdia->RenderWithName(); ?>
 											<?php $this->chkPagoPpdx->RenderWithName(); ?>

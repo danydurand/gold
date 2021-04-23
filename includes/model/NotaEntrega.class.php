@@ -27,7 +27,17 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
-		public function piezasDeLaNota() {
+
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'NotaEntrega';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->Referencia;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/nota_entrega_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
+        }
+
+        public function piezasDeLaNota() {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Guia->NotaEntregaId,$this->Id);
             return GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));

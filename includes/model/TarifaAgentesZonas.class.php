@@ -27,6 +27,14 @@
 			return sprintf('TarifaAgentesZonas Object %s',  $this->intId);
 		}
 
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'TarifaAgentesZona';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->Tarifa->Nombre.' | Zona: '.$this->Zona;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/tarifa_agentes_zona_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
+        }
 
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...

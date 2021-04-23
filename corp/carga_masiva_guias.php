@@ -29,6 +29,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $txtCargArch;
     protected $lstServImpo;
     protected $txtNumeRefe;
+    protected $txtNombArch;
 
     protected $lblNumeCarg;
     protected $lblNumePend;
@@ -91,6 +92,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->txtCargArch_Create();
         $this->lstServImpo_Create();
         $this->txtNumeRefe_Create();
+        $this->txtNombArch_Create();
 
         //---- Importación y procesamiento ----
 
@@ -134,6 +136,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             if ($this->objNotaEntr->Procesadas > 0) {
                 $this->dtgPiezNota_Create();
             }
+            $this->txtNombArch->Visible = true;
         }
 
         if ((strlen($this->lblEstaNota->Text) > 0) and ($this->lblEstaNota->Text != 'CREAD@')) {
@@ -184,8 +187,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
         if ($this->objNotaEntr->ServicioImportacion == 'AER') {
             $colKiloPiez = new QDataGridColumn($this);
-            $colKiloPiez->Name = QApplication::Translate('Libras');
-            $colKiloPiez->Html = '<?= $_ITEM->Libras; ?>';
+            $colKiloPiez->Name = QApplication::Translate('Kilos');
+            $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
             $this->dtgPiezNota->AddColumn($colKiloPiez);
         } else {
             $colKiloPiez = new QDataGridColumn($this);
@@ -259,6 +262,17 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->txtNumeRefe->Text = $this->objNotaEntr->Referencia;
         }
         $this->txtNumeRefe->AddAction(new QChangeEvent(), new QAjaxAction('activarProcesamiento'));
+    }
+
+    protected function txtNombArch_Create() {
+        $this->txtNombArch = new QTextBox($this);
+        $this->txtNombArch->Name = 'Nombre del Archivo';
+        $this->txtNombArch->ToolTip = 'Nombre del archivo cargado...';
+        if ($this->blnEditMode) {
+            $this->txtNombArch->Text = $this->objNotaEntr->NombreArchivo;
+        }
+        $this->txtNombArch = disableControl($this->txtNombArch);
+        $this->txtNombArch->Visible = false;
     }
 
     protected function lblNumeCarg_Create() {
@@ -1140,6 +1154,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             } else {
                 $objGuia->PiesCub           = $objGuiaMasi->PesoGuia;
             }
+            $objGuia->Kilos                 = $objGuia->Libras * 0.45359237;
             $objGuia->NotaEntregaId         = $objGuiaMasi->NotaEntregaId;
             try {
                 t('Voy a guardar la guia en la BD');

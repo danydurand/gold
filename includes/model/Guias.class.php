@@ -364,7 +364,7 @@
                 } else {
                     $objNuevPiez->PiesCub = $objGuiaMasi->PesoGuia;
                 }
-                $objNuevPiez->Kilos       = $objGuiaMasi->Libras * 0.45359237;
+                $objNuevPiez->Kilos       = $objNuevPiez->Libras * 0.45359237;
                 $objNuevPiez->Largo       = $objGuiaMasi->Largo;
                 $objNuevPiez->Alto        = $objGuiaMasi->Alto;
                 $objNuevPiez->Ancho       = $objGuiaMasi->Ancho;

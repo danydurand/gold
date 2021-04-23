@@ -16,6 +16,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <?php $this->btnCancel->Render() ?>
             <?php $this->btnFiltAvan->Render() ?>
             <?php $this->btnExpoExce->Render() ?>
+            <?php $this->btnDeleSele->Render() ?>
         </div>
     </div>
     <div class="form-controls">

@@ -36,6 +36,7 @@ require(__YAMAGUCHI__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->txtCargArch->RenderWithName(); ?>
                 <?php $this->lstServImpo->RenderWithName(); ?>
                 <?php $this->txtNumeRefe->RenderWithName(); ?>
+                <?php $this->txtNombArch->RenderWithName(); ?>
             </div>
             <div class="col-xs-3">
                 <?php $this->lblNumeCarg->RenderWithName(); ?>

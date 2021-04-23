@@ -745,6 +745,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $this->txtDireFisc->Text = $this->objMasterCliente->DireFisc;
         }
         $this->txtDireFisc->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+        $this->txtDireFisc->AddAction(new QChangeEvent(), new QAjaxAction('txtDireFisc_Change'));
     }
 
     protected function txtNumeDrif_Create() {
@@ -1072,7 +1073,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
     protected function chkCargMasi_Create() {
         $this->chkCargMasi = new QCheckBox($this);
-        $this->chkCargMasi->Name = QApplication::Translate('Carga Masiva ?');
+        $this->chkCargMasi->Name = 'Permitir Carga Masiva Guías ?';
+        $this->chkCargMasi->HtmlAfter = '&nbsp;&nbsp;<b>(interna en en SisCO)</b>';
         if ($this->blnEditMode) {
             $this->chkCargMasi->Checked = $this->objMasterCliente->CargaMasiva;
         }
@@ -1090,7 +1092,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected function txtGuiaXcar_Create() {
         $this->txtGuiaXcar = new QIntegerTextBox($this);
         $this->txtGuiaXcar->Name = 'Cantidad de Guías por Carga';
-        $this->txtGuiaXcar->Width = 30;
+        $this->txtGuiaXcar->Width = 50;
         $this->txtGuiaXcar->Visible = false;
         $this->txtGuiaXcar->Text = '';
         if ($this->blnEditMode){
@@ -1309,6 +1311,12 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    protected function txtDireFisc_Change() {
+        if (strlen($this->txtEntrFact->Text) == 0) {
+            $this->txtEntrFact->Text = strtoupper($this->txtDireFisc->Text);
+        }
+    }
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
@@ -1721,6 +1729,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     }
 
     protected function  btnSave_Click() {
+        t('1');
         $blnTodoOkey = true;
         $this->mensaje();
         //--------------------------------------------------------------------------------------------
@@ -1731,7 +1740,9 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         } else {
             $intCodiDepe = $this->lstCodiDepe->SelectedValue;
         }
+        t('2');
         if ($this->chkManeApix->Checked) {
+            t('maneja api');
             //--------------------------------------------------------------------------------------
             // Si se especifica que el Cliente "Maneja API", la "Cantidad de Guias Maxima por Dia"
             // no debe quedar en cero (0)
@@ -1759,12 +1770,16 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 $blnTodoOkey = false;
             }
         }
+        t('3');
         if (!$this->blnEditMode && $blnTodoOkey) {
+            t('creando y todo esta ok...');
             if (strlen($this->txtCodiInte->Text)) {
                 //---------------------------------------------------------------------------
                 // En este caso, se le está asignando manualmente el Correlativo al Cliente.
                 //---------------------------------------------------------------------------
-                if ($this->lstCodiDepe->SelectedValue != 4) {
+                t('Depende de: '.$this->lstCodiDepe->SelectedValue);
+                if ( ($this->lstCodiDepe->SelectedValue != 4) && (!is_null($this->lstCodiDepe->SelectedValue)) ) {
+                    t('no depende de 4');
                     //-----------------------------------------------------------------------------
                     // Este Cliente, en realidad es una Sub-Cuenta de un Cliente Maestro.
                     //-----------------------------------------------------------------------------
@@ -1772,24 +1787,30 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                     $this->txtCodiInte->Text = $objCliente->CodigoInterno.'-'.$this->txtCodiInte->Text;
                 }
             } else {
+                t('No tenia codigo, asi que se le asigna uno...');
                 //------------------------------------------------------------------------------------------------------
                 // El Programa genera el Correlativo correspondiente y se lo asigna automáticamente al Cliente a Crear.
                 //------------------------------------------------------------------------------------------------------
                 $this->txtCodiInte->Text = MasterCliente::generarProxCodigo($intCodiDepe);
             }
+            t('6');
             //-------------------------------------------------------------------------------------------------
             // Se verifica la existencia previa de un Cliente con el Correlativo asignado en la Base de Datos.
             //-------------------------------------------------------------------------------------------------
             $objCliente = MasterCliente::LoadByCodigoInterno($this->txtCodiInte->Text);
             if ($objCliente) {
+                t('ya existe un cliente con ese codigo');
                 $this->mensaje('Ya existe un Cliente con este Código','','d','',__iHAND__);
                 $blnTodoOkey = false;
             }
         }
 
+        t('8');
         $blnTodoOkey = $this->validarDescuentos();
 
+        t('9');
         if ($blnTodoOkey) {
+            t('10');
             //--------------------------------------------
             // Se clona el objeto para verificar cambios
             //--------------------------------------------
@@ -1799,9 +1820,19 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             //------------------------------------
             // Se actualiza la ficha del Cliente
             //------------------------------------
+            t('11');
             $this->ActualizarCampos($intCodiDepe);
-            $this->objMasterCliente->Save();
+            t('12');
+            try {
+                $this->objMasterCliente->Save();
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
+                $this->danger($e->getMessage());
+                return;
+            }
+            t('13');
             $this->GestionMensajeDeAlertaYamaguchi($this->objMasterCliente);
+            t('14');
             //------------------------------------------------------------------------------------
             // Si se trata de una "cuenta padre" las sub-cuentas deben quedar con el mismo status
             //------------------------------------------------------------------------------------
@@ -1822,6 +1853,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                     }
                 }
             }
+            t('15');
             if ($this->blnEditMode) {
                 //---------------------------------------------------------------------------------------
                 // Si estamos en Modo Edición, se verificará la existencia de algun cambio en los datos.
@@ -1844,17 +1876,22 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                     $this->mensaje('Transacción Exitosa','','','',__iCHEC__);
                 }
             } else {
-                $arrLogxCamb['strNombTabl'] = 'MasterCliente';
-                $arrLogxCamb['intRefeRegi'] = $this->objMasterCliente->CodiClie;
-                $arrLogxCamb['strNombRegi'] = '('.$this->objMasterCliente->CodigoInterno .') - '. $this->objMasterCliente->NombClie;
-                $arrLogxCamb['strDescCamb'] = "Creado";
-                $arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie;
-                LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','',__iCHEC__);
+                t('16');
+                $this->objMasterCliente->logDeCambios('Creado');
+                //$arrLogxCamb['strNombTabl'] = 'MasterCliente';
+                //$arrLogxCamb['intRefeRegi'] = $this->objMasterCliente->CodiClie;
+                //$arrLogxCamb['strNombRegi'] = '('.$this->objMasterCliente->CodigoInterno .') - '. $this->objMasterCliente->NombClie;
+                //$arrLogxCamb['strDescCamb'] = "Creado";
+                //$arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie;
+                //LogDeCambios($arrLogxCamb);
+                //$this->mensaje('Transacción Exitosa','','','',__iCHEC__);
+                $this->success('Transaccion Exitosa !!!');
             }
+            t('17');
             $this->btnNuevClie->Visible = true;
             $this->btnDelete->Visible = true;
             $this->blnEditMode = true;
+            t('18');
         }
     }
 
@@ -1949,7 +1986,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected function ActualizarCampos($intCodiDepe) {
         $this->objMasterCliente->CodiDepe = $intCodiDepe;
         $this->objMasterCliente->NombClie = $this->txtNombClie->Text;
-        $this->objMasterCliente->CodiEsta = $this->lstCodiEsta->SelectedValue;
+        $this->objMasterCliente->SucursalId = $this->lstCodiEsta->SelectedValue;
         $this->objMasterCliente->DireFisc = $this->txtDireFisc->Text;
         $this->objMasterCliente->NumeDrif = $this->txtNumeDrif->Text;
         $this->objMasterCliente->VendedorId = $this->lstVendClie->SelectedValue;

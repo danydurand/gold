@@ -20,7 +20,7 @@ require_once(__FORMBASE_CLASSES__ . '/NotaEntregaListFormBase.class.php');
  * @package My QCubed Application
  * @subpackage Drafts
  */
-class NotaEntregaListForm extends NotaEntregaListFormBase {
+class ManifiestosList extends NotaEntregaListFormBase {
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -53,7 +53,7 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
         $objClauOrde   = QQ::Clause();
         $objClauOrde[] = QQ::OrderBy(QQN::NotaEntrega()->Id,false);
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->PorCorregir,0);
+        $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Estatus,'FACTURAD@');
         $this->dtgNotaEntregas->AdditionalClauses = $objClauOrde;
         $this->dtgNotaEntregas->AdditionalConditions = QQ::AndCondition($objClauWher);
 
@@ -92,13 +92,18 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
 
     }
 
+    public function btnNuevRegi_Click()
+    {
+        QApplication::Redirect("carga_masiva_guias.php");
+    }
+
     public function FechMani(NotaEntrega $objManiClie) {
         return $objManiClie->Fecha->__toString("DD/MM/YYYY");
     }
 
     public function dtgNotaEntregasRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
-        QApplication::Redirect("nota_entrega_edit.php/$intId");
+        QApplication::Redirect("carga_masiva_guias.php/$intId");
 	}		
 
 }
@@ -106,5 +111,5 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
 
 // Go ahead and run this form object to generate the page and event handlers, implicitly using
 // nota_entrega_list.tpl.php as the included HTML template file
-NotaEntregaListForm::Run('NotaEntregaListForm');
+ManifiestosList::Run('ManifiestosList');
 ?>

@@ -112,7 +112,7 @@ class NewGrupoEditForm extends NewGrupoEditFormBase {
         $this->dtgUsuaGrup->MetaAddColumn('NombUsua');
         $this->dtgUsuaGrup->MetaAddColumn('ApelUsua');
         $this->dtgUsuaGrup->MetaAddTypeColumn('CodiStat', 'StatusType');
-        $colSucuUsua = $this->dtgUsuaGrup->MetaAddColumn(QQN::Usuario()->CodiEsta);
+        $colSucuUsua = $this->dtgUsuaGrup->MetaAddColumn(QQN::Usuario()->Sucursal->Iata);
         $colSucuUsua->Name = 'Suc.';
         $this->dtgUsuaGrup->MetaAddColumn('FechAcce');
 

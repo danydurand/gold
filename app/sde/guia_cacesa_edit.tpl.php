@@ -16,21 +16,21 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
                     <?php $this->lblMensUsua->Render(); ?>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 1em;">
                 <div class="col-md-1"></div>
-                <div class="col-md-5" style="margin-top: 1em;">
+                <div class="col-md-4">
                     <?php $this->calFechCarg->RenderWithName(); ?>
-                    <?php $this->txtNumeGuia->RenderWithName(); ?>
+                    <?php //$this->txtNumeGuia->RenderWithName(); ?>
                     <?php $this->txtGuiaExte->RenderWithName(); ?>
                     <?php $this->txtOrigGuia->RenderWithName(); ?>
                     <?php $this->lblDestGuia->RenderWithName(); ?>
                     <?php $this->lblOtroDestino->RenderWithName(); ?>
                     <?php $this->lstSucuDest->RenderWithName(); ?>
-                    <?php $this->chkAsigDest->RenderWithName(); ?>
-                </div>
-                <div class="col-md-5" style="margin-top: 1em;">
+                    <?php //$this->chkAsigDest->RenderWithName(); ?>
                     <?php $this->txtNombRemi->RenderWithName(); ?>
                     <?php $this->txtNombDest->RenderWithName(); ?>
+                </div>
+                <div class="col-md-5">
                     <?php $this->txtDireDest->RenderWithName(); ?>
                     <?php $this->txtTeleDest->RenderWithName(); ?>
                     <?php $this->txtDescCont->RenderWithName(); ?>

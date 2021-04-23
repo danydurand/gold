@@ -22,6 +22,9 @@ require_once(__FORMBASE_CLASSES__ . '/GuiaCacesaListFormBase.class.php');
  */
 class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 	protected $btnCancel;
+	protected $colGuiaSele;
+	protected $btnDeleSele;
+	protected $objManiAjus;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -32,9 +35,23 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 		QApplication::CheckRemoteAdmin();		    
 	}
 
+    protected function SetupValores() {
+        $intManiIdxx = $_SESSION['ManiAjus'];
+        if ($intManiIdxx) {
+            $this->objManiAjus = NotaEntrega::Load($intManiIdxx);
+            if (!$this->objManiAjus) {
+                $this->danger('Manifiesto sin Referencia');
+            }
+        } else {
+            $this->danger('Manifiesto sin Referencia');
+        }
+    }
+
 	//	protected function Form_Load() {}
 	protected function Form_Create() {
 		parent::Form_Create();
+
+		$this->SetupValores();
 
 		$this->lblTituForm->Text = 'Guías por corregir';
 		$this->btnNuevRegi->Visible = false;
@@ -64,40 +81,40 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 		// We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
 		// or $_ITEM->Id to pass the object's id, or any other data grid variable
 		$this->dtgGuiaCacesas->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-		$this->dtgGuiaCacesas->AddRowAction(new QClickEvent(), new QAjaxAction('dtgGuiaCacesasRow_Click'));
+		$this->dtgGuiaCacesas->AddRowAction(new QDoubleClickEvent(), new QAjaxAction('dtgGuiaCacesasRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
 		// Create the Other Columns (note that you can use strings for guia_cacesa's properties, or you
 		// can traverse down QQN::guia_cacesa() to display fields that are down the hierarchy)
-		$colFechCarg = $this->dtgGuiaCacesas->MetaAddColumn('FechCarg');
-		$colFechCarg->Name = 'Fecha';
 
-		$colNumeGuia = $this->dtgGuiaCacesas->MetaAddColumn('NumeGuia');
-		$colNumeGuia->Name = 'Guía L.';
+        $this->colGuiaSele = new QCheckBoxColumn('', $this->dtgGuiaCacesas);
+        $this->colGuiaSele->PrimaryKey = 'Id';
+        $this->dtgGuiaCacesas->AddColumn($this->colGuiaSele);
+        $this->dtgGuiaCacesas->AddAction(new QClickEvent(), new QAjaxAction('colGuiaSele_Click'));
 
-		$colGuiaExte = $this->dtgGuiaCacesas->MetaAddColumn('GuiaExte');
-		$colGuiaExte->Name ='Guía Externa';
+        $this->dtgGuiaCacesas->MetaAddColumn('Id');
+        $this->dtgGuiaCacesas->MetaAddColumn('GuiaExte','Name="Guía Cliente"');
 
-		$colOrigGuia = $this->dtgGuiaCacesas->MetaAddColumn('OrigGuia');
-		$colOrigGuia->Name = 'Origen';
+        $colFechCarg = new QDataGridColumn('FECHA CARG','<?= $_ITEM->FechCarg->__toString("DD/MM/YYYY") ?>');
+        $this->dtgGuiaCacesas->AddColumn($colFechCarg);
 
-		$colDestGuia = $this->dtgGuiaCacesas->MetaAddColumn('DestGuia');
-		$colDestGuia->Name = 'Destino';
+        $this->dtgGuiaCacesas->MetaAddColumn('OrigGuia','Name=Orig');
 
-		$colNombRemi = $this->dtgGuiaCacesas->MetaAddColumn('NombRemi');
-		$colNombRemi->Name = 'Remitente';
+		$this->dtgGuiaCacesas->MetaAddColumn('DestGuia','Name=Dest');
 
-		$colNombDest = $this->dtgGuiaCacesas->MetaAddColumn('NombDest');
-		$colNombDest->Name = 'Destinatario';
+		$this->dtgGuiaCacesas->MetaAddColumn('ServicioImportacion','Name=S.Impor');
 
-		$colNombUsua = $this->dtgGuiaCacesas->MetaAddColumn('RegistradoPor');
-		$colNombUsua->Name = 'Usuario';
+		$this->dtgGuiaCacesas->MetaAddColumn('NombRemi','Name=Cliente');
 
-		$colProcGuia = $this->dtgGuiaCacesas->MetaAddColumn('ProcesoId');
-		$colProcGuia->Name = 'Proceso';
+		$this->dtgGuiaCacesas->MetaAddColumn('Observacion');
+
+		$this->dtgGuiaCacesas->MetaAddColumn('RegistradoPor','Name=Regis. Por');
+
+		$this->dtgGuiaCacesas->MetaAddColumn(QQN::GuiaCacesa()->NotaEntrega->Referencia,'Name=Manif.');
 
         $this->btnExpoExce_Create();
+        $this->btnDeleSele_Create();
     }
 
 	protected function btnExpoExce_Create() {
@@ -107,6 +124,13 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 		$this->btnExpoExce->HtmlEntities = false;
 		$this->btnExpoExce->CssClass = 'btn btn-outline-danger btn-sm';
 		$this->btnExpoExce->Visible = true;
+	}
+
+	protected function btnDeleSele_Create() {
+		$this->btnDeleSele = new QButtonD($this);
+        $this->btnDeleSele->Text = '<i class="fa fa-trash fa-lg"></i> Borrar';
+		$this->btnDeleSele->Visible = false;
+		$this->btnDeleSele->AddAction(new QClickEvent(), new QAjaxAction('btnDeleSele_Click'));
 	}
 
 	protected function btnCancel_Create() {
@@ -122,13 +146,37 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 	// Acciones Asociadas a los Objetos
 	//-----------------------------------
 
+    protected function colGuiaSele_Click() {
+        $arrIdxxSele = $this->colGuiaSele->GetChangedIds();
+        if (count($arrIdxxSele) > 0) {
+            $this->btnDeleSele->Visible = true;
+        } else {
+            $this->btnDeleSele->Visible = false;
+        }
+    }
+
+    protected function btnDeleSele_Click() {
+        $arrIdxxSele = $this->colGuiaSele->GetChangedIds();
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::In(QQN::GuiaCacesa()->Id, array_keys($arrIdxxSele));
+        $arrDeleGuia   = GuiaCacesa::QueryArray(QQ::AndCondition($objClauWher));
+        $intCantGuia   = 0;
+        foreach ($arrDeleGuia as $objDeleGuia) {
+            $objDeleGuia->Delete();
+            $intCantGuia++;
+        }
+        $this->dtgGuiaCacesas->Refresh();
+        $this->success('Transaccion Exitosa !!! | Guias Borradas: '.$intCantGuia);
+    }
+
 	public function dtgGuiaCacesasRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
         QApplication::Redirect("guia_cacesa_edit.php/$intId");
 	}
 
 	protected function btnCancel_Click() {
-		QApplication::Redirect(__SIST__."/carga_masiva_guias.php");
+	    $intManuAjus = $_SESSION['ManiAjus'];
+		QApplication::Redirect(__SIST__."/carga_masiva_guias.php/".$intManuAjus);
 	}
 }
 
