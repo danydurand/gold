@@ -22,6 +22,7 @@ require_once(__FORMBASE_CLASSES__ . '/GuiaCacesaListFormBase.class.php');
  */
 class GuiaCacesaListForm extends GuiaCacesaListFormBase {
     protected $btnCancel;
+    protected $objManiAjus;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -34,8 +35,22 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 
 //		protected function Form_Load() {}
 
+    protected function SetupValores() {
+        $intManiIdxx = $_SESSION['ManiAjus'];
+        if ($intManiIdxx) {
+            $this->objManiAjus = NotaEntrega::Load($intManiIdxx);
+            if (!$this->objManiAjus) {
+                $this->danger('Manifiesto sin Referencia');
+            }
+        } else {
+            $this->danger('Manifiesto sin Referencia');
+        }
+    }
+
 	protected function Form_Create() {
 		parent::Form_Create();
+
+        $this->SetupValores();
 
         $this->lblTituForm->Text = 'Guías por corregir';
         $this->btnNuevRegi->Visible = false;
@@ -71,15 +86,20 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 
 		// Create the Other Columns (note that you can use strings for guia_cacesa's properties, or you
 		// can traverse down QQN::guia_cacesa() to display fields that are down the hierarchy)
-        $this->dtgGuiaCacesas->MetaAddColumn('FechCarg','Name=Fecha');
+        $colFechCarg = new QDataGridColumn('FECHA CARG','<?= $_ITEM->FechCarg->__toString("DD/MM/YYYY") ?>');
+        $this->dtgGuiaCacesas->AddColumn($colFechCarg);
         //$this->dtgGuiaCacesas->MetaAddColumn('NumeGuia','Name=Guia GC');
-        $this->dtgGuiaCacesas->MetaAddColumn('GuiaExte','Name=Tracking');
+        $this->dtgGuiaCacesas->MetaAddColumn('GuiaExte','Name=Nro Guia');
         $this->dtgGuiaCacesas->MetaAddColumn('OrigGuia','Name=Origen');
-        $this->dtgGuiaCacesas->MetaAddColumn('NombRemi','Name=Remitente');
+        //$this->dtgGuiaCacesas->MetaAddColumn('NombRemi','Name=Remitente');
         $this->dtgGuiaCacesas->MetaAddColumn('DestGuia','Name=Destino');
+        $this->dtgGuiaCacesas->MetaAddColumn('ServicioImportacion','Name=S.Impor.');
         $this->dtgGuiaCacesas->MetaAddColumn('NombDest','Name=Destinatario');
+        $this->dtgGuiaCacesas->MetaAddColumn('Observacion');
         $this->dtgGuiaCacesas->MetaAddColumn('RegistradoPor','Name=RegisPor');
-        $this->dtgGuiaCacesas->MetaAddColumn('ProcesoId','Name=Proceso');
+        //$this->dtgGuiaCacesas->MetaAddColumn('ProcesoId','Name=Proceso');
+        $this->dtgGuiaCacesas->MetaAddColumn(QQN::GuiaCacesa()->NotaEntrega->Referencia,'Name=Manif.');
+
         $this->btnExpoExce_Create();
     }
 
@@ -111,7 +131,8 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 	}
 
     protected function btnCancel_Click() {
-        QApplication::Redirect(__SIST__."/carga_masiva_guias.php");
+        $intManuAjus = $_SESSION['ManiAjus'];
+        QApplication::Redirect(__SIST__."/carga_masiva_guias.php/".$intManuAjus);
     }
 
 }

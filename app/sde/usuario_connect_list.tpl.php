@@ -5,7 +5,7 @@
 	// Be sure to move this out of this directory before modifying to ensure that subsequent
 	// code re-generations do not overwrite your changes.
 
-	$strPageTitle = 'Usuarios CORP';
+	$strPageTitle = 'Usuarios Connect';
 	require(__APP_INCLUDES__ . '/header.inc.php');
 	require(__APP_INCLUDES__ . '/botonera_list.inc.php');
 ?>

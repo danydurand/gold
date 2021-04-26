@@ -108,34 +108,34 @@ class Envalijar extends FormularioBaseKaizen {
 		//--------------------------------------
 		// Se graba o actualiza el Contenedor
 		//--------------------------------------
-		$objContenedor = SdeContenedor::Load($this->txtNumeCont->Text);
-		if (!$objContenedor) {
-		    t('El contenedor no existe');
-			$objContenedor           = new SdeContenedor();
-			$objContenedor->NumeCont = $this->txtNumeCont->Text;
-			$objContenedor->CodiOper = $this->lstOperAbie->SelectedValue;
-			$objContenedor->Fecha    = new QDateTime(QDateTime::Now);
-			$objContenedor->Hora     = date('H:i');
-			$objContenedor->StatCont = 'P';
-			$objContenedor->Save();
-            //------------------------
-            // Log de Transacciones
-            //------------------------
-            $arrLogxCamb['strNombTabl'] = 'Contenedor';
-            $arrLogxCamb['intRefeRegi'] = $objContenedor->NumeCont;
-            $arrLogxCamb['strNombRegi'] = $objContenedor->NumeCont;
-            $arrLogxCamb['strDescCamb'] = 'Contenedor Creado';
-            LogDeCambios($arrLogxCamb);
-		} else {
-            //------------------------
-            // Log de Transacciones
-            //------------------------
-            $arrLogxCamb['strNombTabl'] = 'Contenedor';
-            $arrLogxCamb['intRefeRegi'] = $objContenedor->NumeCont;
-            $arrLogxCamb['strNombRegi'] = $objContenedor->NumeCont;
-            $arrLogxCamb['strDescCamb'] = 'Contenedor Actualizado';
-            LogDeCambios($arrLogxCamb);
-		}
+		//$objContenedor = SdeContenedor::Load($this->txtNumeCont->Text);
+		//if (!$objContenedor) {
+		//    t('El contenedor no existe');
+		//	$objContenedor           = new SdeContenedor();
+		//	$objContenedor->NumeCont = $this->txtNumeCont->Text;
+		//	$objContenedor->CodiOper = $this->lstOperAbie->SelectedValue;
+		//	$objContenedor->Fecha    = new QDateTime(QDateTime::Now);
+		//	$objContenedor->Hora     = date('H:i');
+		//	$objContenedor->StatCont = 'P';
+		//	$objContenedor->Save();
+         //   //------------------------
+         //   // Log de Transacciones
+         //   //------------------------
+         //   $arrLogxCamb['strNombTabl'] = 'Contenedor';
+         //   $arrLogxCamb['intRefeRegi'] = $objContenedor->NumeCont;
+         //   $arrLogxCamb['strNombRegi'] = $objContenedor->NumeCont;
+         //   $arrLogxCamb['strDescCamb'] = 'Contenedor Creado';
+         //   LogDeCambios($arrLogxCamb);
+		//} else {
+         //   //------------------------
+         //   // Log de Transacciones
+         //   //------------------------
+         //   $arrLogxCamb['strNombTabl'] = 'Contenedor';
+         //   $arrLogxCamb['intRefeRegi'] = $objContenedor->NumeCont;
+         //   $arrLogxCamb['strNombRegi'] = $objContenedor->NumeCont;
+         //   $arrLogxCamb['strDescCamb'] = 'Contenedor Actualizado';
+         //   LogDeCambios($arrLogxCamb);
+		//}
         $objContainer  = Containers::LoadByNumero($this->txtNumeCont->Text);
 		if (!$objContainer) {
 		    t('El container no existe');
@@ -145,13 +145,14 @@ class Envalijar extends FormularioBaseKaizen {
 			$objContainer->Fecha       = new QDateTime(QDateTime::Now);
 			$objContainer->Hora        = date('H:i');
 			$objContainer->Estatus     = 'ABIERT@';
+			$objContainer->Tipo        = 'VALIJA';
 			$objContainer->CreatedBy   = $this->objUsuario->CodiUsua;
 			$objContainer->Save();
             //------------------------
             // Log de Transacciones
             //------------------------
-            $arrLogxCamb['strNombTabl'] = 'Container';
-            $arrLogxCamb['intRefeRegi'] = $objContainer->Numero;
+            $arrLogxCamb['strNombTabl'] = 'Containers';
+            $arrLogxCamb['intRefeRegi'] = $objContainer->Id;
             $arrLogxCamb['strNombRegi'] = $objContainer->Numero;
             $arrLogxCamb['strDescCamb'] = 'Container Creado';
             LogDeCambios($arrLogxCamb);
@@ -159,8 +160,8 @@ class Envalijar extends FormularioBaseKaizen {
             //------------------------
             // Log de Transacciones
             //------------------------
-            $arrLogxCamb['strNombTabl'] = 'Container';
-            $arrLogxCamb['intRefeRegi'] = $objContainer->Numero;
+            $arrLogxCamb['strNombTabl'] = 'Containers';
+            $arrLogxCamb['intRefeRegi'] = $objContainer->Id;
             $arrLogxCamb['strNombRegi'] = $objContainer->Numero;
             $arrLogxCamb['strDescCamb'] = 'Container Actualizado';
             LogDeCambios($arrLogxCamb);
@@ -171,13 +172,13 @@ class Envalijar extends FormularioBaseKaizen {
 		$arrListNume = LimpiarArreglo($arrListNume,false);
 		$this->txtListNume->Text = '';
 
-		$arrDestinos = $objContenedor->GetDestinos();
+		$arrDestinos = $objContainer->GetDestinos();
 		t('La Operaciones es:  '.$this->lstOperAbie->SelectedValue);
 		t('Los destinos asociados a la ruta del contenedor son: ');
 		foreach ($arrDestinos as $intCodiSucu) {
 		    t('Sucursal: '.$intCodiSucu);
         }
-		$intCodiRuta = $objContenedor->CodiOperObject->RutaId;
+		$intCodiRuta = $objContainer->Operacion->RutaId;
 
 		$intContVali = 0;
 		$intContGuia = 0;
@@ -203,12 +204,12 @@ class Envalijar extends FormularioBaseKaizen {
                     //-----------------------------------------------------------------------------------
                     if (in_array($objPiezGuia->Guia->DestinoId,$arrDestinos)) {
                         t('El destino de la guia esta incluido en los destinos de la Operacion');
-                        if (!$objContenedor->IsGuiaPiezasAsGuiaAssociated($objPiezGuia)) {
+                        if (!$objContainer->IsGuiaPiezasAsContainerPiezaAssociated($objPiezGuia)) {
                             t('La pieza no esta asociada');
                             //------------------------------------------------------
                             // Se establece la relación "contenedor-pieza"
                             //------------------------------------------------------
-                            $objContenedor->AssociateGuiaPiezasAsGuia($objPiezGuia);
+                            $objContainer->AssociateGuiaPiezasAsContainerPieza($objPiezGuia);
                         }
                         $intContGuia ++;
                     } else {
@@ -226,15 +227,15 @@ class Envalijar extends FormularioBaseKaizen {
                 //---------------------------------------------------
                 // Si no es una Guia, se chequea que sea una Valija
                 //---------------------------------------------------
-                $objValija = SdeContenedor::Load($strNumeSeri);
+                $objValija = Containers::LoadByNumero($strNumeSeri);
                 if ($objValija) {
                     t('La Valija existe');
-                    if (!$objContenedor->IsSdeContenedorAsSdeContContAssociated($objValija)) {
+                    if (!$objContainer->IsContainersAsContainerContainerAssociated($objValija)) {
                         t('La valija no esta asociada al contenedor');
                         //---------------------------------------------------
                         // Se establece la relación "contenedor-valija"
                         //---------------------------------------------------
-                        $objContenedor->AssociateSdeContenedorAsSdeContCont($objValija);
+                        $objContainer->AssociateContainersAsContainerContainer($objValija);
                     }
                     $intContVali ++;
                 } else {
@@ -255,7 +256,7 @@ class Envalijar extends FormularioBaseKaizen {
                         $arrDatoCkpt['NumePiez'] = $strNumeSeri;
                         $arrDatoCkpt['GuiaAnul'] = $objPiezGuia->Guia->DeletedBy;
                         $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                        $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion." (".$objContenedor->NumeCont.")";
+                        $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion." (".$objContainer->Numero.")";
                         $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
                         $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
                         if ($arrResuGrab['TodoOkey']) {
@@ -271,7 +272,7 @@ class Envalijar extends FormularioBaseKaizen {
                         $arrDatoCkpt['NumeCont'] = $strNumeSeri;
                         $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
                         $arrDatoCkpt['TextObse'] = $objCheckpoint->Descripcion;
-                        $arrResuGrab = GrabarCheckpointContenedor($arrDatoCkpt)." (".$objContenedor->NumeCont.")";
+                        $arrResuGrab = GrabarCheckpointContenedor($arrDatoCkpt)." (".$objContainer->Numero.")";
                         if ($arrResuGrab['TodoOkey']) {
                             $intContVali ++;
                         } else {
@@ -281,25 +282,25 @@ class Envalijar extends FormularioBaseKaizen {
                 } else {
                     t('No existe el checkpoint BG');
                     $strMensUsua = 'No existe el checkpoint BG';
-                    $this->mensaje($strMensUsua,'m','d','l',__iHAND__);
+                    $this->danger($strMensUsua);
                     $blnTodoOkey = false;
                 }
             }
 		}
 		if ($blnTodoOkey && ($intContGuia == $intContCkpt)) {
 			$strMensUsua = sprintf('El Proceso culmino Exitosamente. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-            $this->mensaje($strMensUsua,'m','s','l',__iCHEC__);
+            $this->success($strMensUsua);
 			$this->inicializarPantalla();
 		} else {
 			$strMensUsua = sprintf('Hubo Errores en la Transaccion. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-            $this->mensaje($strMensUsua,'m','w','l',__iEXCL__);
+            $this->warning($strMensUsua);
 		}
         //------------------------
         // Log de Transacciones
         //------------------------
-        $arrLogxCamb['strNombTabl'] = 'Contenedor';
-        $arrLogxCamb['intRefeRegi'] = $objContenedor->NumeCont;
-        $arrLogxCamb['strNombRegi'] = $objContenedor->NumeCont;
+        $arrLogxCamb['strNombTabl'] = 'Containers';
+        $arrLogxCamb['intRefeRegi'] = $objContainer->Id;
+        $arrLogxCamb['strNombRegi'] = $objContainer->Numero;
         $arrLogxCamb['strDescCamb'] = 'Envalijado: '.$strMensUsua;
         LogDeCambios($arrLogxCamb);
 	}

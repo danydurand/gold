@@ -396,7 +396,7 @@ class UsuarioConnectEditForm extends UsuarioConnectEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/usuario_connect_edit.php/'.$this->mctUsuarioConnect->UsuarioConnect->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','',__iCHEC__);
+                $this->success('Transacción Exitosa');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'UsuarioCORP';
@@ -405,7 +405,7 @@ class UsuarioConnectEditForm extends UsuarioConnectEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/usuario_connect_edit.php/'.$this->mctUsuarioConnect->UsuarioConnect->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','',__iCHEC__);
+            $this->success('Transacción Exitosa');
 		}
 	}
 

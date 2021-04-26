@@ -24,8 +24,21 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('%s',  $this->strNumero);
+			return sprintf('%s',  $this->Numero);
 		}
+
+		public function actualizarTotales() {
+            $decSumaPeso = 0;
+            $intCantPiez = 0;
+            $arrPiezCont = GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->Id);
+            foreach ($arrPiezCont as $objPiezCont) {
+                $decSumaPeso += (double)$objPiezCont->Kilos;
+                $intCantPiez ++;
+            }
+            $this->Peso = $decSumaPeso;
+            $this->Piezas = $intCantPiez;
+            $this->Save();
+        }
 
         public function GetPiezasConCheckpoint($strCodiCkpt) {
 		    t('Obtenidor piezas del contenedor que tengan: '.$strCodiCkpt);

@@ -34,7 +34,7 @@ class UsuarioConnectListForm extends UsuarioConnectListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
-        $this->lblTituForm->Text = 'Usuarios CORP';
+        $this->lblTituForm->Text = 'Usuarios Connect';
 
         // Instantiate the Meta DataGrid
 		$this->dtgUsuarioConnects = new UsuarioConnectDataGrid($this);
@@ -85,7 +85,7 @@ class UsuarioConnectListForm extends UsuarioConnectListFormBase {
 
 		$this->dtgUsuarioConnects->MetaAddColumn(QQN::UsuarioConnect()->Sucursal);
 
-		$this->dtgUsuarioConnects->MetaAddColumn('FechaAcceso');
+		$this->dtgUsuarioConnects->MetaAddColumn(QQN::UsuarioConnect()->FechaAcceso);
 
         $this->btnExpoExce_Create();
     }

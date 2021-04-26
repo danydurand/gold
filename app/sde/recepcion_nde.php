@@ -140,13 +140,6 @@ class RecepcionNde extends FormularioBaseKaizen {
 
     }
 
-    //protected function btnRepoDisc_Create() {
-    //    $this->btnRepoDisc = new QButtonP($this);
-    //    $this->btnRepoDisc->Text = TextoIcono('eye','Discrepancias','F','fa-lg');
-    //    $this->btnRepoDisc->AddAction(new QClickEvent(), new QServerAction('reporteDeDiscrepancias'));
-    //    $this->btnRepoDisc->Visible = false;
-    //}
-
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
@@ -232,17 +225,6 @@ class RecepcionNde extends FormularioBaseKaizen {
     }
 
 
-    protected function reporteDeDiscrepancias() {
-        //$arrEnca2PDF = array('Nro de Guia','Destinatario','Origen','Destino','Peso','Piezas','Discrepancia');
-        //$arrAnch2PDF = array(25,90,20,20,15,15,20);
-        //$arrJust2PDF = array('C','L','C','C','R','R','C');
-        //$_SESSION['Dato'] = serialize($this->arrGuiaDisc);
-        //$_SESSION['Enca'] = serialize($arrEnca2PDF);
-        //$_SESSION['Anch'] = serialize($arrAnch2PDF);
-        //$_SESSION['Just'] = serialize($arrJust2PDF);
-        //QApplication::Redirect('../util/tabla2pdf2.php?nomb_repo=Discrepancias');
-    }
-
     protected function btnSave_Click() {
         $objNotaEntr = NotaEntrega::Load($this->lstNotaEntr->SelectedValue);
         $arrPiezNota = $objNotaEntr->piezasDeLaNota();
@@ -257,7 +239,7 @@ class RecepcionNde extends FormularioBaseKaizen {
         //-------------------------------------------------------------------------------------
         $arrNumePiez = array_unique($arrNumePiez);
         $this->txtNumePiez->Text = '';
-        $objCkptRece = Checkpoints::LoadByCodigo('PU');
+        $objCkptRece = Checkpoints::LoadByCodigo('RA');
         $intContCkpt = 0;
         $arrRelaSobr = [];
         if (strlen($objNotaEntr->RelacionSobrantes) > 0) {
@@ -310,7 +292,7 @@ class RecepcionNde extends FormularioBaseKaizen {
                 }
             }
         }
-        $intCantPick  = $objNotaEntr->contarCheckpoint('PU');
+        $intCantPick  = $objNotaEntr->contarCheckpoint($objCkptRece->Codigo);
         $strRelaSobr  = '';
         if (count($arrRelaSobr) > 0) {
             $strRelaSobr = implode(',',$arrRelaSobr);

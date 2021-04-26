@@ -320,7 +320,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
                 $strMensUsua .= ' La sucursal '.$this->txtDestGuia->Text.' ha sido asignada a '.$intGuiaAsig.'Guía(s) más como Destino!';
             }
 
-            $this->mensaje($strMensUsua,'','','check');
+            $this->success($strMensUsua);
         }
 	}
 
@@ -334,7 +334,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
             $strTablRela = implode(',',$arrTablRela);
 
             $strMensUsua = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->mensaje($strMensUsua,'','d',__iHAND__);
+            $this->danger($strMensUsua);
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
@@ -437,7 +437,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
         //}
 
         if (!$blnTodoOkey) {
-            $this->mensaje($strMensUsua,'m','d',__iHAND__);
+            $this->danger($strMensUsua);
         }
 
         return $blnTodoOkey;

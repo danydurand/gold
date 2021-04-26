@@ -1,7 +1,6 @@
 <?php
 require_once('qcubed.inc.php');
 $intManiIdxx = QApplication::PathInfo(0);
-$strTipoRepo = QApplication::PathInfo(1);
 if (strlen($intManiIdxx) == 0) {
     echo 'Falta especificar el Id del Manifiesto';
     return;
@@ -16,13 +15,8 @@ use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 
 try {
-    if ($strTipoRepo = 'M') {
-        $strNombArch = 'MANI_CARG_'.$objManiCarg->Numero.'.pdf';
-        $strNombForm = 'manifiesto_de_carga2_html.php';
-    } else {
-        $strNombArch = 'HOJA_ENTR_'.$objManiCarg->Numero.'.pdf';
-        $strNombForm = 'hoja_entrega_html.php';
-    }
+    $strNombArch = 'NOTA_DESP_'.$objManiCarg->Numero.'.pdf';
+    $strNombForm = 'nota_de_despacho_html.php';
 
     $html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "20"));
     $html2pdf->pdf->SetDisplayMode('fullpage');

@@ -256,7 +256,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function txtNumeRefe_Create() {
         $this->txtNumeRefe = new QTextBox($this);
-        $this->txtNumeRefe->Name = 'Referencia NDE';
+        $this->txtNumeRefe->Name = 'Referencia Manif.';
         $this->txtNumeRefe->ToolTip = 'Nro de Nota de Entrega, Manifiesto o Contenedor';
         if ($this->blnEditMode) {
             $this->txtNumeRefe->Text = $this->objNotaEntr->Referencia;
@@ -498,7 +498,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function btnCancel_Click() {
         $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
+        QApplication::Redirect(__SIST__."/nota_entrega_list.php");
     }
 
     protected function btnSave_Click() {
@@ -633,6 +633,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function btnAjusGuia_Click() {
+        $_SESSION['ManiAjus'] = $this->objNotaEntr->Id;
         QApplication::Redirect(__SIST__.'/guia_cacesa_list.php');
     }
 

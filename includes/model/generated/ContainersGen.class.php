@@ -21,6 +21,14 @@
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
 	 * @property string $Hora the value for strHora (Not Null)
 	 * @property string $Estatus the value for strEstatus (Not Null)
+	 * @property string $Tipo the value for strTipo 
+	 * @property integer $ClienteCorpId the value for intClienteCorpId 
+	 * @property string $Awb the value for strAwb 
+	 * @property string $PrecintoLateral the value for strPrecintoLateral 
+	 * @property integer $Piezas the value for intPiezas 
+	 * @property double $Peso the value for fltPeso 
+	 * @property string $Contenido the value for strContenido 
+	 * @property string $Direccion the value for strDireccion 
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
 	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
@@ -28,6 +36,7 @@
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property SdeOperacion $Operacion the value for the SdeOperacion object referenced by intOperacionId (Not Null)
+	 * @property MasterCliente $ClienteCorp the value for the MasterCliente object referenced by intClienteCorpId 
 	 * @property-read Containers $_ParentContainersAsContainerContainer the value for the private _objParentContainersAsContainerContainer (Read-Only) if set due to an expansion on the container_container_assn association table
 	 * @property-read Containers[] $_ParentContainersAsContainerContainerArray the value for the private _objParentContainersAsContainerContainerArray (Read-Only) if set due to an ExpandAsArray on the container_container_assn association table
 	 * @property-read Containers $_ContainersAsContainerContainer the value for the private _objContainersAsContainerContainer (Read-Only) if set due to an expansion on the container_container_assn association table
@@ -92,6 +101,74 @@
 		 */
 		protected $strEstatus;
 		const EstatusDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.tipo
+		 * @var string strTipo
+		 */
+		protected $strTipo;
+		const TipoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.cliente_corp_id
+		 * @var integer intClienteCorpId
+		 */
+		protected $intClienteCorpId;
+		const ClienteCorpIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.awb
+		 * @var string strAwb
+		 */
+		protected $strAwb;
+		const AwbMaxLength = 20;
+		const AwbDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.precinto_lateral
+		 * @var string strPrecintoLateral
+		 */
+		protected $strPrecintoLateral;
+		const PrecintoLateralMaxLength = 20;
+		const PrecintoLateralDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.piezas
+		 * @var integer intPiezas
+		 */
+		protected $intPiezas;
+		const PiezasDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.peso
+		 * @var double fltPeso
+		 */
+		protected $fltPeso;
+		const PesoDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.contenido
+		 * @var string strContenido
+		 */
+		protected $strContenido;
+		const ContenidoMaxLength = 100;
+		const ContenidoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.direccion
+		 * @var string strDireccion
+		 */
+		protected $strDireccion;
+		const DireccionMaxLength = 100;
+		const DireccionDefault = null;
 
 
 		/**
@@ -238,6 +315,16 @@
 		 */
 		protected $objOperacion;
 
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column containers.cliente_corp_id.
+		 *
+		 * NOTE: Always use the ClienteCorp property getter to correctly retrieve this MasterCliente object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var MasterCliente objClienteCorp
+		 */
+		protected $objClienteCorp;
+
 
 
 		/**
@@ -251,6 +338,14 @@
 			$this->dttFecha = (Containers::FechaDefault === null)?null:new QDateTime(Containers::FechaDefault);
 			$this->strHora = Containers::HoraDefault;
 			$this->strEstatus = Containers::EstatusDefault;
+			$this->strTipo = Containers::TipoDefault;
+			$this->intClienteCorpId = Containers::ClienteCorpIdDefault;
+			$this->strAwb = Containers::AwbDefault;
+			$this->strPrecintoLateral = Containers::PrecintoLateralDefault;
+			$this->intPiezas = Containers::PiezasDefault;
+			$this->fltPeso = Containers::PesoDefault;
+			$this->strContenido = Containers::ContenidoDefault;
+			$this->strDireccion = Containers::DireccionDefault;
 			$this->strCreatedAt = Containers::CreatedAtDefault;
 			$this->strUpdatedAt = Containers::UpdatedAtDefault;
 			$this->strDeletedAt = Containers::DeletedAtDefault;
@@ -604,6 +699,14 @@
 			    $objBuilder->AddSelectItem($strTableName, 'fecha', $strAliasPrefix . 'fecha');
 			    $objBuilder->AddSelectItem($strTableName, 'hora', $strAliasPrefix . 'hora');
 			    $objBuilder->AddSelectItem($strTableName, 'estatus', $strAliasPrefix . 'estatus');
+			    $objBuilder->AddSelectItem($strTableName, 'tipo', $strAliasPrefix . 'tipo');
+			    $objBuilder->AddSelectItem($strTableName, 'cliente_corp_id', $strAliasPrefix . 'cliente_corp_id');
+			    $objBuilder->AddSelectItem($strTableName, 'awb', $strAliasPrefix . 'awb');
+			    $objBuilder->AddSelectItem($strTableName, 'precinto_lateral', $strAliasPrefix . 'precinto_lateral');
+			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
+			    $objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
+			    $objBuilder->AddSelectItem($strTableName, 'contenido', $strAliasPrefix . 'contenido');
+			    $objBuilder->AddSelectItem($strTableName, 'direccion', $strAliasPrefix . 'direccion');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'deleted_at', $strAliasPrefix . 'deleted_at');
@@ -753,6 +856,30 @@
 			$strAlias = $strAliasPrefix . 'estatus';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strEstatus = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'tipo';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strTipo = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'cliente_corp_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intClienteCorpId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'awb';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strAwb = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'precinto_lateral';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strPrecintoLateral = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'piezas';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intPiezas = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'peso';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltPeso = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'contenido';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strContenido = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'direccion';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strDireccion = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -807,6 +934,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['operacion_id']) ? null : $objExpansionAliasArray['operacion_id']);
 				$objToReturn->objOperacion = SdeOperacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'operacion_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for ClienteCorp Early Binding
+			$strAlias = $strAliasPrefix . 'cliente_corp_id__codi_clie';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['cliente_corp_id']) ? null : $objExpansionAliasArray['cliente_corp_id']);
+				$objToReturn->objClienteCorp = MasterCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cliente_corp_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -1065,6 +1199,38 @@
 
 		/**
 		 * Load an array of Containers objects,
+		 * by ClienteCorpId Index(es)
+		 * @param integer $intClienteCorpId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public static function LoadArrayByClienteCorpId($intClienteCorpId, $objOptionalClauses = null) {
+			// Call Containers::QueryArray to perform the LoadArrayByClienteCorpId query
+			try {
+				return Containers::QueryArray(
+					QQ::Equal(QQN::Containers()->ClienteCorpId, $intClienteCorpId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Containerses
+		 * by ClienteCorpId Index(es)
+		 * @param integer $intClienteCorpId
+		 * @return int
+		*/
+		public static function CountByClienteCorpId($intClienteCorpId) {
+			// Call Containers::QueryCount to perform the CountByClienteCorpId query
+			return Containers::QueryCount(
+				QQ::Equal(QQN::Containers()->ClienteCorpId, $intClienteCorpId)
+			);
+		}
+
+		/**
+		 * Load an array of Containers objects,
 		 * by OperacionId Index(es)
 		 * @param integer $intOperacionId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -1224,6 +1390,14 @@
 							`fecha`,
 							`hora`,
 							`estatus`,
+							`tipo`,
+							`cliente_corp_id`,
+							`awb`,
+							`precinto_lateral`,
+							`piezas`,
+							`peso`,
+							`contenido`,
+							`direccion`,
 							`created_by`,
 							`updated_by`,
 							`deleted_by`
@@ -1233,6 +1407,14 @@
 							' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							' . $objDatabase->SqlVariable($this->strHora) . ',
 							' . $objDatabase->SqlVariable($this->strEstatus) . ',
+							' . $objDatabase->SqlVariable($this->strTipo) . ',
+							' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
+							' . $objDatabase->SqlVariable($this->strAwb) . ',
+							' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
+							' . $objDatabase->SqlVariable($this->intPiezas) . ',
+							' . $objDatabase->SqlVariable($this->fltPeso) . ',
+							' . $objDatabase->SqlVariable($this->strContenido) . ',
+							' . $objDatabase->SqlVariable($this->strDireccion) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -1301,6 +1483,14 @@
 							`fecha` = ' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							`hora` = ' . $objDatabase->SqlVariable($this->strHora) . ',
 							`estatus` = ' . $objDatabase->SqlVariable($this->strEstatus) . ',
+							`tipo` = ' . $objDatabase->SqlVariable($this->strTipo) . ',
+							`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
+							`awb` = ' . $objDatabase->SqlVariable($this->strAwb) . ',
+							`precinto_lateral` = ' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
+							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
+							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
+							`contenido` = ' . $objDatabase->SqlVariable($this->strContenido) . ',
+							`direccion` = ' . $objDatabase->SqlVariable($this->strDireccion) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							`deleted_by` = ' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -1449,6 +1639,14 @@
 			$this->dttFecha = $objReloaded->dttFecha;
 			$this->strHora = $objReloaded->strHora;
 			$this->strEstatus = $objReloaded->strEstatus;
+			$this->strTipo = $objReloaded->strTipo;
+			$this->ClienteCorpId = $objReloaded->ClienteCorpId;
+			$this->strAwb = $objReloaded->strAwb;
+			$this->strPrecintoLateral = $objReloaded->strPrecintoLateral;
+			$this->intPiezas = $objReloaded->intPiezas;
+			$this->fltPeso = $objReloaded->fltPeso;
+			$this->strContenido = $objReloaded->strContenido;
+			$this->strDireccion = $objReloaded->strDireccion;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
 			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
 			$this->strDeletedAt = $objReloaded->strDeletedAt;
@@ -1517,6 +1715,62 @@
 					 */
 					return $this->strEstatus;
 
+				case 'Tipo':
+					/**
+					 * Gets the value for strTipo 
+					 * @return string
+					 */
+					return $this->strTipo;
+
+				case 'ClienteCorpId':
+					/**
+					 * Gets the value for intClienteCorpId 
+					 * @return integer
+					 */
+					return $this->intClienteCorpId;
+
+				case 'Awb':
+					/**
+					 * Gets the value for strAwb 
+					 * @return string
+					 */
+					return $this->strAwb;
+
+				case 'PrecintoLateral':
+					/**
+					 * Gets the value for strPrecintoLateral 
+					 * @return string
+					 */
+					return $this->strPrecintoLateral;
+
+				case 'Piezas':
+					/**
+					 * Gets the value for intPiezas 
+					 * @return integer
+					 */
+					return $this->intPiezas;
+
+				case 'Peso':
+					/**
+					 * Gets the value for fltPeso 
+					 * @return double
+					 */
+					return $this->fltPeso;
+
+				case 'Contenido':
+					/**
+					 * Gets the value for strContenido 
+					 * @return string
+					 */
+					return $this->strContenido;
+
+				case 'Direccion':
+					/**
+					 * Gets the value for strDireccion 
+					 * @return string
+					 */
+					return $this->strDireccion;
+
 				case 'CreatedAt':
 					/**
 					 * Gets the value for strCreatedAt (Read-Only Timestamp)
@@ -1572,6 +1826,20 @@
 						if ((!$this->objOperacion) && (!is_null($this->intOperacionId)))
 							$this->objOperacion = SdeOperacion::Load($this->intOperacionId);
 						return $this->objOperacion;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ClienteCorp':
+					/**
+					 * Gets the value for the MasterCliente object referenced by intClienteCorpId 
+					 * @return MasterCliente
+					 */
+					try {
+						if ((!$this->objClienteCorp) && (!is_null($this->intClienteCorpId)))
+							$this->objClienteCorp = MasterCliente::Load($this->intClienteCorpId);
+						return $this->objClienteCorp;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1740,6 +2008,111 @@
 						throw $objExc;
 					}
 
+				case 'Tipo':
+					/**
+					 * Sets the value for strTipo 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strTipo = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ClienteCorpId':
+					/**
+					 * Sets the value for intClienteCorpId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objClienteCorp = null;
+						return ($this->intClienteCorpId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Awb':
+					/**
+					 * Sets the value for strAwb 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strAwb = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'PrecintoLateral':
+					/**
+					 * Sets the value for strPrecintoLateral 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strPrecintoLateral = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Piezas':
+					/**
+					 * Sets the value for intPiezas 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intPiezas = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Peso':
+					/**
+					 * Sets the value for fltPeso 
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltPeso = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Contenido':
+					/**
+					 * Sets the value for strContenido 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strContenido = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Direccion':
+					/**
+					 * Sets the value for strDireccion 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strDireccion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'CreatedBy':
 					/**
 					 * Sets the value for intCreatedBy 
@@ -1809,6 +2182,38 @@
 						// Update Local Member Variables
 						$this->objOperacion = $mixValue;
 						$this->intOperacionId = $mixValue->CodiOper;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'ClienteCorp':
+					/**
+					 * Sets the value for the MasterCliente object referenced by intClienteCorpId 
+					 * @param MasterCliente $mixValue
+					 * @return MasterCliente
+					 */
+					if (is_null($mixValue)) {
+						$this->intClienteCorpId = null;
+						$this->objClienteCorp = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a MasterCliente object
+						try {
+							$mixValue = QType::Cast($mixValue, 'MasterCliente');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED MasterCliente object
+						if (is_null($mixValue->CodiClie))
+							throw new QCallerException('Unable to set an unsaved ClienteCorp for this Containers');
+
+						// Update Local Member Variables
+						$this->objClienteCorp = $mixValue;
+						$this->intClienteCorpId = $mixValue->CodiClie;
 
 						// Return $mixValue
 						return $mixValue;
@@ -2417,6 +2822,14 @@
 			$strToReturn .= '<element name="Fecha" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="Hora" type="xsd:string"/>';
 			$strToReturn .= '<element name="Estatus" type="xsd:string"/>';
+			$strToReturn .= '<element name="Tipo" type="xsd:string"/>';
+			$strToReturn .= '<element name="ClienteCorp" type="xsd1:MasterCliente"/>';
+			$strToReturn .= '<element name="Awb" type="xsd:string"/>';
+			$strToReturn .= '<element name="PrecintoLateral" type="xsd:string"/>';
+			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
+			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
+			$strToReturn .= '<element name="Contenido" type="xsd:string"/>';
+			$strToReturn .= '<element name="Direccion" type="xsd:string"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
@@ -2432,6 +2845,7 @@
 			if (!array_key_exists('Containers', $strComplexTypeArray)) {
 				$strComplexTypeArray['Containers'] = Containers::GetSoapComplexTypeXml();
 				SdeOperacion::AlterSoapComplexTypeArray($strComplexTypeArray);
+				MasterCliente::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -2459,6 +2873,23 @@
 				$objToReturn->strHora = $objSoapObject->Hora;
 			if (property_exists($objSoapObject, 'Estatus'))
 				$objToReturn->strEstatus = $objSoapObject->Estatus;
+			if (property_exists($objSoapObject, 'Tipo'))
+				$objToReturn->strTipo = $objSoapObject->Tipo;
+			if ((property_exists($objSoapObject, 'ClienteCorp')) &&
+				($objSoapObject->ClienteCorp))
+				$objToReturn->ClienteCorp = MasterCliente::GetObjectFromSoapObject($objSoapObject->ClienteCorp);
+			if (property_exists($objSoapObject, 'Awb'))
+				$objToReturn->strAwb = $objSoapObject->Awb;
+			if (property_exists($objSoapObject, 'PrecintoLateral'))
+				$objToReturn->strPrecintoLateral = $objSoapObject->PrecintoLateral;
+			if (property_exists($objSoapObject, 'Piezas'))
+				$objToReturn->intPiezas = $objSoapObject->Piezas;
+			if (property_exists($objSoapObject, 'Peso'))
+				$objToReturn->fltPeso = $objSoapObject->Peso;
+			if (property_exists($objSoapObject, 'Contenido'))
+				$objToReturn->strContenido = $objSoapObject->Contenido;
+			if (property_exists($objSoapObject, 'Direccion'))
+				$objToReturn->strDireccion = $objSoapObject->Direccion;
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
 			if (property_exists($objSoapObject, 'UpdatedAt'))
@@ -2495,6 +2926,10 @@
 				$objObject->intOperacionId = null;
 			if ($objObject->dttFecha)
 				$objObject->dttFecha = $objObject->dttFecha->qFormat(QDateTime::FormatSoap);
+			if ($objObject->objClienteCorp)
+				$objObject->objClienteCorp = MasterCliente::GetSoapObjectFromObject($objObject->objClienteCorp, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intClienteCorpId = null;
 			return $objObject;
 		}
 
@@ -2515,6 +2950,14 @@
 			$iArray['Fecha'] = $this->dttFecha;
 			$iArray['Hora'] = $this->strHora;
 			$iArray['Estatus'] = $this->strEstatus;
+			$iArray['Tipo'] = $this->strTipo;
+			$iArray['ClienteCorpId'] = $this->intClienteCorpId;
+			$iArray['Awb'] = $this->strAwb;
+			$iArray['PrecintoLateral'] = $this->strPrecintoLateral;
+			$iArray['Piezas'] = $this->intPiezas;
+			$iArray['Peso'] = $this->fltPeso;
+			$iArray['Contenido'] = $this->strContenido;
+			$iArray['Direccion'] = $this->strDireccion;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
 			$iArray['UpdatedAt'] = $this->strUpdatedAt;
 			$iArray['DeletedAt'] = $this->strDeletedAt;
@@ -2673,6 +3116,15 @@
      * @property-read QQNode $Fecha
      * @property-read QQNode $Hora
      * @property-read QQNode $Estatus
+     * @property-read QQNode $Tipo
+     * @property-read QQNode $ClienteCorpId
+     * @property-read QQNodeMasterCliente $ClienteCorp
+     * @property-read QQNode $Awb
+     * @property-read QQNode $PrecintoLateral
+     * @property-read QQNode $Piezas
+     * @property-read QQNode $Peso
+     * @property-read QQNode $Contenido
+     * @property-read QQNode $Direccion
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -2708,6 +3160,24 @@
 					return new QQNode('hora', 'Hora', 'VarChar', $this);
 				case 'Estatus':
 					return new QQNode('estatus', 'Estatus', 'VarChar', $this);
+				case 'Tipo':
+					return new QQNode('tipo', 'Tipo', 'VarChar', $this);
+				case 'ClienteCorpId':
+					return new QQNode('cliente_corp_id', 'ClienteCorpId', 'Integer', $this);
+				case 'ClienteCorp':
+					return new QQNodeMasterCliente('cliente_corp_id', 'ClienteCorp', 'Integer', $this);
+				case 'Awb':
+					return new QQNode('awb', 'Awb', 'VarChar', $this);
+				case 'PrecintoLateral':
+					return new QQNode('precinto_lateral', 'PrecintoLateral', 'VarChar', $this);
+				case 'Piezas':
+					return new QQNode('piezas', 'Piezas', 'Integer', $this);
+				case 'Peso':
+					return new QQNode('peso', 'Peso', 'Float', $this);
+				case 'Contenido':
+					return new QQNode('contenido', 'Contenido', 'VarChar', $this);
+				case 'Direccion':
+					return new QQNode('direccion', 'Direccion', 'VarChar', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
 				case 'UpdatedAt':
@@ -2750,6 +3220,15 @@
      * @property-read QQNode $Fecha
      * @property-read QQNode $Hora
      * @property-read QQNode $Estatus
+     * @property-read QQNode $Tipo
+     * @property-read QQNode $ClienteCorpId
+     * @property-read QQNodeMasterCliente $ClienteCorp
+     * @property-read QQNode $Awb
+     * @property-read QQNode $PrecintoLateral
+     * @property-read QQNode $Piezas
+     * @property-read QQNode $Peso
+     * @property-read QQNode $Contenido
+     * @property-read QQNode $Direccion
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -2785,6 +3264,24 @@
 					return new QQNode('hora', 'Hora', 'string', $this);
 				case 'Estatus':
 					return new QQNode('estatus', 'Estatus', 'string', $this);
+				case 'Tipo':
+					return new QQNode('tipo', 'Tipo', 'string', $this);
+				case 'ClienteCorpId':
+					return new QQNode('cliente_corp_id', 'ClienteCorpId', 'integer', $this);
+				case 'ClienteCorp':
+					return new QQNodeMasterCliente('cliente_corp_id', 'ClienteCorp', 'integer', $this);
+				case 'Awb':
+					return new QQNode('awb', 'Awb', 'string', $this);
+				case 'PrecintoLateral':
+					return new QQNode('precinto_lateral', 'PrecintoLateral', 'string', $this);
+				case 'Piezas':
+					return new QQNode('piezas', 'Piezas', 'integer', $this);
+				case 'Peso':
+					return new QQNode('peso', 'Peso', 'double', $this);
+				case 'Contenido':
+					return new QQNode('contenido', 'Contenido', 'string', $this);
+				case 'Direccion':
+					return new QQNode('direccion', 'Direccion', 'string', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'string', $this);
 				case 'UpdatedAt':

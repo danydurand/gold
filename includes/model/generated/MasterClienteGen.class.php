@@ -40,7 +40,7 @@
 	 * @property string $HoraVier the value for strHoraVier 
 	 * @property string $HoraSaba the value for strHoraSaba 
 	 * @property integer $CodiStat the value for intCodiStat (Not Null)
-	 * @property integer $CodiSino the value for intCodiSino (Not Null)
+	 * @property integer $CodiSino the value for intCodiSino 
 	 * @property string $TextObse the value for strTextObse 
 	 * @property string $NumeDfax the value for strNumeDfax 
 	 * @property string $CodigoInterno the value for strCodigoInterno (Unique)
@@ -92,6 +92,8 @@
 	 * @property-read ConsumoDia[] $_ConsumoDiaAsClienteArray the value for the private _objConsumoDiaAsClienteArray (Read-Only) if set due to an ExpandAsArray on the consumo_dia.cliente_id reverse relationship
 	 * @property-read ConsumoMes $_ConsumoMesAsCliente the value for the private _objConsumoMesAsCliente (Read-Only) if set due to an expansion on the consumo_mes.cliente_id reverse relationship
 	 * @property-read ConsumoMes[] $_ConsumoMesAsClienteArray the value for the private _objConsumoMesAsClienteArray (Read-Only) if set due to an ExpandAsArray on the consumo_mes.cliente_id reverse relationship
+	 * @property-read Containers $_ContainersAsClienteCorp the value for the private _objContainersAsClienteCorp (Read-Only) if set due to an expansion on the containers.cliente_corp_id reverse relationship
+	 * @property-read Containers[] $_ContainersAsClienteCorpArray the value for the private _objContainersAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the containers.cliente_corp_id reverse relationship
 	 * @property-read Descuentos $_DescuentosAsCliente the value for the private _objDescuentosAsCliente (Read-Only) if set due to an expansion on the descuentos.cliente_id reverse relationship
 	 * @property-read Descuentos[] $_DescuentosAsClienteArray the value for the private _objDescuentosAsClienteArray (Read-Only) if set due to an ExpandAsArray on the descuentos.cliente_id reverse relationship
 	 * @property-read DestinatarioFrecuente $_DestinatarioFrecuenteAsCliente the value for the private _objDestinatarioFrecuenteAsCliente (Read-Only) if set due to an expansion on the destinatario_frecuente.cliente_id reverse relationship
@@ -697,6 +699,22 @@
 		 * @var ConsumoMes[] _objConsumoMesAsClienteArray;
 		 */
 		private $_objConsumoMesAsClienteArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ContainersAsClienteCorp object
+		 * (of type Containers), if this MasterCliente object was restored with
+		 * an expansion on the containers association table.
+		 * @var Containers _objContainersAsClienteCorp;
+		 */
+		private $_objContainersAsClienteCorp;
+
+		/**
+		 * Private member variable that stores a reference to an array of ContainersAsClienteCorp objects
+		 * (of type Containers[]), if this MasterCliente object was restored with
+		 * an ExpandAsArray on the containers association table.
+		 * @var Containers[] _objContainersAsClienteCorpArray;
+		 */
+		private $_objContainersAsClienteCorpArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single DescuentosAsCliente object
@@ -1982,6 +2000,21 @@
 					$objToReturn->_objConsumoMesAsClienteArray[] = ConsumoMes::InstantiateDbRow($objDbRow, $strAliasPrefix . 'consumomesascliente__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objConsumoMesAsCliente)) {
 					$objToReturn->_objConsumoMesAsCliente = ConsumoMes::InstantiateDbRow($objDbRow, $strAliasPrefix . 'consumomesascliente__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ContainersAsClienteCorp Virtual Binding
+			$strAlias = $strAliasPrefix . 'containersasclientecorp__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['containersasclientecorp']) ? null : $objExpansionAliasArray['containersasclientecorp']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objContainersAsClienteCorpArray)
+				$objToReturn->_objContainersAsClienteCorpArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objContainersAsClienteCorpArray[] = Containers::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containersasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objContainersAsClienteCorp)) {
+					$objToReturn->_objContainersAsClienteCorp = Containers::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containersasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3490,7 +3523,7 @@
 
 				case 'CodiSino':
 					/**
-					 * Gets the value for intCodiSino (Not Null)
+					 * Gets the value for intCodiSino 
 					 * @return integer
 					 */
 					return $this->intCodiSino;
@@ -3936,6 +3969,22 @@
 					 * @return ConsumoMes[]
 					 */
 					return $this->_objConsumoMesAsClienteArray;
+
+				case '_ContainersAsClienteCorp':
+					/**
+					 * Gets the value for the private _objContainersAsClienteCorp (Read-Only)
+					 * if set due to an expansion on the containers.cliente_corp_id reverse relationship
+					 * @return Containers
+					 */
+					return $this->_objContainersAsClienteCorp;
+
+				case '_ContainersAsClienteCorpArray':
+					/**
+					 * Gets the value for the private _objContainersAsClienteCorpArray (Read-Only)
+					 * if set due to an ExpandAsArray on the containers.cliente_corp_id reverse relationship
+					 * @return Containers[]
+					 */
+					return $this->_objContainersAsClienteCorpArray;
 
 				case '_DescuentosAsCliente':
 					/**
@@ -4506,7 +4555,7 @@
 
 				case 'CodiSino':
 					/**
-					 * Sets the value for intCodiSino (Not Null)
+					 * Sets the value for intCodiSino 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
@@ -5356,6 +5405,9 @@
 			if ($this->CountConsumoMesesAsCliente()) {
 				$arrTablRela[] = 'consumo_mes';
 			}
+			if ($this->CountContainersesAsClienteCorp()) {
+				$arrTablRela[] = 'containers';
+			}
 			if ($this->CountDescuentosesAsCliente()) {
 				$arrTablRela[] = 'descuentos';
 			}
@@ -5702,6 +5754,155 @@
 					`consumo_mes`
 				WHERE
 					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ContainersAsClienteCorp
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ContainersesAsClienteCorp as an array of Containers objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public function GetContainersAsClienteCorpArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiClie)))
+				return array();
+
+			try {
+				return Containers::LoadArrayByClienteCorpId($this->intCodiClie, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ContainersesAsClienteCorp
+		 * @return int
+		*/
+		public function CountContainersesAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				return 0;
+
+			return Containers::CountByClienteCorpId($this->intCodiClie);
+		}
+
+		/**
+		 * Associates a ContainersAsClienteCorp
+		 * @param Containers $objContainers
+		 * @return void
+		*/
+		public function AssociateContainersAsClienteCorp(Containers $objContainers) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainersAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objContainers->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainersAsClienteCorp on this MasterCliente with an unsaved Containers.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`containers`
+				SET
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainers->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ContainersAsClienteCorp
+		 * @param Containers $objContainers
+		 * @return void
+		*/
+		public function UnassociateContainersAsClienteCorp(Containers $objContainers) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainersAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objContainers->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainersAsClienteCorp on this MasterCliente with an unsaved Containers.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`containers`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainers->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ContainersesAsClienteCorp
+		 * @return void
+		*/
+		public function UnassociateAllContainersesAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainersAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`containers`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ContainersAsClienteCorp
+		 * @param Containers $objContainers
+		 * @return void
+		*/
+		public function DeleteAssociatedContainersAsClienteCorp(Containers $objContainers) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainersAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objContainers->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainersAsClienteCorp on this MasterCliente with an unsaved Containers.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`containers`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainers->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ContainersesAsClienteCorp
+		 * @return void
+		*/
+		public function DeleteAllContainersesAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainersAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`containers`
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
 			');
 		}
 
@@ -8304,6 +8505,7 @@
      *
      * @property-read QQReverseReferenceNodeConsumoDia $ConsumoDiaAsCliente
      * @property-read QQReverseReferenceNodeConsumoMes $ConsumoMesAsCliente
+     * @property-read QQReverseReferenceNodeContainers $ContainersAsClienteCorp
      * @property-read QQReverseReferenceNodeDescuentos $DescuentosAsCliente
      * @property-read QQReverseReferenceNodeDestinatarioFrecuente $DestinatarioFrecuenteAsCliente
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsCodiClie
@@ -8475,6 +8677,8 @@
 					return new QQReverseReferenceNodeConsumoDia($this, 'consumodiaascliente', 'reverse_reference', 'cliente_id', 'ConsumoDiaAsCliente');
 				case 'ConsumoMesAsCliente':
 					return new QQReverseReferenceNodeConsumoMes($this, 'consumomesascliente', 'reverse_reference', 'cliente_id', 'ConsumoMesAsCliente');
+				case 'ContainersAsClienteCorp':
+					return new QQReverseReferenceNodeContainers($this, 'containersasclientecorp', 'reverse_reference', 'cliente_corp_id', 'ContainersAsClienteCorp');
 				case 'DescuentosAsCliente':
 					return new QQReverseReferenceNodeDescuentos($this, 'descuentosascliente', 'reverse_reference', 'cliente_id', 'DescuentosAsCliente');
 				case 'DestinatarioFrecuenteAsCliente':
@@ -8597,6 +8801,7 @@
      *
      * @property-read QQReverseReferenceNodeConsumoDia $ConsumoDiaAsCliente
      * @property-read QQReverseReferenceNodeConsumoMes $ConsumoMesAsCliente
+     * @property-read QQReverseReferenceNodeContainers $ContainersAsClienteCorp
      * @property-read QQReverseReferenceNodeDescuentos $DescuentosAsCliente
      * @property-read QQReverseReferenceNodeDestinatarioFrecuente $DestinatarioFrecuenteAsCliente
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsCodiClie
@@ -8768,6 +8973,8 @@
 					return new QQReverseReferenceNodeConsumoDia($this, 'consumodiaascliente', 'reverse_reference', 'cliente_id', 'ConsumoDiaAsCliente');
 				case 'ConsumoMesAsCliente':
 					return new QQReverseReferenceNodeConsumoMes($this, 'consumomesascliente', 'reverse_reference', 'cliente_id', 'ConsumoMesAsCliente');
+				case 'ContainersAsClienteCorp':
+					return new QQReverseReferenceNodeContainers($this, 'containersasclientecorp', 'reverse_reference', 'cliente_corp_id', 'ContainersAsClienteCorp');
 				case 'DescuentosAsCliente':
 					return new QQReverseReferenceNodeDescuentos($this, 'descuentosascliente', 'reverse_reference', 'cliente_id', 'DescuentosAsCliente');
 				case 'DestinatarioFrecuenteAsCliente':

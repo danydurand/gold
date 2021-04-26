@@ -27,13 +27,43 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+
+        public static function LoadArrayAptasParaTrasladar($intCodiClie, $objOptionalClauses=null) {
+            // Performing the load manually (instead of using QCubed Query)
+
+            // Get the Database Object for this Class
+            $objDatabase = GuiaPiezas::GetDatabase();
+
+            // Properly Escape All Input Parameters using Database->SqlVariable()
+            $strParam1 = $objDatabase->SqlVariable($intCodiClie);
+
+            // Setup the SQL Query
+            $strQuery = sprintf('
+				SELECT 
+					*
+				FROM
+					v_aptas_para_trasladar AS `aptas_para_trasladar`
+				WHERE
+					cliente_corp_id = %s ',
+                $strParam1);
+
+            // Perform the Query and Instantiate the Result
+            $objDbResult = $objDatabase->Query($strQuery);
+            return GuiaPiezas::InstantiateDbResult($objDbResult);
+        }
+
         public function ultimoCheckpoint() {
-            $objClausula   = QQ::Clause();
-            $objClausula[] = QQ::Equal(QQN::PiezaCheckpoints()->Id, $this->intId);
-            $objOtraClau[] = QQ::OrderBy(QQN::PiezaCheckpoints()->Id,false);
-            $objOtraClau[] = QQ::LimitInfo(1);
-            $arrGuiaCkpt   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClausula),$objOtraClau);
-            return (count($arrGuiaCkpt)) ? $arrGuiaCkpt[0]->Checkpoint->Codigo : null;
+            $strUltiCkpt  = "null";
+            $strCadeSqlx  = 'select codigo_ckpt ';
+            $strCadeSqlx .= '  from v_last_checkpoint_guia ';
+            $strCadeSqlx .= ' where pieza_id = '.$this->Id;
+            $objDatabase  = GuiaPiezas::GetDatabase();
+            $objDbResult  = $objDatabase->Query($strCadeSqlx);
+            while ($mixRegistro = $objDbResult->FetchArray()) {
+                $strUltiCkpt = $mixRegistro['codigo_ckpt'];
+                break;
+            }
+            return $strUltiCkpt;
         }
 
         public function ultimoCheckpointEnSucursal($intCodiSucu) {

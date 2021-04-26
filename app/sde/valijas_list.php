@@ -20,7 +20,7 @@ require_once(__FORMBASE_CLASSES__ . '/ContainersListFormBase.class.php');
  * @package My QCubed Application
  * @subpackage Drafts
  */
-class ContainersListForm extends ContainersListFormBase {
+class ValijasList extends ContainersListFormBase {
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -35,7 +35,7 @@ class ContainersListForm extends ContainersListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
-		$this->lblTituForm->Text = 'Masters';
+		$this->lblTituForm->Text = 'Valijas';
 
 		// Instantiate the Meta DataGrid
 		$this->dtgContainerses = new ContainersDataGrid($this);
@@ -50,9 +50,10 @@ class ContainersListForm extends ContainersListFormBase {
 		$this->dtgContainerses->Paginator = new QPaginator($this->dtgContainerses);
 		$this->dtgContainerses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-		$objClauWher   = QQ::Clause();
-		$objClauWher[] = QQ::Equal(QQN::Containers()->Tipo,'MASTER');
-		$this->dtgContainerses->AdditionalConditions = QQ::AndCondition($objClauWher);
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::Containers()->Tipo,'VALIJA');
+        $this->dtgContainerses->AdditionalConditions = QQ::AndCondition($objClauWher);
+
 		// Higlight the datagrid rows when mousing over them
 		$this->dtgContainerses->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
 		$this->dtgContainerses->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
@@ -90,7 +91,7 @@ class ContainersListForm extends ContainersListFormBase {
     }
 
     public function btnNuevRegi_Click() {
-        QApplication::Redirect("sacar_a_ruta.php");
+        QApplication::Redirect("envalijar_new.php");
     }
 
     public function CantPiez_ColumnRender(Containers $objValija) {
@@ -99,7 +100,7 @@ class ContainersListForm extends ContainersListFormBase {
 
     public function dtgContainersesRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
-        QApplication::Redirect("sacar_a_ruta.php/$intId");
+        QApplication::Redirect("containers_edit.php/$intId");
 	}		
 
 }
@@ -107,5 +108,5 @@ class ContainersListForm extends ContainersListFormBase {
 
 // Go ahead and run this form object to generate the page and event handlers, implicitly using
 // containers_list.tpl.php as the included HTML template file
-ContainersListForm::Run('ContainersListForm');
+ValijasList::Run('ValijasList');
 ?>

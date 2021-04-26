@@ -117,22 +117,23 @@ class EnvalijarNew extends FormularioBaseKaizen {
 			$objContainer->Fecha       = new QDateTime(QDateTime::Now);
 			$objContainer->Hora        = date('H:i');
 			$objContainer->Estatus     = 'ABIERT@';
+			$objContainer->Tipo        = 'VALIJA';
 			$objContainer->CreatedBy   = $this->objUsuario->CodiUsua;
 			$objContainer->Save();
             //------------------------
             // Log de Transacciones
             //------------------------
-            $arrLogxCamb['strNombTabl'] = 'Container';
-            $arrLogxCamb['intRefeRegi'] = $objContainer->Numero;
+            $arrLogxCamb['strNombTabl'] = 'Containers';
+            $arrLogxCamb['intRefeRegi'] = $objContainer->Id;
             $arrLogxCamb['strNombRegi'] = $objContainer->Numero;
-            $arrLogxCamb['strDescCamb'] = 'Container Creado';
+            $arrLogxCamb['strDescCamb'] = 'Creado';
             LogDeCambios($arrLogxCamb);
 		} else {
             //------------------------
             // Log de Transacciones
             //------------------------
             $arrLogxCamb['strNombTabl'] = 'Container';
-            $arrLogxCamb['intRefeRegi'] = $objContainer->Numero;
+            $arrLogxCamb['intRefeRegi'] = $objContainer->Id;
             $arrLogxCamb['strNombRegi'] = $objContainer->Numero;
             $arrLogxCamb['strDescCamb'] = 'Container Actualizado';
             LogDeCambios($arrLogxCamb);
@@ -151,6 +152,8 @@ class EnvalijarNew extends FormularioBaseKaizen {
         }
 		$intCodiRuta = $objContainer->Operacion->RutaId;
 
+		$objDatabase = Containers::GetDatabase();
+		$objDatabase->TransactionBegin();
 		$intContVali = 0;
 		$intContGuia = 0;
 		$intContCkpt = 0;
@@ -254,24 +257,26 @@ class EnvalijarNew extends FormularioBaseKaizen {
                 } else {
                     t('No existe el checkpoint BG');
                     $strMensUsua = 'No existe el checkpoint BG';
-                    $this->mensaje($strMensUsua,'m','d','l',__iHAND__);
+                    $this->danger($strMensUsua);
                     $blnTodoOkey = false;
                 }
             }
 		}
+		$objContainer->actualizarTotales();
+		$objDatabase->TransactionCommit();
 		if ($blnTodoOkey && ($intContGuia == $intContCkpt)) {
 			$strMensUsua = sprintf('El Proceso culmino Exitosamente. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-            $this->mensaje($strMensUsua,'m','s','l',__iCHEC__);
+            $this->success($strMensUsua);
 			$this->inicializarPantalla();
 		} else {
 			$strMensUsua = sprintf('Hubo Errores en la Transaccion. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-            $this->mensaje($strMensUsua,'m','w','l',__iEXCL__);
+            $this->warning($strMensUsua);
 		}
         //------------------------
         // Log de Transacciones
         //------------------------
-        $arrLogxCamb['strNombTabl'] = 'Contenedor';
-        $arrLogxCamb['intRefeRegi'] = $objContainer->Numero;
+        $arrLogxCamb['strNombTabl'] = 'Containers';
+        $arrLogxCamb['intRefeRegi'] = $objContainer->Id;
         $arrLogxCamb['strNombRegi'] = $objContainer->Numero;
         $arrLogxCamb['strDescCamb'] = 'Envalijado: '.$strMensUsua;
         LogDeCambios($arrLogxCamb);

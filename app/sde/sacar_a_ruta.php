@@ -10,7 +10,12 @@ QApplication::CheckRemoteAdmin();
 class SacarARuta extends FormularioBaseKaizen {
     protected $lstOperAbie;  // Combo de Operaciones Abiertas
     protected $txtNumeCont;  // Numero de Contenedor
+    protected $txtPrecLate;  // Precinto Lateral
     protected $txtListNume;  // Lista de Seriales/Guias/Valijas
+    protected $txtNumeAwbx;  // Guia Aerea
+    protected $lstClieCorp;  // Clientes Corporativos
+    protected $dtgPiezApta;  // Piezas aptas para el Manifiesto
+    protected $dtgPiezMani;  // Piezas del Manifiesto
 
     protected $arrListNume;  // Arreglo que contiene los numeros de la lista
     protected $objDataBase;
@@ -19,6 +24,10 @@ class SacarARuta extends FormularioBaseKaizen {
     protected $arrGuiaReto;  // Arreglo de Guias de Retorno
     protected $arrImprReto;  // Arreglo de Guias de Retorno para Impresion
     protected $dlgMensUsua;
+    protected $btnGestChve;  // Gestionar Chofer y Vehiculo
+    protected $blnGestChve = false;
+    protected $txtDireEntr;
+    protected $txtDescCont;
 
     protected $txtNuevChof;
     protected $txtNuevCedu;
@@ -36,21 +45,39 @@ class SacarARuta extends FormularioBaseKaizen {
     protected $dtgChofSucu;
     protected $dtgVehiSucu;
 
-    protected $btnManiCarg;
-    protected $btnHojaEntr;
     protected $btnRepoErro;
     protected $btnImprReto;
 
     protected $intChofSele;
     protected $intVehiSele;
+    /* @var $objContaine Containers */
+    protected $objContaine;
+    protected $blnEditMode;
+    protected $btnRepoMani;
+
+    protected function SetupValores() {
+        $this->blnEditMode = false;
+        $intIdxxCont = QApplication::PathInfo(0);
+        if ($intIdxxCont) {
+            $this->objContaine = Containers::Load($intIdxxCont);
+            if ($this->objContaine) {
+                $this->blnEditMode = true;
+            }
+        }
+    }
 
     protected function Form_Create() {
         parent::Form_Create();
 
-        $this->lblTituForm->Text = QApplication::Translate('Armar Manifiesto');
+        $this->SetupValores();
+
+        $this->objDefaultWaitIcon = new QWaitIcon($this);
+
+        $this->lblTituForm->Text = 'Armar Manifiesto';
 
         $this->dlgMensUsua_Create();
 
+        $this->lstClieCorp_Create();
         $this->lstTipoOper_Create();
         $this->lstOperAbie_Create();
         $this->txtNombChof_Create();
@@ -58,9 +85,14 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->txtDescVehi_Create();
         $this->txtPlacVehi_Create();
         $this->txtNumeCont_Create();
+        $this->txtNumeAwbx_Create();
+        $this->txtPrecLate_Create();
         $this->txtListNume_Create();
-
-        $this->btnSave->Text = TextoIcono('floppy-o','Guardar','F','fa-lg');
+        $this->txtDireEntr_Create();
+        $this->txtDescCont_Create();
+        $this->dtgPiezApta_Create();
+        $this->dtgPiezMani_Create();
+        $this->btnRepoMani_Create();
 
         $this->txtNuevChof_Create();
         $this->txtNuevCedu_Create();
@@ -73,18 +105,40 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnRegiVehi_Create();
         $this->dtgVehiSucu_Create();
 
-        $this->btnManiCarg_Create();
-        $this->btnHojaEntr_Create();
         $this->btnRepoErro_Create();
-        //$this->btnImprReto_Create();
+        $this->btnGestChve_Create();
 
         $this->validarCampos();
-        $this->mensajeInicial();
+        //$this->mensajeInicial();
+
+        if ($this->blnEditMode) {
+            $this->lstTipoOper_Change();
+        }
     }
 
     //-----------------------------
     // Aqui se crean los objetos
     //-----------------------------
+
+    protected function btnRepoMani_Create() {
+        $this->btnRepoMani = new QLabel($this);
+        $this->btnRepoMani->HtmlEntities = false;
+        $this->btnRepoMani->CssClass = '';
+        $strTextBoto   = TextoIcono('cog fa-fw','Imprimir');
+        $arrOpciDrop   = array();
+        if ($this->blnEditMode) {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/manifiesto_de_carga_pdf.php/'.$this->objContaine->Id,
+                TextoIcono('list','Manfiesto de Carga')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/nota_de_despacho_pdf.php/'.$this->objContaine->Id,
+                TextoIcono('bank','Nota de Despacho')
+            );
+        }
+        $this->btnRepoMani->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
+        $this->btnRepoMani->Visible  = $this->blnEditMode;
+    }
 
     protected function lstNuevTipo_Create() {
         $this->lstNuevTipo = new QListBox($this);
@@ -141,6 +195,9 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->txtNombChof->Placeholder = 'Nombre del Chofer';
         $this->txtNombChof->Enabled = false;
         $this->txtNombChof->ForeColor = 'blue';
+        if ($this->blnEditMode) {
+            $this->txtNombChof->Text = $this->objContaine->Operacion->CodiChofObject->NombChof;
+        }
     }
 
     protected function txtCeduChof_Create() {
@@ -148,6 +205,9 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->txtCeduChof->Placeholder = 'Cédula del Chofer';
         $this->txtCeduChof->Enabled = false;
         $this->txtCeduChof->ForeColor = 'blue';
+        if ($this->blnEditMode) {
+            $this->txtCeduChof->Text = $this->objContaine->Operacion->CodiChofObject->NumeCedu;
+        }
     }
 
     protected function txtDescVehi_Create() {
@@ -155,6 +215,9 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->txtDescVehi->Placeholder = 'Vehículo';
         $this->txtDescVehi->Enabled = false;
         $this->txtDescVehi->ForeColor = 'blue';
+        if ($this->blnEditMode) {
+            $this->txtDescVehi->Text = $this->objContaine->Operacion->CodiVehiObject->DescVehi;
+        }
     }
 
     protected function txtPlacVehi_Create() {
@@ -162,6 +225,9 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->txtPlacVehi->Placeholder = 'Placa';
         $this->txtPlacVehi->Enabled = false;
         $this->txtPlacVehi->ForeColor = 'blue';
+        if ($this->blnEditMode) {
+            $this->txtPlacVehi->Text = $this->objContaine->Operacion->CodiVehiObject->NumePlac;
+        }
     }
 
     protected function dtgChofSucu_Create() {
@@ -357,7 +423,11 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->lstTipoOper->Required = true;
         $this->lstTipoOper->AddItem(QApplication::Translate("- Seleccione Uno -"),null);
         foreach (SdeTipoOper::LoadAll() as $objTipoOper) {
-            $this->lstTipoOper->AddItem($objTipoOper->__toString(),$objTipoOper->CodiTipo);
+            $blnSeleRegi = false;
+            if ($this->blnEditMode) {
+                $blnSeleRegi = $this->objContaine->Operacion->CodiTipo == $objTipoOper->CodiTipo;
+            }
+            $this->lstTipoOper->AddItem($objTipoOper->__toString(),$objTipoOper->CodiTipo, $blnSeleRegi);
         }
         $this->lstTipoOper->AddAction(new QChangeEvent(), new QAjaxAction('lstTipoOper_Change'));
     }
@@ -368,43 +438,260 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->lstOperAbie->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
         $this->lstOperAbie->Name = 'Operación';
         $this->lstOperAbie->Required = true;
-        $this->lstOperAbie->Width = 300;
+        $this->lstOperAbie->Width = 350;
         $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
         $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('mostrarDatos'));
+        $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('lstClieCorp_Change'));
     }
 
-    // Número de Contenedor
+    protected function lstClieCorp_Create() {
+        $this->lstClieCorp = new QListBox($this);
+        $this->lstClieCorp->Name = 'Cliente Corp';
+        $this->lstClieCorp->Required = true;
+        $this->lstClieCorp->Width = 350;
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CodiStat,SinoType::SI);
+        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CargaMasiva,SinoType::SI);
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::MasterCliente()->NombClie);
+        $arrClieCorp   = MasterCliente::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+        $intCantClie   = count($arrClieCorp);
+        $this->lstClieCorp->AddItem('- Seleccione Uno - ('.$intCantClie.')',null);
+        foreach ($arrClieCorp as $objClieCopr) {
+            $blnSeleRegi = false;
+            if ($this->blnEditMode) {
+                $blnSeleRegi = $this->objContaine->ClienteCorpId == $objClieCopr->CodiClie;
+            }
+            $this->lstClieCorp->AddItem($objClieCopr->__toString(),$objClieCopr->CodiClie, $blnSeleRegi);
+        }
+        $this->lstClieCorp->AddAction(new QChangeEvent(), new QAjaxAction('lstClieCorp_Change'));
+    }
+
+    protected function dtgPiezApta_Create() {
+        $this->dtgPiezApta = new QDataGrid($this);
+        $this->dtgPiezApta->FontSize = 12;
+        $this->dtgPiezApta->ShowFilter = false;
+
+        $this->dtgPiezApta->CssClass = 'datagrid';
+        $this->dtgPiezApta->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgPiezApta->Paginator = new QPaginator($this->dtgPiezApta);
+        $this->dtgPiezApta->ItemsPerPage = 6;
+
+        $this->dtgPiezApta->RowActionParameterHtml = '<?= $_ITEM->Id ?>|<?= $_ITEM->GuiaId ?>';
+        $this->dtgPiezApta->AddRowAction(new QDoubleClickEvent(), new QAjaxAction('dtgPiezAptaRow_Click'));
+
+        $this->dtgPiezApta->UseAjax = true;
+
+        $this->dtgPiezApta->SetDataBinder('dtgPiezApta_Bind');
+
+        $this->dtgPiezAptaColumns();
+
+    }
+
+    protected function dtgPiezAptaRow_Click($strFormId, $strControlId, $strParameter) {
+        t('strParameter:'.$strParameter);
+        $intGuiaIdxx = explode('|',$strParameter)[1];
+        QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$intGuiaIdxx);
+    }
+
+    protected function dtgPiezApta_Bind() {
+        $intCodiClie = $this->lstClieCorp->SelectedValue;
+        $intCodiOper = $this->lstOperAbie->SelectedValue;
+        if ( (!is_null($intCodiClie)) && (!is_null($intCodiOper)) ) {
+            $strCadeSqlx  = "select id ";
+            $strCadeSqlx .= "  from v_aptas_para_trasladar ";
+            $strCadeSqlx .= " where cliente_corp_id = $intCodiClie";
+            $objDatabase  = GuiaPiezas::GetDatabase();
+            $objDbResult  = $objDatabase->Query($strCadeSqlx);
+            $arrIdxxPiez  = [];
+            while ($mixRegistro = $objDbResult->FetchArray()) {
+                $arrIdxxPiez[] = $mixRegistro['id'];
+            }
+            $arrPiezApta = GuiaPiezas::QueryArray(QQ::AndCondition(QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxPiez)));
+            $this->dtgPiezApta->TotalItemCount = count($arrPiezApta);
+            $this->dtgPiezApta->DataSource     = GuiaPiezas::QueryArray(
+                QQ::AndCondition(QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxPiez)),
+                QQ::Clause($this->dtgPiezApta->OrderByClause, $this->dtgPiezApta->LimitClause)
+            );
+        }
+
+    }
+
+    protected function dtgPiezAptaColumns() {
+        $colIdxxPiez = new QDataGridColumn($this);
+        $colIdxxPiez->Name = QApplication::Translate('IdPieza');
+        $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
+        $colIdxxPiez->Width = 70;
+        $this->dtgPiezApta->AddColumn($colIdxxPiez);
+
+        $colManiGuia = new QDataGridColumn($this);
+        $colManiGuia->Name = QApplication::Translate('Manif.');
+        $colManiGuia->Html = '<?= $_ITEM->Guia->NotaEntrega->Referencia ?>';
+        $colManiGuia->Width = 95;
+        $this->dtgPiezApta->AddColumn($colManiGuia);
+
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $colUltiCkpt->Width = 30;
+        $this->dtgPiezApta->AddColumn($colUltiCkpt);
+
+    }
+
+    protected function dtgPiezMani_Create() {
+        $this->dtgPiezMani = new QDataGrid($this);
+        $this->dtgPiezMani->FontSize = 12;
+        $this->dtgPiezMani->ShowFilter = false;
+
+        $this->dtgPiezMani->CssClass = 'datagrid';
+        $this->dtgPiezMani->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgPiezMani->Paginator = new QPaginator($this->dtgPiezMani);
+        $this->dtgPiezMani->ItemsPerPage = 5;
+
+        $this->dtgPiezMani->UseAjax = true;
+
+        $this->dtgPiezMani->SetDataBinder('dtgPiezMani_Bind');
+
+        $this->dtgPiezManiColumns();
+
+    }
+
+    protected function dtgPiezMani_Bind() {
+        $intCodiClie = $this->lstClieCorp->SelectedValue;
+        $intCodiOper = $this->lstOperAbie->SelectedValue;
+        if ( (!is_null($intCodiClie)) && (!is_null($intCodiOper)) ) {
+            if ($this->blnEditMode) {
+                $arrIdxxMani = [];
+                $arrPiezMani = $this->objContaine->GetGuiaPiezasAsContainerPiezaArray();
+                foreach ($arrPiezMani as $objPiezMani) {
+                    $arrIdxxMani[] = $objPiezMani->Id;
+                }
+                $this->dtgPiezMani->TotalItemCount = $this->objContaine->CountGuiaPiezasesAsContainerPieza();
+                $this->dtgPiezMani->DataSource     = GuiaPiezas::QueryArray(
+                    QQ::AndCondition(QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxMani)),
+                    QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause)
+                );
+            }
+        }
+
+    }
+
+    protected function dtgPiezManiColumns() {
+        $colIdxxPiez = new QDataGridColumn($this);
+        $colIdxxPiez->Name = QApplication::Translate('IdPieza');
+        $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
+        $colIdxxPiez->Width = 70;
+        $this->dtgPiezMani->AddColumn($colIdxxPiez);
+
+        $colManiGuia = new QDataGridColumn($this);
+        $colManiGuia->Name = QApplication::Translate('Manif.');
+        $colManiGuia->Html = '<?= $_ITEM->Guia->NotaEntrega->Referencia ?>';
+        $colManiGuia->Width = 95;
+        $this->dtgPiezMani->AddColumn($colManiGuia);
+
+        $colServImpo = new QDataGridColumn($this);
+        $colServImpo->Name = QApplication::Translate('S.Impor.');
+        $colServImpo->Html = '<?= $_ITEM->Guia->ServicioImportacion ?>';
+        $colServImpo->Width = 30;
+        $this->dtgPiezMani->AddColumn($colServImpo);
+
+        $colDescCont = new QDataGridColumn($this);
+        $colDescCont->Name = QApplication::Translate('Descripcion');
+        $colDescCont->Html = '<?= substr($_ITEM->Descripcion,0,25) ?>';
+        $colDescCont->Width = 130;
+        $this->dtgPiezMani->AddColumn($colDescCont);
+
+        $colKiloPiez = new QDataGridColumn($this);
+        $colKiloPiez->Name = QApplication::Translate('Kilos');
+        $colKiloPiez->Html = '<?= $_ITEM->Kilos ?>';
+        $colKiloPiez->Width = 30;
+        $this->dtgPiezMani->AddColumn($colKiloPiez);
+
+        $colVoluPiez = new QDataGridColumn($this);
+        $colVoluPiez->Name = QApplication::Translate('PiesCub');
+        $colVoluPiez->Html = '<?= $_ITEM->PiesCub ?>';
+        $colVoluPiez->Width = 30;
+        $this->dtgPiezMani->AddColumn($colVoluPiez);
+
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $colUltiCkpt->Width = 30;
+        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+
+    }
+
+    protected function lstClieCorp_Change() {
+        $this->dtgPiezApta->Refresh();
+        $this->dtgPiezMani->Refresh();
+    }
+
+
+    protected function txtNumeAwbx_Create() {
+        $this->txtNumeAwbx = new QTextBox($this);
+        $this->txtNumeAwbx->Required = true;
+        $this->txtNumeAwbx->Width = 160;
+        if ($this->blnEditMode) {
+            $this->txtNumeAwbx->Text = $this->objContaine->Awb;
+        }
+        $this->txtNumeAwbx->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+
+    }
+
     protected function txtNumeCont_Create() {
         $this->txtNumeCont = new QTextBox($this);
-        $this->txtNumeCont->Placeholder = 'Precinto/Candado #';
         $this->txtNumeCont->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
         $this->txtNumeCont->AddAction(new QChangeEvent(), new QAjaxAction('advertirExistencia'));
         $this->txtNumeCont->Required = true;
+        if ($this->blnEditMode) {
+            $this->txtNumeCont->Text = $this->objContaine->Numero;
+        }
+        $this->txtNumeCont->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+    }
+
+    protected function txtPrecLate_Create() {
+        $this->txtPrecLate = new QTextBox($this);
+        $this->txtPrecLate->AddAction(new QChangeEvent(), new QAjaxAction('advertirExistencia'));
+        if ($this->blnEditMode) {
+            $this->txtPrecLate->Text = $this->objContaine->PrecintoLateral;
+        }
+        $this->txtPrecLate->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
     }
 
     // Lista de Seriales o Items asociados a una Guia
     protected function txtListNume_Create() {
         $this->txtListNume = new QTextBox($this);
-        $this->txtListNume->Placeholder = 'Guías/Valijas';
         $this->txtListNume->TextMode = QTextMode::MultiLine;
         $this->txtListNume->Required = true;
-        $this->txtListNume->Width = 200;
-        $this->txtListNume->Height = 220;
+        $this->txtListNume->Width = 250;
+        $this->txtListNume->Rows = 11;
         $this->txtListNume->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
     }
 
-    protected function btnManiCarg_Create() {
-        $this->btnManiCarg = new QButtonI($this);
-        $this->btnManiCarg->Text = TextoIcono('wpforms','Manifiesto','F','fa-lg');
-        $this->btnManiCarg->AddAction(new QClickEvent(), new QServerAction('btnManiCarg_Click'));
-        $this->btnManiCarg->Visible = false;
+    protected function txtDireEntr_Create() {
+        $this->txtDireEntr = new QTextBox($this);
+        $this->txtDireEntr->Width = 350;
+        $this->txtDireEntr->TextMode = QTextMode::MultiLine;
+        $this->txtDireEntr->Required = true;
+        $this->txtDireEntr->Rows = 2;
+        $this->txtDireEntr->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+        if ($this->blnEditMode) {
+            $this->txtDireEntr->Text = $this->objContaine->Direccion;
+        }
     }
 
-    protected function btnHojaEntr_Create() {
-        $this->btnHojaEntr = new QButtonI($this);
-        $this->btnHojaEntr->Text = TextoIcono('wpforms','Hoja Entrega','F','fa-lg');
-        $this->btnHojaEntr->AddAction(new QClickEvent(), new QServerAction('btnHojaEntr_Click'));
-        $this->btnHojaEntr->Visible = false;
+    protected function txtDescCont_Create() {
+        $this->txtDescCont = new QTextBox($this);
+        $this->txtDescCont->Width = 350;
+        $this->txtDescCont->TextMode = QTextMode::MultiLine;
+        $this->txtDescCont->Required = true;
+        $this->txtDescCont->Rows = 2;
+        $this->txtDescCont->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+        if ($this->blnEditMode) {
+            $this->txtDescCont->Text = $this->objContaine->Contenido;
+        }
     }
 
     protected function btnRepoErro_Create() {
@@ -414,16 +701,29 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnRepoErro->Visible = false;
     }
 
-    protected function btnImprReto_Create() {
-        $this->btnImprReto = new QButtonP($this);
-        $this->btnImprReto->Text = TextoIcono('wpforms','Retorno(s)','F','fa-lg');
-        $this->btnImprReto->AddAction(new QClickEvent(), new QServerAction('btnImprReto_Click'));
-        $this->btnImprReto->Visible = false;
+    protected function btnGestChve_Create() {
+        $this->btnGestChve = new QButtonP($this);
+        $this->btnGestChve->Text = TextoIcono('list','Gestionar C/V','F','fa-lg');
+        $this->btnGestChve->AddAction(new QClickEvent(), new QServerAction('btnGestChve_Click'));
+        $this->btnGestChve->ToolTip = 'Gestionar Choferes y Vehiculos';
     }
 
     //---------------------------------------
     // Acciones asociadas a los objetos
     //---------------------------------------
+
+    protected function btnGestChve_Click() {
+        $this->blnGestChve = !$this->blnGestChve;
+        if ($this->blnGestChve) {
+            $this->mensajeInicial();
+            $this->btnGestChve->Text = TextoIcono('list','Mostrar Guias','F','fa-lg');
+            $this->btnGestChve->ToolTip = 'Mostrar Guias y Piezas';
+        } else {
+            $this->mensaje();
+            $this->btnGestChve->Text = TextoIcono('list','Gestionar C/V','F','fa-lg');
+            $this->btnGestChve->ToolTip = 'Gestionar Choferes y Vehiculos';
+        }
+    }
 
     protected function mostrarDatos() {
         if (!is_null($this->lstOperAbie->SelectedValue)) {
@@ -444,15 +744,32 @@ class SacarARuta extends FormularioBaseKaizen {
         }
 
     }
+
     protected function advertirExistencia() {
+        $strMensUsua = '';
+        $strCaraConc = '';
         $strNumeMani = trim($this->txtNumeCont->Text);
         if (strlen($strNumeMani) > 0) {
             $objExisMani = Containers::LoadByNumero($strNumeMani);
             if ($objExisMani) {
                 $strMensUsua  = 'Ya existe el Manifiesto: <b>'.$strNumeMani.'</b>, creado el <b>';
                 $strMensUsua .= $objExisMani->Fecha->__toString('DD/MM/YYYY').'</b>.  Las piezas serán agregadas';
-                $this->mensaje($strMensUsua,'m','w','',__iEXCL__);
             }
+        }
+        $strPrecLate = trim($this->txtPrecLate->Text);
+        if (strlen($strPrecLate) > 0) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Containers()->PrecintoLateral,$strPrecLate);
+            $objExisMani   = Containers::QueryCount(QQ::AndCondition($objClauWher));
+            if ($objExisMani) {
+                if (strlen($strMensUsua) > 0) {
+                    $strCaraConc = ' | ';
+                }
+                $strMensUsua .= $strCaraConc.'Precinto Lateral: <b>'.$strPrecLate.'</b>, usando previamente <b>';
+            }
+        }
+        if (strlen($strMensUsua) > 0) {
+            $this->warning($strMensUsua);
         }
     }
 
@@ -465,15 +782,15 @@ class SacarARuta extends FormularioBaseKaizen {
         $strNuevPlac = trim(limpiarCadena($this->txtNuevPlac->Text));
         $strNuevDesc = trim(limpiarCadena($this->txtNuevDesc->Text));
         if (is_null($intNuevTipo)) {
-            $this->mensaje('El Tipo de Vehiculo, es requerido','','d','',__iHAND__);
+            $this->danger('El Tipo de Vehiculo, es requerido');
             return;
         }
         if (strlen($strNuevPlac) <= 5) {
-            $this->mensaje('La Placa debe tener al menos 6 caracteres','','d','',__iHAND__);
+            $this->danger('La Placa debe tener al menos 6 caracteres');
             return;
         }
         if (strlen($strNuevDesc) <= 5) {
-            $this->mensaje('La Descripción del Vehiculo es muy corta','','d','',__iHAND__);
+            $this->danger('La Descripción del Vehiculo es muy corta');
             return;
         }
         //------------------------------------------------
@@ -534,11 +851,11 @@ class SacarARuta extends FormularioBaseKaizen {
         $strNuevChof = trim(limpiarCadena($this->txtNuevChof->Text));
         $strNuevCedu = trim(DejarSoloLosNumeros($this->txtNuevCedu->Text));
         if (strlen($strNuevChof) <= 4) {
-            $this->mensaje('El nombre del nuevo Chofer, es muy pequeño','','d','',__iHAND__);
+            $this->danger('El nombre del nuevo Chofer, es muy pequeño');
             return;
         }
         if (strlen($strNuevCedu) <= 6) {
-            $this->mensaje('La cédula del nuevo Chofer, es muy corta','','d','',__iHAND__);
+            $this->danger('La cédula del nuevo Chofer, es muy corta');
             return;
         }
         //----------------------------------------------
@@ -592,14 +909,6 @@ class SacarARuta extends FormularioBaseKaizen {
     }
 
 
-    protected function btnImprReto_Click($strFormId, $strControlId, $strParameter) {
-        //---------------------------------
-        // Se imprimen las guias retorno
-        //---------------------------------
-        $_SESSION['Dato'] = serialize($this->arrImprReto);
-        QApplication::Redirect('guia_pdf_lote.php');
-    }
-
     protected function btnRepoErro_Click($strFormId, $strControlId, $strParameter) {
         //--------------------------------------------------
         // Datos necesarios para imprimir reporte PDF
@@ -614,29 +923,6 @@ class SacarARuta extends FormularioBaseKaizen {
         QApplication::Redirect('../util/tabla2pdf2.php?nomb_repo=Errores_Salida_A_Ruta');
     }
 
-    protected function btnManiCarg_Click() {
-        $objContenedor = Containers::LoadByNumero($this->txtNumeCont->Text);
-        if ($objContenedor) {
-            if ($objContenedor->CountGuiaPiezasesAsContainerPieza()) {
-                QApplication::Redirect('imprimir_manifiesto.php?manifiesto='.$this->txtNumeCont->Text);
-            } else {
-                $strMensUsua = QApplication::Translate('No hay Guias Asociadas');
-                $this->mensaje($strMensUsua,'','w','i','exclamation-triangle');
-            }
-        }
-    }
-
-    protected function btnHojaEntr_Click() {
-        $objContenedor = Containers::LoadByNumero($this->txtNumeCont->Text);
-        if ($objContenedor) {
-            if ($objContenedor->CountGuiaPiezasesAsContainerPieza()) {
-                QApplication::Redirect('imprimir_hoja_entrega.php?manifiesto='.$this->txtNumeCont->Text);
-            } else {
-                $strMensUsua = QApplication::Translate('No hay Guias Asociadas');
-                $this->mensaje($strMensUsua,'','w','i','exclamation-triangle');
-            }
-        }
-    }
 
     protected function lstTipoOper_Change() {
         $this->lstOperAbie->RemoveAllItems();
@@ -649,7 +935,14 @@ class SacarARuta extends FormularioBaseKaizen {
             $intCantOper   = count($arrSdexOper);
             $this->lstOperAbie->AddItem('- Seleccione Uno - ('.$intCantOper.')',null);
             foreach ($arrSdexOper as $objOperacion) {
-                $this->lstOperAbie->AddItem(substr($objOperacion->__toString(),0,50),$objOperacion->CodiOper);
+                $blnSeleRegi = false;
+                if ($this->blnEditMode) {
+                    $blnSeleRegi = $this->objContaine->OperacionId == $objOperacion->CodiOper;
+                }
+                $this->lstOperAbie->AddItem(substr($objOperacion->__toString(),0,50),$objOperacion->CodiOper, $blnSeleRegi);
+                if ($blnSeleRegi) {
+                    $this->mostrarDatos();
+                }
             }
         }
         if ($this->lstTipoOper->SelectedValue == 0) {
@@ -658,16 +951,12 @@ class SacarARuta extends FormularioBaseKaizen {
             //-----------------------------------
             $this->txtNumeCont->Enabled = false;
             $this->txtNumeCont->ForeColor = 'blue';
-            $this->btnHojaEntr->Visible = true;
-            $this->btnManiCarg->Visible = false;
         } else {
             //-----------------------------------
             // Ruta Extra-Urbana
             //-----------------------------------
             $this->txtNumeCont->Enabled = true;
             $this->txtNumeCont->ForeColor = 'black';
-            $this->btnHojaEntr->Visible = false;
-            $this->btnManiCarg->Visible = true;
         }
     }
 
@@ -692,27 +981,6 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->mensaje();
     }
 
-    protected function MostrarRetornos() {
-        $this->arrImprReto = array();
-        $strRelaGuia  = "<center><font size='2'>";
-        $strRelaGuia .= "<table>";
-        $strRelaGuia .= "<th align='center'><font size='2'><i>Guia</i></font></th><th><font size='2'><i>Remitente</i></font></th>";
-        foreach ($this->arrGuiaReto as $arrGuiaReto) {
-            $strRelaGuia .= "<tr>";
-            $strRelaGuia .= "<td width='120' align='center'><font size='2'><i>".$arrGuiaReto[0]."</i></font></td>";
-            $strRelaGuia .= "<td align='right'><font size='2'><i>".$arrGuiaReto[1]."</i></font></td>";
-            $strRelaGuia .= "</tr>";
-            $this->arrImprReto[] = $arrGuiaReto[2];
-        }
-        $strRelaGuia .= "</table>";
-        $strRelaGuia .= "</font></center>";
-        $this->dlgMensUsua->Text =
-            '<i>Este Manifiesto incluye Guias con Retorno.  Particípecelo al Courier inmediatamente<br>'.
-            $strRelaGuia.'<br>'.
-            '<font color="red">Presione el boton "RETORNOS" p/imprimir las Guias</font><br><br>'.
-            '(Haga click fuera del recuadro blanco para ocultar este mensaje)<br/><br>'.
-            $this->dlgMensUsua->ShowDialogBox();
-    }
 
     protected function mensajeInicial() {
         $strTextMens  = 'Los <b>Choferes</b> están ordenados alfebéticamente y los <b>Vehículos</b> por placa. ';
@@ -725,8 +993,6 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->txtNumeCont->Text = '';
         $this->txtListNume->Text = '';
         $this->deshabilitarBotonSalvar();
-        $this->btnManiCarg->Visible = false;
-        $this->btnHojaEntr->Visible = false;
     }
 
     protected function deshabilitarBotonSalvar() {
@@ -801,8 +1067,8 @@ class SacarARuta extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click() {
-        t('Comenzando el Sacar a Ruta');
         t('==========================');
+        t('Comenzando el Sacar a Ruta');
         $this->objDataBase = QApplication::$Database[1];
         $strTipoRuta = $this->lstTipoOper->SelectedValue == 0 ? "URBANA" : "EXTRA-URBANA";
         t('Tipo de Ruta: '.$strTipoRuta);
@@ -822,13 +1088,19 @@ class SacarARuta extends FormularioBaseKaizen {
         if (!$objContenedor) {
             t('No existia, lo voy a crear');
             $objContenedor = new Containers();
-            $objContenedor->Numero    = $this->txtNumeCont->Text;
-            $objContenedor->Fecha     = new QDateTime(QDateTime::Now);
-            $objContenedor->Hora      = date("H:i");
-            $objContenedor->CreatedBy = $this->objUsuario->CodiUsua;
-            $objContenedor->Estatus   = 'ABIERT@';
+            $objContenedor->Fecha           = new QDateTime(QDateTime::Now);
+            $objContenedor->Hora            = date("H:i");
+            $objContenedor->CreatedBy       = $this->objUsuario->CodiUsua;
+            $objContenedor->Estatus         = 'ABIERT@';
+            $objContenedor->Tipo            = 'MASTER';
         }
-        $objContenedor->OperacionId = $this->lstOperAbie->SelectedValue;
+        $objContenedor->Numero          = $this->txtNumeCont->Text;
+        $objContenedor->PrecintoLateral = $this->txtPrecLate->Text;
+        $objContenedor->Awb             = $this->txtNumeAwbx->Text;
+        $objContenedor->ClienteCorpId   = $this->lstClieCorp->SelectedValue;
+        $objContenedor->OperacionId     = $this->lstOperAbie->SelectedValue;
+        $objContenedor->Contenido       = $this->txtDescCont->Text;
+        $objContenedor->Direccion       = $this->txtDireEntr->Text;
         $objContenedor->Save();
         t('Contenedor salvado en la BD');
 
@@ -839,10 +1111,6 @@ class SacarARuta extends FormularioBaseKaizen {
         }
         t('El ckpt es: '.$objCheckpoint->Codigo);
         $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
-        //--------------------------------------------------------------------------------------
-        // Con la funcion DejarSoloLosNumeros1 se eliminan los caracteres especiales y letras
-        //--------------------------------------------------------------------------------------
-//		array_walk($this->arrListNume,'DejarSoloLosNumeros1');
         //---------------------------------------------------------------------------
         // Con array_unique se eliminan las guias repetidas en caso de que las haya
         //---------------------------------------------------------------------------
@@ -857,6 +1125,8 @@ class SacarARuta extends FormularioBaseKaizen {
         $intContCkpt = 0;
         $this->arrGuiaErro = array();
         $this->arrGuiaReto = array();
+        $objDatabase = Containers::GetDatabase();
+        $objDatabase->TransactionBegin();
         foreach ($this->arrListNume as $strNumeSeri) {
             if (strlen($strNumeSeri)) {
                 t('Procesando: '.$strNumeSeri);
@@ -1001,16 +1271,24 @@ class SacarARuta extends FormularioBaseKaizen {
                 }
             }
         }
+        $this->dtgPiezMani->Refresh();
+        $this->dtgPiezApta->Refresh();
+        t('Termine de procesar la piezas');
+        $objContenedor->actualizarTotales();
+        t('Se actualizaron los totales en el container');
+        $objDatabase->TransactionCommit();
         $strMensUsua = sprintf('Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-        $this->mensaje($strMensUsua,'','','i','check');
+        $this->success($strMensUsua);
         //--------------------------------------------------------------------------------
         // Si hubo algun error, el boton que permite listar los errores, se hace visible
         //--------------------------------------------------------------------------------
         if (count($this->arrGuiaErro)) {
             $this->btnRepoErro->Visible = true;
         }
+        t('Voy a actualizar la operacion con el chofer y el vehiculo');
         $this->actualizarOperacion($objContenedor);
-        $this->btnManiCarg->Visible = true;
+        t('Operacion actualizada.. TERMINE');
+        //$this->btnManiCarg->Visible = true;
     }
 
     protected function actualizarOperacion(Containers $objContenedor) {
@@ -1022,7 +1300,11 @@ class SacarARuta extends FormularioBaseKaizen {
                 //-----------------------------------------------------------------------------------------
                 $objOperAsoc->CodiChof = $this->intChofSele;
                 $objOperAsoc->CodiVehi = $this->intVehiSele;
-                $objOperAsoc->Save();
+                try {
+                    $objOperAsoc->Save();
+                } catch (Exception $e) {
+                    t('Error actualizando la Operacion: '.$e->getMessage());
+                }
                 //---------------------------------------------
                 // Se deja rastro de la transaccion realizada
                 //---------------------------------------------

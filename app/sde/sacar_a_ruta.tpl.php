@@ -4,17 +4,15 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
     <div class="titulo-formulario">
         <div class="col-xs-4 col-md-3 col-lg-3 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
-            <?php $this->lblTituForm->Render(); ?>
+            <?php $this->lblTituForm->Render(); ?>&nbsp;&nbsp;<?php $this->objDefaultWaitIcon->Render(); ?>
         </div>
-        <div class="hidden-xs hidden-sm col-md-6 col-lg-5" style="text-align: center; margin-top: -0.25em;">
+        <div class="hidden-xs hidden-sm col-md-7 col-lg-7" style="text-align: center; margin-top: -0.25em;">
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnSave->Render(); ?>
-            <?php $this->btnManiCarg->Render() ?>
-            <?php $this->btnHojaEntr->Render() ?>
+            <?php $this->btnRepoMani->Render() ?>
             <?php $this->btnRepoErro->Render() ?>
-            <?php //$this->btnImprReto->Render() ?>
+            <?php $this->btnGestChve->Render() ?>
         </div>
-        <div class="hidden-sm col-md-3 col-lg-4"></div>
     </div>
     <div class="form-controls">
         <div class="container-fluid">
@@ -25,51 +23,69 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             </div>
             <div class="row" style="margin-top: 1em;">
                 <div class="col-md-4">
-                    <div class="title">Tipo de Operación</div>
-                    <?php $this->lstTipoOper->Render(); ?>
+                    <div class="title">Cliente Corp</div>
+                    <?php $this->lstClieCorp->Render(); ?>
+                    <div class="row">
+                        <div class="col-md-6 title">Tipo de Operación</div>
+                        <div class="col-md-6 title">BL o AWB</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?php $this->lstTipoOper->Render(); ?></div>
+                        <div class="col-md-6"><?php $this->txtNumeAwbx->Render(); ?></div>
+                    </div>
                     <div class="title">Operaciones</div>
                     <?php $this->lstOperAbie->Render(); ?>
-                    <div style="margin-top: 1em"></div>
-                    <?php $this->txtNombChof->Render(); ?>
-                    <?php $this->txtCeduChof->Render(); ?>
-                    <?php $this->txtDescVehi->Render(); ?>
-                    <?php $this->txtPlacVehi->Render(); ?>
-                    <?php $this->txtNumeCont->Render(); ?>
-                    <?php $this->txtListNume->Render(); ?>
-                </div>
-                <div class="col-md-4">
                     <div class="row">
-                        <div class="col-md-6">
-                            <?php $this->txtNuevChof->Render(); ?>
+                        <div class="col-md-6 title">Chofer</div>
+                        <div class="col-md-6 title">Cédula</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?php $this->txtNombChof->Render(); ?></div>
+                        <div class="col-md-6"><?php $this->txtCeduChof->Render(); ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 title">Vehículo</div>
+                        <div class="col-md-6 title">Placa</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?php $this->txtDescVehi->Render(); ?></div>
+                        <div class="col-md-6"><?php $this->txtPlacVehi->Render(); ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 title">Precinto Trasero</div>
+                        <div class="col-md-6 title">Precinto Lateral</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?php $this->txtNumeCont->Render(); ?></div>
+                        <div class="col-md-6"><?php $this->txtPrecLate->Render(); ?></div>
+                    </div>
+                    <div class="title">Dirección de Entrega</div>
+                    <?php $this->txtDireEntr->Render(); ?>
+                    <div class="title">Descripción del Contenido</div>
+                    <?php $this->txtDescCont->Render(); ?>
+                </div>
+                <?php if ($this->blnGestChve) { ?>
+                    <?php include('partials/gestion_chve.tpl.php') ?>
+                <?php } else { ?>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="title">Guías o Valijas</div>
+                                <?php $this->txtListNume->Render(); ?>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="title">Piezas Aptas para Manifestar</div>
+                                <?php $this->dtgPiezApta->Render(); ?>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <?php $this->txtNuevCedu->Render(); ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?php $this->btnRegiChof->Render(); ?>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="title">Piezas Manifestadas</div>
+                                <?php $this->dtgPiezMani->Render(); ?>
+                            </div>
                         </div>
                     </div>
-                    <div class="list_title">Choferes de la Sucursal</div>
-                    <?php $this->dtgChofSucu->Render(); ?>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <?php $this->lstNuevTipo->Render(); ?>
-                        </div>
-                        <div class="col-md-3">
-                            <?php $this->txtNuevPlac->Render(); ?>
-                        </div>
-                        <div class="col-md-3">
-                            <?php $this->txtNuevDesc->Render(); ?>
-                        </div>
-                        <div class="col-md-1">
-                            <?php $this->btnRegiVehi->Render(); ?>
-                        </div>
-                    </div>
-                    <div class="list_title">Vehículos de la Sucursal</div>
-                    <?php $this->dtgVehiSucu->Render(); ?>
-                </div>
+                <?php } ?>
             </div>
             <div class="row">
                 <div class="col-md-12" style="margin-top: 1em;">
