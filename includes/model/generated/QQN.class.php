@@ -1009,6 +1009,12 @@
 			return new QQNodeTrackingConsecutivo('tracking_consecutivo', null, null);
 		}
 		/**
+		 * @return QQNodeTransportista
+		 */
+		static public function Transportista() {
+			return new QQNodeTransportista('transportista', null, null);
+		}
+		/**
 		 * @return QQNodeTurno
 		 */
 		static public function Turno() {

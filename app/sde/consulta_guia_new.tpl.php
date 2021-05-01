@@ -241,10 +241,18 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                             </div>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <div class="titulo-c">Nota Entrega</div>
+                                    <div class="titulo-c">Manifiesto</div>
                                 </div>
                                 <div class="col-md-6">
                                     <?php $this->lblNotaEntr->Render(); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="titulo-c">Serv. Impor.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <?php $this->lblServImpo->Render(); ?>
                                 </div>
                             </div>
                             <div class="row">

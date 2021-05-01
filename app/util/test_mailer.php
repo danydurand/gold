@@ -8,7 +8,7 @@ require_once('qcubed.inc.php');
 use PHPMailer\PHPMailer\PHPMailer;
 
 $mail = new PHPMailer();
-$mail->setFrom('SisCO@libertyexpress.com', 'Medicion y Control');
+$mail->setFrom('SisCO@goldsist.com', 'Medicion y Control');
 $mail->addAddress('danydurand@gmail.com', 'Daniel');
 $mail->Subject  = 'First PHPMailer Message';
 $mail->Body     = 'Hi! This is my first e-mail sent through PHPMailer.';

@@ -70,6 +70,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblMontCanc;
     protected $txtTextCome;
     protected $lblNotaEntr;
+    protected $lblServImpo;
     protected $lblNumeFact;
 
     // Parámetros de Posición //
@@ -204,6 +205,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblFechHora_Create();
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
+        $this->lblservImpo_Create();
         $this->lblNumeFact_Create();
 
         // Para cargar el POD
@@ -528,7 +530,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblSucuOrig->Name = 'Origen';
         $strSucuOrig = $this->objGuia->Origen->Iata;
         if ($this->objGuia->sistema() == 'RET') {
-            $strSucuOrig .= ' ('.$this->objGuia->ReceptoriaOrigen->Siglas.')';
+            if ($this->objGuia->ReceptoriaOrigenId) {
+                $strSucuOrig .= ' ('.$this->objGuia->ReceptoriaOrigen->Siglas.')';
+            }
         }
         $this->lblSucuOrig->Text = $strSucuOrig;
     }
@@ -563,7 +567,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblSucuDest->Name = 'Destino';
         $strSucuDest = $this->objGuia->Destino->Iata;
         if ($this->objGuia->sistema() == 'RET') {
-            $strSucuDest .= ' ('.$this->objGuia->ReceptoriaDestino->Siglas.')';
+            if ($this->objGuia->ReceptoriaDestinoId) {
+                $strSucuDest .= ' ('.$this->objGuia->ReceptoriaDestino->Siglas.')';
+            }
         }
         $this->lblSucuDest->Text = $strSucuDest;
     }
@@ -640,7 +646,10 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblPiezPeso_Create() {
         $this->lblPiezPeso = new QLabel($this);
         $this->lblPiezPeso->Name = 'Piezas/Peso';
-        $this->lblPiezPeso->Text = $this->objGuia->Piezas.'/'.$this->objGuia->Kilos.' (Kg)';
+        $strPiezGuia = $this->objGuia->Piezas;
+        $strPesoGuia = $this->objGuia->ServicioImportacion == 'AER' ? $this->objGuia->Kilos : $this->objGuia->PiesCub;
+        $strUnidPeso = $this->objGuia->ServicioImportacion == 'AER' ? 'Kg' : 'P3';
+        $this->lblPiezPeso->Text = $strPiezGuia.' / '.$strPesoGuia.' ('.$strUnidPeso.')';
     }
 
     protected function lblValoDecl_Create() {
@@ -701,6 +710,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblNotaEntr_Create() {
         $this->lblNotaEntr = new QLabel($this);
         $this->lblNotaEntr->Text = $this->objGuia->NotaEntregaId ? $this->objGuia->NotaEntrega->Referencia : null;
+    }
+
+    protected function lblServImpo_Create() {
+        $this->lblServImpo = new QLabel($this);
+        $this->lblServImpo->Text = strlen($this->objGuia->ServicioImportacion) ? $this->objGuia->ServicioImportacion : null;
     }
 
     protected function lblNumeFact_Create() {

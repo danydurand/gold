@@ -21,6 +21,7 @@
 	 * @property string $NombreArchivo the value for strNombreArchivo 
 	 * @property string $Estatus the value for strEstatus (Not Null)
 	 * @property string $ServicioImportacion the value for strServicioImportacion (Not Null)
+	 * @property boolean $EnKilos the value for blnEnKilos (Not Null)
 	 * @property integer $Cargadas the value for intCargadas (Not Null)
 	 * @property integer $PorProcesar the value for intPorProcesar (Not Null)
 	 * @property integer $PorCorregir the value for intPorCorregir (Not Null)
@@ -28,6 +29,7 @@
 	 * @property integer $Recibidas the value for intRecibidas 
 	 * @property integer $Sobrantes the value for intSobrantes 
 	 * @property double $Libras the value for fltLibras (Not Null)
+	 * @property double $Kilos the value for fltKilos (Not Null)
 	 * @property double $PiesCub the value for fltPiesCub (Not Null)
 	 * @property double $Volumen the value for fltVolumen (Not Null)
 	 * @property integer $Piezas the value for intPiezas (Not Null)
@@ -117,6 +119,14 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column nota_entrega.en_kilos
+		 * @var boolean blnEnKilos
+		 */
+		protected $blnEnKilos;
+		const EnKilosDefault = 0;
+
+
+		/**
 		 * Protected member variable that maps to the database column nota_entrega.cargadas
 		 * @var integer intCargadas
 		 */
@@ -170,6 +180,14 @@
 		 */
 		protected $fltLibras;
 		const LibrasDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column nota_entrega.kilos
+		 * @var double fltKilos
+		 */
+		protected $fltKilos;
+		const KilosDefault = 0;
 
 
 		/**
@@ -458,6 +476,7 @@
 			$this->strNombreArchivo = NotaEntrega::NombreArchivoDefault;
 			$this->strEstatus = NotaEntrega::EstatusDefault;
 			$this->strServicioImportacion = NotaEntrega::ServicioImportacionDefault;
+			$this->blnEnKilos = NotaEntrega::EnKilosDefault;
 			$this->intCargadas = NotaEntrega::CargadasDefault;
 			$this->intPorProcesar = NotaEntrega::PorProcesarDefault;
 			$this->intPorCorregir = NotaEntrega::PorCorregirDefault;
@@ -465,6 +484,7 @@
 			$this->intRecibidas = NotaEntrega::RecibidasDefault;
 			$this->intSobrantes = NotaEntrega::SobrantesDefault;
 			$this->fltLibras = NotaEntrega::LibrasDefault;
+			$this->fltKilos = NotaEntrega::KilosDefault;
 			$this->fltPiesCub = NotaEntrega::PiesCubDefault;
 			$this->fltVolumen = NotaEntrega::VolumenDefault;
 			$this->intPiezas = NotaEntrega::PiezasDefault;
@@ -830,6 +850,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'nombre_archivo', $strAliasPrefix . 'nombre_archivo');
 			    $objBuilder->AddSelectItem($strTableName, 'estatus', $strAliasPrefix . 'estatus');
 			    $objBuilder->AddSelectItem($strTableName, 'servicio_importacion', $strAliasPrefix . 'servicio_importacion');
+			    $objBuilder->AddSelectItem($strTableName, 'en_kilos', $strAliasPrefix . 'en_kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'cargadas', $strAliasPrefix . 'cargadas');
 			    $objBuilder->AddSelectItem($strTableName, 'por_procesar', $strAliasPrefix . 'por_procesar');
 			    $objBuilder->AddSelectItem($strTableName, 'por_corregir', $strAliasPrefix . 'por_corregir');
@@ -837,6 +858,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'recibidas', $strAliasPrefix . 'recibidas');
 			    $objBuilder->AddSelectItem($strTableName, 'sobrantes', $strAliasPrefix . 'sobrantes');
 			    $objBuilder->AddSelectItem($strTableName, 'libras', $strAliasPrefix . 'libras');
+			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
 			    $objBuilder->AddSelectItem($strTableName, 'volumen', $strAliasPrefix . 'volumen');
 			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
@@ -998,6 +1020,9 @@
 			$strAlias = $strAliasPrefix . 'servicio_importacion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strServicioImportacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'en_kilos';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnEnKilos = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'cargadas';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCargadas = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1019,6 +1044,9 @@
 			$strAlias = $strAliasPrefix . 'libras';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltLibras = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'kilos';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltKilos = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'pies_cub';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltPiesCub = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1469,6 +1497,7 @@
 							`nombre_archivo`,
 							`estatus`,
 							`servicio_importacion`,
+							`en_kilos`,
 							`cargadas`,
 							`por_procesar`,
 							`por_corregir`,
@@ -1476,6 +1505,7 @@
 							`recibidas`,
 							`sobrantes`,
 							`libras`,
+							`kilos`,
 							`pies_cub`,
 							`volumen`,
 							`piezas`,
@@ -1497,6 +1527,7 @@
 							' . $objDatabase->SqlVariable($this->strNombreArchivo) . ',
 							' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
+							' . $objDatabase->SqlVariable($this->blnEnKilos) . ',
 							' . $objDatabase->SqlVariable($this->intCargadas) . ',
 							' . $objDatabase->SqlVariable($this->intPorProcesar) . ',
 							' . $objDatabase->SqlVariable($this->intPorCorregir) . ',
@@ -1504,6 +1535,7 @@
 							' . $objDatabase->SqlVariable($this->intRecibidas) . ',
 							' . $objDatabase->SqlVariable($this->intSobrantes) . ',
 							' . $objDatabase->SqlVariable($this->fltLibras) . ',
+							' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							' . $objDatabase->SqlVariable($this->fltVolumen) . ',
 							' . $objDatabase->SqlVariable($this->intPiezas) . ',
@@ -1584,6 +1616,7 @@
 							`nombre_archivo` = ' . $objDatabase->SqlVariable($this->strNombreArchivo) . ',
 							`estatus` = ' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							`servicio_importacion` = ' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
+							`en_kilos` = ' . $objDatabase->SqlVariable($this->blnEnKilos) . ',
 							`cargadas` = ' . $objDatabase->SqlVariable($this->intCargadas) . ',
 							`por_procesar` = ' . $objDatabase->SqlVariable($this->intPorProcesar) . ',
 							`por_corregir` = ' . $objDatabase->SqlVariable($this->intPorCorregir) . ',
@@ -1591,6 +1624,7 @@
 							`recibidas` = ' . $objDatabase->SqlVariable($this->intRecibidas) . ',
 							`sobrantes` = ' . $objDatabase->SqlVariable($this->intSobrantes) . ',
 							`libras` = ' . $objDatabase->SqlVariable($this->fltLibras) . ',
+							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							`volumen` = ' . $objDatabase->SqlVariable($this->fltVolumen) . ',
 							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
@@ -1751,6 +1785,7 @@
 			$this->strNombreArchivo = $objReloaded->strNombreArchivo;
 			$this->strEstatus = $objReloaded->strEstatus;
 			$this->strServicioImportacion = $objReloaded->strServicioImportacion;
+			$this->blnEnKilos = $objReloaded->blnEnKilos;
 			$this->intCargadas = $objReloaded->intCargadas;
 			$this->intPorProcesar = $objReloaded->intPorProcesar;
 			$this->intPorCorregir = $objReloaded->intPorCorregir;
@@ -1758,6 +1793,7 @@
 			$this->intRecibidas = $objReloaded->intRecibidas;
 			$this->intSobrantes = $objReloaded->intSobrantes;
 			$this->fltLibras = $objReloaded->fltLibras;
+			$this->fltKilos = $objReloaded->fltKilos;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
 			$this->fltVolumen = $objReloaded->fltVolumen;
 			$this->intPiezas = $objReloaded->intPiezas;
@@ -1838,6 +1874,13 @@
 					 */
 					return $this->strServicioImportacion;
 
+				case 'EnKilos':
+					/**
+					 * Gets the value for blnEnKilos (Not Null)
+					 * @return boolean
+					 */
+					return $this->blnEnKilos;
+
 				case 'Cargadas':
 					/**
 					 * Gets the value for intCargadas (Not Null)
@@ -1886,6 +1929,13 @@
 					 * @return double
 					 */
 					return $this->fltLibras;
+
+				case 'Kilos':
+					/**
+					 * Gets the value for fltKilos (Not Null)
+					 * @return double
+					 */
+					return $this->fltKilos;
 
 				case 'PiesCub':
 					/**
@@ -2236,6 +2286,19 @@
 						throw $objExc;
 					}
 
+				case 'EnKilos':
+					/**
+					 * Sets the value for blnEnKilos (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnEnKilos = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Cargadas':
 					/**
 					 * Sets the value for intCargadas (Not Null)
@@ -2322,6 +2385,19 @@
 					 */
 					try {
 						return ($this->fltLibras = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Kilos':
+					/**
+					 * Sets the value for fltKilos (Not Null)
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltKilos = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3349,6 +3425,7 @@
 			$strToReturn .= '<element name="NombreArchivo" type="xsd:string"/>';
 			$strToReturn .= '<element name="Estatus" type="xsd:string"/>';
 			$strToReturn .= '<element name="ServicioImportacion" type="xsd:string"/>';
+			$strToReturn .= '<element name="EnKilos" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Cargadas" type="xsd:int"/>';
 			$strToReturn .= '<element name="PorProcesar" type="xsd:int"/>';
 			$strToReturn .= '<element name="PorCorregir" type="xsd:int"/>';
@@ -3356,6 +3433,7 @@
 			$strToReturn .= '<element name="Recibidas" type="xsd:int"/>';
 			$strToReturn .= '<element name="Sobrantes" type="xsd:int"/>';
 			$strToReturn .= '<element name="Libras" type="xsd:float"/>';
+			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
 			$strToReturn .= '<element name="Volumen" type="xsd:float"/>';
 			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
@@ -3413,6 +3491,8 @@
 				$objToReturn->strEstatus = $objSoapObject->Estatus;
 			if (property_exists($objSoapObject, 'ServicioImportacion'))
 				$objToReturn->strServicioImportacion = $objSoapObject->ServicioImportacion;
+			if (property_exists($objSoapObject, 'EnKilos'))
+				$objToReturn->blnEnKilos = $objSoapObject->EnKilos;
 			if (property_exists($objSoapObject, 'Cargadas'))
 				$objToReturn->intCargadas = $objSoapObject->Cargadas;
 			if (property_exists($objSoapObject, 'PorProcesar'))
@@ -3427,6 +3507,8 @@
 				$objToReturn->intSobrantes = $objSoapObject->Sobrantes;
 			if (property_exists($objSoapObject, 'Libras'))
 				$objToReturn->fltLibras = $objSoapObject->Libras;
+			if (property_exists($objSoapObject, 'Kilos'))
+				$objToReturn->fltKilos = $objSoapObject->Kilos;
 			if (property_exists($objSoapObject, 'PiesCub'))
 				$objToReturn->fltPiesCub = $objSoapObject->PiesCub;
 			if (property_exists($objSoapObject, 'Volumen'))
@@ -3522,6 +3604,7 @@
 			$iArray['NombreArchivo'] = $this->strNombreArchivo;
 			$iArray['Estatus'] = $this->strEstatus;
 			$iArray['ServicioImportacion'] = $this->strServicioImportacion;
+			$iArray['EnKilos'] = $this->blnEnKilos;
 			$iArray['Cargadas'] = $this->intCargadas;
 			$iArray['PorProcesar'] = $this->intPorProcesar;
 			$iArray['PorCorregir'] = $this->intPorCorregir;
@@ -3529,6 +3612,7 @@
 			$iArray['Recibidas'] = $this->intRecibidas;
 			$iArray['Sobrantes'] = $this->intSobrantes;
 			$iArray['Libras'] = $this->fltLibras;
+			$iArray['Kilos'] = $this->fltKilos;
 			$iArray['PiesCub'] = $this->fltPiesCub;
 			$iArray['Volumen'] = $this->fltVolumen;
 			$iArray['Piezas'] = $this->intPiezas;
@@ -3591,6 +3675,7 @@
      * @property-read QQNode $NombreArchivo
      * @property-read QQNode $Estatus
      * @property-read QQNode $ServicioImportacion
+     * @property-read QQNode $EnKilos
      * @property-read QQNode $Cargadas
      * @property-read QQNode $PorProcesar
      * @property-read QQNode $PorCorregir
@@ -3598,6 +3683,7 @@
      * @property-read QQNode $Recibidas
      * @property-read QQNode $Sobrantes
      * @property-read QQNode $Libras
+     * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
      * @property-read QQNode $Volumen
      * @property-read QQNode $Piezas
@@ -3648,6 +3734,8 @@
 					return new QQNode('estatus', 'Estatus', 'VarChar', $this);
 				case 'ServicioImportacion':
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'VarChar', $this);
+				case 'EnKilos':
+					return new QQNode('en_kilos', 'EnKilos', 'Bit', $this);
 				case 'Cargadas':
 					return new QQNode('cargadas', 'Cargadas', 'Integer', $this);
 				case 'PorProcesar':
@@ -3662,6 +3750,8 @@
 					return new QQNode('sobrantes', 'Sobrantes', 'Integer', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'Float', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'Float', $this);
 				case 'PiesCub':
 					return new QQNode('pies_cub', 'PiesCub', 'Float', $this);
 				case 'Volumen':
@@ -3734,6 +3824,7 @@
      * @property-read QQNode $NombreArchivo
      * @property-read QQNode $Estatus
      * @property-read QQNode $ServicioImportacion
+     * @property-read QQNode $EnKilos
      * @property-read QQNode $Cargadas
      * @property-read QQNode $PorProcesar
      * @property-read QQNode $PorCorregir
@@ -3741,6 +3832,7 @@
      * @property-read QQNode $Recibidas
      * @property-read QQNode $Sobrantes
      * @property-read QQNode $Libras
+     * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
      * @property-read QQNode $Volumen
      * @property-read QQNode $Piezas
@@ -3791,6 +3883,8 @@
 					return new QQNode('estatus', 'Estatus', 'string', $this);
 				case 'ServicioImportacion':
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'string', $this);
+				case 'EnKilos':
+					return new QQNode('en_kilos', 'EnKilos', 'boolean', $this);
 				case 'Cargadas':
 					return new QQNode('cargadas', 'Cargadas', 'integer', $this);
 				case 'PorProcesar':
@@ -3805,6 +3899,8 @@
 					return new QQNode('sobrantes', 'Sobrantes', 'integer', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'double', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'double', $this);
 				case 'PiesCub':
 					return new QQNode('pies_cub', 'PiesCub', 'double', $this);
 				case 'Volumen':

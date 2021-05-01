@@ -23,8 +23,6 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             </div>
             <div class="row" style="margin-top: 1em;">
                 <div class="col-md-4">
-                    <div class="title">Cliente Corp</div>
-                    <?php $this->lstClieCorp->Render(); ?>
                     <div class="row">
                         <div class="col-md-6 title">Tipo de Operación</div>
                         <div class="col-md-6 title">BL o AWB</div>
@@ -35,6 +33,8 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     </div>
                     <div class="title">Operaciones</div>
                     <?php $this->lstOperAbie->Render(); ?>
+                    <div class="title">Transportista</div>
+                    <?php $this->lstEmprTran->Render(); ?>
                     <div class="row">
                         <div class="col-md-6 title">Chofer</div>
                         <div class="col-md-6 title">Cédula</div>

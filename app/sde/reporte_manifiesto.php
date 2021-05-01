@@ -39,8 +39,8 @@ if ($objManifiesto) {
             $decSumaMont,
             'Valija',
             $objValija->Fecha->__toString("DD/MM/YYYY"),
-            'LIBERTYEXPRESS',
-            'LIBERTYEXPRESS',
+            'GoldCoast',
+            'GoldCoast',
             '',
             $intCantPiez,
             $decSumaPeso

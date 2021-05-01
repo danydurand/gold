@@ -88,7 +88,9 @@ class FacturasListForm extends FacturasListFormBase {
 		$colCantMani->HorizontalAlign = QHorizontalAlign::Center;
 		$this->dtgFacturases->AddColumn($colCantMani);
 
-		$this->dtgFacturases->MetaAddColumn('Total');
+		$colTotaFact = new QDataGridColumn('TOTAL','<?= $_ITEM->__total() ?>');
+		$this->dtgFacturases->AddColumn($colTotaFact);
+		$this->dtgFacturases->MetaAddColumn('EstatusPago');
 		//$this->dtgFacturases->MetaAddColumn('MontoDscto');
 		//$this->dtgFacturases->MetaAddColumn('MontoCobrado');
 		//$this->dtgFacturases->MetaAddColumn('Numero');

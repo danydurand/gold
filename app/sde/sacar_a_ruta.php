@@ -13,7 +13,7 @@ class SacarARuta extends FormularioBaseKaizen {
     protected $txtPrecLate;  // Precinto Lateral
     protected $txtListNume;  // Lista de Seriales/Guias/Valijas
     protected $txtNumeAwbx;  // Guia Aerea
-    protected $lstClieCorp;  // Clientes Corporativos
+    protected $lstEmprTran;  // Empresa Transportista
     protected $dtgPiezApta;  // Piezas aptas para el Manifiesto
     protected $dtgPiezMani;  // Piezas del Manifiesto
 
@@ -77,7 +77,7 @@ class SacarARuta extends FormularioBaseKaizen {
 
         $this->dlgMensUsua_Create();
 
-        $this->lstClieCorp_Create();
+        $this->lstEmprTran_Create();
         $this->lstTipoOper_Create();
         $this->lstOperAbie_Create();
         $this->txtNombChof_Create();
@@ -108,7 +108,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnRepoErro_Create();
         $this->btnGestChve_Create();
 
-        $this->validarCampos();
+        //$this->validarCampos();
         //$this->mensajeInicial();
 
         if ($this->blnEditMode) {
@@ -439,32 +439,34 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->lstOperAbie->Name = 'Operación';
         $this->lstOperAbie->Required = true;
         $this->lstOperAbie->Width = 350;
-        $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
+        //$this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
         $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('mostrarDatos'));
-        $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('lstClieCorp_Change'));
+        $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('lstOperAbie_Change'));
     }
 
-    protected function lstClieCorp_Create() {
-        $this->lstClieCorp = new QListBox($this);
-        $this->lstClieCorp->Name = 'Cliente Corp';
-        $this->lstClieCorp->Required = true;
-        $this->lstClieCorp->Width = 350;
+    protected function lstOperAbie_Change() {
+        $this->dtgPiezApta->Refresh();
+    }
+
+    protected function lstEmprTran_Create() {
+        $this->lstEmprTran = new QListBox($this);
+        $this->lstEmprTran->Name = 'Transportista';
+        $this->lstEmprTran->Required = true;
+        $this->lstEmprTran->Width = 350;
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CodiStat,SinoType::SI);
-        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CargaMasiva,SinoType::SI);
+        $objClauWher[] = QQ::Equal(QQN::Transportista()->Activo,SinoType::SI);
         $objClauOrde   = QQ::Clause();
-        $objClauOrde[] = QQ::OrderBy(QQN::MasterCliente()->NombClie);
-        $arrClieCorp   = MasterCliente::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
-        $intCantClie   = count($arrClieCorp);
-        $this->lstClieCorp->AddItem('- Seleccione Uno - ('.$intCantClie.')',null);
-        foreach ($arrClieCorp as $objClieCopr) {
+        $objClauOrde[] = QQ::OrderBy(QQN::Transportista()->Nombre);
+        $arrEmprTran   = Transportista::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+        $intCantClie   = count($arrEmprTran);
+        $this->lstEmprTran->AddItem('- Seleccione Uno - ('.$intCantClie.')',null);
+        foreach ($arrEmprTran as $objEmprTran) {
             $blnSeleRegi = false;
             if ($this->blnEditMode) {
-                $blnSeleRegi = $this->objContaine->ClienteCorpId == $objClieCopr->CodiClie;
+                $blnSeleRegi = $this->objContaine->TransportistaId == $objEmprTran->Id;
             }
-            $this->lstClieCorp->AddItem($objClieCopr->__toString(),$objClieCopr->CodiClie, $blnSeleRegi);
+            $this->lstEmprTran->AddItem($objEmprTran->__toString(),$objEmprTran->Id, $blnSeleRegi);
         }
-        $this->lstClieCorp->AddAction(new QChangeEvent(), new QAjaxAction('lstClieCorp_Change'));
     }
 
     protected function dtgPiezApta_Create() {
@@ -496,12 +498,13 @@ class SacarARuta extends FormularioBaseKaizen {
     }
 
     protected function dtgPiezApta_Bind() {
-        $intCodiClie = $this->lstClieCorp->SelectedValue;
         $intCodiOper = $this->lstOperAbie->SelectedValue;
-        if ( (!is_null($intCodiClie)) && (!is_null($intCodiOper)) ) {
+        if (!is_null($intCodiOper)) {
+            $objOperSele = SdeOperacion::Load($intCodiOper);
+            $strDestIdxx = $objOperSele->GetDestinosIds('string');
             $strCadeSqlx  = "select id ";
             $strCadeSqlx .= "  from v_aptas_para_trasladar ";
-            $strCadeSqlx .= " where cliente_corp_id = $intCodiClie";
+            $strCadeSqlx .= " where destino_id in (".$strDestIdxx.")";
             $objDatabase  = GuiaPiezas::GetDatabase();
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $arrIdxxPiez  = [];
@@ -531,6 +534,12 @@ class SacarARuta extends FormularioBaseKaizen {
         $colManiGuia->Width = 95;
         $this->dtgPiezApta->AddColumn($colManiGuia);
 
+        $colDestGuia = new QDataGridColumn($this);
+        $colDestGuia->Name = QApplication::Translate('Dest');
+        $colDestGuia->Html = '<?= $_ITEM->Guia->Destino->Iata ?>';
+        $colDestGuia->Width = 50;
+        $this->dtgPiezApta->AddColumn($colDestGuia);
+
         $colUltiCkpt = new QDataGridColumn($this);
         $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
         $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
@@ -559,10 +568,10 @@ class SacarARuta extends FormularioBaseKaizen {
     }
 
     protected function dtgPiezMani_Bind() {
-        $intCodiClie = $this->lstClieCorp->SelectedValue;
+        $intCodiClie = $this->lstEmprTran->SelectedValue;
         $intCodiOper = $this->lstOperAbie->SelectedValue;
         if ( (!is_null($intCodiClie)) && (!is_null($intCodiOper)) ) {
-            if ($this->blnEditMode) {
+            //if ($this->blnEditMode) {
                 $arrIdxxMani = [];
                 $arrPiezMani = $this->objContaine->GetGuiaPiezasAsContainerPiezaArray();
                 foreach ($arrPiezMani as $objPiezMani) {
@@ -573,7 +582,7 @@ class SacarARuta extends FormularioBaseKaizen {
                     QQ::AndCondition(QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxMani)),
                     QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause)
                 );
-            }
+            //}
         }
 
     }
@@ -623,11 +632,6 @@ class SacarARuta extends FormularioBaseKaizen {
 
     }
 
-    protected function lstClieCorp_Change() {
-        $this->dtgPiezApta->Refresh();
-        $this->dtgPiezMani->Refresh();
-    }
-
 
     protected function txtNumeAwbx_Create() {
         $this->txtNumeAwbx = new QTextBox($this);
@@ -642,7 +646,7 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected function txtNumeCont_Create() {
         $this->txtNumeCont = new QTextBox($this);
-        $this->txtNumeCont->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
+        //$this->txtNumeCont->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
         $this->txtNumeCont->AddAction(new QChangeEvent(), new QAjaxAction('advertirExistencia'));
         $this->txtNumeCont->Required = true;
         if ($this->blnEditMode) {
@@ -667,7 +671,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->txtListNume->Required = true;
         $this->txtListNume->Width = 250;
         $this->txtListNume->Rows = 11;
-        $this->txtListNume->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
+        //$this->txtListNume->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
     }
 
     protected function txtDireEntr_Create() {
@@ -819,7 +823,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $arrLogxCamb['strNombRegi'] = $objNuevVehi->DescVehi;
             $arrLogxCamb['strDescCamb'] = 'Creado dinamicamente, desde Sacar a Ruta';
             LogDeCambios($arrLogxCamb);
-            $this->mensaje('Vehículo creado Exitosamente !','','','',__iCHEC__);
+            $this->success('Vehículo creado Exitosamente !');
             $this->lstNuevTipo->SelectedIndex = 0;
             $this->txtNuevPlac->Text = '';
             $this->txtNuevDesc->Text = '';
@@ -830,7 +834,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $objNuevVehi->CodiStat = StatusType::ACTIVO;
             $objNuevVehi->CodiDisp = SinoType::SI;
             $objNuevVehi->Save();
-            $this->mensaje('El Vehículo ya Existía !!!','','w','',__iEXCL__);
+            $this->warning('El Vehículo ya Existía !!!');
         }
         //----------------------------------------------------
         // El vehiculo recién creado se asigna la Manifiesto
@@ -885,7 +889,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $arrLogxCamb['strNombRegi'] = $objNuevChof->NombChof;
             $arrLogxCamb['strDescCamb'] = 'Creado dinamicamente, desde Sacar a Ruta';
             LogDeCambios($arrLogxCamb);
-            $this->mensaje('Chofer creado Exitosamente !','','','',__iCHEC__);
+            $this->success('Chofer creado Exitosamente !');
         } else {
             //--------------------------------------------------------------------------------
             // Si Chofer existe y esta inactivo o no disponible, se cambian esas condiciones
@@ -893,7 +897,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $objCeduExis->CodiStat = StatusType::ACTIVO;
             $objCeduExis->CodiDisp = SinoType::SI;
             $objCeduExis->Save();
-            $this->mensaje('El Chofer ya Existía !!!','','w','',__iEXCL__);
+            $this->warning('El Chofer ya Existía !!!');
         }
         $this->txtNuevChof->Text = '';
         $this->txtNuevCedu->Text = '';
@@ -960,27 +964,6 @@ class SacarARuta extends FormularioBaseKaizen {
         }
     }
 
-    protected function validarCampos() {
-        $intContCar1 = $this->lstOperAbie->SelectedValue;
-        if ($this->lstTipoOper->SelectedValue == 0) {
-            //-----------------------------------------------------
-            // Las Rutas "Urbanas" no requieren Número de Precinto
-            //-----------------------------------------------------
-            $intContCar2 = 1;
-            $this->txtNumeCont->Required = false;
-        } else {
-            $this->txtNumeCont->Required = true;
-            $intContCar2 = strlen($this->txtNumeCont->Text);
-        }
-        $intCantGuia = strlen($this->txtListNume->Text);
-        if ($intContCar1 && $intContCar2 && $intCantGuia) {
-            $this->habilitarBotonSalvar();
-        } else {
-            $this->deshabilitarBotonSalvar();
-        }
-        $this->mensaje();
-    }
-
 
     protected function mensajeInicial() {
         $strTextMens  = 'Los <b>Choferes</b> están ordenados alfebéticamente y los <b>Vehículos</b> por placa. ';
@@ -1007,23 +990,23 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected function validarChoferVehiculo() {
         //---------------------------------------------
-        // Se validan los nuevos datos del Manifiesto
+        // Se validan los nuevos datos del Chofer
         //---------------------------------------------
         $this->mensaje();
         if (strlen(trim($this->txtNombChof->Text)) == 0) {
-            $this->mensaje('Debe seleccionar un Chofer de la lista','','d','',__iHAND__);
+            $this->danger('Debe seleccionar un Chofer de la lista');
             return false;
         }
         if (strlen(trim($this->txtCeduChof->Text)) == 0) {
-            $this->mensaje('La cédula del Chofer es requerida','','d','',__iHAND__);
+            $this->danger('La cédula del Chofer es requerida');
             return false;
         }
         if (strlen(trim($this->txtDescVehi->Text)) == 0) {
-            $this->mensaje('Debe seleccionar un Vehículo de la lista','','d','',__iHAND__);
+            $this->danger('Debe seleccionar un Vehículo de la lista');
             return false;
         }
         if (strlen(trim($this->txtPlacVehi->Text)) == 0) {
-            $this->mensaje('La Placa del Vehículo es requerida','','d','',__iHAND__);
+            $this->danger('La Placa del Vehículo es requerida');
             return false;
         }
         //----------------------------------------------------------------------------------------
@@ -1066,6 +1049,45 @@ class SacarARuta extends FormularioBaseKaizen {
         return true;
     }
 
+    protected function Form_Validate()
+    {
+        if (is_null($this->lstEmprTran->SelectedValue)) {
+            $this->danger('Debe seleccionar un Transportista');
+            return false;
+        }
+        if (is_null($this->lstTipoOper->SelectedValue)) {
+            $this->danger('Debe seleccionar un Tipo de Ruta/Operacion');
+            return false;
+        }
+        if (strlen($this->txtNumeAwbx->Text) == 0) {
+            $this->danger('Debe especificar un Nro de BL o AWB');
+            return false;
+        }
+        if (is_null($this->lstOperAbie->SelectedValue)) {
+            $this->danger('Debe especificar una Operacion');
+            return false;
+        }
+        if (strlen($this->txtNumeCont->Text) == 0) {
+            $this->danger('Debe especificar el Precinto Trasero');
+            return false;
+        }
+        if (strlen($this->txtDireEntr->Text) == 0) {
+            $this->danger('Debe especificar la Direccion de Entrega');
+            return false;
+        }
+        if (strlen($this->txtDescCont->Text) == 0) {
+            $this->danger('Debe especificar la Descripción del Contenido');
+            return false;
+        }
+        if (!$this->blnEditMode) {
+            if (strlen($this->txtListNume->Text) == 0) {
+                $this->danger('Debe especificar al menos una Guia/Pieza a Manifestar');
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected function btnSave_Click() {
         t('==========================');
         t('Comenzando el Sacar a Ruta');
@@ -1097,8 +1119,8 @@ class SacarARuta extends FormularioBaseKaizen {
         $objContenedor->Numero          = $this->txtNumeCont->Text;
         $objContenedor->PrecintoLateral = $this->txtPrecLate->Text;
         $objContenedor->Awb             = $this->txtNumeAwbx->Text;
-        $objContenedor->ClienteCorpId   = $this->lstClieCorp->SelectedValue;
         $objContenedor->OperacionId     = $this->lstOperAbie->SelectedValue;
+        $objContenedor->TransportistaId = $this->lstEmprTran->SelectedValue;
         $objContenedor->Contenido       = $this->txtDescCont->Text;
         $objContenedor->Direccion       = $this->txtDireEntr->Text;
         $objContenedor->Save();
@@ -1141,7 +1163,17 @@ class SacarARuta extends FormularioBaseKaizen {
                         t('La guia se puede procesar');
                         if ($strTipoRuta == 'EXTRA-URBANA') {
                             t('La ruta es Extra-Urbana');
-                            if ($objGuiaPiez->Kilos != 0) {
+                            $blnTienPeso = true;
+                            if ($objGuiaPiez->Guia->ServicioImportacion == 'MAR') {
+                                if ($objGuiaPiez->PiesCub == 0) {
+                                    $blnTienPeso = false;
+                                }
+                            } else {
+                                if ($objGuiaPiez->Kilos == 0) {
+                                    $blnTienPeso = false;
+                                }
+                            }
+                            if ($blnTienPeso) {
                                 t('La pieza tiene peso');
                                 //--------------------------------------------------------------------------------
                                 // Antes de asociar la Guia al Contenedor, se debe verificar que el destino
@@ -1277,7 +1309,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $objContenedor->actualizarTotales();
         t('Se actualizaron los totales en el container');
         $objDatabase->TransactionCommit();
-        $strMensUsua = sprintf('Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
+        $strMensUsua = sprintf('Guias procesadas (%s) | Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
         $this->success($strMensUsua);
         //--------------------------------------------------------------------------------
         // Si hubo algun error, el boton que permite listar los errores, se hace visible

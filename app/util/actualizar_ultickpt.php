@@ -80,7 +80,7 @@ if ($intContFech > 0) {
 	$mail = new PHPMailer();
 	try {
 		$mail->isHTML(true);
-		$mail->setFrom('SisCO@libertyexpress.com', 'Control de Fallas');
+		$mail->setFrom('SisCO@goldsist.com', 'Control de Fallas');
 		$mail->addAddress('soportelufeman@gmail.com');
 		$mail->Subject = "Guias con actualizacion de Ultimo Checkpoint";
 		$mail->Body = 'Estimado Usuario, sírvase revisar el documento anexo...';

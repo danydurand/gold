@@ -39,7 +39,6 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 		$this->mctSucursales = SucursalesMetaControl::CreateFromPathInfo($this);
 
 		// Call MetaControl's methods to create qcontrols based on Sucursales's data fields
-        t('S1');
 		$this->lblId = $this->mctSucursales->lblId_Create();
 		$this->txtNombre = $this->mctSucursales->txtNombre_Create();
 		$this->txtIata = $this->mctSucursales->txtIata_Create();
@@ -71,7 +70,6 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 		//$this->txtUpdatedBy = $this->mctSucursales->txtUpdatedBy_Create();
 		//$this->txtDeletedBy = $this->mctSucursales->txtDeletedBy_Create();
         //$this->dtgSdeOperacionsAsOperacionDestino = $this->mctSucursales->dtgSdeOperacionsAsOperacionDestino_Create();
-        t('S4');
 
 	}
 
@@ -159,7 +157,7 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/sucursales_edit.php/'.$this->mctSucursales->Sucursales->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa !!!');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Sucursales';
@@ -168,7 +166,7 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/sucursales_edit.php/'.$this->mctSucursales->Sucursales->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa !!!');
 		}
 	}
 

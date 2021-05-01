@@ -78,7 +78,7 @@ if (count($arrCambTari) > 0) {
 
             $mail = new PHPMailer();
             $mail->isHTML(true);
-            $mail->setFrom('SisCO@libertyexpress.com', 'Cambio de Tarifa');
+            $mail->setFrom('SisCO@goldsist.com', 'Cambio de Tarifa');
             $mail->addAddress('soportelufeman@gmail.com');
             $mail->Subject   = $strTituRepo;
             $mail->Body      = 'Estimado Usuario, sírvase revisar el documento anexo...<br><br>';

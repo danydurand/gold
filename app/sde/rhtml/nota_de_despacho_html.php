@@ -22,6 +22,7 @@ $strNumeAwbx = $objManiImpr->Awb;
 $intCantPiez = $objManiImpr->Piezas;
 $decPesoTota = $objManiImpr->Peso;
 $strDescCont = $objManiImpr->Contenido;
+$strEmprTran = $objManiImpr->Transportista->Nombre;
 
 ?>
 <style type="text/css">
@@ -58,12 +59,12 @@ $strDescCont = $objManiImpr->Contenido;
         <table style="margin-top: 24px; margin-left: -3px;">
             <tr>
                 <td style="width: 680px;">
-                    CLIENTE: <?= $strNombClie ?>
+                    <b>CLIENTE:</b> <?= $strNombEmpr ?>
                 </td>
             </tr>
             <tr>
                 <td style="width: 680px;">
-                    DIRECCION: <?= $strDireEntr ?>
+                    <b>DIRECCION:</b> <?= $strDireEntr ?>
                 </td>
             </tr>
             <tr>
@@ -73,15 +74,16 @@ $strDescCont = $objManiImpr->Contenido;
             </tr>
         </table>
         <ul>
-            <li><span class="linea">PRECINTO TRASERO: <?= $strNumeCont ?></span></li>
-            <li><span class="linea">PRECINTO LATERAL: <?= $strPrecLate ?></span></li>
-            <li><span class="linea">BL o AWB: <?= $strNumeAwbx ?></span></li>
-            <li><span class="linea">BULTOS: <?= $intCantPiez ?> PIEZAS</span></li>
-            <li><span class="linea">PESO: <?= $decPesoTota ?> KILOS</span></li>
-            <li><span class="linea">CONTENIDO: <?= $strDescCont ?></span></li>
-            <li><span class="linea">CHOFER: <?= $strNombChof ?></span></li>
-            <li><span class="linea">PLACA: <?= $strNumePlac ?></span></li>
-            <li><span class="linea">CEDULA: <?= $strCeduChof ?></span></li>
+            <li><span class="linea"><b>PRECINTO TRASERO:</b> <?= $strNumeCont ?></span></li>
+            <li><span class="linea"><b>PRECINTO LATERAL:</b> <?= $strPrecLate ?></span></li>
+            <li><span class="linea"><b>BL o AWB:</b> <?= $strNumeAwbx ?></span></li>
+            <li><span class="linea"><b>BULTOS:</b> <?= $intCantPiez ?> PIEZAS</span></li>
+            <li><span class="linea"><b>PESO:</b> <?= $decPesoTota ?> KILOS</span></li>
+            <li><span class="linea"><b>EMPRESA TRANSPORTE:</b> <?= $strEmprTran ?></span></li>
+            <li><span class="linea"><b>CONTENIDO:</b> <?= $strDescCont ?></span></li>
+            <li><span class="linea"><b>CHOFER:</b> <?= $strNombChof ?></span></li>
+            <li><span class="linea"><b>PLACA:</b> <?= $strNumePlac ?></span></li>
+            <li><span class="linea"><b>CEDULA:</b> <?= $strCeduChof ?></span></li>
         </ul>
     </page_header>
 

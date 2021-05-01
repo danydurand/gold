@@ -16,7 +16,7 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6" style="margin-top: 1em;">
+				<div class="col-md-5" style="margin-top: 1em;">
 					<?php $this->lblCodiChof->RenderWithName(); ?>
 					<?php $this->txtNombChof->RenderWithName(); ?>
 					<?php $this->txtApelChof->RenderWithName(); ?>
@@ -24,7 +24,7 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
 					<?php $this->txtTeleChof->RenderWithName(); ?>
 					<?php $this->txtTextObse->RenderWithName(); ?>
 				</div>
-				<div class="col-md-6" style="margin-top: 1em;">
+				<div class="col-md-5" style="margin-top: 1em;">
                     <br>
 					<?php $this->txtLogin->RenderWithName(); ?>
 					<?php $this->txtPassword->RenderWithName(); ?>

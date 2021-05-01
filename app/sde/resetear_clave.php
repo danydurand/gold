@@ -179,7 +179,7 @@ class ResetearClave extends FormularioBaseKaizen {
         $to = $this->strDireMail;
         $strLogiUsua = $objUsuario->LogiUsua;
         $objMessage = new QEmailMessage();
-        $objMessage->From = 'LibertyExpress - Yokohama <notificaciones@libertyexpress.com>';
+        $objMessage->From = 'GoldCoast - Yokohama <noti@goldsist.com>';
         $objMessage->To = $to;
         $objMessage->Subject = 'Cambio de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
 

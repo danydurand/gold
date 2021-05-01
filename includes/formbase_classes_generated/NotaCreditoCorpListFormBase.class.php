@@ -1,21 +1,21 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do the List All functionality
- * of the Containers class.  It uses the code-generated
- * ContainersDataGrid control which has meta-methods to help with
- * easily creating/defining Containers columns.
+ * of the NotaCreditoCorp class.  It uses the code-generated
+ * NotaCreditoCorpDataGrid control which has meta-methods to help with
+ * easily creating/defining NotaCreditoCorp columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  *
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both containers_list.php AND
- * containers_list.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both nota_credito_corp_list.php AND
+ * nota_credito_corp_list.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class ContainersListFormBase extends QForm {
+abstract class NotaCreditoCorpListFormBase extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $lblTituForm;
@@ -23,11 +23,11 @@ abstract class ContainersListFormBase extends QForm {
     protected $btnFiltAvan;
     protected $btnExpoExce;
 
-    // Local instance of the Meta DataGrid to list Containerses
+    // Local instance of the Meta DataGrid to list NotaCreditoCorps
     /**
-     * @var ContainersDataGrid dtgContainerses
+     * @var NotaCreditoCorpDataGrid dtgNotaCreditoCorps
      */
-    protected $dtgContainerses;
+    protected $dtgNotaCreditoCorps;
 
     // Create QForm Event Handlers as Needed
 
@@ -50,53 +50,49 @@ abstract class ContainersListFormBase extends QForm {
         $this->btnFiltAvan_Create();
 
         // Instantiate the Meta DataGrid
-        $this->dtgContainerses = new ContainersDataGrid($this);
+        $this->dtgNotaCreditoCorps = new NotaCreditoCorpDataGrid($this);
 
         // Style the DataGrid (if desired)
-        $this->dtgContainerses->CssClass = 'datagrid';
-        $this->dtgContainerses->AlternateRowStyle->CssClass = 'alternate';
-        $this->dtgContainerses->FontSize = 13;
-        $this->dtgContainerses->ShowFilter = false;
+        $this->dtgNotaCreditoCorps->CssClass = 'datagrid';
+        $this->dtgNotaCreditoCorps->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgNotaCreditoCorps->FontSize = 13;
+        $this->dtgNotaCreditoCorps->ShowFilter = false;
 
         // Add Pagination (if desired)
-        $this->dtgContainerses->Paginator = new QPaginator($this->dtgContainerses);
-        $this->dtgContainerses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgNotaCreditoCorps->Paginator = new QPaginator($this->dtgNotaCreditoCorps);
+        $this->dtgNotaCreditoCorps->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         // Higlight the datagrid rows when mousing over them
-        $this->dtgContainerses->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgContainerses->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgNotaCreditoCorps->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgNotaCreditoCorps->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         // Add a click handler for the rows.
         // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
         // or $_ITEM->Id to pass the object's id, or any other data grid variable
-        $this->dtgContainerses->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-        $this->dtgContainerses->AddRowAction(new QClickEvent(), new QAjaxAction('dtgContainersesRow_Click'));
+        $this->dtgNotaCreditoCorps->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgNotaCreditoCorps->AddRowAction(new QClickEvent(), new QAjaxAction('dtgNotaCreditoCorpsRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
-        // Create the Other Columns (note that you can use strings for containers's properties, or you
-        // can traverse down QQN::containers() to display fields that are down the hierarchy)
-        $this->dtgContainerses->MetaAddColumn('Id');
-        $this->dtgContainerses->MetaAddColumn('Numero');
-        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
-        $this->dtgContainerses->MetaAddColumn('Fecha');
-        $this->dtgContainerses->MetaAddColumn('Hora');
-        $this->dtgContainerses->MetaAddColumn('Estatus');
-        $this->dtgContainerses->MetaAddColumn('Tipo');
-        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Transportista);
-        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->ClienteCorp);
-        $this->dtgContainerses->MetaAddColumn('Awb');
-        $this->dtgContainerses->MetaAddColumn('PrecintoLateral');
-        $this->dtgContainerses->MetaAddColumn('Piezas');
-        $this->dtgContainerses->MetaAddColumn('Peso');
-        $this->dtgContainerses->MetaAddColumn('Contenido');
-        $this->dtgContainerses->MetaAddColumn('Direccion');
-        $this->dtgContainerses->MetaAddColumn('CreatedAt');
-        $this->dtgContainerses->MetaAddColumn('UpdatedAt');
-        $this->dtgContainerses->MetaAddColumn('DeletedAt');
-        $this->dtgContainerses->MetaAddColumn('CreatedBy');
-        $this->dtgContainerses->MetaAddColumn('UpdatedBy');
-        $this->dtgContainerses->MetaAddColumn('DeletedBy');
+        // Create the Other Columns (note that you can use strings for nota_credito_corp's properties, or you
+        // can traverse down QQN::nota_credito_corp() to display fields that are down the hierarchy)
+        $this->dtgNotaCreditoCorps->MetaAddColumn('Id');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('Referencia');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('Tipo');
+        $this->dtgNotaCreditoCorps->MetaAddColumn(QQN::NotaCreditoCorp()->ClienteCorp);
+        $this->dtgNotaCreditoCorps->MetaAddColumn(QQN::NotaCreditoCorp()->PagoCorp);
+        $this->dtgNotaCreditoCorps->MetaAddColumn(QQN::NotaCreditoCorp()->Factura);
+        $this->dtgNotaCreditoCorps->MetaAddColumn('Fecha');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('Monto');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('Observacion');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('Numero');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('MaquinaFiscal');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('FechaImpresion');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('HoraImpresion');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('CreatedAt');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('UpdatedAt');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('CreatedBy');
+        $this->dtgNotaCreditoCorps->MetaAddColumn('UpdatedBy');
 
         $this->btnExpoExce_Create();
 
@@ -104,7 +100,7 @@ abstract class ContainersListFormBase extends QForm {
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'Containerses';
+        $this->lblTituForm->Text = 'NotaCreditoCorps';
     }
 
     protected function lblMensUsua_Create() {
@@ -136,7 +132,7 @@ abstract class ContainersListFormBase extends QForm {
     }
 
     protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgContainerses);
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgNotaCreditoCorps);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoExce->HtmlEntities = false;
@@ -145,16 +141,16 @@ abstract class ContainersListFormBase extends QForm {
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/containers_edit.php');
+        QApplication::Redirect(__SIST__.'/nota_credito_corp_edit.php');
     }
 
     protected function btnFiltAvan_Click() {
-        $this->dtgContainerses->ShowFilter = !$this->dtgContainerses->ShowFilter;
+        $this->dtgNotaCreditoCorps->ShowFilter = !$this->dtgNotaCreditoCorps->ShowFilter;
     }
 
-    public function dtgContainersesRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgNotaCreditoCorpsRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
-      QApplication::Redirect("containers_edit.php/$intId");
+      QApplication::Redirect("nota_credito_corp_edit.php/$intId");
     }
 
 

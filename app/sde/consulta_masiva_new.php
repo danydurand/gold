@@ -27,16 +27,13 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
 
     protected function Form_Create() {
         parent::Form_Create();
-        t('C1');
         $this->lblTituForm->Text = QApplication::Translate('Consulta Masiva de Guías');
 
         $this->rdbTipoEnvi_Create();
         $this->txtListNume_Create();
         $this->chkMostQuer_Create();
-        t('C2');
 
          $this->btnExpoExce_Create();
-        t('C3');
     }
 
     //----------------------------
@@ -47,8 +44,8 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
         $this->rdbTipoEnvi = new QRadioButtonList($this);
         $this->rdbTipoEnvi->Name = QApplication::Translate('Buscar Por:');
         $this->rdbTipoEnvi->RepeatColumns = 2;
-        $this->rdbTipoEnvi->AddItem('&nbsp;Guía&nbsp;&nbsp;&nbsp;&nbsp;','N',true);
-        $this->rdbTipoEnvi->AddItem('&nbsp;Tracking','I');
+        $this->rdbTipoEnvi->AddItem('&nbsp;Guía Gold&nbsp;&nbsp;&nbsp;&nbsp;','N');
+        $this->rdbTipoEnvi->AddItem('&nbsp;Guía Cliente','I',true);
         $this->rdbTipoEnvi->HtmlEntities = false;
         $this->rdbTipoEnvi->Required = true;
         $this->rdbTipoEnvi->RepeatColumns = 2;

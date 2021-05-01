@@ -91,6 +91,7 @@ abstract class GuiaCacesaEditFormBase extends QForm {
 	protected $txtServicioEntrega;
 	protected $txtServicioImportacion;
 	protected $txtLibras;
+	protected $txtKilos;
 	protected $txtVolumen;
 	protected $txtPiesCub;
 	protected $lstNotaEntrega;
@@ -199,6 +200,7 @@ abstract class GuiaCacesaEditFormBase extends QForm {
 		$this->txtServicioEntrega = $this->mctGuiaCacesa->txtServicioEntrega_Create();
 		$this->txtServicioImportacion = $this->mctGuiaCacesa->txtServicioImportacion_Create();
 		$this->txtLibras = $this->mctGuiaCacesa->txtLibras_Create();
+		$this->txtKilos = $this->mctGuiaCacesa->txtKilos_Create();
 		$this->txtVolumen = $this->mctGuiaCacesa->txtVolumen_Create();
 		$this->txtPiesCub = $this->mctGuiaCacesa->txtPiesCub_Create();
 		$this->lstNotaEntrega = $this->mctGuiaCacesa->lstNotaEntrega_Create();

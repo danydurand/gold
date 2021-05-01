@@ -22,6 +22,7 @@
 	 * @property string $Hora the value for strHora (Not Null)
 	 * @property string $Estatus the value for strEstatus (Not Null)
 	 * @property string $Tipo the value for strTipo 
+	 * @property integer $TransportistaId the value for intTransportistaId 
 	 * @property integer $ClienteCorpId the value for intClienteCorpId 
 	 * @property string $Awb the value for strAwb 
 	 * @property string $PrecintoLateral the value for strPrecintoLateral 
@@ -36,6 +37,7 @@
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property SdeOperacion $Operacion the value for the SdeOperacion object referenced by intOperacionId (Not Null)
+	 * @property Transportista $Transportista the value for the Transportista object referenced by intTransportistaId 
 	 * @property MasterCliente $ClienteCorp the value for the MasterCliente object referenced by intClienteCorpId 
 	 * @property-read Containers $_ParentContainersAsContainerContainer the value for the private _objParentContainersAsContainerContainer (Read-Only) if set due to an expansion on the container_container_assn association table
 	 * @property-read Containers[] $_ParentContainersAsContainerContainerArray the value for the private _objParentContainersAsContainerContainerArray (Read-Only) if set due to an ExpandAsArray on the container_container_assn association table
@@ -109,6 +111,14 @@
 		 */
 		protected $strTipo;
 		const TipoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.transportista_id
+		 * @var integer intTransportistaId
+		 */
+		protected $intTransportistaId;
+		const TransportistaIdDefault = null;
 
 
 		/**
@@ -317,6 +327,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column containers.transportista_id.
+		 *
+		 * NOTE: Always use the Transportista property getter to correctly retrieve this Transportista object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Transportista objTransportista
+		 */
+		protected $objTransportista;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column containers.cliente_corp_id.
 		 *
 		 * NOTE: Always use the ClienteCorp property getter to correctly retrieve this MasterCliente object.
@@ -339,6 +359,7 @@
 			$this->strHora = Containers::HoraDefault;
 			$this->strEstatus = Containers::EstatusDefault;
 			$this->strTipo = Containers::TipoDefault;
+			$this->intTransportistaId = Containers::TransportistaIdDefault;
 			$this->intClienteCorpId = Containers::ClienteCorpIdDefault;
 			$this->strAwb = Containers::AwbDefault;
 			$this->strPrecintoLateral = Containers::PrecintoLateralDefault;
@@ -700,6 +721,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'hora', $strAliasPrefix . 'hora');
 			    $objBuilder->AddSelectItem($strTableName, 'estatus', $strAliasPrefix . 'estatus');
 			    $objBuilder->AddSelectItem($strTableName, 'tipo', $strAliasPrefix . 'tipo');
+			    $objBuilder->AddSelectItem($strTableName, 'transportista_id', $strAliasPrefix . 'transportista_id');
 			    $objBuilder->AddSelectItem($strTableName, 'cliente_corp_id', $strAliasPrefix . 'cliente_corp_id');
 			    $objBuilder->AddSelectItem($strTableName, 'awb', $strAliasPrefix . 'awb');
 			    $objBuilder->AddSelectItem($strTableName, 'precinto_lateral', $strAliasPrefix . 'precinto_lateral');
@@ -859,6 +881,9 @@
 			$strAlias = $strAliasPrefix . 'tipo';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strTipo = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'transportista_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intTransportistaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'cliente_corp_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intClienteCorpId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -934,6 +959,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['operacion_id']) ? null : $objExpansionAliasArray['operacion_id']);
 				$objToReturn->objOperacion = SdeOperacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'operacion_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for Transportista Early Binding
+			$strAlias = $strAliasPrefix . 'transportista_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['transportista_id']) ? null : $objExpansionAliasArray['transportista_id']);
+				$objToReturn->objTransportista = Transportista::InstantiateDbRow($objDbRow, $strAliasPrefix . 'transportista_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for ClienteCorp Early Binding
 			$strAlias = $strAliasPrefix . 'cliente_corp_id__codi_clie';
@@ -1231,6 +1263,38 @@
 
 		/**
 		 * Load an array of Containers objects,
+		 * by TransportistaId Index(es)
+		 * @param integer $intTransportistaId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public static function LoadArrayByTransportistaId($intTransportistaId, $objOptionalClauses = null) {
+			// Call Containers::QueryArray to perform the LoadArrayByTransportistaId query
+			try {
+				return Containers::QueryArray(
+					QQ::Equal(QQN::Containers()->TransportistaId, $intTransportistaId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Containerses
+		 * by TransportistaId Index(es)
+		 * @param integer $intTransportistaId
+		 * @return int
+		*/
+		public static function CountByTransportistaId($intTransportistaId) {
+			// Call Containers::QueryCount to perform the CountByTransportistaId query
+			return Containers::QueryCount(
+				QQ::Equal(QQN::Containers()->TransportistaId, $intTransportistaId)
+			);
+		}
+
+		/**
+		 * Load an array of Containers objects,
 		 * by OperacionId Index(es)
 		 * @param integer $intOperacionId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -1391,6 +1455,7 @@
 							`hora`,
 							`estatus`,
 							`tipo`,
+							`transportista_id`,
 							`cliente_corp_id`,
 							`awb`,
 							`precinto_lateral`,
@@ -1408,6 +1473,7 @@
 							' . $objDatabase->SqlVariable($this->strHora) . ',
 							' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							' . $objDatabase->SqlVariable($this->strTipo) . ',
+							' . $objDatabase->SqlVariable($this->intTransportistaId) . ',
 							' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
 							' . $objDatabase->SqlVariable($this->strAwb) . ',
 							' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
@@ -1484,6 +1550,7 @@
 							`hora` = ' . $objDatabase->SqlVariable($this->strHora) . ',
 							`estatus` = ' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							`tipo` = ' . $objDatabase->SqlVariable($this->strTipo) . ',
+							`transportista_id` = ' . $objDatabase->SqlVariable($this->intTransportistaId) . ',
 							`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
 							`awb` = ' . $objDatabase->SqlVariable($this->strAwb) . ',
 							`precinto_lateral` = ' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
@@ -1640,6 +1707,7 @@
 			$this->strHora = $objReloaded->strHora;
 			$this->strEstatus = $objReloaded->strEstatus;
 			$this->strTipo = $objReloaded->strTipo;
+			$this->TransportistaId = $objReloaded->TransportistaId;
 			$this->ClienteCorpId = $objReloaded->ClienteCorpId;
 			$this->strAwb = $objReloaded->strAwb;
 			$this->strPrecintoLateral = $objReloaded->strPrecintoLateral;
@@ -1721,6 +1789,13 @@
 					 * @return string
 					 */
 					return $this->strTipo;
+
+				case 'TransportistaId':
+					/**
+					 * Gets the value for intTransportistaId 
+					 * @return integer
+					 */
+					return $this->intTransportistaId;
 
 				case 'ClienteCorpId':
 					/**
@@ -1826,6 +1901,20 @@
 						if ((!$this->objOperacion) && (!is_null($this->intOperacionId)))
 							$this->objOperacion = SdeOperacion::Load($this->intOperacionId);
 						return $this->objOperacion;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Transportista':
+					/**
+					 * Gets the value for the Transportista object referenced by intTransportistaId 
+					 * @return Transportista
+					 */
+					try {
+						if ((!$this->objTransportista) && (!is_null($this->intTransportistaId)))
+							$this->objTransportista = Transportista::Load($this->intTransportistaId);
+						return $this->objTransportista;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2021,6 +2110,20 @@
 						throw $objExc;
 					}
 
+				case 'TransportistaId':
+					/**
+					 * Sets the value for intTransportistaId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objTransportista = null;
+						return ($this->intTransportistaId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'ClienteCorpId':
 					/**
 					 * Sets the value for intClienteCorpId 
@@ -2182,6 +2285,38 @@
 						// Update Local Member Variables
 						$this->objOperacion = $mixValue;
 						$this->intOperacionId = $mixValue->CodiOper;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'Transportista':
+					/**
+					 * Sets the value for the Transportista object referenced by intTransportistaId 
+					 * @param Transportista $mixValue
+					 * @return Transportista
+					 */
+					if (is_null($mixValue)) {
+						$this->intTransportistaId = null;
+						$this->objTransportista = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Transportista object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Transportista');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Transportista object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Transportista for this Containers');
+
+						// Update Local Member Variables
+						$this->objTransportista = $mixValue;
+						$this->intTransportistaId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -2823,6 +2958,7 @@
 			$strToReturn .= '<element name="Hora" type="xsd:string"/>';
 			$strToReturn .= '<element name="Estatus" type="xsd:string"/>';
 			$strToReturn .= '<element name="Tipo" type="xsd:string"/>';
+			$strToReturn .= '<element name="Transportista" type="xsd1:Transportista"/>';
 			$strToReturn .= '<element name="ClienteCorp" type="xsd1:MasterCliente"/>';
 			$strToReturn .= '<element name="Awb" type="xsd:string"/>';
 			$strToReturn .= '<element name="PrecintoLateral" type="xsd:string"/>';
@@ -2845,6 +2981,7 @@
 			if (!array_key_exists('Containers', $strComplexTypeArray)) {
 				$strComplexTypeArray['Containers'] = Containers::GetSoapComplexTypeXml();
 				SdeOperacion::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Transportista::AlterSoapComplexTypeArray($strComplexTypeArray);
 				MasterCliente::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
@@ -2875,6 +3012,9 @@
 				$objToReturn->strEstatus = $objSoapObject->Estatus;
 			if (property_exists($objSoapObject, 'Tipo'))
 				$objToReturn->strTipo = $objSoapObject->Tipo;
+			if ((property_exists($objSoapObject, 'Transportista')) &&
+				($objSoapObject->Transportista))
+				$objToReturn->Transportista = Transportista::GetObjectFromSoapObject($objSoapObject->Transportista);
 			if ((property_exists($objSoapObject, 'ClienteCorp')) &&
 				($objSoapObject->ClienteCorp))
 				$objToReturn->ClienteCorp = MasterCliente::GetObjectFromSoapObject($objSoapObject->ClienteCorp);
@@ -2926,6 +3066,10 @@
 				$objObject->intOperacionId = null;
 			if ($objObject->dttFecha)
 				$objObject->dttFecha = $objObject->dttFecha->qFormat(QDateTime::FormatSoap);
+			if ($objObject->objTransportista)
+				$objObject->objTransportista = Transportista::GetSoapObjectFromObject($objObject->objTransportista, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intTransportistaId = null;
 			if ($objObject->objClienteCorp)
 				$objObject->objClienteCorp = MasterCliente::GetSoapObjectFromObject($objObject->objClienteCorp, false);
 			else if (!$blnBindRelatedObjects)
@@ -2951,6 +3095,7 @@
 			$iArray['Hora'] = $this->strHora;
 			$iArray['Estatus'] = $this->strEstatus;
 			$iArray['Tipo'] = $this->strTipo;
+			$iArray['TransportistaId'] = $this->intTransportistaId;
 			$iArray['ClienteCorpId'] = $this->intClienteCorpId;
 			$iArray['Awb'] = $this->strAwb;
 			$iArray['PrecintoLateral'] = $this->strPrecintoLateral;
@@ -3117,6 +3262,8 @@
      * @property-read QQNode $Hora
      * @property-read QQNode $Estatus
      * @property-read QQNode $Tipo
+     * @property-read QQNode $TransportistaId
+     * @property-read QQNodeTransportista $Transportista
      * @property-read QQNode $ClienteCorpId
      * @property-read QQNodeMasterCliente $ClienteCorp
      * @property-read QQNode $Awb
@@ -3162,6 +3309,10 @@
 					return new QQNode('estatus', 'Estatus', 'VarChar', $this);
 				case 'Tipo':
 					return new QQNode('tipo', 'Tipo', 'VarChar', $this);
+				case 'TransportistaId':
+					return new QQNode('transportista_id', 'TransportistaId', 'Integer', $this);
+				case 'Transportista':
+					return new QQNodeTransportista('transportista_id', 'Transportista', 'Integer', $this);
 				case 'ClienteCorpId':
 					return new QQNode('cliente_corp_id', 'ClienteCorpId', 'Integer', $this);
 				case 'ClienteCorp':
@@ -3221,6 +3372,8 @@
      * @property-read QQNode $Hora
      * @property-read QQNode $Estatus
      * @property-read QQNode $Tipo
+     * @property-read QQNode $TransportistaId
+     * @property-read QQNodeTransportista $Transportista
      * @property-read QQNode $ClienteCorpId
      * @property-read QQNodeMasterCliente $ClienteCorp
      * @property-read QQNode $Awb
@@ -3266,6 +3419,10 @@
 					return new QQNode('estatus', 'Estatus', 'string', $this);
 				case 'Tipo':
 					return new QQNode('tipo', 'Tipo', 'string', $this);
+				case 'TransportistaId':
+					return new QQNode('transportista_id', 'TransportistaId', 'integer', $this);
+				case 'Transportista':
+					return new QQNodeTransportista('transportista_id', 'Transportista', 'integer', $this);
 				case 'ClienteCorpId':
 					return new QQNode('cliente_corp_id', 'ClienteCorpId', 'integer', $this);
 				case 'ClienteCorp':

@@ -1,26 +1,26 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the NotaEntrega class.  It uses the code-generated
- * NotaEntregaMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a NotaEntrega columns.
+ * of the Transportista class.  It uses the code-generated
+ * TransportistaMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a Transportista columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both nota_entrega_edit.php AND
- * nota_entrega_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both transportista_edit.php AND
+ * transportista_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class NotaEntregaEditFormBase extends QForm {
-	// Local instance of the NotaEntregaMetaControl
+abstract class TransportistaEditFormBase extends QForm {
+	// Local instance of the TransportistaMetaControl
 	/**
-	 * @var NotaEntregaMetaControlGen mctNotaEntrega
+	 * @var TransportistaMetaControlGen mctTransportista
 	 */
-	protected $mctNotaEntrega;
+	protected $mctTransportista;
 	protected $lblMensUsua;
 	protected $lblNotiUsua;
 	protected $lblTituForm;
@@ -50,34 +50,12 @@ abstract class NotaEntregaEditFormBase extends QForm {
     protected $btnProxSmal;
     protected $btnUltiSmal;
 
-	// Controls for NotaEntrega's Data Fields
+	// Controls for Transportista's Data Fields
 	protected $lblId;
-	protected $lstClienteCorp;
-	protected $txtReferencia;
-	protected $txtNombreArchivo;
-	protected $txtEstatus;
-	protected $txtServicioImportacion;
-	protected $chkEnKilos;
-	protected $txtCargadas;
-	protected $txtPorProcesar;
-	protected $txtPorCorregir;
-	protected $txtProcesadas;
-	protected $txtRecibidas;
-	protected $txtSobrantes;
-	protected $txtLibras;
-	protected $txtKilos;
-	protected $txtPiesCub;
-	protected $txtVolumen;
-	protected $txtPiezas;
-	protected $calFecha;
-	protected $txtHora;
-	protected $lstUsuario;
-	protected $lstTarifa;
-	protected $lstFactura;
-	protected $txtTotal;
-	protected $txtValorDeclarado;
+	protected $txtNombre;
+	protected $txtRif;
+	protected $chkActivo;
 	protected $txtObservacion;
-	protected $txtRelacionSobrantes;
 	protected $lblCreatedAt;
 	protected $lblUpdatedAt;
 	protected $lblDeletedAt;
@@ -116,9 +94,9 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
         $this->objUsuario = unserialize($_SESSION['User']);
 
-        // Use the CreateFromPathInfo shortcut (this can also be done manually using the NotaEntregaMetaControl constructor)
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the TransportistaMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctNotaEntrega = NotaEntregaMetaControl::CreateFromPathInfo($this);
+        $this->mctTransportista = TransportistaMetaControl::CreateFromPathInfo($this);
 
         $this->determinarPosicion();
 
@@ -148,40 +126,18 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
         $this->verificarNavegacion();
 
-		// Call MetaControl's methods to create qcontrols based on NotaEntrega's data fields
-		$this->lblId = $this->mctNotaEntrega->lblId_Create();
-		$this->lstClienteCorp = $this->mctNotaEntrega->lstClienteCorp_Create();
-		$this->txtReferencia = $this->mctNotaEntrega->txtReferencia_Create();
-		$this->txtNombreArchivo = $this->mctNotaEntrega->txtNombreArchivo_Create();
-		$this->txtEstatus = $this->mctNotaEntrega->txtEstatus_Create();
-		$this->txtServicioImportacion = $this->mctNotaEntrega->txtServicioImportacion_Create();
-		$this->chkEnKilos = $this->mctNotaEntrega->chkEnKilos_Create();
-		$this->txtCargadas = $this->mctNotaEntrega->txtCargadas_Create();
-		$this->txtPorProcesar = $this->mctNotaEntrega->txtPorProcesar_Create();
-		$this->txtPorCorregir = $this->mctNotaEntrega->txtPorCorregir_Create();
-		$this->txtProcesadas = $this->mctNotaEntrega->txtProcesadas_Create();
-		$this->txtRecibidas = $this->mctNotaEntrega->txtRecibidas_Create();
-		$this->txtSobrantes = $this->mctNotaEntrega->txtSobrantes_Create();
-		$this->txtLibras = $this->mctNotaEntrega->txtLibras_Create();
-		$this->txtKilos = $this->mctNotaEntrega->txtKilos_Create();
-		$this->txtPiesCub = $this->mctNotaEntrega->txtPiesCub_Create();
-		$this->txtVolumen = $this->mctNotaEntrega->txtVolumen_Create();
-		$this->txtPiezas = $this->mctNotaEntrega->txtPiezas_Create();
-		$this->calFecha = $this->mctNotaEntrega->calFecha_Create();
-		$this->txtHora = $this->mctNotaEntrega->txtHora_Create();
-		$this->lstUsuario = $this->mctNotaEntrega->lstUsuario_Create();
-		$this->lstTarifa = $this->mctNotaEntrega->lstTarifa_Create();
-		$this->lstFactura = $this->mctNotaEntrega->lstFactura_Create();
-		$this->txtTotal = $this->mctNotaEntrega->txtTotal_Create();
-		$this->txtValorDeclarado = $this->mctNotaEntrega->txtValorDeclarado_Create();
-		$this->txtObservacion = $this->mctNotaEntrega->txtObservacion_Create();
-		$this->txtRelacionSobrantes = $this->mctNotaEntrega->txtRelacionSobrantes_Create();
-		$this->lblCreatedAt = $this->mctNotaEntrega->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaEntrega->lblUpdatedAt_Create();
-		$this->lblDeletedAt = $this->mctNotaEntrega->lblDeletedAt_Create();
-		$this->txtCreatedBy = $this->mctNotaEntrega->txtCreatedBy_Create();
-		$this->txtUpdatedBy = $this->mctNotaEntrega->txtUpdatedBy_Create();
-		$this->txtDeletedBy = $this->mctNotaEntrega->txtDeletedBy_Create();
+		// Call MetaControl's methods to create qcontrols based on Transportista's data fields
+		$this->lblId = $this->mctTransportista->lblId_Create();
+		$this->txtNombre = $this->mctTransportista->txtNombre_Create();
+		$this->txtRif = $this->mctTransportista->txtRif_Create();
+		$this->chkActivo = $this->mctTransportista->chkActivo_Create();
+		$this->txtObservacion = $this->mctTransportista->txtObservacion_Create();
+		$this->lblCreatedAt = $this->mctTransportista->lblCreatedAt_Create();
+		$this->lblUpdatedAt = $this->mctTransportista->lblUpdatedAt_Create();
+		$this->lblDeletedAt = $this->mctTransportista->lblDeletedAt_Create();
+		$this->txtCreatedBy = $this->mctTransportista->txtCreatedBy_Create();
+		$this->txtUpdatedBy = $this->mctTransportista->txtUpdatedBy_Create();
+		$this->txtDeletedBy = $this->mctTransportista->txtDeletedBy_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();
@@ -194,17 +150,17 @@ abstract class NotaEntregaEditFormBase extends QForm {
 	//-----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctNotaEntrega->NotaEntrega && !isset($_SESSION['DataNotaEntrega'])) {
-            $_SESSION['DataNotaEntrega'] = serialize(array($this->mctNotaEntrega->NotaEntrega));
+        if ($this->mctTransportista->Transportista && !isset($_SESSION['DataTransportista'])) {
+            $_SESSION['DataTransportista'] = serialize(array($this->mctTransportista->Transportista));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataNotaEntrega']);
+        $this->arrDataTabl = unserialize($_SESSION['DataTransportista']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctNotaEntrega->NotaEntrega->Id) {
+            if ($objTable->Id == $this->mctTransportista->Transportista->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -215,7 +171,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
 	protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'NotaEntrega';
+        $this->lblTituForm->Text = 'Transportista';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 	}
 
@@ -241,7 +197,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnNuevRegi->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevRegi->HtmlEntities = false;
         $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevRegi->Visible = $this->mctNotaEntrega->EditMode;
+        $this->btnNuevRegi->Visible = $this->mctTransportista->EditMode;
     }
 
     protected function btnProxRegi_Create() {
@@ -308,9 +264,9 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnDelete->Text = '<i class="fa fa-trash-o fa-lg"></i> Borrar';
         $this->btnDelete->CssClass = 'btn btn-danger btn-sm';
         $this->btnDelete->HtmlEntities = false;
-		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('NotaEntrega'))));
+		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('Transportista'))));
 		$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-		$this->btnDelete->Visible = $this->mctNotaEntrega->EditMode;
+		$this->btnDelete->Visible = $this->mctTransportista->EditMode;
 	}
 
     protected function btnLogxCamb_Create() {
@@ -319,7 +275,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('NotaEntrega',$this->mctNotaEntrega->NotaEntrega->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('Transportista',$this->mctTransportista->Transportista->Id);
     }
 
     //-------------------------
@@ -340,7 +296,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnNuevSmal->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevSmal->HtmlEntities = false;
         $this->btnNuevSmal->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevSmal->Visible = $this->mctNotaEntrega->EditMode;
+        $this->btnNuevSmal->Visible = $this->mctTransportista->EditMode;
     }
 
     protected function btnGuarSmal_Create() {
@@ -360,7 +316,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnBorrSmal->HtmlEntities = false;
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiaRoxanne'))));
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-        $this->btnBorrSmal->Visible = $this->mctNotaEntrega->EditMode;
+        $this->btnBorrSmal->Visible = $this->mctTransportista->EditMode;
     }
 
     protected function btnHistSmal_Create() {
@@ -420,10 +376,13 @@ abstract class NotaEntregaEditFormBase extends QForm {
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
 		// Check for records that may violate Unique Clauses
-			if (($objNotaEntrega = NotaEntrega::LoadByClienteCorpIdReferencia($this->lstClienteCorp->SelectedValue,$this->txtReferencia->Text)) && ($objNotaEntrega->Id != $this->mctNotaEntrega->NotaEntrega->Id )){
+			if (($objTransportista = Transportista::LoadByNombre($this->txtNombre->Text)) && ($objTransportista->Id != $this->mctTransportista->Transportista->Id )){
 				$blnToReturn = false;
-				$this->lstClienteCorp->Warning = QApplication::Translate("Already in Use");
-				$this->txtReferencia->Warning = QApplication::Translate("Already in Use");
+				$this->txtNombre->Warning = QApplication::Translate("Already in Use");
+			}
+			if (($objTransportista = Transportista::LoadByRif($this->txtRif->Text)) && ($objTransportista->Id != $this->mctTransportista->Transportista->Id )){
+				$blnToReturn = false;
+				$this->txtRif->Warning = QApplication::Translate("Already in Use");
 			}
 
 		$blnFocused = false;
@@ -447,26 +406,26 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function verificarNavegacion() {
-        if ($this->mctNotaEntrega->EditMode) {
+        if ($this->mctTransportista->EditMode) {
             $this->btnRegiAnte->Enabled = !($this->intPosiRegi == 0);
             $this->btnPrimRegi->Enabled = !($this->intPosiRegi == 0);
             $this->btnProxRegi->Enabled = !($this->intPosiRegi == $this->intCantRegi - 1);
@@ -490,8 +449,8 @@ abstract class NotaEntregaEditFormBase extends QForm {
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-		// Delegate "Save" processing to the NotaEntregaMetaControl
-		$this->mctNotaEntrega->SaveNotaEntrega();
+		// Delegate "Save" processing to the TransportistaMetaControl
+		$this->mctTransportista->SaveTransportista();
 		$this->RedirectToListPage();
 	}
 
@@ -500,7 +459,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
 		// Se verifica la integridad referencial
 		//----------------------------------------
 		$blnTodoOkey = true;
-		$arrTablRela = $this->mctNotaEntrega->TablasRelacionadasNotaEntrega();
+		$arrTablRela = $this->mctTransportista->TablasRelacionadasTransportista();
 		if (count($arrTablRela)) {
 			$strTablRela = implode(',',$arrTablRela);
 				
@@ -509,25 +468,25 @@ abstract class NotaEntregaEditFormBase extends QForm {
 			$blnTodoOkey = false;
 		}
 		if ($blnTodoOkey) {
-			// Delegate "Delete" processing to the NotaEntregaMetaControl
-			$this->mctNotaEntrega->DeleteNotaEntrega();
+			// Delegate "Delete" processing to the TransportistaMetaControl
+			$this->mctTransportista->DeleteTransportista();
 			$this->RedirectToListPage();
 		}
 	}
 
     protected function btnLogxCamb_Click() {
-        $_SESSION['RegiRefe'] = $this->mctNotaEntrega->NotaEntrega->Id;
-        $_SESSION['TablRefe'] = 'NotaEntrega';
-        $_SESSION['RegiReto'] = 'nota_entrega_edit.php/'.$this->mctNotaEntrega->NotaEntrega->Id;
+        $_SESSION['RegiRefe'] = $this->mctTransportista->Transportista->Id;
+        $_SESSION['TablRefe'] = 'Transportista';
+        $_SESSION['RegiReto'] = 'transportista_edit.php/'.$this->mctTransportista->Transportista->Id;
         QApplication::Redirect(__SIST__.'/log_list.php');
     }
 
     protected function btnVolvList_Click() {
-        QApplication::Redirect(__SIST__.'/nota_entrega_list.php');
+        QApplication::Redirect(__SIST__.'/transportista_list.php');
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php');
+        QApplication::Redirect(__SIST__.'/transportista_edit.php');
     }
 
 

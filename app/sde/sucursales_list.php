@@ -67,7 +67,7 @@ class SucursalesListForm extends SucursalesListFormBase {
 		//$this->dtgSucursaleses->MetaAddColumn('Id');
         $this->dtgSucursaleses->MetaAddColumn('Iata');
         $this->dtgSucursaleses->MetaAddColumn('Nombre');
-		$this->dtgSucursaleses->MetaAddColumn('Telefono');
+		//$this->dtgSucursaleses->MetaAddColumn('Telefono');
 		$this->dtgSucursaleses->MetaAddColumn(QQN::Sucursales()->Estado);
 		$this->dtgSucursaleses->MetaAddColumn('Zona');
 		$this->dtgSucursaleses->MetaAddColumn('EsExport');
@@ -76,7 +76,7 @@ class SucursalesListForm extends SucursalesListFormBase {
 		$this->dtgSucursaleses->MetaAddColumn('EsAreaMetropolitana');
 		$this->dtgSucursaleses->MetaAddColumn('EsAlmacen');
 		$this->dtgSucursaleses->MetaAddColumn('EsTienda');
-		$this->dtgSucursaleses->MetaAddColumn('EmailPrincipal');
+		//$this->dtgSucursaleses->MetaAddColumn('EmailPrincipal');
 		//$this->dtgSucursaleses->MetaAddColumn('EmailAlmacen');
 		//$this->dtgSucursaleses->MetaAddColumn('ZonaNc');
 		//$this->dtgSucursaleses->MetaAddColumn('ComisionVenta');

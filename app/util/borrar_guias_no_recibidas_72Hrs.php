@@ -144,12 +144,12 @@ if ($intCantProc > 0) {
 	//--------------------------------
 	// Envio el reporte por e-mail
 	//--------------------------------
-	$to = array('aalvarado@libertyexpress.com','incidencias@libertyexpress.com','danydurand@gmail.com');
+	$to = array('aalvarado@goldsist.com','incidencias@goldsist.com','danydurand@gmail.com');
 	$attach = 'borrar_guias_no_recibidas_72Hrs.txt';
 	$strBodyMail = redactarCorreoCliente($intCantProc);
 	$mimemail = new MIMEMAIL('HTML');
 	$mimemail->senderName = 'Liberty Express';
-	$mimemail->senderMail = 'notificaciones@app-libertyexpress.com';
+	$mimemail->senderMail = 'noti@app-goldsist.com';
 	$mimemail->subject = 'Control de Guias NR/RP/VR';
 	$mimemail->body = $strBodyMail;
 	$mimemail->attachments[] = $attach;
@@ -177,12 +177,12 @@ function redactarCorreoCliente($intCantProc) {
             <head>
                 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
                 <meta charset="utf-8">
-                <title>LibertyExpress</title>
+                <title>GoldCoast</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user‐scalable=no">
             </head>
             <body style="font-family:Trebuchet MS">
 				<div style="padding-top:2em;text-align:center;">
-					<img src="'.$strDireSist.'generador/assets/images/LogoEmpresa.jpg" alt="LibertyExpress Logo" />
+					<img src="'.$strDireSist.'generador/assets/images/LogoEmpresa.jpg" alt="GoldCoast Logo" />
 				</div>
 				<h2 style="color:#B0110D; text-align:center;">Estimado(s) Administrador(es) y/u Operador(es) del Sistema</h2>
 				<p>Se le(s) informa que se ha(n) eliminado '.$intCantProc.' Guía(s) No Recibida(s) con más de 72 Hrs.</p>

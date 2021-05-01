@@ -46,29 +46,33 @@ class ChoferEditForm extends ChoferEditFormBase {
 
 		$this->txtNombChof = $this->mctChofer->txtNombChof_Create();
 		$this->txtNombChof->Name = 'Nombres';
+        $this->txtNombChof->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
 
 		$this->txtApelChof = $this->mctChofer->txtApelChof_Create();
 		$this->txtApelChof->Name = 'Apellidos';
+		$this->txtApelChof->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
 
 		$this->txtNumeCedu = $this->mctChofer->txtNumeCedu_Create();
 		$this->txtNumeCedu->Name = 'Cédula';
 
 		$this->txtTeleChof = $this->mctChofer->txtTeleChof_Create();
         $this->txtTeleChof->Name = 'Teléfono';
-        $this->txtTeleChof->HtmlAfter = ' Utilice el Formato: 9999-9999999';
+        $this->txtTeleChof->Placeholder = 'Solo Números';
 
 		$this->txtTextObse = $this->mctChofer->txtTextObse_Create();
 		$this->txtTextObse->TextMode = QTextMode::MultiLine;
 
         $this->txtLogin = $this->mctChofer->txtLogin_Create();
+        $this->txtLogin->Width = 100;
 
         $this->txtPassword = $this->mctChofer->txtPassword_Create();
+        $this->txtPassword->Width = 100;
         $this->txtPassword->TextMode = QTextMode::Password;
 
         $this->calAccesoMobile = $this->mctChofer->calAccesoMobile_Create();
 
         $this->lstSucursal = $this->mctChofer->lstSucursal_Create();
-        $this->lstSucursal->Width = 200;
+        $this->lstSucursal->Width = 180;
 
         $this->lstTipoMensObject = $this->mctChofer->lstTipoMensObject_Create();
         $this->lstTipoMensObject->Name = 'Tipo';
@@ -77,6 +81,21 @@ class ChoferEditForm extends ChoferEditFormBase {
         $this->lstCodiDispObject->Name = 'Disponible?';
 
         $this->lstCodiStatObject = $this->mctChofer->lstCodiStatObject_Create();
+
+        if (!$this->mctChofer->EditMode) {
+            $this->lstTipoMensObject->SelectedIndex = 1;
+            $this->lstCodiDispObject->SelectedIndex = 1;
+            $this->lstCodiStatObject->SelectedIndex = 1;
+            $intIdxxSucu = 0;
+            foreach ($this->lstSucursal->GetAllItems() as $item) {
+                if ($item->Value == $this->objUsuario->SucursalId) {
+                    $this->lstSucursal->SelectedIndex = $intIdxxSucu;
+                    break;
+                } else {
+                    $intIdxxSucu++;
+                }
+            }
+        }
     }
 
 	//----------------------------
@@ -116,6 +135,34 @@ class ChoferEditForm extends ChoferEditFormBase {
 	// Acciones Asociadas a los Objetos
 	//-----------------------------------
 
+    public function crearLogin() {
+	    $strNombChof = $this->txtNombChof->Text;
+	    $strApelChof = $this->txtApelChof->Text;
+	    if (strlen($strNombChof) && strlen($strApelChof)) {
+	        $blnLogiVali = false;
+	        $intCantInte = strlen($strNombChof);
+	        $i = 0;
+	        while ((!$blnLogiVali) && ($i < $intCantInte)) {
+                $strLogiChof  = $strNombChof[$i];
+                $strLogiChof .= substr($strApelChof,0,7);
+                $strLogiChof  = strtolower($strLogiChof);
+                t('Login Propuesto: '.$strLogiChof);
+                //-------------------------------------------------------------
+                // Se verifica la existencia previa ya que no puede repetirse
+                //-------------------------------------------------------------
+                $objClauWher   = QQ::Clause();
+                $objClauWher[] = QQ::Equal(QQN::Chofer()->Login,$strLogiChof);
+                $intCantLogi   = Chofer::QueryCount(QQ::AndCondition($objClauWher));
+                if ($intCantLogi == 0) {
+                    $this->txtLogin->Text = $strLogiChof;
+                    $blnLogiVali = true;
+                } else {
+                    $i++;
+                }
+            }
+        }
+    }
+
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
         QApplication::Redirect(__SIST__.'/chofer_edit.php/'.$objRegiTabl->CodiChof);
@@ -140,7 +187,6 @@ class ChoferEditForm extends ChoferEditFormBase {
         if ($this->txtPassword) {
             $this->txtPassword->Text = md5($this->txtPassword->Text);
         }
-
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
@@ -164,7 +210,7 @@ class ChoferEditForm extends ChoferEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/chofer_edit.php/'.$this->mctChofer->Chofer->CodiChof;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Chofer';
@@ -173,7 +219,7 @@ class ChoferEditForm extends ChoferEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/chofer_edit.php/'.$this->mctChofer->Chofer->CodiChof;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa');
 		}
 	}
 
@@ -185,9 +231,7 @@ class ChoferEditForm extends ChoferEditFormBase {
         $arrTablRela = $this->mctChofer->TablasRelacionadasChofer();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            $this->danger('Existen registros relacionados en '.$strTablRela);
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {

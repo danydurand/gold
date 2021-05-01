@@ -96,7 +96,7 @@ class CambiarClave extends FormularioBaseKaizen {
             // Create a new message. Note that you can list multiple
             // addresses and that QCubed supports Bcc and Cc.
             $objMessage = new QEmailMessage();
-            $objMessage->From = 'LibertyExpress - SisCO <notificaciones@libertyexpress.com>';
+            $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
             $objMessage->To = $this->objUsuario->__nombreYCorreo();
             //$objMessage->Bcc = $strEmaiSopo;
             $objMessage->Subject = 'Cambio de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
@@ -106,7 +106,7 @@ class CambiarClave extends FormularioBaseKaizen {
             $strBody .= "El SisCO, ha registrado un cambio de Clave de Acceso, para su Usuario $strLogiUsua.<br>";
             $strBody .= 'Si Usted desconoce esta transacción, por favor comuníquese a la brevedad<br>';
             $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br><br>';
-            $strBody .= 'soportelufeman@gmail.com<br>';
+            $strBody .= 'soporte@lufemansoftware.com<br>';
             $objMessage->HtmlBody = $strBody;
 
             // Add random/custom email headers

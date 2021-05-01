@@ -97,7 +97,7 @@ foreach ($arrSucuSele as $objSucursal) {
             //--------------------------------
             // Envio el reporte por e-mail
             //--------------------------------
-//				$to = array('rortega@libertyexpress.com','pmelendez@libertyexpress.com');
+//				$to = array('rortega@goldsist.com','pmelendez@goldsist.com');
 
             $arrDestCorr = array();
             $arrDireMail = explode(',',$objSucursal->DireMail);
@@ -107,7 +107,7 @@ foreach ($arrSucuSele as $objSucursal) {
             $strDireMail = $arrDestCorr;
 
             $mail = new PHPMailer();
-            $mail->setFrom('SisCO@libertyexpress.com', 'Medicion y Control');
+            $mail->setFrom('SisCO@goldsist.com', 'Medicion y Control');
             //$mail->addAddress('soporte@lufemansoftware.com');
             $mail->Subject  = $strTituRepo;
             $mail->Body     = 'Estimado Usuario, sírvase revisar el documento anexo...';

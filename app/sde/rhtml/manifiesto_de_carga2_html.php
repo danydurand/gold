@@ -16,6 +16,7 @@ $strFechDhoy = date("d/m/Y H:i");
 $strLimiDere = '340px';
 $strNumeCont = $objManiImpr->Numero;
 $strPrecLate = $objManiImpr->PrecintoLateral;
+$strEmprTran = $objManiImpr->Transportista->Nombre;
 
 // Se seleccionan las piezas asociadas directamente al Manifiesto
 $arrPiezMani = $objManiImpr->GetGuiaPiezasAsContainerPiezaArray();
@@ -26,10 +27,6 @@ foreach ($arrValiMani as $objValiMani) {
     $arrPiezMani[] = $objValiMani->GetGuiaPiezasAsContainerPiezaArray();
 }
 $intCantPiez = count($arrPiezMani);
-
-$strMensaje  = "Yo $strNombChof, C.I. Nro $strCeduChof, he recibido la cantidad de $intCantPiez bulto(s) pertenecientes ";
-$strMensaje .= "a Clientes de $strNombEmpr, para ser distribuidas en un(a) $strDescVehi de placa: $strNumePlac ";
-$strMensaje .= "en los siguientes destinos: $strDestOper";
 ?>
 <style type="text/css">
     <!--
@@ -46,27 +43,27 @@ $strMensaje .= "en los siguientes destinos: $strDestOper";
                 <td style="width: 350px; text-align: right">
                     <table border="1">
                         <tr>
-                            <td style="width: 200px; text-align: right">FECHA y HORA:</td>
+                            <td style="width: 200px; text-align: right"><b>FECHA y HORA:</b></td>
                             <td style="width: 120px; text-align: center"><?= $strFechDhoy ?></td>
                         </tr>
                         <tr>
-                            <td style="text-align: right">CONDUCTOR:</td>
+                            <td style="text-align: right"><b>CONDUCTOR:</b></td>
                             <td style="text-align: center"><?= $strNombChof ?></td>
                         </tr>
                         <tr>
-                            <td style="text-align: right">PLACA DEL VEHICULO:</td>
+                            <td style="text-align: right"><b>PLACA DEL VEHICULO:</b></td>
                             <td style="text-align: center"><?= $strNumePlac ?></td>
                         </tr>
                         <tr>
-                            <td style="text-align: right">EMPRESA DE TRANSPORTE:</td>
-                            <td style="text-align: center"><?= $strNombEmpr ?></td>
+                            <td style="text-align: right"><b>TRANSPORTISTA:</b></td>
+                            <td style="text-align: center"><?= $strEmprTran ?></td>
                         </tr>
                         <tr>
-                            <td style="text-align: right">PRECINTO DE SALIDA:</td>
+                            <td style="text-align: right"><b>PRECINTO DE SALIDA:</b></td>
                             <td style="text-align: center"><?= $strNumeCont ?></td>
                         </tr>
                         <tr>
-                            <td style="text-align: right">PRECINTO LATERAL:</td>
+                            <td style="text-align: right"><b>PRECINTO LATERAL:</b></td>
                             <td style="text-align: center"><?= $strPrecLate ?></td>
                         </tr>
                     </table>

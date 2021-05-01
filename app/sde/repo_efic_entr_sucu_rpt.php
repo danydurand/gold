@@ -386,8 +386,8 @@ foreach ($arrSucuSele as $objSucursal) {
             $to = array($objSucursal->DireMail);
             $attach = $strNombArch;
             $mimemail = new MIMEMAIL('plain/text');
-            $mimemail->senderName = 'LibertyExpress';
-            $mimemail->senderMail = 'localhost@app-libertyexpress.com';
+            $mimemail->senderName = 'GoldCoast';
+            $mimemail->senderMail = 'localhost@app-goldsist.com';
             $mimemail->subject = $strTituRepo;
             $mimemail->body = '';
             $mimemail->attachments[] = $attach;

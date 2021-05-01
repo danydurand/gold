@@ -65,6 +65,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected $chkManeApix;
     protected $txtUsuaApix;
     protected $txtPassApix;
+    protected $dtgFactClie;
+    protected $intCantFact;
 
     protected $txtDctoVolu;
     protected $txtVoluDcto;
@@ -152,6 +154,14 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtDireFisc_Create();
         $this->txtNumeDrif_Create();
         $this->txtSaldExce_Create();
+
+        if ($this->blnEditMode) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+            $this->intCantFact = Facturas::QueryCount(QQ::AndCondition($objClauWher));
+
+            $this->dtgFactClie_Create();
+        }
 
         $this->chkVendClie_Create();
         $this->lstVendClie_Create();
@@ -596,6 +606,50 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             QQ::Clause($this->dtgSubcClie->OrderByClause, $this->dtgSubcClie->LimitClause)
         );
     }
+
+    protected function dtgFactClie_Create() {
+        $this->dtgFactClie = new FacturasDataGrid($this);
+        $this->dtgFactClie->FontSize = 13;
+        $this->dtgFactClie->ShowFilter = false;
+
+        $this->dtgFactClie->CssClass = 'datagrid';
+        $this->dtgFactClie->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgFactClie->Paginator = new QPaginator($this->dtgFactClie);
+        $this->dtgFactClie->ItemsPerPage = 10; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+
+        $this->dtgFactClie->SortColumnIndex = 0;
+
+        $this->dtgFactClie->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgFactClie->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        /*$this->dtgFactClie->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
+        //$this->dtgFactClie->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
+
+        $this->dtgFactClie->MetaAddColumn('Referencia');
+        $this->dtgFactClie->MetaAddColumn('Fecha');
+        $this->dtgFactClie->MetaAddColumn('Total');
+        $this->dtgFactClie->MetaAddColumn('EstatusPago');
+
+        $this->dtgFactClie->SetDataBinder('dtgFactClie_Binder');
+
+    }
+
+    protected function dtgFactClie_Binder(){
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+        $arrFactClie   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
+        $intCantFact   = count($arrFactClie);
+        if ($intCantFact > 10) {
+            $this->dtgFactClie->TotalItemCount = count($arrFactClie);
+        }
+        // Bind the datasource to the datagrid
+        $this->dtgFactClie->DataSource = Facturas::QueryArray(
+            QQ::AndCondition($objClauWher),
+            QQ::Clause($this->dtgFactClie->OrderByClause, $this->dtgFactClie->LimitClause)
+        );
+    }
+
 
 
     protected function dtgDctoClie_Create() {

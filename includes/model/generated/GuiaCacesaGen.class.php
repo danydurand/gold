@@ -55,6 +55,7 @@
 	 * @property string $ServicioEntrega the value for strServicioEntrega 
 	 * @property string $ServicioImportacion the value for strServicioImportacion 
 	 * @property double $Libras the value for fltLibras 
+	 * @property double $Kilos the value for fltKilos (Not Null)
 	 * @property double $Volumen the value for fltVolumen 
 	 * @property double $PiesCub the value for fltPiesCub 
 	 * @property integer $NotaEntregaId the value for intNotaEntregaId 
@@ -410,6 +411,14 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column guia_cacesa.kilos
+		 * @var double fltKilos
+		 */
+		protected $fltKilos;
+		const KilosDefault = 0;
+
+
+		/**
 		 * Protected member variable that maps to the database column guia_cacesa.volumen
 		 * @var double fltVolumen
 		 */
@@ -522,6 +531,7 @@
 			$this->strServicioEntrega = GuiaCacesa::ServicioEntregaDefault;
 			$this->strServicioImportacion = GuiaCacesa::ServicioImportacionDefault;
 			$this->fltLibras = GuiaCacesa::LibrasDefault;
+			$this->fltKilos = GuiaCacesa::KilosDefault;
 			$this->fltVolumen = GuiaCacesa::VolumenDefault;
 			$this->fltPiesCub = GuiaCacesa::PiesCubDefault;
 			$this->intNotaEntregaId = GuiaCacesa::NotaEntregaIdDefault;
@@ -906,6 +916,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'servicio_entrega', $strAliasPrefix . 'servicio_entrega');
 			    $objBuilder->AddSelectItem($strTableName, 'servicio_importacion', $strAliasPrefix . 'servicio_importacion');
 			    $objBuilder->AddSelectItem($strTableName, 'libras', $strAliasPrefix . 'libras');
+			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'volumen', $strAliasPrefix . 'volumen');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
 			    $objBuilder->AddSelectItem($strTableName, 'nota_entrega_id', $strAliasPrefix . 'nota_entrega_id');
@@ -1154,6 +1165,9 @@
 			$strAlias = $strAliasPrefix . 'libras';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltLibras = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'kilos';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltKilos = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'volumen';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltVolumen = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1469,6 +1483,7 @@
 							`servicio_entrega`,
 							`servicio_importacion`,
 							`libras`,
+							`kilos`,
 							`volumen`,
 							`pies_cub`,
 							`nota_entrega_id`
@@ -1512,6 +1527,7 @@
 							' . $objDatabase->SqlVariable($this->strServicioEntrega) . ',
 							' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
 							' . $objDatabase->SqlVariable($this->fltLibras) . ',
+							' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							' . $objDatabase->SqlVariable($this->fltVolumen) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							' . $objDatabase->SqlVariable($this->intNotaEntregaId) . '
@@ -1569,6 +1585,7 @@
 							`servicio_entrega` = ' . $objDatabase->SqlVariable($this->strServicioEntrega) . ',
 							`servicio_importacion` = ' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
 							`libras` = ' . $objDatabase->SqlVariable($this->fltLibras) . ',
+							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							`volumen` = ' . $objDatabase->SqlVariable($this->fltVolumen) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intNotaEntregaId) . '
@@ -1715,6 +1732,7 @@
 			$this->strServicioEntrega = $objReloaded->strServicioEntrega;
 			$this->strServicioImportacion = $objReloaded->strServicioImportacion;
 			$this->fltLibras = $objReloaded->fltLibras;
+			$this->fltKilos = $objReloaded->fltKilos;
 			$this->fltVolumen = $objReloaded->fltVolumen;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
 			$this->NotaEntregaId = $objReloaded->NotaEntregaId;
@@ -2017,6 +2035,13 @@
 					 * @return double
 					 */
 					return $this->fltLibras;
+
+				case 'Kilos':
+					/**
+					 * Gets the value for fltKilos (Not Null)
+					 * @return double
+					 */
+					return $this->fltKilos;
 
 				case 'Volumen':
 					/**
@@ -2612,6 +2637,19 @@
 						throw $objExc;
 					}
 
+				case 'Kilos':
+					/**
+					 * Sets the value for fltKilos (Not Null)
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltKilos = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Volumen':
 					/**
 					 * Sets the value for fltVolumen 
@@ -2838,6 +2876,7 @@
 			$strToReturn .= '<element name="ServicioEntrega" type="xsd:string"/>';
 			$strToReturn .= '<element name="ServicioImportacion" type="xsd:string"/>';
 			$strToReturn .= '<element name="Libras" type="xsd:float"/>';
+			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="Volumen" type="xsd:float"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
 			$strToReturn .= '<element name="NotaEntrega" type="xsd1:NotaEntrega"/>';
@@ -2946,6 +2985,8 @@
 				$objToReturn->strServicioImportacion = $objSoapObject->ServicioImportacion;
 			if (property_exists($objSoapObject, 'Libras'))
 				$objToReturn->fltLibras = $objSoapObject->Libras;
+			if (property_exists($objSoapObject, 'Kilos'))
+				$objToReturn->fltKilos = $objSoapObject->Kilos;
 			if (property_exists($objSoapObject, 'Volumen'))
 				$objToReturn->fltVolumen = $objSoapObject->Volumen;
 			if (property_exists($objSoapObject, 'PiesCub'))
@@ -3041,6 +3082,7 @@
 			$iArray['ServicioEntrega'] = $this->strServicioEntrega;
 			$iArray['ServicioImportacion'] = $this->strServicioImportacion;
 			$iArray['Libras'] = $this->fltLibras;
+			$iArray['Kilos'] = $this->fltKilos;
 			$iArray['Volumen'] = $this->fltVolumen;
 			$iArray['PiesCub'] = $this->fltPiesCub;
 			$iArray['NotaEntregaId'] = $this->intNotaEntregaId;
@@ -3122,6 +3164,7 @@
      * @property-read QQNode $ServicioEntrega
      * @property-read QQNode $ServicioImportacion
      * @property-read QQNode $Libras
+     * @property-read QQNode $Kilos
      * @property-read QQNode $Volumen
      * @property-read QQNode $PiesCub
      * @property-read QQNode $NotaEntregaId
@@ -3219,6 +3262,8 @@
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'VarChar', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'Float', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'Float', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'Float', $this);
 				case 'PiesCub':
@@ -3283,6 +3328,7 @@
      * @property-read QQNode $ServicioEntrega
      * @property-read QQNode $ServicioImportacion
      * @property-read QQNode $Libras
+     * @property-read QQNode $Kilos
      * @property-read QQNode $Volumen
      * @property-read QQNode $PiesCub
      * @property-read QQNode $NotaEntregaId
@@ -3380,6 +3426,8 @@
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'string', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'double', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'double', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'double', $this);
 				case 'PiesCub':

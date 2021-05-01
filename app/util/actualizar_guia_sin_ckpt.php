@@ -54,7 +54,7 @@ fclose($mixManeArch);
 //---------------------------------
 if ($intContBuen > 0 || $intContMalo > 0) {
     $mail = new PHPMailer();
-    $mail->setFrom('SisCO@libertyexpress.com', 'Control de Fallas');
+    $mail->setFrom('SisCO@goldsist.com', 'Control de Fallas');
     $mail->addAddress('soportelufeman@gmail.com');
     $mail->Subject  = "Guias sin Checkpoint";
     $mail->Body     = 'Estimado Usuario, sírvase revisar el documento anexo...';

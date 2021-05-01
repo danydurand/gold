@@ -16,16 +16,18 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
                     <?php $this->lblMensUsua->Render(); ?>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12" style="margin-top: 1em;">
+            <div class="row" style="margin-top: 1em;">
+                <div class="col-md-5">
                     <?php $this->lblCodiVehi->RenderWithName(); ?>
                     <?php $this->txtDescVehi->RenderWithName(); ?>
                     <?php $this->txtNumePlac->RenderWithName(); ?>
-                    <?php $this->txtTextObse->RenderWithName(); ?>
                     <?php $this->lstSucursal->RenderWithName(); ?>
+                </div>
+                <div class="col-md-5">
                     <?php $this->lstTipoVehiObject->RenderWithName(); ?>
                     <?php $this->lstCodiDispObject->RenderWithName(); ?>
                     <?php $this->lstCodiStatObject->RenderWithName(); ?>
+                    <?php $this->txtTextObse->RenderWithName(); ?>
                 </div>
             </div>
         </div>

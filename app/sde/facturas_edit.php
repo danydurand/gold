@@ -232,6 +232,11 @@ class FacturasEditForm extends FacturasEditFormBase {
         $colFormPago->Name = QApplication::Translate('F.Pago');
         $colFormPago->Html = '<?= $_ITEM->FormaPago->__toString() ?>';
         $this->dtgPagoFact->AddColumn($colFormPago);
+
+        $colMontPago = new QDataGridColumn($this);
+        $colMontPago->Name = QApplication::Translate('Monto');
+        $colMontPago->Html = '<?= nf($_ITEM->Monto) ?>';
+        $this->dtgPagoFact->AddColumn($colMontPago);
     }
 
     protected function determinarPosicion() {

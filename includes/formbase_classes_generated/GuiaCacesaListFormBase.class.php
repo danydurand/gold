@@ -116,6 +116,7 @@ abstract class GuiaCacesaListFormBase extends QForm {
         $this->dtgGuiaCacesas->MetaAddColumn('ServicioEntrega');
         $this->dtgGuiaCacesas->MetaAddColumn('ServicioImportacion');
         $this->dtgGuiaCacesas->MetaAddColumn('Libras');
+        $this->dtgGuiaCacesas->MetaAddColumn('Kilos');
         $this->dtgGuiaCacesas->MetaAddColumn('Volumen');
         $this->dtgGuiaCacesas->MetaAddColumn('PiesCub');
         $this->dtgGuiaCacesas->MetaAddColumn(QQN::GuiaCacesa()->NotaEntrega);

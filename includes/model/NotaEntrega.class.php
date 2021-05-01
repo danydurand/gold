@@ -27,6 +27,13 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
+        public function IdsDeLasGuias() {
+		    $arrIdxxGuia = [];
+            foreach ($this->GetGuiasArray() as $objGuiaNota) {
+                $arrIdxxGuia[] = $objGuiaNota->Id;
+		    }
+		    return $arrIdxxGuia;
+        }
 
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'NotaEntrega';

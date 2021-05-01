@@ -339,8 +339,8 @@ foreach ($arrSucuSele as $objSucursal) {
             //$to = array('eredior@gmail.com');
             $attach = $strNombArch;
             $mimemail = new MIMEMAIL('plain/text');
-            $mimemail->senderName = 'LibertyExpress';
-            $mimemail->senderMail = 'notificaciones@libertyexpress.com';
+            $mimemail->senderName = 'GoldCoast';
+            $mimemail->senderMail = 'noti@goldsist.com';
             $mimemail->subject = $strTituRepo;
             $mimemail->body = '';
             $mimemail->attachments[] = $attach;

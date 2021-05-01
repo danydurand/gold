@@ -82,6 +82,7 @@ abstract class NotaEntregaListFormBase extends QForm {
         $this->dtgNotaEntregas->MetaAddColumn('NombreArchivo');
         $this->dtgNotaEntregas->MetaAddColumn('Estatus');
         $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion');
+        $this->dtgNotaEntregas->MetaAddColumn('EnKilos');
         $this->dtgNotaEntregas->MetaAddColumn('Cargadas');
         $this->dtgNotaEntregas->MetaAddColumn('PorProcesar');
         $this->dtgNotaEntregas->MetaAddColumn('PorCorregir');
@@ -89,6 +90,7 @@ abstract class NotaEntregaListFormBase extends QForm {
         $this->dtgNotaEntregas->MetaAddColumn('Recibidas');
         $this->dtgNotaEntregas->MetaAddColumn('Sobrantes');
         $this->dtgNotaEntregas->MetaAddColumn('Libras');
+        $this->dtgNotaEntregas->MetaAddColumn('Kilos');
         $this->dtgNotaEntregas->MetaAddColumn('PiesCub');
         $this->dtgNotaEntregas->MetaAddColumn('Volumen');
         $this->dtgNotaEntregas->MetaAddColumn('Piezas');

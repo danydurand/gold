@@ -33,6 +33,19 @@
 			}
 		}
 
+        public function GetDestinosIds($formato='array') {
+            $arrSucuDest = $this->GetSucursalesAsOperacionDestinoArray();
+            $arrDestIdxx = [];
+            foreach ($arrSucuDest as $objSucuDest) {
+                $arrDestIdxx[] = $objSucuDest->Id;
+            }
+            if ($formato == 'array') {
+                return $arrDestIdxx;
+            } else {
+                return implode(',',$arrDestIdxx);
+            }
+        }
+
 		public function __toStringConDestinos() {
 			$arrSucuDest = $this->GetSucursalesAsOperacionDestinoArray();
 			$strSucuDest = implode($arrSucuDest,', ');
@@ -84,7 +97,7 @@
 			//      return DspDespacho::CountByCodiOper($this->intCodiOper);
 		}
 
-		public static function OperaciónFictAsociadaASucursalUsuario($intIdxxOper) {
+		public static function OperacionFictAsociadaASucursalUsuario($intIdxxOper) {
             $objOperacion = SdeOperacion::Load($intIdxxOper);
             if (!$objOperacion) {
                 $arrOperacion = SdeOperacion::LoadArrayByCodiRuta('R9999', QQ::Clause(QQ::LimitInfo(1)));

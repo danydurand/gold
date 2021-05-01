@@ -118,12 +118,12 @@ foreach ($arrSucuSele as $objSucursal) {
 				// 	array_push($arrDestCorr,$strDireMail);
 				// }
 				// $to = $arrDestCorr;
-				$to = array('rortega@libertyexpress.com','pmelendez@libertyexpress.com','incidencias@libertyexpress.com');
+				$to = array('rortega@goldsist.com','pmelendez@goldsist.com','incidencias@goldsist.com');
 
 				$attach = $strNombArch;
 				$mimemail = new MIMEMAIL('plain/text');
-				$mimemail->senderName = 'LibertyExpress';
-				$mimemail->senderMail = 'localhost@app-libertyexpress.com';
+				$mimemail->senderName = 'GoldCoast';
+				$mimemail->senderMail = 'localhost@app-goldsist.com';
 				$mimemail->subject = $strTituRepo;
 				$mimemail->body = '';
 				$mimemail->attachments[] = $attach;

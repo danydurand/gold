@@ -1,26 +1,26 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the NotaEntrega class.  It uses the code-generated
- * NotaEntregaMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a NotaEntrega columns.
+ * of the NotaCreditoCorp class.  It uses the code-generated
+ * NotaCreditoCorpMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a NotaCreditoCorp columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both nota_entrega_edit.php AND
- * nota_entrega_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both nota_credito_corp_edit.php AND
+ * nota_credito_corp_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class NotaEntregaEditFormBase extends QForm {
-	// Local instance of the NotaEntregaMetaControl
+abstract class NotaCreditoCorpEditFormBase extends QForm {
+	// Local instance of the NotaCreditoCorpMetaControl
 	/**
-	 * @var NotaEntregaMetaControlGen mctNotaEntrega
+	 * @var NotaCreditoCorpMetaControlGen mctNotaCreditoCorp
 	 */
-	protected $mctNotaEntrega;
+	protected $mctNotaCreditoCorp;
 	protected $lblMensUsua;
 	protected $lblNotiUsua;
 	protected $lblTituForm;
@@ -50,40 +50,24 @@ abstract class NotaEntregaEditFormBase extends QForm {
     protected $btnProxSmal;
     protected $btnUltiSmal;
 
-	// Controls for NotaEntrega's Data Fields
+	// Controls for NotaCreditoCorp's Data Fields
 	protected $lblId;
-	protected $lstClienteCorp;
 	protected $txtReferencia;
-	protected $txtNombreArchivo;
-	protected $txtEstatus;
-	protected $txtServicioImportacion;
-	protected $chkEnKilos;
-	protected $txtCargadas;
-	protected $txtPorProcesar;
-	protected $txtPorCorregir;
-	protected $txtProcesadas;
-	protected $txtRecibidas;
-	protected $txtSobrantes;
-	protected $txtLibras;
-	protected $txtKilos;
-	protected $txtPiesCub;
-	protected $txtVolumen;
-	protected $txtPiezas;
-	protected $calFecha;
-	protected $txtHora;
-	protected $lstUsuario;
-	protected $lstTarifa;
+	protected $txtTipo;
+	protected $lstClienteCorp;
+	protected $lstPagoCorp;
 	protected $lstFactura;
-	protected $txtTotal;
-	protected $txtValorDeclarado;
+	protected $calFecha;
+	protected $txtMonto;
 	protected $txtObservacion;
-	protected $txtRelacionSobrantes;
+	protected $txtNumero;
+	protected $txtMaquinaFiscal;
+	protected $txtFechaImpresion;
+	protected $txtHoraImpresion;
 	protected $lblCreatedAt;
 	protected $lblUpdatedAt;
-	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
-	protected $txtDeletedBy;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -116,9 +100,9 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
         $this->objUsuario = unserialize($_SESSION['User']);
 
-        // Use the CreateFromPathInfo shortcut (this can also be done manually using the NotaEntregaMetaControl constructor)
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the NotaCreditoCorpMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctNotaEntrega = NotaEntregaMetaControl::CreateFromPathInfo($this);
+        $this->mctNotaCreditoCorp = NotaCreditoCorpMetaControl::CreateFromPathInfo($this);
 
         $this->determinarPosicion();
 
@@ -148,40 +132,24 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
         $this->verificarNavegacion();
 
-		// Call MetaControl's methods to create qcontrols based on NotaEntrega's data fields
-		$this->lblId = $this->mctNotaEntrega->lblId_Create();
-		$this->lstClienteCorp = $this->mctNotaEntrega->lstClienteCorp_Create();
-		$this->txtReferencia = $this->mctNotaEntrega->txtReferencia_Create();
-		$this->txtNombreArchivo = $this->mctNotaEntrega->txtNombreArchivo_Create();
-		$this->txtEstatus = $this->mctNotaEntrega->txtEstatus_Create();
-		$this->txtServicioImportacion = $this->mctNotaEntrega->txtServicioImportacion_Create();
-		$this->chkEnKilos = $this->mctNotaEntrega->chkEnKilos_Create();
-		$this->txtCargadas = $this->mctNotaEntrega->txtCargadas_Create();
-		$this->txtPorProcesar = $this->mctNotaEntrega->txtPorProcesar_Create();
-		$this->txtPorCorregir = $this->mctNotaEntrega->txtPorCorregir_Create();
-		$this->txtProcesadas = $this->mctNotaEntrega->txtProcesadas_Create();
-		$this->txtRecibidas = $this->mctNotaEntrega->txtRecibidas_Create();
-		$this->txtSobrantes = $this->mctNotaEntrega->txtSobrantes_Create();
-		$this->txtLibras = $this->mctNotaEntrega->txtLibras_Create();
-		$this->txtKilos = $this->mctNotaEntrega->txtKilos_Create();
-		$this->txtPiesCub = $this->mctNotaEntrega->txtPiesCub_Create();
-		$this->txtVolumen = $this->mctNotaEntrega->txtVolumen_Create();
-		$this->txtPiezas = $this->mctNotaEntrega->txtPiezas_Create();
-		$this->calFecha = $this->mctNotaEntrega->calFecha_Create();
-		$this->txtHora = $this->mctNotaEntrega->txtHora_Create();
-		$this->lstUsuario = $this->mctNotaEntrega->lstUsuario_Create();
-		$this->lstTarifa = $this->mctNotaEntrega->lstTarifa_Create();
-		$this->lstFactura = $this->mctNotaEntrega->lstFactura_Create();
-		$this->txtTotal = $this->mctNotaEntrega->txtTotal_Create();
-		$this->txtValorDeclarado = $this->mctNotaEntrega->txtValorDeclarado_Create();
-		$this->txtObservacion = $this->mctNotaEntrega->txtObservacion_Create();
-		$this->txtRelacionSobrantes = $this->mctNotaEntrega->txtRelacionSobrantes_Create();
-		$this->lblCreatedAt = $this->mctNotaEntrega->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaEntrega->lblUpdatedAt_Create();
-		$this->lblDeletedAt = $this->mctNotaEntrega->lblDeletedAt_Create();
-		$this->txtCreatedBy = $this->mctNotaEntrega->txtCreatedBy_Create();
-		$this->txtUpdatedBy = $this->mctNotaEntrega->txtUpdatedBy_Create();
-		$this->txtDeletedBy = $this->mctNotaEntrega->txtDeletedBy_Create();
+		// Call MetaControl's methods to create qcontrols based on NotaCreditoCorp's data fields
+		$this->lblId = $this->mctNotaCreditoCorp->lblId_Create();
+		$this->txtReferencia = $this->mctNotaCreditoCorp->txtReferencia_Create();
+		$this->txtTipo = $this->mctNotaCreditoCorp->txtTipo_Create();
+		$this->lstClienteCorp = $this->mctNotaCreditoCorp->lstClienteCorp_Create();
+		$this->lstPagoCorp = $this->mctNotaCreditoCorp->lstPagoCorp_Create();
+		$this->lstFactura = $this->mctNotaCreditoCorp->lstFactura_Create();
+		$this->calFecha = $this->mctNotaCreditoCorp->calFecha_Create();
+		$this->txtMonto = $this->mctNotaCreditoCorp->txtMonto_Create();
+		$this->txtObservacion = $this->mctNotaCreditoCorp->txtObservacion_Create();
+		$this->txtNumero = $this->mctNotaCreditoCorp->txtNumero_Create();
+		$this->txtMaquinaFiscal = $this->mctNotaCreditoCorp->txtMaquinaFiscal_Create();
+		$this->txtFechaImpresion = $this->mctNotaCreditoCorp->txtFechaImpresion_Create();
+		$this->txtHoraImpresion = $this->mctNotaCreditoCorp->txtHoraImpresion_Create();
+		$this->lblCreatedAt = $this->mctNotaCreditoCorp->lblCreatedAt_Create();
+		$this->lblUpdatedAt = $this->mctNotaCreditoCorp->lblUpdatedAt_Create();
+		$this->txtCreatedBy = $this->mctNotaCreditoCorp->txtCreatedBy_Create();
+		$this->txtUpdatedBy = $this->mctNotaCreditoCorp->txtUpdatedBy_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();
@@ -194,17 +162,17 @@ abstract class NotaEntregaEditFormBase extends QForm {
 	//-----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctNotaEntrega->NotaEntrega && !isset($_SESSION['DataNotaEntrega'])) {
-            $_SESSION['DataNotaEntrega'] = serialize(array($this->mctNotaEntrega->NotaEntrega));
+        if ($this->mctNotaCreditoCorp->NotaCreditoCorp && !isset($_SESSION['DataNotaCreditoCorp'])) {
+            $_SESSION['DataNotaCreditoCorp'] = serialize(array($this->mctNotaCreditoCorp->NotaCreditoCorp));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataNotaEntrega']);
+        $this->arrDataTabl = unserialize($_SESSION['DataNotaCreditoCorp']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctNotaEntrega->NotaEntrega->Id) {
+            if ($objTable->Id == $this->mctNotaCreditoCorp->NotaCreditoCorp->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -215,7 +183,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
 	protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'NotaEntrega';
+        $this->lblTituForm->Text = 'NotaCreditoCorp';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 	}
 
@@ -241,7 +209,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnNuevRegi->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevRegi->HtmlEntities = false;
         $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevRegi->Visible = $this->mctNotaEntrega->EditMode;
+        $this->btnNuevRegi->Visible = $this->mctNotaCreditoCorp->EditMode;
     }
 
     protected function btnProxRegi_Create() {
@@ -308,9 +276,9 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnDelete->Text = '<i class="fa fa-trash-o fa-lg"></i> Borrar';
         $this->btnDelete->CssClass = 'btn btn-danger btn-sm';
         $this->btnDelete->HtmlEntities = false;
-		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('NotaEntrega'))));
+		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('NotaCreditoCorp'))));
 		$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-		$this->btnDelete->Visible = $this->mctNotaEntrega->EditMode;
+		$this->btnDelete->Visible = $this->mctNotaCreditoCorp->EditMode;
 	}
 
     protected function btnLogxCamb_Create() {
@@ -319,7 +287,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('NotaEntrega',$this->mctNotaEntrega->NotaEntrega->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('NotaCreditoCorp',$this->mctNotaCreditoCorp->NotaCreditoCorp->Id);
     }
 
     //-------------------------
@@ -340,7 +308,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnNuevSmal->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevSmal->HtmlEntities = false;
         $this->btnNuevSmal->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevSmal->Visible = $this->mctNotaEntrega->EditMode;
+        $this->btnNuevSmal->Visible = $this->mctNotaCreditoCorp->EditMode;
     }
 
     protected function btnGuarSmal_Create() {
@@ -360,7 +328,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
         $this->btnBorrSmal->HtmlEntities = false;
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiaRoxanne'))));
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-        $this->btnBorrSmal->Visible = $this->mctNotaEntrega->EditMode;
+        $this->btnBorrSmal->Visible = $this->mctNotaCreditoCorp->EditMode;
     }
 
     protected function btnHistSmal_Create() {
@@ -420,9 +388,8 @@ abstract class NotaEntregaEditFormBase extends QForm {
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
 		// Check for records that may violate Unique Clauses
-			if (($objNotaEntrega = NotaEntrega::LoadByClienteCorpIdReferencia($this->lstClienteCorp->SelectedValue,$this->txtReferencia->Text)) && ($objNotaEntrega->Id != $this->mctNotaEntrega->NotaEntrega->Id )){
+			if (($objNotaCreditoCorp = NotaCreditoCorp::LoadByReferencia($this->txtReferencia->Text)) && ($objNotaCreditoCorp->Id != $this->mctNotaCreditoCorp->NotaCreditoCorp->Id )){
 				$blnToReturn = false;
-				$this->lstClienteCorp->Warning = QApplication::Translate("Already in Use");
 				$this->txtReferencia->Warning = QApplication::Translate("Already in Use");
 			}
 
@@ -447,26 +414,26 @@ abstract class NotaEntregaEditFormBase extends QForm {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/nota_credito_corp_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/nota_credito_corp_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/nota_credito_corp_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/nota_credito_corp_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function verificarNavegacion() {
-        if ($this->mctNotaEntrega->EditMode) {
+        if ($this->mctNotaCreditoCorp->EditMode) {
             $this->btnRegiAnte->Enabled = !($this->intPosiRegi == 0);
             $this->btnPrimRegi->Enabled = !($this->intPosiRegi == 0);
             $this->btnProxRegi->Enabled = !($this->intPosiRegi == $this->intCantRegi - 1);
@@ -490,8 +457,8 @@ abstract class NotaEntregaEditFormBase extends QForm {
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-		// Delegate "Save" processing to the NotaEntregaMetaControl
-		$this->mctNotaEntrega->SaveNotaEntrega();
+		// Delegate "Save" processing to the NotaCreditoCorpMetaControl
+		$this->mctNotaCreditoCorp->SaveNotaCreditoCorp();
 		$this->RedirectToListPage();
 	}
 
@@ -500,7 +467,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
 		// Se verifica la integridad referencial
 		//----------------------------------------
 		$blnTodoOkey = true;
-		$arrTablRela = $this->mctNotaEntrega->TablasRelacionadasNotaEntrega();
+		$arrTablRela = $this->mctNotaCreditoCorp->TablasRelacionadasNotaCreditoCorp();
 		if (count($arrTablRela)) {
 			$strTablRela = implode(',',$arrTablRela);
 				
@@ -509,25 +476,25 @@ abstract class NotaEntregaEditFormBase extends QForm {
 			$blnTodoOkey = false;
 		}
 		if ($blnTodoOkey) {
-			// Delegate "Delete" processing to the NotaEntregaMetaControl
-			$this->mctNotaEntrega->DeleteNotaEntrega();
+			// Delegate "Delete" processing to the NotaCreditoCorpMetaControl
+			$this->mctNotaCreditoCorp->DeleteNotaCreditoCorp();
 			$this->RedirectToListPage();
 		}
 	}
 
     protected function btnLogxCamb_Click() {
-        $_SESSION['RegiRefe'] = $this->mctNotaEntrega->NotaEntrega->Id;
-        $_SESSION['TablRefe'] = 'NotaEntrega';
-        $_SESSION['RegiReto'] = 'nota_entrega_edit.php/'.$this->mctNotaEntrega->NotaEntrega->Id;
+        $_SESSION['RegiRefe'] = $this->mctNotaCreditoCorp->NotaCreditoCorp->Id;
+        $_SESSION['TablRefe'] = 'NotaCreditoCorp';
+        $_SESSION['RegiReto'] = 'nota_credito_corp_edit.php/'.$this->mctNotaCreditoCorp->NotaCreditoCorp->Id;
         QApplication::Redirect(__SIST__.'/log_list.php');
     }
 
     protected function btnVolvList_Click() {
-        QApplication::Redirect(__SIST__.'/nota_entrega_list.php');
+        QApplication::Redirect(__SIST__.'/nota_credito_corp_list.php');
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/nota_entrega_edit.php');
+        QApplication::Redirect(__SIST__.'/nota_credito_corp_edit.php');
     }
 
 

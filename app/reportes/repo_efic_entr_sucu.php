@@ -332,12 +332,12 @@ foreach ($arrSucuSele as $objSucursal) {
         // Envio el reporte por e-mail
         //--------------------------------
         $mail = new PHPMailer();
-        $mail->setFrom('SisCO@libertyexpress.com', 'Medicion y Control');
+        $mail->setFrom('SisCO@goldsist.com', 'Medicion y Control');
         //if ($objSucursal->CodiEsta == 'CCS') {
         //    $mail->addAddress('soporte@lufemansoftware.com');
         //}
-        $mail->addAddress('aalvarado@libertyexpress.com');
-        $mail->addAddress('emontilla@libertyexpress.com');
+        $mail->addAddress('aalvarado@goldsist.com');
+        $mail->addAddress('emontilla@goldsist.com');
         $mail->Subject  = $strTituRepo;
         $mail->Body     = 'Estimado Usuario, sirvase revisar el documento anexo...';
         $mail->addAttachment($strNombArch);

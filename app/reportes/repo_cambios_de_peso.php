@@ -48,7 +48,7 @@ if ($intCantRegi) {
     $arrDireMail = explode(',',$strUsuaNoti);
 
     $mail = new PHPMailer();
-    $mail->setFrom('SisCO@libertyexpress.com', 'Control de Operaciones');
+    $mail->setFrom('SisCO@goldsist.com', 'Control de Operaciones');
     //$mail->addAddress('soporte@lufemansoftware.com');
     $mail->Subject  = "Guias con cambio de peso despues del TR";
     $mail->Body     = 'Estimado Usuario, sírvase revisar el documento anexo...';

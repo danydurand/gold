@@ -27,6 +27,10 @@
 			return sprintf('%s',  $this->intId);
 		}
 
+        public function __total() {
+            return nf($this->Total);
+		}
+
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'Facturas';
             $arrLogxCamb['intRefeRegi'] = $this->Id;

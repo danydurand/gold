@@ -1175,6 +1175,13 @@
 		QApplicationBase::$ClassFile['trackingconsecutivometacontrol'] = __META_CONTROLS__ . '/TrackingConsecutivoMetaControl.class.php';
 		QApplicationBase::$ClassFile['trackingconsecutivodatagrid'] = __META_CONTROLS__ . '/TrackingConsecutivoDataGrid.class.php';
 
+	// ClassPaths for the Transportista class
+		QApplicationBase::$ClassFile['transportista'] = __MODEL__ . '/Transportista.class.php';
+		QApplicationBase::$ClassFile['qqnodetransportista'] = __MODEL__ . '/Transportista.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodetransportista'] = __MODEL__ . '/Transportista.class.php';
+		QApplicationBase::$ClassFile['transportistametacontrol'] = __META_CONTROLS__ . '/TransportistaMetaControl.class.php';
+		QApplicationBase::$ClassFile['transportistadatagrid'] = __META_CONTROLS__ . '/TransportistaDataGrid.class.php';
+
 	// ClassPaths for the Turno class
 		QApplicationBase::$ClassFile['turno'] = __MODEL__ . '/Turno.class.php';
 		QApplicationBase::$ClassFile['qqnodeturno'] = __MODEL__ . '/Turno.class.php';

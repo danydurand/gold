@@ -172,7 +172,7 @@ foreach ($arrSucuEmpr as $objSucursal) {
 			//------------------------------------------------------------------------------------------------
 			$strEnviMail = BuscarParametro('EnviMail','MailSino',"Txt1","S");
             $mail = new PHPMailer();
-            $mail->setFrom('SisCO@libertyexpress.com', 'Medicion y Control');
+            $mail->setFrom('SisCO@goldsist.com', 'Medicion y Control');
             //$mail->addAddress('soporte@lufemansoftware.com');
             $mail->Subject  = $strTituRepo;
             $mail->Body     = 'Estimado Usuario, sírvase revisar el documento anexo...';

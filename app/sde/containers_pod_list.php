@@ -20,7 +20,7 @@ require_once(__FORMBASE_CLASSES__ . '/ContainersListFormBase.class.php');
  * @package My QCubed Application
  * @subpackage Drafts
  */
-class ContainersListForm extends ContainersListFormBase {
+class ContainersPodListForm extends ContainersListFormBase {
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -35,7 +35,7 @@ class ContainersListForm extends ContainersListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
-		$this->lblTituForm->Text = 'Masters';
+		$this->lblTituForm->Text = 'PODs Maviso';
 
 		// Instantiate the Meta DataGrid
 		$this->dtgContainerses = new ContainersDataGrid($this);
@@ -79,6 +79,11 @@ class ContainersListForm extends ContainersListFormBase {
         $colCantPiez->Width        = 90;
         $this->dtgContainerses->AddColumn($colCantPiez);
 
+        $colPiezEntr = new QDataGridColumn('ENTREGADAS', '<?= $_FORM->PiezEntr_ColumnRender($_ITEM) ?>');
+        $colPiezEntr->HtmlEntities = false;
+        $colPiezEntr->Width        = 90;
+        $this->dtgContainerses->AddColumn($colPiezEntr);
+
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Transportista->Nombre,'Name=Transportista');
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
 		//$this->dtgContainerses->MetaAddColumn('Fecha');
@@ -94,6 +99,7 @@ class ContainersListForm extends ContainersListFormBase {
 		//$this->dtgContainerses->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
+        $this->btnNuevRegi->Visible = false;
 
     }
 
@@ -105,9 +111,13 @@ class ContainersListForm extends ContainersListFormBase {
         return $objValija->CountGuiaPiezasesAsContainerPieza();
     }
 
+    public function PiezEntr_ColumnRender(Containers $objValija) {
+        return count($objValija->GetPiezasConCheckpoint('OK'));
+    }
+
     public function dtgContainersesRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
-        QApplication::Redirect("sacar_a_ruta.php/$intId");
+        QApplication::Redirect("guia_piezas_list.php/$intId");
 	}		
 
 }
@@ -115,5 +125,5 @@ class ContainersListForm extends ContainersListFormBase {
 
 // Go ahead and run this form object to generate the page and event handlers, implicitly using
 // containers_list.tpl.php as the included HTML template file
-ContainersListForm::Run('ContainersListForm');
+ContainersPodListForm::Run('ContainersPodListForm');
 ?>

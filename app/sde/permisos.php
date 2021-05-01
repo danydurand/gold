@@ -104,7 +104,9 @@ class Permisos extends FormularioBaseKaizen {
         $intCanrGrup = count($arrNewxGrup);
         $this->lstCodiGrup->AddItem(QApplication::Translate('- Seleccione Uno - ('.$intCanrGrup.')'),null);
         foreach ($arrNewxGrup as $objGrupo) {
-            $this->lstCodiGrup->AddItem($objGrupo->__toStringConCantUsuarios(),$objGrupo->Id);
+            if ($objGrupo->Activo == SinoType::SI) {
+                $this->lstCodiGrup->AddItem($objGrupo->__toStringConCantUsuarios(),$objGrupo->Id);
+            }
         }
         $this->lstCodiGrup->AddAction(new QChangeEvent(), new QServerAction('actualizarOpciones'));
     }

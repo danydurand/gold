@@ -27,6 +27,11 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12" style="text-align: left">
+                    <?php $this->lblRefeMani->RenderWithName(); ?>
+                </div>
+            </div>
+            <div class="row">
                 <div class="table-responsive">
                     <?php $this->dtgGuiaCacesas->Render(); ?>
                 </div>

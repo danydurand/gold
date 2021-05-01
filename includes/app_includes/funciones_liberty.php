@@ -8,6 +8,14 @@ include('dateclass.php');
 require_once('mimemail.inc.php');
 
 
+function completar($strNumePiez) {
+    return str_pad($strNumePiez, 3, '0', STR_PAD_LEFT);
+}
+
+function flotar($strNumeDeci) {
+    return str_replace(',','.',$strNumeDeci);
+}
+
 /**
  * Esta rutina se utiliza para habilitar objetos en los formularios
  * @param $objControl

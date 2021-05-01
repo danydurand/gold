@@ -348,7 +348,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
             }
         }
         $strMensOrig .= $strMensUsua;
-        $this->mensaje($strMensOrig,'','d','hand-stop-o');
+        $this->danger($strMensOrig);
         return $blnTodoOkey;
     }
 
@@ -455,7 +455,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
             $this->RedactarEmailCreacion($this->mctUsuario->Usuario,$this->strPassUsua);
         }
 
-        $this->mensaje('Transacción Exitosa!','','',__iCHEC__);
+        $this->success('Transacción Exitosa!');
     }
 
     protected function verificarActivacion(Usuario $objUsuaAnte, Usuario $objUsuaActu) {
@@ -474,13 +474,13 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $strLogiUsua = $objUsuario->LogiUsua;
         //$strNuevClav = $objUsuario->PassUsua;
         $objMessage = new QEmailMessage();
-        $objMessage->From = 'LibertyExpress - Yokohama <notificaciones@libertyexpress.com>';
+        $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
         $objMessage->To = $strMailPara;
         $objMessage->Subject = 'Cambio de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
 
         // Also setup HTML message (optional)
         $strBody  = 'Estimado Usuario,<p><br>';
-        $strBody .= 'Bienvenido al Sistema Yokohama, el personal autorizado ha registrado ';
+        $strBody .= 'Bienvenido al Sistema SisCO, el personal autorizado ha registrado ';
         $strBody .= 'una cuenta para Usted con el siguiente login de Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br><br>';
         $strBody .= 'Su Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b>.<br>';
         $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema. Gracias!<br><br>';
@@ -488,7 +488,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $objMessage->HtmlBody = $strBody;
 
         // Add random/custom email headers
-        $objMessage->SetHeader('x-application', 'Sistema Yokohama');
+        $objMessage->SetHeader('x-application', 'Sistema SisCO');
 
         // Send the Message (Commented out for obvious reasons)
         QEmailServer::Send($objMessage);
@@ -502,23 +502,23 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $strLogiUsua = $objUsuario->LogiUsua;
         //$strNuevClav = $objUsuario->PassUsua;
         $objMessage = new QEmailMessage();
-        $objMessage->From = 'LibertyExpress - Yokohama <notificaciones@libertyexpress.com>';
+        $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
         $objMessage->To = $strMailPara;
         $objMessage->Subject = 'Reseteo de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
 
         // Also setup HTML message (optional) //
         $strBody  = 'Estimado Usuario,<p><br>';
-        $strBody .= 'Desde el Sistema Yokohama, el personal autorizado ha registrado ';
+        $strBody .= 'Desde el Sistema SisCO, el personal autorizado ha registrado ';
         $strBody .= 'un reseteo de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br><br>';
         $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b>.<br>';
         $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema nuevamente. Gracias!<br><br>';
         $strBody .= 'Si Usted desconoce esta transacción, por favor comuníquese a la brevedad<br>';
         $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br><br>';
-        $strBody .= 'soportelufeman@gmail.com<br>';
+        $strBody .= 'soporte@lufemansoftware.com<br>';
         $objMessage->HtmlBody = $strBody;
 
         // Add random/custom email headers
-        $objMessage->SetHeader('x-application', 'Sistema Yokohama');
+        $objMessage->SetHeader('x-application', 'Sistema SisCO');
 
         // Send the Message (Commented out for obvious reasons)
         QEmailServer::Send($objMessage);

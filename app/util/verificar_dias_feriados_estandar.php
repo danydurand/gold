@@ -46,7 +46,7 @@ if ($intFeriEsta == $intDiasFeri) {
     //---------------------------------------------------------------------------------------
     $mimemail = new MIMEMAIL('HTML');
     $mimemail->senderName = 'Sistema Yokohama';
-    $mimemail->senderMail = 'localhost@libertyexpress.com';
+    $mimemail->senderMail = 'localhost@goldsist.com';
     $mimemail->subject = $strTituRepo;
     $mimemail->body = $strBodyMail;
     $mimemail->create();
@@ -67,12 +67,12 @@ function redactarCorreoAdministrador() {
             <head>
                 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
                 <meta charset="utf-8">
-                <title>LibertyExpress</title>
+                <title>GoldCoast</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user‐scalable=no">
             </head>
             <body style="font-family:Trebuchet MS">
                 <div style="padding-top:2em;text-align:center;">
-					<img src="'.$strDireSist.'assets/images/LogoEmpresa.jpg" alt="LibertyExpress Logo" />
+					<img src="'.$strDireSist.'assets/images/LogoEmpresa.jpg" alt="GoldCoast Logo" />
 				</div>
 				<h2 style="color:#B0110D; text-align:center;">Estimado(s) Administrador(es) y/u Operador(es) del Sistema</h2>
 				<p>Se le(s) informa que tiene(n) pendiente por cargar en el Sistema, fechas no estándares del año en curso
@@ -81,18 +81,18 @@ function redactarCorreoAdministrador() {
 				 lleva a cabo automáticamente puedan realizarse de manera más óptima y eficaz.</p>
 				<br><hr>
 				<span style="font-style: italic; color:#555; margin-top: 2em;">
-					: : : El Equipo de LibertyExpress : : :
+					: : : El Equipo de GoldCoast : : :
 				</span><br><br>
                 <span style="font-style: italic; color:#555;">
                      Por favor, no responda a este mensaje, fue enviado desde una dirección
                      de correo electrónico no monitorizada. Este mensaje es un servicio de
-                     correo electrónico relacionado con su cuenta en LibertyExpress.
+                     correo electrónico relacionado con su cuenta en GoldCoast.
                      Para información general o para solicitar ayuda con su
-                     cuenta de LibertyExpress, por favor contacte a nuestro departamento de
+                     cuenta de GoldCoast, por favor contacte a nuestro departamento de
                      Servicio al Cliente.
                 </span><br><br>
                 <span style="font-style: italic; color:#555;">Copyright©
-                    2017 LibertyExpress©, Todos los Derechos Reservados.
+                    2017 GoldCoast©, Todos los Derechos Reservados.
                 </span>
             </body>
         </html>

@@ -4,7 +4,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
 <div class="titulo-formulario">
     <div class="col-xs-12 col-md-3 col-lg-3" style="text-align: left; margin-left: -0.8em; margin-top: -0.30em">
-        <?php $this->lblTituForm->Render(); ?>
+        <?php $this->lblTituForm->Render(); ?>&nbsp;&nbsp;<?php $this->objDefaultWaitIcon->Render(); ?>
     </div>
     <div class="hidden-xs hidden-sm col-md-6 col-lg-6" style="text-align: center; margin-top: -0.25em;">
         <?php $this->btnCancel->Render(); ?>
@@ -33,6 +33,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->txtNombArch->RenderWithName(); ?>
             </div>
             <div class="col-xs-3">
+                <?php $this->chkEnxxKilo->RenderWithName(); ?>
                 <?php $this->lblNumeCarg->RenderWithName(); ?>
                 <?php $this->lblNumePend->RenderWithName(); ?>
                 <?php $this->lblNumeAjus->RenderWithName(); ?>

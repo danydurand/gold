@@ -58,6 +58,7 @@ abstract class ContainersEditFormBase extends QForm {
 	protected $txtHora;
 	protected $txtEstatus;
 	protected $txtTipo;
+	protected $lstTransportista;
 	protected $lstClienteCorp;
 	protected $txtAwb;
 	protected $txtPrecintoLateral;
@@ -146,6 +147,7 @@ abstract class ContainersEditFormBase extends QForm {
 		$this->txtHora = $this->mctContainers->txtHora_Create();
 		$this->txtEstatus = $this->mctContainers->txtEstatus_Create();
 		$this->txtTipo = $this->mctContainers->txtTipo_Create();
+		$this->lstTransportista = $this->mctContainers->lstTransportista_Create();
 		$this->lstClienteCorp = $this->mctContainers->lstClienteCorp_Create();
 		$this->txtAwb = $this->mctContainers->txtAwb_Create();
 		$this->txtPrecintoLateral = $this->mctContainers->txtPrecintoLateral_Create();

@@ -24,7 +24,9 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 	protected $btnCancel;
 	protected $colGuiaSele;
 	protected $btnDeleSele;
+	/* @var $objManiAjus NotaEntrega */
 	protected $objManiAjus;
+	protected $lblRefeMani;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -56,6 +58,8 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 		$this->lblTituForm->Text = 'Guías por corregir';
 		$this->btnNuevRegi->Visible = false;
 
+		$this->lblRefeMani_Create();
+
 		$this->btnCancel_Create();
 
 		// Instantiate the Meta DataGrid
@@ -67,7 +71,11 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 		$this->dtgGuiaCacesas->CssClass = 'datagrid';
 		$this->dtgGuiaCacesas->AlternateRowStyle->CssClass = 'alternate';
 
-		$this->dtgGuiaCacesas->AdditionalConditions = QQ::Equal(QQN::GuiaCacesa()->Ajustar,true);
+		//t('Manif: '.$this->objManiAjus->Id);
+		$objClauWher   = QQ::Clause();
+		$objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->Ajustar,SinoType::SI);
+		$objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->NotaEntregaId,$this->objManiAjus->Id);
+		$this->dtgGuiaCacesas->AdditionalConditions = QQ::AndCondition($objClauWher);
 
 		// Add Pagination (if desired)
 		$this->dtgGuiaCacesas->Paginator = new QPaginator($this->dtgGuiaCacesas);
@@ -93,7 +101,7 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
         $this->dtgGuiaCacesas->AddColumn($this->colGuiaSele);
         $this->dtgGuiaCacesas->AddAction(new QClickEvent(), new QAjaxAction('colGuiaSele_Click'));
 
-        $this->dtgGuiaCacesas->MetaAddColumn('Id');
+        //$this->dtgGuiaCacesas->MetaAddColumn('Id');
         $this->dtgGuiaCacesas->MetaAddColumn('GuiaExte','Name="Guía Cliente"');
 
         $colFechCarg = new QDataGridColumn('FECHA CARG','<?= $_ITEM->FechCarg->__toString("DD/MM/YYYY") ?>');
@@ -111,10 +119,16 @@ class GuiaCacesaListForm extends GuiaCacesaListFormBase {
 
 		$this->dtgGuiaCacesas->MetaAddColumn('RegistradoPor','Name=Regis. Por');
 
-		$this->dtgGuiaCacesas->MetaAddColumn(QQN::GuiaCacesa()->NotaEntrega->Referencia,'Name=Manif.');
+		//$this->dtgGuiaCacesas->MetaAddColumn(QQN::GuiaCacesa()->NotaEntrega->Referencia,'Name=Manif.');
 
         $this->btnExpoExce_Create();
         $this->btnDeleSele_Create();
+    }
+
+    protected function lblRefeMani_Create() {
+	    $this->lblRefeMani = new QLabel($this);
+	    $this->lblRefeMani->Name = 'Manifiesto';
+	    $this->lblRefeMani->Text = $this->objManiAjus->Referencia;
     }
 
 	protected function btnExpoExce_Create() {

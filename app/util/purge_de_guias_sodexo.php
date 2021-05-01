@@ -67,7 +67,7 @@ fclose($mixManeArch);
 //--------------------------------
 if ($intDifeRegi > 0) {
     $mail = new PHPMailer();
-    $mail->setFrom('SisCO@libertyexpress.com', 'Control de Operaciones');
+    $mail->setFrom('SisCO@goldsist.com', 'Control de Operaciones');
     $mail->addAddress('soportelufeman@gmail.com');
     $mail->Subject  = "Purge de Guias Sodexo";
     $mail->Body     = 'Estimado Usuario, sírvase revisar el documento anexo...';

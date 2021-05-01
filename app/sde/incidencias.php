@@ -26,10 +26,20 @@ class Incidencias extends FormularioBaseKaizen {
     protected $txtTextObse;
     protected $arrGuiaSina;
     protected $rdbTipoInci;
+    protected $arrPiezInci;
 
+
+    protected function SetupValores() {
+        if (isset($_SESSION['PiezInci'])) {
+            $this->arrPiezInci = $_SESSION['PiezInci'];
+            unset($_SESSION['PiezInci']);
+        }
+    }
 
     protected function Form_Create() {
         parent::Form_Create();
+
+        $this->SetupValores();
 
         $this->lblTituForm->Text = 'Incidencias';
 
@@ -73,6 +83,13 @@ class Incidencias extends FormularioBaseKaizen {
         }
         $this->lstListCkpt->Width = 250;
         $this->lstListCkpt->Required = true;
+        $this->lstListCkpt->AddAction(new QChangeEvent(), new QAjaxAction('lstListCkpt_Change'));
+    }
+
+    protected function lstListCkpt_Change() {
+        if (!is_null($this->lstListCkpt->SelectedValue)) {
+            $this->txtTextObse->Text = $this->lstListCkpt->SelectedName;
+        }
     }
 
     protected function txtNumeSeri_Create() {
@@ -82,6 +99,14 @@ class Incidencias extends FormularioBaseKaizen {
         $this->txtNumeSeri->TextMode = QTextMode::MultiLine;
         $this->txtNumeSeri->Height = 250;
         $this->txtNumeSeri->Width = 250;
+        if (count($this->arrPiezInci) > 0) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::GuiaPiezas()->Id,$this->arrPiezInci);
+            $arrPiezInci   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
+            foreach ($arrPiezInci as $objPiezMani) {
+                $this->txtNumeSeri->Text = $objPiezMani->IdPieza.chr(13);
+            }
+        }
     }
 
     protected function txtTextObse_Create() {

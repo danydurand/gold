@@ -725,7 +725,7 @@ class CrearFactura extends FormularioBaseKaizen {
             QApplication::Redirect($strDurlDxml);
         } else {
             //$this->mensaje($_SERVER['SERVER_NAME']);
-            $strDurlDxml = 'http://www.app-libertyexpress.com/liberty/ws/cliente.php?NombRuti=factura&id='.$this->lblNumeFact->Text;
+            $strDurlDxml = 'http://www.app-goldsist.com/liberty/ws/cliente.php?NombRuti=factura&id='.$this->lblNumeFact->Text;
             QApplication::Redirect($strDurlDxml);
         }
     }

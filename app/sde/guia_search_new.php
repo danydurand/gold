@@ -110,7 +110,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
 
     protected function txtGuiaExte_Create() {
         $this->txtGuiaExte = new QTextBox($this);
-        $this->txtGuiaExte->Name = QApplication::Translate('Tracking');
+        $this->txtGuiaExte->Name = QApplication::Translate('Guía Cliente');
         $this->txtGuiaExte->Width = 181;
     }
 

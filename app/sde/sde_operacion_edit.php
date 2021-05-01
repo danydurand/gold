@@ -208,7 +208,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/sde_operacion_edit.php/'.$this->mctSdeOperacion->SdeOperacion->CodiOper;
 				LogDeCambios($arrLogxCamb);
             }
-            $this->mensaje('Transacción Exitosa','','',__iCHEC__);
+            $this->success('Transacción Exitosa !!!');
         } else {
 			$arrLogxCamb['strNombTabl'] = 'SdeOperacion';
 			$arrLogxCamb['intRefeRegi'] = $this->mctSdeOperacion->SdeOperacion->CodiOper;
@@ -216,7 +216,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/sde_operacion_edit.php/'.$this->mctSdeOperacion->SdeOperacion->CodiOper;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa !!!');
 		}
 	}
 

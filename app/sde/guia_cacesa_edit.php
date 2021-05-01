@@ -112,9 +112,9 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
 
         if (strlen($this->txtObservacion->Text) > 0) {
             if (!$this->chkAjustar->Checked) {
-                $this->mensaje('Esta Guía ya no requiere ajustes!','','s','check');
+                $this->success('Esta Guía ya no requiere ajustes !');
             } else {
-                $this->mensaje(utf8_encode($this->txtObservacion->Text),'','d','hand-stop-o');
+                $this->danger(utf8_encode($this->txtObservacion->Text));
             }
         }
 	}
@@ -210,6 +210,7 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
         QApplication::Redirect(__SIST__.'/guia_cacesa_edit.php/'.$objRegiTabl->Id);
     }
+
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         //------------------------------------------------------------------
@@ -332,8 +333,8 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
             //------------------------------------------------------------------------------------------
             foreach  ($arrTeleDest as $strTeleDest) {
                 $strTeleDest = DejarSoloLosNumeros($strTeleDest);
-                if (strlen($strTeleDest) > 11) {
-                    $this->danger('Cada Nro de Teléfono debe tener 11 caracteres');
+                if (strlen($strTeleDest) > 12) {
+                    $this->danger('Cada Nro de Teléfono debe tener max. 12 digitos: Ej: 584121236541');
                     return false;
                 }
             }

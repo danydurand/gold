@@ -355,61 +355,45 @@
             t('Rutina: crearPieza');
             t('==================');
             t('Procesando IdPieza: '.$objGuiaMasi->IdPieza);
+            return;
+            $strNumePiez = completar($objGuiaMasi->IdPieza);
             try {
                 $objNuevPiez = new GuiaPiezas();
                 $objNuevPiez->GuiaId      = $this->Id;
-                $objNuevPiez->IdPieza     = $this->Tracking.'-'.$objGuiaMasi->IdPieza;
-                if ($objGuiaMasi->ServicioImportacion == 'AER') {
-                    $objNuevPiez->Libras  = $objGuiaMasi->PesoGuia;
-                } else {
-                    $objNuevPiez->PiesCub = $objGuiaMasi->PesoGuia;
-                }
-                $objNuevPiez->Kilos       = $objNuevPiez->Libras * 0.45359237;
-                $objNuevPiez->Largo       = $objGuiaMasi->Largo;
-                $objNuevPiez->Alto        = $objGuiaMasi->Alto;
-                $objNuevPiez->Ancho       = $objGuiaMasi->Ancho;
-                $objNuevPiez->Volumen     = ($objGuiaMasi->Largo * $objGuiaMasi->Alto * $objGuiaMasi->Ancho) / 166;
+                $objNuevPiez->IdPieza     = $this->Tracking.'-'.$strNumePiez;
+                $objNuevPiez->PiesCub     = $objGuiaMasi->PiesCub;
+                $objNuevPiez->Kilos       = $objGuiaMasi->Kilos;
                 $objNuevPiez->Descripcion = $objGuiaMasi->DescCont;
                 $objNuevPiez->PiesCub     = $objGuiaMasi->PiesCub;
                 $objNuevPiez->Save();
-                //-----------------------------------------------------------------------------
-                // Si se trata de piezas secundarias, las dimensiones deben sumarse a la guia
-                //-----------------------------------------------------------------------------
-                if ($objGuiaMasi->IdPieza == '001') {
+                if ($strNumePiez == '001') {
                     t('Asignando dimensiones de la pieza: '.$objNuevPiez->IdPieza);
                     $objNuevPiez->Guia->Kilos     = $objNuevPiez->Kilos;
-                    $objNuevPiez->Guia->Libras    = $objNuevPiez->Libras;
-                    $objNuevPiez->Guia->Largo     = $objNuevPiez->Largo;
-                    $objNuevPiez->Guia->Alto      = $objNuevPiez->Alto;
-                    $objNuevPiez->Guia->Ancho     = $objNuevPiez->Ancho;
-                    $objNuevPiez->Guia->Volumen   = $objNuevPiez->Volumen;
                     $objNuevPiez->Guia->PiesCub   = $objNuevPiez->PiesCub;
                     $objNuevPiez->Guia->Contenido = trim($objNuevPiez->Descripcion);
                     $objNuevPiez->Guia->Piezas    = 1;
                     $objNuevPiez->Guia->Save();
                     t('La guia ha sido actualizada con los valores de la 1era pieza');
                 }
-                if ($objGuiaMasi->IdPieza != '001') {
-
+                if ($strNumePiez != '001') {
+                    //-----------------------------------------------------------------------------
+                    // Si se trata de piezas secundarias, las dimensiones deben sumarse a la guia
+                    //-----------------------------------------------------------------------------
                     t('Agregando dimensiones de la pieza: '.$objNuevPiez->IdPieza);
                     $objNuevPiez->Guia->Kilos     += $objNuevPiez->Kilos;
-                    $objNuevPiez->Guia->Libras    += $objNuevPiez->Libras;
-                    $objNuevPiez->Guia->Largo     += $objNuevPiez->Largo;
-                    $objNuevPiez->Guia->Alto      += $objNuevPiez->Alto;
-                    $objNuevPiez->Guia->Ancho     += $objNuevPiez->Ancho;
-                    $objNuevPiez->Guia->Volumen   += $objNuevPiez->Volumen;
                     $objNuevPiez->Guia->PiesCub   += $objNuevPiez->PiesCub;
                     $objNuevPiez->Guia->Contenido .= ' / '.trim($objNuevPiez->Descripcion);
                     $objNuevPiez->Guia->Piezas    += 1;
                     $objNuevPiez->Guia->Save();
                     t('La guia ha sido actualizada con los valores de la pieza secundaria');
                 }
-                $strTextObse = trim($objCkptProc->Descripcion).' (NDE: '.$objNuevPiez->Guia->NotaEntrega->Referencia.')';
+                $strTextObse = trim($objCkptProc->Descripcion).' (Manif.: '.$objNuevPiez->Guia->NotaEntrega->Referencia.')';
                 $arrResuGrab = $this->grabarCheckpointPieza($objNuevPiez, $objCkptProc, $strTextObse);
                 if (!$arrResuGrab['TodoOkey']) {
                     throw new Exception($arrResuGrab['MotiNook']);
                 }
             } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
                 $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
                 $arrParaErro['NumeRefe'] = 'Pieza: '.$objGuiaMasi->IdPieza;
                 $arrParaErro['MensErro'] = $e->getMessage();
@@ -630,13 +614,13 @@
                     $blnTodoOkey = false;
                 }
             }
-            if ($blnTodoOkey) {
-                if ($this->fltTotal == 0) {
-                    $strMensUsua = QApplication::Translate('Monto Cero');
-                    $intCodiErro = 4;
-                    $blnTodoOkey = false;
-                }
-            }
+            //if ($blnTodoOkey) {
+            //    if ($this->fltTotal == 0) {
+            //        $strMensUsua = QApplication::Translate('Monto Cero');
+            //        $intCodiErro = 4;
+            //        $blnTodoOkey = false;
+            //    }
+            //}
             $arrSepuProc['TodoOkey'] = $blnTodoOkey;
             $arrSepuProc['MensUsua'] = $strMensUsua;
             $arrSepuProc['CodiErro'] = $intCodiErro;

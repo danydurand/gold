@@ -168,7 +168,7 @@ class NewGrupoEditForm extends NewGrupoEditFormBase {
                         LogDeCambios($arrLogxCamb);
                     }
                 }
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'NewGrupo';
@@ -177,7 +177,7 @@ class NewGrupoEditForm extends NewGrupoEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/new_grupo_edit.php/'.$this->mctNewGrupo->NewGrupo->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa');
 		}
 		$this->dtgUsuaGrup->Refresh();
 	}

@@ -243,7 +243,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
         } else {
             $strTextMens = 'Transacción Exitosa';
         }
-        $this->mensaje($strTextMens,'','',__iCHEC__);
+        $this->success($strTextMens);
     }
 
     public function agregarATodosLosGrupos() {

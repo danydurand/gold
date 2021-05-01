@@ -16,7 +16,7 @@ function Bloque1($pdf, $intX, $intY, $objGuia, $objUsuario, $k) {
 
     $pdf->SetFont($strTipoLetr, '', 9);
     $pdf->SetXY($intX, $intY);
-    $pdf->Cell(30, 5, 'Liberty Express C.A.... http://www.libertyexpress.com', 0);
+    $pdf->Cell(30, 5, 'Liberty Express C.A.... http://www.goldsist.com', 0);
 
     $intDateX = $intX + 120;
     $pdf->SetXY($intDateX, $intY);

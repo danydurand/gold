@@ -73,7 +73,7 @@ class UsuarioListForm extends UsuarioListFormBase {
 		$this->dtgUsuarios->MetaAddColumn('ApelUsua');
 		$this->dtgUsuarios->MetaAddColumn('LogiUsua');
 		$this->dtgUsuarios->MetaAddTypeColumn('CodiStat', 'StatusType');
-		$colSucuUsua = $this->dtgUsuarios->MetaAddColumn(QQN::Usuario()->SucursalId);
+		$colSucuUsua = $this->dtgUsuarios->MetaAddColumn(QQN::Usuario()->Sucursal->Iata);
 		$colSucuUsua->Name = 'Suc.';
 		$colTipoUsua = $this->dtgUsuarios->MetaAddTypeColumn('TipoUsua', 'TipoUsuaType');
         $colTipoUsua->Name = 'Tipo';

@@ -1,21 +1,21 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do the List All functionality
- * of the Containers class.  It uses the code-generated
- * ContainersDataGrid control which has meta-methods to help with
- * easily creating/defining Containers columns.
+ * of the Transportista class.  It uses the code-generated
+ * TransportistaDataGrid control which has meta-methods to help with
+ * easily creating/defining Transportista columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  *
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both containers_list.php AND
- * containers_list.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both transportista_list.php AND
+ * transportista_list.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class ContainersListFormBase extends QForm {
+abstract class TransportistaListFormBase extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $lblTituForm;
@@ -23,11 +23,11 @@ abstract class ContainersListFormBase extends QForm {
     protected $btnFiltAvan;
     protected $btnExpoExce;
 
-    // Local instance of the Meta DataGrid to list Containerses
+    // Local instance of the Meta DataGrid to list Transportistas
     /**
-     * @var ContainersDataGrid dtgContainerses
+     * @var TransportistaDataGrid dtgTransportistas
      */
-    protected $dtgContainerses;
+    protected $dtgTransportistas;
 
     // Create QForm Event Handlers as Needed
 
@@ -50,53 +50,43 @@ abstract class ContainersListFormBase extends QForm {
         $this->btnFiltAvan_Create();
 
         // Instantiate the Meta DataGrid
-        $this->dtgContainerses = new ContainersDataGrid($this);
+        $this->dtgTransportistas = new TransportistaDataGrid($this);
 
         // Style the DataGrid (if desired)
-        $this->dtgContainerses->CssClass = 'datagrid';
-        $this->dtgContainerses->AlternateRowStyle->CssClass = 'alternate';
-        $this->dtgContainerses->FontSize = 13;
-        $this->dtgContainerses->ShowFilter = false;
+        $this->dtgTransportistas->CssClass = 'datagrid';
+        $this->dtgTransportistas->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgTransportistas->FontSize = 13;
+        $this->dtgTransportistas->ShowFilter = false;
 
         // Add Pagination (if desired)
-        $this->dtgContainerses->Paginator = new QPaginator($this->dtgContainerses);
-        $this->dtgContainerses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgTransportistas->Paginator = new QPaginator($this->dtgTransportistas);
+        $this->dtgTransportistas->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         // Higlight the datagrid rows when mousing over them
-        $this->dtgContainerses->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgContainerses->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgTransportistas->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgTransportistas->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         // Add a click handler for the rows.
         // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
         // or $_ITEM->Id to pass the object's id, or any other data grid variable
-        $this->dtgContainerses->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-        $this->dtgContainerses->AddRowAction(new QClickEvent(), new QAjaxAction('dtgContainersesRow_Click'));
+        $this->dtgTransportistas->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgTransportistas->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTransportistasRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
-        // Create the Other Columns (note that you can use strings for containers's properties, or you
-        // can traverse down QQN::containers() to display fields that are down the hierarchy)
-        $this->dtgContainerses->MetaAddColumn('Id');
-        $this->dtgContainerses->MetaAddColumn('Numero');
-        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
-        $this->dtgContainerses->MetaAddColumn('Fecha');
-        $this->dtgContainerses->MetaAddColumn('Hora');
-        $this->dtgContainerses->MetaAddColumn('Estatus');
-        $this->dtgContainerses->MetaAddColumn('Tipo');
-        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Transportista);
-        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->ClienteCorp);
-        $this->dtgContainerses->MetaAddColumn('Awb');
-        $this->dtgContainerses->MetaAddColumn('PrecintoLateral');
-        $this->dtgContainerses->MetaAddColumn('Piezas');
-        $this->dtgContainerses->MetaAddColumn('Peso');
-        $this->dtgContainerses->MetaAddColumn('Contenido');
-        $this->dtgContainerses->MetaAddColumn('Direccion');
-        $this->dtgContainerses->MetaAddColumn('CreatedAt');
-        $this->dtgContainerses->MetaAddColumn('UpdatedAt');
-        $this->dtgContainerses->MetaAddColumn('DeletedAt');
-        $this->dtgContainerses->MetaAddColumn('CreatedBy');
-        $this->dtgContainerses->MetaAddColumn('UpdatedBy');
-        $this->dtgContainerses->MetaAddColumn('DeletedBy');
+        // Create the Other Columns (note that you can use strings for transportista's properties, or you
+        // can traverse down QQN::transportista() to display fields that are down the hierarchy)
+        $this->dtgTransportistas->MetaAddColumn('Id');
+        $this->dtgTransportistas->MetaAddColumn('Nombre');
+        $this->dtgTransportistas->MetaAddColumn('Rif');
+        $this->dtgTransportistas->MetaAddColumn('Activo');
+        $this->dtgTransportistas->MetaAddColumn('Observacion');
+        $this->dtgTransportistas->MetaAddColumn('CreatedAt');
+        $this->dtgTransportistas->MetaAddColumn('UpdatedAt');
+        $this->dtgTransportistas->MetaAddColumn('DeletedAt');
+        $this->dtgTransportistas->MetaAddColumn('CreatedBy');
+        $this->dtgTransportistas->MetaAddColumn('UpdatedBy');
+        $this->dtgTransportistas->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
 
@@ -104,7 +94,7 @@ abstract class ContainersListFormBase extends QForm {
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'Containerses';
+        $this->lblTituForm->Text = 'Transportistas';
     }
 
     protected function lblMensUsua_Create() {
@@ -136,7 +126,7 @@ abstract class ContainersListFormBase extends QForm {
     }
 
     protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgContainerses);
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgTransportistas);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoExce->HtmlEntities = false;
@@ -145,16 +135,16 @@ abstract class ContainersListFormBase extends QForm {
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/containers_edit.php');
+        QApplication::Redirect(__SIST__.'/transportista_edit.php');
     }
 
     protected function btnFiltAvan_Click() {
-        $this->dtgContainerses->ShowFilter = !$this->dtgContainerses->ShowFilter;
+        $this->dtgTransportistas->ShowFilter = !$this->dtgTransportistas->ShowFilter;
     }
 
-    public function dtgContainersesRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgTransportistasRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
-      QApplication::Redirect("containers_edit.php/$intId");
+      QApplication::Redirect("transportista_edit.php/$intId");
     }
 
 

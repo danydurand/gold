@@ -51,6 +51,7 @@ class VehiculoEditForm extends VehiculoEditFormBase {
 
 		$this->txtNumePlac = $this->mctVehiculo->txtNumePlac_Create();
 		$this->txtNumePlac->Name = 'Placa';
+		$this->txtNumePlac->Width = 100;
 
 		$this->txtTextObse = $this->mctVehiculo->txtTextObse_Create();
 		$this->txtTextObse->TextMode = QTextMode::MultiLine;
@@ -64,7 +65,22 @@ class VehiculoEditForm extends VehiculoEditFormBase {
 		$this->lstCodiDispObject->Name = 'Disponible?';
 
 		$this->lstCodiStatObject = $this->mctVehiculo->lstCodiStatObject_Create();
-	}
+
+        if (!$this->mctVehiculo->EditMode) {
+            $this->lstCodiDispObject->SelectedIndex = 1;
+            $this->lstCodiStatObject->SelectedIndex = 1;
+            $intIdxxSucu = 0;
+            foreach ($this->lstSucursal->GetAllItems() as $item) {
+                if ($item->Value == $this->objUsuario->SucursalId) {
+                    $this->lstSucursal->SelectedIndex = $intIdxxSucu;
+                    break;
+                } else {
+                    $intIdxxSucu++;
+                }
+            }
+        }
+
+    }
 
 	//----------------------------
 	// Aqui se crean los objetos 

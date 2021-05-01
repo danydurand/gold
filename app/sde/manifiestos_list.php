@@ -73,8 +73,8 @@ class ManifiestosList extends NotaEntregaListFormBase {
 		// can traverse down QQN::nota_entrega() to display fields that are down the hierarchy)
 		$this->dtgNotaEntregas->MetaAddColumn('Id');
 		$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp,'Name=Cliente');
-		$this->dtgNotaEntregas->MetaAddColumn('Referencia','Name=Ref.');
-        $colFechMani = new QDataGridColumn('Fecha','<?= $_FORM->FechMani($_ITEM) ?>');
+		$this->dtgNotaEntregas->MetaAddColumn('Referencia');
+        $colFechMani = new QDataGridColumn('FECHA','<?= $_FORM->FechMani($_ITEM) ?>');
         $this->dtgNotaEntregas->AddColumn($colFechMani);
         $this->dtgNotaEntregas->MetaAddColumn('Estatus');
         $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion','Name=S.Impor');
@@ -82,9 +82,9 @@ class ManifiestosList extends NotaEntregaListFormBase {
         $this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=xProc');
         $this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=xCorr');
         $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Proc');
-        $this->dtgNotaEntregas->MetaAddColumn('Libras','Name=Lbs');
+        $this->dtgNotaEntregas->MetaAddColumn('Kilos');
         $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=Pies3');
-        $this->dtgNotaEntregas->MetaAddColumn('Volumen','Name=Vol.');
+        //$this->dtgNotaEntregas->MetaAddColumn('Volumen','Name=Vol.');
         $this->dtgNotaEntregas->MetaAddColumn('Total');
         $this->dtgNotaEntregas->MetaAddColumn('FacturaId','Name=Fact');
 

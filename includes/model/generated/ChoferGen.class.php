@@ -23,7 +23,7 @@
 	 * @property string $TextObse the value for strTextObse 
 	 * @property integer $TipoMens the value for intTipoMens (Not Null)
 	 * @property integer $SucursalId the value for intSucursalId (Not Null)
-	 * @property string $CodiEsta the value for strCodiEsta (Not Null)
+	 * @property string $CodiEsta the value for strCodiEsta 
 	 * @property integer $CodiDisp the value for intCodiDisp (Not Null)
 	 * @property integer $CodiStat the value for intCodiStat (Not Null)
 	 * @property string $Login Login:: (Unique)
@@ -1356,7 +1356,7 @@
 
 				case 'CodiEsta':
 					/**
-					 * Gets the value for strCodiEsta (Not Null)
+					 * Gets the value for strCodiEsta 
 					 * @return string
 					 */
 					return $this->strCodiEsta;
@@ -1557,7 +1557,7 @@
 
 				case 'CodiEsta':
 					/**
-					 * Sets the value for strCodiEsta (Not Null)
+					 * Sets the value for strCodiEsta 
 					 * @param string $mixValue
 					 * @return string
 					 */
