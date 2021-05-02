@@ -153,7 +153,7 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
             } else {
                 foreach ($arrListTemp as $strNumeGuia) {
                     if (strlen($strNumeGuia) > 0) {
-                        $objClausula[] = QQ::Like(QQN::Guias()->Tracking,"%".$strNumeGuia."%");
+                        $objClausula[] = QQ::In(QQN::Guias()->Tracking,$this->arrListNume);
                         $strCadeSqlx .= " and g.tracking in ('".$strCadeGuia."')";
                     }
                 }

@@ -101,8 +101,8 @@ class GuiasListForm extends GuiasListFormBase {
 		// Create the Other Columns (note that you can use strings for guias's properties, or you
 		// can traverse down QQN::guias() to display fields that are down the hierarchy)
 		//$this->dtgGuiases->MetaAddColumn('Id');
-		$this->dtgGuiases->MetaAddColumn('Numero');
-		$this->dtgGuiases->MetaAddColumn('Tracking');
+		$this->dtgGuiases->MetaAddColumn('Numero','Name=Guia-Gold');
+		$this->dtgGuiases->MetaAddColumn('Tracking','Name=Guia-Cliente');
 
         //$colNombClie = $this->nombreDeCliente(QQN::Guias()->Id);
         //$colNombClie = new QDataGridColumn('CLIENTE',$colNombClie);

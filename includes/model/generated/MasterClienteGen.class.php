@@ -23,7 +23,8 @@
 	 * @property string $DireFisc the value for strDireFisc (Not Null)
 	 * @property string $NumeDrif the value for strNumeDrif (Not Null)
 	 * @property integer $VendedorId the value for intVendedorId (Not Null)
-	 * @property integer $TarifaId the value for intTarifaId (Not Null)
+	 * @property integer $TarifaId the value for intTarifaId 
+	 * @property integer $TarifaAgenteId the value for intTarifaAgenteId 
 	 * @property integer $Facturable the value for intFacturable 
 	 * @property integer $CicloId the value for intCicloId (Not Null)
 	 * @property string $NumeDnit the value for strNumeDnit 
@@ -82,7 +83,8 @@
 	 * @property MasterCliente $CodiDepeObject the value for the MasterCliente object referenced by intCodiDepe (Not Null)
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
 	 * @property FacVendedor $Vendedor the value for the FacVendedor object referenced by intVendedorId (Not Null)
-	 * @property FacTarifa $Tarifa the value for the FacTarifa object referenced by intTarifaId (Not Null)
+	 * @property FacTarifa $Tarifa the value for the FacTarifa object referenced by intTarifaId 
+	 * @property TarifaAgentes $TarifaAgente the value for the TarifaAgentes object referenced by intTarifaAgenteId 
 	 * @property SdeOperacion $RutaRecolectaObject the value for the SdeOperacion object referenced by intRutaRecolecta 
 	 * @property SdeOperacion $RutaEntregaObject the value for the SdeOperacion object referenced by intRutaEntrega 
 	 * @property MotivoEliminacion $MotivoEliminacion the value for the MotivoEliminacion object referenced by intMotivoEliminacionId 
@@ -204,6 +206,14 @@
 		 */
 		protected $intTarifaId;
 		const TarifaIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column master_cliente.tarifa_agente_id
+		 * @var integer intTarifaAgenteId
+		 */
+		protected $intTarifaAgenteId;
+		const TarifaAgenteIdDefault = null;
 
 
 		/**
@@ -1004,6 +1014,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column master_cliente.tarifa_agente_id.
+		 *
+		 * NOTE: Always use the TarifaAgente property getter to correctly retrieve this TarifaAgentes object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var TarifaAgentes objTarifaAgente
+		 */
+		protected $objTarifaAgente;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column master_cliente.ruta_recolecta.
 		 *
 		 * NOTE: Always use the RutaRecolectaObject property getter to correctly retrieve this SdeOperacion object.
@@ -1084,6 +1104,7 @@
 			$this->strNumeDrif = MasterCliente::NumeDrifDefault;
 			$this->intVendedorId = MasterCliente::VendedorIdDefault;
 			$this->intTarifaId = MasterCliente::TarifaIdDefault;
+			$this->intTarifaAgenteId = MasterCliente::TarifaAgenteIdDefault;
 			$this->intFacturable = MasterCliente::FacturableDefault;
 			$this->intCicloId = MasterCliente::CicloIdDefault;
 			$this->strNumeDnit = MasterCliente::NumeDnitDefault;
@@ -1489,6 +1510,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'nume_drif', $strAliasPrefix . 'nume_drif');
 			    $objBuilder->AddSelectItem($strTableName, 'vendedor_id', $strAliasPrefix . 'vendedor_id');
 			    $objBuilder->AddSelectItem($strTableName, 'tarifa_id', $strAliasPrefix . 'tarifa_id');
+			    $objBuilder->AddSelectItem($strTableName, 'tarifa_agente_id', $strAliasPrefix . 'tarifa_agente_id');
 			    $objBuilder->AddSelectItem($strTableName, 'facturable', $strAliasPrefix . 'facturable');
 			    $objBuilder->AddSelectItem($strTableName, 'ciclo_id', $strAliasPrefix . 'ciclo_id');
 			    $objBuilder->AddSelectItem($strTableName, 'nume_dnit', $strAliasPrefix . 'nume_dnit');
@@ -1696,6 +1718,9 @@
 			$strAlias = $strAliasPrefix . 'tarifa_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intTarifaId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'tarifa_agente_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intTarifaAgenteId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'facturable';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intFacturable = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1918,6 +1943,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['tarifa_id']) ? null : $objExpansionAliasArray['tarifa_id']);
 				$objToReturn->objTarifa = FacTarifa::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifa_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for TarifaAgente Early Binding
+			$strAlias = $strAliasPrefix . 'tarifa_agente_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['tarifa_agente_id']) ? null : $objExpansionAliasArray['tarifa_agente_id']);
+				$objToReturn->objTarifaAgente = TarifaAgentes::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifa_agente_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for RutaRecolectaObject Early Binding
 			$strAlias = $strAliasPrefix . 'ruta_recolecta__codi_oper';
@@ -2865,6 +2897,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of MasterCliente objects,
+		 * by TarifaAgenteId Index(es)
+		 * @param integer $intTarifaAgenteId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return MasterCliente[]
+		*/
+		public static function LoadArrayByTarifaAgenteId($intTarifaAgenteId, $objOptionalClauses = null) {
+			// Call MasterCliente::QueryArray to perform the LoadArrayByTarifaAgenteId query
+			try {
+				return MasterCliente::QueryArray(
+					QQ::Equal(QQN::MasterCliente()->TarifaAgenteId, $intTarifaAgenteId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count MasterClientes
+		 * by TarifaAgenteId Index(es)
+		 * @param integer $intTarifaAgenteId
+		 * @return int
+		*/
+		public static function CountByTarifaAgenteId($intTarifaAgenteId) {
+			// Call MasterCliente::QueryCount to perform the CountByTarifaAgenteId query
+			return MasterCliente::QueryCount(
+				QQ::Equal(QQN::MasterCliente()->TarifaAgenteId, $intTarifaAgenteId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -2904,6 +2968,7 @@
 							`nume_drif`,
 							`vendedor_id`,
 							`tarifa_id`,
+							`tarifa_agente_id`,
 							`facturable`,
 							`ciclo_id`,
 							`nume_dnit`,
@@ -2968,6 +3033,7 @@
 							' . $objDatabase->SqlVariable($this->strNumeDrif) . ',
 							' . $objDatabase->SqlVariable($this->intVendedorId) . ',
 							' . $objDatabase->SqlVariable($this->intTarifaId) . ',
+							' . $objDatabase->SqlVariable($this->intTarifaAgenteId) . ',
 							' . $objDatabase->SqlVariable($this->intFacturable) . ',
 							' . $objDatabase->SqlVariable($this->intCicloId) . ',
 							' . $objDatabase->SqlVariable($this->strNumeDnit) . ',
@@ -3046,6 +3112,7 @@
 							`nume_drif` = ' . $objDatabase->SqlVariable($this->strNumeDrif) . ',
 							`vendedor_id` = ' . $objDatabase->SqlVariable($this->intVendedorId) . ',
 							`tarifa_id` = ' . $objDatabase->SqlVariable($this->intTarifaId) . ',
+							`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intTarifaAgenteId) . ',
 							`facturable` = ' . $objDatabase->SqlVariable($this->intFacturable) . ',
 							`ciclo_id` = ' . $objDatabase->SqlVariable($this->intCicloId) . ',
 							`nume_dnit` = ' . $objDatabase->SqlVariable($this->strNumeDnit) . ',
@@ -3271,6 +3338,7 @@
 			$this->strNumeDrif = $objReloaded->strNumeDrif;
 			$this->VendedorId = $objReloaded->VendedorId;
 			$this->TarifaId = $objReloaded->TarifaId;
+			$this->TarifaAgenteId = $objReloaded->TarifaAgenteId;
 			$this->intFacturable = $objReloaded->intFacturable;
 			$this->CicloId = $objReloaded->CicloId;
 			$this->strNumeDnit = $objReloaded->strNumeDnit;
@@ -3404,10 +3472,17 @@
 
 				case 'TarifaId':
 					/**
-					 * Gets the value for intTarifaId (Not Null)
+					 * Gets the value for intTarifaId 
 					 * @return integer
 					 */
 					return $this->intTarifaId;
+
+				case 'TarifaAgenteId':
+					/**
+					 * Gets the value for intTarifaAgenteId 
+					 * @return integer
+					 */
+					return $this->intTarifaAgenteId;
 
 				case 'Facturable':
 					/**
@@ -3842,13 +3917,27 @@
 
 				case 'Tarifa':
 					/**
-					 * Gets the value for the FacTarifa object referenced by intTarifaId (Not Null)
+					 * Gets the value for the FacTarifa object referenced by intTarifaId 
 					 * @return FacTarifa
 					 */
 					try {
 						if ((!$this->objTarifa) && (!is_null($this->intTarifaId)))
 							$this->objTarifa = FacTarifa::Load($this->intTarifaId);
 						return $this->objTarifa;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'TarifaAgente':
+					/**
+					 * Gets the value for the TarifaAgentes object referenced by intTarifaAgenteId 
+					 * @return TarifaAgentes
+					 */
+					try {
+						if ((!$this->objTarifaAgente) && (!is_null($this->intTarifaAgenteId)))
+							$this->objTarifaAgente = TarifaAgentes::Load($this->intTarifaAgenteId);
+						return $this->objTarifaAgente;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4333,13 +4422,27 @@
 
 				case 'TarifaId':
 					/**
-					 * Sets the value for intTarifaId (Not Null)
+					 * Sets the value for intTarifaId 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
 					try {
 						$this->objTarifa = null;
 						return ($this->intTarifaId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'TarifaAgenteId':
+					/**
+					 * Sets the value for intTarifaAgenteId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objTarifaAgente = null;
+						return ($this->intTarifaAgenteId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -5165,7 +5268,7 @@
 
 				case 'Tarifa':
 					/**
-					 * Sets the value for the FacTarifa object referenced by intTarifaId (Not Null)
+					 * Sets the value for the FacTarifa object referenced by intTarifaId 
 					 * @param FacTarifa $mixValue
 					 * @return FacTarifa
 					 */
@@ -5189,6 +5292,38 @@
 						// Update Local Member Variables
 						$this->objTarifa = $mixValue;
 						$this->intTarifaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'TarifaAgente':
+					/**
+					 * Sets the value for the TarifaAgentes object referenced by intTarifaAgenteId 
+					 * @param TarifaAgentes $mixValue
+					 * @return TarifaAgentes
+					 */
+					if (is_null($mixValue)) {
+						$this->intTarifaAgenteId = null;
+						$this->objTarifaAgente = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a TarifaAgentes object
+						try {
+							$mixValue = QType::Cast($mixValue, 'TarifaAgentes');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED TarifaAgentes object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved TarifaAgente for this MasterCliente');
+
+						// Update Local Member Variables
+						$this->objTarifaAgente = $mixValue;
+						$this->intTarifaAgenteId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -8046,6 +8181,7 @@
 			$strToReturn .= '<element name="NumeDrif" type="xsd:string"/>';
 			$strToReturn .= '<element name="Vendedor" type="xsd1:FacVendedor"/>';
 			$strToReturn .= '<element name="Tarifa" type="xsd1:FacTarifa"/>';
+			$strToReturn .= '<element name="TarifaAgente" type="xsd1:TarifaAgentes"/>';
 			$strToReturn .= '<element name="Facturable" type="xsd:int"/>';
 			$strToReturn .= '<element name="CicloId" type="xsd:int"/>';
 			$strToReturn .= '<element name="NumeDnit" type="xsd:string"/>';
@@ -8113,6 +8249,7 @@
 				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
 				FacVendedor::AlterSoapComplexTypeArray($strComplexTypeArray);
 				FacTarifa::AlterSoapComplexTypeArray($strComplexTypeArray);
+				TarifaAgentes::AlterSoapComplexTypeArray($strComplexTypeArray);
 				SdeOperacion::AlterSoapComplexTypeArray($strComplexTypeArray);
 				SdeOperacion::AlterSoapComplexTypeArray($strComplexTypeArray);
 				MotivoEliminacion::AlterSoapComplexTypeArray($strComplexTypeArray);
@@ -8152,6 +8289,9 @@
 			if ((property_exists($objSoapObject, 'Tarifa')) &&
 				($objSoapObject->Tarifa))
 				$objToReturn->Tarifa = FacTarifa::GetObjectFromSoapObject($objSoapObject->Tarifa);
+			if ((property_exists($objSoapObject, 'TarifaAgente')) &&
+				($objSoapObject->TarifaAgente))
+				$objToReturn->TarifaAgente = TarifaAgentes::GetObjectFromSoapObject($objSoapObject->TarifaAgente);
 			if (property_exists($objSoapObject, 'Facturable'))
 				$objToReturn->intFacturable = $objSoapObject->Facturable;
 			if (property_exists($objSoapObject, 'CicloId'))
@@ -8299,6 +8439,10 @@
 				$objObject->objTarifa = FacTarifa::GetSoapObjectFromObject($objObject->objTarifa, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intTarifaId = null;
+			if ($objObject->objTarifaAgente)
+				$objObject->objTarifaAgente = TarifaAgentes::GetSoapObjectFromObject($objObject->objTarifaAgente, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intTarifaAgenteId = null;
 			if ($objObject->objRutaRecolectaObject)
 				$objObject->objRutaRecolectaObject = SdeOperacion::GetSoapObjectFromObject($objObject->objRutaRecolectaObject, false);
 			else if (!$blnBindRelatedObjects)
@@ -8338,6 +8482,7 @@
 			$iArray['NumeDrif'] = $this->strNumeDrif;
 			$iArray['VendedorId'] = $this->intVendedorId;
 			$iArray['TarifaId'] = $this->intTarifaId;
+			$iArray['TarifaAgenteId'] = $this->intTarifaAgenteId;
 			$iArray['Facturable'] = $this->intFacturable;
 			$iArray['CicloId'] = $this->intCicloId;
 			$iArray['NumeDnit'] = $this->strNumeDnit;
@@ -8443,6 +8588,8 @@
      * @property-read QQNodeFacVendedor $Vendedor
      * @property-read QQNode $TarifaId
      * @property-read QQNodeFacTarifa $Tarifa
+     * @property-read QQNode $TarifaAgenteId
+     * @property-read QQNodeTarifaAgentes $TarifaAgente
      * @property-read QQNode $Facturable
      * @property-read QQNode $CicloId
      * @property-read QQNode $NumeDnit
@@ -8557,6 +8704,10 @@
 					return new QQNode('tarifa_id', 'TarifaId', 'Integer', $this);
 				case 'Tarifa':
 					return new QQNodeFacTarifa('tarifa_id', 'Tarifa', 'Integer', $this);
+				case 'TarifaAgenteId':
+					return new QQNode('tarifa_agente_id', 'TarifaAgenteId', 'Integer', $this);
+				case 'TarifaAgente':
+					return new QQNodeTarifaAgentes('tarifa_agente_id', 'TarifaAgente', 'Integer', $this);
 				case 'Facturable':
 					return new QQNode('facturable', 'Facturable', 'Integer', $this);
 				case 'CicloId':
@@ -8739,6 +8890,8 @@
      * @property-read QQNodeFacVendedor $Vendedor
      * @property-read QQNode $TarifaId
      * @property-read QQNodeFacTarifa $Tarifa
+     * @property-read QQNode $TarifaAgenteId
+     * @property-read QQNodeTarifaAgentes $TarifaAgente
      * @property-read QQNode $Facturable
      * @property-read QQNode $CicloId
      * @property-read QQNode $NumeDnit
@@ -8853,6 +9006,10 @@
 					return new QQNode('tarifa_id', 'TarifaId', 'integer', $this);
 				case 'Tarifa':
 					return new QQNodeFacTarifa('tarifa_id', 'Tarifa', 'integer', $this);
+				case 'TarifaAgenteId':
+					return new QQNode('tarifa_agente_id', 'TarifaAgenteId', 'integer', $this);
+				case 'TarifaAgente':
+					return new QQNodeTarifaAgentes('tarifa_agente_id', 'TarifaAgente', 'integer', $this);
 				case 'Facturable':
 					return new QQNode('facturable', 'Facturable', 'integer', $this);
 				case 'CicloId':

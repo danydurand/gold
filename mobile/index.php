@@ -5,7 +5,7 @@ $blnTodoOkey = true;
 $strMensErro = '';
 if (isset($_POST['login'])) {
     $strLogiUsua = $_POST['login'];
-    $objUsuario = Usuario::LoadByLogin($strLogiUsua);
+    $objUsuario = Usuario::LoadByLogiUsua($strLogiUsua);
     // Traza("el login es $strLogiUsua");
     if (!$objUsuario) {
         $blnTodoOkey = false;
@@ -15,14 +15,14 @@ if (isset($_POST['login'])) {
         if (isset($_POST['clave'])) {
             $strClavAcce = $_POST['clave'];
             // Traza("Ya ubique al Socio");
-            if (trim($objUsuario->Password) != trim(md5($strClavAcce))) {
+            if (trim($objUsuario->PassUsua) != trim(md5($strClavAcce))) {
                 // Traza("la clave no coincide");
                 $strMensErro = 'Clave Invalida';
                 $blnTodoOkey = false;
             } else {
                 $_SESSION['User'] = serialize($objUsuario);
-                $objUsuario->AccesoMobile = new QDateTime(QDateTime::Now);
-                $objUsuario->Save();
+                //$objUsuario->AccesoMobile = new QDateTime(QDateTime::Now);
+                //$objUsuario->Save();
                 QApplication::Redirect('menu.php');
             }
         }

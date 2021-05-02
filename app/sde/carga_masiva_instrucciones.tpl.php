@@ -18,23 +18,20 @@
                     incluya la la columna pero déjela en blanco.
                 </li>
                 <li class="text-info">
-                    <u>Se espera un archivo plano con extensión ".csv", ".txt" o ".dat", con 10 columnas
+                    <u>Se espera un archivo plano con extensión ".csv", ".txt" o ".dat", con 7 columnas
                         separadas por punto y coma (";"), con cabecera y con la siguiente estructura:</u>
                 </li>
             </ul>
             <ol>
                 <div class="col-xs-12 col-md-offset-1 col-md-5">
                     <li class="text-info">Número de Guía <strong>(Opcional)</strong></li>
-                    <li class="text-info">Id de la Pieza (Ej: 1, 2) <span class="req">(R)</span></li>
-                    <li class="text-info">Cédula del Destinatario <span class="req">(R)</span></li>
+                    <li class="text-info">Cantidad de Piezas (Ej: 1, 2) <span class="req">(R)</span></li>
                     <li class="text-info">Nombre y Apellido del Destinatario <span class="req">(R)</span></li>
                     <li class="text-info">Teléfono del Destinatario <span class="req">(R)</span></li>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <li class="text-info">Direccion de Entrega <span class="req">(R)</span></li>
                     <li class="text-info">Iata Sucursal Destino <span class="req">(R) ("Sucu" p/más información)</span></li>
-                    <li class="text-info">Ciudad Destino <strong>(Opcional)</strong></li>
-                    <li class="text-info">Descripción del Contenido <span class="req">(R)</span></li>
                     <li class="text-info">Peso (Aereo=Libras, Maritimo=PiesCub)  <span class="req">(R)</span></li>
                 </div>
             </ol>

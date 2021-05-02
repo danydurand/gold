@@ -7,22 +7,20 @@ if (!isset($_SESSION['ManiIdxx'])) {
 $intManiIdxx = $_SESSION['ManiIdxx'];
 $strNombEmpr = $_SESSION['NombEmpr'];
 $objManiImpr = Containers::Load($intManiIdxx);
-$strDestOper = implode($objManiImpr->GetDestinos('Nombre'),", ");
-$strNombChof = $objManiImpr->Operacion->CodiChofObject->NombChof;
-$strCeduChof = $objManiImpr->Operacion->CodiChofObject->NumeCedu;
-$strDescVehi = $objManiImpr->Operacion->CodiVehiObject->DescVehi;
-$strNumePlac = $objManiImpr->Operacion->CodiVehiObject->NumePlac;
+$strNombChof = $objManiImpr->Chofer;
+$strCeduChof = $objManiImpr->Cedula;
+$strDescVehi = $objManiImpr->Vehiculo;
+$strNumePlac = $objManiImpr->Placa;
 $strFechDhoy = date("d/m/Y H:i");
 $strLimiDere = '350px';
 $strDireEntr = $objManiImpr->Direccion;
-$strNombClie = $objManiImpr->ClienteCorp->NombClie;
 $strNumeCont = $objManiImpr->Numero;
 $strPrecLate = $objManiImpr->PrecintoLateral;
 $strNumeAwbx = $objManiImpr->Awb;
 $intCantPiez = $objManiImpr->Piezas;
 $decPesoTota = $objManiImpr->Peso;
 $strDescCont = $objManiImpr->Contenido;
-$strEmprTran = $objManiImpr->Transportista->Nombre;
+$strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportista->Nombre : 'N/A';
 
 ?>
 <style type="text/css">
@@ -75,7 +73,9 @@ $strEmprTran = $objManiImpr->Transportista->Nombre;
         </table>
         <ul>
             <li><span class="linea"><b>PRECINTO TRASERO:</b> <?= $strNumeCont ?></span></li>
+            <?php if (strlen($strPrecLate) > 0) { ?>
             <li><span class="linea"><b>PRECINTO LATERAL:</b> <?= $strPrecLate ?></span></li>
+            <?php } ?>
             <li><span class="linea"><b>BL o AWB:</b> <?= $strNumeAwbx ?></span></li>
             <li><span class="linea"><b>BULTOS:</b> <?= $intCantPiez ?> PIEZAS</span></li>
             <li><span class="linea"><b>PESO:</b> <?= $decPesoTota ?> KILOS</span></li>

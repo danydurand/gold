@@ -80,16 +80,16 @@ class FacturasListForm extends FacturasListFormBase {
 		//$this->dtgFacturases->MetaAddColumn('DireccionFiscal');
 		//$this->dtgFacturases->MetaAddColumn('Telefono');
 		//$this->dtgFacturases->MetaAddColumn(QQN::Facturas()->Sucursal);
-		//$this->dtgFacturases->MetaAddColumn(QQN::Facturas()->Receptoria);
-		//$this->dtgFacturases->MetaAddColumn(QQN::Facturas()->Caja);
 		$this->dtgFacturases->MetaAddColumn('Estatus');
 		$this->dtgFacturases->MetaAddColumn('EstatusPago');
-		$this->dtgFacturases->MetaAddColumn('Tasa');
+
 		$colCantMani = new QDataGridColumn('Cant. Manif','<?= $_FORM->CantMani($_ITEM) ?>');
 		$colCantMani->HorizontalAlign = QHorizontalAlign::Center;
 		$this->dtgFacturases->AddColumn($colCantMani);
 
-		$this->dtgFacturases->MetaAddColumn('Total');
+		$colTotaFact = new QDataGridColumn('TOTAL','<?= nf($_ITEM->Total) ?>');
+		$this->dtgFacturases->AddColumn($colTotaFact);
+
 		//$this->dtgFacturases->MetaAddColumn('MontoDscto');
 		//$this->dtgFacturases->MetaAddColumn('MontoCobrado');
 		//$this->dtgFacturases->MetaAddColumn('Numero');

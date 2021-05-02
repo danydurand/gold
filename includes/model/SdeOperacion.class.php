@@ -46,6 +46,19 @@
             }
         }
 
+        public function GetNombresDeSucursales($formato='array') {
+            $arrSucuDest = $this->GetSucursalesAsOperacionDestinoArray();
+            $arrDestIdxx = [];
+            foreach ($arrSucuDest as $objSucuDest) {
+                $arrDestIdxx[] = $objSucuDest->Nombre;
+            }
+            if ($formato == 'array') {
+                return $arrDestIdxx;
+            } else {
+                return implode(', ',$arrDestIdxx);
+            }
+        }
+
 		public function __toStringConDestinos() {
 			$arrSucuDest = $this->GetSucursalesAsOperacionDestinoArray();
 			$strSucuDest = implode($arrSucuDest,', ');

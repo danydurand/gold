@@ -85,6 +85,7 @@ abstract class MasterClienteListFormBase extends QForm {
         $this->dtgMasterClientes->MetaAddColumn('NumeDrif');
         $this->dtgMasterClientes->MetaAddColumn(QQN::MasterCliente()->Vendedor);
         $this->dtgMasterClientes->MetaAddColumn(QQN::MasterCliente()->Tarifa);
+        $this->dtgMasterClientes->MetaAddColumn(QQN::MasterCliente()->TarifaAgente);
         $this->dtgMasterClientes->MetaAddColumn('Facturable');
         $this->dtgMasterClientes->MetaAddTypeColumn('CicloId', 'CicloFactType');
         $this->dtgMasterClientes->MetaAddColumn('NumeDnit');

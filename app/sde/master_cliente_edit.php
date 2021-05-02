@@ -32,6 +32,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected $txtEntrFact;
     protected $chkTariClie;
     protected $lstTariClie;
+    protected $chkTariAgen;
+    protected $lstTariAgen;
     protected $txtPersCona;
     protected $txtTeleCona;
     protected $txtPersConb;
@@ -168,6 +170,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtEntrFact_Create();
         $this->chkTariClie_Create();
         $this->lstTariClie_Create();
+        $this->chkTariAgen_Create();
+        $this->lstTariAgen_Create();
         $this->txtPersCona_Create();
         $this->txtTeleCona_Create();
         $this->txtPersConb_Create();
@@ -335,6 +339,17 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
         $this->btnSave->Visible = !$this->btnRecuClie->Visible;
 
+        //---------------------------------------------------------------------------------------
+        // Unicamente cuando se trate del Cliente Retail (Codigo Interno NAC01) deben aparecer
+        // las Tarifas Nacionales, de resto deben aparecer las Tarifas de los Agentes
+        //---------------------------------------------------------------------------------------
+        if ($this->txtCodiInte->Text == 'NAC01') {
+            $this->chkTariAgen->Visible = false;
+            $this->lstTariAgen->Visible = false;
+        } else {
+            $this->chkTariClie->Visible = false;
+            $this->lstTariClie->Visible = false;
+        }
         //----------------------------------------------------------------------------------
         // Luego de crear todos los elementos del formuario, se ejecuta cualquier acción
         // determinada por el segundo parametro de invocacion del programa (cuando exista)
@@ -890,6 +905,33 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             }
         } else {
             $this->lstTariClie->AddItem('- Seleccione Una -', null);
+        }
+    }
+
+    protected function chkTariAgen_Create() {
+        $this->chkTariAgen = new QCheckBox($this);
+        $this->chkTariAgen->Checked = false;
+        if ($this->blnEditMode) {
+            $this->chkTariAgen->Name = "Desea cambiar la Tarifa ?";
+        } else {
+            $this->chkTariAgen->Name = "Desea especificar la Tarifa ?";
+        }
+        $this->chkTariAgen->AddAction(new QChangeEvent(), new QAjaxAction('chkTariAgen_Change'));
+    }
+
+    protected function lstTariAgen_Create() {
+        $this->lstTariAgen = new QListBox($this);
+        $this->lstTariAgen->Name = 'Tarifa';
+        $this->lstTariAgen->Required = true;
+        if ($this->blnEditMode) {
+            if (!is_null($this->objMasterCliente->TarifaAgenteId)) {
+                $objTarifa = TarifaAgentes::Load($this->objMasterCliente->TarifaAgenteId);
+                if ($objTarifa) {
+                    $this->lstTariAgen->AddItem($objTarifa->__toString(), $objTarifa->Id, true);
+                }
+            }
+        } else {
+            $this->lstTariAgen->AddItem('- Seleccione Una -', null);
         }
     }
 
@@ -1555,6 +1597,29 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         }
     }
 
+    protected function chkTariAgen_Change() {
+        $this->lstTariClie->RemoveAllItems();
+        if ($this->chkTariAgen->Checked) {
+            $objClauOrde   = QQ::Clause();
+            $objClauOrde[] = QQ::OrderBy(QQN::TarifaAgentes()->Id,false);
+            $arrTariAgen   = TarifaAgentes::LoadAll($objClauOrde);
+            $intCantTari   = count($arrTariAgen);
+            $this->lstTariAgen->AddItem('- Seleccione Una - ('.$intCantTari.')', null);
+            if ($arrTariAgen) {
+                foreach ($arrTariAgen as $objTariAgen) {
+                    $this->lstTariAgen->AddItem($objTariAgen->__toString(), $objTariAgen->Id);
+                }
+            }
+        } else {
+            if ($this->blnEditMode && !is_null($this->objMasterCliente->TarifaAgenteId)) {
+                $objTariAgen = TarifaAgentes::Load($this->objMasterCliente->TarifaAgenteId);
+                if ($objTariAgen) {
+                    $this->lstTariAgen->AddItem($objTariAgen->__toString(), $objTariAgen->Id, true);
+                }
+            }
+        }
+    }
+
     protected function chkRutaReco_Change() {
         $this->lstRutaReco->RemoveAllItems();
         if ($this->chkRutaReco->Checked) {
@@ -1802,14 +1867,14 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             // no debe quedar en cero (0)
             //--------------------------------------------------------------------------------------
             if ($this->txtGuiaXdia->Text <= 0) {
-                $this->mensaje('En la sección <strong>Configuracion: API</strong>, la cantidad de guías por día debe ser mayor a cero','m','d','',__iHAND__);
+                $this->danger('En la sección <strong>Configuracion: API</strong>, la cantidad de guías por día debe ser mayor a cero');
                 $blnTodoOkey = false;
             }
             //-------------------------------------------------------------
             // La credenciales de acceso a la API, deben contener valores
             //-------------------------------------------------------------
             if ((strlen($this->txtUsuaApix->Text) == 0 || strlen($this->txtPassApix->Text) == 0)) {
-                $this->mensaje('En la sección <strong>Configuracion: API</strong>, las credenciales (Usuario de acceso a la API, no deben estar vacías','m','d','',__iHAND__);
+                $this->danger('En la sección <strong>Configuracion: API</strong>, las credenciales (Usuario de acceso a la API, no deben estar vacías');
                 $blnTodoOkey = false;
             }
             //----------------------------------------------
@@ -1820,7 +1885,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $objClauWher[] = QQ::NotEqual(QQN::MasterCliente()->CodiClie,$this->objMasterCliente->CodiClie);
             $blnExisOtro   = MasterCliente::QueryCount(QQ::AndCondition($objClauWher));
             if ($blnExisOtro) {
-                $this->mensaje('En la sección <strong>Configuracion: API</strong>, Ya existe otro Cliente con el mismo Usuario API','m','d','',__iHAND__);
+                $this->danger('En la sección <strong>Configuracion: API</strong>, Ya existe otro Cliente con el mismo Usuario API');
                 $blnTodoOkey = false;
             }
         }
@@ -2045,6 +2110,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->objMasterCliente->NumeDrif = $this->txtNumeDrif->Text;
         $this->objMasterCliente->VendedorId = $this->lstVendClie->SelectedValue;
         $this->objMasterCliente->TarifaId = $this->lstTariClie->SelectedValue;
+        $this->objMasterCliente->TarifaAgenteId = $this->lstTariAgen->SelectedValue;
         $this->objMasterCliente->CicloId = 1;
         $this->objMasterCliente->NumeDnit = '';
         $this->objMasterCliente->PersCona = $this->txtPersCona->Text;

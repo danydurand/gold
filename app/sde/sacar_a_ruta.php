@@ -435,17 +435,25 @@ class SacarARuta extends FormularioBaseKaizen {
     // Operaciones
     protected function lstOperAbie_Create() {
         $this->lstOperAbie = new QListBox($this);
-        $this->lstOperAbie->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
+        $this->lstOperAbie->AddItem(QApplication::Translate('- Seleccione Una -'),null);
         $this->lstOperAbie->Name = 'Operación';
         $this->lstOperAbie->Required = true;
         $this->lstOperAbie->Width = 350;
-        //$this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
         $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('mostrarDatos'));
         $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('lstOperAbie_Change'));
     }
 
     protected function lstOperAbie_Change() {
         $this->dtgPiezApta->Refresh();
+        if (!is_null($this->lstOperAbie->SelectedValue)) {
+            if (strlen($this->txtDireEntr->Text) == 0) {
+                $intOperSele = $this->lstOperAbie->SelectedValue;
+                $objOperSele = SdeOperacion::Load($intOperSele);
+                if ($objOperSele) {
+                    $this->txtDireEntr->Text = $objOperSele->GetNombresDeSucursales('string');
+                }
+            }
+        }
     }
 
     protected function lstEmprTran_Create() {
@@ -492,7 +500,7 @@ class SacarARuta extends FormularioBaseKaizen {
     }
 
     protected function dtgPiezAptaRow_Click($strFormId, $strControlId, $strParameter) {
-        t('strParameter:'.$strParameter);
+        //t('strParameter:'.$strParameter);
         $intGuiaIdxx = explode('|',$strParameter)[1];
         QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$intGuiaIdxx);
     }
@@ -668,10 +676,9 @@ class SacarARuta extends FormularioBaseKaizen {
     protected function txtListNume_Create() {
         $this->txtListNume = new QTextBox($this);
         $this->txtListNume->TextMode = QTextMode::MultiLine;
-        $this->txtListNume->Required = true;
-        $this->txtListNume->Width = 250;
+        //$this->txtListNume->Required = true;
+        $this->txtListNume->Width = 185;
         $this->txtListNume->Rows = 11;
-        //$this->txtListNume->AddAction(new QChangeEvent(), new QAjaxAction('validarCampos'));
     }
 
     protected function txtDireEntr_Create() {
@@ -1051,40 +1058,50 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected function Form_Validate()
     {
-        if (is_null($this->lstEmprTran->SelectedValue)) {
-            $this->danger('Debe seleccionar un Transportista');
-            return false;
-        }
+        t('VALIDANDO...');
+        t('1');
         if (is_null($this->lstTipoOper->SelectedValue)) {
             $this->danger('Debe seleccionar un Tipo de Ruta/Operacion');
             return false;
         }
+        t('2');
         if (strlen($this->txtNumeAwbx->Text) == 0) {
             $this->danger('Debe especificar un Nro de BL o AWB');
             return false;
         }
+        t('3');
         if (is_null($this->lstOperAbie->SelectedValue)) {
             $this->danger('Debe especificar una Operacion');
             return false;
         }
+        t('4');
+        if (is_null($this->lstEmprTran->SelectedValue)) {
+            $this->danger('Debe seleccionar un Transportista');
+            return false;
+        }
+        t('5');
         if (strlen($this->txtNumeCont->Text) == 0) {
             $this->danger('Debe especificar el Precinto Trasero');
             return false;
         }
+        t('6');
         if (strlen($this->txtDireEntr->Text) == 0) {
             $this->danger('Debe especificar la Direccion de Entrega');
             return false;
         }
+        t('7');
         if (strlen($this->txtDescCont->Text) == 0) {
             $this->danger('Debe especificar la Descripción del Contenido');
             return false;
         }
+        t('8');
         if (!$this->blnEditMode) {
             if (strlen($this->txtListNume->Text) == 0) {
                 $this->danger('Debe especificar al menos una Guia/Pieza a Manifestar');
                 return false;
             }
         }
+        t('9');
         return true;
     }
 
@@ -1098,7 +1115,6 @@ class SacarARuta extends FormularioBaseKaizen {
         // Se graba o actualiza el contenedor en la tabla guia
         //------------------------------------------------------
         if ($strTipoRuta == "URBANA") {
-            t('La ruta es Urbana');
             //---------------------------------------------------------------
             // Si la Ruta es "Urbana" y no se ha especificado un Contenedor
             // o Número de Valija el Sistema debe asignar un número.
@@ -1107,220 +1123,232 @@ class SacarARuta extends FormularioBaseKaizen {
         }
         t('Voy a buscar el contenedor');
         $objContenedor = Containers::LoadByNumero($this->txtNumeCont->Text);
-        if (!$objContenedor) {
-            t('No existia, lo voy a crear');
-            $objContenedor = new Containers();
-            $objContenedor->Fecha           = new QDateTime(QDateTime::Now);
-            $objContenedor->Hora            = date("H:i");
-            $objContenedor->CreatedBy       = $this->objUsuario->CodiUsua;
-            $objContenedor->Estatus         = 'ABIERT@';
-            $objContenedor->Tipo            = 'MASTER';
+        try {
+            if (!$objContenedor) {
+                t('No existia, lo voy a crear');
+                $objContenedor = new Containers();
+                $objContenedor->Fecha       = new QDateTime(QDateTime::Now);
+                $objContenedor->Hora        = date("H:i");
+                $objContenedor->CreatedBy   = $this->objUsuario->CodiUsua;
+                $objContenedor->Estatus     = 'ABIERT@';
+                $objContenedor->Tipo        = 'MASTER';
+            }
+            $objContenedor->Numero          = $this->txtNumeCont->Text;
+            $objContenedor->PrecintoLateral = $this->txtPrecLate->Text;
+            $objContenedor->Awb             = $this->txtNumeAwbx->Text;
+            $objContenedor->OperacionId     = $this->lstOperAbie->SelectedValue;
+            $objContenedor->Chofer          = $this->txtNombChof->Text;
+            $objContenedor->Cedula          = $this->txtCeduChof->Text;
+            $objContenedor->Vehiculo        = $this->txtDescVehi->Text;
+            $objContenedor->Placa           = $this->txtPlacVehi->Text;
+            $objContenedor->TransportistaId = $this->lstEmprTran->SelectedValue;
+            $objContenedor->Contenido       = $this->txtDescCont->Text;
+            $objContenedor->Direccion       = $this->txtDireEntr->Text;
+            $objContenedor->Save();
+            t('Contenedor salvado en la BD');
+        } catch (Exception $e) {
+            t('Error creando Container: '.$e->getMessage());
+            $this->danger($e->getMessage());
+            return;
         }
-        $objContenedor->Numero          = $this->txtNumeCont->Text;
-        $objContenedor->PrecintoLateral = $this->txtPrecLate->Text;
-        $objContenedor->Awb             = $this->txtNumeAwbx->Text;
-        $objContenedor->OperacionId     = $this->lstOperAbie->SelectedValue;
-        $objContenedor->TransportistaId = $this->lstEmprTran->SelectedValue;
-        $objContenedor->Contenido       = $this->txtDescCont->Text;
-        $objContenedor->Direccion       = $this->txtDireEntr->Text;
-        $objContenedor->Save();
-        t('Contenedor salvado en la BD');
 
-        if ($strTipoRuta == "URBANA") {
-            $objCheckpoint = Checkpoints::LoadByCodigo('ER');
-        } else {
-            $objCheckpoint = Checkpoints::LoadByCodigo('TR');
-        }
-        t('El ckpt es: '.$objCheckpoint->Codigo);
-        $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
-        //---------------------------------------------------------------------------
-        // Con array_unique se eliminan las guias repetidas en caso de que las haya
-        //---------------------------------------------------------------------------
-        $this->arrListNume = array_unique($this->arrListNume,SORT_STRING);
-        $this->txtListNume->Text = '';
+        if (strlen($this->txtListNume->Text) > 0) {
+            if ($strTipoRuta == "URBANA") {
+                $objCheckpoint = Checkpoints::LoadByCodigo('ER');
+            } else {
+                $objCheckpoint = Checkpoints::LoadByCodigo('TR');
+            }
+            t('El ckpt es: '.$objCheckpoint->Codigo);
+            $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
+            //---------------------------------------------------------------------------
+            // Con array_unique se eliminan las guias repetidas en caso de que las haya
+            //---------------------------------------------------------------------------
+            $this->arrListNume = array_unique($this->arrListNume,SORT_STRING);
+            $this->txtListNume->Text = '';
 
-        $arrDestinos = $objContenedor->GetDestinos();
-        t('El contenedor tiene: '.count($arrDestinos).' destinos');
-        $intCodiRuta = $objContenedor->Operacion->RutaId;
-        $intContVali = 0;
-        $intContGuia = 0;
-        $intContCkpt = 0;
-        $this->arrGuiaErro = array();
-        $this->arrGuiaReto = array();
-        $objDatabase = Containers::GetDatabase();
-        $objDatabase->TransactionBegin();
-        foreach ($this->arrListNume as $strNumeSeri) {
-            if (strlen($strNumeSeri)) {
-                t('Procesando: '.$strNumeSeri);
-                //-----------------------------------------------------------------------
-                // Se procesa una a una las Guias/Valijas proporcionadas por el Usuario
-                //-----------------------------------------------------------------------
-                $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
-                if ($objGuiaPiez) {
-                    t('La pieza existe');
-                    $arrSepuProc = $objGuiaPiez->Guia->SePuedeProcesar();
-                    if ($arrSepuProc['TodoOkey']) {
-                        t('La guia se puede procesar');
-                        if ($strTipoRuta == 'EXTRA-URBANA') {
-                            t('La ruta es Extra-Urbana');
-                            $blnTienPeso = true;
-                            if ($objGuiaPiez->Guia->ServicioImportacion == 'MAR') {
-                                if ($objGuiaPiez->PiesCub == 0) {
-                                    $blnTienPeso = false;
-                                }
-                            } else {
-                                if ($objGuiaPiez->Kilos == 0) {
-                                    $blnTienPeso = false;
-                                }
-                            }
-                            if ($blnTienPeso) {
-                                t('La pieza tiene peso');
-                                //--------------------------------------------------------------------------------
-                                // Antes de asociar la Guia al Contenedor, se debe verificar que el destino
-                                // de la Guia, coincida con algunos de los Destinos de la Operacion seleccionada
-                                //---------------------------------------------------------------------------------
-                                if (in_array($objGuiaPiez->Guia->DestinoId,$arrDestinos)) {
-                                    t('Los destinos coinciden');
-                                    if (!$objContenedor->IsGuiaPiezasAsContainerPiezaAssociated($objGuiaPiez)) {
-                                        t('La pieza no estaba asociada');
-                                        //---------------------------------------------
-                                        // Se establece la relacion "contenedor-guia"
-                                        //---------------------------------------------
-                                        $objContenedor->AssociateGuiaPiezasAsContainerPieza($objGuiaPiez);
-                                        t('Ya asocie la pieza');
-                                        //---------------------------------------------
-                                        // Se registra el checkpoint correspondiente
-                                        //---------------------------------------------
-                                        $arrDatoCkpt = array();
-                                        $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-                                        $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
-                                        $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                                        $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
-                                        $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-                                        $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
-                                        $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                                        if ($arrResuGrab['TodoOkey']) {
-                                            t('Se grabo el checkpoint a la pieza');
-                                            $intContCkpt ++;
-                                        } else {
-                                            t('Hubo algun error: '.$arrResuGrab['MotiNook']);
-                                            $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate($arrResuGrab['MotiNook']));
-                                        }
+            $arrDestinos = $objContenedor->GetDestinos();
+            t('El contenedor tiene: '.count($arrDestinos).' destinos');
+            $intCodiRuta = $objContenedor->Operacion->RutaId;
+            $intContVali = 0;
+            $intContGuia = 0;
+            $intContCkpt = 0;
+            $this->arrGuiaErro = array();
+            $this->arrGuiaReto = array();
+            $objDatabase = Containers::GetDatabase();
+            $objDatabase->TransactionBegin();
+            foreach ($this->arrListNume as $strNumeSeri) {
+                if (strlen($strNumeSeri)) {
+                    t('Procesando: '.$strNumeSeri);
+                    //-----------------------------------------------------------------------
+                    // Se procesa una a una las Guias/Valijas proporcionadas por el Usuario
+                    //-----------------------------------------------------------------------
+                    $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
+                    if ($objGuiaPiez) {
+                        t('La pieza existe');
+                        $arrSepuProc = $objGuiaPiez->Guia->SePuedeProcesar();
+                        if ($arrSepuProc['TodoOkey']) {
+                            t('La guia se puede procesar');
+                            if ($strTipoRuta == 'EXTRA-URBANA') {
+                                $blnTienPeso = true;
+                                if ($objGuiaPiez->Guia->ServicioImportacion == 'MAR') {
+                                    if ($objGuiaPiez->PiesCub == 0) {
+                                        $blnTienPeso = false;
                                     }
                                 } else {
-                                    t('El destino no coincide');
-                                    $this->txtListNume->Text .= $strNumeSeri." (Destino no Coincide)".chr(13);
-                                    $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate('DESTINO ('.$objGuiaPiez->Guia->Destino->Iata.') NO COINCIDE'));
+                                    if ($objGuiaPiez->Kilos == 0) {
+                                        $blnTienPeso = false;
+                                    }
+                                }
+                                if ($blnTienPeso) {
+                                    t('La pieza tiene peso');
+                                    //--------------------------------------------------------------------------------
+                                    // Antes de asociar la Guia al Contenedor, se debe verificar que el destino
+                                    // de la Guia, coincida con algunos de los Destinos de la Operacion seleccionada
+                                    //---------------------------------------------------------------------------------
+                                    if (in_array($objGuiaPiez->Guia->DestinoId,$arrDestinos)) {
+                                        t('Los destinos coinciden');
+                                        if (!$objContenedor->IsGuiaPiezasAsContainerPiezaAssociated($objGuiaPiez)) {
+                                            t('La pieza no estaba asociada');
+                                            //---------------------------------------------
+                                            // Se establece la relacion "contenedor-guia"
+                                            //---------------------------------------------
+                                            $objContenedor->AssociateGuiaPiezasAsContainerPieza($objGuiaPiez);
+                                            t('Ya asocie la pieza');
+                                            //---------------------------------------------
+                                            // Se registra el checkpoint correspondiente
+                                            //---------------------------------------------
+                                            $arrDatoCkpt = array();
+                                            $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+                                            $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+                                            $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+                                            $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
+                                            $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
+                                            $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+                                            $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                                            if ($arrResuGrab['TodoOkey']) {
+                                                t('Se grabo el checkpoint a la pieza');
+                                                $intContCkpt ++;
+                                            } else {
+                                                t('Hubo algun error: '.$arrResuGrab['MotiNook']);
+                                                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate($arrResuGrab['MotiNook']));
+                                            }
+                                        }
+                                    } else {
+                                        t('El destino no coincide');
+                                        $this->txtListNume->Text .= $strNumeSeri." (Destino no Coincide)".chr(13);
+                                        $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate('DESTINO ('.$objGuiaPiez->Guia->Destino->Iata.') NO COINCIDE'));
+                                    }
+                                } else {
+                                    t('La pieza no tiene peso');
+                                    $this->txtListNume->Text .= $strNumeSeri." (Peso de la guia no puede ser cero)".chr(13);
+                                    $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate('PESO ('.$objGuiaPiez->Kilos.') IGUAL A CERO'));
                                 }
                             } else {
-                                t('La pieza no tiene peso');
-                                $this->txtListNume->Text .= $strNumeSeri." (Peso de la guia no puede ser cero)".chr(13);
-                                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate('PESO ('.$objGuiaPiez->Kilos.') IGUAL A CERO'));
-                            }
-                        } else {
-                            //--------------
-                            // Ruta Urbana
-                            //--------------
-                            if ($objGuiaPiez->Guia->DestinoId != $this->objUsuario->SucursalId) {
-                                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'Esta Guia no tiene como Destino '.$this->objUsuario->Sucursal->Iata);
-                            } else {
-                                $objContenedor->AssociateGuiaPiezasAsContainerPieza($objGuiaPiez);
-                                $objGuiaPiez->HojaEntrega = $objContenedor->Numero;
-                                $objGuiaPiez->Save();
-                            }
-                            //-----------------------------------------------------------
-                            // Se registra en "guia_ckpt" el checkpoint correspondiente
-                            //-----------------------------------------------------------
-                            $arrDatoCkpt = array();
-                            $arrDatoCkpt['NumeGuia'] = $objGuiaPiez->Id;
-                            $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
-                            $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                            $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
-                            $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-                            $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
-                            $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                            if ($arrResuGrab['TodoOkey']) {
-                                $intContCkpt ++;
-                            } else {
-                                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate($arrResuGrab['MotiNook']));
-                            }
-                        }
-                        $intContGuia ++;
-                    } else {
-                        $this->txtListNume->Text .= $strNumeSeri." (".$arrSepuProc['MensUsua'].")".chr(13);
-                        $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate($arrSepuProc['MensUsua']));
-                    }
-                } else {
-                    //---------------------------------------------------
-                    // Si no es una Guia, se chequea que sea una Valija
-                    //---------------------------------------------------
-                    $objValija = Containers::LoadByNumero($strNumeSeri);
-                    if ($objValija) {
-                        if (!$objValija->IsContainersAsContainerContainerAssociated($objContenedor)) {
-                            //-----------------------------------------------
-                            // Se establece la relación "contenedor-valija"
-                            //-----------------------------------------------
-                            $objValija->AssociateContainersAsContainerContainer($objContenedor);
-                            //---------------------------------------------
-                            // Se registra un checkpoint para la Valija
-                            //---------------------------------------------
-                            $arrDatoCkpt = array();
-                            $arrDatoCkpt['NumeCont'] = $objContenedor->Id;
-                            $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                            $arrDatoCkpt['TextObse'] = $objCheckpoint->Descripcion;
-                            $arrResuGrab = GrabarCheckpointContenedorNew($arrDatoCkpt);
-                            if ($arrResuGrab['TodoOkey']) {
-                                $intContVali ++;
-                            } else {
-                                $this->arrGuiaErro[] = array($objValija->Numero,QApplication::Translate($arrResuGrab['MotiNook']));
-                            }
-                        }
-                        $arrPiezVali = $objValija->GetGuiaPiezasAsContainerPiezaArray();
-                        foreach ($arrPiezVali as $objPiezVali) {
-                            //----------------------------------------------------------
-                            // Se registra un checkpoint para cada pieza de la Valija
-                            //----------------------------------------------------------
-                            $arrDatoCkpt = array();
-                            $arrDatoCkpt['NumePiez'] = $objPiezVali->Id;
-                            $arrDatoCkpt['GuiaAnul'] = $objPiezVali->Guia->Anulada();
-                            $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                            $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
-                            $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-                            $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
-                            $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                            if ($arrResuGrab['TodoOkey']) {
-                                $intContCkpt ++;
-                            } else {
-                                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate($arrResuGrab['MotiNook']));
+                                //--------------
+                                // Ruta Urbana
+                                //--------------
+                                if ($objGuiaPiez->Guia->DestinoId != $this->objUsuario->SucursalId) {
+                                    $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'Esta Guia no tiene como Destino '.$this->objUsuario->Sucursal->Iata);
+                                } else {
+                                    $objContenedor->AssociateGuiaPiezasAsContainerPieza($objGuiaPiez);
+                                    $objGuiaPiez->HojaEntrega = $objContenedor->Numero;
+                                    $objGuiaPiez->Save();
+                                }
+                                //-----------------------------------------------------------
+                                // Se registra en "guia_ckpt" el checkpoint correspondiente
+                                //-----------------------------------------------------------
+                                $arrDatoCkpt = array();
+                                $arrDatoCkpt['NumeGuia'] = $objGuiaPiez->Id;
+                                $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+                                $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+                                $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
+                                $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
+                                $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+                                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                                if ($arrResuGrab['TodoOkey']) {
+                                    $intContCkpt ++;
+                                } else {
+                                    $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
+                                }
                             }
                             $intContGuia ++;
+                        } else {
+                            $this->txtListNume->Text .= $strNumeSeri." (".$arrSepuProc['MensUsua'].")".chr(13);
+                            $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrSepuProc['MensUsua']);
                         }
-                        $intContVali ++;
                     } else {
-                        $this->txtListNume->Text .= $strNumeSeri." (No Existe Guia/Valija)".chr(13);
-                        $this->arrGuiaErro[] = array($strNumeSeri,QApplication::Translate($strNumeSeri." (No Existe Guia/Valija)"));
+                        //---------------------------------------------------
+                        // Si no es una Guia, se chequea que sea una Valija
+                        //---------------------------------------------------
+                        $objValija = Containers::LoadByNumero($strNumeSeri);
+                        if ($objValija) {
+                            if (!$objValija->IsContainersAsContainerContainerAssociated($objContenedor)) {
+                                //-----------------------------------------------
+                                // Se establece la relación "contenedor-valija"
+                                //-----------------------------------------------
+                                $objValija->AssociateContainersAsContainerContainer($objContenedor);
+                                //---------------------------------------------
+                                // Se registra un checkpoint para la Valija
+                                //---------------------------------------------
+                                $arrDatoCkpt = array();
+                                $arrDatoCkpt['NumeCont'] = $objContenedor->Id;
+                                $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+                                $arrDatoCkpt['TextObse'] = $objCheckpoint->Descripcion;
+                                $arrResuGrab = GrabarCheckpointContenedorNew($arrDatoCkpt);
+                                if ($arrResuGrab['TodoOkey']) {
+                                    $intContVali ++;
+                                } else {
+                                    $this->arrGuiaErro[] = array($objValija->Numero,$arrResuGrab['MotiNook']);
+                                }
+                            }
+                            $arrPiezVali = $objValija->GetGuiaPiezasAsContainerPiezaArray();
+                            foreach ($arrPiezVali as $objPiezVali) {
+                                //----------------------------------------------------------
+                                // Se registra un checkpoint para cada pieza de la Valija
+                                //----------------------------------------------------------
+                                $arrDatoCkpt = array();
+                                $arrDatoCkpt['NumePiez'] = $objPiezVali->Id;
+                                $arrDatoCkpt['GuiaAnul'] = $objPiezVali->Guia->Anulada();
+                                $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+                                $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
+                                $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
+                                $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+                                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                                if ($arrResuGrab['TodoOkey']) {
+                                    $intContCkpt ++;
+                                } else {
+                                    $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
+                                }
+                                $intContGuia ++;
+                            }
+                            $intContVali ++;
+                        } else {
+                            $this->txtListNume->Text .= $strNumeSeri." (No Existe Guia/Valija)".chr(13);
+                            $this->arrGuiaErro[] = array($strNumeSeri,$strNumeSeri." (No Existe Guia/Valija)");
+                        }
                     }
                 }
             }
+            $this->dtgPiezMani->Refresh();
+            $this->dtgPiezApta->Refresh();
+            t('Termine de procesar la piezas');
+            $objContenedor->actualizarTotales();
+            t('Se actualizaron los totales en el container');
+            $objDatabase->TransactionCommit();
+            $strMensUsua = sprintf('Guias procesadas (%s) | Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
+            $this->success($strMensUsua);
+            //--------------------------------------------------------------------------------
+            // Si hubo algun error, el boton que permite listar los errores, se hace visible
+            //--------------------------------------------------------------------------------
+            if (count($this->arrGuiaErro)) {
+                $this->btnRepoErro->Visible = true;
+            }
+            t('Voy a actualizar la operacion con el chofer y el vehiculo');
+            $this->actualizarOperacion($objContenedor);
+            t('Operacion actualizada.. TERMINE');
+        } else {
+            $this->info('Se actualizo el Manifiesto | No se proceso ninguna Guia/Pieza');
         }
-        $this->dtgPiezMani->Refresh();
-        $this->dtgPiezApta->Refresh();
-        t('Termine de procesar la piezas');
-        $objContenedor->actualizarTotales();
-        t('Se actualizaron los totales en el container');
-        $objDatabase->TransactionCommit();
-        $strMensUsua = sprintf('Guias procesadas (%s) | Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-        $this->success($strMensUsua);
-        //--------------------------------------------------------------------------------
-        // Si hubo algun error, el boton que permite listar los errores, se hace visible
-        //--------------------------------------------------------------------------------
-        if (count($this->arrGuiaErro)) {
-            $this->btnRepoErro->Visible = true;
-        }
-        t('Voy a actualizar la operacion con el chofer y el vehiculo');
-        $this->actualizarOperacion($objContenedor);
-        t('Operacion actualizada.. TERMINE');
-        //$this->btnManiCarg->Visible = true;
     }
 
     protected function actualizarOperacion(Containers $objContenedor) {
@@ -1330,21 +1358,21 @@ class SacarARuta extends FormularioBaseKaizen {
                 //-----------------------------------------------------------------------------------------
                 // El Chofer y el Vehiculo seleccionado, se asocian a la Operacion para futuras ocasiones
                 //-----------------------------------------------------------------------------------------
-                $objOperAsoc->CodiChof = $this->intChofSele;
-                $objOperAsoc->CodiVehi = $this->intVehiSele;
                 try {
+                    $objOperAsoc->CodiChof = $this->intChofSele;
+                    $objOperAsoc->CodiVehi = $this->intVehiSele;
                     $objOperAsoc->Save();
+                    //---------------------------------------------
+                    // Se deja rastro de la transaccion realizada
+                    //---------------------------------------------
+                    $arrLogxCamb['strNombTabl'] = 'SdeOperacion';
+                    $arrLogxCamb['intRefeRegi'] = $objOperAsoc->CodiOper;
+                    $arrLogxCamb['strNombRegi'] = $objOperAsoc->RutaId;
+                    $arrLogxCamb['strDescCamb'] = 'Modificado dinamicamente, desde Sacar a Ruta';
+                    LogDeCambios($arrLogxCamb);
                 } catch (Exception $e) {
                     t('Error actualizando la Operacion: '.$e->getMessage());
                 }
-                //---------------------------------------------
-                // Se deja rastro de la transaccion realizada
-                //---------------------------------------------
-                $arrLogxCamb['strNombTabl'] = 'SdeOperacion';
-                $arrLogxCamb['intRefeRegi'] = $objOperAsoc->CodiOper;
-                $arrLogxCamb['strNombRegi'] = $objOperAsoc->RutaId;
-                $arrLogxCamb['strDescCamb'] = 'Modificado dinamicamente, desde Sacar a Ruta';
-                LogDeCambios($arrLogxCamb);
             }
         }
     }

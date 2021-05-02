@@ -152,7 +152,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 //t('La guia si existe');
                 if (is_null($this->objGuia->FacturaId)) {
                     //t('La guia no esta facturada');
-                    $arrConcActi = Conceptos::conceptosActivos();
+                    $arrConcActi = Conceptos::conceptosActivos($this->objGuia->Producto->Codigo);
                     $this->objGuia->calcularTodoLosConceptos($arrConcActi);
                     QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id);
                 } else {

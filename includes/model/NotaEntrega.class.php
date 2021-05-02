@@ -91,6 +91,7 @@
             $decTotaNdex = 0;
             foreach ($arrGuiaNota as $objGuiaNota) {
                 t('Procesando la guia: '.$objGuiaNota->Tracking);
+                //$arrConcActi = Conceptos::conceptosActivos($objGuiaNota->Producto->Codigo);
                 $objGuiaNota->calcularTodoLosConceptos($arrConcCalc);
                 $decTotaNdex += $objGuiaNota->Total;
                 //--------------------------------------------------------------------

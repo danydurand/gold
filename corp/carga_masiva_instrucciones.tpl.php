@@ -18,14 +18,14 @@
                     incluya la la columna pero déjela en blanco.
                 </li>
                 <li class="text-info">
-                    <u>Se espera un archivo plano con extensión ".csv", ".txt" o ".dat", con 14 columnas
+                    <u>Se espera un archivo plano con extensión ".csv", ".txt" o ".dat", con 8 columnas
                         separadas por punto y coma (";"), con cabecera y con la siguiente estructura:</u>
                 </li>
             </ul>
             <ol>
                 <div class="col-xs-12 col-md-offset-1 col-md-5">
                     <li class="text-info">Número de Guía <strong>(Opcional)</strong></li>
-                    <li class="text-info">Id de la Pieza (Ej: 001, 002) <span class="req">(R)</span></li>
+                    <li class="text-info">Cantidad de Piezas (Ej: 1, 2) <span class="req">(R)</span></li>
                     <li class="text-info">Cédula del Destinatario <span class="req">(R)</span></li>
                     <li class="text-info">Nombre y Apellido del Destinatario <span class="req">(R)</span></li>
                     <li class="text-info">Teléfono del Destinatario <span class="req">(R)</span></li>

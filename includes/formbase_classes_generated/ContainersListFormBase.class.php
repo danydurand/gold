@@ -79,6 +79,10 @@ abstract class ContainersListFormBase extends QForm {
         $this->dtgContainerses->MetaAddColumn('Id');
         $this->dtgContainerses->MetaAddColumn('Numero');
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
+        $this->dtgContainerses->MetaAddColumn('Chofer');
+        $this->dtgContainerses->MetaAddColumn('Cedula');
+        $this->dtgContainerses->MetaAddColumn('Vehiculo');
+        $this->dtgContainerses->MetaAddColumn('Placa');
         $this->dtgContainerses->MetaAddColumn('Fecha');
         $this->dtgContainerses->MetaAddColumn('Hora');
         $this->dtgContainerses->MetaAddColumn('Estatus');

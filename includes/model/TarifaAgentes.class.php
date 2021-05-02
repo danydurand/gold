@@ -24,7 +24,7 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('TarifaAgentes Object %s',  $this->intId);
+			return sprintf('%s',  $this->Nombre);
 		}
 
 

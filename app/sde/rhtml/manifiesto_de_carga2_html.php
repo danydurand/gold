@@ -7,16 +7,15 @@ if (!isset($_SESSION['ManiIdxx'])) {
 $intManiIdxx = $_SESSION['ManiIdxx'];
 $strNombEmpr = $_SESSION['NombEmpr'];
 $objManiImpr = Containers::Load($intManiIdxx);
-$strDestOper = implode($objManiImpr->GetDestinos('Nombre'),", ");
-$strNombChof = $objManiImpr->Operacion->CodiChofObject->NombChof;
-$strCeduChof = $objManiImpr->Operacion->CodiChofObject->NumeCedu;
-$strDescVehi = $objManiImpr->Operacion->CodiVehiObject->DescVehi;
-$strNumePlac = $objManiImpr->Operacion->CodiVehiObject->NumePlac;
+$strNombChof = $objManiImpr->Chofer;
+$strCeduChof = $objManiImpr->Cedula;
+$strDescVehi = $objManiImpr->Vehiculo;
+$strNumePlac = $objManiImpr->Placa;
 $strFechDhoy = date("d/m/Y H:i");
 $strLimiDere = '340px';
 $strNumeCont = $objManiImpr->Numero;
 $strPrecLate = $objManiImpr->PrecintoLateral;
-$strEmprTran = $objManiImpr->Transportista->Nombre;
+$strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportista->Nombre : 'N/A';
 
 // Se seleccionan las piezas asociadas directamente al Manifiesto
 $arrPiezMani = $objManiImpr->GetGuiaPiezasAsContainerPiezaArray();
@@ -62,10 +61,12 @@ $intCantPiez = count($arrPiezMani);
                             <td style="text-align: right"><b>PRECINTO DE SALIDA:</b></td>
                             <td style="text-align: center"><?= $strNumeCont ?></td>
                         </tr>
+                        <?php if (strlen($strPrecLate) > 0) { ?>
                         <tr>
                             <td style="text-align: right"><b>PRECINTO LATERAL:</b></td>
                             <td style="text-align: center"><?= $strPrecLate ?></td>
                         </tr>
+                        <?php } ?>
                     </table>
                 </td>
             </tr>

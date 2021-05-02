@@ -27,6 +27,17 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
+		public function __servImportacion() {
+		    switch ($this->ServicioImportacion) {
+                case 'AER':
+                    return 'AEREO';
+                case 'MAR':
+                    return 'MARITIMO';
+                default:
+                    return 'AEREO';
+            }
+        }
+
         public function NroFactura() {
 		    $strFactGuia = 'N/A';
             if (!is_null($this->FacturaId)) {
@@ -49,11 +60,48 @@
 
         public function pesoTarifa() {
             if ($this->ServicioImportacion == 'AER') {
-                $decPesoComp = $this->Libras;
+                $decPesoComp = $this->Kilos;
             } else {
                 $decPesoComp = $this->PiesCub;
             }
-            return ($decPesoComp > $this->Volumen) ? $decPesoComp : $this->Volumen;
+            return $decPesoComp;
+        }
+
+        public function flete_imp(Conceptos $concepto)
+        {
+            t('Rutina: flete_imp');
+            $monto = 0;
+            $texto = '';
+            /* @var $objTariClie TarifaAgentes */
+            $objTariClie = $this->ClienteCorp->TarifaAgente;
+            $decPesoTari = $this->pesoTarifa();
+            t('El peso usado para calcular la Tarifa sera: '.$decPesoTari);
+            if (is_null($this->TarifaAgenteId)) {
+                $this->TarifaAgenteId = $objTariClie->Id;
+                $this->Save();
+                t('La guia no tenia tarifa, le acabo de asignar: '.$this->TarifaAgente->Nombre);
+            }
+            $intTariIdxx = $this->TarifaAgenteId;
+            $strNombTari = $this->TarifaAgente->Nombre;
+            $intZonaIdxx = $this->Destino->Zona;
+            $strServImpo = $this->__servImportacion();
+            t("Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
+            //$objClauWher   = QQ::Clause();
+            //$objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->TarifaId,$this->TarifaAgenteId);
+            //$objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Zona,$intZonaIdxx);
+            //$objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Servicio,trim($strServImpo));
+            $objPrecTari   = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx,$intZonaIdxx,$strServImpo);
+            if ($objPrecTari) {
+                $precio = $objPrecTari->Precio;
+                $monto  = $precio * $decPesoTari;
+                $texto  = "Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari: $precio, ";
+                $texto .= "para un peso de: $decPesoTari, totaliza: $monto";
+            } else {
+                $monto = 0;
+                $texto  = "No hay Tarifa para Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari";
+            }
+
+            return array($monto, $texto);
         }
 
         public function flete_nac(Conceptos $concepto)
@@ -116,6 +164,9 @@
         }
 
         public function calcularTodoLosConceptos($arrConcCalc) {
+            t('');
+            t('================================');
+            t('Rutina: calcularTodoLosConceptos');
             t('1ero se eliminan los conceptos existentes asociados a la guia');
             $this->borrarConceptos();
             t('Ahora se calculan los conceptos de la guia: '.$this->Id);
@@ -351,42 +402,26 @@
         /**
          * Esta rutina crea las piezas correspondientes a la Guia
          */
-		public function crearPieza(GuiaCacesa $objGuiaMasi, $objProcEjec, $objCkptProc) {
+		//public function crearPieza(GuiaCacesa $objGuiaMasi, $objProcEjec, $objCkptProc, $intIdxxPiez) {
+		public function crearPieza($objParaPiez) {
+            $objProcEjec = $objParaPiez->ProcEjec;
+            $objCkptProc = $objParaPiez->CkptProc;
+            $decKiloProm = $objParaPiez->KiloProm;
+            $decPiesProm = $objParaPiez->PiesProm;
+            $intIdxxPiez = $objParaPiez->IdxxPiez;
+
             t('Rutina: crearPieza');
             t('==================');
-            t('Procesando IdPieza: '.$objGuiaMasi->IdPieza);
-            return;
-            $strNumePiez = completar($objGuiaMasi->IdPieza);
+            $strNumePiez = completar($intIdxxPiez);
+            t('Procesando IdPieza: '.$strNumePiez);
             try {
                 $objNuevPiez = new GuiaPiezas();
                 $objNuevPiez->GuiaId      = $this->Id;
                 $objNuevPiez->IdPieza     = $this->Tracking.'-'.$strNumePiez;
-                $objNuevPiez->PiesCub     = $objGuiaMasi->PiesCub;
-                $objNuevPiez->Kilos       = $objGuiaMasi->Kilos;
-                $objNuevPiez->Descripcion = $objGuiaMasi->DescCont;
-                $objNuevPiez->PiesCub     = $objGuiaMasi->PiesCub;
+                $objNuevPiez->PiesCub     = $decPiesProm;
+                $objNuevPiez->Kilos       = $decKiloProm;
+                $objNuevPiez->Descripcion = 'N/A';
                 $objNuevPiez->Save();
-                if ($strNumePiez == '001') {
-                    t('Asignando dimensiones de la pieza: '.$objNuevPiez->IdPieza);
-                    $objNuevPiez->Guia->Kilos     = $objNuevPiez->Kilos;
-                    $objNuevPiez->Guia->PiesCub   = $objNuevPiez->PiesCub;
-                    $objNuevPiez->Guia->Contenido = trim($objNuevPiez->Descripcion);
-                    $objNuevPiez->Guia->Piezas    = 1;
-                    $objNuevPiez->Guia->Save();
-                    t('La guia ha sido actualizada con los valores de la 1era pieza');
-                }
-                if ($strNumePiez != '001') {
-                    //-----------------------------------------------------------------------------
-                    // Si se trata de piezas secundarias, las dimensiones deben sumarse a la guia
-                    //-----------------------------------------------------------------------------
-                    t('Agregando dimensiones de la pieza: '.$objNuevPiez->IdPieza);
-                    $objNuevPiez->Guia->Kilos     += $objNuevPiez->Kilos;
-                    $objNuevPiez->Guia->PiesCub   += $objNuevPiez->PiesCub;
-                    $objNuevPiez->Guia->Contenido .= ' / '.trim($objNuevPiez->Descripcion);
-                    $objNuevPiez->Guia->Piezas    += 1;
-                    $objNuevPiez->Guia->Save();
-                    t('La guia ha sido actualizada con los valores de la pieza secundaria');
-                }
                 $strTextObse = trim($objCkptProc->Descripcion).' (Manif.: '.$objNuevPiez->Guia->NotaEntrega->Referencia.')';
                 $arrResuGrab = $this->grabarCheckpointPieza($objNuevPiez, $objCkptProc, $strTextObse);
                 if (!$arrResuGrab['TodoOkey']) {
@@ -395,7 +430,7 @@
             } catch (Exception $e) {
                 t('Error: '.$e->getMessage());
                 $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
-                $arrParaErro['NumeRefe'] = 'Pieza: '.$objGuiaMasi->IdPieza;
+                $arrParaErro['NumeRefe'] = 'Pieza: '.$strNumePiez;
                 $arrParaErro['MensErro'] = $e->getMessage();
                 $arrParaErro['ComeErro'] = 'Fallo la creacion de la Pieza de la Guia';
                 GrabarError($arrParaErro);

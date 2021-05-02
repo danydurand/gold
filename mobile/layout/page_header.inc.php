@@ -1,8 +1,8 @@
         <?php
             if (isset($_SESSION['User'])) {
                 $objUsuaMobi = unserialize($_SESSION['User']);
-                $strLogiUsua = $objUsuaMobi->Login; 
-                $strAcceMobi = $objUsuaMobi->AccesoMobile; 
+                $strLogiUsua = $objUsuaMobi->LogiUsua;
+                $strAcceMobi = date('Y-m-d'); //$objUsuaMobi->AccesoMobile;
             } else {
                 QApplication::Redirect('index.php');
             }

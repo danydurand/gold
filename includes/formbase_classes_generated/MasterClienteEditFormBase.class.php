@@ -60,6 +60,7 @@ abstract class MasterClienteEditFormBase extends QForm {
 	protected $txtNumeDrif;
 	protected $lstVendedor;
 	protected $lstTarifa;
+	protected $lstTarifaAgente;
 	protected $txtFacturable;
 	protected $lstCiclo;
 	protected $txtNumeDnit;
@@ -191,6 +192,7 @@ abstract class MasterClienteEditFormBase extends QForm {
 		$this->txtNumeDrif = $this->mctMasterCliente->txtNumeDrif_Create();
 		$this->lstVendedor = $this->mctMasterCliente->lstVendedor_Create();
 		$this->lstTarifa = $this->mctMasterCliente->lstTarifa_Create();
+		$this->lstTarifaAgente = $this->mctMasterCliente->lstTarifaAgente_Create();
 		$this->txtFacturable = $this->mctMasterCliente->txtFacturable_Create();
 		$this->lstCiclo = $this->mctMasterCliente->lstCiclo_Create();
 		$this->txtNumeDnit = $this->mctMasterCliente->txtNumeDnit_Create();

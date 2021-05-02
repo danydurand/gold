@@ -18,6 +18,10 @@
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property string $Numero the value for strNumero (Unique)
 	 * @property integer $OperacionId the value for intOperacionId (Not Null)
+	 * @property string $Chofer the value for strChofer 
+	 * @property string $Cedula the value for strCedula 
+	 * @property string $Vehiculo the value for strVehiculo 
+	 * @property string $Placa the value for strPlaca 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
 	 * @property string $Hora the value for strHora (Not Null)
 	 * @property string $Estatus the value for strEstatus (Not Null)
@@ -78,6 +82,42 @@
 		 */
 		protected $intOperacionId;
 		const OperacionIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.chofer
+		 * @var string strChofer
+		 */
+		protected $strChofer;
+		const ChoferMaxLength = 50;
+		const ChoferDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.cedula
+		 * @var string strCedula
+		 */
+		protected $strCedula;
+		const CedulaMaxLength = 15;
+		const CedulaDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.vehiculo
+		 * @var string strVehiculo
+		 */
+		protected $strVehiculo;
+		const VehiculoMaxLength = 50;
+		const VehiculoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.placa
+		 * @var string strPlaca
+		 */
+		protected $strPlaca;
+		const PlacaMaxLength = 15;
+		const PlacaDefault = null;
 
 
 		/**
@@ -177,7 +217,7 @@
 		 * @var string strDireccion
 		 */
 		protected $strDireccion;
-		const DireccionMaxLength = 100;
+		const DireccionMaxLength = 250;
 		const DireccionDefault = null;
 
 
@@ -355,6 +395,10 @@
 			$this->intId = Containers::IdDefault;
 			$this->strNumero = Containers::NumeroDefault;
 			$this->intOperacionId = Containers::OperacionIdDefault;
+			$this->strChofer = Containers::ChoferDefault;
+			$this->strCedula = Containers::CedulaDefault;
+			$this->strVehiculo = Containers::VehiculoDefault;
+			$this->strPlaca = Containers::PlacaDefault;
 			$this->dttFecha = (Containers::FechaDefault === null)?null:new QDateTime(Containers::FechaDefault);
 			$this->strHora = Containers::HoraDefault;
 			$this->strEstatus = Containers::EstatusDefault;
@@ -717,6 +761,10 @@
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'numero', $strAliasPrefix . 'numero');
 			    $objBuilder->AddSelectItem($strTableName, 'operacion_id', $strAliasPrefix . 'operacion_id');
+			    $objBuilder->AddSelectItem($strTableName, 'chofer', $strAliasPrefix . 'chofer');
+			    $objBuilder->AddSelectItem($strTableName, 'cedula', $strAliasPrefix . 'cedula');
+			    $objBuilder->AddSelectItem($strTableName, 'vehiculo', $strAliasPrefix . 'vehiculo');
+			    $objBuilder->AddSelectItem($strTableName, 'placa', $strAliasPrefix . 'placa');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha', $strAliasPrefix . 'fecha');
 			    $objBuilder->AddSelectItem($strTableName, 'hora', $strAliasPrefix . 'hora');
 			    $objBuilder->AddSelectItem($strTableName, 'estatus', $strAliasPrefix . 'estatus');
@@ -869,6 +917,18 @@
 			$strAlias = $strAliasPrefix . 'operacion_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intOperacionId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'chofer';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strChofer = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'cedula';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strCedula = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'vehiculo';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strVehiculo = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'placa';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strPlaca = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'fecha';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttFecha = $objDbRow->GetColumn($strAliasName, 'Date');
@@ -1451,6 +1511,10 @@
 						INSERT INTO `containers` (
 							`numero`,
 							`operacion_id`,
+							`chofer`,
+							`cedula`,
+							`vehiculo`,
+							`placa`,
 							`fecha`,
 							`hora`,
 							`estatus`,
@@ -1469,6 +1533,10 @@
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strNumero) . ',
 							' . $objDatabase->SqlVariable($this->intOperacionId) . ',
+							' . $objDatabase->SqlVariable($this->strChofer) . ',
+							' . $objDatabase->SqlVariable($this->strCedula) . ',
+							' . $objDatabase->SqlVariable($this->strVehiculo) . ',
+							' . $objDatabase->SqlVariable($this->strPlaca) . ',
 							' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							' . $objDatabase->SqlVariable($this->strHora) . ',
 							' . $objDatabase->SqlVariable($this->strEstatus) . ',
@@ -1546,6 +1614,10 @@
 						SET
 							`numero` = ' . $objDatabase->SqlVariable($this->strNumero) . ',
 							`operacion_id` = ' . $objDatabase->SqlVariable($this->intOperacionId) . ',
+							`chofer` = ' . $objDatabase->SqlVariable($this->strChofer) . ',
+							`cedula` = ' . $objDatabase->SqlVariable($this->strCedula) . ',
+							`vehiculo` = ' . $objDatabase->SqlVariable($this->strVehiculo) . ',
+							`placa` = ' . $objDatabase->SqlVariable($this->strPlaca) . ',
 							`fecha` = ' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							`hora` = ' . $objDatabase->SqlVariable($this->strHora) . ',
 							`estatus` = ' . $objDatabase->SqlVariable($this->strEstatus) . ',
@@ -1703,6 +1775,10 @@
 			// Update $this's local variables to match
 			$this->strNumero = $objReloaded->strNumero;
 			$this->OperacionId = $objReloaded->OperacionId;
+			$this->strChofer = $objReloaded->strChofer;
+			$this->strCedula = $objReloaded->strCedula;
+			$this->strVehiculo = $objReloaded->strVehiculo;
+			$this->strPlaca = $objReloaded->strPlaca;
 			$this->dttFecha = $objReloaded->dttFecha;
 			$this->strHora = $objReloaded->strHora;
 			$this->strEstatus = $objReloaded->strEstatus;
@@ -1761,6 +1837,34 @@
 					 * @return integer
 					 */
 					return $this->intOperacionId;
+
+				case 'Chofer':
+					/**
+					 * Gets the value for strChofer 
+					 * @return string
+					 */
+					return $this->strChofer;
+
+				case 'Cedula':
+					/**
+					 * Gets the value for strCedula 
+					 * @return string
+					 */
+					return $this->strCedula;
+
+				case 'Vehiculo':
+					/**
+					 * Gets the value for strVehiculo 
+					 * @return string
+					 */
+					return $this->strVehiculo;
+
+				case 'Placa':
+					/**
+					 * Gets the value for strPlaca 
+					 * @return string
+					 */
+					return $this->strPlaca;
 
 				case 'Fecha':
 					/**
@@ -2053,6 +2157,58 @@
 					try {
 						$this->objOperacion = null;
 						return ($this->intOperacionId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Chofer':
+					/**
+					 * Sets the value for strChofer 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strChofer = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Cedula':
+					/**
+					 * Sets the value for strCedula 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strCedula = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Vehiculo':
+					/**
+					 * Sets the value for strVehiculo 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strVehiculo = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Placa':
+					/**
+					 * Sets the value for strPlaca 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strPlaca = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2954,6 +3110,10 @@
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Numero" type="xsd:string"/>';
 			$strToReturn .= '<element name="Operacion" type="xsd1:SdeOperacion"/>';
+			$strToReturn .= '<element name="Chofer" type="xsd:string"/>';
+			$strToReturn .= '<element name="Cedula" type="xsd:string"/>';
+			$strToReturn .= '<element name="Vehiculo" type="xsd:string"/>';
+			$strToReturn .= '<element name="Placa" type="xsd:string"/>';
 			$strToReturn .= '<element name="Fecha" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="Hora" type="xsd:string"/>';
 			$strToReturn .= '<element name="Estatus" type="xsd:string"/>';
@@ -3004,6 +3164,14 @@
 			if ((property_exists($objSoapObject, 'Operacion')) &&
 				($objSoapObject->Operacion))
 				$objToReturn->Operacion = SdeOperacion::GetObjectFromSoapObject($objSoapObject->Operacion);
+			if (property_exists($objSoapObject, 'Chofer'))
+				$objToReturn->strChofer = $objSoapObject->Chofer;
+			if (property_exists($objSoapObject, 'Cedula'))
+				$objToReturn->strCedula = $objSoapObject->Cedula;
+			if (property_exists($objSoapObject, 'Vehiculo'))
+				$objToReturn->strVehiculo = $objSoapObject->Vehiculo;
+			if (property_exists($objSoapObject, 'Placa'))
+				$objToReturn->strPlaca = $objSoapObject->Placa;
 			if (property_exists($objSoapObject, 'Fecha'))
 				$objToReturn->dttFecha = new QDateTime($objSoapObject->Fecha);
 			if (property_exists($objSoapObject, 'Hora'))
@@ -3091,6 +3259,10 @@
 			$iArray['Id'] = $this->intId;
 			$iArray['Numero'] = $this->strNumero;
 			$iArray['OperacionId'] = $this->intOperacionId;
+			$iArray['Chofer'] = $this->strChofer;
+			$iArray['Cedula'] = $this->strCedula;
+			$iArray['Vehiculo'] = $this->strVehiculo;
+			$iArray['Placa'] = $this->strPlaca;
 			$iArray['Fecha'] = $this->dttFecha;
 			$iArray['Hora'] = $this->strHora;
 			$iArray['Estatus'] = $this->strEstatus;
@@ -3258,6 +3430,10 @@
      * @property-read QQNode $Numero
      * @property-read QQNode $OperacionId
      * @property-read QQNodeSdeOperacion $Operacion
+     * @property-read QQNode $Chofer
+     * @property-read QQNode $Cedula
+     * @property-read QQNode $Vehiculo
+     * @property-read QQNode $Placa
      * @property-read QQNode $Fecha
      * @property-read QQNode $Hora
      * @property-read QQNode $Estatus
@@ -3301,6 +3477,14 @@
 					return new QQNode('operacion_id', 'OperacionId', 'Integer', $this);
 				case 'Operacion':
 					return new QQNodeSdeOperacion('operacion_id', 'Operacion', 'Integer', $this);
+				case 'Chofer':
+					return new QQNode('chofer', 'Chofer', 'VarChar', $this);
+				case 'Cedula':
+					return new QQNode('cedula', 'Cedula', 'VarChar', $this);
+				case 'Vehiculo':
+					return new QQNode('vehiculo', 'Vehiculo', 'VarChar', $this);
+				case 'Placa':
+					return new QQNode('placa', 'Placa', 'VarChar', $this);
 				case 'Fecha':
 					return new QQNode('fecha', 'Fecha', 'Date', $this);
 				case 'Hora':
@@ -3368,6 +3552,10 @@
      * @property-read QQNode $Numero
      * @property-read QQNode $OperacionId
      * @property-read QQNodeSdeOperacion $Operacion
+     * @property-read QQNode $Chofer
+     * @property-read QQNode $Cedula
+     * @property-read QQNode $Vehiculo
+     * @property-read QQNode $Placa
      * @property-read QQNode $Fecha
      * @property-read QQNode $Hora
      * @property-read QQNode $Estatus
@@ -3411,6 +3599,14 @@
 					return new QQNode('operacion_id', 'OperacionId', 'integer', $this);
 				case 'Operacion':
 					return new QQNodeSdeOperacion('operacion_id', 'Operacion', 'integer', $this);
+				case 'Chofer':
+					return new QQNode('chofer', 'Chofer', 'string', $this);
+				case 'Cedula':
+					return new QQNode('cedula', 'Cedula', 'string', $this);
+				case 'Vehiculo':
+					return new QQNode('vehiculo', 'Vehiculo', 'string', $this);
+				case 'Placa':
+					return new QQNode('placa', 'Placa', 'string', $this);
 				case 'Fecha':
 					return new QQNode('fecha', 'Fecha', 'QDateTime', $this);
 				case 'Hora':

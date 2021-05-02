@@ -198,11 +198,11 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
             $this->dtgGuiaNota->AddColumn($colPiesGuia);
         }
 
-        $colVoluGuia = new QDataGridColumn($this);
-        $colVoluGuia->Name = QApplication::Translate('Volumen');
-        $colVoluGuia->Html = '<?= $_ITEM->Volumen ?>';
-        $colVoluGuia->Wrap = true;
-        $this->dtgGuiaNota->AddColumn($colVoluGuia);
+        //$colVoluGuia = new QDataGridColumn($this);
+        //$colVoluGuia->Name = QApplication::Translate('Volumen');
+        /*$colVoluGuia->Html = '<?= $_ITEM->Volumen ?>';*/
+        //$colVoluGuia->Wrap = true;
+        //$this->dtgGuiaNota->AddColumn($colVoluGuia);
 
     }
 
@@ -223,7 +223,9 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
     }
 
     protected function dtgNotaConc_Bind() {
-        $this->dtgNotaConc->DataSource = $this->mctNotaEntrega->NotaEntrega->GetNotaConceptosArray();
+	    $objClauOrde   = QQ::Clause();
+	    $objClauOrde[] = QQ::OrderBy(QQN::NotaConceptos()->Concepto->Orden);
+        $this->dtgNotaConc->DataSource = $this->mctNotaEntrega->NotaEntrega->GetNotaConceptosArray($objClauOrde);
     }
 
     protected function dtgNotaConcColumns() {
@@ -234,7 +236,7 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
         $this->dtgNotaConc->AddColumn($colConcNota);
 
         $colMostComo = new QDataGridColumn($this);
-        $colMostComo->Name = QApplication::Translate('Concepto');
+        $colMostComo->Name = QApplication::Translate('Mostrar Como');
         $colMostComo->Html = '<?= $_ITEM->MostrarComo ?>';
         $colMostComo->Width = 150;
         $this->dtgNotaConc->AddColumn($colMostComo);
@@ -246,14 +248,15 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
 
         $colValoConc = new QDataGridColumn($this);
         $colValoConc->Name = QApplication::Translate('Valor');
-        $colValoConc->Html = '<?= $_ITEM->Valor ?>';
+        $colValoConc->Html = '<?= nf($_ITEM->Valor) ?>';
         $colValoConc->Width = 60;
         $this->dtgNotaConc->AddColumn($colValoConc);
 
         $colMontConc = new QDataGridColumn($this);
         $colMontConc->Name = QApplication::Translate('Monto');
-        $colMontConc->Html = '<?= $_ITEM->Monto ?>';
+        $colMontConc->Html = '<?= nf($_ITEM->Monto) ?>';
         $colMontConc->Width = 80;
+        $colMontConc->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgNotaConc->AddColumn($colMontConc);
 
         //$colExplConc = new QDataGridColumn($this);

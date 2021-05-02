@@ -69,11 +69,11 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php } else { ?>
                     <div class="col-md-8">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="title">Guías o Valijas</div>
                                 <?php $this->txtListNume->Render(); ?>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                                 <div class="title">Piezas Aptas para Manifestar</div>
                                 <?php $this->dtgPiezApta->Render(); ?>
                             </div>

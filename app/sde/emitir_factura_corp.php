@@ -155,7 +155,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
 
     protected function cargarConceptos() {
         $this->lstConcFact->RemoveAllItems();
-        $arrConcActi = Conceptos::conceptosActivos('NAC');
+        $arrConcActi = Conceptos::conceptosActivos('IMP');
         foreach ($arrConcActi as $objConcActi) {
             $this->lstConcFact->AddItem($objConcActi->__toString(),$objConcActi->Id,true);
         }
@@ -273,9 +273,9 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                 t($strTextErro);
                 throw new Exception($strTextErro);
             }
-            //--------------------------------------------------
-            // Se seleccionan y procesan las nde's del Cliente
-            //--------------------------------------------------
+            //---------------------------------------------------------
+            // Se seleccionan y procesan los manifiestos del Cliente
+            //---------------------------------------------------------
             $objDatabase = Facturas::GetDatabase();
 
             t('Se creo la Factura Id: '.$objFactClie->Id);

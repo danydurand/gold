@@ -294,7 +294,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 
         t('resetee');
 	    // Se notifica al Usuario el exito de la transaccion
-        $this->mensaje('Transaccion Exitosa.  Rango guardado !!!','m','s',__iCHEC__);
+        $this->success('Transaccion Exitosa.  Rango guardado !!!');
     }
 
     protected function btnCancRang_Click() {
@@ -533,7 +533,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
             if (!is_numeric($mixValoCamp)) {
                 if (!in_array($mixValoCamp,['metodo','rango'])) {
                     $strTextMens = 'El Valor del Concepto debe ser: "metodo", "rango" o "un numero"';
-                    $this->mensaje($strTextMens,'m','d',__iHAND__);
+                    $this->danger($strTextMens);
                     return false;
                 }
             }
@@ -570,7 +570,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/conceptos_edit.php/'.$this->mctConceptos->Conceptos->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa !!!');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Conceptos';
@@ -579,7 +579,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/conceptos_edit.php/'.$this->mctConceptos->Conceptos->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa !!!');
 		}
 	}
 
@@ -591,9 +591,8 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $arrTablRela = $this->mctConceptos->TablasRelacionadasConceptos();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            $strTextMens = sprintf('Existen registros relacionados en %s',$strTablRela);
+            $this->danger($strTextMens);
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {

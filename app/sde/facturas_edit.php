@@ -86,6 +86,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->txtTotal         = disableControl($this->txtTotal);
         $this->txtNotaCreditoId = disableControl($this->txtNotaCreditoId);
         $this->txtEstatusPago   = disableControl($this->txtEstatusPago);
+        $this->lstSucursal      = disableControl($this->lstSucursal);
 
         $this->dtgPagoFact_Create();
         $this->btnImprFact_Create();
@@ -162,21 +163,24 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgNotaFact->AddColumn($colServImpo);
 
         $colCantPiez = new QDataGridColumn($this);
-        $colCantPiez->Name = QApplication::Translate('Piezas');
+        $colCantPiez->Name = QApplication::Translate('Pzas');
         $colCantPiez->Html = '<?= $_ITEM->Piezas ?>';
         $colCantPiez->Width = 60;
         $this->dtgNotaFact->AddColumn($colCantPiez);
 
         $colCantLibr = new QDataGridColumn($this);
-        $colCantLibr->Name = QApplication::Translate('Libras');
-        $colCantLibr->Html = '<?= $_ITEM->Libras ?>';
+        $colCantLibr->Name = "Peso";
+        $colCantLibr->Html = '<?= $_ITEM->ServicioImportacion == "AER" ? nf($_ITEM->Kilos) : nf($_ITEM->PiesCub) ?>';
         $colCantLibr->Width = 60;
+        $colCantLibr->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgNotaFact->AddColumn($colCantLibr);
 
         $colTotaNota = new QDataGridColumn($this);
         $colTotaNota->Name = QApplication::Translate('Total');
-        $colTotaNota->Html = '<?= $_ITEM->Total ?>';
+        $colTotaNota->Html = '<?= nf($_ITEM->Total) ?>';
         $colTotaNota->Wrap = true;
+        $colTotaNota->Width = 70;
+        $colTotaNota->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgNotaFact->AddColumn($colTotaNota);
 
     }

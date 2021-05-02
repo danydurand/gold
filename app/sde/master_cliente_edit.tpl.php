@@ -103,6 +103,8 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 										<?php $this->txtEntrFact->RenderWithName(); ?>
 										<?php $this->chkTariClie->RenderWithName(); ?>
 										<?php $this->lstTariClie->RenderWithName(); ?>
+										<?php $this->chkTariAgen->RenderWithName(); ?>
+										<?php $this->lstTariAgen->RenderWithName(); ?>
 										<?php $this->txtPersCona->RenderWithName(); ?>
 										<?php $this->txtTeleCona->RenderWithName(); ?>
 										<?php $this->txtDireMail->RenderWithName(); ?>

@@ -47,6 +47,7 @@
 	 * @property string $Ubicacion the value for strUbicacion 
 	 * @property integer $VendedorId the value for intVendedorId 
 	 * @property integer $TarifaId the value for intTarifaId 
+	 * @property integer $TarifaAgenteId the value for intTarifaAgenteId 
 	 * @property integer $ReceptoriaOrigenId the value for intReceptoriaOrigenId 
 	 * @property integer $ReceptoriaDestinoId the value for intReceptoriaDestinoId 
 	 * @property double $Kilos the value for fltKilos 
@@ -76,6 +77,7 @@
 	 * @property Productos $Producto the value for the Productos object referenced by intProductoId (Not Null)
 	 * @property FacVendedor $Vendedor the value for the FacVendedor object referenced by intVendedorId 
 	 * @property FacTarifa $Tarifa the value for the FacTarifa object referenced by intTarifaId 
+	 * @property TarifaAgentes $TarifaAgente the value for the TarifaAgentes object referenced by intTarifaAgenteId 
 	 * @property Counter $ReceptoriaOrigen the value for the Counter object referenced by intReceptoriaOrigenId 
 	 * @property Counter $ReceptoriaDestino the value for the Counter object referenced by intReceptoriaDestinoId 
 	 * @property GuiaPod $GuiaPod the value for the GuiaPod object referenced by intGuiaPodId 
@@ -368,6 +370,14 @@
 		 */
 		protected $intTarifaId;
 		const TarifaIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias.tarifa_agente_id
+		 * @var integer intTarifaAgenteId
+		 */
+		protected $intTarifaAgenteId;
+		const TarifaAgenteIdDefault = null;
 
 
 		/**
@@ -740,6 +750,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guias.tarifa_agente_id.
+		 *
+		 * NOTE: Always use the TarifaAgente property getter to correctly retrieve this TarifaAgentes object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var TarifaAgentes objTarifaAgente
+		 */
+		protected $objTarifaAgente;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column guias.receptoria_origen_id.
 		 *
 		 * NOTE: Always use the ReceptoriaOrigen property getter to correctly retrieve this Counter object.
@@ -835,6 +855,7 @@
 			$this->strUbicacion = Guias::UbicacionDefault;
 			$this->intVendedorId = Guias::VendedorIdDefault;
 			$this->intTarifaId = Guias::TarifaIdDefault;
+			$this->intTarifaAgenteId = Guias::TarifaAgenteIdDefault;
 			$this->intReceptoriaOrigenId = Guias::ReceptoriaOrigenIdDefault;
 			$this->intReceptoriaDestinoId = Guias::ReceptoriaDestinoIdDefault;
 			$this->fltKilos = Guias::KilosDefault;
@@ -1229,6 +1250,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'ubicacion', $strAliasPrefix . 'ubicacion');
 			    $objBuilder->AddSelectItem($strTableName, 'vendedor_id', $strAliasPrefix . 'vendedor_id');
 			    $objBuilder->AddSelectItem($strTableName, 'tarifa_id', $strAliasPrefix . 'tarifa_id');
+			    $objBuilder->AddSelectItem($strTableName, 'tarifa_agente_id', $strAliasPrefix . 'tarifa_agente_id');
 			    $objBuilder->AddSelectItem($strTableName, 'receptoria_origen_id', $strAliasPrefix . 'receptoria_origen_id');
 			    $objBuilder->AddSelectItem($strTableName, 'receptoria_destino_id', $strAliasPrefix . 'receptoria_destino_id');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
@@ -1471,6 +1493,9 @@
 			$strAlias = $strAliasPrefix . 'tarifa_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intTarifaId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'tarifa_agente_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intTarifaAgenteId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'receptoria_origen_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intReceptoriaOrigenId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1619,6 +1644,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['tarifa_id']) ? null : $objExpansionAliasArray['tarifa_id']);
 				$objToReturn->objTarifa = FacTarifa::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifa_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for TarifaAgente Early Binding
+			$strAlias = $strAliasPrefix . 'tarifa_agente_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['tarifa_agente_id']) ? null : $objExpansionAliasArray['tarifa_agente_id']);
+				$objToReturn->objTarifaAgente = TarifaAgentes::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifa_agente_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for ReceptoriaOrigen Early Binding
 			$strAlias = $strAliasPrefix . 'receptoria_origen_id__id';
@@ -2266,6 +2298,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of Guias objects,
+		 * by TarifaAgenteId Index(es)
+		 * @param integer $intTarifaAgenteId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Guias[]
+		*/
+		public static function LoadArrayByTarifaAgenteId($intTarifaAgenteId, $objOptionalClauses = null) {
+			// Call Guias::QueryArray to perform the LoadArrayByTarifaAgenteId query
+			try {
+				return Guias::QueryArray(
+					QQ::Equal(QQN::Guias()->TarifaAgenteId, $intTarifaAgenteId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Guiases
+		 * by TarifaAgenteId Index(es)
+		 * @param integer $intTarifaAgenteId
+		 * @return int
+		*/
+		public static function CountByTarifaAgenteId($intTarifaAgenteId) {
+			// Call Guias::QueryCount to perform the CountByTarifaAgenteId query
+			return Guias::QueryCount(
+				QQ::Equal(QQN::Guias()->TarifaAgenteId, $intTarifaAgenteId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -2359,6 +2423,7 @@
 							`ubicacion`,
 							`vendedor_id`,
 							`tarifa_id`,
+							`tarifa_agente_id`,
 							`receptoria_origen_id`,
 							`receptoria_destino_id`,
 							`kilos`,
@@ -2409,6 +2474,7 @@
 							' . $objDatabase->SqlVariable($this->strUbicacion) . ',
 							' . $objDatabase->SqlVariable($this->intVendedorId) . ',
 							' . $objDatabase->SqlVariable($this->intTarifaId) . ',
+							' . $objDatabase->SqlVariable($this->intTarifaAgenteId) . ',
 							' . $objDatabase->SqlVariable($this->intReceptoriaOrigenId) . ',
 							' . $objDatabase->SqlVariable($this->intReceptoriaDestinoId) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
@@ -2518,6 +2584,7 @@
 							`ubicacion` = ' . $objDatabase->SqlVariable($this->strUbicacion) . ',
 							`vendedor_id` = ' . $objDatabase->SqlVariable($this->intVendedorId) . ',
 							`tarifa_id` = ' . $objDatabase->SqlVariable($this->intTarifaId) . ',
+							`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intTarifaAgenteId) . ',
 							`receptoria_origen_id` = ' . $objDatabase->SqlVariable($this->intReceptoriaOrigenId) . ',
 							`receptoria_destino_id` = ' . $objDatabase->SqlVariable($this->intReceptoriaDestinoId) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
@@ -2736,6 +2803,7 @@
 			$this->strUbicacion = $objReloaded->strUbicacion;
 			$this->VendedorId = $objReloaded->VendedorId;
 			$this->TarifaId = $objReloaded->TarifaId;
+			$this->TarifaAgenteId = $objReloaded->TarifaAgenteId;
 			$this->ReceptoriaOrigenId = $objReloaded->ReceptoriaOrigenId;
 			$this->ReceptoriaDestinoId = $objReloaded->ReceptoriaDestinoId;
 			$this->fltKilos = $objReloaded->fltKilos;
@@ -3001,6 +3069,13 @@
 					 */
 					return $this->intTarifaId;
 
+				case 'TarifaAgenteId':
+					/**
+					 * Gets the value for intTarifaAgenteId 
+					 * @return integer
+					 */
+					return $this->intTarifaAgenteId;
+
 				case 'ReceptoriaOrigenId':
 					/**
 					 * Gets the value for intReceptoriaOrigenId 
@@ -3259,6 +3334,20 @@
 						if ((!$this->objTarifa) && (!is_null($this->intTarifaId)))
 							$this->objTarifa = FacTarifa::Load($this->intTarifaId);
 						return $this->objTarifa;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'TarifaAgente':
+					/**
+					 * Gets the value for the TarifaAgentes object referenced by intTarifaAgenteId 
+					 * @return TarifaAgentes
+					 */
+					try {
+						if ((!$this->objTarifaAgente) && (!is_null($this->intTarifaAgenteId)))
+							$this->objTarifaAgente = TarifaAgentes::Load($this->intTarifaAgenteId);
+						return $this->objTarifaAgente;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3878,6 +3967,20 @@
 						throw $objExc;
 					}
 
+				case 'TarifaAgenteId':
+					/**
+					 * Sets the value for intTarifaAgenteId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objTarifaAgente = null;
+						return ($this->intTarifaAgenteId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'ReceptoriaOrigenId':
 					/**
 					 * Sets the value for intReceptoriaOrigenId 
@@ -4370,6 +4473,38 @@
 						// Update Local Member Variables
 						$this->objTarifa = $mixValue;
 						$this->intTarifaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'TarifaAgente':
+					/**
+					 * Sets the value for the TarifaAgentes object referenced by intTarifaAgenteId 
+					 * @param TarifaAgentes $mixValue
+					 * @return TarifaAgentes
+					 */
+					if (is_null($mixValue)) {
+						$this->intTarifaAgenteId = null;
+						$this->objTarifaAgente = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a TarifaAgentes object
+						try {
+							$mixValue = QType::Cast($mixValue, 'TarifaAgentes');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED TarifaAgentes object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved TarifaAgente for this Guias');
+
+						// Update Local Member Variables
+						$this->objTarifaAgente = $mixValue;
+						$this->intTarifaAgenteId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -5535,6 +5670,7 @@
 			$strToReturn .= '<element name="Ubicacion" type="xsd:string"/>';
 			$strToReturn .= '<element name="Vendedor" type="xsd1:FacVendedor"/>';
 			$strToReturn .= '<element name="Tarifa" type="xsd1:FacTarifa"/>';
+			$strToReturn .= '<element name="TarifaAgente" type="xsd1:TarifaAgentes"/>';
 			$strToReturn .= '<element name="ReceptoriaOrigen" type="xsd1:Counter"/>';
 			$strToReturn .= '<element name="ReceptoriaDestino" type="xsd1:Counter"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
@@ -5572,6 +5708,7 @@
 				Productos::AlterSoapComplexTypeArray($strComplexTypeArray);
 				FacVendedor::AlterSoapComplexTypeArray($strComplexTypeArray);
 				FacTarifa::AlterSoapComplexTypeArray($strComplexTypeArray);
+				TarifaAgentes::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Counter::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Counter::AlterSoapComplexTypeArray($strComplexTypeArray);
 				GuiaPod::AlterSoapComplexTypeArray($strComplexTypeArray);
@@ -5662,6 +5799,9 @@
 			if ((property_exists($objSoapObject, 'Tarifa')) &&
 				($objSoapObject->Tarifa))
 				$objToReturn->Tarifa = FacTarifa::GetObjectFromSoapObject($objSoapObject->Tarifa);
+			if ((property_exists($objSoapObject, 'TarifaAgente')) &&
+				($objSoapObject->TarifaAgente))
+				$objToReturn->TarifaAgente = TarifaAgentes::GetObjectFromSoapObject($objSoapObject->TarifaAgente);
 			if ((property_exists($objSoapObject, 'ReceptoriaOrigen')) &&
 				($objSoapObject->ReceptoriaOrigen))
 				$objToReturn->ReceptoriaOrigen = Counter::GetObjectFromSoapObject($objSoapObject->ReceptoriaOrigen);
@@ -5760,6 +5900,10 @@
 				$objObject->objTarifa = FacTarifa::GetSoapObjectFromObject($objObject->objTarifa, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intTarifaId = null;
+			if ($objObject->objTarifaAgente)
+				$objObject->objTarifaAgente = TarifaAgentes::GetSoapObjectFromObject($objObject->objTarifaAgente, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intTarifaAgenteId = null;
 			if ($objObject->objReceptoriaOrigen)
 				$objObject->objReceptoriaOrigen = Counter::GetSoapObjectFromObject($objObject->objReceptoriaOrigen, false);
 			else if (!$blnBindRelatedObjects)
@@ -5822,6 +5966,7 @@
 			$iArray['Ubicacion'] = $this->strUbicacion;
 			$iArray['VendedorId'] = $this->intVendedorId;
 			$iArray['TarifaId'] = $this->intTarifaId;
+			$iArray['TarifaAgenteId'] = $this->intTarifaAgenteId;
 			$iArray['ReceptoriaOrigenId'] = $this->intReceptoriaOrigenId;
 			$iArray['ReceptoriaDestinoId'] = $this->intReceptoriaDestinoId;
 			$iArray['Kilos'] = $this->fltKilos;
@@ -5956,6 +6101,8 @@
      * @property-read QQNodeFacVendedor $Vendedor
      * @property-read QQNode $TarifaId
      * @property-read QQNodeFacTarifa $Tarifa
+     * @property-read QQNode $TarifaAgenteId
+     * @property-read QQNodeTarifaAgentes $TarifaAgente
      * @property-read QQNode $ReceptoriaOrigenId
      * @property-read QQNodeCounter $ReceptoriaOrigen
      * @property-read QQNode $ReceptoriaDestinoId
@@ -6079,6 +6226,10 @@
 					return new QQNode('tarifa_id', 'TarifaId', 'Integer', $this);
 				case 'Tarifa':
 					return new QQNodeFacTarifa('tarifa_id', 'Tarifa', 'Integer', $this);
+				case 'TarifaAgenteId':
+					return new QQNode('tarifa_agente_id', 'TarifaAgenteId', 'Integer', $this);
+				case 'TarifaAgente':
+					return new QQNodeTarifaAgentes('tarifa_agente_id', 'TarifaAgente', 'Integer', $this);
 				case 'ReceptoriaOrigenId':
 					return new QQNode('receptoria_origen_id', 'ReceptoriaOrigenId', 'Integer', $this);
 				case 'ReceptoriaOrigen':
@@ -6198,6 +6349,8 @@
      * @property-read QQNodeFacVendedor $Vendedor
      * @property-read QQNode $TarifaId
      * @property-read QQNodeFacTarifa $Tarifa
+     * @property-read QQNode $TarifaAgenteId
+     * @property-read QQNodeTarifaAgentes $TarifaAgente
      * @property-read QQNode $ReceptoriaOrigenId
      * @property-read QQNodeCounter $ReceptoriaOrigen
      * @property-read QQNode $ReceptoriaDestinoId
@@ -6321,6 +6474,10 @@
 					return new QQNode('tarifa_id', 'TarifaId', 'integer', $this);
 				case 'Tarifa':
 					return new QQNodeFacTarifa('tarifa_id', 'Tarifa', 'integer', $this);
+				case 'TarifaAgenteId':
+					return new QQNode('tarifa_agente_id', 'TarifaAgenteId', 'integer', $this);
+				case 'TarifaAgente':
+					return new QQNodeTarifaAgentes('tarifa_agente_id', 'TarifaAgente', 'integer', $this);
 				case 'ReceptoriaOrigenId':
 					return new QQNode('receptoria_origen_id', 'ReceptoriaOrigenId', 'integer', $this);
 				case 'ReceptoriaOrigen':

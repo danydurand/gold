@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="row" style="margin-top: .5em">
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <?php $this->lblId->RenderWithName(); ?>
                 <?php $this->txtNombre->RenderWithName(); ?>
                 <?php $this->txtOrden->RenderWithName(); ?>

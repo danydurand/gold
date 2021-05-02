@@ -54,6 +54,10 @@ abstract class ContainersEditFormBase extends QForm {
 	protected $lblId;
 	protected $txtNumero;
 	protected $lstOperacion;
+	protected $txtChofer;
+	protected $txtCedula;
+	protected $txtVehiculo;
+	protected $txtPlaca;
 	protected $calFecha;
 	protected $txtHora;
 	protected $txtEstatus;
@@ -143,6 +147,10 @@ abstract class ContainersEditFormBase extends QForm {
 		$this->lblId = $this->mctContainers->lblId_Create();
 		$this->txtNumero = $this->mctContainers->txtNumero_Create();
 		$this->lstOperacion = $this->mctContainers->lstOperacion_Create();
+		$this->txtChofer = $this->mctContainers->txtChofer_Create();
+		$this->txtCedula = $this->mctContainers->txtCedula_Create();
+		$this->txtVehiculo = $this->mctContainers->txtVehiculo_Create();
+		$this->txtPlaca = $this->mctContainers->txtPlaca_Create();
 		$this->calFecha = $this->mctContainers->calFecha_Create();
 		$this->txtHora = $this->mctContainers->txtHora_Create();
 		$this->txtEstatus = $this->mctContainers->txtEstatus_Create();
