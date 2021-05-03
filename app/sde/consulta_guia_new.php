@@ -58,7 +58,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblFormPago;
     protected $lblValoDecl;
     protected $lblGuiaReto;
-    protected $lblFletDire;
+    protected $lblCodiProd;
     protected $lblPersEntr;
     protected $lblFechEntr;
     protected $lblTextObse;
@@ -196,6 +196,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblFechGuia_Create();
         $this->lblDescCont_Create();
         $this->lblFormPago_Create();
+        $this->lblCodiProd_Create();
         $this->lblPiezPeso_Create();
         $this->lblValoDecl_Create();
         $this->lblPersEntr_Create();
@@ -596,11 +597,28 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     // -------- Costos del Servicio -------- //
     protected function lblTipoTari_Create() {
         $this->lblTipoTari = new QLabel($this);
-        $objTariGuia = FacTarifa::Load($this->objGuia->TarifaId);
-        if ($objTariGuia) {
-            $this->lblTipoTari->Text = $objTariGuia->Descripcion;
-        } else {
-            $this->lblTipoTari->Text = 'N/A';
+        switch ($this->objGuia->Producto->Codigo) {
+            case 'IMP':
+                $objTariGuia = TarifaAgentes::Load($this->objGuia->TarifaAgenteId);
+                if ($objTariGuia) {
+                    $this->lblTipoTari->Text = $objTariGuia->Nombre;
+                } else {
+                    $this->lblTipoTari->Text = 'N/A';
+                }
+                break;
+            case 'NAC':
+                $objTariGuia = FacTarifa::Load($this->objGuia->TarifaId);
+                if ($objTariGuia) {
+                    $this->lblTipoTari->Text = $objTariGuia->Descripcion;
+                } else {
+                    $this->lblTipoTari->Text = 'N/A';
+                }
+                break;
+            case 'EXP':
+                $this->lblTipoTari->Text = 'N/A';
+                break;
+            default:
+                $this->lblTipoTari->Text = 'N/A';
         }
     }
 
@@ -620,7 +638,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblNumeGuia_Create() {
         $this->lblNumeGuia = new QLabel($this);
         $this->lblNumeGuia->Name = 'Guía #';
-        $this->lblNumeGuia->Text = $this->objGuia->Numero;
+        $this->lblNumeGuia->Text = $this->objGuia->Tracking;
         $this->lblNumeGuia->HtmlEntities = false;
     }
 
@@ -641,6 +659,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblFormPago = new QLabel($this);
         $this->lblFormPago->Name = 'M. Pago';
         $this->lblFormPago->Text = $this->objGuia->FormaPago;
+    }
+
+    protected function lblCodiProd_Create() {
+        $this->lblCodiProd = new QLabel($this);
+        $this->lblCodiProd->Name = 'Producto';
+        $this->lblCodiProd->Text = $this->objGuia->Producto->Codigo;
     }
 
     protected function lblPiezPeso_Create() {

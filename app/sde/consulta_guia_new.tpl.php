@@ -170,10 +170,10 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                             <?php $this->lblPiezPeso->Render(); ?>
                         </div>
                         <div class="col-md-3">
-                            <div class="titulo-c">Flete Directo?</div>
+                            <div class="titulo-c">Producto</div>
                         </div>
                         <div class="col-md-3">
-                            <?php //$this->lblFletDire->Render(); ?>
+                            <?php $this->lblCodiProd->Render(); ?>
                         </div>
                     </div>
                     <div class="row">

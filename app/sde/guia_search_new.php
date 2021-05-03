@@ -74,8 +74,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->lstReceOrig_Create();
         $this->lstCodiDest_Create();
         $this->lstReceDest_Create();
-        //$this->txtNombRemi_Create();
-        //$this->txtNombDest_Create();
         $this->lstCodiVend_Create();
         $this->rdbTienPodx_Create();
         $this->calEntrInic_Create();

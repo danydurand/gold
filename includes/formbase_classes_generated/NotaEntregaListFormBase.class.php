@@ -83,6 +83,7 @@ abstract class NotaEntregaListFormBase extends QForm {
         $this->dtgNotaEntregas->MetaAddColumn('Estatus');
         $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion');
         $this->dtgNotaEntregas->MetaAddColumn('EnKilos');
+        $this->dtgNotaEntregas->MetaAddColumn('CargaRecibida');
         $this->dtgNotaEntregas->MetaAddColumn('Cargadas');
         $this->dtgNotaEntregas->MetaAddColumn('PorProcesar');
         $this->dtgNotaEntregas->MetaAddColumn('PorCorregir');

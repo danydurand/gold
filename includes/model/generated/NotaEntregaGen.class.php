@@ -22,6 +22,7 @@
 	 * @property string $Estatus the value for strEstatus (Not Null)
 	 * @property string $ServicioImportacion the value for strServicioImportacion (Not Null)
 	 * @property boolean $EnKilos the value for blnEnKilos (Not Null)
+	 * @property boolean $CargaRecibida the value for blnCargaRecibida 
 	 * @property integer $Cargadas the value for intCargadas (Not Null)
 	 * @property integer $PorProcesar the value for intPorProcesar (Not Null)
 	 * @property integer $PorCorregir the value for intPorCorregir (Not Null)
@@ -124,6 +125,14 @@
 		 */
 		protected $blnEnKilos;
 		const EnKilosDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column nota_entrega.carga_recibida
+		 * @var boolean blnCargaRecibida
+		 */
+		protected $blnCargaRecibida;
+		const CargaRecibidaDefault = 0;
 
 
 		/**
@@ -477,6 +486,7 @@
 			$this->strEstatus = NotaEntrega::EstatusDefault;
 			$this->strServicioImportacion = NotaEntrega::ServicioImportacionDefault;
 			$this->blnEnKilos = NotaEntrega::EnKilosDefault;
+			$this->blnCargaRecibida = NotaEntrega::CargaRecibidaDefault;
 			$this->intCargadas = NotaEntrega::CargadasDefault;
 			$this->intPorProcesar = NotaEntrega::PorProcesarDefault;
 			$this->intPorCorregir = NotaEntrega::PorCorregirDefault;
@@ -851,6 +861,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'estatus', $strAliasPrefix . 'estatus');
 			    $objBuilder->AddSelectItem($strTableName, 'servicio_importacion', $strAliasPrefix . 'servicio_importacion');
 			    $objBuilder->AddSelectItem($strTableName, 'en_kilos', $strAliasPrefix . 'en_kilos');
+			    $objBuilder->AddSelectItem($strTableName, 'carga_recibida', $strAliasPrefix . 'carga_recibida');
 			    $objBuilder->AddSelectItem($strTableName, 'cargadas', $strAliasPrefix . 'cargadas');
 			    $objBuilder->AddSelectItem($strTableName, 'por_procesar', $strAliasPrefix . 'por_procesar');
 			    $objBuilder->AddSelectItem($strTableName, 'por_corregir', $strAliasPrefix . 'por_corregir');
@@ -1023,6 +1034,9 @@
 			$strAlias = $strAliasPrefix . 'en_kilos';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->blnEnKilos = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'carga_recibida';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnCargaRecibida = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'cargadas';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCargadas = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1498,6 +1512,7 @@
 							`estatus`,
 							`servicio_importacion`,
 							`en_kilos`,
+							`carga_recibida`,
 							`cargadas`,
 							`por_procesar`,
 							`por_corregir`,
@@ -1528,6 +1543,7 @@
 							' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
 							' . $objDatabase->SqlVariable($this->blnEnKilos) . ',
+							' . $objDatabase->SqlVariable($this->blnCargaRecibida) . ',
 							' . $objDatabase->SqlVariable($this->intCargadas) . ',
 							' . $objDatabase->SqlVariable($this->intPorProcesar) . ',
 							' . $objDatabase->SqlVariable($this->intPorCorregir) . ',
@@ -1617,6 +1633,7 @@
 							`estatus` = ' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							`servicio_importacion` = ' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
 							`en_kilos` = ' . $objDatabase->SqlVariable($this->blnEnKilos) . ',
+							`carga_recibida` = ' . $objDatabase->SqlVariable($this->blnCargaRecibida) . ',
 							`cargadas` = ' . $objDatabase->SqlVariable($this->intCargadas) . ',
 							`por_procesar` = ' . $objDatabase->SqlVariable($this->intPorProcesar) . ',
 							`por_corregir` = ' . $objDatabase->SqlVariable($this->intPorCorregir) . ',
@@ -1786,6 +1803,7 @@
 			$this->strEstatus = $objReloaded->strEstatus;
 			$this->strServicioImportacion = $objReloaded->strServicioImportacion;
 			$this->blnEnKilos = $objReloaded->blnEnKilos;
+			$this->blnCargaRecibida = $objReloaded->blnCargaRecibida;
 			$this->intCargadas = $objReloaded->intCargadas;
 			$this->intPorProcesar = $objReloaded->intPorProcesar;
 			$this->intPorCorregir = $objReloaded->intPorCorregir;
@@ -1880,6 +1898,13 @@
 					 * @return boolean
 					 */
 					return $this->blnEnKilos;
+
+				case 'CargaRecibida':
+					/**
+					 * Gets the value for blnCargaRecibida 
+					 * @return boolean
+					 */
+					return $this->blnCargaRecibida;
 
 				case 'Cargadas':
 					/**
@@ -2294,6 +2319,19 @@
 					 */
 					try {
 						return ($this->blnEnKilos = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'CargaRecibida':
+					/**
+					 * Sets the value for blnCargaRecibida 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnCargaRecibida = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3426,6 +3464,7 @@
 			$strToReturn .= '<element name="Estatus" type="xsd:string"/>';
 			$strToReturn .= '<element name="ServicioImportacion" type="xsd:string"/>';
 			$strToReturn .= '<element name="EnKilos" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="CargaRecibida" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Cargadas" type="xsd:int"/>';
 			$strToReturn .= '<element name="PorProcesar" type="xsd:int"/>';
 			$strToReturn .= '<element name="PorCorregir" type="xsd:int"/>';
@@ -3493,6 +3532,8 @@
 				$objToReturn->strServicioImportacion = $objSoapObject->ServicioImportacion;
 			if (property_exists($objSoapObject, 'EnKilos'))
 				$objToReturn->blnEnKilos = $objSoapObject->EnKilos;
+			if (property_exists($objSoapObject, 'CargaRecibida'))
+				$objToReturn->blnCargaRecibida = $objSoapObject->CargaRecibida;
 			if (property_exists($objSoapObject, 'Cargadas'))
 				$objToReturn->intCargadas = $objSoapObject->Cargadas;
 			if (property_exists($objSoapObject, 'PorProcesar'))
@@ -3605,6 +3646,7 @@
 			$iArray['Estatus'] = $this->strEstatus;
 			$iArray['ServicioImportacion'] = $this->strServicioImportacion;
 			$iArray['EnKilos'] = $this->blnEnKilos;
+			$iArray['CargaRecibida'] = $this->blnCargaRecibida;
 			$iArray['Cargadas'] = $this->intCargadas;
 			$iArray['PorProcesar'] = $this->intPorProcesar;
 			$iArray['PorCorregir'] = $this->intPorCorregir;
@@ -3676,6 +3718,7 @@
      * @property-read QQNode $Estatus
      * @property-read QQNode $ServicioImportacion
      * @property-read QQNode $EnKilos
+     * @property-read QQNode $CargaRecibida
      * @property-read QQNode $Cargadas
      * @property-read QQNode $PorProcesar
      * @property-read QQNode $PorCorregir
@@ -3736,6 +3779,8 @@
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'VarChar', $this);
 				case 'EnKilos':
 					return new QQNode('en_kilos', 'EnKilos', 'Bit', $this);
+				case 'CargaRecibida':
+					return new QQNode('carga_recibida', 'CargaRecibida', 'Bit', $this);
 				case 'Cargadas':
 					return new QQNode('cargadas', 'Cargadas', 'Integer', $this);
 				case 'PorProcesar':
@@ -3825,6 +3870,7 @@
      * @property-read QQNode $Estatus
      * @property-read QQNode $ServicioImportacion
      * @property-read QQNode $EnKilos
+     * @property-read QQNode $CargaRecibida
      * @property-read QQNode $Cargadas
      * @property-read QQNode $PorProcesar
      * @property-read QQNode $PorCorregir
@@ -3885,6 +3931,8 @@
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'string', $this);
 				case 'EnKilos':
 					return new QQNode('en_kilos', 'EnKilos', 'boolean', $this);
+				case 'CargaRecibida':
+					return new QQNode('carga_recibida', 'CargaRecibida', 'boolean', $this);
 				case 'Cargadas':
 					return new QQNode('cargadas', 'Cargadas', 'integer', $this);
 				case 'PorProcesar':

@@ -33,6 +33,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $txtNumeRefe;
     protected $txtNombArch;
     protected $chkEnxxKilo;
+    protected $chkCargReci;
 
     protected $lblNumeCarg;
     protected $lblNumePend;
@@ -93,6 +94,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->txtNumeRefe_Create();
         $this->txtNombArch_Create();
         $this->chkEnxxKilo_Create();
+        $this->chkCargReci_Create();
 
         //---- Importación y procesamiento ----
 
@@ -296,6 +298,14 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->chkEnxxKilo->Name = 'En Kilos ?';
         if ($this->blnEditMode) {
             $this->chkEnxxKilo->Checked = $this->objNotaEntr->EnKilos;
+        }
+    }
+
+    protected function chkCargReci_Create() {
+        $this->chkCargReci = new QCheckBox($this);
+        $this->chkCargReci->Name = 'Carga Recibida ?';
+        if ($this->blnEditMode) {
+            $this->chkCargReci->Checked = $this->objNotaEntr->CargaRecibida;
         }
     }
 
@@ -552,12 +562,17 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $intCantErro = 0;
         $blnTodoOkey = true;
         $blnProcImpo = true;
-        $objCkptMasi = Checkpoints::LoadByCodigo('RA');
+        if ($this->objNotaEntr->CargaRecibida) {
+            $strCodiCkpt = 'RA';
+        } else {
+            $strCodiCkpt = 'NR';
+        }
+        $objCkptMasi = Checkpoints::LoadByCodigo($strCodiCkpt);
         if (!$objCkptMasi) {
-            $this->danger('No existe el Checkpoint RA !!!');
+            $this->danger("No existe el Checkpoint $strCodiCkpt");
             return;
         }
-        t('Checkpoint RA, leido de la BD');
+        t("Checkpoint $strCodiCkpt leido de la BD");
         //----------------------------------------------------------
         // Se identifican las Guias Masivas pendientes por procesar
         //----------------------------------------------------------
@@ -804,7 +819,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function CargarArchivo($strNombArch) {
-        t('');
+        $objDatabase = Guias::GetDatabase();
+        $objDatabase->TransactionBegin();
         t('');
         t('=====================');
         t('Rutina: CargarArchivo');
@@ -842,6 +858,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $this->objNotaEntr->Estatus             = 'CREAD@';
                 $this->objNotaEntr->ServicioImportacion = $this->lstServImpo->SelectedValue;
                 $this->objNotaEntr->EnKilos             = $this->chkEnxxKilo->Checked;
+                $this->objNotaEntr->CargaRecibida       = $this->chkCargReci->Checked;
                 $this->objNotaEntr->Cargadas            = 0;
                 $this->objNotaEntr->PorProcesar         = 0;
                 $this->objNotaEntr->PorCorregir         = 0;
@@ -864,11 +881,13 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 //-----------------------
                 $this->objNotaEntr->logDeCambios("Creado");
             } catch (Exception $e) {
+                t('Error creando el Manifiesto: '.$e->getMessage());
                 $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
                 $arrParaErro['NumeRefe'] = $strNombArch;
                 $arrParaErro['MensErro'] = $e->getMessage();
                 $arrParaErro['ComeErro'] = 'Falla al crear el Manifiesto ('.$this->objCliente->CodigoInterno.')';
                 GrabarError($arrParaErro);
+                $this->danger($e->getMessage());
             }
         } else {
             $this->lblNumeCarg->Text = $this->objNotaEntr->Cargadas;
@@ -933,6 +952,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                     //-----------------------------------------------------------------------
                     if ($blnTodoOkey) {
                         $arrResuVali = $this->verificarDatosMasivos($arrCampClie,$intNumeLine);
+                        t('Datos verificados');
                         $blnTodoOkey = $arrResuVali['TodoOkey'];
                         $blnDestOkey = $arrResuVali['DestOkey'];
                         $strMensObse = $arrResuVali['TextErro'];
@@ -982,13 +1002,13 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                             $objGuiaMasi->OtroDestino         = !$blnDestOkey ? $strSucuDest : null;
                             $objGuiaMasi->Observacion         = utf8_decode(strtoupper($strMensObse));
                             $objGuiaMasi->ClienteId           = $this->objCliente->CodiClie;
-                            $objGuiaMasi->TarifaId            = $this->objCliente->Tarifa->Id;
+                            $objGuiaMasi->TarifaId            = $this->objCliente->TarifaAgenteId;
                             $objGuiaMasi->ProcesoId           = $this->objProcEjec->Id;
                             $objGuiaMasi->ValorDeclarado      = 0;
                             $objGuiaMasi->NotaEntregaId       = $this->objNotaEntr->Id;
                             $objGuiaMasi->Kilos               = 0;
                             $objGuiaMasi->PiesCub             = 0;
-                            //t('Voy por aqui...'. $strPesoEnvi);
+                            t('Voy por aqui...');
                             if ($this->objNotaEntr->ServicioImportacion == 'AER') {
                                 if ($this->objNotaEntr->EnKilos) {
                                     $objGuiaMasi->Kilos = (float)$decPesoEnvi;
@@ -1036,6 +1056,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $strLineArch = fgets($mixArchAgen);
             }
         } catch (Exception $e) {
+            t('Error cargando el archivo: '.$e->getMessage());
             $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
             $arrParaErro['NumeRefe'] = $strNombArch;
             $arrParaErro['MensErro'] = $e->getMessage();
@@ -1057,14 +1078,25 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         //---------------------------------------------
         // Se actualiza el Manifiesto con los totales
         //---------------------------------------------
-        $this->objNotaEntr->Libras      = $decSumaLibr;
-        $this->objNotaEntr->Kilos       = $decSumaKilo;
-        $this->objNotaEntr->PiesCub     = $decSumaPies;
-        $this->objNotaEntr->Cargadas    = $intCantRegi;
-        $this->objNotaEntr->PorCorregir = $intCantAjus;
-        $this->objNotaEntr->PorProcesar = $intCantRegi - $intCantAjus;
-        $this->objNotaEntr->Piezas      = $intCantRegi;
-        $this->objNotaEntr->Save();
+        try {
+            $this->objNotaEntr->Libras      = $decSumaLibr;
+            $this->objNotaEntr->Kilos       = $decSumaKilo;
+            $this->objNotaEntr->PiesCub     = $decSumaPies;
+            $this->objNotaEntr->Cargadas    = $intCantRegi;
+            $this->objNotaEntr->PorCorregir = $intCantAjus;
+            $this->objNotaEntr->PorProcesar = $intCantRegi - $intCantAjus;
+            $this->objNotaEntr->Piezas      = $intCantRegi;
+            $this->objNotaEntr->Save();
+        } catch (Exception $e) {
+            t('Error actualizando el manifiesto: '.$e->getMessage());
+            $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = $strNombArch;
+            $arrParaErro['MensErro'] = $e->getMessage();
+            $arrParaErro['ComeErro'] = 'Error actualizando el manifiesto ('.$this->objNotaEntr->Referencia.')';
+            GrabarError($arrParaErro);
+            $intCantErro ++;
+            $blnErroProc = true;
+        }
         if ($intCantRegi > 0) {
             //-------------------------------------------------------------------------------------------------
             // Si se ha importado uno o más registros, se manifiesta al usuario la posibilidad de procesar y/o
@@ -1105,8 +1137,11 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $arrLogxCamb['strDescCamb'] = 'Ejecutado';
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
-
-
+        if ($blnErroProc) {
+            $objDatabase->TransactionRollBack();
+        } else {
+            $objDatabase->TransactionCommit();
+        }
         QApplication::Redirect(__SIST__.'/carga_masiva_guias.php/'.$this->objNotaEntr->Id);
     }
 
@@ -1144,7 +1179,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objGuia->Total                 = 0;
             $objGuia->CreatedBy             = $this->objUsuario->CodiUsua;
             $objGuia->VendedorId            = $this->objCliente->VendedorId;
-            $objGuia->TarifaId              = $objGuiaMasi->TarifaId;
+            $objGuia->TarifaAgenteId        = $objGuiaMasi->TarifaId;
             $objGuia->Alto                  = $objGuiaMasi->Alto;
             $objGuia->Ancho                 = $objGuiaMasi->Ancho;
             $objGuia->Largo                 = $objGuiaMasi->Largo;
