@@ -4,7 +4,6 @@ require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 
 class GuiaSearchNewForm extends FormularioBaseKaizen {
-    // Parámetros Regulares //
     protected $arrRegiSucu;
     protected $intCantSucu;
 
@@ -36,8 +35,8 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $chkPesoVolu;
     protected $txtUsuaCrea;
     protected $txtUbicFisi;
-    protected $btnExpoExce;
-    protected $btnExpoEsta;
+    protected $btnExceFact;
+    protected $btnExceReta;
     protected $lstReceOrig;
 
     // Zona 3
@@ -50,8 +49,11 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $chkConxDesc;
     protected $chkMostQuer;
 
+
     protected function Form_Create() {
         parent::Form_Create();
+
+        //$this->SetupValores();
 
         $this->arrRegiSucu = Sucursales::LoadAll();
         $this->intCantSucu = count($this->arrRegiSucu);
@@ -90,9 +92,10 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         
         $this->btnSave->Text = TextoIcono('search fa-lg','Buscar');
         $this->btnSave->ActionParameter = "B";
-        $this->btnExpoExce_Create();
-        $this->btnExpoEsta_Create();
+        $this->btnExceFact_Create();
+        $this->btnExceReta_Create();
         $this->txtSepaColu_Create();
+
     }
 
     //----------------------------
@@ -114,7 +117,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
 
     protected function txtNumeMast_Create() {
         $this->txtNumeMast = new QTextBox($this);
-        $this->txtNumeMast->Name = QApplication::Translate('Nro de Manifiesto');
+        $this->txtNumeMast->Name = QApplication::Translate('Manifiesto Recepcion');
         $this->txtNumeMast->Width = 181;
     }
 
@@ -304,21 +307,22 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         }
     }
 
-    protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QButton($this);
-        $this->btnExpoExce->Text = '<i class="fa fa-file-excel-o fa-lg"></i> Reporte XLS';
-        $this->btnExpoExce->ActionParameter = "K";
-        $this->btnExpoExce->HtmlEntities = false;
-        $this->btnExpoExce->CssClass = 'btn btn-info btn-sm';
-        $this->btnExpoExce->AddAction(new QClickEvent(), new QServerAction('btnSave_Click'));
+    protected function btnExceFact_Create() {
+        $this->btnExceFact = new QButton($this);
+        $this->btnExceFact->Text = '<i class="fa fa-download fa-lg"></i> XLS-Fact';
+        $this->btnExceFact->ActionParameter = "F";
+        $this->btnExceFact->HtmlEntities = false;
+        $this->btnExceFact->CssClass = 'btn btn-outline-primary btn-sm';
+        $this->btnExceFact->AddAction(new QClickEvent(), new QServerAction('btnSave_Click'));
     }
 
-    protected function btnExpoEsta_Create() {
-        $this->btnExpoEsta = new QButtonP($this);
-        $this->btnExpoEsta->Text = '<i class="fa fa-file-excel-o fa-lg"></i> Estadis. Guias';
-        $this->btnExpoEsta->ActionParameter = "E";
-        $this->btnExpoEsta->HtmlEntities = false;
-        $this->btnExpoEsta->AddAction(new QClickEvent(), new QServerAction('btnSave_Click'));
+    protected function btnExceReta_Create() {
+        $this->btnExceReta = new QButtonP($this);
+        $this->btnExceReta->Text = '<i class="fa fa-download fa-lg"></i> XLS-Retail';
+        $this->btnExceReta->ActionParameter = "R";
+        $this->btnExceReta->HtmlEntities = false;
+        $this->btnExceReta->CssClass = 'btn btn-outline-danger btn-sm';
+        $this->btnExceReta->AddAction(new QClickEvent(), new QServerAction('btnSave_Click'));
     }
 
     protected function txtSepaColu_Create() {
@@ -441,6 +445,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
+        $this->mensaje();
         $blnTodoOkey = true;
         $objUsuaPodx = null;
         $objUsuaCrea = null;
@@ -510,15 +515,8 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $strCadeSqlx  .= " and g.tracking = '".$this->txtGuiaExte->Text."'";
             }
             if (strlen($this->txtNumeMast->Text) > 0) {
-                $objGuiaMast = SdeContenedor::Load($this->txtNumeMast->Text);
-                if ($objGuiaMast) {
-                    $arrNumeGuia = $objGuiaMast->obtenerGuiasDeLaMaster();
-                    if (count($arrNumeGuia) > 0) {
-                        $objClausula[] = QQ::In(QQN::Guias()->Id,$arrNumeGuia);
-                        $strCadeGuia = implode("','",$arrNumeGuia);
-                        $strCadeSqlx .= " and g.id in ('$strCadeGuia')";
-                    }
-                }
+                $objClausula[] = QQ::Equal(QQN::Guias()->NotaEntrega->Referencia,$this->txtNumeMast->Text);
+                $strCadeSqlx  .= " and ne.referencia = ".trim($this->txtNumeMast->Text);
             }
             if (!is_null($this->lstCodiClie->SelectedValue) && (!$this->chkInclSubc->Checked)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$this->lstCodiClie->SelectedValue);
@@ -545,12 +543,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 }
             }
             if (!is_null($this->calFechInic->DateTime)) {
-                $objClausula[] = QQ::GreaterOrEqual(QQN::Guias()->CreatedAt,$this->calFechInic->DateTime->__toString("YYYY-MM-DD 00:00:00"));
-                $strCadeSqlx  .= " and date(g.created_at) >= '".$this->calFechInic->DateTime->__toString("YYYY-MM-DD")."'";
+                $objClausula[] = QQ::GreaterOrEqual(QQN::Guias()->Fecha,$this->calFechInic->DateTime->__toString("YYYY-MM-DD 00:00:00"));
+                $strCadeSqlx  .= " and date(g.fecha) >= '".$this->calFechInic->DateTime->__toString("YYYY-MM-DD")."'";
             }
             if (!is_null($this->calFechFina->DateTime)) {
-                $objClausula[] = QQ::LessOrEqual(QQN::Guias()->CreatedAt,$this->calFechFina->DateTime->__toString("YYYY-MM-DD 23:59:59"));
-                $strCadeSqlx  .= " and (g.created_at) <= '".$this->calFechFina->DateTime->__toString("YYYY-MM-DD")."'";
+                $objClausula[] = QQ::LessOrEqual(QQN::Guias()->Fecha,$this->calFechFina->DateTime->__toString("YYYY-MM-DD 23:59:59"));
+                $strCadeSqlx  .= " and (g.fecha) <= '".$this->calFechFina->DateTime->__toString("YYYY-MM-DD")."'";
             }
             if (!is_null($this->lstFormPago->SelectedValue)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->FormaPago, $this->lstFormPago->SelectedValue);
@@ -636,7 +634,22 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                                 $_SESSION['ProgEspe'] = basename($_SERVER['SCRIPT_FILENAME']);
                                 QApplication::Redirect('guias_list.php');
                                 break;
-                            case 'K':
+                            case 'F':
+                                //----------------------
+                                // Formato Facturacion
+                                //----------------------
+                                $_SESSION['SepaColu'] = ';';
+                                $strSepaColu = $this->txtSepaColu->Text;
+                                if (strlen($strSepaColu) > 0) {
+                                    if (in_array($strSepaColu,array(',',';','|','*'))) {
+                                        $_SESSION['SepaColu'] = $strSepaColu;
+                                    }
+                                }
+                                $_SESSION['CondWher'] = serialize($objClausula);
+                                $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
+                                QApplication::Redirect('repo_guias_facturacion.php');
+                                break;
+                            case 'R':
                                 //-------------------
                                 // Reporte en Excel
                                 //-------------------

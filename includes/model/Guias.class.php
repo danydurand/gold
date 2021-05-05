@@ -27,7 +27,8 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
-		public function __servImportacion() {
+
+        public function __servImportacion() {
 		    switch ($this->ServicioImportacion) {
                 case 'AER':
                     return 'AEREO';

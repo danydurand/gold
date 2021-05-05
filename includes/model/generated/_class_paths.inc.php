@@ -881,6 +881,13 @@
 		QApplicationBase::$ClassFile['parametrometacontrol'] = __META_CONTROLS__ . '/ParametroMetaControl.class.php';
 		QApplicationBase::$ClassFile['parametrodatagrid'] = __META_CONTROLS__ . '/ParametroDataGrid.class.php';
 
+	// ClassPaths for the Parametros class
+		QApplicationBase::$ClassFile['parametros'] = __MODEL__ . '/Parametros.class.php';
+		QApplicationBase::$ClassFile['qqnodeparametros'] = __MODEL__ . '/Parametros.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeparametros'] = __MODEL__ . '/Parametros.class.php';
+		QApplicationBase::$ClassFile['parametrosmetacontrol'] = __META_CONTROLS__ . '/ParametrosMetaControl.class.php';
+		QApplicationBase::$ClassFile['parametrosdatagrid'] = __META_CONTROLS__ . '/ParametrosDataGrid.class.php';
+
 	// ClassPaths for the PendientesPuntoVirtual class
 		QApplicationBase::$ClassFile['pendientespuntovirtual'] = __MODEL__ . '/PendientesPuntoVirtual.class.php';
 		QApplicationBase::$ClassFile['qqnodependientespuntovirtual'] = __MODEL__ . '/PendientesPuntoVirtual.class.php';

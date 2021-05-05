@@ -115,4 +115,53 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             width: 100%;
         }
     </style>
+    <script type="text/javascript">
+        function startIntro(){
+            var intro = introJs();
+            intro.setOptions({
+                nextLabel: "Next",
+                prevLabel: "Prev",
+                skipLabel: "Skip",
+                doneLabel: "Done",
+                steps: [
+                    {
+                        intro: "En este formulario, Usted puede Despachar la Mercancía hacia su destino final"
+                    },
+                    {
+                        element: '#c8',
+                        intro: "Seleccione el Tipo de Operacion"
+                        // position: 'up'
+                    }
+                    //{
+                    //    element: '#fbypers',
+                    //    intro: "{{__('You can filter the KPIs by Perspective. Choose one of them and press the Filter button')}}",
+                    //    // position: 'right'
+                    //},
+                    //{
+                    //    element: '#fbyobj',
+                    //    intro: "{{__('You can filter the KPIs by Objective. Choose one of them and press the Filter button')}}",
+                    //    // position: 'right'
+                    //},
+                    //{
+                    //    element: '#fbyres',
+                    //    intro: "{{__('You can filter the KPIs by Responsable. Choose one of them and press the Filter button')}}",
+                    //    // position: 'right'
+                    //},
+                    //{
+                    //    element: '#fbytype',
+                    //    intro: "{{__('You can filter the KPIs by Type. Choose one of them and press the Filter button')}}",
+                    //    // position: 'right'
+                    //},
+                    //{
+                    //    element: '#filter',
+                    //    intro: "{{__('Press this button to apply the Filter')}}",
+                    //    // position: 'right'
+                    //},
+                ]
+            });
+
+            intro.start();
+        }
+    </script>
+
 <?php require(__APP_INCLUDES__ .'/footer.inc.php'); ?>

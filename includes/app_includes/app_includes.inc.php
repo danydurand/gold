@@ -1,6 +1,7 @@
 <?php
 	require_once(__APP_INCLUDES__ . '/funciones_liberty.php');
 	require_once(__APP_INCLUDES__ . '/funciones_kaizen.php');
+	require_once(__APP_INCLUDES__ . '/funciones_gold.php');
     require_once(__APP_INCLUDES__ . '/imagenes_standard.php');
     require_once(__APP_INCLUDES__ . '/fc/fusioncharts.php');
     require_once(__LOG_DIRECTORY__.'/vendor/autoload.php');

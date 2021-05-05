@@ -122,14 +122,14 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
 
     protected function calFechInic_Create() {
         $this->calFechInic = new QCalendar($this);
-        $this->calFechInic->Name = 'Fecha NDE Inicial';
+        $this->calFechInic->Name = 'Fecha Manif. Inicial';
         $this->calFechInic->Width = 100;
         $this->calFechInic->AddAction(new QChangeEvent(), new QAjaxAction('cargarClientes'));
     }
 
     protected function calFechFina_Create() {
         $this->calFechFina = new QCalendar($this);
-        $this->calFechFina->Name = 'Fecha NDE Final';
+        $this->calFechFina->Name = 'Fecha Manif. Final';
         $this->calFechFina->Width = 100;
         $this->calFechFina->AddAction(new QChangeEvent(), new QAjaxAction('cargarClientes'));
     }
@@ -294,20 +294,20 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                 $objNotaClie->calcularTodoLosConceptos($arrConcFact);
                 $intCantNota ++;
 
-                t('Asociando la nde: '.$objNotaClie->Id.' con la Factura');
+                t('Asociando el Manifiesto: '.$objNotaClie->Id.' con la Factura');
                 $objNotaFact = new FacturaNotas();
                 $objNotaFact->FacturaId     = $objFactClie->Id;
                 $objNotaFact->NotaEntregaId = $objNotaClie->Id;
                 $objNotaFact->Total         = $objNotaClie->Total;
                 $objNotaFact->Save();
-                t('NDE asociada');
+                t('Manifiesto asociada');
                 $decSumaNota += $objNotaFact->Total;
                 t('El monto total de la factura va por: '.$decSumaNota);
                 $objNotaClie->asociandoNotaConFactura($objFactClie->Id);
                 //-----------------------------------------------------------------
-                // Los conceptos de la NDE, se transforman en Items de la Factura
+                // Los conceptos del Manifiesto, se transforman en Items de la Factura
                 //-----------------------------------------------------------------
-                t('Transformando conceptos de la nde en items de la factura');
+                t('Transformando conceptos del Manifiesto en items de la factura');
                 $arrNotaConc = NotaConceptos::LoadArrayByNotaEntregaId($objNotaClie->Id);
                 foreach($arrNotaConc as $objNotaConc) {
                     t('Procesando el concepto: ' . $objNotaConc->Concepto->Nombre);
@@ -332,7 +332,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                         }
                     }
                 }
-                t("Se procesaron los conceptos de la nde\n");
+                t("Se procesaron los conceptos del Manifiesto\n");
                 $objDatabase->TransactionCommit();
             }
             //-----------------------------------------------------------------------------------
@@ -345,8 +345,8 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
             t('Se actualizo el total de la factura con: '.$decSumaNota."\n");
         }
         $this->cargarClientes();
-        $strTextMens = 'Facturacion Exitosa !!. NDEs procesadas: '.$intCantNota.'. FACTs emitidas: '.$intCantFact;
-        $this->info($strTextMens);
+        $strTextMens = 'Facturacion Exitosa. Manifiestos procesados: '.$intCantNota.' | Facturas emitidas: '.$intCantFact;
+        $this->success($strTextMens);
     }
 }
 

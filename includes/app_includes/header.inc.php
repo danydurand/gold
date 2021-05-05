@@ -24,6 +24,10 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
 	<style type="text/css">@import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles.css");</style>
 	<style type="text/css">@import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles_plus.css");</style>
 
+    <!-- Intro JS -->
+    <link rel="stylesheet" href="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ .'/introjs/introjs.min.css' ?>">
+    <script src="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ .'/introjs/intro.min.js' ?>"></script>
+
     <!-- Bootstrap Core CSS -->
     <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/bower_components/bootstrap/dist/css/bootstrap.css"?> rel="stylesheet">
 
@@ -35,7 +39,7 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
 
     <!-- Custom Fonts -->
     <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/bower_components/font-awesome/css/font-awesome.min.css"?> rel="stylesheet" type="text/css">
-    <!--<link href=<?/*= __APP_CSS_ASSETS__ ."/bootstrap4.css"*/?> rel="stylesheet" type="text/css">-->
+    <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/bootstrap4.css"?> rel="stylesheet" type="text/css">
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -72,7 +76,7 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" style="color: white; text-decoration: none" href="<?= __APP__.'/mg.php'?>">
+                <a class="navbar-brand" style="color: white; text-decoration: none" href="<?= __APP__.'/mg.php'?>" id="gold">
                     GoldCoast | SISPAQ | <?= $_SESSION['NombSist'] ?> | <?= $strDatoEsta ?>
                 <?php if ($_SESSION['Sistema'] == 'pmn') { ?>
                     | <?= $strDatoEsta ?> | <?= isset($_SESSION['ReceOrig']) ? unserialize($_SESSION['ReceOrig']) : '' ?>
@@ -82,8 +86,17 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
             <!-- /.navbar-header -->
             
             <ul class="nav navbar-top-links navbar-right">
+
+                <a class="btn btn-sm btn-success"
+                   style="margin-left:.5em"
+                   href="javascript:void(0);"
+                   title="Ayuda"
+                   onclick="javascript:introJs().start();startIntro()">
+                    <i class="fa fa-question-circle fa-lg"></i>
+                </a>
+
                 <li><span style="color: white"><i class="fa fa-user fa-fw"></i> <?= $strDatoGrup ?></span></li>
-                <li class="dropdown">
+                <li class="dropdown"  id="user">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                          <i class="fa fa-caret-down"></i>
                     </a>

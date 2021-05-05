@@ -4,8 +4,8 @@ if ($_SESSION['Sistema'] == 'sde') {
     $strDescSist = "SisCO (<strong>Sis</strong>tema de <strong>C</strong>ontrol <strong>O</strong>perativo)";
     $strPageTitle = "SisCO";
 } else {
-    $strDescSist = "<strong>Expreso Nacional</strong>";
-    $strDescSist = "Expreso Nacional";
+    $strDescSist = "<strong>Retail</strong>";
+    $strDescSist = "Retail";
 }
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
@@ -51,4 +51,33 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             width: 30%;
         }
     </style>
+    <script type="text/javascript">
+        function startIntro(){
+            var intro = introJs();
+            intro.setOptions({
+                nextLabel: "Next",
+                prevLabel: "Prev",
+                skipLabel: "Skip",
+                doneLabel: "Done",
+                steps: [
+                    {
+                        intro: "El SisCO fue diseñado para controlar toda la Operacion de la Empresa"
+                    },
+                    {
+                        element: '#user',
+                        intro: "Aquí podrá Cambiar su Clave de Acceso, así como acceder al su Historial de Acciones en el Sistema"
+                        // position: 'up'
+                    },
+                    {
+                        element: '#gold',
+                        intro: "Presione aquí para volver a la pantalla principal en cualquier momento"
+                        // position: 'up'
+                    }
+                ]
+            });
+
+            intro.start();
+        }
+    </script>
+
 <?php require(__APP_INCLUDES__.'/footer.inc.php'); ?>

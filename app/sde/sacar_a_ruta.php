@@ -77,9 +77,9 @@ class SacarARuta extends FormularioBaseKaizen {
 
         $this->dlgMensUsua_Create();
 
-        $this->lstEmprTran_Create();
         $this->lstTipoOper_Create();
         $this->lstOperAbie_Create();
+        $this->lstEmprTran_Create();
         $this->txtNombChof_Create();
         $this->txtCeduChof_Create();
         $this->txtDescVehi_Create();
@@ -924,14 +924,8 @@ class SacarARuta extends FormularioBaseKaizen {
         //--------------------------------------------------
         // Datos necesarios para imprimir reporte PDF
         //--------------------------------------------------
-        $arrEnca2PDF = array('Nro de Guia','Error');
-        $arrAnch2PDF = array(20,100);
-        $arrJust2PDF = array('C','L');
         $_SESSION['Dato'] = serialize($this->arrGuiaErro);
-        $_SESSION['Enca'] = serialize($arrEnca2PDF);
-        $_SESSION['Anch'] = serialize($arrAnch2PDF);
-        $_SESSION['Just'] = serialize($arrJust2PDF);
-        QApplication::Redirect('../util/tabla2pdf2.php?nomb_repo=Errores_Salida_A_Ruta');
+        QApplication::Redirect(__SIST__.'/mostrar_errores.php');
     }
 
 
@@ -1164,6 +1158,7 @@ class SacarARuta extends FormularioBaseKaizen {
             // Con array_unique se eliminan las guias repetidas en caso de que las haya
             //---------------------------------------------------------------------------
             $this->arrListNume = array_unique($this->arrListNume,SORT_STRING);
+            $this->arrListNume = array_map('transformar',$this->arrListNume);
             $this->txtListNume->Text = '';
 
             $arrDestinos = $objContenedor->GetDestinos();
@@ -1177,7 +1172,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $objDatabase = Containers::GetDatabase();
             $objDatabase->TransactionBegin();
             foreach ($this->arrListNume as $strNumeSeri) {
-                if (strlen($strNumeSeri)) {
+                if (strlen(trim($strNumeSeri))) {
                     t('Procesando: '.$strNumeSeri);
                     //-----------------------------------------------------------------------
                     // Se procesa una a una las Guias/Valijas proporcionadas por el Usuario
@@ -1230,24 +1225,29 @@ class SacarARuta extends FormularioBaseKaizen {
                                                 $intContCkpt ++;
                                             } else {
                                                 t('Hubo algun error: '.$arrResuGrab['MotiNook']);
-                                                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate($arrResuGrab['MotiNook']));
+                                                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
                                             }
+                                        } else {
+                                            t('La pieza ya estaba asociada al Manifiesto');
+                                            $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
+                                            $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'Pieza previamente incluida en el Manifiesto');
                                         }
                                     } else {
                                         t('El destino no coincide');
-                                        $this->txtListNume->Text .= $strNumeSeri." (Destino no Coincide)".chr(13);
-                                        $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate('DESTINO ('.$objGuiaPiez->Guia->Destino->Iata.') NO COINCIDE'));
+                                        $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
+                                        $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'DESTINO ('.$objGuiaPiez->Guia->Destino->Iata.') NO COINCIDE');
                                     }
                                 } else {
                                     t('La pieza no tiene peso');
-                                    $this->txtListNume->Text .= $strNumeSeri." (Peso de la guia no puede ser cero)".chr(13);
-                                    $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,QApplication::Translate('PESO ('.$objGuiaPiez->Kilos.') IGUAL A CERO'));
+                                    $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
+                                    $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'SIN PESO');
                                 }
                             } else {
                                 //--------------
                                 // Ruta Urbana
                                 //--------------
                                 if ($objGuiaPiez->Guia->DestinoId != $this->objUsuario->SucursalId) {
+                                    $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
                                     $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'Esta Guia no tiene como Destino '.$this->objUsuario->Sucursal->Iata);
                                 } else {
                                     $objContenedor->AssociateGuiaPiezasAsContainerPieza($objGuiaPiez);
@@ -1269,12 +1269,13 @@ class SacarARuta extends FormularioBaseKaizen {
                                     $intContCkpt ++;
                                 } else {
                                     $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
+                                    $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
                                 }
                             }
                             $intContGuia ++;
                         } else {
-                            $this->txtListNume->Text .= $strNumeSeri." (".$arrSepuProc['MensUsua'].")".chr(13);
                             $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrSepuProc['MensUsua']);
+                            $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
                         }
                     } else {
                         //---------------------------------------------------
@@ -1323,7 +1324,7 @@ class SacarARuta extends FormularioBaseKaizen {
                             }
                             $intContVali ++;
                         } else {
-                            $this->txtListNume->Text .= $strNumeSeri." (No Existe Guia/Valija)".chr(13);
+                            $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
                             $this->arrGuiaErro[] = array($strNumeSeri,$strNumeSeri." (No Existe Guia/Valija)");
                         }
                     }
@@ -1335,12 +1336,13 @@ class SacarARuta extends FormularioBaseKaizen {
             $objContenedor->actualizarTotales();
             t('Se actualizaron los totales en el container');
             $objDatabase->TransactionCommit();
-            $strMensUsua = sprintf('Guias procesadas (%s) | Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-            $this->success($strMensUsua);
-            //--------------------------------------------------------------------------------
-            // Si hubo algun error, el boton que permite listar los errores, se hace visible
-            //--------------------------------------------------------------------------------
-            if (count($this->arrGuiaErro)) {
+            $intCantErro = count($this->arrGuiaErro);
+            $strMensUsua = sprintf('Guias/Piezas procesadas (%s) | Checkpoints (%s) | Errores (%s)',
+                $intContGuia,$intContCkpt,$intCantErro);
+            if ($intCantErro == 0) {
+                $this->success($strMensUsua);
+            } else {
+                $this->warning($strMensUsua);
                 $this->btnRepoErro->Visible = true;
             }
             t('Voy a actualizar la operacion con el chofer y el vehiculo');

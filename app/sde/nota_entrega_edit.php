@@ -329,7 +329,7 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
     }
 
     protected function btnCalcConc_Click() {
-        $arrConcActi = Conceptos::conceptosActivos('NAC');
+        $arrConcActi = Conceptos::conceptosActivos('IMP');
         $this->mctNotaEntrega->NotaEntrega->calcularTodoLosConceptos($arrConcActi);
         QApplication::Redirect(__SIST__.'/nota_entrega_edit.php/'.$this->mctNotaEntrega->NotaEntrega->Id);
     }

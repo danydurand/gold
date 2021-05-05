@@ -14,6 +14,17 @@
 
             </div>
         </div>
+
+        <script type="text/javascript">
+            // Dispara la ayuda, cuando se presiona F1
+            document.onkeydown=function(e){
+                if (e.which == 112) {
+                    startIntro();
+                    return false;
+                }
+            }
+        </script>
+
         <!-- jQuery -->
         <script src=<?= __VIRTUAL_DIRECTORY__ .__APP_JS_ASSETS__ ."/bower_components/jquery/dist/jquery.min.js" ?>></script>
         <!-- Bootstrap Core JavaScript -->

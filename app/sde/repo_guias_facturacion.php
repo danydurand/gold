@@ -19,39 +19,24 @@ $objUser = unserialize($_SESSION['User']);
 //----------------------------------------------------------------------
 // Se determina el nombre del archivo que sera generado
 //----------------------------------------------------------------------
-$strNombArch = __TEMP__.'/guias_retail_'.$objUser->LogiUsua.'.csv';
+$strNombArch = __TEMP__.'/guias_facturacion_'.$objUser->LogiUsua.'.csv';
 $mixManeArch = fopen($strNombArch,'w');
 //----------------
 // Encabezados
 //----------------
 $arrEnca2XLS = array(
-    'Guia Gold',
-    'Guia Ext',
-    'Prod',
-    'S.Import',
     'Cliente',
+    'Guia-Cliente',
+    'S.Import',
     'Fecha',
-    'Suc.Orig',
-    'Recep.Orig',
-    'Suc.Dest',
-    'Recep.Dest',
-    'F. Pago',
-    'Remitente',
-    'Destinatario',
-    'Tarifa',
+    'Destino',
+    'Zona',
     'Kilos',
-    'Libras',
     'PiesCub',
-    'Tarifa Vol',
     'Piezas',
-    'NotaEntrega',
-    'V.Decl',
+    'Manifiesto',
     'Factura',
-    'Entregado A',
-    'F. Entrega',
-    'H. Entrega',
-    'Fecha POD',
-    'Contenido'
+    'Total'
 );
 //----------------------------------------------------------------------
 // El vector de encabezados, se lleva al archivo plano
@@ -77,76 +62,32 @@ while ($intCantRepe <= $intCantCicl) {
     // Recorro la lista de registros, armando el vector de datos
     //--------------------------------------------------------------
     foreach ($arrDatoRepo as $objTabla) {
-        $strReceOrig = (!is_null($objTabla->ReceptoriaOrigenId)) ? $objTabla->ReceptoriaOrigen->Siglas : null;
-        $strReceDest = (!is_null($objTabla->ReceptoriaDestinoId)) ? $objTabla->ReceptoriaDestino->Siglas : null;
-        $strNotaEntr = (!is_null($objTabla->NotaEntregaId)) ? $objTabla->NotaEntrega->Referencia : null;
-        $strFactGuia = $objTabla->NroFactura();
-        //if (!is_null($objTabla->FacturaId)) {
-        //    $objFactGuia = Facturas::Load($objTabla->FacturaId);
-        //    if ($objFactGuia) {
-        //        if (!is_null($objTabla->ClienteCorpId)) {
-        //            $strFactGuia = $objFactGuia->Referencia;
-        //        } else {
-        //            $strFactGuia = $objFactGuia->Id;
-        //        }
-        //    }
-        //}
-
-        $strCodiProd = $objTabla->Producto->Codigo;
-        $strServImpo = $objTabla->ServicioImportacion;
-        $strDescTari = quitaCaracter($strSepaColu,$objTabla->NombreTarifa('reporte'));
-        $strNumeGuia = " ".quitaCaracter($strSepaColu,$objTabla->Numero);
-        $strNumeTrac = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->Tracking)));
         $strNombClie = quitaCaracter($strSepaColu,$objTabla->NombreCliente('reporte'));
+        $strNumeGuia = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->Tracking)));
+        $strServImpo = $objTabla->ServicioImportacion;
         $strFechGuia = $objTabla->Fecha->__toString('DD/MM/YYYY');
-        $strEstaOrig = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->Origen->Iata)));
-        $strReceOrig = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$strReceOrig)));
         $strEstaDest = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->Destino->Iata)));
-        $strReceDest = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$strReceDest)));
-        $strFormPago = $objTabla->FormaPago;
-        $strNombRemi = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->NombreRemitente)));
-        $strNombDest = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->NombreDestinatario)));
+        $objZonaFact = Parametros::LoadByIndiceCodigo('ZONA',$objTabla->Destino->Zona);
+        $strNombZona = $objZonaFact ? $objZonaFact->Descripcion : 'N/A';
         $strKiloGuia = nf($objTabla->Kilos);
-        $strLibrGuia = nf($objTabla->Libras);
         $strPiesGuia = nf($objTabla->PiesCub);
-        $strPesoVolu = nf($objTabla->Volumen);
         $strCantPiez = nf0($objTabla->Piezas);
-        $strNotaEntr = utf8_decode($strNotaEntr);
-        $strValoDecl = nf($objTabla->ValorDeclarado);
-        $strFactGuia = utf8_decode($strFactGuia);
-        $strEntrAxxx = quitaCaracter($strSepaColu,$objTabla->EntregadoA('reporte'));
-        $strFechEntr = $objTabla->FechaEntrega();
-        $strHoraEntr = quitaCaracter($strSepaColu,$objTabla->HoraEntrega('reporte'));
-        $strFechPodx = $objTabla->FechaRegistroPod('reporte');
+        $strRefeMani = (!is_null($objTabla->NotaEntregaId)) ? $objTabla->NotaEntrega->Referencia : null;
+        $strFactGuia = $objTabla->NroFactura();
         $strMontTota = nf($objTabla->Total);
 
         $arrLineArch = array(
-            $strNumeGuia,
-            $strNumeTrac,
-            $strCodiProd,
-            $strServImpo,
             $strNombClie,
+            $strNumeGuia,
+            $strServImpo,
             $strFechGuia,
-            $strEstaOrig,
-            $strReceOrig,
             $strEstaDest,
-            $strReceDest,
-            $strFormPago,
-            $strNombRemi,
-            $strNombDest,
-            $strDescTari,
+            $strNombZona,
             $strKiloGuia,
-            $strLibrGuia,
             $strPiesGuia,
-            $strPesoVolu,
             $strCantPiez,
-            $strNotaEntr,
-            $strValoDecl,
+            $strRefeMani,
             $strFactGuia,
-            $strEntrAxxx,
-            $strFechEntr,
-            $strHoraEntr,
-            $strFechPodx,
             $strMontTota,
         );
         //----------------------------------------------------------------------

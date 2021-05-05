@@ -757,6 +757,12 @@
 			return new QQNodeParametro('parametro', null, null);
 		}
 		/**
+		 * @return QQNodeParametros
+		 */
+		static public function Parametros() {
+			return new QQNodeParametros('parametros', null, null);
+		}
+		/**
 		 * @return QQNodePendientesPuntoVirtual
 		 */
 		static public function PendientesPuntoVirtual() {

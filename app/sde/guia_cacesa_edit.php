@@ -170,10 +170,12 @@ class GuiaCacesaEditForm extends GuiaCacesaEditFormBase {
 	//-----------------------------------
 
     protected function CargarDestinos() {
+	    //$objClauOrde   = QQ::Clause();
+	    //$objClauOrde[] = QQ::
         foreach (Sucursales::LoadAll() as $objSucursal) {
-            if ($objSucursal->EsAlmacen == SinoType::NO) {
-                $this->lstSucuDest->AddItem($objSucursal->__toString(),$objSucursal->Id);
-            }
+            //if ($objSucursal->EsAlmacen == SinoType::NO) {
+                $this->lstSucuDest->AddItem($objSucursal->__toString(),$objSucursal->Iata);
+            //}
         }
     }
 

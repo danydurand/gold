@@ -34,17 +34,21 @@ class ParametroEditForm extends ParametroEditFormBase {
 
     //	protected function Form_Load() {}
 	protected function Form_Create() {
+	    t('1');
 		parent::Form_Create();
 
+		t('2');
         $this->lblTituForm->Text = 'Parámetro';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 
+        t('3');
 		// Use the CreateFromPathInfo shortcut (this can also be done manually using the ParametroMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
 		$this->mctParametro = ParametroMetaControl::CreateFromPathInfo($this);
 
         $this->strCodiRegi = $this->mctParametro->Parametro->__codigoRegistro();
 
+        t('4');
 		// Call MetaControl's methods to create qcontrols based on Parametro's data fields
 		$this->txtIndiPara = $this->mctParametro->txtIndiPara_Create();
 		$this->txtIndiPara->Width = 80;
@@ -76,6 +80,7 @@ class ParametroEditForm extends ParametroEditFormBase {
 		$this->txtParaVal3 = $this->mctParametro->txtParaVal3_Create();
 		$this->txtParaVal4 = $this->mctParametro->txtParaVal4_Create();
 		$this->txtParaVal5 = $this->mctParametro->txtParaVal5_Create();
+		t('5');
 	}
 
 	//----------------------------
@@ -190,8 +195,7 @@ class ParametroEditForm extends ParametroEditFormBase {
         $arrTablRela = $this->mctParametro->TablasRelacionadasParametro();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            $this->danger(sprintf('Existen registros relacionados en %s',$strTablRela));
+            $this->danger(sprintf('Existen registros relacionados en '.$strTablRela));
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {

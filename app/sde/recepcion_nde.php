@@ -159,7 +159,7 @@ class RecepcionNde extends FormularioBaseKaizen {
         //-------------------------------------------------------------------
         $objSeleColu   = QQ::Select(QQN::NotaEntrega()->ClienteCorpId);
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'CREAD@');
+        $objClauWher[] = QQ::In(QQN::NotaEntrega()->Estatus,['CREAD@','RECIBID@']);
         $arrClieInic   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher),QQ::Clause($objSeleColu,QQ::Distinct()));
 
         $arrClieCorp   = [];
@@ -186,7 +186,7 @@ class RecepcionNde extends FormularioBaseKaizen {
         $intClieSele   = $this->lstClieCorp->SelectedValue;
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorpId,$intClieSele);
-        $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'CREAD@');
+        $objClauWher[] = QQ::In(QQN::NotaEntrega()->Estatus,['CREAD@','RECIBID@']);
         $arrNotaClie   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
         if ($strParameter) {
             $objClauWher   = QQ::Clause();

@@ -12,8 +12,8 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <?php $this->btnAjusGuia->Render(); ?>
         <?php $this->btnSave->Render(); ?>
         <?php $this->btnBorrNota->Render(); ?>
-        <?php $this->btnErroProc->Render(); ?>
         <?php $this->btnMostSucu->Render(); ?>
+        <?php $this->btnErroProc->Render(); ?>
         <?php //$this->btnImprDesp->Render(); ?>
     </div>
 </div>
