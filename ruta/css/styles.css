@@ -1,0 +1,76 @@
+/* CUSTOM CSS */
+
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #a94442;
+}
+.alert-danger hr {
+  border-top-color: #e4b9c0;
+}
+.alert-danger .alert-link {
+  color: #843534;
+}
+
+body {
+  background-color: #eee;
+  background-image: url(../images/cs.png);
+}
+
+.hr {
+    height: 0.2em;
+}
+
+.panel {
+	background-color: transparent;
+	background-image: url(../images/cs.png);
+}
+
+.blur {
+  background-position: center center;
+  bottom: 0px;
+  left: 0px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  overflow: hidden;
+}
+
+#pbtn {
+	width: 200px;
+}
+
+.sp {
+  height: 10px;
+}
+
+.ui-content {
+  background-color: #eee;
+  background-image: url(../images/cs.png);
+}
+
+.extra {
+  padding-top: 1.6em;
+  padding-left: 1.5em;
+}
+
+.mani {
+  padding-top: 1.2em;
+  padding-left: 1.5em;
+}
+
+.user {
+  padding-top: 2.5em;
+  padding-left: 1.8em;
+}
+
+.user_p {
+  text-align: center;
+  /*text-transform: capitalize;*/
+  color: #666;
+}
+
+.user_p img {
+  border-radius: 100%;
+  vertical-align: top;
+}

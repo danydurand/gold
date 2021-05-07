@@ -79,8 +79,7 @@ abstract class ContainersListFormBase extends QForm {
         $this->dtgContainerses->MetaAddColumn('Id');
         $this->dtgContainerses->MetaAddColumn('Numero');
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
-        $this->dtgContainerses->MetaAddColumn('Chofer');
-        $this->dtgContainerses->MetaAddColumn('Cedula');
+        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Chofer);
         $this->dtgContainerses->MetaAddColumn('Vehiculo');
         $this->dtgContainerses->MetaAddColumn('Placa');
         $this->dtgContainerses->MetaAddColumn('Fecha');
@@ -93,6 +92,8 @@ abstract class ContainersListFormBase extends QForm {
         $this->dtgContainerses->MetaAddColumn('PrecintoLateral');
         $this->dtgContainerses->MetaAddColumn('Piezas');
         $this->dtgContainerses->MetaAddColumn('Peso');
+        $this->dtgContainerses->MetaAddColumn('Kilos');
+        $this->dtgContainerses->MetaAddColumn('PiesCub');
         $this->dtgContainerses->MetaAddColumn('Contenido');
         $this->dtgContainerses->MetaAddColumn('Direccion');
         $this->dtgContainerses->MetaAddColumn('CreatedAt');

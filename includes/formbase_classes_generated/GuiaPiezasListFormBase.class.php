@@ -92,6 +92,7 @@ abstract class GuiaPiezasListFormBase extends QForm {
         $this->dtgGuiaPiezases->MetaAddColumn('Ubicacion');
         $this->dtgGuiaPiezases->MetaAddColumn('CreatedAt');
         $this->dtgGuiaPiezases->MetaAddColumn('UpdatedAt');
+        $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->GuiaPiezaPodAsGuiaPieza);
 
         $this->btnExpoExce_Create();
 

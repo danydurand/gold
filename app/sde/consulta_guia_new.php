@@ -1144,7 +1144,15 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     public function dtgGuiaCkpt_CodiUsua_Render(PiezaCheckpoints $objPiezCkpt) {
         if (!is_null($objPiezCkpt->CreatedBy)) {
             $objUsuaCkpt = Usuario::Load($objPiezCkpt->CreatedBy);
-            return $objUsuaCkpt->__toString();
+            if ($objUsuaCkpt) {
+                return $objUsuaCkpt->__toString();
+            } else {
+                //------------------------
+                // Se trata de un Chofer
+                //------------------------
+                $objUsuaCkpt = Chofer::Load($objPiezCkpt->CreatedBy);
+                return $objUsuaCkpt->Login;
+            }
         } else {
             return null;
         }

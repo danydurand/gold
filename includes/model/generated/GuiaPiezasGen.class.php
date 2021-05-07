@@ -32,6 +32,7 @@
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
 	 * @property Guias $Guia the value for the Guias object referenced by intGuiaId (Not Null)
+	 * @property GuiaPiezaPod $GuiaPiezaPodAsGuiaPieza the value for the GuiaPiezaPod object that uniquely references this GuiaPiezas
 	 * @property-read Containers $_ContainersAsContainerPieza the value for the private _objContainersAsContainerPieza (Read-Only) if set due to an expansion on the container_pieza_assn association table
 	 * @property-read Containers[] $_ContainersAsContainerPiezaArray the value for the private _objContainersAsContainerPiezaArray (Read-Only) if set due to an ExpandAsArray on the container_pieza_assn association table
 	 * @property-read SdeContenedor $_SdeContenedorAsGuia the value for the private _objSdeContenedorAsGuia (Read-Only) if set due to an expansion on the sde_contenedor_guia_assn association table
@@ -257,6 +258,24 @@
 		 * @var Guias objGuia
 		 */
 		protected $objGuia;
+
+		/**
+		 * Protected member variable that contains the object which points to
+		 * this object by the reference in the unique database column guia_pieza_pod.guia_pieza_id.
+		 *
+		 * NOTE: Always use the GuiaPiezaPodAsGuiaPieza property getter to correctly retrieve this GuiaPiezaPod object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var GuiaPiezaPod objGuiaPiezaPodAsGuiaPieza
+		 */
+		protected $objGuiaPiezaPodAsGuiaPieza;
+
+		/**
+		 * Used internally to manage whether the adjoined GuiaPiezaPodAsGuiaPieza object
+		 * needs to be updated on save.
+		 *
+		 * NOTE: Do not manually update this value
+		 */
+		protected $blnDirtyGuiaPiezaPodAsGuiaPieza;
 
 
 
@@ -849,6 +868,21 @@
 				$objToReturn->objGuia = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guia_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
+			// Check for GuiaPiezaPodAsGuiaPieza Unique ReverseReference Binding
+			$strAlias = $strAliasPrefix . 'guiapiezapodasguiapieza__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if ($objDbRow->ColumnExists($strAliasName)) {
+				if (!is_null($objDbRow->GetColumn($strAliasName))) {
+					$objExpansionNode = (empty($objExpansionAliasArray['guiapiezapodasguiapieza']) ? null : $objExpansionAliasArray['guiapiezapodasguiapieza']);
+					$objToReturn->objGuiaPiezaPodAsGuiaPieza = GuiaPiezaPod::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezapodasguiapieza__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+				else {
+					// We ATTEMPTED to do an Early Bind but the Object Doesn't Exist
+					// Let's set to FALSE so that the object knows not to try and re-query again
+					$objToReturn->objGuiaPiezaPodAsGuiaPieza = false;
+				}
+			}
+
 				
 			// Check for ContainersAsContainerPieza Virtual Binding
 			$strAlias = $strAliasPrefix . 'containersascontainerpieza__container_id__id';
@@ -1223,6 +1257,26 @@
 				}
 					
 
+
+
+				// Update the adjoined GuiaPiezaPodAsGuiaPieza object (if applicable)
+				// TODO: Make this into hard-coded SQL queries
+				if ($this->blnDirtyGuiaPiezaPodAsGuiaPieza) {
+					// Unassociate the old one (if applicable)
+					if ($objAssociated = GuiaPiezaPod::LoadByGuiaPiezaId($this->intId)) {
+						$objAssociated->GuiaPiezaId = null;
+						$objAssociated->Save();
+					}
+
+					// Associate the new one (if applicable)
+					if ($this->objGuiaPiezaPodAsGuiaPieza) {
+						$this->objGuiaPiezaPodAsGuiaPieza->GuiaPiezaId = $this->intId;
+						$this->objGuiaPiezaPodAsGuiaPieza->Save();
+					}
+
+					// Reset the "Dirty" flag
+					$this->blnDirtyGuiaPiezaPodAsGuiaPieza = false;
+				}
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -1273,6 +1327,15 @@
 			// Get the Database Object for this Class
 			$objDatabase = GuiaPiezas::GetDatabase();
 
+
+		
+			// Update the adjoined GuiaPiezaPodAsGuiaPieza object (if applicable) and perform a delete
+
+			// Optional -- if you **KNOW** that you do not want to EVER run any level of business logic on the disassocation,
+			// you *could* override Delete() so that this step can be a single hard coded query to optimize performance.
+			if ($objAssociated = GuiaPiezaPod::LoadByGuiaPiezaId($this->intId)) {
+				$objAssociated->Delete();
+			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
@@ -1505,6 +1568,24 @@
 						if ((!$this->objGuia) && (!is_null($this->intGuiaId)))
 							$this->objGuia = Guias::Load($this->intGuiaId);
 						return $this->objGuia;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'GuiaPiezaPodAsGuiaPieza':
+					/**
+					 * Gets the value for the GuiaPiezaPod object that uniquely references this GuiaPiezas
+					 * by objGuiaPiezaPodAsGuiaPieza (Unique)
+					 * @return GuiaPiezaPod
+					 */
+					try {
+						if ($this->objGuiaPiezaPodAsGuiaPieza === false)
+							// We've attempted early binding -- and the reverse reference object does not exist
+							return null;
+						if (!$this->objGuiaPiezaPodAsGuiaPieza)
+							$this->objGuiaPiezaPodAsGuiaPieza = GuiaPiezaPod::LoadByGuiaPiezaId($this->intId);
+						return $this->objGuiaPiezaPodAsGuiaPieza;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1791,6 +1872,45 @@
 						// Update Local Member Variables
 						$this->objGuia = $mixValue;
 						$this->intGuiaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'GuiaPiezaPodAsGuiaPieza':
+					/**
+					 * Sets the value for the GuiaPiezaPod object referenced by objGuiaPiezaPodAsGuiaPieza (Unique)
+					 * @param GuiaPiezaPod $mixValue
+					 * @return GuiaPiezaPod
+					 */
+					if (is_null($mixValue)) {
+						$this->objGuiaPiezaPodAsGuiaPieza = null;
+
+						// Make sure we update the adjoined GuiaPiezaPod object the next time we call Save()
+						$this->blnDirtyGuiaPiezaPodAsGuiaPieza = true;
+
+						return null;
+					} else {
+						// Make sure $mixValue actually is a GuiaPiezaPod object
+						try {
+							$mixValue = QType::Cast($mixValue, 'GuiaPiezaPod');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Are we setting objGuiaPiezaPodAsGuiaPieza to a DIFFERENT $mixValue?
+						if ((!$this->GuiaPiezaPodAsGuiaPieza) || ($this->GuiaPiezaPodAsGuiaPieza->Id != $mixValue->Id)) {
+							// Yes -- therefore, set the "Dirty" flag to true
+							// to make sure we update the adjoined GuiaPiezaPod object the next time we call Save()
+							$this->blnDirtyGuiaPiezaPodAsGuiaPieza = true;
+
+							// Update Local Member Variable
+							$this->objGuiaPiezaPodAsGuiaPieza = $mixValue;
+						} else {
+							// Nope -- therefore, make no changes
+						}
 
 						// Return $mixValue
 						return $mixValue;
@@ -2525,6 +2645,7 @@
      * @property-read QQNodeGuiaPiezasContainersAsContainerPieza $ContainersAsContainerPieza
      * @property-read QQNodeGuiaPiezasSdeContenedorAsGuia $SdeContenedorAsGuia
      *
+     * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2573,6 +2694,8 @@
 					return new QQNodeGuiaPiezasContainersAsContainerPieza($this);
 				case 'SdeContenedorAsGuia':
 					return new QQNodeGuiaPiezasSdeContenedorAsGuia($this);
+				case 'GuiaPiezaPodAsGuiaPieza':
+					return new QQReverseReferenceNodeGuiaPiezaPod($this, 'guiapiezapodasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaPiezaPodAsGuiaPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
 
@@ -2611,6 +2734,7 @@
      * @property-read QQNodeGuiaPiezasContainersAsContainerPieza $ContainersAsContainerPieza
      * @property-read QQNodeGuiaPiezasSdeContenedorAsGuia $SdeContenedorAsGuia
      *
+     * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2659,6 +2783,8 @@
 					return new QQNodeGuiaPiezasContainersAsContainerPieza($this);
 				case 'SdeContenedorAsGuia':
 					return new QQNodeGuiaPiezasSdeContenedorAsGuia($this);
+				case 'GuiaPiezaPodAsGuiaPieza':
+					return new QQReverseReferenceNodeGuiaPiezaPod($this, 'guiapiezapodasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaPiezaPodAsGuiaPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
 

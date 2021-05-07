@@ -27,16 +27,23 @@
 			return sprintf('%s',  $this->Numero);
 		}
 
+		public function destinosCorto() {
+		    return substr($this->Direccion,0,50).'...';
+        }
+
 		public function actualizarTotales() {
-            $decSumaPeso = 0;
+            $decSumaKilo = 0;
+            $decSumaPies = 0;
             $intCantPiez = 0;
             $arrPiezCont = GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->Id);
             foreach ($arrPiezCont as $objPiezCont) {
-                $decSumaPeso += (double)$objPiezCont->Kilos;
+                $decSumaKilo += (double)$objPiezCont->Kilos;
+                $decSumaPies += (double)$objPiezCont->PiesCub;
                 $intCantPiez ++;
             }
-            $this->Peso = $decSumaPeso;
-            $this->Piezas = $intCantPiez;
+            $this->Kilos   = $decSumaKilo;
+            $this->PiesCub = $decSumaPies;
+            $this->Piezas  = $intCantPiez;
             $this->Save();
         }
 

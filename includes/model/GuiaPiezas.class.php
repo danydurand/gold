@@ -52,8 +52,23 @@
             return GuiaPiezas::InstantiateDbResult($objDbResult);
         }
 
+        public function ultimoCheckpointTodo() {
+            $mixRegistro  = [];
+            $strCadeSqlx  = 'select pc.* ';
+            $strCadeSqlx .= '  from v_last_pieza_checkpoint lpc inner join pieza_checkpoints pc';
+            $strCadeSqlx .= '    on lpc.id = pc.id';
+            $strCadeSqlx .= ' where pc.pieza_id = '.$this->Id;
+            $objDatabase  = GuiaPiezas::GetDatabase();
+            $objDbResult  = $objDatabase->Query($strCadeSqlx);
+            while ($mixRegistro = $objDbResult->FetchArray()) {
+                return $mixRegistro;
+                break;
+            }
+            return $mixRegistro;
+        }
+
         public function ultimoCheckpoint() {
-            $strUltiCkpt  = "null";
+            $strUltiCkpt  = null;
             $strCadeSqlx  = 'select codigo_ckpt ';
             $strCadeSqlx .= '  from v_last_checkpoint_guia ';
             $strCadeSqlx .= ' where pieza_id = '.$this->Id;

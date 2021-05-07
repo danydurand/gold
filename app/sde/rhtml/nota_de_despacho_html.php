@@ -6,9 +6,10 @@ if (!isset($_SESSION['ManiIdxx'])) {
 }
 $intManiIdxx = $_SESSION['ManiIdxx'];
 $strNombEmpr = $_SESSION['NombEmpr'];
+/* @var $objManiImpr Containers */
 $objManiImpr = Containers::Load($intManiIdxx);
-$strNombChof = $objManiImpr->Chofer;
-$strCeduChof = $objManiImpr->Cedula;
+$strNombChof = $objManiImpr->Chofer->NombChof;
+$strCeduChof = $objManiImpr->Chofer->NumeCedu;
 $strDescVehi = $objManiImpr->Vehiculo;
 $strNumePlac = $objManiImpr->Placa;
 $strFechDhoy = date("d/m/Y H:i");
@@ -18,7 +19,7 @@ $strNumeCont = $objManiImpr->Numero;
 $strPrecLate = $objManiImpr->PrecintoLateral;
 $strNumeAwbx = $objManiImpr->Awb;
 $intCantPiez = $objManiImpr->Piezas;
-$decPesoTota = $objManiImpr->Peso;
+$strPesoTota = $objManiImpr->Kilos.' Kgs / '.$objManiImpr->PiesCub.' PiesCub';
 $strDescCont = $objManiImpr->Contenido;
 $strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportista->Nombre : 'N/A';
 
@@ -78,7 +79,7 @@ $strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportis
             <?php } ?>
             <li><span class="linea"><b>BL o AWB:</b> <?= $strNumeAwbx ?></span></li>
             <li><span class="linea"><b>BULTOS:</b> <?= $intCantPiez ?> PIEZAS</span></li>
-            <li><span class="linea"><b>PESO:</b> <?= $decPesoTota ?> KILOS</span></li>
+            <li><span class="linea"><b>PESO:</b> <?= $strPesoTota ?> </span></li>
             <li><span class="linea"><b>EMPRESA TRANSPORTE:</b> <?= $strEmprTran ?></span></li>
             <li><span class="linea"><b>CONTENIDO:</b> <?= $strDescCont ?></span></li>
             <li><span class="linea"><b>CHOFER:</b> <?= $strNombChof ?></span></li>

@@ -7,8 +7,8 @@ if (!isset($_SESSION['ManiIdxx'])) {
 $intManiIdxx = $_SESSION['ManiIdxx'];
 $strNombEmpr = $_SESSION['NombEmpr'];
 $objManiImpr = Containers::Load($intManiIdxx);
-$strNombChof = $objManiImpr->Chofer;
-$strCeduChof = $objManiImpr->Cedula;
+$strNombChof = $objManiImpr->Chofer->NombChof;
+$strCeduChof = $objManiImpr->Chofer->NumeCedu;
 $strDescVehi = $objManiImpr->Vehiculo;
 $strNumePlac = $objManiImpr->Placa;
 $strFechDhoy = date("d/m/Y H:i");

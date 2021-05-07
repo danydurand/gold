@@ -27,6 +27,33 @@
 			return sprintf('%s %s',$this->strNombChof,$this->strApelChof);
 		}
 
+        public static function LoginPropuesto($strCadeNomb, $strCadeApel) {
+            $strLogiProp = '';
+            if (strlen($strCadeNomb) && strlen($strCadeApel)) {
+                $blnLogiVali = false;
+                $intCantInte = strlen($strCadeNomb);
+                $i = 0;
+                while ((!$blnLogiVali) && ($i < $intCantInte)) {
+                    $strLogiProp  = $strCadeNomb[$i];
+                    $strLogiProp .= substr($strCadeApel,0,7);
+                    $strLogiProp  = strtolower($strLogiProp);
+                    t('Login Propuesto: '.$strLogiProp);
+                    //-------------------------------------------------------------
+                    // Se verifica la existencia previa ya que no puede repetirse
+                    //-------------------------------------------------------------
+                    $objClauWher   = QQ::Clause();
+                    $objClauWher[] = QQ::Equal(QQN::Chofer()->Login,$strLogiProp);
+                    $intCantLogi   = Chofer::QueryCount(QQ::AndCondition($objClauWher));
+                    if ($intCantLogi == 0) {
+                        $blnLogiVali = true;
+                    } else {
+                        $i++;
+                    }
+                }
+            }
+            return $strLogiProp;
+        }
+
         public static function ChoferesActivosDeLaSucursal($strCodiSucu) {
             $objClauOrde   = QQ::Clause();
             $objClauOrde[] = QQ::OrderBy(QQN::Chofer()->NombChof);

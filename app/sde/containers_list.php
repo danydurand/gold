@@ -73,19 +73,22 @@ class ContainersListForm extends ContainersListFormBase {
 		// Create the Other Columns (note that you can use strings for containers's properties, or you
 		// can traverse down QQN::containers() to display fields that are down the hierarchy)
 		$this->dtgContainerses->MetaAddColumn('Id');
-		$this->dtgContainerses->MetaAddColumn('Numero');
-        $colCantPiez = new QDataGridColumn('PIEZAS', '<?= $_FORM->CantPiez_ColumnRender($_ITEM) ?>');
-        $colCantPiez->HtmlEntities = false;
-        $colCantPiez->Width        = 90;
-        $this->dtgContainerses->AddColumn($colCantPiez);
+		$this->dtgContainerses->MetaAddColumn('Numero','Name=Precinto');
 
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Transportista->Nombre,'Name=Transportista');
+
+        $colNombChof = new QDataGridColumn('Chofer','<?= $_FORM->NombChof_Render($_ITEM); ?>');
+        $this->dtgContainerses->AddColumn($colNombChof);
+
+        $this->dtgContainerses->MetaAddColumn('Piezas');
+        $this->dtgContainerses->MetaAddColumn('Kilos');
+        $this->dtgContainerses->MetaAddColumn('PiesCub');
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
-		//$this->dtgContainerses->MetaAddColumn('Fecha');
 		$colFechMast = new QDataGridColumn('FECHA','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
 		$this->dtgContainerses->AddColumn($colFechMast);
 		$this->dtgContainerses->MetaAddColumn('Hora');
 		$this->dtgContainerses->MetaAddColumn('Estatus');
+
 		//$this->dtgContainerses->MetaAddColumn('CreatedAt');
 		//$this->dtgContainerses->MetaAddColumn('UpdatedAt');
 		//$this->dtgContainerses->MetaAddColumn('DeletedAt');
@@ -101,8 +104,12 @@ class ContainersListForm extends ContainersListFormBase {
         QApplication::Redirect("sacar_a_ruta.php");
     }
 
-    public function CantPiez_ColumnRender(Containers $objValija) {
-        return $objValija->CountGuiaPiezasesAsContainerPieza();
+    public function CantPiez_ColumnRender(Containers $objManifiesto) {
+        return $objManifiesto->CountGuiaPiezasesAsContainerPieza();
+    }
+
+    public function NombChof_Render(Containers $objManifiesto) {
+        return $objManifiesto->Chofer->__toString();
     }
 
     public function dtgContainersesRow_Click($strFormId, $strControlId, $strParameter) {

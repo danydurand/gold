@@ -18,8 +18,7 @@
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property string $Numero the value for strNumero (Unique)
 	 * @property integer $OperacionId the value for intOperacionId (Not Null)
-	 * @property string $Chofer the value for strChofer 
-	 * @property string $Cedula the value for strCedula 
+	 * @property integer $ChoferId the value for intChoferId 
 	 * @property string $Vehiculo the value for strVehiculo 
 	 * @property string $Placa the value for strPlaca 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
@@ -31,7 +30,9 @@
 	 * @property string $Awb the value for strAwb 
 	 * @property string $PrecintoLateral the value for strPrecintoLateral 
 	 * @property integer $Piezas the value for intPiezas 
-	 * @property double $Peso the value for fltPeso 
+	 * @property double $Peso the value for fltPeso (Not Null)
+	 * @property double $Kilos the value for fltKilos (Not Null)
+	 * @property double $PiesCub the value for fltPiesCub (Not Null)
 	 * @property string $Contenido the value for strContenido 
 	 * @property string $Direccion the value for strDireccion 
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
@@ -41,6 +42,7 @@
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property SdeOperacion $Operacion the value for the SdeOperacion object referenced by intOperacionId (Not Null)
+	 * @property Chofer $Chofer the value for the Chofer object referenced by intChoferId 
 	 * @property Transportista $Transportista the value for the Transportista object referenced by intTransportistaId 
 	 * @property MasterCliente $ClienteCorp the value for the MasterCliente object referenced by intClienteCorpId 
 	 * @property-read Containers $_ParentContainersAsContainerContainer the value for the private _objParentContainersAsContainerContainer (Read-Only) if set due to an expansion on the container_container_assn association table
@@ -85,21 +87,11 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column containers.chofer
-		 * @var string strChofer
+		 * Protected member variable that maps to the database column containers.chofer_id
+		 * @var integer intChoferId
 		 */
-		protected $strChofer;
-		const ChoferMaxLength = 50;
-		const ChoferDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column containers.cedula
-		 * @var string strCedula
-		 */
-		protected $strCedula;
-		const CedulaMaxLength = 15;
-		const CedulaDefault = null;
+		protected $intChoferId;
+		const ChoferIdDefault = null;
 
 
 		/**
@@ -200,7 +192,23 @@
 		 * @var double fltPeso
 		 */
 		protected $fltPeso;
-		const PesoDefault = 0;
+		const PesoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.kilos
+		 * @var double fltKilos
+		 */
+		protected $fltKilos;
+		const KilosDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.pies_cub
+		 * @var double fltPiesCub
+		 */
+		protected $fltPiesCub;
+		const PiesCubDefault = 0;
 
 
 		/**
@@ -367,6 +375,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column containers.chofer_id.
+		 *
+		 * NOTE: Always use the Chofer property getter to correctly retrieve this Chofer object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Chofer objChofer
+		 */
+		protected $objChofer;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column containers.transportista_id.
 		 *
 		 * NOTE: Always use the Transportista property getter to correctly retrieve this Transportista object.
@@ -395,8 +413,7 @@
 			$this->intId = Containers::IdDefault;
 			$this->strNumero = Containers::NumeroDefault;
 			$this->intOperacionId = Containers::OperacionIdDefault;
-			$this->strChofer = Containers::ChoferDefault;
-			$this->strCedula = Containers::CedulaDefault;
+			$this->intChoferId = Containers::ChoferIdDefault;
 			$this->strVehiculo = Containers::VehiculoDefault;
 			$this->strPlaca = Containers::PlacaDefault;
 			$this->dttFecha = (Containers::FechaDefault === null)?null:new QDateTime(Containers::FechaDefault);
@@ -409,6 +426,8 @@
 			$this->strPrecintoLateral = Containers::PrecintoLateralDefault;
 			$this->intPiezas = Containers::PiezasDefault;
 			$this->fltPeso = Containers::PesoDefault;
+			$this->fltKilos = Containers::KilosDefault;
+			$this->fltPiesCub = Containers::PiesCubDefault;
 			$this->strContenido = Containers::ContenidoDefault;
 			$this->strDireccion = Containers::DireccionDefault;
 			$this->strCreatedAt = Containers::CreatedAtDefault;
@@ -761,8 +780,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'numero', $strAliasPrefix . 'numero');
 			    $objBuilder->AddSelectItem($strTableName, 'operacion_id', $strAliasPrefix . 'operacion_id');
-			    $objBuilder->AddSelectItem($strTableName, 'chofer', $strAliasPrefix . 'chofer');
-			    $objBuilder->AddSelectItem($strTableName, 'cedula', $strAliasPrefix . 'cedula');
+			    $objBuilder->AddSelectItem($strTableName, 'chofer_id', $strAliasPrefix . 'chofer_id');
 			    $objBuilder->AddSelectItem($strTableName, 'vehiculo', $strAliasPrefix . 'vehiculo');
 			    $objBuilder->AddSelectItem($strTableName, 'placa', $strAliasPrefix . 'placa');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha', $strAliasPrefix . 'fecha');
@@ -775,6 +793,8 @@
 			    $objBuilder->AddSelectItem($strTableName, 'precinto_lateral', $strAliasPrefix . 'precinto_lateral');
 			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
 			    $objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
+			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
+			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
 			    $objBuilder->AddSelectItem($strTableName, 'contenido', $strAliasPrefix . 'contenido');
 			    $objBuilder->AddSelectItem($strTableName, 'direccion', $strAliasPrefix . 'direccion');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
@@ -917,12 +937,9 @@
 			$strAlias = $strAliasPrefix . 'operacion_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intOperacionId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'chofer';
+			$strAlias = $strAliasPrefix . 'chofer_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strChofer = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'cedula';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCedula = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->intChoferId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'vehiculo';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strVehiculo = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -959,6 +976,12 @@
 			$strAlias = $strAliasPrefix . 'peso';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltPeso = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'kilos';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltKilos = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'pies_cub';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltPiesCub = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'contenido';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strContenido = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1019,6 +1042,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['operacion_id']) ? null : $objExpansionAliasArray['operacion_id']);
 				$objToReturn->objOperacion = SdeOperacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'operacion_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for Chofer Early Binding
+			$strAlias = $strAliasPrefix . 'chofer_id__codi_chof';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['chofer_id']) ? null : $objExpansionAliasArray['chofer_id']);
+				$objToReturn->objChofer = Chofer::InstantiateDbRow($objDbRow, $strAliasPrefix . 'chofer_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for Transportista Early Binding
 			$strAlias = $strAliasPrefix . 'transportista_id__id';
@@ -1355,6 +1385,38 @@
 
 		/**
 		 * Load an array of Containers objects,
+		 * by ChoferId Index(es)
+		 * @param integer $intChoferId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public static function LoadArrayByChoferId($intChoferId, $objOptionalClauses = null) {
+			// Call Containers::QueryArray to perform the LoadArrayByChoferId query
+			try {
+				return Containers::QueryArray(
+					QQ::Equal(QQN::Containers()->ChoferId, $intChoferId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Containerses
+		 * by ChoferId Index(es)
+		 * @param integer $intChoferId
+		 * @return int
+		*/
+		public static function CountByChoferId($intChoferId) {
+			// Call Containers::QueryCount to perform the CountByChoferId query
+			return Containers::QueryCount(
+				QQ::Equal(QQN::Containers()->ChoferId, $intChoferId)
+			);
+		}
+
+		/**
+		 * Load an array of Containers objects,
 		 * by OperacionId Index(es)
 		 * @param integer $intOperacionId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -1511,8 +1573,7 @@
 						INSERT INTO `containers` (
 							`numero`,
 							`operacion_id`,
-							`chofer`,
-							`cedula`,
+							`chofer_id`,
 							`vehiculo`,
 							`placa`,
 							`fecha`,
@@ -1525,6 +1586,8 @@
 							`precinto_lateral`,
 							`piezas`,
 							`peso`,
+							`kilos`,
+							`pies_cub`,
 							`contenido`,
 							`direccion`,
 							`created_by`,
@@ -1533,8 +1596,7 @@
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strNumero) . ',
 							' . $objDatabase->SqlVariable($this->intOperacionId) . ',
-							' . $objDatabase->SqlVariable($this->strChofer) . ',
-							' . $objDatabase->SqlVariable($this->strCedula) . ',
+							' . $objDatabase->SqlVariable($this->intChoferId) . ',
 							' . $objDatabase->SqlVariable($this->strVehiculo) . ',
 							' . $objDatabase->SqlVariable($this->strPlaca) . ',
 							' . $objDatabase->SqlVariable($this->dttFecha) . ',
@@ -1547,6 +1609,8 @@
 							' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
 							' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							' . $objDatabase->SqlVariable($this->fltPeso) . ',
+							' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							' . $objDatabase->SqlVariable($this->strContenido) . ',
 							' . $objDatabase->SqlVariable($this->strDireccion) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -1614,8 +1678,7 @@
 						SET
 							`numero` = ' . $objDatabase->SqlVariable($this->strNumero) . ',
 							`operacion_id` = ' . $objDatabase->SqlVariable($this->intOperacionId) . ',
-							`chofer` = ' . $objDatabase->SqlVariable($this->strChofer) . ',
-							`cedula` = ' . $objDatabase->SqlVariable($this->strCedula) . ',
+							`chofer_id` = ' . $objDatabase->SqlVariable($this->intChoferId) . ',
 							`vehiculo` = ' . $objDatabase->SqlVariable($this->strVehiculo) . ',
 							`placa` = ' . $objDatabase->SqlVariable($this->strPlaca) . ',
 							`fecha` = ' . $objDatabase->SqlVariable($this->dttFecha) . ',
@@ -1628,6 +1691,8 @@
 							`precinto_lateral` = ' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
 							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
+							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							`contenido` = ' . $objDatabase->SqlVariable($this->strContenido) . ',
 							`direccion` = ' . $objDatabase->SqlVariable($this->strDireccion) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -1775,8 +1840,7 @@
 			// Update $this's local variables to match
 			$this->strNumero = $objReloaded->strNumero;
 			$this->OperacionId = $objReloaded->OperacionId;
-			$this->strChofer = $objReloaded->strChofer;
-			$this->strCedula = $objReloaded->strCedula;
+			$this->ChoferId = $objReloaded->ChoferId;
 			$this->strVehiculo = $objReloaded->strVehiculo;
 			$this->strPlaca = $objReloaded->strPlaca;
 			$this->dttFecha = $objReloaded->dttFecha;
@@ -1789,6 +1853,8 @@
 			$this->strPrecintoLateral = $objReloaded->strPrecintoLateral;
 			$this->intPiezas = $objReloaded->intPiezas;
 			$this->fltPeso = $objReloaded->fltPeso;
+			$this->fltKilos = $objReloaded->fltKilos;
+			$this->fltPiesCub = $objReloaded->fltPiesCub;
 			$this->strContenido = $objReloaded->strContenido;
 			$this->strDireccion = $objReloaded->strDireccion;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
@@ -1838,19 +1904,12 @@
 					 */
 					return $this->intOperacionId;
 
-				case 'Chofer':
+				case 'ChoferId':
 					/**
-					 * Gets the value for strChofer 
-					 * @return string
+					 * Gets the value for intChoferId 
+					 * @return integer
 					 */
-					return $this->strChofer;
-
-				case 'Cedula':
-					/**
-					 * Gets the value for strCedula 
-					 * @return string
-					 */
-					return $this->strCedula;
+					return $this->intChoferId;
 
 				case 'Vehiculo':
 					/**
@@ -1931,10 +1990,24 @@
 
 				case 'Peso':
 					/**
-					 * Gets the value for fltPeso 
+					 * Gets the value for fltPeso (Not Null)
 					 * @return double
 					 */
 					return $this->fltPeso;
+
+				case 'Kilos':
+					/**
+					 * Gets the value for fltKilos (Not Null)
+					 * @return double
+					 */
+					return $this->fltKilos;
+
+				case 'PiesCub':
+					/**
+					 * Gets the value for fltPiesCub (Not Null)
+					 * @return double
+					 */
+					return $this->fltPiesCub;
 
 				case 'Contenido':
 					/**
@@ -2005,6 +2078,20 @@
 						if ((!$this->objOperacion) && (!is_null($this->intOperacionId)))
 							$this->objOperacion = SdeOperacion::Load($this->intOperacionId);
 						return $this->objOperacion;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Chofer':
+					/**
+					 * Gets the value for the Chofer object referenced by intChoferId 
+					 * @return Chofer
+					 */
+					try {
+						if ((!$this->objChofer) && (!is_null($this->intChoferId)))
+							$this->objChofer = Chofer::Load($this->intChoferId);
+						return $this->objChofer;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2162,27 +2249,15 @@
 						throw $objExc;
 					}
 
-				case 'Chofer':
+				case 'ChoferId':
 					/**
-					 * Sets the value for strChofer 
-					 * @param string $mixValue
-					 * @return string
+					 * Sets the value for intChoferId 
+					 * @param integer $mixValue
+					 * @return integer
 					 */
 					try {
-						return ($this->strChofer = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Cedula':
-					/**
-					 * Sets the value for strCedula 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCedula = QType::Cast($mixValue, QType::String));
+						$this->objChofer = null;
+						return ($this->intChoferId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2335,12 +2410,38 @@
 
 				case 'Peso':
 					/**
-					 * Sets the value for fltPeso 
+					 * Sets the value for fltPeso (Not Null)
 					 * @param double $mixValue
 					 * @return double
 					 */
 					try {
 						return ($this->fltPeso = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Kilos':
+					/**
+					 * Sets the value for fltKilos (Not Null)
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltKilos = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'PiesCub':
+					/**
+					 * Sets the value for fltPiesCub (Not Null)
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltPiesCub = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2441,6 +2542,38 @@
 						// Update Local Member Variables
 						$this->objOperacion = $mixValue;
 						$this->intOperacionId = $mixValue->CodiOper;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'Chofer':
+					/**
+					 * Sets the value for the Chofer object referenced by intChoferId 
+					 * @param Chofer $mixValue
+					 * @return Chofer
+					 */
+					if (is_null($mixValue)) {
+						$this->intChoferId = null;
+						$this->objChofer = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Chofer object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Chofer');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Chofer object
+						if (is_null($mixValue->CodiChof))
+							throw new QCallerException('Unable to set an unsaved Chofer for this Containers');
+
+						// Update Local Member Variables
+						$this->objChofer = $mixValue;
+						$this->intChoferId = $mixValue->CodiChof;
 
 						// Return $mixValue
 						return $mixValue;
@@ -3110,8 +3243,7 @@
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Numero" type="xsd:string"/>';
 			$strToReturn .= '<element name="Operacion" type="xsd1:SdeOperacion"/>';
-			$strToReturn .= '<element name="Chofer" type="xsd:string"/>';
-			$strToReturn .= '<element name="Cedula" type="xsd:string"/>';
+			$strToReturn .= '<element name="Chofer" type="xsd1:Chofer"/>';
 			$strToReturn .= '<element name="Vehiculo" type="xsd:string"/>';
 			$strToReturn .= '<element name="Placa" type="xsd:string"/>';
 			$strToReturn .= '<element name="Fecha" type="xsd:dateTime"/>';
@@ -3124,6 +3256,8 @@
 			$strToReturn .= '<element name="PrecintoLateral" type="xsd:string"/>';
 			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
 			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
+			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
+			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
 			$strToReturn .= '<element name="Contenido" type="xsd:string"/>';
 			$strToReturn .= '<element name="Direccion" type="xsd:string"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
@@ -3141,6 +3275,7 @@
 			if (!array_key_exists('Containers', $strComplexTypeArray)) {
 				$strComplexTypeArray['Containers'] = Containers::GetSoapComplexTypeXml();
 				SdeOperacion::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Chofer::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Transportista::AlterSoapComplexTypeArray($strComplexTypeArray);
 				MasterCliente::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
@@ -3164,10 +3299,9 @@
 			if ((property_exists($objSoapObject, 'Operacion')) &&
 				($objSoapObject->Operacion))
 				$objToReturn->Operacion = SdeOperacion::GetObjectFromSoapObject($objSoapObject->Operacion);
-			if (property_exists($objSoapObject, 'Chofer'))
-				$objToReturn->strChofer = $objSoapObject->Chofer;
-			if (property_exists($objSoapObject, 'Cedula'))
-				$objToReturn->strCedula = $objSoapObject->Cedula;
+			if ((property_exists($objSoapObject, 'Chofer')) &&
+				($objSoapObject->Chofer))
+				$objToReturn->Chofer = Chofer::GetObjectFromSoapObject($objSoapObject->Chofer);
 			if (property_exists($objSoapObject, 'Vehiculo'))
 				$objToReturn->strVehiculo = $objSoapObject->Vehiculo;
 			if (property_exists($objSoapObject, 'Placa'))
@@ -3194,6 +3328,10 @@
 				$objToReturn->intPiezas = $objSoapObject->Piezas;
 			if (property_exists($objSoapObject, 'Peso'))
 				$objToReturn->fltPeso = $objSoapObject->Peso;
+			if (property_exists($objSoapObject, 'Kilos'))
+				$objToReturn->fltKilos = $objSoapObject->Kilos;
+			if (property_exists($objSoapObject, 'PiesCub'))
+				$objToReturn->fltPiesCub = $objSoapObject->PiesCub;
 			if (property_exists($objSoapObject, 'Contenido'))
 				$objToReturn->strContenido = $objSoapObject->Contenido;
 			if (property_exists($objSoapObject, 'Direccion'))
@@ -3232,6 +3370,10 @@
 				$objObject->objOperacion = SdeOperacion::GetSoapObjectFromObject($objObject->objOperacion, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intOperacionId = null;
+			if ($objObject->objChofer)
+				$objObject->objChofer = Chofer::GetSoapObjectFromObject($objObject->objChofer, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intChoferId = null;
 			if ($objObject->dttFecha)
 				$objObject->dttFecha = $objObject->dttFecha->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objTransportista)
@@ -3259,8 +3401,7 @@
 			$iArray['Id'] = $this->intId;
 			$iArray['Numero'] = $this->strNumero;
 			$iArray['OperacionId'] = $this->intOperacionId;
-			$iArray['Chofer'] = $this->strChofer;
-			$iArray['Cedula'] = $this->strCedula;
+			$iArray['ChoferId'] = $this->intChoferId;
 			$iArray['Vehiculo'] = $this->strVehiculo;
 			$iArray['Placa'] = $this->strPlaca;
 			$iArray['Fecha'] = $this->dttFecha;
@@ -3273,6 +3414,8 @@
 			$iArray['PrecintoLateral'] = $this->strPrecintoLateral;
 			$iArray['Piezas'] = $this->intPiezas;
 			$iArray['Peso'] = $this->fltPeso;
+			$iArray['Kilos'] = $this->fltKilos;
+			$iArray['PiesCub'] = $this->fltPiesCub;
 			$iArray['Contenido'] = $this->strContenido;
 			$iArray['Direccion'] = $this->strDireccion;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
@@ -3430,8 +3573,8 @@
      * @property-read QQNode $Numero
      * @property-read QQNode $OperacionId
      * @property-read QQNodeSdeOperacion $Operacion
-     * @property-read QQNode $Chofer
-     * @property-read QQNode $Cedula
+     * @property-read QQNode $ChoferId
+     * @property-read QQNodeChofer $Chofer
      * @property-read QQNode $Vehiculo
      * @property-read QQNode $Placa
      * @property-read QQNode $Fecha
@@ -3446,6 +3589,8 @@
      * @property-read QQNode $PrecintoLateral
      * @property-read QQNode $Piezas
      * @property-read QQNode $Peso
+     * @property-read QQNode $Kilos
+     * @property-read QQNode $PiesCub
      * @property-read QQNode $Contenido
      * @property-read QQNode $Direccion
      * @property-read QQNode $CreatedAt
@@ -3477,10 +3622,10 @@
 					return new QQNode('operacion_id', 'OperacionId', 'Integer', $this);
 				case 'Operacion':
 					return new QQNodeSdeOperacion('operacion_id', 'Operacion', 'Integer', $this);
+				case 'ChoferId':
+					return new QQNode('chofer_id', 'ChoferId', 'Integer', $this);
 				case 'Chofer':
-					return new QQNode('chofer', 'Chofer', 'VarChar', $this);
-				case 'Cedula':
-					return new QQNode('cedula', 'Cedula', 'VarChar', $this);
+					return new QQNodeChofer('chofer_id', 'Chofer', 'Integer', $this);
 				case 'Vehiculo':
 					return new QQNode('vehiculo', 'Vehiculo', 'VarChar', $this);
 				case 'Placa':
@@ -3509,6 +3654,10 @@
 					return new QQNode('piezas', 'Piezas', 'Integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'Float', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'Float', $this);
+				case 'PiesCub':
+					return new QQNode('pies_cub', 'PiesCub', 'Float', $this);
 				case 'Contenido':
 					return new QQNode('contenido', 'Contenido', 'VarChar', $this);
 				case 'Direccion':
@@ -3552,8 +3701,8 @@
      * @property-read QQNode $Numero
      * @property-read QQNode $OperacionId
      * @property-read QQNodeSdeOperacion $Operacion
-     * @property-read QQNode $Chofer
-     * @property-read QQNode $Cedula
+     * @property-read QQNode $ChoferId
+     * @property-read QQNodeChofer $Chofer
      * @property-read QQNode $Vehiculo
      * @property-read QQNode $Placa
      * @property-read QQNode $Fecha
@@ -3568,6 +3717,8 @@
      * @property-read QQNode $PrecintoLateral
      * @property-read QQNode $Piezas
      * @property-read QQNode $Peso
+     * @property-read QQNode $Kilos
+     * @property-read QQNode $PiesCub
      * @property-read QQNode $Contenido
      * @property-read QQNode $Direccion
      * @property-read QQNode $CreatedAt
@@ -3599,10 +3750,10 @@
 					return new QQNode('operacion_id', 'OperacionId', 'integer', $this);
 				case 'Operacion':
 					return new QQNodeSdeOperacion('operacion_id', 'Operacion', 'integer', $this);
+				case 'ChoferId':
+					return new QQNode('chofer_id', 'ChoferId', 'integer', $this);
 				case 'Chofer':
-					return new QQNode('chofer', 'Chofer', 'string', $this);
-				case 'Cedula':
-					return new QQNode('cedula', 'Cedula', 'string', $this);
+					return new QQNodeChofer('chofer_id', 'Chofer', 'integer', $this);
 				case 'Vehiculo':
 					return new QQNode('vehiculo', 'Vehiculo', 'string', $this);
 				case 'Placa':
@@ -3631,6 +3782,10 @@
 					return new QQNode('piezas', 'Piezas', 'integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'double', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'double', $this);
+				case 'PiesCub':
+					return new QQNode('pies_cub', 'PiesCub', 'double', $this);
 				case 'Contenido':
 					return new QQNode('contenido', 'Contenido', 'string', $this);
 				case 'Direccion':

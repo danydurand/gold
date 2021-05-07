@@ -138,29 +138,7 @@ class ChoferEditForm extends ChoferEditFormBase {
     public function crearLogin() {
 	    $strNombChof = $this->txtNombChof->Text;
 	    $strApelChof = $this->txtApelChof->Text;
-	    if (strlen($strNombChof) && strlen($strApelChof)) {
-	        $blnLogiVali = false;
-	        $intCantInte = strlen($strNombChof);
-	        $i = 0;
-	        while ((!$blnLogiVali) && ($i < $intCantInte)) {
-                $strLogiChof  = $strNombChof[$i];
-                $strLogiChof .= substr($strApelChof,0,7);
-                $strLogiChof  = strtolower($strLogiChof);
-                t('Login Propuesto: '.$strLogiChof);
-                //-------------------------------------------------------------
-                // Se verifica la existencia previa ya que no puede repetirse
-                //-------------------------------------------------------------
-                $objClauWher   = QQ::Clause();
-                $objClauWher[] = QQ::Equal(QQN::Chofer()->Login,$strLogiChof);
-                $intCantLogi   = Chofer::QueryCount(QQ::AndCondition($objClauWher));
-                if ($intCantLogi == 0) {
-                    $this->txtLogin->Text = $strLogiChof;
-                    $blnLogiVali = true;
-                } else {
-                    $i++;
-                }
-            }
-        }
+	    $this->txtLogin->Text = Chofer::LoginPropuesto($strNombChof,$strApelChof);
     }
 
     protected function btnProxRegi_Click() {
@@ -184,10 +162,11 @@ class ChoferEditForm extends ChoferEditFormBase {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-        if ($this->txtPassword) {
-            $this->txtPassword->Text = md5($this->txtPassword->Text);
+        if (strlen(trim($this->txtPassword->Text)) == 0) {
+            $this->txtPassword->Text = 'sencillo';
         }
-		//--------------------------------------------
+        $this->txtPassword->Text = md5($this->txtPassword->Text);
+        //--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctChofer->Chofer;

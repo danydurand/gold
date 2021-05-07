@@ -69,6 +69,7 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 	protected $lblUpdatedAt;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
+	protected $lstGuiaPiezaPodAsGuiaPieza;
 	protected $dtgContainersesAsContainerPieza;
 	protected $dtgSdeContenedorsAsGuia;
 
@@ -150,6 +151,7 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 		$this->txtUbicacion = $this->mctGuiaPiezas->txtUbicacion_Create();
 		$this->lblCreatedAt = $this->mctGuiaPiezas->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctGuiaPiezas->lblUpdatedAt_Create();
+			$this->lstGuiaPiezaPodAsGuiaPieza = $this->mctGuiaPiezas->lstGuiaPiezaPodAsGuiaPieza_Create();
 			$this->dtgContainersesAsContainerPieza = $this->mctGuiaPiezas->dtgContainersesAsContainerPieza_Create();
 			$this->dtgSdeContenedorsAsGuia = $this->mctGuiaPiezas->dtgSdeContenedorsAsGuia_Create();
 

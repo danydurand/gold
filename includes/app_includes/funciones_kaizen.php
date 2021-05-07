@@ -222,8 +222,16 @@ function ordenar_array() {
 
 function t($strTextTraz) {
     if (isset($_SESSION['User'])) {
-        $objUsuario = unserialize($_SESSION['User']);
-        if ($objUsuario->LogiUsua == 'ddurand') {
+        $objUsuario  = unserialize($_SESSION['User']);
+        $blnTodoOkey = false;
+        if ( ($objUsuario instanceof Usuario) && ($objUsuario->LogiUsua == 'ddurand') ) {
+            $blnTodoOkey = true;
+        } else {
+            if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'ddurand') ) {
+                $blnTodoOkey = true;
+            }
+        }
+        if ($blnTodoOkey) {
             $mixManeArch = fopen(__LOG_DIRECTORY__.'/traza.log','a');
             $arrLineAudi = array();
             $arrLineAudi[] = date('Y-m-d');

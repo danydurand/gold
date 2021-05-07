@@ -5,6 +5,7 @@
 // Descripcion : Aqui se registran funciones de uso general del Sistema GoldCoast
 //------------------------------------------------------------------------------------
 
+
 /**
  * Esta rutina toma un numero de guia al estilo Sthepy y lo transforma en algo
  * util y legible al estilo SisCO

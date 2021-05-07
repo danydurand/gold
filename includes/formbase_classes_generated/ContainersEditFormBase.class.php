@@ -54,8 +54,7 @@ abstract class ContainersEditFormBase extends QForm {
 	protected $lblId;
 	protected $txtNumero;
 	protected $lstOperacion;
-	protected $txtChofer;
-	protected $txtCedula;
+	protected $lstChofer;
 	protected $txtVehiculo;
 	protected $txtPlaca;
 	protected $calFecha;
@@ -68,6 +67,8 @@ abstract class ContainersEditFormBase extends QForm {
 	protected $txtPrecintoLateral;
 	protected $txtPiezas;
 	protected $txtPeso;
+	protected $txtKilos;
+	protected $txtPiesCub;
 	protected $txtContenido;
 	protected $txtDireccion;
 	protected $lblCreatedAt;
@@ -147,8 +148,7 @@ abstract class ContainersEditFormBase extends QForm {
 		$this->lblId = $this->mctContainers->lblId_Create();
 		$this->txtNumero = $this->mctContainers->txtNumero_Create();
 		$this->lstOperacion = $this->mctContainers->lstOperacion_Create();
-		$this->txtChofer = $this->mctContainers->txtChofer_Create();
-		$this->txtCedula = $this->mctContainers->txtCedula_Create();
+		$this->lstChofer = $this->mctContainers->lstChofer_Create();
 		$this->txtVehiculo = $this->mctContainers->txtVehiculo_Create();
 		$this->txtPlaca = $this->mctContainers->txtPlaca_Create();
 		$this->calFecha = $this->mctContainers->calFecha_Create();
@@ -161,6 +161,8 @@ abstract class ContainersEditFormBase extends QForm {
 		$this->txtPrecintoLateral = $this->mctContainers->txtPrecintoLateral_Create();
 		$this->txtPiezas = $this->mctContainers->txtPiezas_Create();
 		$this->txtPeso = $this->mctContainers->txtPeso_Create();
+		$this->txtKilos = $this->mctContainers->txtKilos_Create();
+		$this->txtPiesCub = $this->mctContainers->txtPiesCub_Create();
 		$this->txtContenido = $this->mctContainers->txtContenido_Create();
 		$this->txtDireccion = $this->mctContainers->txtDireccion_Create();
 		$this->lblCreatedAt = $this->mctContainers->lblCreatedAt_Create();

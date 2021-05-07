@@ -2040,14 +2040,15 @@ function DiasTranscurridos($dttFechFina,$dttFechInci) {
 
 function DeterminarUsuario() {
     $_SERVER['ProcesoTraza'] = "AUDITORIA";
-    //   Traza("Determinar Usuario");
+    t("==========================");
+    t("Rutina: Determinar Usuario");
     //-------------------------------------------------------------------------
     // Esta rutina determina cual es el tipo de Usuario que esta conectado
     // y devuelve al punto de su invocacion datos de dicho Usuario
     //-------------------------------------------------------------------------
     $objUsuario = isset($_SESSION['User']) ? unserialize($_SESSION['User']) : unserialize($_SESSION['UserExt']);
     if ($objUsuario instanceof UsuarioConnect) {
-        //      Traza("Es un Usuario Connect");
+        t("Es un Usuario Connect");
         //-------------------------------
         // Usuario del Sistema Connect
         //-------------------------------
@@ -2059,12 +2060,20 @@ function DeterminarUsuario() {
         }
         $strLogiUsua = $objUsuario->LogiUsua;
     } else {
-        //         Traza("Es un Usuario Interno del Sistema");
-        //----------------------------------
-        // Usuario Interno de la Empresa
-        //----------------------------------
-        $intCodiUsua = $objUsuario->CodiUsua;
-        $strLogiUsua = $objUsuario->LogiUsua;
+        if ($objUsuario instanceof Usuario) {
+            t("Es un Usuario Interno del Sistema");
+            //----------------------------------
+            // Usuario Interno de la Empresa
+            //----------------------------------
+            $intCodiUsua = $objUsuario->CodiUsua;
+            $strLogiUsua = $objUsuario->LogiUsua;
+        } else {
+            //----------------------------------
+            // Se trata de un Chofer
+            //----------------------------------
+            $intCodiUsua = $objUsuario->CodiChof;
+            $strLogiUsua = $objUsuario->Login;
+        }
     }
     $intCodiSucu = $objUsuario->SucursalId;
     //   Traza('El Usuario es: '.$strLogiUsua.' asociado a la Sucursal: '.$strCodiEsta.' y el codigo de este usuario es: '.$intCodiUsua);
@@ -2087,7 +2096,7 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
     $blnGuiaAnul = $arrDatoCkpt['GuiaAnul'];
     $intCodiCkpt = $arrDatoCkpt['CodiCkpt'];
     $strTextCkpt = $arrDatoCkpt['TextCkpt'];
-    $intCodiRuta = $arrDatoCkpt['CodiRuta'];
+    $intCodiRuta = isset($arrDatoCkpt['CodiRuta']) ? $arrDatoCkpt['CodiRuta'] : null;
     $intParaSucu = isset($arrDatoCkpt['CodiSucu']) ? $arrDatoCkpt['CodiSucu'] : '';
     $intNotiCkpt = isset($arrDatoCkpt['NotiCkpt']) ? $arrDatoCkpt['NotiCkpt'] : null;
 
@@ -2127,18 +2136,18 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
         }
         t('El checkpoint se puede procesar');
         $objPiezCkpt = new PiezaCheckpoints();
-        $objPiezCkpt->PiezaId      = $objPiezProc->Id;
-        $objPiezCkpt->CheckpointId = $intCodiCkpt;
-        $objPiezCkpt->SucursalId   = $intCodiSucu;
-        $objPiezCkpt->Fecha        = new QDateTime(QDateTime::Now());
-        $objPiezCkpt->Hora         = date('H:i');
-        $objPiezCkpt->Comentario   = strtoupper($strTextCkpt);
-        $objPiezCkpt->RutaId       = !is_null($intCodiRuta) ? $intCodiRuta : null;
-        $objPiezCkpt->CreatedBy    = $intCodiUsua;
         try {
+            $objPiezCkpt->PiezaId      = $objPiezProc->Id;
+            $objPiezCkpt->CheckpointId = $intCodiCkpt;
+            $objPiezCkpt->SucursalId   = $intCodiSucu;
+            $objPiezCkpt->Fecha        = new QDateTime(QDateTime::Now());
+            $objPiezCkpt->Hora         = date('H:i');
+            $objPiezCkpt->Comentario   = strtoupper($strTextCkpt);
+            $objPiezCkpt->RutaId       = !is_null($intCodiRuta) ? $intCodiRuta : null;
+            $objPiezCkpt->CreatedBy    = $intCodiUsua;
             $objPiezCkpt->Save();
         } catch (Exception $e) {
-            t('Grabando checkpoint a la pieza: '.$objPiezProc->Id.' | Error: '.$e->getMessage());
+            t('Error grabando checkpoint a la pieza: '.$objPiezProc->Id.': '.$e->getMessage());
         }
 
         t('Ckpt grabado en la Pieza, el Id es: '.$objPiezCkpt->Id);

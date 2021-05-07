@@ -636,6 +636,13 @@
 		QApplicationBase::$ClassFile['guiapiezametacontrol'] = __META_CONTROLS__ . '/GuiaPiezaMetaControl.class.php';
 		QApplicationBase::$ClassFile['guiapiezadatagrid'] = __META_CONTROLS__ . '/GuiaPiezaDataGrid.class.php';
 
+	// ClassPaths for the GuiaPiezaPod class
+		QApplicationBase::$ClassFile['guiapiezapod'] = __MODEL__ . '/GuiaPiezaPod.class.php';
+		QApplicationBase::$ClassFile['qqnodeguiapiezapod'] = __MODEL__ . '/GuiaPiezaPod.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeguiapiezapod'] = __MODEL__ . '/GuiaPiezaPod.class.php';
+		QApplicationBase::$ClassFile['guiapiezapodmetacontrol'] = __META_CONTROLS__ . '/GuiaPiezaPodMetaControl.class.php';
+		QApplicationBase::$ClassFile['guiapiezapoddatagrid'] = __META_CONTROLS__ . '/GuiaPiezaPodDataGrid.class.php';
+
 	// ClassPaths for the GuiaPiezas class
 		QApplicationBase::$ClassFile['guiapiezas'] = __MODEL__ . '/GuiaPiezas.class.php';
 		QApplicationBase::$ClassFile['qqnodeguiapiezas'] = __MODEL__ . '/GuiaPiezas.class.php';

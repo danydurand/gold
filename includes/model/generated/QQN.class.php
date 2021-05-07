@@ -547,6 +547,12 @@
 			return new QQNodeGuiaPieza('guia_pieza', null, null);
 		}
 		/**
+		 * @return QQNodeGuiaPiezaPod
+		 */
+		static public function GuiaPiezaPod() {
+			return new QQNodeGuiaPiezaPod('guia_pieza_pod', null, null);
+		}
+		/**
 		 * @return QQNodeGuiaPiezas
 		 */
 		static public function GuiaPiezas() {

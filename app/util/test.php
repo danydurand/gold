@@ -2,10 +2,29 @@
 require_once('qcubed.inc.php');
 
 
-$strNumeGuia = 'ANA9570174415-p2-001';
-echo "Entrando: ".$strNumeGuia."<br><br>";
-$strNumeGuia = transformar($strNumeGuia);
-echo "Transformada: ".$strNumeGuia;
+//---------------------------------
+// Ultimo Checkpoint de una pieza
+//---------------------------------
+$objPiezSele = GuiaPiezas::Load(385);
+print_r($objPiezSele->ultimoCheckpointTodo());
+
+//----------------------
+// Limpiar cadena
+//----------------------
+//$strNombChof = "Diego+] Torres/*-";
+//echo "Antes: $strNombChof<br>";
+//$strNombChof = limpiarCadena($strNombChof);
+//echo "Despues: $strNombChof<br>";
+
+
+//----------------------------------------------
+// Transformar la guia scanneada en guia SisCO
+//----------------------------------------------
+
+//$strNumeGuia = 'ANA9570174415-p2-001';
+//echo "Entrando: ".$strNumeGuia."<br><br>";
+//$strNumeGuia = transformar($strNumeGuia);
+//echo "Transformada: ".$strNumeGuia;
 
 
 
