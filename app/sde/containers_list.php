@@ -89,13 +89,6 @@ class ContainersListForm extends ContainersListFormBase {
 		$this->dtgContainerses->MetaAddColumn('Hora');
 		$this->dtgContainerses->MetaAddColumn('Estatus');
 
-		//$this->dtgContainerses->MetaAddColumn('CreatedAt');
-		//$this->dtgContainerses->MetaAddColumn('UpdatedAt');
-		//$this->dtgContainerses->MetaAddColumn('DeletedAt');
-		//$this->dtgContainerses->MetaAddColumn('CreatedBy');
-		//$this->dtgContainerses->MetaAddColumn('UpdatedBy');
-		//$this->dtgContainerses->MetaAddColumn('DeletedBy');
-
         $this->btnExpoExce_Create();
 
     }

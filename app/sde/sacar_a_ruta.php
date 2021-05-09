@@ -263,10 +263,6 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->dtgChofSucu->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
         $this->dtgChofSucu->AddRowAction(new QDoubleClickEvent(), new QAjaxAction('dtgChofSucuRow_DoubleClick'));
 
-
-        //$colNombChof = $this->dtgChofSucu->MetaAddColumn('NombChof');
-        //$colNombChof->Name = 'Nombre';
-
         $colNombChof = new QDataGridColumn('NOMBRE','<?= $_FORM->dtgChofSucu_NombChof_Render($_ITEM) ?>');
         $this->dtgChofSucu->AddColumn($colNombChof);
 
@@ -1141,6 +1137,9 @@ class SacarARuta extends FormularioBaseKaizen {
                 $objContenedor->CreatedBy   = $this->objUsuario->CodiUsua;
                 $objContenedor->Estatus     = 'ABIERT@';
                 $objContenedor->Tipo        = 'MASTER';
+                $objContenedor->Kilos       = 0;
+                $objContenedor->PiesCub     = 0;
+                $objContenedor->Peso        = 0;
             }
             $objContenedor->Numero          = $this->txtNumeCont->Text;
             $objContenedor->PrecintoLateral = $this->txtPrecLate->Text;

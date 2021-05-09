@@ -82,9 +82,12 @@ class GuiasListForm extends GuiasListFormBase {
 		$this->dtgGuiases->Paginator = new QPaginator($this->dtgGuiases);
 		$this->dtgGuiases->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-        $objClauOrde   = QQ::Clause();
-        $objClauOrde[] = QQ::OrderBy(QQN::Guias()->Id,false);
-        $this->dtgGuiases->AdditionalClauses = $objClauOrde;
+        //$objClauOrde   = QQ::Clause();
+        //$objClauOrde[] = QQ::OrderBy(QQN::Guias()->Id,false);
+        //$this->dtgGuiases->AdditionalClauses = $objClauOrde;
+
+        $this->dtgGuiases->SortColumnIndex = 0;
+        $this->dtgGuiases->SortDirection = 1;
 
         // Higlight the datagrid rows when mousing over them
 		$this->dtgGuiases->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
@@ -100,8 +103,8 @@ class GuiasListForm extends GuiasListFormBase {
 
 		// Create the Other Columns (note that you can use strings for guias's properties, or you
 		// can traverse down QQN::guias() to display fields that are down the hierarchy)
-		//$this->dtgGuiases->MetaAddColumn('Id');
-		$this->dtgGuiases->MetaAddColumn('Numero','Name=Guia-Gold');
+		$this->dtgGuiases->MetaAddColumn('Id');
+		//$this->dtgGuiases->MetaAddColumn('Numero','Name=Guia-Gold');
 		$this->dtgGuiases->MetaAddColumn('Tracking','Name=Guia-Cliente');
 
         //$colNombClie = $this->nombreDeCliente(QQN::Guias()->Id);

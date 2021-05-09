@@ -142,8 +142,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $this->mensaje($strMensMost,'m','d',__iHAND__);
         }
 
-        // Habilitar en Produccion
-
         $this->objRegiTrab = $this->CrearRegistroDeTrabajo();
 
         if ($strAcciPlus == 'cc') {
@@ -158,6 +156,15 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 } else {
                     //t('La guia esta facturada, no se puede re-calcular los conceptos');
                     $this->warning('La Guia ya fue Facturada.  No admite re-calculo de Conceptos');
+                }
+            }
+        }
+        if ($strAcciPlus == 'ne') {
+            // Imprimir Nota de Entrega
+            if ($this->objGuia) {
+                $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+                foreach ($arrPiezGuia as $objPiezGuia) {
+                    QApplication::Redirect(__SIST__.'/nota_de_entrega_pdf.php/'.$this->objGuia->Id.'/'.$objPiezGuia->Id);
                 }
             }
         }
@@ -361,6 +368,10 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/cc',
                 TextoIcono(__iEDIT__,'Calcular Conceptos')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ne',
+                TextoIcono('print fa-lg','Imprimir Nota de Despacho')
             );
         }
 
