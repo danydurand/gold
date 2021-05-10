@@ -62,13 +62,13 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         
         $this->txtNumeGuia_Create();
         $this->txtGuiaExte_Create();
-        $this->txtNumeMast_Create();
         $this->txtCodiInte_Create();
         $this->txtNombBusc_Create();
         $this->lstCodiClie_Create();
-        $this->chkInclSubc_Create();
         $this->lstCodiProd_Create();
         $this->txtNotaEntr_Create();
+
+        $this->txtNumeMast_Create();
         $this->calFechInic_Create();
         $this->calFechFina_Create();
         $this->lstFormPago_Create();
@@ -87,6 +87,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         //$this->lstCodiCkpt_Create();
         $this->chkMostQuer_Create();
         //$this->chkConxDesc_Create();
+        $this->chkInclSubc_Create();
 
         // Botónes del Formulario //
         
@@ -113,12 +114,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtGuiaExte = new QTextBox($this);
         $this->txtGuiaExte->Name = QApplication::Translate('Guía Cliente');
         $this->txtGuiaExte->Width = 181;
-    }
-
-    protected function txtNumeMast_Create() {
-        $this->txtNumeMast = new QTextBox($this);
-        $this->txtNumeMast->Name = QApplication::Translate('Manifiesto Recepcion');
-        $this->txtNumeMast->Width = 181;
     }
 
     protected function txtCodiInte_Create() {
@@ -148,6 +143,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->chkInclSubc = new QCheckBox($this);
         $this->chkInclSubc->Name = 'Incluir Sub-Cuentas ?';
         $this->chkInclSubc->Checked = false;
+    }
+
+    protected function txtNumeMast_Create() {
+        $this->txtNumeMast = new QTextBox($this);
+        $this->txtNumeMast->Name = 'Manifiesto de Ruta';
+        $this->txtNumeMast->Width = 181;
     }
 
     protected function calFechInic_Create() {
@@ -267,7 +268,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
 
     protected function txtNotaEntr_Create() {
         $this->txtNotaEntr = new QTextBox($this);
-        $this->txtNotaEntr->Name = 'Nota de Entrega';
+        $this->txtNotaEntr->Name = 'Manif. Recepción';
         $this->txtNotaEntr->Width = 180;
     }
 
@@ -359,22 +360,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         }
     }
 
-    protected function obtenerGuiasDeLaMaster($strNumeMast) {
-        $strCadeSqlx  = "select p.guia_id ";
-        $strCadeSqlx .= "  from sde_contenedor_guia_assn c";
-        $strCadeSqlx .= "       inner join guia_piezas p";
-        $strCadeSqlx .= "    on c.guia_pieza_id = p.id ";
-        $strCadeSqlx .= " where nume_cont = '".$strNumeMast."'";
-        //t('Query: '.$strCadeSqlx);
-        $objDatabase = SdeContenedor::GetDatabase();
-        $objDbResult = $objDatabase->Query($strCadeSqlx);
-        $arrGuiaMast = array();
-        while ($mixRegistro = $objDbResult->FetchArray()) {
-            $arrGuiaMast[] = $mixRegistro['guia_id'];
-        }
-        return $arrGuiaMast;
-    }
-
     protected function lstCodiDest_Change() {
         /**
          * @var $objReceptoria Counter
@@ -446,7 +431,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         $this->mensaje();
-        $blnTodoOkey = true;
         $objUsuaPodx = null;
         $objUsuaCrea = null;
         $strMensMost = '';
@@ -492,14 +476,23 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         //------------------------------------------------------------------------------
         // Antes de armar el SQL, se verifica si se ha seteado un usuario en particular
         //------------------------------------------------------------------------------
+        $blnTodoOkey = true;
         if (strlen($this->txtUsuaPodx->Text)) {
-            //---------------------------------------------------------------------
-            // Se trata de un usuario quien ha registrado el POD de la(s) guía(s).
-            //---------------------------------------------------------------------
-            $objUsuaPodx = Usuario::LoadByLogiUsua($this->txtUsuaPodx->Text);
+            $strLogiUsua = trim($this->txtUsuaPodx->Text);
+            //---------------------------------------------------------------------------
+            // Se determina la existencia de un Usuario o un Chofer cuyo login coincida
+            //---------------------------------------------------------------------------
+            $objUsuaPodx = Usuario::LoadByLogiUsua($strLogiUsua);
             if (!$objUsuaPodx) {
-                $this->mensaje('El Usuario <b>'.$this->txtUsuaPodx->Text.'</b> no existe!','','d','i','hand-stop-o');
-                $blnTodoOkey = false;
+                $objUsuaPodx = Chofer::LoadByLogin($strLogiUsua);
+                if (!$objUsuaPodx) {
+                    $strMensMost = 'No existe Usuario o Chofer con el login: <b>'.$strLogiUsua.'</b> !';
+                    $blnTodoOkey = false;
+                } else {
+                    $intUsuaPodx = $objUsuaPodx->CodiChof;
+                }
+            } else {
+                $intUsuaPodx = $objUsuaPodx->CodiUsua;
             }
         }
         if ($blnTodoOkey) {
@@ -514,10 +507,6 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $objClausula[] = QQ::Like(QQN::Guias()->Tracking,"%".$this->txtGuiaExte->Text."%");
                 $strCadeSqlx  .= " and g.tracking = '".$this->txtGuiaExte->Text."'";
             }
-            if (strlen($this->txtNumeMast->Text) > 0) {
-                $objClausula[] = QQ::Equal(QQN::Guias()->NotaEntrega->Referencia,$this->txtNumeMast->Text);
-                $strCadeSqlx  .= " and ne.referencia = ".trim($this->txtNumeMast->Text);
-            }
             if (!is_null($this->lstCodiClie->SelectedValue) && (!$this->chkInclSubc->Checked)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$this->lstCodiClie->SelectedValue);
                 $strCadeSqlx  .= " and g.cliente_corp_id = ".$this->lstCodiClie->SelectedValue;
@@ -527,8 +516,23 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $strCadeSqlx  .= " and g.producto_id = ".$this->lstCodiProd->SelectedValue;
             }
             if (strlen($this->txtNotaEntr->Text) > 0) {
+                //--------------------------
+                // Manifiesto de Recepcion
+                //--------------------------
                 $objClausula[] = QQ::Equal(QQN::Guias()->NotaEntrega->Referencia,$this->txtNotaEntr->Text);
                 $strCadeSqlx  .= " and ne.referencia = ".$this->txtNotaEntr->Text;
+            }
+            if (strlen($this->txtNumeMast->Text) > 0) {
+                //-------------------------------
+                // Manifiesto de Salida a Ruta
+                //-------------------------------
+                $arrGuiaMast = [];
+                $objManiRuta = Containers::LoadByNumero($this->txtNumeMast->Text);
+                if ($objManiRuta) {
+                    $arrGuiaMast = $objManiRuta->obtenerGuiasDeLaMaster();
+                }
+                $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaMast);
+                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaMast).')';
             }
             if ($this->chkInclSubc->Checked) {
                 if (!is_null($this->lstCodiClie->SelectedValue)) {
@@ -558,13 +562,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 //----------------------------------------------------------------------------
                 // Se identifican las piezas localizadas en la ubicacion dada por el Usuario
                 //----------------------------------------------------------------------------
-                $objClauWher   = QQ::Clause();
-                $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->Ubicacion,"%".trim($this->txtUbicFisi->Text)."%");
-                $arrPiezUbic   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
-                $arrGuiaIdxx   = array();
-                foreach ($arrPiezUbic as $objPiezUbic) {
-                    $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
-                }
+                $arrGuiaIdxx   = GuiaPiezas::EnEstaUbicacion($this->txtUbicFisi->Text);
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaIdxx);
                 $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaIdxx).")";
             }
@@ -589,30 +587,33 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $strCadeSqlx  .= " and g.vendedor_id = ".$this->lstCodiVend->SelectedValue;
             }
             if (!is_null($this->calEntrInic->DateTime)) {
-                $objClausula[] = QQ::GreaterOrEqual(QQN::Guias()->GuiaPod->FechaEntrega,$this->calEntrInic->DateTime->__toString("YYYY-MM-DD"));
-                $strCadeSqlx  .= " and gp.fecha_entrega >= '".$this->calEntrInic->DateTime->__toString("YYYY-MM-DD")."'";
+                $arrGuiaSele   = Guias::ConCheckpointEnFechaInicial('OK',$this->calEntrInic->DateTime->__toString("YYYY-MM-DD"));
+                $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
+                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
             }
             if (!is_null($this->calEntrFina->DateTime)) {
-                $objClausula[] = QQ::LessOrEqual(QQN::Guias()->GuiaPod->FechaEntrega,$this->calEntrFina->DateTime->__toString("YYYY-MM-DD"));
-                $strCadeSqlx  .= " and gp.fecha_entrega <= '".$this->calEntrFina->DateTime->__toString("YYYY-MM-DD")."'";
+                $arrGuiaSele   = Guias::ConCheckpointEnFechaFinal('OK',$this->calEntrInic->DateTime->__toString("YYYY-MM-DD"));
+                $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
+                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
             }
-            if (!is_null($this->rdbTienPodx->SelectedValue)) {
-                if ($this->rdbTienPodx->SelectedValue == 'SI') {
-                    $objClausula[] = QQ::IsNotNull(QQN::Guias()->GuiaPodId);
-                    $strCadeSqlx  .= " and g.guia_pod_id_a IS NOT NULL";
-                } else {
-                    $objClausula[] = QQ::IsNull(QQN::Guias()->GuiaPodId);
-                    $strCadeSqlx  .= " and g.guia_pod_id IS NULL";
-                }
-            }
+            //if (!is_null($this->rdbTienPodx->SelectedValue)) {
+            //    if ($this->rdbTienPodx->SelectedValue == 'SI') {
+            //        $objClausula[] = QQ::IsNotNull(QQN::Guias()->GuiaPodId);
+            //        $strCadeSqlx  .= " and g.guia_pod_id_a IS NOT NULL";
+            //    } else {
+            //        $objClausula[] = QQ::IsNull(QQN::Guias()->GuiaPodId);
+            //        $strCadeSqlx  .= " and g.guia_pod_id IS NULL";
+            //    }
+            //}
             if (strlen($this->txtUsuaPodx->Text)) {
-                $objClausula[] = QQ::Like(QQN::Guias()->GuiaPod->CreatedBy,$objUsuaPodx->CodiUsua);
-                $strCadeSqlx  .= " and gp.created_by = ".$objUsuaPodx->CodiUsua;
+                $arrGuiaSele   = Guias::ConCheckpointRegistradoPor('OK',$intUsuaPodx);
+                $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
+                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
             }
-            if (!is_null($this->lstTariIdxx->SelectedValue)) {
-                $objClausula[] = QQ::Equal(QQN::Guias()->TarifaId,$this->lstTariIdxx->SelectedValue);
-                $strCadeSqlx  .= " and g.tarifa_id = ".$this->lstTariIdxx->SelectedValue;
-            }
+            //if (!is_null($this->lstTariIdxx->SelectedValue)) {
+            //    $objClausula[] = QQ::Equal(QQN::Guias()->TarifaId,$this->lstTariIdxx->SelectedValue);
+            //    $strCadeSqlx  .= " and g.tarifa_id = ".$this->lstTariIdxx->SelectedValue;
+            //}
             $objClausula[] = QQ::IsNull(QQN::Guias()->DeletedBy);
             $strCadeSqlx  .= " and g.deleted_by IS NULL ";
             if ($this->chkMostQuer->Checked) {
@@ -678,7 +679,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $strMensMost = 'Debe proporcionar al menos un Criterio de Búsqueda!';
             }
         }
-        $this->mensaje($strMensMost,'','d','i',__iHAND__);
+        $this->danger($strMensMost);
     }
 }
 

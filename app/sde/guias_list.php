@@ -124,8 +124,8 @@ class GuiasListForm extends GuiasListFormBase {
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
         //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
         $this->dtgGuiases->MetaAddColumn('ServicioImportacion','Name=S.Impor');
+        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Producto, 'Name=Prod');
-        $this->dtgGuiases->MetaAddColumn('FormaPago','Name=F.Pago');
         $this->dtgGuiases->MetaAddColumn('NombreRemitente', 'Name=Remitente');
         $this->dtgGuiases->MetaAddColumn('NombreDestinatario','Name=Destinatario');
         $this->dtgGuiases->MetaAddColumn('Total');

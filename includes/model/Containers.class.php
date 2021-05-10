@@ -84,17 +84,23 @@
             return $this->GetGuiaPiezasAsContainerPiezaArray();
         }
 
+        // 4722877
+
         public function obtenerGuiasDeLaMaster() {
-            $strCadeSqlx  = "select p.guia_id ";
-            $strCadeSqlx .= "  from sde_contenedor_guia_assn c";
-            $strCadeSqlx .= "       inner join guia_piezas p";
-            $strCadeSqlx .= "    on c.guia_pieza_id = p.id ";
-            $strCadeSqlx .= " where nume_cont = '".$this->strNumeCont."'";
-            $objDatabase = SdeContenedor::GetDatabase();
+            $strCadeSqlx  = "select g.id ";
+            $strCadeSqlx .= "  from containers c";
+            $strCadeSqlx .= "       inner join container_pieza_assn cpa";
+            $strCadeSqlx .= "    on c.id = cpa.container_id";
+            $strCadeSqlx .= "       inner join guia_piezas gp";
+            $strCadeSqlx .= "    on gp.id = cpa.guia_pieza_id";
+            $strCadeSqlx .= "       inner join guias g";
+            $strCadeSqlx .= "    on g.id = gp.guia_id";
+            $strCadeSqlx .= " where c.numero = '".$this->Numero."'";
+            $objDatabase = Containers::GetDatabase();
             $objDbResult = $objDatabase->Query($strCadeSqlx);
             $arrGuiaMast = array();
             while ($mixRegistro = $objDbResult->FetchArray()) {
-                $arrGuiaMast[] = $mixRegistro['guia_id'];
+                $arrGuiaMast[] = $mixRegistro['id'];
             }
             return $arrGuiaMast;
         }

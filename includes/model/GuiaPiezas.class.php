@@ -27,6 +27,16 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+        public static function EnEstaUbicacion($strEstaUbic) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->Ubicacion,"%".trim($strEstaUbic)."%");
+            $arrPiezUbic   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
+            $arrGuiaIdxx   = [];
+            foreach ($arrPiezUbic as $objPiezUbic) {
+                $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
+            }
+            return $arrGuiaIdxx;
+        }
 
         public static function LoadArrayAptasParaTrasladar($intCodiClie, $objOptionalClauses=null) {
             // Performing the load manually (instead of using QCubed Query)

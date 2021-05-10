@@ -27,17 +27,50 @@
 			return sprintf('%s',  $this->Pieza->IdPieza);
 		}
 
-		public function tieneCheckpoint($strCodiCkpt) {
+        public static function ConCheckpointRegistradoPor($strCodiCkpt, $intCodiUsua) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);
+            $objClauWher[] = QQ::GreaterOrEqual(QQN::PiezaCheckpoints()->CreatedBy,$intCodiUsua);
+            $arrPiezCkpt   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClauWher));
+            return $arrPiezCkpt;
+        }
+
+        public function tieneCheckpoint($strCodiCkpt) {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);
             $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->PiezaId,$this->PiezaId);
             return PiezaCheckpoints::QueryCount(QQ::AndCondition($objClauWher));
         }
 
+        public static function ConCheckpointEnFechaInicial($strCodiCkpt, $dttFechInic) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);
+            $objClauWher[] = QQ::GreaterOrEqual(QQN::PiezaCheckpoints()->Fecha,$dttFechInic);
+            $arrPiezCkpt   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClauWher));
+            return $arrPiezCkpt;
+        }
+
+        public static function ConCheckpointEnFechaFinal($strCodiCkpt, $dttFechFina) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);
+            $objClauWher[] = QQ::GreaterOrEqual(QQN::PiezaCheckpoints()->Fecha,$dttFechFina);
+            $arrPiezCkpt   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClauWher));
+            return $arrPiezCkpt;
+        }
+
         public static function CheckpointEnFecha($strCodiCkpt, $dttFechRefe) {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);
             $objClauWher[] = QQ::LessOrEqual(QQN::PiezaCheckpoints()->Fecha,$dttFechRefe);
+            $arrPiezCkpt   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClauWher));
+            return $arrPiezCkpt;
+        }
+
+        public static function CheckpointEnRangoDeFechas($strCodiCkpt, $dttFechInic, $dttFechFina) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);
+            $objClauWher[] = QQ::GreaterOrEqual(QQN::PiezaCheckpoints()->Fecha,$dttFechInic);
+            $objClauWher[] = QQ::LessOrEqual(QQN::PiezaCheckpoints()->Fecha,$dttFechFina);
             $arrPiezCkpt   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClauWher));
             return $arrPiezCkpt;
         }

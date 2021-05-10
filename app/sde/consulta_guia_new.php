@@ -162,10 +162,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         if ($strAcciPlus == 'ne') {
             // Imprimir Nota de Entrega
             if ($this->objGuia) {
-                $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
-                foreach ($arrPiezGuia as $objPiezGuia) {
-                    QApplication::Redirect(__SIST__.'/nota_de_entrega_pdf.php/'.$this->objGuia->Id.'/'.$objPiezGuia->Id);
-                }
+                QApplication::Redirect(__SIST__.'/nota_de_entrega_pdf.php/'.$this->objGuia->Id);
             }
         }
     }

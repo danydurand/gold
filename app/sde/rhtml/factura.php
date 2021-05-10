@@ -10,30 +10,14 @@ if (!isset($_SESSION['FactIdxx'])) {
     echo "Se requiere un Nro de Factura para Imprimir...";
     return;
 }
+$strLimiDere = '350px';
 $intFactIdxx = $_SESSION['FactIdxx'];
 $objFactImpr = Facturas::Load($intFactIdxx);
 ?>
 
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
-        <!---------------------->
-        <!-- LOGO y DIRECCION -->
-        <!---------------------->
-        <table>
-            <tr>
-                <td style="width: 350px">
-                    <img src=<?= __VIRTUAL_DIRECTORY__.__APP_IMAGE_ASSETS__."/LogoGold.png" ?> alt="LogoGold" width="310px" height="100px">
-                    <br>
-                    <br>
-                    <br>
-                </td>
-                <td style="width: 315px; text-align: right">
-                    1335 NW 98TH CT UNIT 2<br>
-                    DORAL, FL 33172<br>
-                    786 452 9090
-                </td>
-            </tr>
-        </table>
+        <?php include('partials/header_local.tpl.php'); ?>
         <!---------------------->
         <!--     RECUADROS    -->
         <!---------------------->
@@ -76,29 +60,23 @@ $objFactImpr = Facturas::Load($intFactIdxx);
         <!------------------------------->
         <table style="margin-top: 24px; border: solid .5mm">
             <tr style="background-color: #CCC; font-weight: bold">
-                <td style="width: 295px;">Description</td>
-                <td style="width: 100px; text-align: center">Date</td>
-                <td style="width: 100px; text-align: center">Import Serv.</td>
-                <td style="width: 55px; text-align: right">Pieces</td>
-                <td style="width: 100px; text-align: right">Amount</td>
+                <td style=" width: 420px;">Description</td>
+                <td style="width: 120px; text-align: center">Date</td>
+                <td style="width: 120px; text-align: right">Amount</td>
             </tr>
             <?php $intCantPiez = 0 ?>
             <?php foreach ($objFactImpr->GetNotaEntregaAsFacturaArray() as $objNotaEntr) { ?>
                 <tr>
                     <td>Entregas NAC Ref: <?= $objNotaEntr->Referencia ?></td>
                     <td style="text-align: center"><?= $objNotaEntr->Fecha->__toString("DD/MM/YYYY") ?></td>
-                    <td style="text-align: center"><?= $objNotaEntr->ServicioImportacion ?></td>
-                    <td style="text-align: right"><?= $objNotaEntr->Piezas ?></td>
                     <td style="text-align: right"><?= nf($objNotaEntr->Total) ?></td>
                 </tr>
                 <?php $intCantPiez += $objNotaEntr->Piezas ?>
             <?php } ?>
             <tr style="background-color: #CCC; font-weight: bold">
-                <td style="width: 295px;">Totals</td>
-                <td style="width: 100px; text-align: center"></td>
-                <td style="width: 100px; text-align: center"></td>
-                <td style="width: 55px; text-align: right"><?= $intCantPiez ?></td>
-                <td style="width: 100px; text-align: right"><?= nf($objFactImpr->Total) ?></td>
+                <td>Totals</td>
+                <td style="text-align: center"></td>
+                <td style="text-align: right"><?= nf($objFactImpr->Total) ?></td>
             </tr>
         </table>
     </page_header>

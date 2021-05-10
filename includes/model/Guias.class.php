@@ -27,6 +27,37 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
+        public static function ConCheckpointRegistradoPor($strCodiCkpt,$intCodiUsua) {
+		    /* @var $objPiezSele PiezaCheckpoints */
+            $arrGuiaSele = [];
+            $arrPiezSele = PiezaCheckpoints::ConCheckpointRegistradoPor($strCodiCkpt,$intCodiUsua);
+            foreach ($arrPiezSele as $objPiezSele) {
+                $arrGuiaSele[] = $objPiezSele->Pieza->GuiaId;
+            }
+            return $arrGuiaSele;
+        }
+
+        public static function ConCheckpointEnFechaInicial($strCodiCkpt,$dttFechInic) {
+		    /* @var $objPiezSele PiezaCheckpoints */
+            $arrGuiaSele = [];
+            $arrPiezSele = PiezaCheckpoints::ConCheckpointEnFechaInicial($strCodiCkpt,$dttFechInic);
+            foreach ($arrPiezSele as $objPiezSele) {
+                $arrGuiaSele[] = $objPiezSele->Pieza->GuiaId;
+            }
+            return $arrGuiaSele;
+        }
+
+        public static function ConCheckpointEnFechaFinal($strCodiCkpt,$dttFechFina) {
+            /* @var $objPiezSele PiezaCheckpoints */
+            $arrGuiaSele = [];
+            $arrPiezSele = PiezaCheckpoints::ConCheckpointEnFechaFinal($strCodiCkpt,$dttFechFina);
+            foreach ($arrPiezSele as $objPiezSele) {
+                $arrGuiaSele[] = $objPiezSele->Pieza->GuiaId;
+            }
+            return $arrGuiaSele;
+        }
+
+
 
         public function __servImportacion() {
 		    switch ($this->ServicioImportacion) {
