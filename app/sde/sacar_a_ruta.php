@@ -905,7 +905,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $objNuevChof->TipoMens   = MasTipoMensType::FIJO;
             $objNuevChof->TipoMens   = MasTipoMensType::FIJO;
             $objNuevChof->Login      = Chofer::LoginPropuesto($strNombChof, $strApelChof);
-            $objNuevChof->Password   = md5('sencillo');
+            $objNuevChof->Password   = md5('muyfacil');
             $objNuevChof->Save();
             $this->intChofSele       = $objNuevChof->CodiChof;
             //---------------------------------------------
@@ -916,7 +916,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $arrLogxCamb['strNombRegi'] = $objNuevChof->NombChof.' '.$objNuevChof->ApelChof;
             $arrLogxCamb['strDescCamb'] = 'Creado dinamicamente, desde Sacar a Ruta';
             LogDeCambios($arrLogxCamb);
-            $this->success('Chofer creado Exitosamente !');
+            $this->success('Chofer creado Exitosamente !!! | Login Mobile: <b>'.$objNuevChof->Login.'</b> | Clave: <b>muyfacil</b>');
         } else {
             //--------------------------------------------------------------------------------
             // Si Chofer existe y esta inactivo o no disponible, se cambian esas condiciones
