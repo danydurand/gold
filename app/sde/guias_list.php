@@ -59,7 +59,7 @@ class GuiasListForm extends GuiasListFormBase {
 
 		// Security check for ALLOW_REMOTE_ADMIN
 		// To allow access REGARDLESS of ALLOW_REMOTE_ADMIN, simply remove the line below
-		QApplication::CheckRemoteAdmin();		    
+		QApplication::CheckRemoteAdmin();
 	}
 
 //		protected function Form_Load() {}
@@ -82,10 +82,6 @@ class GuiasListForm extends GuiasListFormBase {
 		$this->dtgGuiases->Paginator = new QPaginator($this->dtgGuiases);
 		$this->dtgGuiases->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-        //$objClauOrde   = QQ::Clause();
-        //$objClauOrde[] = QQ::OrderBy(QQN::Guias()->Id,false);
-        //$this->dtgGuiases->AdditionalClauses = $objClauOrde;
-
         $this->dtgGuiases->SortColumnIndex = 0;
         $this->dtgGuiases->SortDirection = 1;
 
@@ -104,15 +100,7 @@ class GuiasListForm extends GuiasListFormBase {
 		// Create the Other Columns (note that you can use strings for guias's properties, or you
 		// can traverse down QQN::guias() to display fields that are down the hierarchy)
 		$this->dtgGuiases->MetaAddColumn('Id');
-		//$this->dtgGuiases->MetaAddColumn('Numero','Name=Guia-Gold');
 		$this->dtgGuiases->MetaAddColumn('Tracking','Name=Guia-Cliente');
-
-        //$colNombClie = $this->nombreDeCliente(QQN::Guias()->Id);
-        //$colNombClie = new QDataGridColumn('CLIENTE',$colNombClie);
-		//$this->dtgGuiases->AddColumn($colNombClie);
-		//$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteRetail,'Name=C.Retail');
-		//$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteCorp,'Name=C.Corp');
-		//$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteInt, 'Name=C.Int');
 
         $colFechGuia = new QDataGridColumn('Fecha','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
         $colFechGuia->OrderByClause = QQ::OrderBy(QQN::Guias()->Fecha, false);
@@ -120,20 +108,19 @@ class GuiasListForm extends GuiasListFormBase {
         $this->dtgGuiases->AddColumn($colFechGuia);
 
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
-        //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaOrigen->Siglas,'Name=R.Ori');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
-        //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
         $this->dtgGuiases->MetaAddColumn('ServicioImportacion','Name=S.Impor');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Producto, 'Name=Prod');
+        $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');
+        $this->dtgGuiases->AddColumn($colUltiCkpt);
         $this->dtgGuiases->MetaAddColumn('NombreRemitente', 'Name=Remitente');
         $this->dtgGuiases->MetaAddColumn('NombreDestinatario','Name=Destinatario');
         $this->dtgGuiases->MetaAddColumn('Total');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Tarifa->Descripcion,'Name=Tarifa');
 
         $this->dtgGuiases->SetDataBinder('dtgGuias_Bind');
 
         $this->btnExpoExce_Create();
+        $this->btnExpoExce->Visible = true;
 
     }
 
@@ -150,7 +137,10 @@ class GuiasListForm extends GuiasListFormBase {
 
         $arrGuiaNaci = Guias::QueryArray(
             QQ::AndCondition($this->objClauWher),
-            QQ::Clause($this->dtgGuiases->OrderByClause, $this->dtgGuiases->LimitClause)
+            QQ::Clause(
+                $this->dtgGuiases->OrderByClause,
+                $this->dtgGuiases->LimitClause
+            )
         );
 
         $this->dtgGuiases->DataSource = $arrGuiaNaci;
@@ -172,19 +162,6 @@ class GuiasListForm extends GuiasListFormBase {
         }
     }
 
-    protected function nombreDeCliente($id)
-    {
-        $guia = Guias::Load($id);
-        if (!is_null($guia->ClienteRetailId)) {
-            return $guia->ClienteRetail->Nombre;
-        }
-        if (!is_null($guia->ClienteCorpId)) {
-            return $guia->ClienteCorp->NombClie;
-        }
-        if (!is_null($guia->ClienteIntId)) {
-            return $guia->ClienteInt->Nombre;
-        }
-    }
 
     public function dtgGuiasesRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);

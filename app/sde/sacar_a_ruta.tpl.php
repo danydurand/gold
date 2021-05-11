@@ -6,7 +6,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <div class="col-xs-4 col-md-3 col-lg-3 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
             <?php $this->lblTituForm->Render(); ?>&nbsp;&nbsp;<?php $this->objDefaultWaitIcon->Render(); ?>
         </div>
-        <div class="hidden-xs hidden-sm col-md-7 col-lg-7" style="text-align: center; margin-top: -0.25em;">
+        <div class="hidden-xs hidden-sm col-md-7 col-lg-7" style="text-align:left; margin-top: -0.25em; margin-left: 4em">
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnSave->Render(); ?>
             <?php $this->btnRepoMani->Render() ?>

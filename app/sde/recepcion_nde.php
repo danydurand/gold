@@ -15,7 +15,7 @@ class RecepcionNde extends FormularioBaseKaizen {
     protected $lstNotaEntr;  // Notas de Entrega
     protected $txtNumePiez;  // Piezas Recibidas
     protected $dtgPiezNota;  // Piezas asociadas a la Nota de Entrega
-    protected $chkInclReci;  // Permite incluir NDE Recibidas con Faltantes
+    protected $chkInclReci;  // Permite incluir Manif Recibidos con Faltantes
 
     protected $intCantNore;
     protected $strCadeSqlx;
@@ -52,7 +52,7 @@ class RecepcionNde extends FormularioBaseKaizen {
 
     protected function chkInclReci_Create() {
         $this->chkInclReci = new QCheckBox($this);
-        $this->chkInclReci->Name = 'Incluir Recibidas con Faltantes ?';
+        $this->chkInclReci->Name = 'Incluir Recibidos con Faltantes ?';
         $this->chkInclReci->AddAction(new QChangeEvent(), new QAjaxAction('chkInclReci_Change'));
     }
 
@@ -98,7 +98,7 @@ class RecepcionNde extends FormularioBaseKaizen {
             $arrPiezNota   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
             $arrPiezNore   = [];
             foreach ($arrPiezNota as $objPiezNota) {
-                if (!$objPiezNota->tieneCheckpoint('PU')) {
+                if (!$objPiezNota->tieneCheckpoint('RA')) {
                     $arrPiezNore[] = $objPiezNota;
                     $this->intCantNore ++;
                 }
@@ -111,18 +111,18 @@ class RecepcionNde extends FormularioBaseKaizen {
         $colPiezIdxx = new QDataGridColumn($this);
         $colPiezIdxx->Name = QApplication::Translate('IdPieza');
         $colPiezIdxx->Html = '<?= $_ITEM->IdPieza ?>';
-        $colPiezIdxx->Width = 110;
+        $colPiezIdxx->Width = 160;
         $this->dtgPiezNota->AddColumn($colPiezIdxx);
 
         $colPiezGuia = new QDataGridColumn($this);
-        $colPiezGuia->Name = QApplication::Translate('Tracking');
+        $colPiezGuia->Name = QApplication::Translate('Guia');
         $colPiezGuia->Html = '<?= $_ITEM->Guia->Tracking ?>';
-        $colPiezGuia->Width = 80;
+        $colPiezGuia->Width = 150;
         $this->dtgPiezNota->AddColumn($colPiezGuia);
 
         $colLibrPiez = new QDataGridColumn($this);
-        $colLibrPiez->Name = QApplication::Translate('Libras');
-        $colLibrPiez->Html = '<?= $_ITEM->Libras ?>';
+        $colLibrPiez->Name = QApplication::Translate('Kilos');
+        $colLibrPiez->Html = '<?= $_ITEM->Kilos ?>';
         $colLibrPiez->Width = 80;
         $this->dtgPiezNota->AddColumn($colLibrPiez);
 
@@ -132,11 +132,6 @@ class RecepcionNde extends FormularioBaseKaizen {
         $colPiesPiez->Width = 80;
         $this->dtgPiezNota->AddColumn($colPiesPiez);
 
-        $colVoluPiez = new QDataGridColumn($this);
-        $colVoluPiez->Name = QApplication::Translate('Vol.');
-        $colVoluPiez->Html = '<?= $_ITEM->Volumen ?>';
-        $colVoluPiez->Width = 80;
-        $this->dtgPiezNota->AddColumn($colVoluPiez);
 
     }
 

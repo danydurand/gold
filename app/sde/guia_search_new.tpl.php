@@ -3,7 +3,7 @@ $strPageTitle = QApplication::Translate('Buscar Guía');
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
 <div class="titulo-formulario">
-    <div class="col-xs-2 col-md-2 col-lg-2 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
+    <div class="col-xs-3 col-md-3 col-lg-3 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
         <?php $this->lblTituForm->Render(); ?>
     </div>
     <div class="hidden-xs hidden-sm col-md-5 col-lg-6" style="text-align: center; margin-top: -0.25em;">

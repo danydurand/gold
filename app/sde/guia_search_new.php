@@ -452,18 +452,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                    g.piezas,
                    g.valor_declarado,
                    ne.referencia,
-                   gp.entregado_a,
-                   date_format(gp.fecha_entrega, '%Y-%m-%d') fecha_entrega,
-                   gp.hora_entrega,
-                   date_format(gp.created_at, '%Y-%m-%d') fecha_pod,
                    g.contenido,
                    ta.descripcion
               from guias g left join clientes_retail c
                 on g.cliente_retail_id = c.id
                    left join master_cliente m
                 on m.codi_clie = g.cliente_corp_id
-                   left join guia_pod gp
-                ON g.id = gp.guia_id
                    left join usuario u
                 on g.created_by = u.codi_usua
                    left join fac_tarifa ta
@@ -477,6 +471,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         // Antes de armar el SQL, se verifica si se ha seteado un usuario en particular
         //------------------------------------------------------------------------------
         $blnTodoOkey = true;
+        $intUsuaPodx = null;
         if (strlen($this->txtUsuaPodx->Text)) {
             $strLogiUsua = trim($this->txtUsuaPodx->Text);
             //---------------------------------------------------------------------------
@@ -596,24 +591,11 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
                 $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
             }
-            //if (!is_null($this->rdbTienPodx->SelectedValue)) {
-            //    if ($this->rdbTienPodx->SelectedValue == 'SI') {
-            //        $objClausula[] = QQ::IsNotNull(QQN::Guias()->GuiaPodId);
-            //        $strCadeSqlx  .= " and g.guia_pod_id_a IS NOT NULL";
-            //    } else {
-            //        $objClausula[] = QQ::IsNull(QQN::Guias()->GuiaPodId);
-            //        $strCadeSqlx  .= " and g.guia_pod_id IS NULL";
-            //    }
-            //}
             if (strlen($this->txtUsuaPodx->Text)) {
                 $arrGuiaSele   = Guias::ConCheckpointRegistradoPor('OK',$intUsuaPodx);
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
                 $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
             }
-            //if (!is_null($this->lstTariIdxx->SelectedValue)) {
-            //    $objClausula[] = QQ::Equal(QQN::Guias()->TarifaId,$this->lstTariIdxx->SelectedValue);
-            //    $strCadeSqlx  .= " and g.tarifa_id = ".$this->lstTariIdxx->SelectedValue;
-            //}
             $objClausula[] = QQ::IsNull(QQN::Guias()->DeletedBy);
             $strCadeSqlx  .= " and g.deleted_by IS NULL ";
             if ($this->chkMostQuer->Checked) {

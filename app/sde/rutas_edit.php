@@ -43,9 +43,13 @@ class RutasEditForm extends RutasEditFormBase {
 		$this->lblId = $this->mctRutas->lblId_Create();
 		$this->txtCodigo = $this->mctRutas->txtCodigo_Create();
 		$this->txtDescripcion = $this->mctRutas->txtDescripcion_Create();
+		$this->txtDescripcion->Width = 300;
 		$this->lstSucursal = $this->mctRutas->lstSucursal_Create();
 		$this->lstTipo = $this->mctRutas->lstTipo_Create();
 		$this->txtObservacion = $this->mctRutas->txtObservacion_Create();
+		$this->txtObservacion->TextMode = QTextMode::MultiLine;
+		$this->txtObservacion->Width = 300;
+		$this->txtObservacion->Rows = 2;
 		$this->lblCreatedAt = $this->mctRutas->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctRutas->lblUpdatedAt_Create();
 		//$this->lblDeletedAt = $this->mctRutas->lblDeletedAt_Create();
@@ -139,7 +143,7 @@ class RutasEditForm extends RutasEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/rutas_edit.php/'.$this->mctRutas->Rutas->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa !');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Rutas';
@@ -148,7 +152,7 @@ class RutasEditForm extends RutasEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/rutas_edit.php/'.$this->mctRutas->Rutas->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa !');
 		}
 	}
 
@@ -160,9 +164,8 @@ class RutasEditForm extends RutasEditFormBase {
         $arrTablRela = $this->mctRutas->TablasRelacionadasRutas();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            $strTextMens = sprintf('Existen registros relacionados en %s',$strTablRela);
+            $this->danger($strTextMens);
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
@@ -170,7 +173,7 @@ class RutasEditForm extends RutasEditFormBase {
             $this->mctRutas->DeleteRutas();
             $arrLogxCamb['strNombTabl'] = 'Rutas';
             $arrLogxCamb['intRefeRegi'] = $this->mctRutas->Rutas->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctRutas->Rutas->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->mctRutas->Rutas->Descripcion;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

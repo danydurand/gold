@@ -162,7 +162,7 @@ class VehiculoEditForm extends VehiculoEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/vehiculo_edit.php/'.$this->mctVehiculo->Vehiculo->CodiVehi;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa !');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Vehiculo';
@@ -171,7 +171,7 @@ class VehiculoEditForm extends VehiculoEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/vehiculo_edit.php/'.$this->mctVehiculo->Vehiculo->CodiVehi;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa !');
 		}
 	}
 
@@ -183,13 +183,11 @@ class VehiculoEditForm extends VehiculoEditFormBase {
         $arrTablRela = $this->mctVehiculo->TablasRelacionadasVehiculo();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            $strTextMens = sprintf('Existen registros relacionados en %s',$strTablRela);
+            $this->danger($strTextMens);
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
-            // Delegate "Delete" processing to the ArancelMetaControl
             $this->mctVehiculo->DeleteVehiculo();
             $arrLogxCamb['strNombTabl'] = 'Vehiculo';
             $arrLogxCamb['intRefeRegi'] = $this->mctVehiculo->Vehiculo->CodiVehi;

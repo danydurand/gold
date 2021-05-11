@@ -551,8 +551,14 @@ class SacarARuta extends FormularioBaseKaizen {
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('IdPieza');
         $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
-        $colIdxxPiez->Width = 70;
+        $colIdxxPiez->Width = 80;
         $this->dtgPiezApta->AddColumn($colIdxxPiez);
+
+        $colManiGuia = new QDataGridColumn($this);
+        $colManiGuia->Name = QApplication::Translate('Ubicacion');
+        $colManiGuia->Html = '<?= $_ITEM->Ubicacion ?>';
+        $colManiGuia->Width = 70;
+        $this->dtgPiezApta->AddColumn($colManiGuia);
 
         $colManiGuia = new QDataGridColumn($this);
         $colManiGuia->Name = QApplication::Translate('Manif.');

@@ -62,7 +62,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     /* @var $objGuiaProc Guias */
     protected $objGuiaProc;
     protected $blnEditMode;
-    protected $dtgPiezNota;
+    protected $dtgPiezMani;
+    protected $dtgGuiaMani;
     protected $intProcAnte;
     protected $objProcAnte;
     protected $intErroAnte;
@@ -70,6 +71,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function Form_Create() {
         parent::Form_Create();
+
+        //$algo = $_SESSION['algo'];
 
         $this->objDefaultWaitIcon = new QWaitIcon($this);
 
@@ -151,7 +154,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
         if ($this->blnEditMode) {
             if ($this->objNotaEntr->Procesadas > 0) {
-                $this->dtgPiezNota_Create();
+                $this->dtgGuiaMani_Create();
+                $this->dtgPiezMani_Create();
             }
             $this->txtNombArch->Visible = true;
         }
@@ -170,75 +174,136 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     // Creación de objetos ...
     //-------------------------
 
-    protected function dtgPiezNota_Create() {
-        $this->dtgPiezNota = new QDataGrid($this);
-        $this->dtgPiezNota->FontSize = 12;
-        $this->dtgPiezNota->ShowFilter = false;
+    protected function dtgGuiaMani_Create() {
+        $this->dtgGuiaMani = new QDataGrid($this);
+        $this->dtgGuiaMani->FontSize = 12;
+        $this->dtgGuiaMani->ShowFilter = false;
 
-        $this->dtgPiezNota->CssClass = 'datagrid';
-        $this->dtgPiezNota->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgGuiaMani->CssClass = 'datagrid';
+        $this->dtgGuiaMani->AlternateRowStyle->CssClass = 'alternate';
 
-        $this->dtgPiezNota->Paginator = new QPaginator($this->dtgPiezNota);
-        $this->dtgPiezNota->ItemsPerPage = 8;
+        $this->dtgGuiaMani->Paginator = new QPaginator($this->dtgGuiaMani);
+        $this->dtgGuiaMani->ItemsPerPage = 8;
 
-        $this->dtgPiezNota->UseAjax = true;
+        $this->dtgGuiaMani->UseAjax = true;
 
-        $this->dtgPiezNota->SetDataBinder('dtgPiezNota_Bind');
+        $this->dtgGuiaMani->SetDataBinder('dtgGuiaMani_Bind');
 
-        $this->createDtgPiezNotaColumns();
+        $this->createdtgGuiaManiColumns();
     }
 
-    protected function dtgPiezNota_Bind() {
+    protected function dtgGuiaMani_Bind() {
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::In(QQN::Guias()->Id,$this->objNotaEntr->IdsDeLasGuias());
         $arrGuiaMani   = Guias::QueryArray(QQ::AndCondition($objClauWher));
-        $this->dtgPiezNota->TotalItemCount = count($arrGuiaMani);
+        $this->dtgGuiaMani->TotalItemCount = count($arrGuiaMani);
         // Bind the datasource to the datagrid
-        $this->dtgPiezNota->DataSource = Guias::QueryArray(
+        $this->dtgGuiaMani->DataSource = Guias::QueryArray(
             QQ::AndCondition($objClauWher),
-            QQ::Clause($this->dtgPiezNota->OrderByClause, $this->dtgPiezNota->LimitClause)
+            QQ::Clause($this->dtgGuiaMani->OrderByClause, $this->dtgGuiaMani->LimitClause)
         );
-        //$this->dtgPiezNota->DataSource = $this->objNotaEntr->GetGuiasArray();
     }
 
-    protected function createDtgPiezNotaColumns() {
+    protected function createdtgGuiaManiColumns() {
         $colNumeTrac = new QDataGridColumn($this);
         $colNumeTrac->Name = QApplication::Translate('Nro Guia');
         $colNumeTrac->Html = '<?= $_ITEM->Tracking ?>';
         $colNumeTrac->Width = 160;
-        $this->dtgPiezNota->AddColumn($colNumeTrac);
+        $this->dtgGuiaMani->AddColumn($colNumeTrac);
 
         $colSucuDest = new QDataGridColumn($this);
         $colSucuDest->Name = QApplication::Translate('Dest');
         $colSucuDest->Html = '<?= $_ITEM->Destino->Iata ?>';
-        $this->dtgPiezNota->AddColumn($colSucuDest);
+        $this->dtgGuiaMani->AddColumn($colSucuDest);
 
         $colNombDest = new QDataGridColumn($this);
         $colNombDest->Name = QApplication::Translate('Nombre del Destinatario');
         $colNombDest->Html = '<?= $_ITEM->NombreDestinatario ?>';
-        $this->dtgPiezNota->AddColumn($colNombDest);
-
-        $colDescCont = new QDataGridColumn($this);
-        $colDescCont->Name = QApplication::Translate('Contenido');
-        $colDescCont->Html = '<?= $_ITEM->Contenido ?>';
-        $this->dtgPiezNota->AddColumn($colDescCont);
+        $this->dtgGuiaMani->AddColumn($colNombDest);
 
         if ($this->objNotaEntr->ServicioImportacion == 'AER') {
             $colKiloPiez = new QDataGridColumn($this);
             $colKiloPiez->Name = QApplication::Translate('Kilos');
             $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
-            $this->dtgPiezNota->AddColumn($colKiloPiez);
+            $this->dtgGuiaMani->AddColumn($colKiloPiez);
         } else {
             $colKiloPiez = new QDataGridColumn($this);
             $colKiloPiez->Name = QApplication::Translate('PiesCub');
             $colKiloPiez->Html = '<?= $_ITEM->PiesCub; ?>';
-            $this->dtgPiezNota->AddColumn($colKiloPiez);
+            $this->dtgGuiaMani->AddColumn($colKiloPiez);
         }
 
         $colCantPiez = new QDataGridColumn($this);
         $colCantPiez->Name = QApplication::Translate('Piezas');
         $colCantPiez->Html = '<?= $_ITEM->Piezas; ?>';
-        $this->dtgPiezNota->AddColumn($colCantPiez);
+        $this->dtgGuiaMani->AddColumn($colCantPiez);
+
+    }
+
+    protected function dtgPiezMani_Create() {
+        $this->dtgPiezMani = new QDataGrid($this);
+        $this->dtgPiezMani->FontSize = 12;
+        $this->dtgPiezMani->ShowFilter = false;
+
+        $this->dtgPiezMani->CssClass = 'datagrid';
+        $this->dtgPiezMani->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgPiezMani->Paginator = new QPaginator($this->dtgPiezMani);
+        $this->dtgPiezMani->ItemsPerPage = 8;
+
+        $this->dtgPiezMani->UseAjax = true;
+
+        $this->dtgPiezMani->SetDataBinder('dtgPiezMani_Bind');
+
+        $this->createdtgPiezManiColumns();
+    }
+
+    protected function dtgPiezMani_Bind() {
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::In(QQN::GuiaPiezas()->GuiaId,$this->objNotaEntr->IdsDeLasGuias());
+        $arrGuiaMani   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
+        $this->dtgPiezMani->TotalItemCount = count($arrGuiaMani);
+        // Bind the datasource to the datagrid
+        $this->dtgPiezMani->DataSource = GuiaPiezas::QueryArray(
+            QQ::AndCondition($objClauWher),
+            QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause)
+        );
+    }
+
+    protected function createdtgPiezManiColumns() {
+        $colNumeTrac = new QDataGridColumn($this);
+        $colNumeTrac->Name = QApplication::Translate('Nro Guia');
+        $colNumeTrac->Html = '<?= $_ITEM->Guia->Tracking ?>';
+        $colNumeTrac->Width = 160;
+        $this->dtgPiezMani->AddColumn($colNumeTrac);
+
+        $colIdxxPiez = new QDataGridColumn($this);
+        $colIdxxPiez->Name = QApplication::Translate('IdPieza');
+        $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
+        $colIdxxPiez->Width = 160;
+        $this->dtgPiezMani->AddColumn($colIdxxPiez);
+
+        $colSucuDest = new QDataGridColumn($this);
+        $colSucuDest->Name = QApplication::Translate('Dest');
+        $colSucuDest->Html = '<?= $_ITEM->Guia->Destino->Iata ?>';
+        $this->dtgPiezMani->AddColumn($colSucuDest);
+
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+
+        if ($this->objNotaEntr->ServicioImportacion == 'AER') {
+            $colKiloPiez = new QDataGridColumn($this);
+            $colKiloPiez->Name = QApplication::Translate('Kilos');
+            $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
+            $this->dtgPiezMani->AddColumn($colKiloPiez);
+        } else {
+            $colKiloPiez = new QDataGridColumn($this);
+            $colKiloPiez->Name = QApplication::Translate('PiesCub');
+            $colKiloPiez->Html = '<?= $_ITEM->PiesCub; ?>';
+            $this->dtgPiezMani->AddColumn($colKiloPiez);
+        }
 
     }
 

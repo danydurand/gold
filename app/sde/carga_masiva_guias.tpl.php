@@ -64,8 +64,11 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <?php } ?>
         <?php if ($this->lblNumeProc->Text > 0) { ?>
         <div class="row" style="margin-top: 1em;">
-            <div class="col-xs-12">
-                <?php $this->dtgPiezNota->Render(); ?>
+            <div class="col-xs-6">
+                <?php $this->dtgGuiaMani->Render(); ?>
+            </div>
+            <div class="col-xs-6">
+                <?php $this->dtgPiezMani->Render(); ?>
             </div>
         </div>
         <?php } ?>
