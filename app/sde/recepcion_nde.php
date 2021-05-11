@@ -238,6 +238,8 @@ class RecepcionNde extends FormularioBaseKaizen {
         // Con "array_unique" se eliminan las guías/piezas repetidas en caso de que las haya
         //-------------------------------------------------------------------------------------
         $arrNumePiez = array_unique($arrNumePiez);
+        $arrNumePiez = array_map('transformar',$arrNumePiez);
+
         $this->txtNumePiez->Text = '';
         $objCkptRece = Checkpoints::LoadByCodigo('RA');
         $intContCkpt = 0;

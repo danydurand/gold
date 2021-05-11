@@ -25,7 +25,7 @@
                 <?php $this->txtUpdatedBy->RenderWithName(); ?>
 
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <?php if ($this->mctTarifaAgentes->EditMode) { ?>
                     <div style="margin-bottom: .3em; cursor: pointer">
                         <div class="titulo"><?php $this->lblTituTari->Render() ?></div>

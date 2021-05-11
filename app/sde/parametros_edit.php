@@ -81,7 +81,13 @@ class ParametrosEditForm extends ParametrosEditFormBase {
 		$this->lblCreatedBy_Create();
 		$this->lblUpdatedBy_Create();
 
-	}
+        if (!in_array($this->objUsuario->LogiUsua,['ddurand','mperez'])) {
+            $this->btnNuevRegi->Visible = false;
+            $this->btnSave->Visible = false;
+            $this->btnDelete->Visible = false;
+        }
+
+    }
 
 	//----------------------------
 	// Aqui se crean los objetos 

@@ -21,6 +21,8 @@ require_once(__FORMBASE_CLASSES__ . '/ParametrosListFormBase.class.php');
  * @subpackage Drafts
  */
 class ParametrosListForm extends ParametrosListFormBase {
+	protected $objUsuario;
+
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -36,6 +38,9 @@ class ParametrosListForm extends ParametrosListFormBase {
 		parent::Form_Create();
 
 		$this->lblTituForm->Text = 'Parámetros';
+		$this->objUsuario = unserialize($_SESSION['User']);
+		t('Usuario: '.$this->objUsuario->LogiUsua);
+
 
 		// Instantiate the Meta DataGrid
 		$this->dtgParametroses = new ParametrosDataGrid($this);
@@ -86,6 +91,10 @@ class ParametrosListForm extends ParametrosListFormBase {
 		//$this->dtgParametroses->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
+
+        if (!in_array($this->objUsuario->LogiUsua,['ddurand','mperez'])) {
+        	$this->btnNuevRegi->Visible = false;
+		}
 
     }
 

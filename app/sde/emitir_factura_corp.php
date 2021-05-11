@@ -165,9 +165,6 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         $this->lstCodiClie->RemoveAllItems();
         $arrClieFact   = [];
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'RECIBID@');
-        $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorp->Facturable,1);
-        $objClauWher[] = QQ::IsNull(QQN::NotaEntrega()->FacturaId);
         if (!is_null($this->calFechInic->DateTime)) {
             t('Fecha Inicial');
             $objClauWher[] = QQ::GreaterOrEqual(QQN::NotaEntrega()->Fecha,$this->calFechInic->DateTime->__toString("YYYY-MM-DD"));
@@ -176,7 +173,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
             t('Fecha Final');
             $objClauWher[] = QQ::LessOrEqual(QQN::NotaEntrega()->Fecha,$this->calFechFina->DateTime->__toString("YYYY-MM-DD"));
         }
-        $this->arrNotaEntr = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+        $this->arrNotaEntr = NotaEntrega::AptasParaFacturar($objClauWher,'array');
         foreach ($this->arrNotaEntr as $objNotaEntr) {
             if (!in_array($objNotaEntr->ClienteCorpId,$arrClieFact)) {
                 $arrClieFact[$objNotaEntr->ClienteCorpId] = $objNotaEntr->ClienteCorp->NombClie;
@@ -214,7 +211,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         t('*********************************');
         t('Comenzando la Emision de Facturas');
-        /* @var $objNotaEntr NotaEntrega */
+        /* @var $objManiClie NotaEntrega */
         /* @var $objClieSele MasterCliente */
         //----------------------
         // Clientes a Facturar
@@ -232,118 +229,124 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         $objClauWher[] = QQ::In(QQN::Conceptos()->Id,$arrConcIdxx);
         $arrConcFact   = Conceptos::QueryArray(QQ::AndCondition($objClauWher));
         t('Cantidad de Conceptos a facturar: '.count($arrConcIdxx));
-        //---------------------------------------------------------
-        // Se emitiran facturas de Aereo y Maritimo por separado
-        //---------------------------------------------------------
+
+        //----------------------------------------------------------------------------------------
+        // El vector arrNotaEntr contiene los Manifiestos de los Clientes, aptos para facturar
+        // que adicionalmente coinciden con el rango de fechas especificado por el Usuario
+        //----------------------------------------------------------------------------------------
+        t('Cantidad de Manifiestos aptos para facturar es: '.count($this->arrNotaEntr));
+        $arrManiIdxx = [];
+        foreach ($this->arrNotaEntr as $objManiFact) {
+            //----------------------------------------------------------------------------------------
+            // Estos Ids de Manifiestos se utilizan luego para filtrar los registros de cada Cliente
+            // El Cliente pudiera tener más manifiestos facturables, pero solo deben facturase los
+            // que aparezcan en este vector.
+            //----------------------------------------------------------------------------------------
+            $arrManiIdxx[] = $objManiFact->Id;
+        }
+
         $intCantMani = 0;
         $intCantFact = 0;
         $arrServImpo = ['AER','MAR'];
-        foreach ($arrServImpo as $strServImpo) {
-            t("Procesando el Servicio de Importacion: $strServImpo");
-            $arrNotaIdxx = [];
-            foreach ($this->arrNotaEntr as $objNotaEntr) {
-                if ($objNotaEntr->ServicioImportacion == $strServImpo) {
-                    $arrNotaIdxx[] = $objNotaEntr->Id;
-                }
-            }
-            t('Emitiendo Facturas...');
-            foreach ($arrClieSele as $objClieSele) {
-                t('Creando factura para el Cliente: '.$objClieSele->NombClie);
-                $blnTodoOkey = true;
-                try {
-                    $objFactClie = new Facturas();
-                    $objFactClie->ClienteCorpId    = $objClieSele->CodiClie;
-                    $objFactClie->Fecha            = new QDateTime(QDateTime::Now());
-                    $objFactClie->Referencia       = Facturas::proxReferencia();
-                    $objFactClie->CedulaRif        = $objClieSele->NumeDrif;
-                    $objFactClie->RazonSocial      = $objClieSele->NombClie;
-                    $objFactClie->DireccionFiscal  = $objClieSele->DireFisc;
-                    $objFactClie->Telefono         = $objClieSele->TeleCona;
-                    $objFactClie->SucursalId       = $this->objUsuario->SucursalId;
-                    $objFactClie->Estatus          = 'CREADA';
-                    $objFactClie->EstatusPago      = 'PENDIENTE';
-                    $objFactClie->Tasa             = 1;
-                    $objFactClie->Total            = 0;
-                    $objFactClie->MontoDscto       = 0;
-                    $objFactClie->MontoCobrado     = 0;
-                    $objFactClie->MontoPendiente   = 0;
-                    $objFactClie->Save();
-                    t('Se creo la Factura Id: '.$objFactClie->Id);
-                } catch (Exception $e) {
-                    $blnTodoOkey = false;
-                    $strTextErro = 'Error creando la factura: '.$e->getMessage();
-                    t($strTextErro);
-                    throw new Exception($strTextErro);
-                }
-                if ($blnTodoOkey) {
-                    //---------------------------------------------------------
-                    // Se seleccionan y procesan los manifiestos del Cliente
-                    //---------------------------------------------------------
-                    $objDatabase = Facturas::GetDatabase();
-                    t('Seleccionando los Manifiestos del Cliente');
-                    $objClauWher   = QQ::Clause();
-                    $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorpId,$objClieSele->CodiClie);
-                    $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'RECIBID@');
-                    $objClauWher[] = QQ::IsNull(QQN::NotaEntrega()->FacturaId);
-                    $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id,$arrNotaIdxx);
-                    $arrNotaClie   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
-                    $decSumaNota   = 0;
-                    $intCantMani   = 0;
-                    foreach ($arrNotaClie as $objNotaClie) {
-                        $objDatabase->TransactionBegin();
 
-                        $objNotaClie->calcularTodoLosConceptos($arrConcFact);
-                        $intCantMani ++;
+        t('Emitiendo Facturas...');
+        foreach ($arrClieSele as $objClieSele) {
+            t('Creando factura para el Cliente: '.$objClieSele->NombClie);
+            foreach ($arrServImpo as $strServImpo) {
+                $intManiServ = NotaEntrega::AptasParaFacturarPorClienteYServicio($objClieSele->CodiClie,$strServImpo,$arrManiIdxx);
+                t('Manifiestos aptos para facturar del Servicio '.$strServImpo.': '.$intManiServ);
+                if ($intManiServ > 0) {
+                    $blnTodoOkey = true;
+                    try {
+                        $objFactClie = new Facturas();
+                        $objFactClie->ClienteCorpId    = $objClieSele->CodiClie;
+                        $objFactClie->Fecha            = new QDateTime(QDateTime::Now());
+                        $objFactClie->Referencia       = Facturas::proxReferencia();
+                        $objFactClie->CedulaRif        = $objClieSele->NumeDrif;
+                        $objFactClie->RazonSocial      = $objClieSele->NombClie;
+                        $objFactClie->DireccionFiscal  = $objClieSele->DireFisc;
+                        $objFactClie->Telefono         = $objClieSele->TeleCona;
+                        $objFactClie->SucursalId       = $this->objUsuario->SucursalId;
+                        $objFactClie->Estatus          = 'CREADA';
+                        $objFactClie->EstatusPago      = 'PENDIENTE';
+                        $objFactClie->Tasa             = 1;
+                        $objFactClie->Total            = 0;
+                        $objFactClie->MontoDscto       = 0;
+                        $objFactClie->MontoCobrado     = 0;
+                        $objFactClie->MontoPendiente   = 0;
+                        $objFactClie->Save();
+                        t('Se creo la Factura Id: '.$objFactClie->Id);
+                    } catch (Exception $e) {
+                        $blnTodoOkey = false;
+                        $strTextErro = 'Error creando la factura: '.$e->getMessage();
+                        t($strTextErro);
+                        throw new Exception($strTextErro);
+                    }
+                    if ($blnTodoOkey) {
+                        //---------------------------------------------------------
+                        // Se seleccionan y procesan los manifiestos del Cliente
+                        //---------------------------------------------------------
+                        t('Seleccionando los Manifiestos del Cliente');
+                        $objDatabase = Facturas::GetDatabase();
+                        $arrManiClie = NotaEntrega::AptasParaFacturarPorClienteYServicio($objClieSele->CodiClie,$strServImpo,$arrManiIdxx,'array');
+                        $decSumaNota = 0;
+                        $intCantMani = 0;
+                        foreach ($arrManiClie as $objManiClie) {
+                            $objDatabase->TransactionBegin();
 
-                        t('Asociando el Manifiesto: '.$objNotaClie->Id.' con la Factura');
-                        $objNotaFact = new FacturaNotas();
-                        $objNotaFact->FacturaId     = $objFactClie->Id;
-                        $objNotaFact->NotaEntregaId = $objNotaClie->Id;
-                        $objNotaFact->Total         = $objNotaClie->Total;
-                        $objNotaFact->Save();
-                        t('Manifiesto asociado');
-                        $decSumaNota += $objNotaFact->Total;
-                        t('El monto total de la factura va por: '.$decSumaNota);
-                        $objNotaClie->asociandoNotaConFactura($objFactClie->Id);
-                        //----------------------------------------------------------------------
-                        // Los conceptos del Manifiesto, se transforman en Items de la Factura
-                        //----------------------------------------------------------------------
-                        t('Transformando conceptos del Manifiesto en items de la factura');
-                        $arrNotaConc = NotaConceptos::LoadArrayByNotaEntregaId($objNotaClie->Id);
-                        foreach($arrNotaConc as $objNotaConc) {
-                            t('Procesando el concepto: ' . $objNotaConc->Concepto->Nombre);
-                            //------------------------------------------------------------------
-                            // Si el concepto existe, se actualiza, en caso contrario, se crea
-                            //------------------------------------------------------------------
-                            $facturaItem = FacturaItems::LoadByFacturaIdConceptoId($objFactClie->Id,$objNotaConc->ConceptoId);
-                            if ($facturaItem) {
-                                t('Ya existia, voy a sumar el monto');
-                                $facturaItem->Monto += $objNotaConc->Monto;
-                            } else {
-                                t('No existia, voy a crearlo');
-                                $item = new FacturaItems();
-                                $item->FacturaId   = $objFactClie->Id;
-                                $item->ConceptoId  = $objNotaConc->ConceptoId;
-                                $item->MostrarComo = $objNotaConc->Concepto->MostrarComo;
-                                $item->Monto       = $objNotaConc->Monto;
-                                try {
-                                    $item->Save();
-                                } catch (Exception $e) {
-                                    t('Error creando item de la factura: '.$e->getMessage());
+                            $objManiClie->calcularTodoLosConceptos($arrConcFact);
+                            $intCantMani ++;
+
+                            t('Asociando el Manifiesto: '.$objManiClie->Id.' con la Factura');
+                            $objNotaFact = new FacturaNotas();
+                            $objNotaFact->FacturaId     = $objFactClie->Id;
+                            $objNotaFact->NotaEntregaId = $objManiClie->Id;
+                            $objNotaFact->Total         = $objManiClie->Total;
+                            $objNotaFact->Save();
+                            t('Manifiesto asociado');
+                            $decSumaNota += $objNotaFact->Total;
+                            t('El monto total de la factura va por: '.$decSumaNota);
+                            $objManiClie->asociandoNotaConFactura($objFactClie->Id);
+                            //----------------------------------------------------------------------
+                            // Los conceptos del Manifiesto, se transforman en Items de la Factura
+                            //----------------------------------------------------------------------
+                            t('Transformando conceptos del Manifiesto en items de la factura');
+                            $arrNotaConc = NotaConceptos::LoadArrayByNotaEntregaId($objManiClie->Id);
+                            foreach($arrNotaConc as $objNotaConc) {
+                                t('Procesando el concepto: ' . $objNotaConc->Concepto->Nombre);
+                                //------------------------------------------------------------------
+                                // Si el concepto existe, se actualiza, en caso contrario, se crea
+                                //------------------------------------------------------------------
+                                $facturaItem = FacturaItems::LoadByFacturaIdConceptoId($objFactClie->Id,$objNotaConc->ConceptoId);
+                                if ($facturaItem) {
+                                    t('Ya existia, voy a sumar el monto');
+                                    $facturaItem->Monto += $objNotaConc->Monto;
+                                } else {
+                                    t('No existia, voy a crearlo');
+                                    $item = new FacturaItems();
+                                    $item->FacturaId   = $objFactClie->Id;
+                                    $item->ConceptoId  = $objNotaConc->ConceptoId;
+                                    $item->MostrarComo = $objNotaConc->Concepto->MostrarComo;
+                                    $item->Monto       = $objNotaConc->Monto;
+                                    try {
+                                        $item->Save();
+                                    } catch (Exception $e) {
+                                        t('Error creando item de la factura: '.$e->getMessage());
+                                    }
                                 }
                             }
+                            t("Se procesaron los conceptos del Manifiesto\n");
+                            $objDatabase->TransactionCommit();
                         }
-                        t("Se procesaron los conceptos del Manifiesto\n");
-                        $objDatabase->TransactionCommit();
+                        //-----------------------------------------------------------------------------------------
+                        // Se actualiza el total de la factura con la sumatoria de los totales de sus manifiestos
+                        //-----------------------------------------------------------------------------------------
+                        $objFactClie->Total          = $decSumaNota;
+                        $objFactClie->MontoPendiente = $decSumaNota;
+                        $objFactClie->Save();
+                        $intCantFact++;
+                        t('Se actualizo el total de la factura con: '.$decSumaNota."\n");
                     }
-                    //-----------------------------------------------------------------------------------------
-                    // Se actualiza el total de la factura con la sumatoria de los totales de sus manifiestos
-                    //-----------------------------------------------------------------------------------------
-                    $objFactClie->Total          = $decSumaNota;
-                    $objFactClie->MontoPendiente = $decSumaNota;
-                    $objFactClie->Save();
-                    $intCantFact++;
-                    t('Se actualizo el total de la factura con: '.$decSumaNota."\n");
                 }
             }
         }

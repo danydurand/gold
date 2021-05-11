@@ -80,28 +80,37 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     intro: "Coloque aquí el Nro Guía-Cliente, cuyos datos desea visualizar"
                 },
                 {
-                    element: '#c9',
+                    element: '#c8',
                     intro: "Coloque aquí el Código del Cliente y presione Tabulador, para que el Cliente correspondiente, aparezca"
                 },
                 {
-                    element: '#c10',
+                    element: '#c8',
                     intro: "Coloque aquí el Nombre del Cliente y presione Tabulador, para que el Cliente correspondiente, aparezca"
                 },
                 {
-                    element: '#c11',
+                    element: '#c10',
                     intro: "El Cliente que aparezca aquí, es el que realmente <b>Filtra</b>, las guías"
                 },
                 {
+                    element: '#c11',
+                    intro: "Seleccione el Código del Producto, para filtrar las guías correspondientes " +
+                    "(IMP=Importacion, EXP=Exportación, NAC=Nacional"
+                },
+                {
+                    element: '#c12',
+                    intro: "Especifique la Referencia de un Manifiesto de Recepción, para visualizar las guías contenidas en él"
+                },
+                {
                     element: '#c13',
-                    intro: "Seleccione el Código del Producto, para filtrar las guías correspondientes"
-                },
+                    intro: "Especifique la Referencia de un Manifiesto de Salida a Ruta, para visualizar las guías contenidas en él"
+                }
                 {
                     element: '#c14',
-                    intro: "Especifique la Referencia de un Manifiesto de Recepción, para visualizar las guías contenidas en él"
-                },
+                    intro: "Especifique una Fecha Inicial de creación de las guías"
+                }
                 {
-                    element: '#c14',
-                    intro: "Especifique la Referencia de un Manifiesto de Recepción, para visualizar las guías contenidas en él"
+                    element: '#c15',
+                    intro: "Especifique una Fecha Inicial de creación de las guías"
                 }
             ]
         });

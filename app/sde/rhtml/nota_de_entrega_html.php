@@ -5,14 +5,8 @@ if (!isset($_SESSION['GuiaSele'])) {
     echo "Se requiere la Guia a imprimir...";
     return;
 }
-if (!isset($_SESSION['PiezGuia'])) {
-    echo "Se requiere la Pieza a imprimir...";
-    return;
-}
 /* @var $objGuiaImpr Guias */
-/* @var $objPiezImpr GuiaPiezas */
 $objGuiaImpr = unserialize($_SESSION['GuiaSele']);
-$objPiezImpr = unserialize($_SESSION['PiezGuia']);
 $strNombEmpr = $_SESSION['NombEmpr'];
 $strLimiDere = '350px';
 $strFechDhoy = date("d/m/Y H:i");
@@ -28,7 +22,11 @@ $strServImpo = $objGuiaImpr->ServicioImportacion;
 $strDescCont = $objGuiaImpr->Contenido;
 $strPesoEnvi = $objGuiaImpr->ServicioImportacion == 'AER' ? $objGuiaImpr->Kilos : $objGuiaImpr->PiesCub;
 $strUnidPeso = $objGuiaImpr->ServicioImportacion == 'AER' ? 'Kgs' : 'Pies3';
-$strPiezIdxx = $objPiezImpr->IdPieza;
+$strPiezGuia = '';
+$arrPiezGuia = $objGuiaImpr->GetGuiaPiezasAsGuiaArray();
+foreach ($arrPiezGuia as $objPiezGuia) {
+    $strPiezGuia .= $objPiezGuia->IdPieza."<br>";
+}
 
 ?>
 <style type="text/css">
@@ -115,11 +113,11 @@ $strPiezIdxx = $objPiezImpr->IdPieza;
                             <td>
                                 <?= $strPesoEnvi ?>&nbsp;<?= $strUnidPeso ?>
                             </td>
-                            <td style="text-align: right">
-                                <span class="etiqueta linea">Pieza Id:</span>
+                            <td style="text-align: right; vertical-align: top">
+                                <span class="etiqueta linea">Piezas:</span>
                             </td>
                             <td>
-                                <?= $strPiezIdxx ?>
+                                <?= $strPiezGuia ?>
                             </td>
                         </tr>
                         <tr>

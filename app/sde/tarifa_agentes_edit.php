@@ -208,8 +208,9 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
     protected function dtgTariZonaColumns() {
         $colZonaTari = new QDataGridColumn($this);
         $colZonaTari->Name = QApplication::Translate('Zona');
-        $colZonaTari->Html = '<?= $_ITEM->Zona ?>';
-        $colZonaTari->Width = 100;
+        /*$colZonaTari->Html = '<?= $_ITEM->Zona ?>';*/
+        $colZonaTari->Html = '<?= $_FORM->dtgZona_Render($_ITEM); ?>';
+        $colZonaTari->Width = 180;
         $this->dtgTariZona->AddColumn($colZonaTari);
 
         $colServTari = new QDataGridColumn($this);
@@ -231,10 +232,19 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
         $this->dtgTariZona->AddColumn($colUsuaCrea);
 
         $colUsuaModi = new QDataGridColumn($this);
-        $colUsuaModi->Name = QApplication::Translate('Creada Por');
+        $colUsuaModi->Name = QApplication::Translate('Modif. Por');
         $colUsuaModi->Html = '<?= $_FORM->dtgUsuaModi_Render($_ITEM) ?>';
         $colUsuaModi->Width = 100;
         $this->dtgTariZona->AddColumn($colUsuaModi);
+    }
+
+    public function dtgZona_Render(TarifaAgentesZonas $objTariZona) {
+	    $strIdxxNomb = $objTariZona->Zona;
+        $objParaZona = Parametros::LoadByIndiceCodigo('ZONA',$objTariZona->Zona);
+        if ($objParaZona) {
+            $strIdxxNomb .= ' - '.$objParaZona->Descripcion;
+        }
+	    return $strIdxxNomb;
     }
 
     public function dtgUsuaCrea_Render(TarifaAgentesZonas $objTariZona) {

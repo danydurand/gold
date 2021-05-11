@@ -20,20 +20,12 @@ $strNombForm = 'nota_de_entrega_html.php';
 
 try {
 
-    $arrPiezGuia = $objGuiaSele->GetGuiaPiezasAsGuiaArray();
-    //----------------------------------------------
-    // Se procesan una a una las piezas de la guia
-    //----------------------------------------------
-    $content = '';
-    foreach ($arrPiezGuia as $objPiezGuia) {
-        $html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "20"));
-        $html2pdf->pdf->SetDisplayMode('fullpage');
-        $_SESSION['GuiaSele'] = serialize($objGuiaSele);
-        $_SESSION['PiezGuia'] = serialize($objPiezGuia);
-        ob_start();
-        include dirname(__FILE__).'/rhtml/'.$strNombForm;
-        $content .= ob_get_clean();
-    }
+    $html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "20"));
+    $html2pdf->pdf->SetDisplayMode('fullpage');
+    $_SESSION['GuiaSele'] = serialize($objGuiaSele);
+    ob_start();
+    include dirname(__FILE__).'/rhtml/'.$strNombForm;
+    $content = ob_get_clean();
     //---------------------------------------------------------------------------
     // El contenido del html de todas Notas de Entrega, se envia al formato PDF
     //---------------------------------------------------------------------------

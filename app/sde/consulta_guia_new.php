@@ -368,7 +368,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             );
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ne',
-                TextoIcono('print fa-lg','Imprimir Nota de Despacho')
+                TextoIcono('print fa-lg','Imprimir Nota de Entrega')
             );
         }
 

@@ -80,7 +80,10 @@ class InventarioAlmacen extends FormularioBaseKaizen {
 		//$objUsuario = unserialize($_SESSION['User']);
 
 		$arrGuiaOkey = explode(',',nl2br2($this->txtNumeSeri->Text));
-		$this->txtNumeSeri->Text = '';
+        $arrGuiaOkey = array_unique($arrGuiaOkey,SORT_STRING);
+        $arrGuiaOkey = array_map('transformar',$arrGuiaOkey);
+
+        $this->txtNumeSeri->Text = '';
 
 		$blnTodoOkey = true;
 		//$objCheckpoint = Checkpoints::LoadByCodigo($this->lstIdenAlma->SelectedValue);

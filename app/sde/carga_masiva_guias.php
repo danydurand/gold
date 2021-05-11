@@ -79,14 +79,16 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         if (strlen(QApplication::PathInfo(0)) > 0) {
             $this->objNotaEntr = NotaEntrega::Load(QApplication::PathInfo(0));
             $this->blnEditMode = true;
-            $this->intErroAnte = $_SESSION['CantErro'];
-            t('Entrando al programa, la cantidad de errores anteriores es: '.$this->intErroAnte);
-            if ($this->intErroAnte > 0) {
-                t('Como habia errores, voy a buscar el proceso anterior..');
-                $this->intProcAnte = $_SESSION['ProcAnte'];
-                $this->objProcAnte = ProcesoError::Load($this->intProcAnte);
-                if ($this->objProcAnte) {
-                    t('Encontre el procesos y estoy en modo edicion');
+            if (isset($_SESSION['CantErro'])) {
+                $this->intErroAnte = $_SESSION['CantErro'];
+                t('Entrando al programa, la cantidad de errores anteriores es: '.$this->intErroAnte);
+                if ($this->intErroAnte > 0) {
+                    t('Como habia errores, voy a buscar el proceso anterior..');
+                    $this->intProcAnte = $_SESSION['ProcAnte'];
+                    $this->objProcAnte = ProcesoError::Load($this->intProcAnte);
+                    if ($this->objProcAnte) {
+                        t('Encontre el procesos y estoy en modo edicion');
+                    }
                 }
             }
         }

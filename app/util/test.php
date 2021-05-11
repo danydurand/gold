@@ -2,11 +2,18 @@
 require_once('qcubed.inc.php');
 
 
+$objClieSele = MasterCliente::LoadByCodigoInterno('EURO');
+$strServImpo = 'AER';
+echo "Cliente: ".$objClieSele->NombClie;
+$intManiServ = NotaEntrega::AptasParaFacturar($objClieSele->CodiClie,$strServImpo,$this->arrNotaEntr);
+
+
+
 //---------------------------------
 // Ultimo Checkpoint de una pieza
 //---------------------------------
-$objPiezSele = GuiaPiezas::Load(385);
-print_r($objPiezSele->ultimoCheckpointTodo());
+//$objPiezSele = GuiaPiezas::Load(385);
+//print_r($objPiezSele->ultimoCheckpointTodo());
 
 //----------------------
 // Limpiar cadena

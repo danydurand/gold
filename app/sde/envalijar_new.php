@@ -119,6 +119,9 @@ class EnvalijarNew extends FormularioBaseKaizen {
 			$objContainer->Estatus     = 'ABIERT@';
 			$objContainer->Tipo        = 'VALIJA';
 			$objContainer->CreatedBy   = $this->objUsuario->CodiUsua;
+            $objContainer->Kilos       = 0;
+            $objContainer->PiesCub     = 0;
+            $objContainer->Peso        = 0;
 			$objContainer->Save();
             //------------------------
             // Log de Transacciones
@@ -142,6 +145,7 @@ class EnvalijarNew extends FormularioBaseKaizen {
 		$blnTodoOkey = true;
 		$arrListNume = explode(',',nl2br2($this->txtListNume->Text));
 		$arrListNume = LimpiarArreglo($arrListNume,false);
+        $arrListNume = array_map('transformar',$arrListNume);
 		$this->txtListNume->Text = '';
 
 		$arrDestinos = $objContainer->GetDestinos();

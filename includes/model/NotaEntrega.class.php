@@ -27,6 +27,31 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
+		public static function AptasParaFacturarPorClienteYServicio($intClieIdxx,$strServImpo,$arrManiIdxx,$strFormResp='count') {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorpId,$intClieIdxx);
+            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'RECIBID@');
+            $objClauWher[] = QQ::IsNull(QQN::NotaEntrega()->FacturaId);
+            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ServicioImportacion,$strServImpo);
+            $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id,$arrManiIdxx);
+            if ($strFormResp == 'count') {
+                return NotaEntrega::QueryCount(QQ::AndCondition($objClauWher));
+            } else {
+                return NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+            }
+        }
+
+		public static function AptasParaFacturar($objClauWher,$strFormResp='count') {
+            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'RECIBID@');
+            $objClauWher[] = QQ::IsNull(QQN::NotaEntrega()->FacturaId);
+            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorp->Facturable,1);
+            if ($strFormResp == 'count') {
+                return NotaEntrega::QueryCount(QQ::AndCondition($objClauWher));
+            } else {
+                return NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+            }
+        }
+
         public function IdsDeLasGuias() {
 		    $arrIdxxGuia = [];
             foreach ($this->GetGuiasArray() as $objGuiaNota) {
