@@ -27,6 +27,77 @@
 			return sprintf('%s',  $this->Descripcion);
 		}
 
+        /**
+         * Esta rutina devuelve el registro cuya clave coincida con los 2 primeros valores
+         * que entran como parametro/ Si el 3er parametro tiene el valor 'TODO' se devuelve
+         * el registro completo como un objeto/  Otros valores posibles son 'Txt1'...'Txt5' ó
+         * 'Val1'..'Val5', en cuyos casos, solo devuelve el valor de ese campo del registro.
+         * El 4to parametro es el valor por defecto que devolvera la funcion en caso de no
+         * encontrar ningun registro coincidente con la clave especificada.
+         * Ej: $intCantDias = BuscarParametro('DiasActi','RepoAtra','Val1',60)
+         * Busca un registro con la clave "DiasActi-RepoAtra' y devuelve el valor del campo "ParaVal1"
+         * si no encuentra dicho registro, devuelve 60 por defecto.
+         *
+         * @param String $strIndiPara (Indice)
+         * @param String $strCodiPara (Codigo)
+         * @param String $strTipoDato (TODO/Txt1/Txt2/Txt3../Val1/Val2/Val3..)
+         * @param String/Decimal $strValoDefe (Valor por defecto de tipo no definido)
+         * @return String/Decimal (Dependiendo del campo que se solicite en $strTipoDato)
+         */
+        public static function BuscarParametro($strIndiPara,$strCodiPara,$strTipoDato,$strValoDefe=-1) {
+            $objParametro = Parametros::LoadByIndiceCodigo($strIndiPara,$strCodiPara);
+            if ($objParametro) {
+                if ($strTipoDato == 'TODO') {
+                    $strValoReto = $objParametro;
+                } else {
+                    switch ($strTipoDato) {
+                        case 'Desc':
+                            $strValoReto = $objParametro->Descripcion;
+                            break;
+                        case 'Txt1':
+                            $strValoReto = $objParametro->Texto1;
+                            break;
+                        case 'Txt2':
+                            $strValoReto = $objParametro->Texto2;
+                            break;
+                        case 'Txt3':
+                            $strValoReto = $objParametro->Texto3;
+                            break;
+                        case 'Txt4':
+                            $strValoReto = $objParametro->Texto4;
+                            break;
+                        case 'Txt5':
+                            $strValoReto = $objParametro->Texto5;
+                            break;
+                        case 'Val1':
+                            $strValoReto = $objParametro->Valor1;
+                            break;
+                        case 'Val2':
+                            $strValoReto = $objParametro->Valor2;
+                            break;
+                        case 'Val3':
+                            $strValoReto = $objParametro->Valor3;
+                            break;
+                        case 'Val4':
+                            $strValoReto = $objParametro->Valor4;
+                            break;
+                        case 'Val5':
+                            $strValoReto = $objParametro->Valor5;
+                            break;
+                        default:
+                            $strValoReto = $strValoDefe;
+                            break;
+                    }
+                    if (strlen($strValoReto) == 0) {
+                        $strValoReto = $strValoDefe;
+                    }
+                }
+            } else {
+                $strValoReto = $strValoDefe;
+            }
+            return $strValoReto;
+        }
+
 		public function _creator() {
 		    if (strlen($this->CreatedBy) > 0) {
 		        $objUsuaCrea = Usuario::Load($this->CreatedBy);

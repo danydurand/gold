@@ -44,6 +44,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $calFechTrx1;
     protected $calFechTrx2;
     protected $txtUsuaPodx;
+    protected $txtRefeFact;
     protected $lstCodiCkpt;
     protected $txtSepaColu;
     protected $chkConxDesc;
@@ -82,6 +83,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->calEntrFina_Create();
         $this->lstTariIdxx_Create();
         $this->txtUsuaPodx_Create();
+        $this->txtRefeFact_Create();
         //$this->txtUsuaCrea_Create();
         $this->txtUbicFisi_Create();
         //$this->lstCodiCkpt_Create();
@@ -290,6 +292,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtUsuaPodx->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
     }
 
+    protected function txtRefeFact_Create() {
+        $this->txtRefeFact = new QTextBox($this);
+        $this->txtRefeFact->Name = 'Factura';
+        $this->txtRefeFact->Width = 100;
+    }
+
     protected function txtUbicFisi_Create() {
         $this->txtUbicFisi = new QTextBox($this);
         $this->txtUbicFisi->Name = 'Ubicación Física';
@@ -490,6 +498,24 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $intUsuaPodx = $objUsuaPodx->CodiUsua;
             }
         }
+        $intRefeFact   = null;
+        if (strlen($this->txtRefeFact->Text)) {
+            $strRefeFact = trim($this->txtRefeFact->Text);
+            //---------------------------------------------------------------------------
+            // Se determina la existencia de la Factura indicada por el Usuario
+            //---------------------------------------------------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Facturas()->Referencia,$strRefeFact);
+            $objAdicClau   = QQ::Clause();
+            $objAdicClau[] = QQ::LimitInfo(1);
+            $arrRefeFact   = Facturas::QueryArray(QQ::AndCondition($objClauWher),$objAdicClau);
+            if (count($arrRefeFact) == 0) {
+                $strMensMost = 'No existe Factura con la Referencia: <b>'.$strRefeFact.'</b> !';
+                $blnTodoOkey = false;
+            } else {
+                $intRefeFact = $arrRefeFact[0]->Id;
+            }
+        }
         if ($blnTodoOkey) {
             //--------------------------------------------------------------------------------------------------
             // Se Arma el SQL para la busqueda de registros, comenzando con la determinación del tipo de envío.
@@ -595,6 +621,10 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $arrGuiaSele   = Guias::ConCheckpointRegistradoPor('OK',$intUsuaPodx);
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
                 $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
+            }
+            if (!is_null($intRefeFact)) {
+                $objClausula[] = QQ::Equal(QQN::Guias()->FacturaId,$intRefeFact);
+                $strCadeSqlx  .= " and g.factura_id = $intRefeFact";
             }
             $objClausula[] = QQ::IsNull(QQN::Guias()->DeletedBy);
             $strCadeSqlx  .= " and g.deleted_by IS NULL ";

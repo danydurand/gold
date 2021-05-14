@@ -26,6 +26,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     <?php $this->chkInclReci->RenderWithName(); ?>
                     <?php $this->lstNotaEntr->RenderWithName(); ?>
                     <?php $this->txtNumePiez->RenderWithName(); ?>
+                    <?php $this->txtUbicFisi->RenderWithName(); ?>
                 </div>
                 <div class="col-md-6">
                     <?php $this->dtgPiezNota->Render(); ?>

@@ -1,23 +1,45 @@
-<style type="text/css">
-    <!--
-    .titulo { background-color: #CCC; font-weight: bold }
-    -->
-</style>
-
 <?php
 require_once('qcubed.inc.php');
+
 if (!isset($_SESSION['FactIdxx'])) {
     echo "Se requiere el Nro de Factura cuya relación de Manifiestos se desea imprimir...";
     return;
 }
 /* @var $objFactImpr Facturas */
-/* @var $objManiFact NotaEntrega */
-$objFactImpr = unserialize($_SESSION['FactMani']);
-$arrManiFact = $objFactImpr->GetNotaEntregaAsFacturaArray();
-$strLimiDere = '350px';
+/* @var $objFactImpr NotaEntrega */
+$objFactImpr  = unserialize($_SESSION['FactMani']);
+$arrTariAgen  = TarifaAgentes::Load($objFactImpr->ClienteCorp->TarifaAgenteId);
+$strCadeSqlx  = "select * ";
+$strCadeSqlx .= "  from v_factura_zona ";
+$strCadeSqlx .= " where factura_id = ".$objFactImpr->Id;
+$strCadeSqlx .= " order by zona";
+$objDatabase  = Facturas::GetDatabase();
+$objDbResult  = $objDatabase->Query($strCadeSqlx);
+$arrFactImpr  = [];
+$decTotaFact  = 0;
+while ($mixRegistro = $objDbResult->FetchArray()) {
+    $strServComp   = $mixRegistro['servicio_importacion'] == 'AER' ? 'AEREO' : 'MARITIMO';
+    $decPesoPiez   = $strServComp == 'AEREO' ? $mixRegistro['kilos'] : $mixRegistro['pies_cub'];
+    $objClauWher   = QQ::Clause();
+    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->TarifaId,$mixRegistro['tarifa_agente_id']);
+    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Zona,$mixRegistro['zona_id']);
+    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Servicio,$strServComp);
+    $arrTariServ   = TarifaAgentesZonas::QueryArray(QQ::AndCondition($objClauWher));
+    $objTariServ   = $arrTariServ[0];
+    $mixRegistro['tarifa'] = $objTariServ->Precio;
+    $mixRegistro['total']  = $objTariServ->Precio * $decPesoPiez;
+    $decTotaFact  += $mixRegistro['total'];
+    $arrFactImpr[] = $mixRegistro;
+}
 
+$strLimiDere = '350px';
 ?>
 
+<style type="text/css">
+    <!--
+    .titulo { background-color: #CCC; font-weight: bold }
+    -->
+</style>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
         <?php include('partials/header_local.tpl.php'); ?>
@@ -55,41 +77,39 @@ $strLimiDere = '350px';
         <table style="margin-top: 24px;">
             <tr>
                 <td style="width: 680px; text-align: center">
-                    <b>MANIFESTS LIST</b>
+                    <b>MANIFESTS LIST By ZONE</b>
                 </td>
             </tr>
         </table>
         <table style="margin-top: 12px; border: solid .5mm">
             <tr style="background-color: #CCC; font-weight: bold">
-                <td style="width: 220px;">Number/Reference</td>
-                <td style="width: 90px; text-align: center">Date</td>
-                <td style="width: 100px; text-align: center">Import Serv.</td>
-                <td style="width: 55px; text-align: right">Pieces</td>
-                <td style="width: 50px; text-align: right">Kgs</td>
-                <td style="width: 60px; text-align: right">PiesCub</td>
-                <td style="width: 60px; text-align: right">Total</td>
+                <td style="width: 175px;">Zona</td>
+                <td style="width: 175px;">Manif/Reference</td>
+                <td style="width: 55px; text-align: center">Pieces</td>
+                <td style="width: 55px; text-align: right">Kgs</td>
+                <td style="width: 60px; text-align: right">Ft3</td>
+                <td style="width: 50px; text-align: right">Price</td>
+                <td style="width: 65px; text-align: right">Total</td>
             </tr>
-            <?php $intCantPiez = 0 ?>
-            <?php foreach ($arrManiFact as $objManiFact) { ?>
+            <?php foreach ($arrFactImpr as $objFactImpr) { ?>
                 <tr>
-                    <td><?= $objManiFact->Referencia ?></td>
-                    <td style="text-align: center"><?= $objManiFact->Fecha->__toString("DD/MM/YYYY") ?></td>
-                    <td style="text-align: center"><?= $objManiFact->ServicioImportacion ?></td>
-                    <td style="text-align: right"><?= $objManiFact->Piezas ?></td>
-                    <td style="text-align: right"><?= nf($objManiFact->Kilos) ?></td>
-                    <td style="text-align: right"><?= nf3($objManiFact->PiesCub) ?></td>
-                    <td style="text-align: right"><?= nf($objManiFact->Total) ?></td>
+                    <td><?= $objFactImpr['zona'] ?></td>
+                    <td><?= $objFactImpr['manifiesto'] ?></td>
+                    <td style="text-align: center"><?= $objFactImpr['piezas'] ?></td>
+                    <td style="text-align: right"><?= nf($objFactImpr['kilos']) ?></td>
+                    <td style="text-align: right"><?= nf3($objFactImpr['pies_cub']) ?></td>
+                    <td style="text-align: right"><?= nf($objFactImpr['tarifa']) ?></td>
+                    <td style="text-align: right"><?= nf($objFactImpr['total']) ?></td>
                 </tr>
-                <?php $intCantPiez += $objManiFact->Piezas ?>
             <?php } ?>
             <tr style="background-color: #CCC; font-weight: bold">
                 <td>Totals</td>
                 <td style="text-align: center"></td>
                 <td style="text-align: center"></td>
-                <td style="text-align: right"><?= $intCantPiez ?></td>
                 <td style="text-align: center"></td>
                 <td style="text-align: center"></td>
-                <td style="text-align: right"><?= nf($objFactImpr->Total) ?></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: right"><?= nf($decTotaFact) ?></td>
             </tr>
         </table>
     </page_header>

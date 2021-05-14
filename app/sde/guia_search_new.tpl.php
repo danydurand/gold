@@ -50,6 +50,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php //$this->rdbTienPodx->RenderWithName(); ?>
                 <?php //$this->lstTariIdxx->RenderWithName(); ?>
                 <?php $this->txtUsuaPodx->RenderWithName(); ?>
+                <?php $this->txtRefeFact->RenderWithName(); ?>
                 <?php //$this->lstCodiCkpt->RenderWithName(); ?>
                 <?php //$this->txtSepaColu->RenderWithName(); ?>
                 <?php $this->chkMostQuer->RenderWithName(); ?>

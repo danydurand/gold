@@ -45,11 +45,27 @@
 		}
 
         public static function proxReferencia() {
-		    $objClauWher   = QQ::Clause();
-		    $objClauWher[] = QQ::IsNotNull(QQN::Facturas()->ClienteCorpId);
-		    $intCantFact   = Facturas::QueryCount(QQ::AndCondition($objClauWher));
+            //------------------------------------------------------------------------------------
+            // Para la 1era vez que se emita una factura, la referencia será tomada de la tabla
+            // "parametros" bajo la combinacion RefeFact-ProxRefe
+            //------------------------------------------------------------------------------------
+            if (Facturas::CountAll() == 0) {
+                $intRefeFact = Parametros::BuscarParametro('RefeFact','ProxRefe','Val1',1);
+            } else {
+                $objAdicClau   = QQ::Clause();
+                $objAdicClau[] = QQ::OrderBy(QQN::Facturas()->Id,false);
+                $objAdicClau[] = QQ::LimitInfo(1);
+                $objClauWher   = QQ::Clause();
+                $objClauWher[] = QQ::IsNotNull(QQN::Facturas()->Id);
+                $arrUltiFact   = Facturas::QueryArray(QQ::AndCondition($objClauWher),$objAdicClau);
+                $objUltiFact   = $arrUltiFact[0];
+                $intRefeFact   = (int)explode('-',$objUltiFact->Referencia)[0];
+            }
+		    //$objClauWher   = QQ::Clause();
+		    //$objClauWher[] = QQ::IsNotNull(QQN::Facturas()->ClienteCorpId);
+		    //$intCantFact   = Facturas::QueryCount(QQ::AndCondition($objClauWher));
 		    $strYearDhoy   = date('Y');
-		    $strNumeRefe   = str_pad($intCantFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
+		    $strNumeRefe   = str_pad($intRefeFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
 		    return $strNumeRefe;
         }
 

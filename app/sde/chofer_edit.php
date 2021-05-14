@@ -138,7 +138,8 @@ class ChoferEditForm extends ChoferEditFormBase {
     public function crearLogin() {
 	    $strNombChof = $this->txtNombChof->Text;
 	    $strApelChof = $this->txtApelChof->Text;
-	    $this->txtLogin->Text = Chofer::LoginPropuesto($strNombChof,$strApelChof);
+	    //$this->txtLogin->Text = Chofer::LoginPropuesto($strNombChof,$strApelChof);
+	    $this->txtLogin->Text = LoginPropuesto($strNombChof,$strApelChof);
     }
 
     protected function btnProxRegi_Click() {

@@ -6,6 +6,41 @@
 //------------------------------------------------------------------------------------
 
 
+function LoginPropuesto($strCadeNomb, $strCadeApel) {
+    $strLogiProp = '';
+    if (strlen($strCadeNomb) && strlen($strCadeApel)) {
+        $blnLogiVali = false;
+        $intCantInte = strlen($strCadeNomb);
+        $i = 0;
+        while ((!$blnLogiVali) && ($i < $intCantInte)) {
+            $strLogiProp  = $strCadeNomb[$i];
+            $strLogiProp .= substr($strCadeApel,0,7);
+            $strLogiProp  = strtolower($strLogiProp);
+            t('Login Propuesto: '.$strLogiProp);
+            //-------------------------------------------------------------------------------------------
+            // Se verifica la existencia previa de algun chofer con ese login ya que no puede repetirse
+            //-------------------------------------------------------------------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Chofer()->Login,$strLogiProp);
+            $intCantLogi   = Chofer::QueryCount(QQ::AndCondition($objClauWher));
+            if ($intCantLogi == 0) {
+                //-------------------------------------------------------------------------------------------
+                // Se verifica la existencia previa de algun usuario con ese login ya que no puede repetirse
+                //-------------------------------------------------------------------------------------------
+                $objClauWher   = QQ::Clause();
+                $objClauWher[] = QQ::Equal(QQN::Usuario()->LogiUsua,$strLogiProp);
+                $intCantLogi   = Usuario::QueryCount(QQ::AndCondition($objClauWher));
+                if ($intCantLogi == 0) {
+                    $blnLogiVali = true;
+                }
+            } else {
+                $i++;
+            }
+        }
+    }
+    return $strLogiProp;
+}
+
 /**
  * Esta rutina toma un numero de guia al estilo Sthepy y lo transforma en algo
  * util y legible al estilo SisCO

@@ -38,9 +38,9 @@
                     $strLogiProp .= substr($strCadeApel,0,7);
                     $strLogiProp  = strtolower($strLogiProp);
                     t('Login Propuesto: '.$strLogiProp);
-                    //-------------------------------------------------------------
-                    // Se verifica la existencia previa ya que no puede repetirse
-                    //-------------------------------------------------------------
+                    //-------------------------------------------------------------------------------------------
+                    // Se verifica la existencia previa de algun chofer con ese login ya que no puede repetirse
+                    //-------------------------------------------------------------------------------------------
                     $objClauWher   = QQ::Clause();
                     $objClauWher[] = QQ::Equal(QQN::Chofer()->Login,$strLogiProp);
                     $intCantLogi   = Chofer::QueryCount(QQ::AndCondition($objClauWher));

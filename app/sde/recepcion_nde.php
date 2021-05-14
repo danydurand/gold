@@ -21,6 +21,7 @@ class RecepcionNde extends FormularioBaseKaizen {
     protected $strCadeSqlx;
     protected $blnExisCont;
     protected $btnRepoDisc;
+    protected $txtUbicFisi;
 
     protected function Form_Create() {
         parent::Form_Create();
@@ -32,6 +33,7 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->lstNotaEntr_Create();
         $this->chkInclReci_Create();
         $this->txtNumePiez_Create();
+        $this->txtUbicFisi_Create();
         $this->dtgPiezNota_Create();
         //$this->btnRepoDisc_Create();
 
@@ -71,6 +73,12 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->txtNumePiez->Rows = 20;
         $this->txtNumePiez->Width = 280;
         $this->txtNumePiez->Height = 240;
+    }
+
+    protected function txtUbicFisi_Create() {
+        $this->txtUbicFisi = new QTextBox($this);
+        $this->txtUbicFisi->Name = 'Ubicacion Física';
+        $this->txtUbicFisi->Width = 280;
     }
 
     protected function dtgPiezNota_Create() {
@@ -275,6 +283,11 @@ class RecepcionNde extends FormularioBaseKaizen {
                     if ($arrResuGrab['TodoOkey']) {
                         $intContCkpt++;
                         t("Ya grabe el checkpoint para la pieza. Van: " . $intContCkpt . " checkpoints grabados");
+                        if (strlen($this->txtUbicFisi->Text) > 0) {
+                            $objGuiaPiez->Ubicacion = $this->txtUbicFisi->Text;
+                            $objGuiaPiez->Save();
+                            t('Se asigno la Ubicacion Fisica: '.$this->txtUbicFisi->Text);
+                        }
                     } else {
                         $strMensUsua = QApplication::Translate("Error al registrar checkpoint a la pieza: " . $objGuiaPiez->IdPieza);
                         $strMensUsua .= " - " . $arrResuGrab['MotiNook'];

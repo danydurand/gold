@@ -67,7 +67,7 @@
                 <?php $this->txtTelefono->RenderWithName(); ?>
                 <?php $this->lstSucursal->RenderWithName(); ?>
                 <?php $this->txtEstatus->RenderWithName(); ?>
-                <?php $this->txtTasa->RenderWithName(); ?>
+                <?php $this->txtReferencia->RenderWithName(); ?>
 				<?php $this->txtTotal->RenderWithName(); ?>
 				<?php //$this->txtMontoDscto->RenderWithName(); ?>
 				<?php //$this->txtMontoCobrado->RenderWithName(); ?>

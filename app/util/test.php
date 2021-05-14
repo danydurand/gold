@@ -2,11 +2,14 @@
 require_once('qcubed.inc.php');
 
 
-$objClieSele = MasterCliente::LoadByCodigoInterno('EURO');
-$strServImpo = 'AER';
-echo "Cliente: ".$objClieSele->NombClie;
-$intManiServ = NotaEntrega::AptasParaFacturar($objClieSele->CodiClie,$strServImpo,$this->arrNotaEntr);
+$arrQuerMobi = Parametros::LoadArrayByIndice('QRYMOBILE');
+echo 'Hay: '.count($arrQuerMobi);
 
+//-------------------
+// Buscar Parametro
+//-------------------
+//$intProxRefe = Parametros::BuscarParametro('RefeFact','ProxRefe','Val1',1);
+//echo $intProxRefe;
 
 
 //---------------------------------

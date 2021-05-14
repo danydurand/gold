@@ -83,6 +83,7 @@ class CheckpointsListForm extends CheckpointsListFormBase {
 		//$this->dtgCheckpointses->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
+        $this->btnExpoExce->Visible = true;
 
     }
 

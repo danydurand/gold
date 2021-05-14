@@ -1133,7 +1133,11 @@ class SacarARuta extends FormularioBaseKaizen {
             $this->txtNumeCont->Text = date('YmdHis');
         }
         t('Voy a buscar el contenedor');
-        $objContenedor = Containers::LoadByNumero($this->txtNumeCont->Text);
+        if (!$this->blnEditMode) {
+            $objContenedor = Containers::LoadByNumero($this->txtNumeCont->Text);
+        } else {
+            $objContenedor = $this->objContaine;
+        }
         try {
             if (!$objContenedor) {
                 t('No existia, lo voy a crear');

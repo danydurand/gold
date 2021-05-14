@@ -70,7 +70,10 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $this->lstGrupo = $this->mctUsuario->lstGrupo_Create(null, QQ::AndCondition($objClauWher));
 
         $this->txtNombUsua = $this->mctUsuario->txtNombUsua_Create();
+        $this->txtNombUsua->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
+        
         $this->txtApelUsua = $this->mctUsuario->txtApelUsua_Create();
+        $this->txtApelUsua->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
 
         $this->txtLogiUsua = $this->mctUsuario->txtLogiUsua_Create();
         $this->txtLogiUsua->Width = 80;
@@ -139,10 +142,16 @@ class UsuarioEditForm extends UsuarioEditFormBase {
             $this->calFechClav->DateTime = new QDateTime(QDateTime::Now);
             $this->calFechClav->DateTime = $this->calFechClav->DateTime->AddMonths(-4);
             $this->calFechAcce->DateTime = new QDateTime(QDateTime::Now);
+
+            $this->txtMailUsua->Text = Parametros::BuscarParametro('DOMICORR','CORREMPR','Txt1','@dominio.com');
+
         }
 
         $this->lblPermUsua_Create();
         $this->dtgPermUsua_Create();
+
+        $this->txtMotiBloq   = disableControl($this->txtMotiBloq);
+        $this->chkSupervisor = disableControl($this->chkSupervisor);
     }
 
     //----------------------------
@@ -260,6 +269,12 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    public function crearLogin() {
+        $strNombUsua = $this->txtNombUsua->Text;
+        $strApelUsua = $this->txtApelUsua->Text;
+        $this->txtLogiUsua->Text = LoginPropuesto($strNombUsua,$strApelUsua);
+    }
 
     protected function btnLogxCamb_Click() {
         $_SESSION['RegiRefe'] = $this->mctUsuario->Usuario->CodiUsua;

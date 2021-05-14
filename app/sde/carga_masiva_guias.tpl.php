@@ -68,6 +68,9 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->dtgGuiaMani->Render(); ?>
             </div>
             <div class="col-xs-6">
+                <div style="text-align: center">
+                    <?php $this->btnExpoPiez->Render(); ?>
+                </div>
                 <?php $this->dtgPiezMani->Render(); ?>
             </div>
         </div>

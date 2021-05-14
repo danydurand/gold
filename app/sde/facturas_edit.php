@@ -81,6 +81,7 @@ class FacturasEditForm extends FacturasEditFormBase {
                 $this->dtgNotaFact_Create();
             }
         }
+        $this->txtReferencia    = disableControl($this->txtReferencia);
         $this->txtEstatus       = disableControl($this->txtEstatus);
         $this->txtTasa          = disableControl($this->txtTasa);
         $this->txtTotal         = disableControl($this->txtTotal);

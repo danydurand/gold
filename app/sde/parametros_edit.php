@@ -44,14 +44,14 @@ class ParametrosEditForm extends ParametrosEditFormBase {
 		// Call MetaControl's methods to create qcontrols based on Parametros's data fields
 		$this->lblId = $this->mctParametros->lblId_Create();
 		$this->txtIndice = $this->mctParametros->txtIndice_Create();
-		$this->txtIndice->Width = 80;
+		$this->txtIndice->Width = 90;
 		$this->txtCodigo = $this->mctParametros->txtCodigo_Create();
-		$this->txtCodigo->Width = 80;
+		$this->txtCodigo->Width = 90;
 		$this->txtDescripcion = $this->mctParametros->txtDescripcion_Create();
-		$this->txtDescripcion->Width = 200;
+		$this->txtDescripcion->Width = 280;
 		$this->txtTexto1 = $this->mctParametros->txtTexto1_Create();
-        $this->txtTexto1->Width = 200;
-        $this->txtTexto1->Rows = 2;
+        $this->txtTexto1->Width = 280;
+        $this->txtTexto1->Rows = 5;
         $this->txtTexto2 = $this->mctParametros->txtTexto2_Create();
         $this->txtTexto2->Width = 200;
         $this->txtTexto2->Rows = 2;
