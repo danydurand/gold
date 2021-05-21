@@ -23,6 +23,9 @@ class RecepcionNde extends FormularioBaseKaizen {
     protected $btnRepoDisc;
     protected $txtUbicFisi;
 
+    protected $objProcEjec;
+    protected $btnErroProc;
+
     protected function Form_Create() {
         parent::Form_Create();
 
@@ -35,6 +38,8 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->txtNumePiez_Create();
         $this->txtUbicFisi_Create();
         $this->dtgPiezNota_Create();
+        $this->btnErroProc_Create();
+
         //$this->btnRepoDisc_Create();
 
         $this->cargarClientesCorp();
@@ -80,6 +85,21 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->txtUbicFisi->Name = 'Ubicacion Física';
         $this->txtUbicFisi->Width = 280;
     }
+
+    protected function btnErroProc_Create() {
+        $this->btnErroProc = new QButtonD($this);
+        $this->btnErroProc->Text = TextoIcono('eye','Error(es)','F','lg');
+        $this->btnErroProc->AddAction(new QClickEvent(), new QServerAction('btnErroProc_Click'));
+        $this->btnErroProc->Visible = false;
+        //if ($this->blnEditMode) {
+        //    t('Creando el boton, en modo edicion');
+        //    if (!is_null($this->objProcAnte)) {
+        //        t('El proceso existe, por lo tanto, había errores');
+        //        $this->btnErroProc->Visible = true;
+        //    }
+        //}
+    }
+
 
     protected function dtgPiezNota_Create() {
         $this->dtgPiezNota = new QDataGrid($this);
@@ -146,6 +166,11 @@ class RecepcionNde extends FormularioBaseKaizen {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    protected function btnErroProc_Click() {
+        $_SESSION['PagiBack'] = __SIST__."/recepcion_nde.php/";
+        QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
+    }
 
     public function chkInclReci_Change() {
         $this->lstClieCorp_Change(null,null,$this->chkInclReci->Checked);
@@ -230,6 +255,11 @@ class RecepcionNde extends FormularioBaseKaizen {
 
     protected function btnSave_Click() {
         $objNotaEntr = NotaEntrega::Load($this->lstNotaEntr->SelectedValue);
+        $blnHayxErro = false;
+
+        $strNombProc = 'Convirtiendo Guias del Manifiesto: '.$objNotaEntr->Referencia;
+        $this->objProcEjec = CrearProceso($strNombProc);
+
         $arrPiezNota = $objNotaEntr->piezasDeLaNota();
         t('El Manif tiene: '.count($arrPiezNota).' piezas');
         $arrIdxxPiez = [];
@@ -267,9 +297,17 @@ class RecepcionNde extends FormularioBaseKaizen {
                         $arrRelaSobr[] = $objGuiaPiez->IdPieza;
                         $this->txtNumePiez->Text = $objGuiaPiez->IdPieza.' (SOB)'. chr(13);
                         t('La pieza existe, pero no pertenece al manifiesto, es un sobrante');
+
+                        $blnHayxErro = true;
+                        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                        $arrParaErro['NumeRefe'] = $objGuiaPiez->IdPieza;
+                        $arrParaErro['MensErro'] = 'La Pieza no pertenece al Manifiesto';
+                        $arrParaErro['ComeErro'] = 'Chequeando que la Pieza este asociada al Manifiesto';
+                        GrabarError($arrParaErro);
+
                         continue;
                     }
-                    t('La pieza si pertenece a la nde');
+                    t('La pieza si pertenece al Manifiesto');
                     //----------------------------------------------------------
                     // Se registra el checkpoint correspondiente para la pieza
                     //----------------------------------------------------------
@@ -289,12 +327,27 @@ class RecepcionNde extends FormularioBaseKaizen {
                             t('Se asigno la Ubicacion Fisica: '.$this->txtUbicFisi->Text);
                         }
                     } else {
-                        $strMensUsua = QApplication::Translate("Error al registrar checkpoint a la pieza: " . $objGuiaPiez->IdPieza);
+                        $strMensUsua = "Error al registrar Checkpoint a la pieza: " . $objGuiaPiez->IdPieza;
                         $strMensUsua .= " - " . $arrResuGrab['MotiNook'];
+
+                        $blnHayxErro = true;
+                        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                        $arrParaErro['NumeRefe'] = $objGuiaPiez->IdPieza;
+                        $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
+                        $arrParaErro['ComeErro'] = 'Registrando el Checkpoint de la Pieza';
+                        GrabarError($arrParaErro);
+
                         t($strMensUsua);
-                        $this->danger($strMensUsua);
+                        //$this->danger($strMensUsua);
                     }
                 } else {
+                    $blnHayxErro = true;
+                    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $strPiezArri;
+                    $arrParaErro['MensErro'] = 'La Pieza no existe en la BD';
+                    $arrParaErro['ComeErro'] = 'Chequeando la existencia de la Pieza';
+                    GrabarError($arrParaErro);
+
                     $intCantSobr ++;
                     $arrRelaSobr[] = $strPiezArri;
                     $this->txtNumePiez->Text = $strPiezArri.' (SOB)'. chr(13);
@@ -327,7 +380,30 @@ class RecepcionNde extends FormularioBaseKaizen {
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/nota_entrega.php/'.$objNotaEntr->Id;
         LogDeCambios($arrLogxCamb);
 
-        $this->success($strTextMens);
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->NotificarAdmin = true;
+        $this->objProcEjec->Save();
+        //----------------------------------------------
+        // Se deja registro de la transacción realizada
+        //----------------------------------------------
+        $arrLogxCamb['strNombTabl'] = 'ProcesoError';
+        $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
+        $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
+        $arrLogxCamb['strDescCamb'] = 'Ejecutado';
+        $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
+        LogDeCambios($arrLogxCamb);
+
+        if ($blnHayxErro) {
+            $this->btnErroProc->Visible = true;
+            $this->warning($strTextMens);
+        } else {
+            $this->success($strTextMens);
+        }
+
         $this->dtgPiezNota->Refresh();
     }
 }

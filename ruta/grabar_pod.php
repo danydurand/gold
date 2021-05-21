@@ -1,8 +1,8 @@
 <?php
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__ . '/funciones_kaizen.php');
+
 $strTituPagi = "Grabar POD";
-include('layout/header.inc.php');
 $blnTodoOkey = true;
 
 if (isset($_POST['nomb'])) {
@@ -13,6 +13,16 @@ if (isset($_POST['nomb'])) {
     $_SESSION['hora'] = $_POST['hora'];
 } else {
     $blnTodoOkey = false;
+}
+$strMultPodx = '';
+$arrOtraProc = [];
+if (isset($_POST['mult_podx'])) {
+    t('Multi POD: '.$_POST['mult_podx']);
+    $strMultPodx = $_POST['mult_podx'];
+    if ($strMultPodx == 'S') {
+        t('Voy a grabar el POD a multiples piezas');
+        $arrOtraProc = unserialize($_SESSION['OtraProc']);
+    }
 }
 
 if ($blnTodoOkey) {
@@ -37,20 +47,43 @@ if ($blnTodoOkey) {
         $objPiezPodx->Delete();
     }
 
+    $strMensErro = '';
+    $intCantPiez = 0;
     try {
+        t('Procesando POD para la pieza: '.$intPiezIdxx);
         $objPiezPodx = new GuiaPiezaPod();
         $objPiezPodx->GuiaPiezaId  = $intPiezIdxx;
         $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
         $objPiezPodx->FechaEntrega = $strFechEntr;
         $objPiezPodx->HoraEntrega  = $strHoraEntr;
         $objPiezPodx->Save();
+        $intCantPiez++;
+        //-----------------------------------------
+        // Mismo POD para multiples piezas
+        //-----------------------------------------
+        if ($strMultPodx == 'S') {
+            if (count($arrOtraProc) > 0) {
+                foreach ($arrOtraProc as $objOtraPiez) {
+                    t('Procesando POD para la pieza: '.$objOtraPiez->Id);
+                    $objPiezPodx = new GuiaPiezaPod();
+                    $objPiezPodx->GuiaPiezaId  = $objOtraPiez->Id;
+                    $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
+                    $objPiezPodx->FechaEntrega = $strFechEntr;
+                    $objPiezPodx->HoraEntrega  = $strHoraEntr;
+                    $objPiezPodx->Save();
+                    $intCantPiez++;
+                }            
+            }
+        }
     } catch (Exception $e) {
+        $strMensErro = $e->getMessage();
         t('Error grabando POD desde Ruta-Mobile: '.$e->getMessage());
         $blnTodoOkey = false;
         $objDatabase->TransactionRollBack();
     }
 
     if ($blnTodoOkey) {
+        $intCantCkpt = 0;
         $objCheckpoint = Checkpoints::LoadByCodigo('OK');
         t('Grabando Checkpoint a la Pieza desde Ruta-Mobile');
         //-------------------------------------------------
@@ -64,9 +97,38 @@ if ($blnTodoOkey) {
         $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
         $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
         if (!$arrResuGrab['TodoOkey']) {
+            $strMensErro = $arrResuGrab['MotiNook'];
             t('Error grabando Checkpoint OK desde Ruta-Mobile:'.$arrResuGrab['MotiNook']);
             $blnTodoOkey = false;
             $objDatabase->TransactionRollBack();
+        } else {
+            $intCantCkpt++;
+            //-----------------------------------------
+            // Misma Incidencia para multiples piezas
+            //-----------------------------------------
+            if ($strMultPodx == 'S') {
+                if (count($arrOtraProc) > 0) {
+                    foreach ($arrOtraProc as $objOtraPiez) {
+                        t('Grabando el OK a otra pieza: '.$objOtraPiez->IdPieza);
+                        $arrDatoCkpt             = array();
+                        $arrDatoCkpt['NumePiez'] = $objOtraPiez->IdPieza;
+                        $arrDatoCkpt['GuiaAnul'] = $objOtraPiez->Guia->Anulada();
+                        $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+                        $arrDatoCkpt['TextCkpt'] = 'ENTREGADO A: '.trim($strNombClie).' | C.I.: '.trim($strCeduRifx).' | '.$strFechEntr.' | '.$strHoraEntr;
+                        $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+                        $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                        if (!$arrResuGrab['TodoOkey']) {
+                            $strMensErro = $arrResuGrab['MotiNook'];
+                            t('Error grabando Checkpoint OK desde Ruta-Mobile:' . $arrResuGrab['MotiNook']);
+                            $blnTodoOkey = false;
+                            $objDatabase->TransactionRollBack();
+                        } else {
+                            $intCantCkpt++;
+                        }
+                    }
+                }
+            }
+            
         }
 
     }
@@ -75,14 +137,14 @@ if ($blnTodoOkey) {
     if ($blnTodoOkey) {
         $strResuRegi = '
         <center class="mensaje">
-            <span style="color:crimson">¡El Detalle de la Entrega ha sido Registrado!!!<hr></span>
+            <span style="color:crimson">¡El Detalle de la Entrega ha sido Registrado!!!<hr> Piezas Procesadas '.$intCantCkpt.'</span>
             <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         </center>
         ';
     } else {
         $strResuRegi = '
             <center class="mensaje">
-                <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>Intente más tarde !!!</span>
+                <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>'.$strMensErro.' !!!</span>
             </center>
             <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         ';
@@ -96,6 +158,7 @@ if ($blnTodoOkey) {
     ';
 }
 ?>
+<?php include('layout/header.inc.php'); ?>
 
     <div data-role="page" id="resultado">
 

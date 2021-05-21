@@ -27,6 +27,17 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+		public function OtrasPiezasDeLaMismaGuia() {
+		    $arrOtraPiez = [];
+		    $arrPiezGuia = $this->Guia->GetGuiaPiezasAsGuiaArray();
+            foreach ($arrPiezGuia as $objPiezGuia) {
+                if ($objPiezGuia->Id != $this->Id) {
+                    $arrOtraPiez[] = $objPiezGuia;
+                }
+		    }
+		    return $arrOtraPiez;
+        }
+
         public static function EnEstaUbicacion($strEstaUbic) {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->Ubicacion,"%".trim($strEstaUbic)."%");

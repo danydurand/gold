@@ -7,12 +7,15 @@
 
 
 function LoginPropuesto($strCadeNomb, $strCadeApel) {
+    t('Entrando a login propuesto');
     $strLogiProp = '';
     if (strlen($strCadeNomb) && strlen($strCadeApel)) {
+        t('Voy por aqui...');
         $blnLogiVali = false;
         $intCantInte = strlen($strCadeNomb);
         $i = 0;
         while ((!$blnLogiVali) && ($i < $intCantInte)) {
+            t('Intento Nro: '.$i);
             $strLogiProp  = $strCadeNomb[$i];
             $strLogiProp .= substr($strCadeApel,0,7);
             $strLogiProp  = strtolower($strLogiProp);
@@ -32,6 +35,8 @@ function LoginPropuesto($strCadeNomb, $strCadeApel) {
                 $intCantLogi   = Usuario::QueryCount(QQ::AndCondition($objClauWher));
                 if ($intCantLogi == 0) {
                     $blnLogiVali = true;
+                } else {
+                    $i++;
                 }
             } else {
                 $i++;
@@ -52,20 +57,35 @@ function LoginPropuesto($strCadeNomb, $strCadeApel) {
 function transformar($strNumeGuia) {
     if (strlen(trim($strNumeGuia))) {
         $intLongCade = strlen($strNumeGuia);
-        $strUltiCuat = substr($strNumeGuia,$intLongCade-4);
+        $intCantDosp = 0;
+        for ($i=0; $i<$intLongCade; $i++) {
+            if ($strNumeGuia[$i] == ':') {
+                $intCantDosp++;
+            }
+        }
         $intCantGuio = 0;
         for ($i=0; $i<$intLongCade; $i++) {
             if ($strNumeGuia[$i] == '-') {
                 $intCantGuio++;
             }
         }
-        if ( ($strUltiCuat == ':200') && ($intCantGuio == 2) ) {
+        $intCantDiag = 0;
+        for ($i=0; $i<$intLongCade; $i++) {
+            if ($strNumeGuia[$i] == '/') {
+                $intCantDiag++;
+            }
+        }
+        if ( ($intCantDosp == 1) && ($intCantGuio == 2) ) {
             t('Caso Stephy');
             return caso_stephy($strNumeGuia);
         }
         if ($intCantGuio == 0) {
             t('Caso Sin Pieza');
             return caso_sin_pieza($strNumeGuia);
+        }
+        if ( ($intCantGuio == 1) && ($intCantDiag == 1) ) {
+            t('Caso con un guión y una diagonal');
+            return caso_con_guion_y_diagonal($strNumeGuia);
         }
         if ($intCantGuio == 1) {
             t('Caso con un guión');
@@ -86,6 +106,15 @@ function caso_stephy($strNumeGuia) {
 
 function caso_sin_pieza($strNumeGuia) {
     return trim($strNumeGuia).'-001';
+}
+
+function caso_con_guion_y_diagonal($strNumeGuia) {
+    //--------------------------------------------
+    // Ej: 116561-1/004 debe retornar 116561-004
+    //--------------------------------------------
+    $strIdxxPiez = explode('/',$strNumeGuia)[1];
+    $strIdxxGuia = explode('-',$strNumeGuia)[0];
+    return trim($strIdxxGuia).'-'.$strIdxxPiez;
 }
 
 function caso_con_guion($strNumeGuia) {

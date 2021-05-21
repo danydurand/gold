@@ -1,6 +1,7 @@
 <?php
 require_once('mimemail.inc.php');
 
+
 function TextoIconoColor($strNombIcon, $strTextAcom, $strPosiText='F', $strTamaIcon='', $strColoIcon='') {
     //--------------------------------------------------------------------------
     // Esta rutina devuelve un string que sirve para asignarlo a texto de los
@@ -224,10 +225,10 @@ function t($strTextTraz) {
     if (isset($_SESSION['User'])) {
         $objUsuario  = unserialize($_SESSION['User']);
         $blnTodoOkey = false;
-        if ( ($objUsuario instanceof Usuario) && ($objUsuario->LogiUsua == 'ddurand') ) {
+        if ( ($objUsuario instanceof Usuario) && (in_array($objUsuario->LogiUsua,['ddurand','jmartine'])) ) {
             $blnTodoOkey = true;
         } else {
-            if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'ddurand') ) {
+            if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'scuevas') ) {
                 $blnTodoOkey = true;
             }
         }

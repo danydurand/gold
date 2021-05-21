@@ -60,6 +60,8 @@ class SucursalesListForm extends SucursalesListFormBase {
 		$this->dtgSucursaleses->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
 		$this->dtgSucursaleses->AddRowAction(new QClickEvent(), new QAjaxAction('dtgSucursalesesRow_Click'));
 
+        $this->dtgSucursaleses->SortColumnIndex = 0;
+
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
 		// Create the Other Columns (note that you can use strings for sucursales's properties, or you

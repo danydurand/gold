@@ -648,9 +648,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         t('==============================');
         t('Creando Guias Gold en el SisCO');
         $this->objCliente = MasterCliente::Load($this->lstClieCarg->SelectedValue);
-        //---------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------
         // Invocacion a rutina para crear el proceso. Obteniendo el ID para el mismo.
-        //---------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------
         $strNombProc = 'Creando Guias Gold del Cliente: '.$this->objCliente->NombClie;
         $this->objProcEjec = CrearProceso($strNombProc);
         t('Proceso iniciado...');
@@ -691,7 +691,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         t('Guias pendientes para procesar: '.$intCantPend);
         if ($intCantPend > 0) {
             foreach ($arrGuiaPend as $objGuiaMasi) {
-                t('Procesando la guia: '.$objGuiaMasi->GuiaExte);
                 //------------------------------------------------------------
                 // Se crea una Guia Interna correspondiente a la Guia Masiva
                 //------------------------------------------------------------
@@ -700,6 +699,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 // Se incrementa el contador de guías procesadas.
                 //------------------------------------------------
                 $intCantGuia++;
+                t('Procesando la guia: '.$objGuiaMasi->GuiaExte.' | Contador: '.$intCantGuia);
             }
         }
         //------------------------------------------------
@@ -719,9 +719,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->lblNumePend->Text = (int) $this->lblNumePend->Text - $intCantGuia;
         $this->objNotaEntr->Procesadas  = $intCantGuia;
         $this->objNotaEntr->PorProcesar = $this->lblNumePend->Text;
-        //t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
+        t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
         if ($this->objNotaEntr->PorCorregir == 0) {
-            //t('Voy a marcarlo como RECIBID@');
+            t('Voy a marcarlo como RECIBID@');
             //---------------------------------------------------------------------------------------
             // Si todas las piezas fueron procesadas exitosamente, el Manifiesto se da por Recibido
             //---------------------------------------------------------------------------------------
@@ -729,6 +729,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->objNotaEntr->Estatus = 'RECIBID@';
         }
         $this->objNotaEntr->Save();
+        t('Manifiesto actulizado...');
         if (!$blnTodoOkey) {
             //---------------------------------------------------------------------------------------------------
             // Si no ha salido to-do bien, se coloca el mensaje construido como un alerta, se indica la cantidad
@@ -750,6 +751,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->objProcEjec->Comentario = $strTextMens;
         $this->objProcEjec->NotificarAdmin = !$blnTodoOkey ? true : false;
         $this->objProcEjec->Save();
+        t('Proceso actualizado');
         //TODO: Ver posibilidad de enviar notificación de error(es) a administradores del Sistema por correo.
         //----------------------------------------------
         // Se deja registro de la transacción realizada
@@ -817,7 +819,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function verificarDatosMasivos($arrCampClie,$intNumeLine) {
-        //t('Verificando datos de la linea: '.$intNumeLine);
+        t('Verificando datos de la linea: '.$intNumeLine);
         $arrContVali = [];
         $blnTodoOkey = true;
         $blnDestOkey = true;
@@ -828,7 +830,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         // Se verifica la existencia previa de la Guia en la tabla
         //--------------------------------------------------------
         $strGuiaClie = $arrCampClie[0];
-        $arrContVali['GuiaClie'] = $strGuiaClie;
         if (strlen($strGuiaClie) > 0) {
             //-------------------------------------------------------------------
             // Primero se verifica si existe una Guía con el Tracking indicado
@@ -849,7 +850,14 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                     $blnTodoOkey = false;
                 }
             }
+        } else {
+            //---------------------------------------------------------------------------
+            // El nro de guia esta vacío, por lo tanto se asigna el consecutivo interno
+            //---------------------------------------------------------------------------
+            $strGuiaClie = Guias::proxNroDeGuia();
         }
+        $arrContVali['GuiaClie'] = $strGuiaClie;
+
         $intCantPiez = (int)$arrCampClie[1];
         $arrContVali['CantPiez'] = $intCantPiez;
         if ($blnTodoOkey) {
@@ -858,7 +866,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $blnTodoOkey = false;
             }
         }
-        $strNombDest = trim($arrCampClie[2]);
+        $strNombDest = trim(limpiarCadena($arrCampClie[2],';'));
         $arrContVali['NombDest'] = $strNombDest;
         if ($blnTodoOkey) {
             if (strlen($strNombDest) == 0) {
@@ -866,7 +874,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $blnTodoOkey = false;
             }
         }
-        $strTeleDest = $arrCampClie[3];
+        $strTeleDest = quitaCaracter(';',$arrCampClie[3]);
         $arrContVali['TeleDest'] = $strTeleDest;
         if ($blnTodoOkey) {
             if (strlen($strTeleDest) == 0) {
@@ -874,7 +882,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $blnTodoOkey = false;
             }
         }
-        $strDireEntr = trim($arrCampClie[4]);
+        $strDireEntr = trim(limpiarCadena($arrCampClie[4],';'));
         $arrContVali['DireEntr'] = $strDireEntr;
         if ($blnTodoOkey) {
             if (strlen($strDireEntr) == 0) {
@@ -1211,7 +1219,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             // corregir datos, se indica la cantidad de registros cargados y se activan los procesamientos de
             // validación para determinar el estatus de actividad y/o registro.
             //-------------------------------------------------------------------------------------------------
-            $strTextMens .= ' - Puede proceder a <strong>Corregir y/ Procesar los Datos</strong>';
+            $strTextMens .= ' - Puede proceder a Corregir y/ Procesar los Datos';
             $this->lblNumeCarg->Text = $intCantRegi;
         }
         if ($blnErroProc) {

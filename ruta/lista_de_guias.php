@@ -26,7 +26,7 @@ if ($arrPiezMani) {
 
         $strListGuia .= '
             <li>
-                <a href="detalle_de_pieza.php?id='.$objPiezMani->Id.'" data-rel="dialog">
+                <a href="detalle_de_pieza.php?id='.$objPiezMani->Id.'&mid='.$objManiSele->Id.'" data-rel="dialog">
                     <img src="images/list.png" class="extra">
                     <h6>'.$objPiezMani->IdPieza.'</h6>
                     <p><b>Destinatario:</b> '.$objPiezMani->Guia->NombreDestinatario.'</p>

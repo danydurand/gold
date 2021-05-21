@@ -1,15 +1,63 @@
 <?php
 require_once('qcubed.inc.php');
 
-include('layout/header.inc.php');
+/* @var $objOtraPiez GuiaPiezas */
+t('Entrando al Detalle de la Pieza...');
 
 $strTituPagi = "Detalle de Pieza";
 $strNumeGuia = '';
 $blnTeniPodx = false;
 if (isset($_GET['id'])) {
     $intPiezIdxx = $_GET['id'];
+    $intManiIdxx = $_GET['mid'];
+    t('El Id de la pieza es: '.$intPiezIdxx);
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
+
+    t('El Id del manifiesto es: '.$intManiIdxx);
+    $objManiSele = Containers::Load($intManiIdxx);
+
+    $arrOtraProc = [];
+    $arrOtraPiez = $objPiezSele->OtrasPiezasDeLaMismaGuia();
+    t('Otras piezas de la misma guia: '.count($arrOtraPiez));
+    foreach ($arrOtraPiez as $objOtraPiez) {
+        //--------------------------------------------------------------------------------------------
+        // Si existen mas piezas de la misma guia, asociadas al Manifiesto y no han sido entregadas
+        //--------------------------------------------------------------------------------------------
+        if ($objManiSele->IsGuiaPiezasAsContainerPiezaAssociated($objOtraPiez)) {
+            t('Esta pieza esta asociada al manifiesto: '.$objOtraPiez->IdPieza);
+            if ($objOtraPiez->ultimoCheckpoint() != 'OK') {
+                t('La pieza no tiene OK');
+                $arrOtraProc[] = $objOtraPiez;
+            }
+        }
+    }
+    t('Otras piezas a procesar: '.count($arrOtraProc));
+    if (count($arrOtraProc) > 0) {
+        t('Lo puse en la sesion...');
+        $_SESSION['OtraProc'] = serialize($arrOtraProc);
+    }
+
+
     $strNumeGuia = $objPiezSele->IdPieza;
+    //---------------------------------------------------------------
+    // Si tiene mas de uno, aqui se separan los numeros de telefono
+    //---------------------------------------------------------------
+    $strHtmlTele = '';
+    $arrVariTele = explode('/',$objPiezSele->Guia->TelefonoDestinatario);
+    if (count($arrVariTele) > 0) {
+        $intCantTele = 1;
+        foreach ($arrVariTele as $strNumeTele) {
+            if (strlen($strNumeTele) > 0) {
+                $strHtmlTele .= '
+                    <tr>
+                        <td class="etiqueta"><i class="fa fa-phone fa-lg"></i></td>
+                        <td class="valor"><a href="tel:'.$strNumeTele.'">Tel #'.$intCantTele.': '.$strNumeTele.'</a></td>
+                    </tr>
+                ';
+                $intCantTele++;
+            }
+        }
+    }
 
     //--------------
     // Incidencias
@@ -21,6 +69,26 @@ if (isset($_GET['id'])) {
         $strListInci .= '<option value="'.$objInciDisp->Id.'">'.$objInciDisp->Descripcion.'</option>';
     }
     $strListInci .= '</select>';
+    //--------------------------------------------------------------------------------------------
+    // Si se trata de una Guía multi-piezas, se ofrece al Usuario la posibilidad de dar el mismo
+    // estatus al resto de la piezas de esa misma guía
+    //--------------------------------------------------------------------------------------------
+    $strMultInci = '';
+    if (count($arrOtraProc) > 0) {
+        $strMultInci .= '
+        <div class="ui-field-contain">
+            <label for="multinci" style="text-align: center">
+            Desea asignar la misma Incidencia a todas las piezas de esta misma Guía !?
+            </label>
+            <fieldset data-role="controlgroup">
+                <label for="siin">Si</label>
+                <input type="radio" name="mult_inci" id="siin" value="S">
+                <label for="noin">No</label>
+                <input type="radio" name="mult_inci" id="noin" value="N">
+            </fieldset>
+        </div>
+        ';
+    }
 
     //--------------------
     // Ultimo Checkpoint
@@ -57,12 +125,32 @@ if (isset($_GET['id'])) {
         $strFechEntr = $objPodxPiez->FechaEntrega;
         $strHoraEntr = $objPodxPiez->HoraEntrega;
     }
+    //--------------------------------------------------------------------------------------------
+    // Si se trata de una Guía multi-piezas, se ofrece al Usuario la posibilidad de dar el mismo
+    // estatus al resto de la piezas de esa misma guía
+    //--------------------------------------------------------------------------------------------
+    $strMultPodx = '';
+    if (count($arrOtraProc) > 0) {
+        $strMultPodx .= '
+        <div class="ui-field-contain">
+            <label for="multpodx" style="text-align: center">
+            Desea grabar la misma Información de Entrega a todas las piezas de esta misma Guía !?
+            </label>
+            <fieldset data-role="controlgroup">
+                <label for="siok">Si</label>
+                <input type="radio" name="mult_podx" id="siok" value="S">
+                <label for="nook">No</label>
+                <input type="radio" name="mult_podx" id="nook" value="N">
+            </fieldset>
+        </div>
+        ';
+    }
     $strAcciForm = $blnTeniPodx ? 'borrar_pod.php' : 'grabar_pod.php';
     $strTextAcci = $blnTeniPodx ? 'Borrar' : 'Grabar';
     $strIconAcci = $blnTeniPodx ? 'times-circle-o' : 'check';
 
     $strDetaPiez = '
-    <div data-role="collapsible-set" data-inset="true" data-theme="d">
+    <div data-role="collapsible-set" data-inset="true" data-theme="a">
         <div class="ui-nodisc-icon" data-role="collapsible" data-collapsed="true" style="font-size:14px;">
             <h3>Contactar Destinatario</h3>
             <table width="100%">
@@ -71,10 +159,7 @@ if (isset($_GET['id'])) {
                         <td class="etiqueta">Destinatario: </td>
                         <td class="valor">'.$objPiezSele->Guia->NombreDestinatario.'</td>
                     </tr>
-                    <tr>
-                        <td class="etiqueta"><i class="fa fa-phone fa-lg"></i></td>
-                        <td class="valor"><a href="tel:'.$objPiezSele->Guia->TelefonoDestinatario.'">'.$objPiezSele->Guia->TelefonoDestinatario.'</a></td>
-                    </tr>
+                    '.$strHtmlTele.' 
                     <tr>
                         <td class="etiqueta">Direccion: </td>
                         <td class="valor">'.$objPiezSele->Guia->DireccionDestinatario.'</td>
@@ -86,14 +171,15 @@ if (isset($_GET['id'])) {
             <h3>Detalles de Entrega</h3>
             <form action="'.$strAcciForm.'" method="post">
                 <input type="hidden" name="idxx" value="'.$objPiezSele->Id.'">
+                <input type="hidden" name="midx" value="'.$objManiSele->Id.'">
                 <div class="ui-field-contain">
                     <label for="nomb">Quién Recibió ?</label>
                     <input type="text" name="nomb" id="nomb" value="'.$strQuieReci.'" placeholder="Nombre de la Persona" required>
-                </div>                
+                </div>
                 <div class="ui-field-contain">
                     <label for="cedu">Cédula/RIF</label>
                     <input type="text" name="cedu" id="cedu" value="'.$strCeduRifx.'" placeholder="Cedula ó RIF" required>
-                </div>                
+                </div>
                 <div class="ui-field-contain">
                     <label for="fnac">Fecha Entrega</label>
                     <input type="text" name="fent" id="fent" value="'.$strFechEntr.'" placeholder="YYYY-MM-DD" required>
@@ -102,6 +188,7 @@ if (isset($_GET['id'])) {
                     <label for="cedu">Hora (Utilice Hora Militar)</label>
                     <input type="text" name="hora" id="hora" value="'.$strHoraEntr.'" placeholder="HH:MM" required>
                 </div>
+                '.$strMultPodx.'
                 <div class="ui-field-contain">
                     <input type="submit" value="<i class=\'fa fa-'.$strIconAcci.' pull-left\'></i>'.$strTextAcci.'" data-theme="b">
                 </div>
@@ -112,9 +199,10 @@ if (isset($_GET['id'])) {
             <form action="grabar_incidencia.php" method="post">
                 <input type="hidden" name="idxx" value="'.$objPiezSele->Id.'">
                 <div class="ui-field-contain">
-                    <label for="esta">Incidencias:</label><br>
+                    <label for="esta" style="text-align: center">Seleccione el estatus que desea dar a la Guía:</label><br>
                     '.$strListInci.'
                 </div>                
+                '.$strMultInci.'
                 <div class="ui-field-contain">
                     <input type="submit" value="<i class=\'fa fa-check pull-left\'></i>Grabar" data-theme="b">
                 </div>
@@ -163,6 +251,7 @@ if (isset($_GET['id'])) {
     ';
 }
 ?>
+<?php include('layout/header.inc.php'); ?>
 
     <div data-role="page" id="resultado">
 

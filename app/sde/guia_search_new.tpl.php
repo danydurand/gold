@@ -85,7 +85,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     intro: "Coloque aquí el Código del Cliente y presione Tabulador, para que el Cliente correspondiente, aparezca"
                 },
                 {
-                    element: '#c8',
+                    element: '#c9',
                     intro: "Coloque aquí el Nombre del Cliente y presione Tabulador, para que el Cliente correspondiente, aparezca"
                 },
                 {
@@ -104,11 +104,11 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 {
                     element: '#c13',
                     intro: "Especifique la Referencia de un Manifiesto de Salida a Ruta, para visualizar las guías contenidas en él"
-                }
+                },
                 {
                     element: '#c14',
                     intro: "Especifique una Fecha Inicial de creación de las guías"
-                }
+                },
                 {
                     element: '#c15',
                     intro: "Especifique una Fecha Inicial de creación de las guías"

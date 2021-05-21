@@ -1,9 +1,30 @@
 <?php
 require_once('qcubed.inc.php');
 
+/* @var $objOtraPiez GuiaPiezas */
 
-$arrQuerMobi = Parametros::LoadArrayByIndice('QRYMOBILE');
-echo 'Hay: '.count($arrQuerMobi);
+$objPiezSele = GuiaPiezas::LoadByIdPieza('WWW8370113729-001');
+$objManiSele = Containers::LoadByNumero('PT222');
+$arrOtraProc = [];
+$arrOtraPiez = $objPiezSele->OtrasPiezasDeLaMismaGuia();
+foreach ($arrOtraPiez as $objOtraPiez) {
+    echo $objOtraPiez->IdPieza."<br>";
+    //--------------------------------------------------------------------------------------------
+    // Si existen mas piezas de la misma guia, asociadas al Manifiesto y no han sido entregadas
+    //--------------------------------------------------------------------------------------------
+    if ($objManiSele->IsGuiaPiezasAsContainerPiezaAssociated($objOtraPiez)) {
+        echo "Esta pieza esta dentro del manifiesto: ".$objOtraPiez->IdPieza."<br>";
+        if ($objOtraPiez->ultimoCheckpoint() != 'OK') {
+            echo "La pieza no ha sido entregada, la voy a considerar<br>";
+            $arrOtraProc[] = $objOtraPiez;
+        }
+    }
+}
+echo "<hr>";
+foreach ($arrOtraProc as $objOtraProc) {
+    echo $objOtraProc->IdPieza."<br>";
+
+}
 
 //-------------------
 // Buscar Parametro

@@ -2,6 +2,8 @@
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__ . '/funciones_kaizen.php');
 
+/* @var $objOtraPiez GuiaPiezas */
+
 $strTituPagi = "Grabar Incidencia";
 
 t('Llegando a grabar incidencia');
@@ -14,6 +16,14 @@ if (isset($_POST['idxx'])) {
 } else {
     $blnTodoOkey = false;
 }
+$strMultInci = '';
+$arrOtraProc = [];
+if (isset($_POST['mult_inci'])) {
+    $strMultInci = $_POST['mult_inci'];
+    if ($strMultInci == 'S') {
+        $arrOtraProc = unserialize($_SESSION['OtraProc']);
+    }
+}
 t('Voy por aqui.. Pieza: '.$intPiezIdxx.' Ckpt: '.$intCodiCkpt);
 if ($blnTodoOkey) {
     t('Id: '.$intPiezIdxx);
@@ -23,6 +33,7 @@ if ($blnTodoOkey) {
     $strResuRegi = '';
     t('Grabando el POD desde Ruta-Mobile...');
 
+    $intCantPiez = 0;
     $objCheckpoint = Checkpoints::Load($intCodiCkpt);
     t('Grabando Incidencia a la Pieza desde Ruta-Mobile');
     //-------------------------------------------------
@@ -38,13 +49,39 @@ if ($blnTodoOkey) {
     if (!$arrResuGrab['TodoOkey']) {
         t('Error grabando la Incidencia desde Ruta-Mobile:'.$arrResuGrab['MotiNook']);
         $blnTodoOkey = false;
+    } else {
+        $intCantPiez++;
     }
-
+    //-----------------------------------------
+    // Misma Incidencia para multiples piezas
+    //-----------------------------------------
+    if ($strMultInci == 'S') {
+        if (count($arrOtraProc) > 0) {
+            foreach ($arrOtraProc as $objOtraPiez) {
+                //-------------------------------------------------
+                // Se registra la Incidencia a la Pieza
+                //-------------------------------------------------
+                $arrDatoCkpt             = array();
+                $arrDatoCkpt['NumePiez'] = $objOtraPiez->IdPieza;
+                $arrDatoCkpt['GuiaAnul'] = $objOtraPiez->Guia->Anulada();
+                $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+                $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion;
+                $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                if (!$arrResuGrab['TodoOkey']) {
+                    t('Error grabando la Incidencia desde Ruta-Mobile:'.$arrResuGrab['MotiNook']);
+                    $blnTodoOkey = false;
+                } else {
+                    $intCantPiez++;
+                }
+            }
+        }
+    }
 
     if ($blnTodoOkey) {
         $strResuRegi = '
         <center class="mensaje">
-            <span style="color:crimson">¡ Incidencia Registrada !<hr></span>
+            <span style="color:crimson">¡ Incidencia Registrada !<hr> Piezas Procesadas '.$intCantPiez.'</span>
             <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         </center>
         ';
@@ -67,7 +104,8 @@ if ($blnTodoOkey) {
 //include('layout/header.inc.php');
 ?>
 
-    <?php include('layout/header.inc.php') ?>
+<?php include('layout/header.inc.php') ?>
+
     <div data-role="page" id="resultado">
 
         <?php include('layout/page_header.inc.php') ?>

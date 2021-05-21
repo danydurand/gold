@@ -116,6 +116,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtGuiaExte = new QTextBox($this);
         $this->txtGuiaExte->Name = QApplication::Translate('Guía Cliente');
         $this->txtGuiaExte->Width = 181;
+        $this->txtGuiaExte->AddAction(new QFocusOutEvent(), new QAjaxAction('txtGuiaExte_FocusOut'));
     }
 
     protected function txtCodiInte_Create() {
@@ -346,6 +347,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    protected function txtGuiaExte_FocusOut() {
+        if (strlen($this->txtGuiaExte->Text) > 0) {
+            $this->txtGuiaExte->Text = transformar($this->txtGuiaExte->Text);
+        }
+    }
 
     protected function lstCodiOrig_Change() {
         /**

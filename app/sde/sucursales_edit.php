@@ -71,6 +71,12 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 		//$this->txtDeletedBy = $this->mctSucursales->txtDeletedBy_Create();
         //$this->dtgSdeOperacionsAsOperacionDestino = $this->mctSucursales->dtgSdeOperacionsAsOperacionDestino_Create();
 
+        if (!$this->mctSucursales->EditMode) {
+            $this->chkEsTienda->Checked = true;
+            $this->chkEsAlmacen->Checked = true;
+            $this->txtTelefono->Text = '5555555';
+        }
+
 	}
 
 	//----------------------------

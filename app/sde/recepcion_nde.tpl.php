@@ -9,7 +9,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <div class="hidden-xs hidden-sm col-md-6 col-lg-5" style="text-align: right; margin-top: -0.25em;">
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnSave->Render(); ?>
-            <?php //$this->btnRepoDisc->Render() ?>
+            <?php $this->btnErroProc->Render() ?>
         </div>
         <div class="hidden-sm col-md-3 col-lg-4"></div>
     </div>
