@@ -12,6 +12,9 @@
                     <li><a href="buscar_guias.php" data-theme="a"><i class="fa fa-lg fa-binoculars"></i>
                         <div class="sp"></div>Rastreo</a>
                     </li>
+                    <li><a href="contacto_gold.php" data-theme="a"><i class="fa fa-lg fa-phone"></i>
+                        <div class="sp"></div>Gold Coast</a>
+                    </li>
                 </ul>
             </nav>
         <?php } ?>
