@@ -660,6 +660,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $mixErroOrig = error_reporting();
         error_reporting(0);
         $this->mensaje();
+        t('Errores en pantalla apagados');
         //-----------------------------------
         // Se identifican valores de trabajo
         //-----------------------------------
@@ -675,7 +676,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->danger("No existe el Checkpoint $strCodiCkpt");
             return;
         }
-        //t("Checkpoint $strCodiCkpt leido de la BD");
+        t("Checkpoint $strCodiCkpt leido de la BD");
         //----------------------------------------------------------
         // Se identifican las Guias Masivas pendientes por procesar
         //----------------------------------------------------------
@@ -771,18 +772,16 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function btnImpoGuia_Click() {
         $strNombArch = $this->txtCargArch->FileName;
-        $arrNombArch = explode('.',$strNombArch);
-        $strExteArch = $arrNombArch[1];
-        $arrExteVali = ['xls','xlsx'];
-        if (in_array($strExteArch,$arrExteVali)) {
+        $strPartNomb = explode('.',$strNombArch);
+        $arrExteVali = array('csv','txt','dat');
+        if (in_array($strPartNomb[1],$arrExteVali)) {
             $file = basename(tempnam(getcwd(),'tmp'));
-            $file = $file.'.'.$strExteArch;
+            $file = $file.'.'.$strPartNomb[1];
             $filedest = '/tmp/'.$file;
             copy($_FILES['c8']['tmp_name'],$filedest);
-            $this->CargarArchivo($filedest,$strExteArch);
+            $this->CargarArchivo($filedest);
         } else {
-            $strExteVali = implode(',',$arrExteVali);
-            $strMensUsua = 'Archivo no corresponde a una extensión válida <b>'.$strExteVali.'</b>';
+            $strMensUsua = 'Archivo no corresponde a una extensión válida (.csv, .txt o .dat)';
             $this->mensaje($strMensUsua,'','d','i',__iHAND__);
         }
     }
@@ -930,7 +929,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         return $arrResuVali;
     }
 
-    protected function CargarArchivo($strNombArch,$strExteArch) {
+    protected function CargarArchivo($strNombArch) {
         t('');
         t('=====================');
         t('Rutina: CargarArchivo');
@@ -1034,32 +1033,34 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             //-------------------------------
             // Se abre el archivo a procesar
             //-------------------------------
-            $strLibrExce = $strExteArch == 'xls' ? 'SimpleXLS' : 'SimpleXLSX';
-            if ( $xls = $strLibrExce::parseFile($strNombArch) ) {
-                //foreach ($xls->rows() as $row) {
-                //    echo $row[0]."<br>";
-                //}
-                //return;
-                //print_r( $xls->rows() );
-                // echo $xls->toHTML();
-            } else {
-                $strMensErro = $strLibrExce::parseError();
-                t('Error leyendo el archivo: '.$strMensErro);
-                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-                $arrParaErro['NumeRefe'] = $strNombArch;
-                $arrParaErro['MensErro'] = $strMensErro;
-                $arrParaErro['ComeErro'] = 'Error leyendo archivo excel: '.$strMensErro;
-                GrabarError($arrParaErro);
-                $this->danger($strMensErro);
-                return;
-                //echo SimpleXLS::parseError();
+            $mixArchAgen = fopen($strNombArch,'r');
+            if (!$mixArchAgen) {
+                $blnErroProc = true;
+                throw new Exception('No puede abrirse el archivo plano');
             }
             //----------------------------------
             // Se lee el archivo linea a linea
             //----------------------------------
-            $intNumeLine = 1;
-            foreach ($xls->rows() as $arrCampClie) {
-                if ( (count($arrCampClie) > 0) && ($intNumeLine > 1) ) {
+            $intNumeLine = 0;
+            while (!feof($mixArchAgen)) {
+                $strLineArch = fgets($mixArchAgen);
+                t('Linea: '.$strLineArch);
+                $intNumeLine++;
+                if ( (strlen(trim($strLineArch)) > 0) && ($intNumeLine > 1) ) {
+                    $arrCampClie = explode(';', $strLineArch);
+                    if ($arrCampClie === false) {
+                        //throw new Exception('Delimitador de columnas invalido. Utilice punto y coma (";")');
+                        $strMensErro = "La linea $intNumeLine | Delimitador de columnas invalido. Utilice punto y coma (';')";
+                        t($strMensErro);
+                        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                        $arrParaErro['NumeRefe'] = $strNombArch;
+                        $arrParaErro['MensErro'] = $strMensErro;
+                        $arrParaErro['ComeErro'] = 'Falla cargando Manifiesto del Cliente ('.$this->objCliente->NombClie.')';
+                        GrabarError($arrParaErro);
+                        $intCantErro ++;
+                        $blnErroProc = true;
+                        continue;
+                    }
                     //----------------------------------------------------------
                     // Se verifica la existencia de los campos reglamentarios
                     //----------------------------------------------------------
@@ -1070,11 +1071,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                         $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
                         $arrParaErro['NumeRefe'] = $strNombArch;
                         $arrParaErro['MensErro'] = $strMensErro;
-                        $arrParaErro['ComeErro'] = 'Cargando Manifiesto del Cliente ('.$this->objCliente->NombClie.')';
+                        $arrParaErro['ComeErro'] = 'Falla cargando Manifiesto del Cliente ('.$this->objCliente->NombClie.')';
                         GrabarError($arrParaErro);
                         $intCantErro ++;
                         $blnErroProc = true;
-                        $intNumeLine++;
                         continue;
                     }
                     //-----------------------------------------------------------------------
@@ -1137,6 +1137,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                         $objGuiaMasi->NotaEntregaId       = $this->objNotaEntr->Id;
                         $objGuiaMasi->Kilos               = 0;
                         $objGuiaMasi->PiesCub             = 0;
+                        t('Voy por aqui...');
                         if ($this->objNotaEntr->ServicioImportacion == 'AER') {
                             if ($this->objNotaEntr->EnKilos) {
                                 $objGuiaMasi->Kilos = (float)$decPesoEnvi;
@@ -1169,7 +1170,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                         $blnErroProc = true;
                     }
                 }
-                $intNumeLine++;
             }
         } catch (Exception $e) {
             t('Error cargando el archivo: '.$e->getMessage());
@@ -1265,6 +1265,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected function crearGuiaMasiva(GuiaCacesa $objGuiaMasi, $objCkptProc) {
         $objDatabase = Guias::GetDatabase();
         $objDatabase->TransactionBegin();
+        t('');
+        t('=======================');
+        t('Rutina: crearGuiaMasiva');
         t('Procesando la Guia-Cliente Nro: '.$objGuiaMasi->GuiaExte);
         $objSucuDest = Sucursales::LoadByIata($objGuiaMasi->DestGuia);
         try {
@@ -1301,7 +1304,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objGuia->PiesCub               = $objGuiaMasi->PiesCub;
             $objGuia->NotaEntregaId         = $objGuiaMasi->NotaEntregaId;
             $objGuia->Save();
-            //t('Guia: '.$objGuia->Numero.' creada en la BD');
+            t('Guia: '.$objGuia->Numero.' creada en la BD');
             //------------------------------------------------------------------
             // Una vez creada la guia, se crean las piezas con pesos promedios
             //------------------------------------------------------------------
@@ -1323,7 +1326,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             // Una vez creadas y registradas la Guía y la Pieza, se elimina la Guía Masiva
             //------------------------------------------------------------------------------
             $objGuiaMasi->Delete();
-            t('Piezas creada y guia masiva borrada');
+            t('Pieza creada y guia masiva borrada');
             //----------------------------------
             // Se actualiza la Nota de Entrega
             //----------------------------------

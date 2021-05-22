@@ -3,6 +3,8 @@
     "monolog/monolog": "1.0.*",
     "phpmailer/phpmailer": "~6.0",
     "php-console/php-console": "^3.1",
-    "spipu/html2pdf": "^5.2"
+    "spipu/html2pdf": "^5.2",
+    "shuchkin/simplexls": "^0.9.10",
+    "shuchkin/simplexlsx": "^0.8.24"
   }
 }

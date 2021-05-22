@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'd3875b2596110e474a2ab117a5a790df5f649f2b',
+    'reference' => 'f8e143b23bad0a95d5e1ab83d4f431314af04c9e',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'd3875b2596110e474a2ab117a5a790df5f649f2b',
+      'reference' => 'f8e143b23bad0a95d5e1ab83d4f431314af04c9e',
     ),
     'monolog/monolog' => 
     array (
@@ -46,6 +46,24 @@
       array (
       ),
       'reference' => 'cb3ea134d4d3729e7857737d5f320cce9caf4d32',
+    ),
+    'shuchkin/simplexls' => 
+    array (
+      'pretty_version' => '0.9.10',
+      'version' => '0.9.10.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3b633e3c5e10d9a60f3972a8cf9350444d6482a8',
+    ),
+    'shuchkin/simplexlsx' => 
+    array (
+      'pretty_version' => '0.8.24',
+      'version' => '0.8.24.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '1581dbed25a846f8fee4303849ab58a14f528518',
     ),
     'spipu/html2pdf' => 
     array (

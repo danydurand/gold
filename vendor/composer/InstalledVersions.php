@@ -20,6 +20,8 @@ use Composer\Semver\VersionParser;
 
 
 
+
+
 class InstalledVersions
 {
 private static $installed = array (
@@ -30,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'd3875b2596110e474a2ab117a5a790df5f649f2b',
+    'reference' => 'f8e143b23bad0a95d5e1ab83d4f431314af04c9e',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +44,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'd3875b2596110e474a2ab117a5a790df5f649f2b',
+      'reference' => 'f8e143b23bad0a95d5e1ab83d4f431314af04c9e',
     ),
     'monolog/monolog' => 
     array (
@@ -70,6 +72,24 @@ private static $installed = array (
       array (
       ),
       'reference' => 'cb3ea134d4d3729e7857737d5f320cce9caf4d32',
+    ),
+    'shuchkin/simplexls' => 
+    array (
+      'pretty_version' => '0.9.10',
+      'version' => '0.9.10.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3b633e3c5e10d9a60f3972a8cf9350444d6482a8',
+    ),
+    'shuchkin/simplexlsx' => 
+    array (
+      'pretty_version' => '0.8.24',
+      'version' => '0.8.24.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '1581dbed25a846f8fee4303849ab58a14f528518',
     ),
     'spipu/html2pdf' => 
     array (
@@ -106,7 +126,6 @@ $packages = array();
 foreach (self::getInstalled() as $installed) {
 $packages[] = array_keys($installed['versions']);
 }
-
 
 if (1 === \count($packages)) {
 return $packages[0];
@@ -271,9 +290,23 @@ return $installed[0]['root'];
 
 
 
+
 public static function getRawData()
 {
+@trigger_error('getRawData only returns the first dataset loaded, which may not be what you expect. Use getAllRawData() instead which returns all datasets for all autoloaders present in the process.', E_USER_DEPRECATED);
+
 return self::$installed;
+}
+
+
+
+
+
+
+
+public static function getAllRawData()
+{
+return self::getInstalled();
 }
 
 
@@ -299,6 +332,7 @@ public static function reload($data)
 self::$installed = $data;
 self::$installedByVendor = array();
 }
+
 
 
 
