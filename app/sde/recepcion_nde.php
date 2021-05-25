@@ -25,11 +25,17 @@ class RecepcionNde extends FormularioBaseKaizen {
 
     protected $objProcEjec;
     protected $btnErroProc;
+    protected $intCantPiez;
+    protected $arrPiezNore;
 
     protected function Form_Create() {
         parent::Form_Create();
 
         $this->lblTituForm->Text = 'Recibir Manifiesto';
+        $_SESSION['ValiRepe'] = Parametros::BuscarParametro('VALIREPE','CKPTREPE','Val1',1);
+        if ($_SESSION['ValiRepe']) {
+            t('Voy a validar Ckpt repetidos');
+        }
 
         $this->lstClieCorp_Create();
 
@@ -40,9 +46,8 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->dtgPiezNota_Create();
         $this->btnErroProc_Create();
 
-        //$this->btnRepoDisc_Create();
-
         $this->cargarClientesCorp();
+
     }
 
     //----------------------------
@@ -91,13 +96,6 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->btnErroProc->Text = TextoIcono('eye','Error(es)','F','lg');
         $this->btnErroProc->AddAction(new QClickEvent(), new QServerAction('btnErroProc_Click'));
         $this->btnErroProc->Visible = false;
-        //if ($this->blnEditMode) {
-        //    t('Creando el boton, en modo edicion');
-        //    if (!is_null($this->objProcAnte)) {
-        //        t('El proceso existe, por lo tanto, había errores');
-        //        $this->btnErroProc->Visible = true;
-        //    }
-        //}
     }
 
 
@@ -109,6 +107,9 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->dtgPiezNota->CssClass = 'datagrid';
         $this->dtgPiezNota->AlternateRowStyle->CssClass = 'alternate';
 
+        //$this->dtgPiezNota->Paginator = new QPaginator($this->dtgPiezNota);
+        //$this->dtgPiezNota->ItemsPerPage = 20;
+
         $this->dtgPiezNota->UseAjax = true;
 
         $this->dtgPiezNota->SetDataBinder('dtgPiezNota_Bind');
@@ -116,23 +117,38 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->dtgPiezNotaColumns();
     }
 
+    //protected function dtgPiezNota_Bind() {
+    //    $intCodiMani = $this->lstNotaEntr->SelectedValue;
+    //    $arrPiezMani = GuiaPiezas::LoadArrayPorRecibirEnAlmacen($intCodiMani);
+    //    $this->dtgPiezNota->TotalItemCount = count($arrPiezMani);
+    //
+    //    // Bind the datasource to the datagrid
+    //    $this->dtgPiezNota->DataSource = GuiaPiezas::LoadArrayPorRecibirEnAlmacen(
+    //        $intCodiMani,
+    //        $this->dtgPiezNota->LimitClause
+    //    );
+    //}
+
     protected function dtgPiezNota_Bind() {
-        $arrPiezNore = [];
+        $this->arrPiezNore = [];
         $this->intCantNore = 0;
         if (!is_null($this->lstNotaEntr->SelectedValue)) {
             $intNotaEntr   = $this->lstNotaEntr->SelectedValue;
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Guia->NotaEntregaId,$intNotaEntr);
-            $arrPiezNota   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
-            $arrPiezNore   = [];
+            $objClauOrde   = QQ::Clause();
+            $objClauOrde[] = QQ::OrderBy(QQN::GuiaPiezas()->IdPieza);
+            $arrPiezNota   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+            $this->arrPiezNore = [];
             foreach ($arrPiezNota as $objPiezNota) {
                 if (!$objPiezNota->tieneCheckpoint('RA')) {
-                    $arrPiezNore[] = $objPiezNota;
+                    $this->arrPiezNore[] = $objPiezNota;
                     $this->intCantNore ++;
                 }
             }
         }
-        $this->dtgPiezNota->DataSource = $arrPiezNore;
+        $this->dtgPiezNota->DataSource = $this->arrPiezNore;
+        //$this->dtgPiezNota->TotalItemCount = count($this->arrPiezNore);
     }
 
     protected function dtgPiezNotaColumns() {
@@ -142,11 +158,11 @@ class RecepcionNde extends FormularioBaseKaizen {
         $colPiezIdxx->Width = 160;
         $this->dtgPiezNota->AddColumn($colPiezIdxx);
 
-        $colPiezGuia = new QDataGridColumn($this);
-        $colPiezGuia->Name = QApplication::Translate('Guia');
-        $colPiezGuia->Html = '<?= $_ITEM->Guia->Tracking ?>';
-        $colPiezGuia->Width = 150;
-        $this->dtgPiezNota->AddColumn($colPiezGuia);
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint(); ?>';
+        $colUltiCkpt->Width = 150;
+        $this->dtgPiezNota->AddColumn($colUltiCkpt);
 
         $colLibrPiez = new QDataGridColumn($this);
         $colLibrPiez->Name = QApplication::Translate('Kilos');
@@ -288,9 +304,9 @@ class RecepcionNde extends FormularioBaseKaizen {
                 $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strPiezArri);
                 if ($objGuiaPiez) {
                     t('La pieza existe en la BD');
-                    //------------------------------------------------
-                    // Se verifica que la pieza corresponda a la nde
-                    //------------------------------------------------
+                    //-----------------------------------------------------
+                    // Se verifica que la pieza corresponda al Manifiesto
+                    //-----------------------------------------------------
                     t('Voy a buscar '.$objGuiaPiez->Id.' en el vector');
                     if (!in_array($objGuiaPiez->Id,$arrIdxxPiez)) {
                         $intCantSobr++;
@@ -334,7 +350,7 @@ class RecepcionNde extends FormularioBaseKaizen {
                         $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
                         $arrParaErro['NumeRefe'] = $objGuiaPiez->IdPieza;
                         $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
-                        $arrParaErro['ComeErro'] = 'Registrando el Checkpoint de la Pieza';
+                        $arrParaErro['ComeErro'] = 'Registrando Checkpoint RA a la Pieza';
                         GrabarError($arrParaErro);
 
                         t($strMensUsua);
@@ -359,7 +375,7 @@ class RecepcionNde extends FormularioBaseKaizen {
         $strRelaSobr  = '';
         if (count($arrRelaSobr) > 0) {
             $strRelaSobr = implode(',',$arrRelaSobr);
-            t('Hay sobrandes: '.$strRelaSobr);
+            t('Hay sobrantes: '.$strRelaSobr);
         }
         //------------------------------------------------------------------------
         // Se actualiza el estatus y los contadores del Manifiesto

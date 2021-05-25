@@ -51,6 +51,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $lblUsuaNota;
     protected $lblEstaNota;
 
+    protected $btnExpoGuia;
     protected $btnExpoPiez;
     protected $btnImpoGuia;
     protected $btnAjusGuia;
@@ -157,6 +158,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             if ($this->objNotaEntr->Procesadas > 0) {
                 $this->dtgGuiaMani_Create();
                 $this->dtgPiezMani_Create();
+                $this->btnExpoGuia_Create();
                 $this->btnExpoPiez_Create();
             }
             $this->txtNombArch->Visible = true;
@@ -199,6 +201,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $objClauWher[] = QQ::In(QQN::Guias()->Id,$this->objNotaEntr->IdsDeLasGuias());
         $arrGuiaMani   = Guias::QueryArray(QQ::AndCondition($objClauWher));
         $this->dtgGuiaMani->TotalItemCount = count($arrGuiaMani);
+
         // Bind the datasource to the datagrid
         $this->dtgGuiaMani->DataSource = Guias::QueryArray(
             QQ::AndCondition($objClauWher),
@@ -210,7 +213,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $colNumeTrac = new QDataGridColumn($this);
         $colNumeTrac->Name = QApplication::Translate('Nro Guia');
         $colNumeTrac->Html = '<?= $_ITEM->Tracking ?>';
-        $colNumeTrac->Width = 160;
+        $colNumeTrac->Width = 140;
         $this->dtgGuiaMani->AddColumn($colNumeTrac);
 
         $colSucuDest = new QDataGridColumn($this);
@@ -218,6 +221,16 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $colSucuDest->Html = '<?= $_ITEM->Destino->Iata ?>';
         $this->dtgGuiaMani->AddColumn($colSucuDest);
 
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = 'U.Ckpt';
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint(); ?>';
+        $this->dtgGuiaMani->AddColumn($colUltiCkpt);
+
+        $colCantPiez = new QDataGridColumn($this);
+        $colCantPiez->Name = QApplication::Translate('Piezas');
+        $colCantPiez->Html = '<?= $_ITEM->Piezas; ?>';
+        $this->dtgGuiaMani->AddColumn($colCantPiez);
+        
         $colNombDest = new QDataGridColumn($this);
         $colNombDest->Name = QApplication::Translate('Nombre del Destinatario');
         $colNombDest->Html = '<?= $_ITEM->NombreDestinatario ?>';
@@ -234,11 +247,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $colKiloPiez->Html = '<?= $_ITEM->PiesCub; ?>';
             $this->dtgGuiaMani->AddColumn($colKiloPiez);
         }
-
-        $colCantPiez = new QDataGridColumn($this);
-        $colCantPiez->Name = QApplication::Translate('Piezas');
-        $colCantPiez->Html = '<?= $_ITEM->Piezas; ?>';
-        $this->dtgGuiaMani->AddColumn($colCantPiez);
 
     }
 
@@ -273,16 +281,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function createdtgPiezManiColumns() {
-        //$colNumeTrac = new QDataGridColumn($this);
-        //$colNumeTrac->Name = QApplication::Translate('Nro Guia');
-        /*$colNumeTrac->Html = '<?= $_ITEM->Guia->Tracking ?>';*/
-        //$colNumeTrac->Width = 160;
-        //$this->dtgPiezMani->AddColumn($colNumeTrac);
-
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('IdPieza');
         $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
-        $colIdxxPiez->Width = 160;
+        $colIdxxPiez->Width = 140;
         $this->dtgPiezMani->AddColumn($colIdxxPiez);
 
         $colUbicPiez = new QDataGridColumn($this);
@@ -315,13 +317,22 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     }
 
+    protected function btnExpoGuia_Create() {
+        $this->btnExpoGuia = new QDataGridExporterButton($this, $this->dtgGuiaMani);
+        $this->btnExpoGuia->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
+        $this->btnExpoGuia->Text = '<i class="fa fa-download fa-lg"></i> XLS';
+        $this->btnExpoGuia->HtmlEntities = false;
+        $this->btnExpoGuia->CssClass = 'btn btn-outline-danger btn-sm';
+        //$this->btnExpoGuia->Visible = $this->objUsuario->LogiUsua == 'ddurand';
+    }
+
     protected function btnExpoPiez_Create() {
         $this->btnExpoPiez = new QDataGridExporterButton($this, $this->dtgPiezMani);
         $this->btnExpoPiez->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoPiez->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoPiez->HtmlEntities = false;
         $this->btnExpoPiez->CssClass = 'btn btn-outline-danger btn-sm';
-        $this->btnExpoPiez->Visible = $this->objUsuario->LogiUsua == 'ddurand';
+        //$this->btnExpoPiez->Visible = $this->objUsuario->LogiUsua == 'ddurand';
     }
 
     protected function lstClieCarg_Create() {

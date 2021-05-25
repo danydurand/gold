@@ -29,6 +29,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     <?php $this->txtUbicFisi->RenderWithName(); ?>
                 </div>
                 <div class="col-md-6">
+                    <div class="titulo" style="margin-bottom: .1em">No Recibidas del Manifiesto</div>
                     <?php $this->dtgPiezNota->Render(); ?>
                 </div>
             </div>

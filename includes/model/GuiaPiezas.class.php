@@ -27,6 +27,36 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+		public function POD() {
+            $objPodxPiez = null;
+
+		    if ($this->tieneCheckpoint('OK')) {
+
+                $objPodxPiez = new stdClass();
+                $objPodxPiez->EntregadoA = '';
+                $objPodxPiez->Cedula     = '';
+                $objPodxPiez->Fecha      = '';
+                $objPodxPiez->Hora       = '';
+
+		        $objCkptPodx = $this->ElCheckpoint('OK');
+		        $arrDatoCome = explode('|',$objCkptPodx->Comentario);
+		        if (isset($arrDatoCome[0])) {
+                    $objPodxPiez->EntregadoA = $arrDatoCome[0];
+                }
+                if (isset($arrDatoCome[1])) {
+                    $objPodxPiez->Cedula = $arrDatoCome[1];
+                }
+                if (isset($arrDatoCome[2])) {
+                    $objPodxPiez->Fecha = $arrDatoCome[2];
+                }
+                if (isset($arrDatoCome[3])) {
+                    $objPodxPiez->Hora = $arrDatoCome[3];
+                }
+            }
+
+		    return $objPodxPiez;
+        }
+
 		public function OtrasPiezasDeLaMismaGuia() {
 		    $arrOtraPiez = [];
 		    $arrPiezGuia = $this->Guia->GetGuiaPiezasAsGuiaArray();
@@ -47,6 +77,33 @@
                 $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
             }
             return $arrGuiaIdxx;
+        }
+
+        public static function LoadArrayPorRecibirEnAlmacen($intManiIdxx, $intLimiRegi=100, $objOptionalClauses=null) {
+            // Performing the load manually (instead of using QCubed Query)
+
+            // Get the Database Object for this Class
+            $objDatabase = GuiaPiezas::GetDatabase();
+
+            // Properly Escape All Input Parameters using Database->SqlVariable()
+            $strParam1 = $objDatabase->SqlVariable($intManiIdxx);
+            $strParam2 = $objDatabase->SqlVariable($intLimiRegi);
+
+            // Setup the SQL Query
+            $strQuery = sprintf('
+				SELECT 
+					*
+				FROM
+					v_por_recibir_en_almacen AS `por_recibir_en_almacen`
+				WHERE
+					nota_entrega_id = %s 
+                LIMIT 
+                    %s',
+                $strParam1,$strParam2);
+
+            // Perform the Query and Instantiate the Result
+            $objDbResult = $objDatabase->Query($strQuery);
+            return GuiaPiezas::InstantiateDbResult($objDbResult);
         }
 
         public static function LoadArrayAptasParaTrasladar($intCodiClie, $objOptionalClauses=null) {
@@ -154,6 +211,21 @@
                     QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo, $strCodiCkpt)
                 )
             );
+        }
+
+        public function ElCheckpoint($strCodiCkpt) {
+            $arrCkptPiez = PiezaCheckpoints::QueryArray(
+                QQ::AndCondition(
+                    QQ::Equal(QQN::PiezaCheckpoints()->PiezaId, $this->Id),
+                    QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo, $strCodiCkpt)
+                ),
+                QQ::OrderBy(QQN::PiezaCheckpoints()->Id,false)
+            );
+            if (count($arrCkptPiez) > 0) {
+                return $arrCkptPiez[0];
+            } else {
+                return null;
+            }
         }
 
 

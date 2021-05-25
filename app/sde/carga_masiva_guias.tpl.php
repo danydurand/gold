@@ -65,6 +65,9 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <?php if ($this->lblNumeProc->Text > 0) { ?>
         <div class="row" style="margin-top: 1em;">
             <div class="col-xs-6">
+                <div style="text-align: center">
+                    <?php $this->btnExpoGuia->Render(); ?>
+                </div>
                 <?php $this->dtgGuiaMani->Render(); ?>
             </div>
             <div class="col-xs-6">

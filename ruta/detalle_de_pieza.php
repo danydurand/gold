@@ -10,11 +10,35 @@ $blnTeniPodx = false;
 if (isset($_GET['id'])) {
     $intPiezIdxx = $_GET['id'];
     $intManiIdxx = $_GET['mid'];
+
     t('El Id de la pieza es: '.$intPiezIdxx);
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
+    $strIdxxPiez = explode('-',$objPiezSele->IdPieza)[1];
 
     t('El Id del manifiesto es: '.$intManiIdxx);
     $objManiSele = Containers::Load($intManiIdxx);
+
+    //----------------------
+    // Informacion del POD
+    //----------------------
+    $strQuieReci = '';
+    $strCeduRifx = '';
+    $strFechEntr = '';
+    $strHoraEntr = '';
+    t('En el detalle de la pieza: '.$intPiezIdxx);
+    $objPodxPiez = $objPiezSele->POD();
+    if ($objPodxPiez) {
+        $blnTeniPodx = true;
+        t('Tiene POD.  Entregada a; '.$objPodxPiez->EntregadoA);
+        $strQuieReci = explode(':',$objPodxPiez->EntregadoA)[1];
+        $strCeduRifx = $objPodxPiez->Cedula;
+        $strFechEntr = $objPodxPiez->Fecha;
+        $strHoraEntr = $objPodxPiez->Hora;
+    }
+    $strAcciForm = $blnTeniPodx ? 'borrar_pod.php' : 'grabar_pod.php';
+    $strTextAcci = $blnTeniPodx ? 'Borrar' : 'Grabar';
+    $strIconAcci = $blnTeniPodx ? 'times-circle-o' : 'check';
+
 
     $arrOtraProc = [];
     $arrOtraPiez = $objPiezSele->OtrasPiezasDeLaMismaGuia();
@@ -25,9 +49,16 @@ if (isset($_GET['id'])) {
         //--------------------------------------------------------------------------------------------
         if ($objManiSele->IsGuiaPiezasAsContainerPiezaAssociated($objOtraPiez)) {
             t('Esta pieza esta asociada al manifiesto: '.$objOtraPiez->IdPieza);
-            if ($objOtraPiez->ultimoCheckpoint() != 'OK') {
-                t('La pieza no tiene OK');
-                $arrOtraProc[] = $objOtraPiez;
+            if ($blnTeniPodx){
+                if ($objOtraPiez->ultimoCheckpoint() == 'OK') {
+                    t('La pieza tiene OK');
+                    $arrOtraProc[] = $objOtraPiez;
+                }
+            } else {
+                if ($objOtraPiez->ultimoCheckpoint() != 'OK') {
+                    t('La pieza no tiene OK');
+                    $arrOtraProc[] = $objOtraPiez;
+                }
             }
         }
     }
@@ -39,9 +70,9 @@ if (isset($_GET['id'])) {
 
 
     $strNumeGuia = $objPiezSele->IdPieza;
-    //---------------------------------------------------------------
-    // Si tiene mas de uno, aqui se separan los numeros de telefono
-    //---------------------------------------------------------------
+    //----------------------------------------------------------------
+    // Si tiene mas de uno, aqui se separan los numeros de telefonos
+    //----------------------------------------------------------------
     $strHtmlTele = '';
     $arrVariTele = explode('/',$objPiezSele->Guia->TelefonoDestinatario);
     if (count($arrVariTele) > 0) {
@@ -103,39 +134,22 @@ if (isset($_GET['id'])) {
         $strUltiHora = $arrUltiCkpt['hora'];
     }
 
-    //----------------------
-    // Informacion del POD
-    //----------------------
-    $strQuieReci = '';
-    $strCeduRifx = '';
-    $strFechEntr = '';
-    $strHoraEntr = '';
-    t('En el detalle de la pieza: '.$intPiezIdxx);
-    $objPodxPiez = GuiaPiezaPod::LoadByGuiaPiezaId($intPiezIdxx);
-    if ($objPodxPiez) {
-        $blnTeniPodx = true;
-        t('Tiene POD...');
-        $strQuieReci = $objPodxPiez->EntregadoA;
-        if (strpos($strQuieReci,'|') > 0) {
-            t('El nombre de la persona que recibio, contiene tambien la cedula');
-            $arrQuieReci = explode('|',$strQuieReci);
-            $strQuieReci = $arrQuieReci[0];
-            $strCeduRifx = $arrQuieReci[1];
-        }
-        $strFechEntr = $objPodxPiez->FechaEntrega;
-        $strHoraEntr = $objPodxPiez->HoraEntrega;
-    }
     //--------------------------------------------------------------------------------------------
     // Si se trata de una Guía multi-piezas, se ofrece al Usuario la posibilidad de dar el mismo
     // estatus al resto de la piezas de esa misma guía
     //--------------------------------------------------------------------------------------------
     $strMultPodx = '';
     if (count($arrOtraProc) > 0) {
+        if (!$blnTeniPodx) {
+            $strMensUsua = 'Usted esta trasladando otras Piezas de esta misma Guía.  
+            Desea grabar la misma Información de Entrega a todas ellas !?';
+        } else {
+            $strMensUsua = 'Otas Piezas de esta misma Guía tienen Información de Entrega.
+            Desea eliminar la Información de Entrega de todas ellas !?';
+        }
         $strMultPodx .= '
         <div class="ui-field-contain">
-            <label for="multpodx" style="text-align: center">
-            Desea grabar la misma Información de Entrega a todas las piezas de esta misma Guía !?
-            </label>
+            <label for="multpodx" style="text-align: center">'.$strMensUsua.'</label>
             <fieldset data-role="controlgroup">
                 <label for="siok">Si</label>
                 <input type="radio" name="mult_podx" id="siok" value="S">
@@ -145,9 +159,6 @@ if (isset($_GET['id'])) {
         </div>
         ';
     }
-    $strAcciForm = $blnTeniPodx ? 'borrar_pod.php' : 'grabar_pod.php';
-    $strTextAcci = $blnTeniPodx ? 'Borrar' : 'Grabar';
-    $strIconAcci = $blnTeniPodx ? 'times-circle-o' : 'check';
 
     $strDetaPiez = '
     <div data-role="collapsible-set" data-inset="true" data-theme="a">
@@ -215,6 +226,10 @@ if (isset($_GET['id'])) {
                     <tr>
                         <td class="etiqueta">Nro de Guia:</td>
                         <td class="valor">'.$objPiezSele->Guia->Tracking.'</td>
+                    </tr>
+                    <tr>
+                        <td class="etiqueta">Pieza:</td>
+                        <td class="valor">'.$strIdxxPiez.'</td>
                     </tr>
                     <tr>
                         <td class="etiqueta">Destinatario:</td>

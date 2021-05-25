@@ -38,7 +38,7 @@ class EliminarCkptGuia extends FormularioBaseKaizen {
 
     protected function txtNumeGuia_Create() {
         $this->txtNumeGuia = new QTextBox($this);
-        $this->txtNumeGuia->Name = QApplication::Translate('Número de Guía');
+        $this->txtNumeGuia->Name = QApplication::Translate('Guía/Pieza');
         $this->txtNumeGuia->Required = true;
         $this->txtNumeGuia->AddAction(new QBlurEvent(), new QAjaxAction('txtNumeGuia_Blur'));
     }
@@ -58,6 +58,7 @@ class EliminarCkptGuia extends FormularioBaseKaizen {
 
     protected function txtNumeGuia_Blur() {
         if (strlen($this->txtNumeGuia->Text)) {
+            $this->txtNumeGuia->Text = transformar($this->txtNumeGuia->Text);
             $this->lstChecBoxs->RemoveAllItems();
             $this->lstChecBoxs->Width = 550;
             $blnTodoPais   = BuscarParametro("TodoPais", $this->objUsuario->LogiUsua, "Val1", 0);

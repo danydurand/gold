@@ -48,7 +48,7 @@
         }
 
         public function GetPiezasConCheckpoint($strCodiCkpt) {
-		    t('Obtenidor piezas del contenedor que tengan: '.$strCodiCkpt);
+		    t('Obteniedo piezas del contenedor que tengan: '.$strCodiCkpt);
             //-----------------------------------------------------------------------------
             // Devuelve un vector con los numeros de las piezas del contenedor que tengan
             // el checkpoint indicado
@@ -83,8 +83,6 @@
         public function obtenerPiezasDeLaMaster() {
             return $this->GetGuiaPiezasAsContainerPiezaArray();
         }
-
-        // 4722877
 
         public function obtenerGuiasDeLaMaster() {
             $strCadeSqlx  = "select g.id ";

@@ -11,16 +11,8 @@ $strTituPagi = "Buscar Guías";
         <div data-role="content">
             <form action="lista_de_guias.php?o=bg" method="post">
                 <div class="ui-field-contain">
-                    <label for="tracking">Buscar por Tracking:</label>
+                    <label for="tracking">Nro de Pieza:</label>
                     <input type="text" name="tracking" id="tracking" placeholder="Nro de Tracking">
-                </div>                
-                <div class="ui-field-contain">
-                    <label for="guia">Buscar por Guia:</label>
-                    <input type="number" name="guia" id="guia" placeholder="Nro de Guia">
-                </div>                
-                <div class="ui-field-contain">
-                    <label for="codigo">Buscar por Código:</label>
-                    <input type="text" name="codigo" id="codigo" placeholder="Codigo de cliente">
                 </div>                
                 <div class="ui-field-contain">
                     <input class="ui-nodisc-icon" type="submit" value="<i class='fa fa-search pull-left'></i>Buscar" data-theme="b">

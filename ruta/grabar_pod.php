@@ -38,62 +38,62 @@ if ($blnTodoOkey) {
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
     $strResuRegi = '';
 
-    t('Grabando el POD desde Ruta-Mobile...');
-    $objDatabase = GuiaPiezaPod::GetDatabase();
+    $objDatabase = GuiaPiezas::GetDatabase();
     $objDatabase->TransactionBegin();
-    $objPiezPodx = GuiaPiezaPod::LoadByGuiaPiezaId($intPiezIdxx);
-    if ($objPiezPodx) {
-        t('Ya tenía POD, lo voy a borrar...');
-        $objPiezPodx->Delete();
-    }
-
-    $strMensErro = '';
-    $intCantPiez = 0;
-    try {
-        t('Procesando POD para la pieza: '.$intPiezIdxx);
-        $objPiezPodx = new GuiaPiezaPod();
-        $objPiezPodx->GuiaPiezaId  = $intPiezIdxx;
-        $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
-        $objPiezPodx->FechaEntrega = $strFechEntr;
-        $objPiezPodx->HoraEntrega  = $strHoraEntr;
-        $objPiezPodx->Save();
-        $intCantPiez++;
-        //-----------------------------------------
-        // Mismo POD para multiples piezas
-        //-----------------------------------------
-        if ($strMultPodx == 'S') {
-            if (count($arrOtraProc) > 0) {
-                foreach ($arrOtraProc as $objOtraPiez) {
-                    t('Procesando POD para la pieza: '.$objOtraPiez->Id);
-                    $objPiezPodx = new GuiaPiezaPod();
-                    $objPiezPodx->GuiaPiezaId  = $objOtraPiez->Id;
-                    $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
-                    $objPiezPodx->FechaEntrega = $strFechEntr;
-                    $objPiezPodx->HoraEntrega  = $strHoraEntr;
-                    $objPiezPodx->Save();
-                    $intCantPiez++;
-                }            
-            }
-        }
-    } catch (Exception $e) {
-        $strMensErro = $e->getMessage();
-        t('Error grabando POD desde Ruta-Mobile: '.$e->getMessage());
-        $blnTodoOkey = false;
-        $objDatabase->TransactionRollBack();
-    }
+    t('Grabando el POD desde Ruta-Mobile...');
+    //$objPiezPodx = GuiaPiezaPod::LoadByGuiaPiezaId($intPiezIdxx);
+    //if ($objPiezPodx) {
+    //    t('Ya tenía POD, lo voy a borrar...');
+    //    $objPiezPodx->Delete();
+    //}
+    //
+    //$strMensErro = '';
+    //$intCantPiez = 0;
+    //try {
+    //    t('Procesando POD para la pieza: '.$intPiezIdxx);
+    //    $objPiezPodx = new GuiaPiezaPod();
+    //    $objPiezPodx->GuiaPiezaId  = $intPiezIdxx;
+    //    $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
+    //    $objPiezPodx->FechaEntrega = $strFechEntr;
+    //    $objPiezPodx->HoraEntrega  = $strHoraEntr;
+    //    $objPiezPodx->Save();
+    //    $intCantPiez++;
+    //    //-----------------------------------------
+    //    // Mismo POD para multiples piezas
+    //    //-----------------------------------------
+    //    if ($strMultPodx == 'S') {
+    //        if (count($arrOtraProc) > 0) {
+    //            foreach ($arrOtraProc as $objOtraPiez) {
+    //                t('Procesando POD para la pieza: '.$objOtraPiez->Id);
+    //                $objPiezPodx = new GuiaPiezaPod();
+    //                $objPiezPodx->GuiaPiezaId  = $objOtraPiez->Id;
+    //                $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
+    //                $objPiezPodx->FechaEntrega = $strFechEntr;
+    //                $objPiezPodx->HoraEntrega  = $strHoraEntr;
+    //                $objPiezPodx->Save();
+    //                $intCantPiez++;
+    //            }
+    //        }
+    //    }
+    //} catch (Exception $e) {
+    //    $strMensErro = $e->getMessage();
+    //    t('Error grabando POD desde Ruta-Mobile: '.$e->getMessage());
+    //    $blnTodoOkey = false;
+    //    $objDatabase->TransactionRollBack();
+    //}
 
     if ($blnTodoOkey) {
         $intCantCkpt = 0;
         $objCheckpoint = Checkpoints::LoadByCodigo('OK');
         t('Grabando Checkpoint a la Pieza desde Ruta-Mobile');
         //-------------------------------------------------
-        // Se registra un checkpoint "OK" para la pieza
+        // Se registra un Checkpoint "OK" para la pieza
         //-------------------------------------------------
         $arrDatoCkpt             = array();
         $arrDatoCkpt['NumePiez'] = $objPiezSele->IdPieza;
         $arrDatoCkpt['GuiaAnul'] = $objPiezSele->Guia->Anulada();
         $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-        $arrDatoCkpt['TextCkpt'] = 'ENTREGADO A: '.trim($strNombClie).' | C.I.: '.trim($strCeduRifx).' | '.$strFechEntr.' | '.$strHoraEntr;
+        $arrDatoCkpt['TextCkpt'] = 'Entregado A: '.trim($strNombClie).' | '.trim($strCeduRifx).' | '.$strFechEntr.' | '.$strHoraEntr;
         $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
         $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
         if (!$arrResuGrab['TodoOkey']) {
@@ -114,7 +114,7 @@ if ($blnTodoOkey) {
                         $arrDatoCkpt['NumePiez'] = $objOtraPiez->IdPieza;
                         $arrDatoCkpt['GuiaAnul'] = $objOtraPiez->Guia->Anulada();
                         $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                        $arrDatoCkpt['TextCkpt'] = 'ENTREGADO A: '.trim($strNombClie).' | C.I.: '.trim($strCeduRifx).' | '.$strFechEntr.' | '.$strHoraEntr;
+                        $arrDatoCkpt['TextCkpt'] = 'Entregado A: '.trim($strNombClie).' | '.trim($strCeduRifx).' | '.$strFechEntr.' | '.$strHoraEntr;
                         $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
                         $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
                         if (!$arrResuGrab['TodoOkey']) {

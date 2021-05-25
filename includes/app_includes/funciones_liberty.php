@@ -2134,6 +2134,26 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
             $arrResuGrab['TodoOkey'] = false;
             return $arrResuGrab;
         }
+        $dttFechDhoy = new QDateTime(QDateTime::Now());
+        $dttFechDhoy = $dttFechDhoy->__toString("YYYY-MM-DD");
+        if (isset($_SESSION['ValiRepe'])) {
+            $blnValiRepe = $_SESSION['ValiRepe'];
+            if ($blnValiRepe) {
+                //t('Validando checkpoint repetido');
+                $arrUltiCkpt = $objPiezProc->ultimoCheckpointTodo();
+                $intUltiCkpt = $arrUltiCkpt['checkpoint_id'];
+                $intUltiSucu = $arrUltiCkpt['sucursal_id'];
+                $dttUltiFech = $arrUltiCkpt['fecha'];
+                if (($intUltiCkpt == $intCodiCkpt) &&
+                    ($intUltiSucu == $intCodiSucu) &&
+                    ($dttUltiFech == $dttFechDhoy)) {
+                    t('Checkpoint repetido');
+                    $arrResuGrab['MotiNook'] = "Ckpt Repetido";
+                    $arrResuGrab['TodoOkey'] = false;
+                    return $arrResuGrab;
+                }
+            }
+        }
         t('El checkpoint se puede procesar');
         $objPiezCkpt = new PiezaCheckpoints();
         try {
