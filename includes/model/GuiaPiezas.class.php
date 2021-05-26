@@ -79,7 +79,7 @@
             return $arrGuiaIdxx;
         }
 
-        public static function LoadArrayPorRecibirEnAlmacen($intManiIdxx, $intLimiRegi=100, $objOptionalClauses=null) {
+        public static function LoadArrayPorRecibirEnAlmacen($intManiIdxx, $objOptionalClauses=null) {
             // Performing the load manually (instead of using QCubed Query)
 
             // Get the Database Object for this Class
@@ -87,7 +87,6 @@
 
             // Properly Escape All Input Parameters using Database->SqlVariable()
             $strParam1 = $objDatabase->SqlVariable($intManiIdxx);
-            $strParam2 = $objDatabase->SqlVariable($intLimiRegi);
 
             // Setup the SQL Query
             $strQuery = sprintf('
@@ -96,10 +95,8 @@
 				FROM
 					v_por_recibir_en_almacen AS `por_recibir_en_almacen`
 				WHERE
-					nota_entrega_id = %s 
-                LIMIT 
-                    %s',
-                $strParam1,$strParam2);
+					nota_entrega_id = %s',
+                $strParam1);
 
             // Perform the Query and Instantiate the Result
             $objDbResult = $objDatabase->Query($strQuery);

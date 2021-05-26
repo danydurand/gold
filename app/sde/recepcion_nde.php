@@ -107,8 +107,8 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->dtgPiezNota->CssClass = 'datagrid';
         $this->dtgPiezNota->AlternateRowStyle->CssClass = 'alternate';
 
-        //$this->dtgPiezNota->Paginator = new QPaginator($this->dtgPiezNota);
-        //$this->dtgPiezNota->ItemsPerPage = 20;
+        $this->dtgPiezNota->Paginator = new QPaginator($this->dtgPiezNota);
+        $this->dtgPiezNota->ItemsPerPage = 20;
 
         $this->dtgPiezNota->UseAjax = true;
 
@@ -117,39 +117,46 @@ class RecepcionNde extends FormularioBaseKaizen {
         $this->dtgPiezNotaColumns();
     }
 
-    //protected function dtgPiezNota_Bind() {
-    //    $intCodiMani = $this->lstNotaEntr->SelectedValue;
-    //    $arrPiezMani = GuiaPiezas::LoadArrayPorRecibirEnAlmacen($intCodiMani);
-    //    $this->dtgPiezNota->TotalItemCount = count($arrPiezMani);
-    //
-    //    // Bind the datasource to the datagrid
-    //    $this->dtgPiezNota->DataSource = GuiaPiezas::LoadArrayPorRecibirEnAlmacen(
-    //        $intCodiMani,
-    //        $this->dtgPiezNota->LimitClause
-    //    );
-    //}
-
     protected function dtgPiezNota_Bind() {
-        $this->arrPiezNore = [];
-        $this->intCantNore = 0;
-        if (!is_null($this->lstNotaEntr->SelectedValue)) {
-            $intNotaEntr   = $this->lstNotaEntr->SelectedValue;
-            $objClauWher   = QQ::Clause();
-            $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Guia->NotaEntregaId,$intNotaEntr);
-            $objClauOrde   = QQ::Clause();
-            $objClauOrde[] = QQ::OrderBy(QQN::GuiaPiezas()->IdPieza);
-            $arrPiezNota   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
-            $this->arrPiezNore = [];
-            foreach ($arrPiezNota as $objPiezNota) {
-                if (!$objPiezNota->tieneCheckpoint('RA')) {
-                    $this->arrPiezNore[] = $objPiezNota;
-                    $this->intCantNore ++;
-                }
-            }
+        $intCodiMani = $this->lstNotaEntr->SelectedValue;
+        $arrPiezMani = GuiaPiezas::LoadArrayPorRecibirEnAlmacen($intCodiMani);
+        $this->dtgPiezNota->TotalItemCount = count($arrPiezMani);
+
+        /* @var $objPiezMani GuiaPiezas */
+        $arrPiezNore = [];
+        foreach ($arrPiezMani as $objPiezMani) {
+            $arrPiezNore[] = $objPiezMani->Id;
         }
-        $this->dtgPiezNota->DataSource = $this->arrPiezNore;
-        //$this->dtgPiezNota->TotalItemCount = count($this->arrPiezNore);
+
+        // Bind the datasource to the datagrid
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::In(QQN::GuiaPiezas()->Id,$arrPiezNore);
+        $this->dtgPiezNota->DataSource = GuiaPiezas::QueryArray(
+            QQ::AndCondition($objClauWher),
+            QQ::Clause($this->dtgPiezNota->OrderByClause, $this->dtgPiezNota->LimitClause)
+        );
     }
+
+    //protected function dtgPiezNota_Bind() {
+    //    $this->arrPiezNore = [];
+    //    $this->intCantNore = 0;
+    //    if (!is_null($this->lstNotaEntr->SelectedValue)) {
+    //        $intNotaEntr   = $this->lstNotaEntr->SelectedValue;
+    //        $objClauWher   = QQ::Clause();
+    //        $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Guia->NotaEntregaId,$intNotaEntr);
+    //        $objClauOrde   = QQ::Clause();
+    //        $objClauOrde[] = QQ::OrderBy(QQN::GuiaPiezas()->IdPieza);
+    //        $arrPiezNota   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+    //        $this->arrPiezNore = [];
+    //        foreach ($arrPiezNota as $objPiezNota) {
+    //            if (!$objPiezNota->tieneCheckpoint('RA')) {
+    //                $this->arrPiezNore[] = $objPiezNota;
+    //                $this->intCantNore ++;
+    //            }
+    //        }
+    //    }
+    //    $this->dtgPiezNota->DataSource = $this->arrPiezNore;
+    //}
 
     protected function dtgPiezNotaColumns() {
         $colPiezIdxx = new QDataGridColumn($this);
@@ -380,11 +387,20 @@ class RecepcionNde extends FormularioBaseKaizen {
         //------------------------------------------------------------------------
         // Se actualiza el estatus y los contadores del Manifiesto
         //------------------------------------------------------------------------
-        $objNotaEntr->Estatus           = 'RECIBID@';
-        $objNotaEntr->Recibidas         = $intCantPick;
-        $objNotaEntr->Sobrantes         = $intCantSobr;
-        $objNotaEntr->RelacionSobrantes = $strRelaSobr;
-        $objNotaEntr->Save();
+        try {
+            $objNotaEntr->Estatus           = 'RECIBID@';
+            $objNotaEntr->Recibidas         = $intCantPick;
+            $objNotaEntr->Sobrantes         = $intCantSobr;
+            $objNotaEntr->RelacionSobrantes = $strRelaSobr;
+            $objNotaEntr->Save();
+        } catch (Exception $e){
+            $blnHayxErro = true;
+            $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = $objNotaEntr->Referencia;
+            $arrParaErro['MensErro'] = $e->getMessage();
+            $arrParaErro['ComeErro'] = 'Actualizando estatus y contadores del Manifiesto';
+            GrabarError($arrParaErro);
+        }
         //-----------------
         // Log de cambios
         //-----------------

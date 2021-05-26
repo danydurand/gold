@@ -74,8 +74,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
-        //$algo = $_SESSION['algo'];
-
         $this->objDefaultWaitIcon = new QWaitIcon($this);
 
         $this->strMensProc = '';
@@ -171,7 +169,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         }
         $this->lstServImpo_Change();
 
-        //
+        $this->chkCargReci = disableControl($this->chkCargReci);
     }
 
     //-------------------------
@@ -659,21 +657,18 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         t('==============================');
         t('Creando Guias Gold en el SisCO');
         $this->objCliente = MasterCliente::Load($this->lstClieCarg->SelectedValue);
-        //-----------------------------------------------------------------------------
-        // Invocacion a rutina para crear el proceso. Obteniendo el ID para el mismo.
-        //-----------------------------------------------------------------------------
+
         $strNombProc = 'Creando Guias Gold del Cliente: '.$this->objCliente->NombClie;
         $this->objProcEjec = CrearProceso($strNombProc);
         t('Proceso iniciado...');
+
         //-------------------------------------
         // Se suprimen los errores en pantalla
         //-------------------------------------
         $mixErroOrig = error_reporting();
         error_reporting(0);
         $this->mensaje();
-        //-----------------------------------
-        // Se identifican valores de trabajo
-        //-----------------------------------
+
         $intCantErro = 0;
         $blnTodoOkey = true;
         if ($this->objNotaEntr->CargaRecibida) {
@@ -686,10 +681,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->danger("No existe el Checkpoint $strCodiCkpt");
             return;
         }
-        //t("Checkpoint $strCodiCkpt leido de la BD");
-        //----------------------------------------------------------
+        //-----------------------------------------------------------
         // Se identifican las Guias Masivas pendientes por procesar
-        //----------------------------------------------------------
+        //-----------------------------------------------------------
         $intCantGuia   = 0;
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->Procesada, SinoType::NO);
@@ -704,12 +698,14 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 //------------------------------------------------------------
                 // Se crea una Guia Interna correspondiente a la Guia Masiva
                 //------------------------------------------------------------
-                $this->crearGuiaMasiva($objGuiaMasi, $objCkptMasi);
-                //------------------------------------------------
-                // Se incrementa el contador de guías procesadas.
-                //------------------------------------------------
-                $intCantGuia++;
-                t('Procesando la guia: '.$objGuiaMasi->GuiaExte.' | Contador: '.$intCantGuia);
+                $blnTodoOkey = $this->crearGuiaMasiva($objGuiaMasi, $objCkptMasi);
+                if ($blnTodoOkey) {
+                    // Se incrementa el contador de guías procesadas.
+                    $intCantGuia++;
+                    t('Procesando la guia: '.$objGuiaMasi->GuiaExte.' | Contador: '.$intCantGuia);
+                } else {
+                    $intCantErro++;
+                }
             }
         }
         //------------------------------------------------
@@ -720,8 +716,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         // Se inicializan los parámetros del mensaje al usuario
         //------------------------------------------------------
         $strTextMens = 'El proceso culmino con '.$intCantErro.' error(es)';
-        $strTipoMens = 's';
-        $strIconMens = __iCHEC__;
+        //$strTipoMens = 's';
+        //$strIconMens = __iCHEC__;
         //---------------------------------------------
         // Se indica cuántas guías han sido procesadas
         //---------------------------------------------
@@ -732,33 +728,27 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
         if ($this->objNotaEntr->PorCorregir == 0) {
             t('Voy a marcarlo como RECIBID@');
-            //---------------------------------------------------------------------------------------
             // Si todas las piezas fueron procesadas exitosamente, el Manifiesto se da por Recibido
-            //---------------------------------------------------------------------------------------
             $this->objNotaEntr->Recibidas = $this->objNotaEntr->Procesadas;
             $this->objNotaEntr->Estatus = 'RECIBID@';
         }
         $this->objNotaEntr->Save();
-        t('Manifiesto actulizado...');
-        if (!$blnTodoOkey) {
-            //---------------------------------------------------------------------------------------------------
-            // Si no ha salido to-do bien, se coloca el mensaje construido como un alerta, se indica la cantidad
-            // de errores existentes y se visualiza el botón para acceder a los detalles de los mismos.
-            //---------------------------------------------------------------------------------------------------
-            $strTipoMens = 'd';
-            $strIconMens = __iHAND__;
-            $this->lblNumeErro->Text = $intCantErro;
-            $this->btnErroProc->Visible = true;
-        }
+        t('Manifiesto actualizado...');
+        //if ($blnHuboErro) {
+        //    $strTipoMens = 'd';
+        //    $strIconMens = __iHAND__;
+        //    $this->lblNumeErro->Text = $intCantErro;
+        //    $this->btnErroProc->Visible = true;
+        //}
         //-----------------------------------------
         // Se construye el mensaje correspondiente
         //-----------------------------------------
-        $this->mensaje($strTextMens,'m',$strTipoMens,'i',$strIconMens);
+        //$this->mensaje($strTextMens,'m',$strTipoMens,'i',$strIconMens);
         //--------------------------------------
         // Se almacena el resultado del proceso
         //--------------------------------------
-        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
-        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->HoraFinal      = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario     = $strTextMens;
         $this->objProcEjec->NotificarAdmin = !$blnTodoOkey ? true : false;
         $this->objProcEjec->Save();
         t('Proceso actualizado');
@@ -772,6 +762,12 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $arrLogxCamb['strDescCamb'] = 'Ejecutado';
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
+
+        t('El Id del Proceso es: '.$this->objProcEjec->Id);
+        t('La cantidad de errores: '.$intCantErro);
+        $_SESSION['ProcAnte'] = $this->objProcEjec->Id;
+        $_SESSION['CantErro'] = $intCantErro;
+
         QApplication::Redirect(__SIST__.'/carga_masiva_guias.php/'.$this->objNotaEntr->Id);
     }
 
@@ -1274,8 +1270,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
 
     protected function crearGuiaMasiva(GuiaCacesa $objGuiaMasi, $objCkptProc) {
-        $objDatabase = Guias::GetDatabase();
-        $objDatabase->TransactionBegin();
+        $blnTodoOkey = true;
+        //$objDatabase = Guias::GetDatabase();
+        //$objDatabase->TransactionBegin();
         t('Procesando la Guia-Cliente Nro: '.$objGuiaMasi->GuiaExte);
         $objSucuDest = Sucursales::LoadByIata($objGuiaMasi->DestGuia);
         try {
@@ -1341,16 +1338,18 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objGuia->NotaEntrega->Procesadas  += 1;
             $objGuia->NotaEntrega->PorProcesar -= 1;
             $objGuia->NotaEntrega->Save();
+            //$objDatabase->TransactionCommit();
         } catch (Exception $e) {
+            $blnTodoOkey = false;
             t('Error creando la guia: '.$e->getMessage());
             $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
             $arrParaErro['NumeRefe'] = 'Guia: '.$objGuiaMasi->NumeGuia;
             $arrParaErro['MensErro'] = $e->getMessage();
             $arrParaErro['ComeErro'] = 'Fallo la creacion de la Guia y su Checkpoint';
             GrabarError($arrParaErro);
-            $objDatabase->TransactionRollBack();
+            //$objDatabase->TransactionRollBack();
         }
-        $objDatabase->TransactionCommit();
+        return $blnTodoOkey;
     }
 }
 
