@@ -160,6 +160,20 @@ if (isset($_GET['id'])) {
         ';
     }
 
+    //-----------------------------------------------------------
+    // Si la Empresa transportista maneja un consecutivo propio
+    //-----------------------------------------------------------
+    $strGuiaTran = $objPiezSele->GuiaTransportista();
+    $strSecuTran = '';
+    if ($strGuiaTran != $objPiezSele->IdPieza) {
+        $strSecuTran = '
+        <tr>
+            <td class="etiqueta">Guia-Transportista:</td>
+            <td class="valor">'.$strGuiaTran.'</td>
+        </tr>
+        ';
+    }ch
+
     $strDetaPiez = '
     <div data-role="collapsible-set" data-inset="true" data-theme="a">
         <div class="ui-nodisc-icon" data-role="collapsible" data-collapsed="true" style="font-size:14px;">
@@ -223,6 +237,7 @@ if (isset($_GET['id'])) {
             <h3>Detalles de la Guia</h3>
             <table width="100%">
                 <tbody>
+                    '.$strSecuTran.'
                     <tr>
                         <td class="etiqueta">Nro de Guia:</td>
                         <td class="valor">'.$objPiezSele->Guia->Tracking.'</td>

@@ -27,6 +27,15 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+		public function GuiaTransportista() {
+            $strGuiaTran = $this->IdPieza;
+            $objGuiaTran = GuiaTransportista::LoadByGuiaPiezaId($this->Id);
+            if ($objGuiaTran) {
+                $strGuiaTran = $objGuiaTran->Guia;  // Secuencia Propia del Transportista
+            }
+            return $strGuiaTran;
+        }
+
 		public function POD() {
             $objPodxPiez = null;
 

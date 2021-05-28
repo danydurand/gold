@@ -1,11 +1,12 @@
 <?php 
 require_once('qcubed.inc.php');
-include('layout/header.inc.php');
 $strTituPagi = "Guias del Manifiesto";
 
 /* @var $objPiezMani GuiaPiezas */
+
 $intIdxxMani = $_GET['id'];
 $objManiSele = Containers::Load($intIdxxMani);
+$blnSecuProp = $objManiSele->Transportista->SecuenciaPropia;
 $arrPiezMani = $objManiSele->GetGuiaPiezasAsContainerPiezaArray();
 $strListGuia = '';
 if ($arrPiezMani) {
@@ -23,12 +24,13 @@ if ($arrPiezMani) {
         if (isset($arrUltiCkpt)) {
             $strUltiCome = $arrUltiCkpt['comentario'];
         }
+        $strPiezMani = $objPiezMani->GuiaTransportista();
 
         $strListGuia .= '
             <li>
                 <a href="detalle_de_pieza.php?id='.$objPiezMani->Id.'&mid='.$objManiSele->Id.'" data-rel="dialog">
                     <img src="images/list.png" class="extra">
-                    <h6>'.$objPiezMani->IdPieza.'</h6>
+                    <h6>'.$strPiezMani.'</h6>
                     <p><b>Destinatario:</b> '.$objPiezMani->Guia->NombreDestinatario.'</p>
                     <p><b>Destino:</b> '.$objPiezMani->Guia->Destino->Iata.'</p>
                     <p><b>Status:</b> '.$strUltiCome.'</p>
@@ -45,6 +47,8 @@ if ($arrPiezMani) {
     ';
 }
 ?>
+<?php include('layout/header.inc.php'); ?>
+
     <div data-role="page">
 
         <?php include('layout/page_header.inc.php'); ?>

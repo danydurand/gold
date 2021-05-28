@@ -4,9 +4,9 @@ require_once('qcubed.inc.php');
 $blnTodoOkey = true;
 $strMensErro = '';
 if (isset($_POST['login'])) {
-    $strLogiUsua = $_POST['login'];
+    $strLogiUsua = strtolower($_POST['login']);
     $objChofer = Chofer::LoadByLogin($strLogiUsua);
-    //t("el login es $strLogiUsua");
+    t("El login del Chofer que se esta conectando es: $strLogiUsua");
     if (!$objChofer) {
         $blnTodoOkey = false;
         $strMensErro = 'Chofer Desconocido';

@@ -301,7 +301,9 @@ class CargaGuiasTransportista extends FormularioBaseKaizen {
                 // Se elimina cualquier registro previo asociado a la Pieza
                 //-----------------------------------------------------------
                 $objGuiaTran = GuiaTransportista::LoadByGuiaPiezaId($arrContVali['IdxxPiez']);
-                $objGuiaTran->Delete();
+                if ($objGuiaTran) {
+                    $objGuiaTran->Delete();
+                }
             } else {
                 $strTextErro = "Linea $intNumeLine | Col 2 | La Pieza # $strIdxxPiez, no existe";
                 $blnTodoOkey = false;
