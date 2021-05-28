@@ -9,8 +9,8 @@ if (!isset($_SESSION['menu'])) {
             <li><a href="kpis_operativos.php" data-theme="d" data-transition="flip"><i class="fa fa-lg fa-ticket"></i>
                     <div class="sp"></div>KPI's Operativos</a>
             </li>
-            <li><a href="en_construccion.php" data-theme="d"><i class="fa fa-lg fa-tv"></i>
-                    <div class="sp"></div>Medios</a>
+            <li><a href="kpis_sistemas.php" data-theme="d"><i class="fa fa-lg fa-tv"></i>
+                    <div class="sp"></div>Sistema</a>
             </li>
             <li><a href="lista_de_gastos.php" data-theme="d"><i class="fa fa-lg fa-money"></i>
                     <div class="sp"></div>Gastos</a>

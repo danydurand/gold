@@ -66,13 +66,7 @@ class TransportistaListForm extends TransportistaListFormBase {
 		$this->dtgTransportistas->MetaAddColumn('Nombre');
 		$this->dtgTransportistas->MetaAddColumn('Rif');
 		$this->dtgTransportistas->MetaAddColumn('Activo');
-		//$this->dtgTransportistas->MetaAddColumn('Observacion');
-		//$this->dtgTransportistas->MetaAddColumn('CreatedAt');
-		//$this->dtgTransportistas->MetaAddColumn('UpdatedAt');
-		//$this->dtgTransportistas->MetaAddColumn('DeletedAt');
-		//$this->dtgTransportistas->MetaAddColumn('CreatedBy');
-		//$this->dtgTransportistas->MetaAddColumn('UpdatedBy');
-		//$this->dtgTransportistas->MetaAddColumn('DeletedBy');
+		$this->dtgTransportistas->MetaAddColumn('SecuenciaPropia');
 
         $this->btnExpoExce_Create();
 

@@ -80,6 +80,7 @@ abstract class TransportistaListFormBase extends QForm {
         $this->dtgTransportistas->MetaAddColumn('Nombre');
         $this->dtgTransportistas->MetaAddColumn('Rif');
         $this->dtgTransportistas->MetaAddColumn('Activo');
+        $this->dtgTransportistas->MetaAddColumn('SecuenciaPropia');
         $this->dtgTransportistas->MetaAddColumn('Observacion');
         $this->dtgTransportistas->MetaAddColumn('CreatedAt');
         $this->dtgTransportistas->MetaAddColumn('UpdatedAt');

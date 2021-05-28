@@ -225,7 +225,7 @@
 		 * @var string strDireccion
 		 */
 		protected $strDireccion;
-		const DireccionMaxLength = 250;
+		const DireccionMaxLength = 1000;
 		const DireccionDefault = null;
 
 

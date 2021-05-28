@@ -223,7 +223,7 @@
 		 * @var string strDireccionRemitente
 		 */
 		protected $strDireccionRemitente;
-		const DireccionRemitenteMaxLength = 250;
+		const DireccionRemitenteMaxLength = 500;
 		const DireccionRemitenteDefault = null;
 
 
@@ -250,7 +250,7 @@
 		 * @var string strDireccionDestinatario
 		 */
 		protected $strDireccionDestinatario;
-		const DireccionDestinatarioMaxLength = 250;
+		const DireccionDestinatarioMaxLength = 500;
 		const DireccionDestinatarioDefault = null;
 
 

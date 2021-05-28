@@ -160,7 +160,7 @@
 		 * @var string strDireRemi
 		 */
 		protected $strDireRemi;
-		const DireRemiMaxLength = 300;
+		const DireRemiMaxLength = 500;
 		const DireRemiDefault = null;
 
 
@@ -187,7 +187,7 @@
 		 * @var string strDireDest
 		 */
 		protected $strDireDest;
-		const DireDestMaxLength = 300;
+		const DireDestMaxLength = 500;
 		const DireDestDefault = null;
 
 
@@ -196,7 +196,7 @@
 		 * @var string strTeleDest
 		 */
 		protected $strTeleDest;
-		const TeleDestMaxLength = 50;
+		const TeleDestMaxLength = 100;
 		const TeleDestDefault = null;
 
 

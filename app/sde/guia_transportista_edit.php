@@ -2,25 +2,25 @@
 // Load the QCubed Development Framework
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__.'/protected.inc.php');
-require_once(__FORMBASE_CLASSES__ . '/TransportistaEditFormBase.class.php');
+require_once(__FORMBASE_CLASSES__ . '/GuiaTransportistaEditFormBase.class.php');
 
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the Transportista class.  It uses the code-generated
- * TransportistaMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a Transportista columns.
+ * of the GuiaTransportista class.  It uses the code-generated
+ * GuiaTransportistaMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a GuiaTransportista columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both transportista_edit.php AND
- * transportista_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both guia_transportista_edit.php AND
+ * guia_transportista_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage Drafts
  */
-class TransportistaEditForm extends TransportistaEditFormBase {
+class GuiaTransportistaEditForm extends GuiaTransportistaEditFormBase {
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -35,28 +35,20 @@ class TransportistaEditForm extends TransportistaEditFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
-		// Use the CreateFromPathInfo shortcut (this can also be done manually using the TransportistaMetaControl constructor)
+		// Use the CreateFromPathInfo shortcut (this can also be done manually using the GuiaTransportistaMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-		$this->mctTransportista = TransportistaMetaControl::CreateFromPathInfo($this);
+		$this->mctGuiaTransportista = GuiaTransportistaMetaControl::CreateFromPathInfo($this);
 
-		// Call MetaControl's methods to create qcontrols based on Transportista's data fields
-		$this->lblId = $this->mctTransportista->lblId_Create();
-		$this->txtNombre = $this->mctTransportista->txtNombre_Create();
-		$this->txtNombre->Width = 250;
-		$this->txtRif = $this->mctTransportista->txtRif_Create();
-		$this->chkSecuenciaPropia = $this->mctTransportista->chkSecuenciaPropia_Create();
-		$this->chkActivo = $this->mctTransportista->chkActivo_Create();
-		$this->txtObservacion = $this->mctTransportista->txtObservacion_Create();
-		$this->txtObservacion->TextMode = QTextMode::MultiLine;
-		$this->txtObservacion->Width = 250;
-		$this->txtObservacion->Rows = 2;
-
-		//$this->lblCreatedAt = $this->mctTransportista->lblCreatedAt_Create();
-		//$this->lblUpdatedAt = $this->mctTransportista->lblUpdatedAt_Create();
-		//$this->lblDeletedAt = $this->mctTransportista->lblDeletedAt_Create();
-		//$this->txtCreatedBy = $this->mctTransportista->txtCreatedBy_Create();
-		//$this->txtUpdatedBy = $this->mctTransportista->txtUpdatedBy_Create();
-		//$this->txtDeletedBy = $this->mctTransportista->txtDeletedBy_Create();
+		// Call MetaControl's methods to create qcontrols based on GuiaTransportista's data fields
+		$this->lblId = $this->mctGuiaTransportista->lblId_Create();
+		$this->lstTransportista = $this->mctGuiaTransportista->lstTransportista_Create();
+		$this->lstGuiaPieza = $this->mctGuiaTransportista->lstGuiaPieza_Create();
+		$this->txtGuia = $this->mctGuiaTransportista->txtGuia_Create();
+		$this->txtProcesoId = $this->mctGuiaTransportista->txtProcesoId_Create();
+		$this->lblCreatedAt = $this->mctGuiaTransportista->lblCreatedAt_Create();
+		$this->lblUpdatedAt = $this->mctGuiaTransportista->lblUpdatedAt_Create();
+		$this->txtCreatedBy = $this->mctGuiaTransportista->txtCreatedBy_Create();
+		$this->txtUpdatedBy = $this->mctGuiaTransportista->txtUpdatedBy_Create();
 
 	}
 
@@ -65,17 +57,17 @@ class TransportistaEditForm extends TransportistaEditFormBase {
 	//----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctTransportista->Transportista && !isset($_SESSION['DataTransportista'])) {
-            $_SESSION['DataTransportista'] = serialize(array($this->mctTransportista->Transportista));
+        if ($this->mctGuiaTransportista->GuiaTransportista && !isset($_SESSION['DataGuiaTransportista'])) {
+            $_SESSION['DataGuiaTransportista'] = serialize(array($this->mctGuiaTransportista->GuiaTransportista));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataTransportista']);
+        $this->arrDataTabl = unserialize($_SESSION['DataGuiaTransportista']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctTransportista->Transportista->Id) {
+            if ($objTable->Id == $this->mctGuiaTransportista->GuiaTransportista->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -90,7 +82,7 @@ class TransportistaEditForm extends TransportistaEditFormBase {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('Transportista',$this->mctTransportista->Transportista->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('GuiaTransportista',$this->mctGuiaTransportista->GuiaTransportista->Id);
     }
 
 
@@ -101,22 +93,22 @@ class TransportistaEditForm extends TransportistaEditFormBase {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/guia_transportista_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/guia_transportista_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/guia_transportista_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/transportista_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/guia_transportista_edit.php/'.$objRegiTabl->Id);
     }
 
 
@@ -125,33 +117,33 @@ class TransportistaEditForm extends TransportistaEditFormBase {
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
-		$objRegiViej = clone $this->mctTransportista->Transportista;
-		$this->mctTransportista->SaveTransportista();
-		if ($this->mctTransportista->EditMode) {
+		$objRegiViej = clone $this->mctGuiaTransportista->GuiaTransportista;
+		$this->mctGuiaTransportista->SaveGuiaTransportista();
+		if ($this->mctGuiaTransportista->EditMode) {
 			//---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
 			// de algun cambio en algun dato 
 			//---------------------------------------------------------------------
-			$objRegiNuev = $this->mctTransportista->Transportista;
+			$objRegiNuev = $this->mctGuiaTransportista->GuiaTransportista;
 			$objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
 			if ($objResuComp->FriendlyComparisonStatus == 'different') {
 				//------------------------------------------
 				// En caso de que el objeto haya cambiado 
 				//------------------------------------------
-				$arrLogxCamb['strNombTabl'] = 'Transportista';
-				$arrLogxCamb['intRefeRegi'] = $this->mctTransportista->Transportista->Id;
-				$arrLogxCamb['strNombRegi'] = $this->mctTransportista->Transportista->Nombre;
+				$arrLogxCamb['strNombTabl'] = 'GuiaTransportista';
+				$arrLogxCamb['intRefeRegi'] = $this->mctGuiaTransportista->GuiaTransportista->Id;
+				$arrLogxCamb['strNombRegi'] = $this->mctGuiaTransportista->GuiaTransportista->Nombre;
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
-                $arrLogxCamb['strEnlaEnti'] = __SIST__.'/transportista_edit.php/'.$this->mctTransportista->Transportista->Id;
+                $arrLogxCamb['strEnlaEnti'] = __SIST__.'/guia_transportista_edit.php/'.$this->mctGuiaTransportista->GuiaTransportista->Id;
 				LogDeCambios($arrLogxCamb);
                 $this->success('Transacción Exitosa !!!');
 			}
 		} else {
-			$arrLogxCamb['strNombTabl'] = 'Transportista';
-			$arrLogxCamb['intRefeRegi'] = $this->mctTransportista->Transportista->Id;
-			$arrLogxCamb['strNombRegi'] = $this->mctTransportista->Transportista->Nombre;
+			$arrLogxCamb['strNombTabl'] = 'GuiaTransportista';
+			$arrLogxCamb['intRefeRegi'] = $this->mctGuiaTransportista->GuiaTransportista->Id;
+			$arrLogxCamb['strNombRegi'] = $this->mctGuiaTransportista->GuiaTransportista->Nombre;
 			$arrLogxCamb['strDescCamb'] = "Creado";
-            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/transportista_edit.php/'.$this->mctTransportista->Transportista->Id;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/guia_transportista_edit.php/'.$this->mctGuiaTransportista->GuiaTransportista->Id;
 			LogDeCambios($arrLogxCamb);
             $this->success('Transacción Exitosa !!!');
 		}
@@ -162,7 +154,7 @@ class TransportistaEditForm extends TransportistaEditFormBase {
         // Se verifica la integridad referencial
         //----------------------------------------
         $blnTodoOkey = true;
-        $arrTablRela = $this->mctTransportista->TablasRelacionadasTransportista();
+        $arrTablRela = $this->mctGuiaTransportista->TablasRelacionadasGuiaTransportista();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
             $this->warning('Existen registros relacionados en %s',$strTablRela);
@@ -170,10 +162,10 @@ class TransportistaEditForm extends TransportistaEditFormBase {
         }
         if ($blnTodoOkey) {
             // Delegate "Delete" processing to the ArancelMetaControl
-            $this->mctTransportista->DeleteTransportista();
-            $arrLogxCamb['strNombTabl'] = 'Transportista';
-            $arrLogxCamb['intRefeRegi'] = $this->mctTransportista->Transportista->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctTransportista->Transportista->Nombre;
+            $this->mctGuiaTransportista->DeleteGuiaTransportista();
+            $arrLogxCamb['strNombTabl'] = 'GuiaTransportista';
+            $arrLogxCamb['intRefeRegi'] = $this->mctGuiaTransportista->GuiaTransportista->Id;
+            $arrLogxCamb['strNombRegi'] = $this->mctGuiaTransportista->GuiaTransportista->Nombre;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();
@@ -182,6 +174,6 @@ class TransportistaEditForm extends TransportistaEditFormBase {
 }
 
 // Go ahead and run this form object to render the page and its event handlers, implicitly using
-// transportista_edit.tpl.php as the included HTML template file
-TransportistaEditForm::Run('TransportistaEditForm');
+// guia_transportista_edit.tpl.php as the included HTML template file
+GuiaTransportistaEditForm::Run('GuiaTransportistaEditForm');
 ?>

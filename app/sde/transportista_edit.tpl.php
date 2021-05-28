@@ -22,6 +22,7 @@
 				<?php $this->txtNombre->RenderWithName(); ?>
 				<?php $this->txtRif->RenderWithName(); ?>
 				<?php $this->chkActivo->RenderWithName(); ?>
+				<?php $this->chkSecuenciaPropia->RenderWithName(); ?>
 				<?php $this->txtObservacion->RenderWithName(); ?>
 				<?php //$this->lblCreatedAt->RenderWithName(); ?>
 				<?php //$this->lblUpdatedAt->RenderWithName(); ?>

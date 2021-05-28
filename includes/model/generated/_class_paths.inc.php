@@ -657,6 +657,13 @@
 		QApplicationBase::$ClassFile['guiapodmetacontrol'] = __META_CONTROLS__ . '/GuiaPodMetaControl.class.php';
 		QApplicationBase::$ClassFile['guiapoddatagrid'] = __META_CONTROLS__ . '/GuiaPodDataGrid.class.php';
 
+	// ClassPaths for the GuiaTransportista class
+		QApplicationBase::$ClassFile['guiatransportista'] = __MODEL__ . '/GuiaTransportista.class.php';
+		QApplicationBase::$ClassFile['qqnodeguiatransportista'] = __MODEL__ . '/GuiaTransportista.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeguiatransportista'] = __MODEL__ . '/GuiaTransportista.class.php';
+		QApplicationBase::$ClassFile['guiatransportistametacontrol'] = __META_CONTROLS__ . '/GuiaTransportistaMetaControl.class.php';
+		QApplicationBase::$ClassFile['guiatransportistadatagrid'] = __META_CONTROLS__ . '/GuiaTransportistaDataGrid.class.php';
+
 	// ClassPaths for the Guias class
 		QApplicationBase::$ClassFile['guias'] = __MODEL__ . '/Guias.class.php';
 		QApplicationBase::$ClassFile['qqnodeguias'] = __MODEL__ . '/Guias.class.php';

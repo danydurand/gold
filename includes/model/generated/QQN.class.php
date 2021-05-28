@@ -565,6 +565,12 @@
 			return new QQNodeGuiaPod('guia_pod', null, null);
 		}
 		/**
+		 * @return QQNodeGuiaTransportista
+		 */
+		static public function GuiaTransportista() {
+			return new QQNodeGuiaTransportista('guia_transportista', null, null);
+		}
+		/**
 		 * @return QQNodeGuias
 		 */
 		static public function Guias() {

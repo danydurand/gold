@@ -294,7 +294,7 @@
 		 * @var string strRelacionSobrantes
 		 */
 		protected $strRelacionSobrantes;
-		const RelacionSobrantesMaxLength = 250;
+		const RelacionSobrantesMaxLength = 1000;
 		const RelacionSobrantesDefault = null;
 
 

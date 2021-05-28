@@ -55,6 +55,7 @@ abstract class TransportistaEditFormBase extends QForm {
 	protected $txtNombre;
 	protected $txtRif;
 	protected $chkActivo;
+	protected $chkSecuenciaPropia;
 	protected $txtObservacion;
 	protected $lblCreatedAt;
 	protected $lblUpdatedAt;
@@ -131,6 +132,7 @@ abstract class TransportistaEditFormBase extends QForm {
 		$this->txtNombre = $this->mctTransportista->txtNombre_Create();
 		$this->txtRif = $this->mctTransportista->txtRif_Create();
 		$this->chkActivo = $this->mctTransportista->chkActivo_Create();
+		$this->chkSecuenciaPropia = $this->mctTransportista->chkSecuenciaPropia_Create();
 		$this->txtObservacion = $this->mctTransportista->txtObservacion_Create();
 		$this->lblCreatedAt = $this->mctTransportista->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctTransportista->lblUpdatedAt_Create();
