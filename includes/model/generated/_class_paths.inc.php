@@ -41,6 +41,13 @@
 		QApplicationBase::$ClassFile['auditsmetacontrol'] = __META_CONTROLS__ . '/AuditsMetaControl.class.php';
 		QApplicationBase::$ClassFile['auditsdatagrid'] = __META_CONTROLS__ . '/AuditsDataGrid.class.php';
 
+	// ClassPaths for the Bag class
+		QApplicationBase::$ClassFile['bag'] = __MODEL__ . '/Bag.class.php';
+		QApplicationBase::$ClassFile['qqnodebag'] = __MODEL__ . '/Bag.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodebag'] = __MODEL__ . '/Bag.class.php';
+		QApplicationBase::$ClassFile['bagmetacontrol'] = __META_CONTROLS__ . '/BagMetaControl.class.php';
+		QApplicationBase::$ClassFile['bagdatagrid'] = __META_CONTROLS__ . '/BagDataGrid.class.php';
+
 	// ClassPaths for the Banco class
 		QApplicationBase::$ClassFile['banco'] = __MODEL__ . '/Banco.class.php';
 		QApplicationBase::$ClassFile['qqnodebanco'] = __MODEL__ . '/Banco.class.php';
@@ -734,6 +741,13 @@
 		QApplicationBase::$ClassFile['manifiestometacontrol'] = __META_CONTROLS__ . '/ManifiestoMetaControl.class.php';
 		QApplicationBase::$ClassFile['manifiestodatagrid'] = __META_CONTROLS__ . '/ManifiestoDataGrid.class.php';
 
+	// ClassPaths for the ManifiestoExp class
+		QApplicationBase::$ClassFile['manifiestoexp'] = __MODEL__ . '/ManifiestoExp.class.php';
+		QApplicationBase::$ClassFile['qqnodemanifiestoexp'] = __MODEL__ . '/ManifiestoExp.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodemanifiestoexp'] = __MODEL__ . '/ManifiestoExp.class.php';
+		QApplicationBase::$ClassFile['manifiestoexpmetacontrol'] = __META_CONTROLS__ . '/ManifiestoExpMetaControl.class.php';
+		QApplicationBase::$ClassFile['manifiestoexpdatagrid'] = __META_CONTROLS__ . '/ManifiestoExpDataGrid.class.php';
+
 	// ClassPaths for the MasCartaDevo class
 		QApplicationBase::$ClassFile['mascartadevo'] = __MODEL__ . '/MasCartaDevo.class.php';
 		QApplicationBase::$ClassFile['qqnodemascartadevo'] = __MODEL__ . '/MasCartaDevo.class.php';
@@ -747,6 +761,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodemastiporuta'] = __MODEL__ . '/MasTipoRuta.class.php';
 		QApplicationBase::$ClassFile['mastiporutametacontrol'] = __META_CONTROLS__ . '/MasTipoRutaMetaControl.class.php';
 		QApplicationBase::$ClassFile['mastiporutadatagrid'] = __META_CONTROLS__ . '/MasTipoRutaDataGrid.class.php';
+
+	// ClassPaths for the MasterAwb class
+		QApplicationBase::$ClassFile['masterawb'] = __MODEL__ . '/MasterAwb.class.php';
+		QApplicationBase::$ClassFile['qqnodemasterawb'] = __MODEL__ . '/MasterAwb.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodemasterawb'] = __MODEL__ . '/MasterAwb.class.php';
+		QApplicationBase::$ClassFile['masterawbmetacontrol'] = __META_CONTROLS__ . '/MasterAwbMetaControl.class.php';
+		QApplicationBase::$ClassFile['masterawbdatagrid'] = __META_CONTROLS__ . '/MasterAwbDataGrid.class.php';
 
 	// ClassPaths for the MasterCliente class
 		QApplicationBase::$ClassFile['mastercliente'] = __MODEL__ . '/MasterCliente.class.php';

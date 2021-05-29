@@ -37,6 +37,12 @@
 			return new QQNodeAudits('audits', null, null);
 		}
 		/**
+		 * @return QQNodeBag
+		 */
+		static public function Bag() {
+			return new QQNodeBag('bag', null, null);
+		}
+		/**
 		 * @return QQNodeBanco
 		 */
 		static public function Banco() {
@@ -631,6 +637,12 @@
 			return new QQNodeManifiesto('manifiesto', null, null);
 		}
 		/**
+		 * @return QQNodeManifiestoExp
+		 */
+		static public function ManifiestoExp() {
+			return new QQNodeManifiestoExp('manifiesto_exp', null, null);
+		}
+		/**
 		 * @return QQNodeMasCartaDevo
 		 */
 		static public function MasCartaDevo() {
@@ -641,6 +653,12 @@
 		 */
 		static public function MasTipoRuta() {
 			return new QQNodeMasTipoRuta('mas_tipo_ruta', null, null);
+		}
+		/**
+		 * @return QQNodeMasterAwb
+		 */
+		static public function MasterAwb() {
+			return new QQNodeMasterAwb('master_awb', null, null);
 		}
 		/**
 		 * @return QQNodeMasterCliente

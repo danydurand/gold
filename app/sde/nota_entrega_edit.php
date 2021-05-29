@@ -166,17 +166,17 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
         $colTracGuia->Width = 110;
         $this->dtgGuiaNota->AddColumn($colTracGuia);
 
-        $colOrigGuia = new QDataGridColumn($this);
-        $colOrigGuia->Name = QApplication::Translate('Orig');
-        $colOrigGuia->Html = '<?= $_ITEM->Origen->Iata ?>';
-        $colOrigGuia->Width = 80;
-        $this->dtgGuiaNota->AddColumn($colOrigGuia);
-
         $colDestGuia = new QDataGridColumn($this);
         $colDestGuia->Name = QApplication::Translate('Dest');
         $colDestGuia->Html = '<?= $_ITEM->Destino->Iata ?>';
-        $colDestGuia->Width = 80;
+        $colDestGuia->Width = 60;
         $this->dtgGuiaNota->AddColumn($colDestGuia);
+
+        $colZonaGuia = new QDataGridColumn($this);
+        $colZonaGuia->Name = 'Zona';
+        $colZonaGuia->Html = '<?= $_ITEM->__zona() ?>';
+        $colZonaGuia->Width = 120;
+        $this->dtgGuiaNota->AddColumn($colZonaGuia);
 
         $colPiezGuia = new QDataGridColumn($this);
         $colPiezGuia->Name = QApplication::Translate('Piezas');
@@ -198,14 +198,11 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
             $this->dtgGuiaNota->AddColumn($colPiesGuia);
         }
 
-        //$colVoluGuia = new QDataGridColumn($this);
-        //$colVoluGuia->Name = QApplication::Translate('Volumen');
-        /*$colVoluGuia->Html = '<?= $_ITEM->Volumen ?>';*/
-        //$colVoluGuia->Wrap = true;
-        //$this->dtgGuiaNota->AddColumn($colVoluGuia);
-
     }
 
+    public function ZonaGuia_Render() {
+
+    }
 
     protected function dtgNotaConc_Create() {
         $this->dtgNotaConc = new QDataGrid($this);

@@ -34,6 +34,8 @@
 	 * @property Guias $Guia the value for the Guias object referenced by intGuiaId (Not Null)
 	 * @property GuiaPiezaPod $GuiaPiezaPodAsGuiaPieza the value for the GuiaPiezaPod object that uniquely references this GuiaPiezas
 	 * @property GuiaTransportista $GuiaTransportistaAsGuiaPieza the value for the GuiaTransportista object that uniquely references this GuiaPiezas
+	 * @property-read Bag $_BagAsPieza the value for the private _objBagAsPieza (Read-Only) if set due to an expansion on the bag_pieza_assn association table
+	 * @property-read Bag[] $_BagAsPiezaArray the value for the private _objBagAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the bag_pieza_assn association table
 	 * @property-read Containers $_ContainersAsContainerPieza the value for the private _objContainersAsContainerPieza (Read-Only) if set due to an expansion on the container_pieza_assn association table
 	 * @property-read Containers[] $_ContainersAsContainerPiezaArray the value for the private _objContainersAsContainerPiezaArray (Read-Only) if set due to an ExpandAsArray on the container_pieza_assn association table
 	 * @property-read SdeContenedor $_SdeContenedorAsGuia the value for the private _objSdeContenedorAsGuia (Read-Only) if set due to an expansion on the sde_contenedor_guia_assn association table
@@ -179,6 +181,22 @@
 		protected $strUpdatedAt;
 		const UpdatedAtDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single BagAsPieza object
+		 * (of type Bag), if this GuiaPiezas object was restored with
+		 * an expansion on the bag_pieza_assn association table.
+		 * @var Bag _objBagAsPieza;
+		 */
+		private $_objBagAsPieza;
+
+		/**
+		 * Private member variable that stores a reference to an array of BagAsPieza objects
+		 * (of type Bag[]), if this GuiaPiezas object was restored with
+		 * an ExpandAsArray on the bag_pieza_assn association table.
+		 * @var Bag[] _objBagAsPiezaArray;
+		 */
+		private $_objBagAsPiezaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single ContainersAsContainerPieza object
@@ -918,6 +936,22 @@
 			}
 
 				
+			// Check for BagAsPieza Virtual Binding
+			$strAlias = $strAliasPrefix . 'bagaspieza__bag_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['bagaspieza']) ? null : $objExpansionAliasArray['bagaspieza']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objBagAsPiezaArray) {
+				$objToReturn->_objBagAsPiezaArray = array();
+			}
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objBagAsPiezaArray[] = Bag::InstantiateDbRow($objDbRow, $strAliasPrefix . 'bagaspieza__bag_id__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objBagAsPieza)) {
+					$objToReturn->_objBagAsPieza = Bag::InstantiateDbRow($objDbRow, $strAliasPrefix . 'bagaspieza__bag_id__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for ContainersAsContainerPieza Virtual Binding
 			$strAlias = $strAliasPrefix . 'containersascontainerpieza__container_id__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1112,6 +1146,37 @@
 		////////////////////////////////////////////////////
 		// INDEX-BASED LOAD METHODS (Array via Many to Many)
 		////////////////////////////////////////////////////
+			/**
+		 * Load an array of Bag objects for a given BagAsPieza
+		 * via the bag_pieza_assn table
+		 * @param integer $intBagId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByBagAsPieza($intBagId, $objOptionalClauses = null, $objClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByBagAsPieza query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->BagAsPieza->BagId, $intBagId),
+					$objOptionalClauses, $objClauses 
+				);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases for a given BagAsPieza
+		 * via the bag_pieza_assn table
+		 * @param integer $intBagId
+		 * @return int
+		*/
+		public static function CountByBagAsPieza($intBagId) {
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->BagAsPieza->BagId, $intBagId)
+			);
+		}
 			/**
 		 * Load an array of Containers objects for a given ContainersAsContainerPieza
 		 * via the container_pieza_assn table
@@ -1678,6 +1743,22 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
+				case '_BagAsPieza':
+					/**
+					 * Gets the value for the private _objBagAsPieza (Read-Only)
+					 * if set due to an expansion on the bag_pieza_assn association table
+					 * @return Bag
+					 */
+					return $this->_objBagAsPieza;
+
+				case '_BagAsPiezaArray':
+					/**
+					 * Gets the value for the private _objBagAsPiezaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the bag_pieza_assn association table
+					 * @return Bag[]
+					 */
+					return $this->_objBagAsPiezaArray;
+
 				case '_ContainersAsContainerPieza':
 					/**
 					 * Gets the value for the private _objContainersAsContainerPieza (Read-Only)
@@ -2229,6 +2310,128 @@
 		}
 
 
+		// Related Many-to-Many Objects' Methods for BagAsPieza
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all many-to-many associated BagsAsPieza as an array of Bag objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Bag[]
+		*/
+		public function GetBagAsPiezaArray($objOptionalClauses = null, $objClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Bag::LoadArrayByGuiaPiezasAsPieza($this->intId, $objClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all many-to-many associated BagsAsPieza
+		 * @return int
+		*/
+		public function CountBagsAsPieza() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Bag::CountByGuiaPiezasAsPieza($this->intId);
+		}
+
+		/**
+		 * Checks to see if an association exists with a specific BagAsPieza
+		 * @param Bag $objBag
+		 * @return bool
+		*/
+		public function IsBagAsPiezaAssociated(Bag $objBag) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsBagAsPiezaAssociated on this unsaved GuiaPiezas.');
+			if ((is_null($objBag->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsBagAsPiezaAssociated on this GuiaPiezas with an unsaved Bag.');
+
+			$intRowCount = GuiaPiezas::QueryCount(
+				QQ::AndCondition(
+					QQ::Equal(QQN::GuiaPiezas()->Id, $this->intId),
+					QQ::Equal(QQN::GuiaPiezas()->BagAsPieza->BagId, $objBag->Id)
+				)
+			);
+
+			return ($intRowCount > 0);
+		}
+
+		/**
+		 * Associates a BagAsPieza
+		 * @param Bag $objBag
+		 * @return void
+		*/
+		public function AssociateBagAsPieza(Bag $objBag) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateBagAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objBag->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateBagAsPieza on this GuiaPiezas with an unsaved Bag.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				INSERT INTO `bag_pieza_assn` (
+					`guia_pieza_id`,
+					`bag_id`
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($objBag->Id) . '
+				)
+			');
+		}
+
+		/**
+		 * Unassociates a BagAsPieza
+		 * @param Bag $objBag
+		 * @return void
+		*/
+		public function UnassociateBagAsPieza(Bag $objBag) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objBag->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsPieza on this GuiaPiezas with an unsaved Bag.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`bag_pieza_assn`
+				WHERE
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . ' AND
+					`bag_id` = ' . $objDatabase->SqlVariable($objBag->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates all BagsAsPieza
+		 * @return void
+		*/
+		public function UnassociateAllBagsAsPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAllBagAsPiezaArray on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`bag_pieza_assn`
+				WHERE
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
 		// Related Many-to-Many Objects' Methods for ContainersAsContainerPieza
 		//-------------------------------------------------------------------
 
@@ -2672,6 +2875,42 @@
     /**
      * @uses QQAssociationNode
      *
+     * @property-read QQNode $BagId
+     * @property-read QQNodeBag $Bag
+     * @property-read QQNodeBag $_ChildTableNode
+     **/
+	class QQNodeGuiaPiezasBagAsPieza extends QQAssociationNode {
+		protected $strType = 'association';
+		protected $strName = 'bagaspieza';
+
+		protected $strTableName = 'bag_pieza_assn';
+		protected $strPrimaryKey = 'guia_pieza_id';
+		protected $strClassName = 'Bag';
+		protected $strPropertyName = 'BagAsPieza';
+		protected $strAlias = 'bagaspieza';
+
+		public function __get($strName) {
+			switch ($strName) {
+				case 'BagId':
+					return new QQNode('bag_id', 'BagId', 'integer', $this);
+				case 'Bag':
+					return new QQNodeBag('bag_id', 'BagId', 'integer', $this);
+				case '_ChildTableNode':
+					return new QQNodeBag('bag_id', 'BagId', 'integer', $this);
+				default:
+					try {
+						return parent::__get($strName);
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+			}
+		}
+	}
+
+    /**
+     * @uses QQAssociationNode
+     *
      * @property-read QQNode $ContainerId
      * @property-read QQNodeContainers $Containers
      * @property-read QQNodeContainers $_ChildTableNode
@@ -2762,6 +3001,7 @@
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      *
+     * @property-read QQNodeGuiaPiezasBagAsPieza $BagAsPieza
      * @property-read QQNodeGuiaPiezasContainersAsContainerPieza $ContainersAsContainerPieza
      * @property-read QQNodeGuiaPiezasSdeContenedorAsGuia $SdeContenedorAsGuia
      *
@@ -2811,6 +3051,8 @@
 					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
 				case 'UpdatedAt':
 					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
+				case 'BagAsPieza':
+					return new QQNodeGuiaPiezasBagAsPieza($this);
 				case 'ContainersAsContainerPieza':
 					return new QQNodeGuiaPiezasContainersAsContainerPieza($this);
 				case 'SdeContenedorAsGuia':
@@ -2854,6 +3096,7 @@
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      *
+     * @property-read QQNodeGuiaPiezasBagAsPieza $BagAsPieza
      * @property-read QQNodeGuiaPiezasContainersAsContainerPieza $ContainersAsContainerPieza
      * @property-read QQNodeGuiaPiezasSdeContenedorAsGuia $SdeContenedorAsGuia
      *
@@ -2903,6 +3146,8 @@
 					return new QQNode('created_at', 'CreatedAt', 'string', $this);
 				case 'UpdatedAt':
 					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
+				case 'BagAsPieza':
+					return new QQNodeGuiaPiezasBagAsPieza($this);
 				case 'ContainersAsContainerPieza':
 					return new QQNodeGuiaPiezasContainersAsContainerPieza($this);
 				case 'SdeContenedorAsGuia':

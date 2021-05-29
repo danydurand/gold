@@ -44,7 +44,7 @@
 		public static function AptasParaFacturar($objClauWher,$strFormResp='count') {
             $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'RECIBID@');
             $objClauWher[] = QQ::IsNull(QQN::NotaEntrega()->FacturaId);
-            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorp->Facturable,1);
+            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Facturable,SinoType::SI);
             if ($strFormResp == 'count') {
                 return NotaEntrega::QueryCount(QQ::AndCondition($objClauWher));
             } else {

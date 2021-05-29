@@ -34,7 +34,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             </div>
             <div class="col-xs-3">
                 <?php $this->chkEnxxKilo->RenderWithName(); ?>
-                <?php $this->chkCargReci->RenderWithName(); ?>
+                <?php $this->chkManiFact->RenderWithName(); ?>
                 <?php $this->lblNumeCarg->RenderWithName(); ?>
                 <?php $this->lblNumePend->RenderWithName(); ?>
                 <?php $this->lblNumeAjus->RenderWithName(); ?>

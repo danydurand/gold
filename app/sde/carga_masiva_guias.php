@@ -33,7 +33,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $txtNumeRefe;
     protected $txtNombArch;
     protected $chkEnxxKilo;
-    protected $chkCargReci;
+    protected $chkManiFact;
 
     protected $lblNumeCarg;
     protected $lblNumePend;
@@ -112,7 +112,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->txtNumeRefe_Create();
         $this->txtNombArch_Create();
         $this->chkEnxxKilo_Create();
-        $this->chkCargReci_Create();
+        $this->chkManiFact_Create();
 
         //---- Importación y procesamiento ----
 
@@ -169,7 +169,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         }
         $this->lstServImpo_Change();
 
-        $this->chkCargReci = disableControl($this->chkCargReci);
+        if ($this->blnEditMode) {
+            $this->chkManiFact = disableControl($this->chkManiFact);
+        }
+
     }
 
     //-------------------------
@@ -353,6 +356,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             }
             $this->lstClieCarg->AddItem($objClieCarg->__toString(), $objClieCarg->CodiClie, $blnSeleRegi);
         }
+        $this->lstClieCarg->AddAction(new QChangeEvent(), new QAjaxAction('lstClieCarg_Change'));
     }
 
     protected function txtCargArch_Create() {
@@ -408,11 +412,11 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         }
     }
 
-    protected function chkCargReci_Create() {
-        $this->chkCargReci = new QCheckBox($this);
-        $this->chkCargReci->Name = 'Carga Recibida ?';
+    protected function chkManiFact_Create() {
+        $this->chkManiFact = new QCheckBox($this);
+        $this->chkManiFact->Name = 'Facturable ?';
         if ($this->blnEditMode) {
-            $this->chkCargReci->Checked = $this->objNotaEntr->CargaRecibida;
+            $this->chkManiFact->Checked = $this->objNotaEntr->Facturable;
         }
     }
 
@@ -608,6 +612,12 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     // Acciones asociadas a los objetos
     //----------------------------------
 
+    protected function lstClieCarg_Change() {
+        if (!is_null($this->lstClieCarg->SelectedValue) && (!$this->blnEditMode) ) {
+            $objClieCarg = MasterCliente::Load($this->lstClieCarg->SelectedValue);
+            $this->chkManiFact->Checked = $objClieCarg->Facturable;
+        }
+    }
 
     protected function lstServImpo_Change() {
         if ($this->lstServImpo->SelectedValue == 'AER') {
@@ -973,8 +983,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $this->objNotaEntr->NombreArchivo       = utf8_decode($this->txtCargArch->FileName);
                 $this->objNotaEntr->Estatus             = 'CREAD@';
                 $this->objNotaEntr->ServicioImportacion = $this->lstServImpo->SelectedValue;
+                $this->objNotaEntr->Facturable          = $this->chkManiFact->Checked;
                 $this->objNotaEntr->EnKilos             = $this->chkEnxxKilo->Checked;
-                $this->objNotaEntr->CargaRecibida       = $this->chkCargReci->Checked;
+                $this->objNotaEntr->CargaRecibida       = false;
                 $this->objNotaEntr->Cargadas            = 0;
                 $this->objNotaEntr->PorProcesar         = 0;
                 $this->objNotaEntr->PorCorregir         = 0;

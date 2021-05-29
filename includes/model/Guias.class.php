@@ -27,6 +27,10 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
+		public function __zona() {
+            return Parametros::BuscarParametro('ZONA',$this->Destino->Zona,'Desc',$this->Destino->Zona);
+        }
+
         public static function ConCheckpointRegistradoPor($strCodiCkpt,$intCodiUsua) {
 		    /* @var $objPiezSele PiezaCheckpoints */
             $arrGuiaSele = [];

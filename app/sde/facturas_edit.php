@@ -164,7 +164,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgNotaFact->AddColumn($colServImpo);
 
         $colCantPiez = new QDataGridColumn($this);
-        $colCantPiez->Name = QApplication::Translate('Pzas');
+        $colCantPiez->Name = QApplication::Translate('Guias');
         $colCantPiez->Html = '<?= $_ITEM->Piezas ?>';
         $colCantPiez->Width = 60;
         $this->dtgNotaFact->AddColumn($colCantPiez);

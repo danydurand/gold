@@ -54,6 +54,7 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
         $objClauOrde[] = QQ::OrderBy(QQN::NotaEntrega()->Id,false);
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->PorCorregir,0);
+        $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Facturable,SinoType::SI);
         $this->dtgNotaEntregas->AdditionalClauses = $objClauOrde;
         $this->dtgNotaEntregas->AdditionalConditions = QQ::AndCondition($objClauWher);
 

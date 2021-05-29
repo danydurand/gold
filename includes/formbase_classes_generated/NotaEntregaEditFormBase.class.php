@@ -57,6 +57,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
 	protected $txtNombreArchivo;
 	protected $txtEstatus;
 	protected $txtServicioImportacion;
+	protected $chkFacturable;
 	protected $chkEnKilos;
 	protected $chkCargaRecibida;
 	protected $txtCargadas;
@@ -156,6 +157,7 @@ abstract class NotaEntregaEditFormBase extends QForm {
 		$this->txtNombreArchivo = $this->mctNotaEntrega->txtNombreArchivo_Create();
 		$this->txtEstatus = $this->mctNotaEntrega->txtEstatus_Create();
 		$this->txtServicioImportacion = $this->mctNotaEntrega->txtServicioImportacion_Create();
+		$this->chkFacturable = $this->mctNotaEntrega->chkFacturable_Create();
 		$this->chkEnKilos = $this->mctNotaEntrega->chkEnKilos_Create();
 		$this->chkCargaRecibida = $this->mctNotaEntrega->chkCargaRecibida_Create();
 		$this->txtCargadas = $this->mctNotaEntrega->txtCargadas_Create();

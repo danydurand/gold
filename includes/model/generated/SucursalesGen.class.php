@@ -41,6 +41,8 @@
 	 * @property Estado $Estado the value for the Estado object referenced by intEstadoId (Not Null)
 	 * @property-read SdeOperacion $_SdeOperacionAsOperacionDestino the value for the private _objSdeOperacionAsOperacionDestino (Read-Only) if set due to an expansion on the operacion_destino_assn association table
 	 * @property-read SdeOperacion[] $_SdeOperacionAsOperacionDestinoArray the value for the private _objSdeOperacionAsOperacionDestinoArray (Read-Only) if set due to an ExpandAsArray on the operacion_destino_assn association table
+	 * @property-read Bag $_BagAsDestino the value for the private _objBagAsDestino (Read-Only) if set due to an expansion on the bag.destino_id reverse relationship
+	 * @property-read Bag[] $_BagAsDestinoArray the value for the private _objBagAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the bag.destino_id reverse relationship
 	 * @property-read Chofer $_ChoferAsSucursal the value for the private _objChoferAsSucursal (Read-Only) if set due to an expansion on the chofer.sucursal_id reverse relationship
 	 * @property-read Chofer[] $_ChoferAsSucursalArray the value for the private _objChoferAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the chofer.sucursal_id reverse relationship
 	 * @property-read ClientesInternacional $_ClientesInternacionalAsSucursal the value for the private _objClientesInternacionalAsSucursal (Read-Only) if set due to an expansion on the clientes_internacional.sucursal_id reverse relationship
@@ -65,6 +67,8 @@
 	 * @property-read Guias[] $_GuiasAsOrigenArray the value for the private _objGuiasAsOrigenArray (Read-Only) if set due to an ExpandAsArray on the guias.origen_id reverse relationship
 	 * @property-read HistoriaCliente $_HistoriaClienteAsSucursal the value for the private _objHistoriaClienteAsSucursal (Read-Only) if set due to an expansion on the historia_cliente.sucursal_id reverse relationship
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsSucursalArray the value for the private _objHistoriaClienteAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.sucursal_id reverse relationship
+	 * @property-read ManifiestoExp $_ManifiestoExpAsDestino the value for the private _objManifiestoExpAsDestino (Read-Only) if set due to an expansion on the manifiesto_exp.destino_id reverse relationship
+	 * @property-read ManifiestoExp[] $_ManifiestoExpAsDestinoArray the value for the private _objManifiestoExpAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp.destino_id reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsSucursal the value for the private _objMasterClienteAsSucursal (Read-Only) if set due to an expansion on the master_cliente.sucursal_id reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsSucursalArray the value for the private _objMasterClienteAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.sucursal_id reverse relationship
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsSucursal the value for the private _objPiezaCheckpointsAsSucursal (Read-Only) if set due to an expansion on the pieza_checkpoints.sucursal_id reverse relationship
@@ -297,6 +301,22 @@
 		private $_objSdeOperacionAsOperacionDestinoArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single BagAsDestino object
+		 * (of type Bag), if this Sucursales object was restored with
+		 * an expansion on the bag association table.
+		 * @var Bag _objBagAsDestino;
+		 */
+		private $_objBagAsDestino;
+
+		/**
+		 * Private member variable that stores a reference to an array of BagAsDestino objects
+		 * (of type Bag[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the bag association table.
+		 * @var Bag[] _objBagAsDestinoArray;
+		 */
+		private $_objBagAsDestinoArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single ChoferAsSucursal object
 		 * (of type Chofer), if this Sucursales object was restored with
 		 * an expansion on the chofer association table.
@@ -487,6 +507,22 @@
 		 * @var HistoriaCliente[] _objHistoriaClienteAsSucursalArray;
 		 */
 		private $_objHistoriaClienteAsSucursalArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ManifiestoExpAsDestino object
+		 * (of type ManifiestoExp), if this Sucursales object was restored with
+		 * an expansion on the manifiesto_exp association table.
+		 * @var ManifiestoExp _objManifiestoExpAsDestino;
+		 */
+		private $_objManifiestoExpAsDestino;
+
+		/**
+		 * Private member variable that stores a reference to an array of ManifiestoExpAsDestino objects
+		 * (of type ManifiestoExp[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the manifiesto_exp association table.
+		 * @var ManifiestoExp[] _objManifiestoExpAsDestinoArray;
+		 */
+		private $_objManifiestoExpAsDestinoArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MasterClienteAsSucursal object
@@ -1308,6 +1344,21 @@
 			}
 
 
+			// Check for BagAsDestino Virtual Binding
+			$strAlias = $strAliasPrefix . 'bagasdestino__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['bagasdestino']) ? null : $objExpansionAliasArray['bagasdestino']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objBagAsDestinoArray)
+				$objToReturn->_objBagAsDestinoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objBagAsDestinoArray[] = Bag::InstantiateDbRow($objDbRow, $strAliasPrefix . 'bagasdestino__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objBagAsDestino)) {
+					$objToReturn->_objBagAsDestino = Bag::InstantiateDbRow($objDbRow, $strAliasPrefix . 'bagasdestino__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for ChoferAsSucursal Virtual Binding
 			$strAlias = $strAliasPrefix . 'choferassucursal__codi_chof';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1485,6 +1536,21 @@
 					$objToReturn->_objHistoriaClienteAsSucursalArray[] = HistoriaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'historiaclienteassucursal__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objHistoriaClienteAsSucursal)) {
 					$objToReturn->_objHistoriaClienteAsSucursal = HistoriaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'historiaclienteassucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ManifiestoExpAsDestino Virtual Binding
+			$strAlias = $strAliasPrefix . 'manifiestoexpasdestino__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['manifiestoexpasdestino']) ? null : $objExpansionAliasArray['manifiestoexpasdestino']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objManifiestoExpAsDestinoArray)
+				$objToReturn->_objManifiestoExpAsDestinoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objManifiestoExpAsDestinoArray[] = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasdestino__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objManifiestoExpAsDestino)) {
+					$objToReturn->_objManifiestoExpAsDestino = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasdestino__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2343,6 +2409,22 @@
 					 */
 					return $this->_objSdeOperacionAsOperacionDestinoArray;
 
+				case '_BagAsDestino':
+					/**
+					 * Gets the value for the private _objBagAsDestino (Read-Only)
+					 * if set due to an expansion on the bag.destino_id reverse relationship
+					 * @return Bag
+					 */
+					return $this->_objBagAsDestino;
+
+				case '_BagAsDestinoArray':
+					/**
+					 * Gets the value for the private _objBagAsDestinoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the bag.destino_id reverse relationship
+					 * @return Bag[]
+					 */
+					return $this->_objBagAsDestinoArray;
+
 				case '_ChoferAsSucursal':
 					/**
 					 * Gets the value for the private _objChoferAsSucursal (Read-Only)
@@ -2534,6 +2616,22 @@
 					 * @return HistoriaCliente[]
 					 */
 					return $this->_objHistoriaClienteAsSucursalArray;
+
+				case '_ManifiestoExpAsDestino':
+					/**
+					 * Gets the value for the private _objManifiestoExpAsDestino (Read-Only)
+					 * if set due to an expansion on the manifiesto_exp.destino_id reverse relationship
+					 * @return ManifiestoExp
+					 */
+					return $this->_objManifiestoExpAsDestino;
+
+				case '_ManifiestoExpAsDestinoArray':
+					/**
+					 * Gets the value for the private _objManifiestoExpAsDestinoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the manifiesto_exp.destino_id reverse relationship
+					 * @return ManifiestoExp[]
+					 */
+					return $this->_objManifiestoExpAsDestinoArray;
 
 				case '_MasterClienteAsSucursal':
 					/**
@@ -3020,6 +3118,9 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
+			if ($this->CountBagsAsDestino()) {
+				$arrTablRela[] = 'bag';
+			}
 			if ($this->CountChofersAsSucursal()) {
 				$arrTablRela[] = 'chofer';
 			}
@@ -3056,6 +3157,9 @@
 			if ($this->CountHistoriaClientesAsSucursal()) {
 				$arrTablRela[] = 'historia_cliente';
 			}
+			if ($this->CountManifiestoExpsAsDestino()) {
+				$arrTablRela[] = 'manifiesto_exp';
+			}
 			if ($this->CountMasterClientesAsSucursal()) {
 				$arrTablRela[] = 'master_cliente';
 			}
@@ -3091,6 +3195,155 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+
+
+		// Related Objects' Methods for BagAsDestino
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated BagsAsDestino as an array of Bag objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Bag[]
+		*/
+		public function GetBagAsDestinoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Bag::LoadArrayByDestinoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated BagsAsDestino
+		 * @return int
+		*/
+		public function CountBagsAsDestino() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Bag::CountByDestinoId($this->intId);
+		}
+
+		/**
+		 * Associates a BagAsDestino
+		 * @param Bag $objBag
+		 * @return void
+		*/
+		public function AssociateBagAsDestino(Bag $objBag) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateBagAsDestino on this unsaved Sucursales.');
+			if ((is_null($objBag->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateBagAsDestino on this Sucursales with an unsaved Bag.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`bag`
+				SET
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objBag->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a BagAsDestino
+		 * @param Bag $objBag
+		 * @return void
+		*/
+		public function UnassociateBagAsDestino(Bag $objBag) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsDestino on this unsaved Sucursales.');
+			if ((is_null($objBag->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsDestino on this Sucursales with an unsaved Bag.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`bag`
+				SET
+					`destino_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objBag->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all BagsAsDestino
+		 * @return void
+		*/
+		public function UnassociateAllBagsAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`bag`
+				SET
+					`destino_id` = null
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated BagAsDestino
+		 * @param Bag $objBag
+		 * @return void
+		*/
+		public function DeleteAssociatedBagAsDestino(Bag $objBag) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsDestino on this unsaved Sucursales.');
+			if ((is_null($objBag->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsDestino on this Sucursales with an unsaved Bag.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`bag`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objBag->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated BagsAsDestino
+		 * @return void
+		*/
+		public function DeleteAllBagsAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateBagAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`bag`
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 
 		// Related Objects' Methods for ChoferAsSucursal
@@ -4887,6 +5140,155 @@
 		}
 
 
+		// Related Objects' Methods for ManifiestoExpAsDestino
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ManifiestoExpsAsDestino as an array of ManifiestoExp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExp[]
+		*/
+		public function GetManifiestoExpAsDestinoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ManifiestoExp::LoadArrayByDestinoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ManifiestoExpsAsDestino
+		 * @return int
+		*/
+		public function CountManifiestoExpsAsDestino() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ManifiestoExp::CountByDestinoId($this->intId);
+		}
+
+		/**
+		 * Associates a ManifiestoExpAsDestino
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function AssociateManifiestoExpAsDestino(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpAsDestino on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpAsDestino on this Sucursales with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp`
+				SET
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ManifiestoExpAsDestino
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function UnassociateManifiestoExpAsDestino(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsDestino on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsDestino on this Sucursales with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp`
+				SET
+					`destino_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ManifiestoExpsAsDestino
+		 * @return void
+		*/
+		public function UnassociateAllManifiestoExpsAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp`
+				SET
+					`destino_id` = null
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ManifiestoExpAsDestino
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function DeleteAssociatedManifiestoExpAsDestino(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsDestino on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsDestino on this Sucursales with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ManifiestoExpsAsDestino
+		 * @return void
+		*/
+		public function DeleteAllManifiestoExpsAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp`
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for MasterClienteAsSucursal
 		//-------------------------------------------------------------------
 
@@ -6640,6 +7042,7 @@
      *
      * @property-read QQNodeSucursalesSdeOperacionAsOperacionDestino $SdeOperacionAsOperacionDestino
      *
+     * @property-read QQReverseReferenceNodeBag $BagAsDestino
      * @property-read QQReverseReferenceNodeChofer $ChoferAsSucursal
      * @property-read QQReverseReferenceNodeClientesInternacional $ClientesInternacionalAsSucursal
      * @property-read QQReverseReferenceNodeClientesRetail $ClientesRetailAsSucursal
@@ -6652,6 +7055,7 @@
      * @property-read QQReverseReferenceNodeGuias $GuiasAsDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsOrigen
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
+     * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsSucursal
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsSucursal
@@ -6720,6 +7124,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'Integer', $this);
 				case 'SdeOperacionAsOperacionDestino':
 					return new QQNodeSucursalesSdeOperacionAsOperacionDestino($this);
+				case 'BagAsDestino':
+					return new QQReverseReferenceNodeBag($this, 'bagasdestino', 'reverse_reference', 'destino_id', 'BagAsDestino');
 				case 'ChoferAsSucursal':
 					return new QQReverseReferenceNodeChofer($this, 'choferassucursal', 'reverse_reference', 'sucursal_id', 'ChoferAsSucursal');
 				case 'ClientesInternacionalAsSucursal':
@@ -6744,6 +7150,8 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasorigen', 'reverse_reference', 'origen_id', 'GuiasAsOrigen');
 				case 'HistoriaClienteAsSucursal':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteassucursal', 'reverse_reference', 'sucursal_id', 'HistoriaClienteAsSucursal');
+				case 'ManifiestoExpAsDestino':
+					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasdestino', 'reverse_reference', 'destino_id', 'ManifiestoExpAsDestino');
 				case 'MasterClienteAsSucursal':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'PiezaCheckpointsAsSucursal':
@@ -6804,6 +7212,7 @@
      *
      * @property-read QQNodeSucursalesSdeOperacionAsOperacionDestino $SdeOperacionAsOperacionDestino
      *
+     * @property-read QQReverseReferenceNodeBag $BagAsDestino
      * @property-read QQReverseReferenceNodeChofer $ChoferAsSucursal
      * @property-read QQReverseReferenceNodeClientesInternacional $ClientesInternacionalAsSucursal
      * @property-read QQReverseReferenceNodeClientesRetail $ClientesRetailAsSucursal
@@ -6816,6 +7225,7 @@
      * @property-read QQReverseReferenceNodeGuias $GuiasAsDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsOrigen
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
+     * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsSucursal
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsSucursal
@@ -6884,6 +7294,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'integer', $this);
 				case 'SdeOperacionAsOperacionDestino':
 					return new QQNodeSucursalesSdeOperacionAsOperacionDestino($this);
+				case 'BagAsDestino':
+					return new QQReverseReferenceNodeBag($this, 'bagasdestino', 'reverse_reference', 'destino_id', 'BagAsDestino');
 				case 'ChoferAsSucursal':
 					return new QQReverseReferenceNodeChofer($this, 'choferassucursal', 'reverse_reference', 'sucursal_id', 'ChoferAsSucursal');
 				case 'ClientesInternacionalAsSucursal':
@@ -6908,6 +7320,8 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasorigen', 'reverse_reference', 'origen_id', 'GuiasAsOrigen');
 				case 'HistoriaClienteAsSucursal':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteassucursal', 'reverse_reference', 'sucursal_id', 'HistoriaClienteAsSucursal');
+				case 'ManifiestoExpAsDestino':
+					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasdestino', 'reverse_reference', 'destino_id', 'ManifiestoExpAsDestino');
 				case 'MasterClienteAsSucursal':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'PiezaCheckpointsAsSucursal':

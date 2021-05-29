@@ -21,6 +21,7 @@
 	 * @property string $NombreArchivo the value for strNombreArchivo 
 	 * @property string $Estatus the value for strEstatus (Not Null)
 	 * @property string $ServicioImportacion the value for strServicioImportacion (Not Null)
+	 * @property boolean $Facturable the value for blnFacturable (Not Null)
 	 * @property boolean $EnKilos the value for blnEnKilos (Not Null)
 	 * @property boolean $CargaRecibida the value for blnCargaRecibida 
 	 * @property integer $Cargadas the value for intCargadas (Not Null)
@@ -117,6 +118,14 @@
 		 */
 		protected $strServicioImportacion;
 		const ServicioImportacionDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column nota_entrega.facturable
+		 * @var boolean blnFacturable
+		 */
+		protected $blnFacturable;
+		const FacturableDefault = 1;
 
 
 		/**
@@ -485,6 +494,7 @@
 			$this->strNombreArchivo = NotaEntrega::NombreArchivoDefault;
 			$this->strEstatus = NotaEntrega::EstatusDefault;
 			$this->strServicioImportacion = NotaEntrega::ServicioImportacionDefault;
+			$this->blnFacturable = NotaEntrega::FacturableDefault;
 			$this->blnEnKilos = NotaEntrega::EnKilosDefault;
 			$this->blnCargaRecibida = NotaEntrega::CargaRecibidaDefault;
 			$this->intCargadas = NotaEntrega::CargadasDefault;
@@ -860,6 +870,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'nombre_archivo', $strAliasPrefix . 'nombre_archivo');
 			    $objBuilder->AddSelectItem($strTableName, 'estatus', $strAliasPrefix . 'estatus');
 			    $objBuilder->AddSelectItem($strTableName, 'servicio_importacion', $strAliasPrefix . 'servicio_importacion');
+			    $objBuilder->AddSelectItem($strTableName, 'facturable', $strAliasPrefix . 'facturable');
 			    $objBuilder->AddSelectItem($strTableName, 'en_kilos', $strAliasPrefix . 'en_kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'carga_recibida', $strAliasPrefix . 'carga_recibida');
 			    $objBuilder->AddSelectItem($strTableName, 'cargadas', $strAliasPrefix . 'cargadas');
@@ -1031,6 +1042,9 @@
 			$strAlias = $strAliasPrefix . 'servicio_importacion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strServicioImportacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'facturable';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnFacturable = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'en_kilos';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->blnEnKilos = $objDbRow->GetColumn($strAliasName, 'Bit');
@@ -1511,6 +1525,7 @@
 							`nombre_archivo`,
 							`estatus`,
 							`servicio_importacion`,
+							`facturable`,
 							`en_kilos`,
 							`carga_recibida`,
 							`cargadas`,
@@ -1542,6 +1557,7 @@
 							' . $objDatabase->SqlVariable($this->strNombreArchivo) . ',
 							' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
+							' . $objDatabase->SqlVariable($this->blnFacturable) . ',
 							' . $objDatabase->SqlVariable($this->blnEnKilos) . ',
 							' . $objDatabase->SqlVariable($this->blnCargaRecibida) . ',
 							' . $objDatabase->SqlVariable($this->intCargadas) . ',
@@ -1632,6 +1648,7 @@
 							`nombre_archivo` = ' . $objDatabase->SqlVariable($this->strNombreArchivo) . ',
 							`estatus` = ' . $objDatabase->SqlVariable($this->strEstatus) . ',
 							`servicio_importacion` = ' . $objDatabase->SqlVariable($this->strServicioImportacion) . ',
+							`facturable` = ' . $objDatabase->SqlVariable($this->blnFacturable) . ',
 							`en_kilos` = ' . $objDatabase->SqlVariable($this->blnEnKilos) . ',
 							`carga_recibida` = ' . $objDatabase->SqlVariable($this->blnCargaRecibida) . ',
 							`cargadas` = ' . $objDatabase->SqlVariable($this->intCargadas) . ',
@@ -1802,6 +1819,7 @@
 			$this->strNombreArchivo = $objReloaded->strNombreArchivo;
 			$this->strEstatus = $objReloaded->strEstatus;
 			$this->strServicioImportacion = $objReloaded->strServicioImportacion;
+			$this->blnFacturable = $objReloaded->blnFacturable;
 			$this->blnEnKilos = $objReloaded->blnEnKilos;
 			$this->blnCargaRecibida = $objReloaded->blnCargaRecibida;
 			$this->intCargadas = $objReloaded->intCargadas;
@@ -1891,6 +1909,13 @@
 					 * @return string
 					 */
 					return $this->strServicioImportacion;
+
+				case 'Facturable':
+					/**
+					 * Gets the value for blnFacturable (Not Null)
+					 * @return boolean
+					 */
+					return $this->blnFacturable;
 
 				case 'EnKilos':
 					/**
@@ -2306,6 +2331,19 @@
 					 */
 					try {
 						return ($this->strServicioImportacion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Facturable':
+					/**
+					 * Sets the value for blnFacturable (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnFacturable = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3463,6 +3501,7 @@
 			$strToReturn .= '<element name="NombreArchivo" type="xsd:string"/>';
 			$strToReturn .= '<element name="Estatus" type="xsd:string"/>';
 			$strToReturn .= '<element name="ServicioImportacion" type="xsd:string"/>';
+			$strToReturn .= '<element name="Facturable" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="EnKilos" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="CargaRecibida" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Cargadas" type="xsd:int"/>';
@@ -3530,6 +3569,8 @@
 				$objToReturn->strEstatus = $objSoapObject->Estatus;
 			if (property_exists($objSoapObject, 'ServicioImportacion'))
 				$objToReturn->strServicioImportacion = $objSoapObject->ServicioImportacion;
+			if (property_exists($objSoapObject, 'Facturable'))
+				$objToReturn->blnFacturable = $objSoapObject->Facturable;
 			if (property_exists($objSoapObject, 'EnKilos'))
 				$objToReturn->blnEnKilos = $objSoapObject->EnKilos;
 			if (property_exists($objSoapObject, 'CargaRecibida'))
@@ -3645,6 +3686,7 @@
 			$iArray['NombreArchivo'] = $this->strNombreArchivo;
 			$iArray['Estatus'] = $this->strEstatus;
 			$iArray['ServicioImportacion'] = $this->strServicioImportacion;
+			$iArray['Facturable'] = $this->blnFacturable;
 			$iArray['EnKilos'] = $this->blnEnKilos;
 			$iArray['CargaRecibida'] = $this->blnCargaRecibida;
 			$iArray['Cargadas'] = $this->intCargadas;
@@ -3717,6 +3759,7 @@
      * @property-read QQNode $NombreArchivo
      * @property-read QQNode $Estatus
      * @property-read QQNode $ServicioImportacion
+     * @property-read QQNode $Facturable
      * @property-read QQNode $EnKilos
      * @property-read QQNode $CargaRecibida
      * @property-read QQNode $Cargadas
@@ -3777,6 +3820,8 @@
 					return new QQNode('estatus', 'Estatus', 'VarChar', $this);
 				case 'ServicioImportacion':
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'VarChar', $this);
+				case 'Facturable':
+					return new QQNode('facturable', 'Facturable', 'Bit', $this);
 				case 'EnKilos':
 					return new QQNode('en_kilos', 'EnKilos', 'Bit', $this);
 				case 'CargaRecibida':
@@ -3869,6 +3914,7 @@
      * @property-read QQNode $NombreArchivo
      * @property-read QQNode $Estatus
      * @property-read QQNode $ServicioImportacion
+     * @property-read QQNode $Facturable
      * @property-read QQNode $EnKilos
      * @property-read QQNode $CargaRecibida
      * @property-read QQNode $Cargadas
@@ -3929,6 +3975,8 @@
 					return new QQNode('estatus', 'Estatus', 'string', $this);
 				case 'ServicioImportacion':
 					return new QQNode('servicio_importacion', 'ServicioImportacion', 'string', $this);
+				case 'Facturable':
+					return new QQNode('facturable', 'Facturable', 'boolean', $this);
 				case 'EnKilos':
 					return new QQNode('en_kilos', 'EnKilos', 'boolean', $this);
 				case 'CargaRecibida':
