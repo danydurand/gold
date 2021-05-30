@@ -27,6 +27,21 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
+		public function ContarActualizarRecibidas() {
+            //-----------------------------------------------------------------------------------
+            // Se identifican las piezas y se verifica cuantas han sido Recibidas en el Almacen
+            //-----------------------------------------------------------------------------------
+            $arrPiezMani = $this->piezasDeLaNota();
+            $intCantReci = 0;
+            foreach ($arrPiezMani as $objPiezMani) {
+                if ($objPiezMani->tieneCheckpoint('RA')) {
+                    $intCantReci++;
+                }
+            }
+            $this->Recibidas = $intCantReci;
+            $this->Save();
+        }
+
 		public static function AptasParaFacturarPorClienteYServicio($intClieIdxx,$strServImpo,$arrManiIdxx,$strFormResp='count') {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorpId,$intClieIdxx);

@@ -57,9 +57,9 @@
                     $strCadeTabu .= "\t";
                 }
             }
-            t('Opcion: '.$this->Nombre);
-            t('El nivel es: '.$this->Nivel);
-            t('Tabuladores: '.$strCadeTabu);
+            //t('Opcion: '.$this->Nombre);
+            //t('El nivel es: '.$this->Nivel);
+            //t('Tabuladores: '.$strCadeTabu);
             if (!$this->EsMenu) {
                 //---------------
                 //  PROGRAMA
