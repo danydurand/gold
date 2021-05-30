@@ -1,7 +1,7 @@
 <?php
-$_SESSION['NombPlat'] = 'Connect';
+$_SESSION['NombPlat'] = 'Retail';
 $strPageTitle = QApplication::Translate('SISPAQ - '.$_SESSION['NombPlat']);
-require(__APP_INCLUDES__ . '/corp/header_login.inc.php');
+require('inc/header_login.inc.php');
 ?>
 
     <div id="formulario_login">
@@ -14,4 +14,4 @@ require(__APP_INCLUDES__ . '/corp/header_login.inc.php');
         </div>
     </div>
 
-<?php require(__APP_INCLUDES__.'/footer_login.inc.php'); ?>
+<?php require('inc/footer_login.inc.php'); ?>

@@ -44,15 +44,22 @@
             return NewOpcion::QueryCount(QQ::AndCondition($objClauWher));
         }
 
-        public function HtmlMenuBootstrap() {
+        public function HtmlMenuBootstrap($strCodiSist='sde') {
             $objUsuario  = unserialize($_SESSION['User']);
-            $strDireProg = __APP__."/".$this->strDirectorio."/";
+            if ($strCodiSist == 'sde') {
+                $strDireProg = __APP__."/".$this->strDirectorio."/";
+            } else {
+                $strDireProg = __SIST__."/";
+            }
             $strCadeTabu = "\t";
             if ($this->Nivel > 0) {
                 for ($i = 1; $i <= $this->Nivel + 1; $i++) {
                     $strCadeTabu .= "\t";
                 }
             }
+            t('Opcion: '.$this->Nombre);
+            t('El nivel es: '.$this->Nivel);
+            t('Tabuladores: '.$strCadeTabu);
             if (!$this->EsMenu) {
                 //---------------
                 //  PROGRAMA
@@ -109,7 +116,7 @@
                 $objClauWher[] = QQ::Equal(QQN::NewOpcion()->SistemaId,$_SESSION['Sistema']);
                 $objClauWher[] = QQ::Equal(QQN::NewOpcion()->Dependencia,$this->intId);
                 $objClauWher[] = QQ::Equal(QQN::NewOpcion()->Activo,true);
-                if ($objUsuario->CodiGrup != 1 && $_SESSION['Sistema'] == 'sde') {
+                if ( ($objUsuario->CodiGrup != 1) && (in_array($_SESSION['Sistema'], ['sde','ret'])) ) {
                     //---------------------------------------------------------
                     // Aqui se identifican las Opciones del grupo del Usuario
                     //---------------------------------------------------------
@@ -128,7 +135,7 @@
                 $arrOpciMenu = NewOpcion::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
                 if ($arrOpciMenu) {
                     foreach ($arrOpciMenu as $objOpcion) {
-                        $strHtmlMenu .= $objOpcion->HtmlMenuBootstrap();
+                        $strHtmlMenu .= $objOpcion->HtmlMenuBootstrap($strCodiSist);
                     }
                 }
                 $strHtmlMenu .= $strCadeTabu."\t</ul>\n";

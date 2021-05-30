@@ -28,9 +28,9 @@
 			return sprintf('%s (%s)',  $this->strNombre, $this->strIata);
 		}
 
-		public static function LoadSucursalesActivas() {
+		public static function LoadSucursalesActivas($strOrdePorx='Iata') {
             $objClauOrde   = QQ::Clause();
-            $objClauOrde[] = QQ::OrderBy(QQN::Sucursales()->Iata);
+            $objClauOrde[] = QQ::OrderBy(QQN::Sucursales()->$strOrdePorx);
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::IsNull(QQN::Sucursales()->DeletedAt);
             return Sucursales::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);

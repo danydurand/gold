@@ -94,7 +94,7 @@ class Index extends QForm {
             }
         }
         if ($objUsuario) {
-            if ($objUsuario->StatusId = StatusType::ACTIVO) {
+            if ($objUsuario->StatusId == StatusType::ACTIVO) {
                 if ($objUsuario->ClaveAcceso == $this->txtClavAcce->Text) {
                     if (is_null($objUsuario->FechaAcceso)) {
                         $objUsuario->FechaAcceso = new QDateTime(QDateTime::Now);

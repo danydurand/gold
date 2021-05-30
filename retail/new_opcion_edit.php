@@ -1,7 +1,7 @@
 <?php
 // Load the QCubed Development Framework
 require_once('qcubed.inc.php');
-require_once(__APP_INCLUDES__.'/protected.inc.php');
+//require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__FORMBASE_CLASSES__ . '/NewOpcionEditFormBase.class.php');
 
 /**
@@ -45,7 +45,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 
 		$this->txtNombre = $this->mctNewOpcion->txtNombre_Create();
 
-        $arrSistOper = array($_SESSION['Sistema'],'con','ret');
+        $arrSistOper = array($_SESSION['Sistema']);
 
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::In(QQN::Sistema()->CodiSist,$arrSistOper);
@@ -56,7 +56,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
         }
 
 		$this->chkEsMenu = $this->mctNewOpcion->chkEsMenu_Create();
-		$this->chkEsMenu->AddAction(new QClickEvent(), new QAjaxAction('chkEsMenu_Click'));
+		//$this->chkEsMenu->AddAction(new QClickEvent(), new QAjaxAction('chkEsMenu_Click'));
 
         $this->chkActivo = $this->mctNewOpcion->chkActivo_Create();
 
@@ -66,7 +66,8 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
         $this->txtDirectorio = $this->mctNewOpcion->txtDirectorio_Create();
 		$this->txtDirectorio->Width = 100;
         if (!$this->mctNewOpcion->EditMode) {
-            $this->txtDirectorio->Text = strtolower($this->lstSistema->SelectedValue);
+            //$this->txtDirectorio->Text = strtolower($this->lstSistema->SelectedValue);
+            $this->txtDirectorio->Text = $_SESSION['NombDire'];
         }
 
         $objClauOrde = QQ::Clause();
@@ -86,7 +87,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 		$this->txtPosicion->Width = 35;
 
 		$this->txtImagen = $this->mctNewOpcion->txtImagen_Create();
-		$this->txtImagen->Width = 150;
+		$this->txtImagen->Width = 90;
 
 		$this->txtNivel = $this->mctNewOpcion->txtNivel_Create();
 		$this->txtNivel->Width = 35;
@@ -95,25 +96,12 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
         $this->chkUsoGeneral->Name = 'De Uso General ?';
         $this->chkUsoGeneral->ToolTip = 'Las opciones de Uso General, se asignan a todos los Grupos activos';
 
-        $this->chkEsMenu_Click();
+        //$this->chkEsMenu_Click();
 	}
 
 	//----------------------------
 	// Aquí se crean los objetos
 	//----------------------------
-
-    protected function btnVolvList_Click() {
-        QApplication::Redirect(__COM__.'/new_opcion_list.php');
-    }
-
-    protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__COM__.'/new_opcion_edit.php');
-    }
-
-    protected function RedirectToListPage() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__COM__."/".$objUltiAcce->__toString());
-    }
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
@@ -127,9 +115,9 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 	// Acciones relativas a los objetos 
 	//-----------------------------------
 
-    protected function chkEsMenu_Click() {
-        $this->txtImagen->Visible = $this->chkEsMenu->Checked;
-    }
+    //protected function chkEsMenu_Click() {
+    //    $this->txtImagen->Visible = $this->chkEsMenu->Checked;
+    //}
 
     protected function lstSistema_Change() {
         if (!is_null($this->lstSistema->SelectedValue)) {
@@ -140,6 +128,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
             $objClauWher[] = QQ::Equal(QQN::NewOpcion()->EsMenu,true);
             $objClauWher[] = QQ::Equal(QQN::NewOpcion()->Activo,true);
             $arrOpciSist   = NewOpcion::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+            // $arrOpciSist   = NewOpcion::LoadArrayBySistemaId($this->lstSistema->SelectedValue,$objClauOrde);
             $intCantOpci   = count($arrOpciSist);
             $this->lstDependenciaObject->RemoveAllItems();
             $this->lstDependenciaObject->AddItem('- Seleccione Uno - ('.$intCantOpci.')',null);
@@ -174,22 +163,22 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__COM__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__COM__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__COM__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__COM__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/new_opcion_edit.php/'.$objRegiTabl->Id);
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
@@ -289,14 +278,14 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
         return $intCantGrup;
     }
 
-    //protected function RedirectToListPage() {
-    //    $objUltiAcce = PilaAcceso::Pop('D');
-    //    QApplication::Redirect(__COM__."/".$objUltiAcce->__toString());
-    //}
-    //
-    //protected function btnVolvList_Click() {
-    //    QApplication::Redirect(__COM__.'/new_opcion_list.php');
-    //}
+    protected function RedirectToListPage() {
+        $objUltiAcce = PilaAcceso::Pop('D');
+        QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
+    }
+
+    protected function btnVolvList_Click() {
+        QApplication::Redirect(__SIST__.'/new_opcion_list.php');
+    }
 }
 
 // Go ahead and run this form object to render the page and its event handlers, implicitly using

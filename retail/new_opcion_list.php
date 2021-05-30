@@ -1,7 +1,7 @@
 <?php
 // Load the QCubed Development Framework
 require_once('qcubed.inc.php');
-require_once(__APP_INCLUDES__.'/protected.inc.php');
+//require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__FORMBASE_CLASSES__ . '/NewOpcionListFormBase.class.php');
 
 /**
@@ -48,7 +48,7 @@ class NewOpcionListForm extends NewOpcionListFormBase {
 		$this->dtgNewOpcions->AlternateRowStyle->CssClass = 'alternate';
 
         // Se incluye una condición para mostrar las opciones del Sistema SDE y del Sistema Yamaguchi
-        $arrOpciSist = array($_SESSION['Sistema'],'con','ret');
+        $arrOpciSist = array($_SESSION['Sistema']);
         $this->dtgNewOpcions->AdditionalConditions = QQ::In(QQN::NewOpcion()->SistemaId,$arrOpciSist);
         // Se incluye una cláusula para ordenar por Sistema y por Posición
         $objClauOrde = QQ::Clause();
@@ -127,12 +127,13 @@ class NewOpcionListForm extends NewOpcionListFormBase {
     //-----------------------------------
 
     public function btnNuevRegi_Click() {
-        QApplication::Redirect(__COM__.'/new_opcion_edit.php');
+        QApplication::Redirect(__SIST__.'/new_opcion_edit.php');
+        //QApplication::Redirect('/new_opcion_edit.php');
     }
 
     public function dtgNewOpcionsRow_Click($strFormId, $strControlId, $strParameter) {
 	  $intId = intval($strParameter);
-	  QApplication::Redirect(__COM__."/new_opcion_edit.php/$intId");
+	  QApplication::Redirect(__SIST__."/new_opcion_edit.php/$intId");
 	}
 }
 
