@@ -8,11 +8,11 @@ $intManiIdxx = $_SESSION['ManiIdxx'];
 $strNombEmpr = $_SESSION['NombEmpr'];
 /* @var $objManiImpr Containers */
 $objManiImpr = Containers::Load($intManiIdxx);
-$strNombChof = $objManiImpr->Chofer->NombChof;
+$strNombChof = $objManiImpr->Chofer->__toString();
 $strCeduChof = $objManiImpr->Chofer->NumeCedu;
 $strDescVehi = $objManiImpr->Vehiculo;
 $strNumePlac = $objManiImpr->Placa;
-$strFechDhoy = date("d/m/Y H:i");
+$strFechDesp = $objManiImpr->Fecha->__toString('DD/MM/YYYY');
 $strLimiDere = '350px';
 $strDireEntr = $objManiImpr->Direccion;
 $strNumeCont = $objManiImpr->Numero;
@@ -45,9 +45,9 @@ $strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportis
         <!---------------------->
         <!--    Encabezado    -->
         <!---------------------->
-        <table style="margin-top: 24px; margin-left: -3px;">
+        <table style="margin-top: 12px; margin-left: -3px;">
             <tr>
-                <td style="text-align: right"><?= $strFechDhoy; ?><br><br></td>
+                <td style="text-align: right"><?= $strFechDesp; ?><br><br></td>
             </tr>
             <tr>
                 <td style="width: 680px; text-align: center">
@@ -55,14 +55,14 @@ $strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportis
                 </td>
             </tr>
         </table>
-        <table style="margin-top: 24px; margin-left: -3px;">
+        <table style="margin-top: 12px; margin-left: -3px;">
             <tr>
                 <td style="width: 680px;">
                     <b>CLIENTE:</b> <?= $strNombEmpr ?>
                 </td>
             </tr>
             <tr>
-                <td style="width: 680px;">
+                <td style="width: 680px; font-size: small; text-align: justify">
                     <b>DIRECCION:</b> <?= $strDireEntr ?>
                 </td>
             </tr>

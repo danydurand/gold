@@ -41,6 +41,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $lblNumeProc;
     protected $lblNumeErro;
 
+    protected $lblCantPiez;
     protected $lblCantReci;
     protected $lblRelaSobr;
     protected $lblTotaLibr;
@@ -122,6 +123,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->lblNumeAjus_Create();
         $this->lblNumeErro_Create();
 
+        $this->lblCantPiez_Create();
         $this->lblCantReci_Create();
         $this->lblRelaSobr_Create();
         $this->lblTotaLibr_Create();
@@ -188,7 +190,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->dtgGuiaMani->AlternateRowStyle->CssClass = 'alternate';
 
         $this->dtgGuiaMani->Paginator = new QPaginator($this->dtgGuiaMani);
-        $this->dtgGuiaMani->ItemsPerPage = 8;
+        $this->dtgGuiaMani->ItemsPerPage = 20;
 
         $this->dtgGuiaMani->UseAjax = true;
 
@@ -214,7 +216,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $colNumeTrac = new QDataGridColumn($this);
         $colNumeTrac->Name = QApplication::Translate('Nro Guia');
         $colNumeTrac->Html = '<?= $_ITEM->Tracking ?>';
-        $colNumeTrac->Width = 140;
+        $colNumeTrac->Width = 135;
         $this->dtgGuiaMani->AddColumn($colNumeTrac);
 
         $colSucuDest = new QDataGridColumn($this);
@@ -228,13 +230,13 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->dtgGuiaMani->AddColumn($colUltiCkpt);
 
         $colCantPiez = new QDataGridColumn($this);
-        $colCantPiez->Name = QApplication::Translate('Piezas');
+        $colCantPiez->Name = QApplication::Translate('Pzas');
         $colCantPiez->Html = '<?= $_ITEM->Piezas; ?>';
         $this->dtgGuiaMani->AddColumn($colCantPiez);
         
         $colNombDest = new QDataGridColumn($this);
         $colNombDest->Name = QApplication::Translate('Nombre del Destinatario');
-        $colNombDest->Html = '<?= $_ITEM->NombreDestinatario ?>';
+        $colNombDest->Html = '<?= substr($_ITEM->NombreDestinatario,0,40) ?>';
         $this->dtgGuiaMani->AddColumn($colNombDest);
 
         if ($this->objNotaEntr->ServicioImportacion == 'AER') {
@@ -260,7 +262,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->dtgPiezMani->AlternateRowStyle->CssClass = 'alternate';
 
         $this->dtgPiezMani->Paginator = new QPaginator($this->dtgPiezMani);
-        $this->dtgPiezMani->ItemsPerPage = 8;
+        $this->dtgPiezMani->ItemsPerPage = 20;
 
         $this->dtgPiezMani->UseAjax = true;
 
@@ -282,6 +284,12 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function createdtgPiezManiColumns() {
+        $colPiezIdxx = new QDataGridColumn($this);
+        $colPiezIdxx->Name = QApplication::Translate('Id');
+        $colPiezIdxx->Html = '<?= $_ITEM->Id ?>';
+        $colPiezIdxx->Width = 60;
+        $this->dtgPiezMani->AddColumn($colPiezIdxx);
+
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('IdPieza');
         $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
@@ -453,11 +461,20 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function lblNumeProc_Create() {
         $this->lblNumeProc = new QLabel($this);
-        $this->lblNumeProc->Name = 'Procesadas';
+        $this->lblNumeProc->Name = 'Procsds';
         $this->lblNumeProc->Text = 0;
         $this->lblNumeProc->HtmlEntities = false;
         if ($this->blnEditMode) {
             $this->lblNumeProc->Text = $this->objNotaEntr->Procesadas;
+        }
+    }
+
+    protected function lblCantPiez_Create() {
+        $this->lblCantPiez = new QLabel($this);
+        $this->lblCantPiez->Name = 'Piezas';
+        $this->lblCantPiez->HtmlEntities = false;
+        if ($this->blnEditMode) {
+            $this->lblCantPiez->Text = $this->objNotaEntr->Piezas;
         }
     }
 
@@ -722,12 +739,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         // Se levantan nuevamente los errores en pantalla
         //------------------------------------------------
         error_reporting($mixErroOrig);
-        //------------------------------------------------------
-        // Se inicializan los parámetros del mensaje al usuario
-        //------------------------------------------------------
         $strTextMens = 'El proceso culmino con '.$intCantErro.' error(es)';
-        //$strTipoMens = 's';
-        //$strIconMens = __iCHEC__;
         //---------------------------------------------
         // Se indica cuántas guías han sido procesadas
         //---------------------------------------------
@@ -735,25 +747,16 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->lblNumePend->Text = (int) $this->lblNumePend->Text - $intCantGuia;
         $this->objNotaEntr->Procesadas  = $intCantGuia;
         $this->objNotaEntr->PorProcesar = $this->lblNumePend->Text;
+        $this->objNotaEntr->Piezas      = $this->objNotaEntr->cantidadDePiezas();
         t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
-        if ($this->objNotaEntr->PorCorregir == 0) {
-            t('Voy a marcarlo como RECIBID@');
+        //if ($this->objNotaEntr->PorCorregir == 0) {
+        //    t('Voy a marcarlo como RECIBID@');
             // Si todas las piezas fueron procesadas exitosamente, el Manifiesto se da por Recibido
-            $this->objNotaEntr->Recibidas = $this->objNotaEntr->Procesadas;
-            $this->objNotaEntr->Estatus = 'RECIBID@';
-        }
+            //$this->objNotaEntr->Recibidas = $this->objNotaEntr->Procesadas;
+            //$this->objNotaEntr->Estatus = 'RECIBID@';
+        //}
         $this->objNotaEntr->Save();
         t('Manifiesto actualizado...');
-        //if ($blnHuboErro) {
-        //    $strTipoMens = 'd';
-        //    $strIconMens = __iHAND__;
-        //    $this->lblNumeErro->Text = $intCantErro;
-        //    $this->btnErroProc->Visible = true;
-        //}
-        //-----------------------------------------
-        // Se construye el mensaje correspondiente
-        //-----------------------------------------
-        //$this->mensaje($strTextMens,'m',$strTipoMens,'i',$strIconMens);
         //--------------------------------------
         // Se almacena el resultado del proceso
         //--------------------------------------
@@ -762,7 +765,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->objProcEjec->NotificarAdmin = !$blnTodoOkey ? true : false;
         $this->objProcEjec->Save();
         t('Proceso actualizado');
-        //TODO: Ver posibilidad de enviar notificación de error(es) a administradores del Sistema por correo.
         //----------------------------------------------
         // Se deja registro de la transacción realizada
         //----------------------------------------------
@@ -773,8 +775,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
 
-        t('El Id del Proceso es: '.$this->objProcEjec->Id);
-        t('La cantidad de errores: '.$intCantErro);
         $_SESSION['ProcAnte'] = $this->objProcEjec->Id;
         $_SESSION['CantErro'] = $intCantErro;
 
@@ -1219,7 +1219,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->objNotaEntr->Cargadas    = $intCantRegi;
             $this->objNotaEntr->PorCorregir = $intCantAjus;
             $this->objNotaEntr->PorProcesar = $intCantRegi - $intCantAjus;
-            $this->objNotaEntr->Piezas      = $intCantRegi;
             $this->objNotaEntr->Save();
         } catch (Exception $e) {
             t('Error actualizando el manifiesto: '.$e->getMessage());

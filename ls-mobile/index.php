@@ -5,7 +5,7 @@ $blnTodoOkey = true;
 $strMensErro = '';
 $objUsuario  = null;
 if (isset($_POST['login'])) {
-    $strLogiUsua = $_POST['login'];
+    $strLogiUsua = strtolower(trim($_POST['login']));
     if (!in_array($strLogiUsua,['ddurand','mperez'])) {
         $blnTodoOkey = false;
         $strMensErro = 'Usuario NO AUTORIZADO !!';

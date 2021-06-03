@@ -27,6 +27,9 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <div class="col-md-6">
                     <div class="titulo" style="margin-bottom: .1em">Manifiestos Pendientes</div>
                     <?php $this->dtgManiPend->Render(); ?>
+                    <!--<br>-->
+                    <!--<div class="titulo" style="margin-bottom: .1em">Piezas x Recibir del Manifiesto</div>-->
+                    <?php //$this->dtgPiezPend->Render(); ?>
                 </div>
             </div>
         </div>

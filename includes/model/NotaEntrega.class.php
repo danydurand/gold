@@ -84,6 +84,10 @@
             LogDeCambios($arrLogxCamb);
         }
 
+        public function cantidadDePiezas() {
+            return count($this->piezasDeLaNota());
+        }
+
         public function piezasDeLaNota() {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Guia->NotaEntregaId,$this->Id);

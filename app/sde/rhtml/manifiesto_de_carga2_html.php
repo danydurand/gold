@@ -7,11 +7,11 @@ if (!isset($_SESSION['ManiIdxx'])) {
 $intManiIdxx = $_SESSION['ManiIdxx'];
 $strNombEmpr = $_SESSION['NombEmpr'];
 $objManiImpr = Containers::Load($intManiIdxx);
-$strNombChof = $objManiImpr->Chofer->NombChof;
+$strNombChof = $objManiImpr->Chofer->__toString();
 $strCeduChof = $objManiImpr->Chofer->NumeCedu;
 $strDescVehi = $objManiImpr->Vehiculo;
 $strNumePlac = $objManiImpr->Placa;
-$strFechDhoy = date("d/m/Y H:i");
+$strFechDesp = $objManiImpr->Fecha->__toString('DD/MM/YYYY');
 $strLimiDere = '340px';
 $strNumeCont = $objManiImpr->Numero;
 $strPrecLate = $objManiImpr->PrecintoLateral;
@@ -43,7 +43,7 @@ $intCantPiez = count($arrPiezMani);
                     <table border="1">
                         <tr>
                             <td style="width: 200px; text-align: right"><b>FECHA y HORA:</b></td>
-                            <td style="width: 120px; text-align: center"><?= $strFechDhoy ?></td>
+                            <td style="width: 120px; text-align: center"><?= $strFechDesp ?></td>
                         </tr>
                         <tr>
                             <td style="text-align: right"><b>CONDUCTOR:</b></td>

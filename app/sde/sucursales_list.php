@@ -91,6 +91,7 @@ class SucursalesListForm extends SucursalesListFormBase {
 		//$this->dtgSucursaleses->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
+        $this->btnExpoExce->Visible = true;
 
     }
 

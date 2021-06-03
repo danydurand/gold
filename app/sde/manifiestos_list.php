@@ -80,22 +80,30 @@ class ManifiestosList extends NotaEntregaListFormBase {
         $this->dtgNotaEntregas->AddColumn($this->colManiSele);
         $this->dtgNotaEntregas->AddAction(new QClickEvent(), new QAjaxAction('colManiSele_Click'));
 
-		$this->dtgNotaEntregas->MetaAddColumn('Id');
-		$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp,'Name=Cliente');
-		$this->dtgNotaEntregas->MetaAddColumn('Referencia');
+		$this->dtgNotaEntregas->MetaAddColumn('Id','FilterBoxSize=1');
+
+		$colNombClie = new QDataGridColumn('Cliente','<?= $_ITEM->ClienteCorp->NombClie ?>');
+        $colNombClie->Filter = QQ::Like(QQN::NotaEntrega()->ClienteCorp->NombClie,null);
+        $colNombClie->FilterType = QFilterType::TextFilter;
+        $colNombClie->FilterBoxSize = 12;
+        $this->dtgNotaEntregas->AddColumn($colNombClie);
+
+        //$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp,'Name=Cliente');
+
+        $this->dtgNotaEntregas->MetaAddColumn('Referencia','FilterBoxSize=12');
         $colFechMani = new QDataGridColumn('FECHA','<?= $_FORM->FechMani($_ITEM) ?>');
         $this->dtgNotaEntregas->AddColumn($colFechMani);
-        $this->dtgNotaEntregas->MetaAddColumn('Estatus');
-        $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion','Name=S.Impor');
+        $this->dtgNotaEntregas->MetaAddColumn('Estatus','FilterBoxSize=6');
+        $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion', 'Name=S.Impor', 'FilterBoxSize=3');
         $this->dtgNotaEntregas->MetaAddColumn('Facturable');
-        $this->dtgNotaEntregas->MetaAddColumn('Cargadas');
-        $this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=xProc');
-        $this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=xCorr');
-        $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Proc');
-        $this->dtgNotaEntregas->MetaAddColumn('Kilos');
-        $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=Pies3');
-        $this->dtgNotaEntregas->MetaAddColumn('Total');
-        $this->dtgNotaEntregas->MetaAddColumn('FacturaId','Name=Fact');
+        $this->dtgNotaEntregas->MetaAddColumn('Cargadas', 'FilterBoxSize=2');
+        $this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=xProc', 'FilterBoxSize=2');
+        $this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=xCorr', 'FilterBoxSize=2');
+        $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Proc', 'FilterBoxSize=2');
+        $this->dtgNotaEntregas->MetaAddColumn('Kilos', 'FilterBoxSize=2');
+        $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=Pies3', 'FilterBoxSize=2');
+        $this->dtgNotaEntregas->MetaAddColumn('Total', 'FilterBoxSize=1');
+        $this->dtgNotaEntregas->MetaAddColumn('FacturaId','Name=Fact','FilterBoxSize=1');
 
         $this->btnExpoExce_Create();
         $this->btnCambFact_Create();

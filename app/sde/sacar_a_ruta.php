@@ -55,6 +55,7 @@ class SacarARuta extends FormularioBaseKaizen {
     protected $blnEditMode;
     protected $btnRepoMani;
     protected $strDescCont;
+    protected $calFechDesp;
 
     protected function SetupValores() {
         $this->blnEditMode = false;
@@ -81,6 +82,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->lstTipoOper_Create();
         $this->lstOperAbie_Create();
         $this->lstEmprTran_Create();
+        $this->calFechDesp_Create();
         $this->txtNombChof_Create();
         $this->txtCeduChof_Create();
         $this->txtDescVehi_Create();
@@ -478,7 +480,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->lstEmprTran = new QListBox($this);
         $this->lstEmprTran->Name = 'Transportista';
         $this->lstEmprTran->Required = true;
-        $this->lstEmprTran->Width = 350;
+        $this->lstEmprTran->Width = 160;
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::Transportista()->Activo,SinoType::SI);
         $objClauOrde   = QQ::Clause();
@@ -492,6 +494,18 @@ class SacarARuta extends FormularioBaseKaizen {
                 $blnSeleRegi = $this->objContaine->TransportistaId == $objEmprTran->Id;
             }
             $this->lstEmprTran->AddItem($objEmprTran->__toString(),$objEmprTran->Id, $blnSeleRegi);
+        }
+    }
+
+    protected function calFechDesp_Create() {
+        $this->calFechDesp = new QCalendar($this);
+        $this->calFechDesp->Name = 'Fecha Despacho';
+        if (!$this->blnEditMode) {
+            $dttFechDhoy = date('Y-m-d');
+            $dttFechTomo = SumaRestaDiasAFecha($dttFechDhoy,1,'+');
+            $this->calFechDesp->DateTime = new QDateTime($dttFechTomo);
+        } else {
+            $this->calFechDesp->DateTime = $this->objContaine->Fecha;
         }
     }
 
@@ -1142,7 +1156,6 @@ class SacarARuta extends FormularioBaseKaizen {
             if (!$objContenedor) {
                 t('No existia, lo voy a crear');
                 $objContenedor = new Containers();
-                $objContenedor->Fecha       = new QDateTime(QDateTime::Now);
                 $objContenedor->Hora        = date("H:i");
                 $objContenedor->CreatedBy   = $this->objUsuario->CodiUsua;
                 $objContenedor->Estatus     = 'ABIERT@';
@@ -1151,6 +1164,7 @@ class SacarARuta extends FormularioBaseKaizen {
                 $objContenedor->PiesCub     = 0;
                 $objContenedor->Peso        = 0;
             }
+            $objContenedor->Fecha           = new QDateTime($this->calFechDesp->DateTime);
             $objContenedor->Numero          = $this->txtNumeCont->Text;
             $objContenedor->PrecintoLateral = $this->txtPrecLate->Text;
             $objContenedor->Awb             = $this->txtNumeAwbx->Text;

@@ -33,8 +33,14 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     </div>
                     <div class="title">Operaciones</div>
                     <?php $this->lstOperAbie->Render(); ?>
-                    <div class="title">Transportista</div>
-                    <?php $this->lstEmprTran->Render(); ?>
+                    <div class="row">
+                        <div class="col-md-6 title">Transportista</div>
+                        <div class="col-md-6 title">F. Despacho</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?php $this->lstEmprTran->Render(); ?></div>
+                        <div class="col-md-6"><?php $this->calFechDesp->Render(); ?></div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6 title">Chofer</div>
                         <div class="col-md-6 title">Cédula</div>

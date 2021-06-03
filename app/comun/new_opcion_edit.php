@@ -56,7 +56,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
         }
 
 		$this->chkEsMenu = $this->mctNewOpcion->chkEsMenu_Create();
-		$this->chkEsMenu->AddAction(new QClickEvent(), new QAjaxAction('chkEsMenu_Click'));
+		//$this->chkEsMenu->AddAction(new QClickEvent(), new QAjaxAction('chkEsMenu_Click'));
 
         $this->chkActivo = $this->mctNewOpcion->chkActivo_Create();
 
@@ -95,7 +95,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
         $this->chkUsoGeneral->Name = 'De Uso General ?';
         $this->chkUsoGeneral->ToolTip = 'Las opciones de Uso General, se asignan a todos los Grupos activos';
 
-        $this->chkEsMenu_Click();
+        //$this->chkEsMenu_Click();
 	}
 
 	//----------------------------
@@ -127,9 +127,9 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 	// Acciones relativas a los objetos 
 	//-----------------------------------
 
-    protected function chkEsMenu_Click() {
-        $this->txtImagen->Visible = $this->chkEsMenu->Checked;
-    }
+    //protected function chkEsMenu_Click() {
+    //    $this->txtImagen->Visible = $this->chkEsMenu->Checked;
+    //}
 
     protected function lstSistema_Change() {
         if (!is_null($this->lstSistema->SelectedValue)) {

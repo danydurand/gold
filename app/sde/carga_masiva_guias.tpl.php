@@ -41,12 +41,13 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             </div>
             <div class="col-xs-2">
                 <?php $this->lblNumeProc->RenderWithName(); ?>
+                <?php $this->lblCantPiez->RenderWithName(); ?>
                 <?php $this->lblCantReci->RenderWithName(); ?>
                 <?php $this->lblTotaLibr->RenderWithName(); ?>
                 <?php $this->lblTotaPies->RenderWithName(); ?>
-                <?php $this->lblTotaVolu->RenderWithName(); ?>
             </div>
             <div class="col-xs-2">
+                <?php $this->lblTotaVolu->RenderWithName(); ?>
                 <?php $this->lblFechNota->RenderWithName(); ?>
                 <?php $this->lblHoraNota->RenderWithName(); ?>
                 <?php $this->lblUsuaNota->RenderWithName(); ?>
