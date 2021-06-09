@@ -28,7 +28,51 @@
 		}
 
 
-		// Override or Create New Load/Count methods
+		public function Save($blnForceInsert = false, $blnForceUpdate = false)
+        {
+            $intIdxxRegi = parent::Save($blnForceInsert, $blnForceUpdate);
+
+            //-------------------------------------------------------------------------------
+            // Se calcular los conceptos de la Guia y se almacen en los Items de la Factura
+            //-------------------------------------------------------------------------------
+            t('=========================');
+            t('En FacturaGuias.class.php');
+            /**
+             * @var $objItemFact FacturaItems
+             * @var $objConcGuia GuiaConceptos
+             */
+            t('Procesando la Guia: '.$this->Guia->Numero);
+            $arrConcGuia = $this->Guia->GetGuiaConceptosAsGuiaArray();
+            t('La guia tiene: '.count($arrConcGuia).' conceptos');
+            foreach($arrConcGuia as $objConcGuia) {
+                t('Procesando el concepto: ' . $objConcGuia->Concepto->Nombre);
+                //------------------------------------------------------------------
+                // Si el concepto existe, se actualiza, en caso contrario, se crea
+                //------------------------------------------------------------------
+                $objItemFact = FacturaItems::LoadByFacturaIdConceptoId($this->FacturaId,$objConcGuia->ConceptoId);
+                if ($objItemFact) {
+                    t('Ya existia, voy a sumar el monto');
+                    $objItemFact->Monto += $objConcGuia->Monto;
+                    $objItemFact->Save();
+                } else {
+                    t('No existia, voy a crearlo');
+                    try {
+                        $objItemFact = new FacturaItems();
+                        $objItemFact->FacturaId   = $this->FacturaId;
+                        $objItemFact->ConceptoId  = $objConcGuia->ConceptoId;
+                        $objItemFact->MostrarComo = $objConcGuia->Concepto->MostrarComo;
+                        $objItemFact->Monto       = $objConcGuia->Monto;
+                        $objItemFact->Save();
+                    } catch (Exception $e) {
+                        t('Error creando item de la factura: '.$e->getMessage());
+                    }
+                }
+            }
+            t("Se procesaron los conceptos de la guia");
+        }
+
+
+        // Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...
 		// but feel free to use these as a starting point)
 /*

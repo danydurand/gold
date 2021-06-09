@@ -31,6 +31,17 @@
             return Parametros::BuscarParametro('ZONA',$this->Destino->Zona,'Desc',$this->Destino->Zona);
         }
 
+        public static function RomperRelacionConFactura($intIdxxFact) {
+            $arrGuiaFact = Guias::LoadArrayByFacturaId($intIdxxFact);
+            if (count($arrGuiaFact) > 0) {
+                t('Rompiendo relacion con las guias de la factura con el Id: '.$intIdxxFact);
+                foreach ($arrGuiaFact as $objGuiaFact) {
+                    $objGuiaFact->FacturaId = null;
+                    $objGuiaFact->Save();
+                }
+            }
+        }
+
         public static function ConCheckpointRegistradoPor($strCodiCkpt,$intCodiUsua) {
 		    /* @var $objPiezSele PiezaCheckpoints */
             $arrGuiaSele = [];
@@ -77,10 +88,14 @@
             if (!is_null($this->FacturaId)) {
                 $objFactGuia = Facturas::Load($this->FacturaId);
                 if ($objFactGuia) {
-                    if (!is_null($this->ClienteCorpId)) {
-                        $strFactGuia = $objFactGuia->Referencia;
+                    if (!is_null($this->ClienteRetailId)) {
+                        if (strlen($objFactGuia->Numero) > 0) {
+                            $strFactGuia = $objFactGuia->Numero;
+                        } else {
+                            $strFactGuia = $objFactGuia->Id;
+                        }
                     } else {
-                        $strFactGuia = $objFactGuia->Id;
+                        $strFactGuia = $objFactGuia->Referencia;
                     }
                 }
             }
@@ -144,7 +159,7 @@
             $monto = 0;
             $texto = '';
             $objTariClie = $this->ClienteCorp->Tarifa;
-            $decPesoTari = $this->pesoTarifa();
+            $decPesoTari = $this->Kilos;
             t('El peso usado para calcular la Tarifa sera: '.$decPesoTari);
             if (is_null($this->TarifaId)) {
                 t('La guia no tenia tarifa, se la acabo de asignar');
@@ -176,21 +191,21 @@
                 t('Se suman los valores y se obtiene: '.$monto);
                 $texto = "Libras excendentes: $peso_excedente * incremento: $objTariClie->ValorIncremento + tarifa del ultimo rango: $ultimo totaliza: $monto";
             } else {
-                t('El monto de la tarifa esta en el rango de kilos');
+                t('El peso esta en el rango de kilos');
                 //---------------------------------------------------
                 // El monto de la tarifa esta definido en la banda
                 //---------------------------------------------------
                 $objClauWher   = QQ::Clause();
                 $objClauWher[] = QQ::Equal(QQN::TarifaPeso()->TarifaId,$this->TarifaId);
-                $objClauWher[] = QQ::LessOrEqual(QQN::TarifaPeso()->PesoInicial,$this->Libras);
-                $objClauWher[] = QQ::GreaterOrEqual(QQN::TarifaPeso()->PesoFinal,$this->Libras);
+                $objClauWher[] = QQ::LessOrEqual(QQN::TarifaPeso()->PesoInicial,$this->Kilos);
+                $objClauWher[] = QQ::GreaterOrEqual(QQN::TarifaPeso()->PesoFinal,$this->Kilos);
                 $arrTariPeso   = TarifaPeso::QueryArray(QQ::AndCondition($objClauWher));
                 if (count($arrTariPeso) > 0) {
                     $monto = $arrTariPeso[0]->MontoTarifa;
                     t('El monto es: '.$monto);
                     $texto = "El monto de la tarifa esta en el rango de peso de la tarifa y arroja: $monto";
                 } else {
-                    $texto = "No se encontro el rango para la TarifaId: ".$this->TarifaId." y el peso: ".$this->Libras;
+                    $texto = "No se encontro el rango para la TarifaId: ".$this->TarifaId." y el peso: ".$this->Kilos;
                     t($texto);
                 }
             }
@@ -246,6 +261,13 @@
             $this->Total = 0;
             $this->Save();
             t('Los conceptos de la guia han sido borrados');
+        }
+
+        public function borrarPiezas() {
+            $this->DeleteAllGuiaPiezasesAsGuia();
+            $this->Piezas = 0;
+            $this->Save();
+            t('Las piezas de la guia han sido borradas');
         }
 
         protected function conceptosBaseImp(Conceptos $concepto)

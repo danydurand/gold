@@ -27,6 +27,90 @@
 			return sprintf('%s',  $this->intId);
 		}
 
+		public static function crearFactura($arrGuiaProc,$intIdxxUsua) {
+
+		    t('=====================');
+		    t('En Facturas.class.php');
+		    $blnTodoOkey = true;
+		    $strTextMens = '';
+
+		    /* @var $objPrimGuia Guias */
+		    $objPrimGuia = $arrGuiaProc[0];
+            t('Creando registro de la factura');
+		    try {
+                $objNuevFact = new Facturas();
+                $objNuevFact->ClienteRetailId = $objPrimGuia->ClienteRetailId;
+                $objNuevFact->Fecha           = new QDateTime(QDateTime::Now());
+                $objNuevFact->CedulaRif       = $objPrimGuia->ClienteRetail->CedulaRif;
+                $objNuevFact->RazonSocial     = $objPrimGuia->NombreRemitente;
+                $objNuevFact->DireccionFiscal = $objPrimGuia->DireccionRemitente;
+                $objNuevFact->Telefono        = $objPrimGuia->TelefonoRemitente;
+                $objNuevFact->SucursalId      = $_SESSION['SucursalId'];
+                $objNuevFact->ReceptoriaId    = $_SESSION['ReceptoriaId'];
+                $objNuevFact->CajaId          = $_SESSION['CajaId'];
+                $objNuevFact->Estatus         = 'CREADA';
+                $objNuevFact->Tasa            = $objPrimGuia->Tasa;
+                $objNuevFact->Total           = 0;
+                $objNuevFact->MontoDscto      = 0;
+                $objNuevFact->MontoCobrado    = 0;
+                $objNuevFact->MontoPendiente  = 0;
+                $objNuevFact->EstatusPago     = 'PENDIENTE';
+                $objNuevFact->CreatedBy       = $intIdxxUsua;
+                $objNuevFact->Save();
+                t('Factura creada sin problemas');
+		    } catch (Exception $e) {
+                $strTextMens = $e->getMessage();
+                t('Error creando la factura: '.$strTextMens);
+                $blnTodoOkey = false;
+		    }
+            if ($blnTodoOkey) {
+		        t('Ahora voy a asociada cada guía con la factura recien creada');
+                foreach($arrGuiaProc as $objGuiaProc) {
+                    //------------------------------------
+                    // Se asocian las guias a la factura
+                    //------------------------------------
+                    /* @var $objGuiaProc Guias */
+                    try {
+                        $objGuiaFact = new FacturaGuias();
+                        $objGuiaFact->FacturaId = $objNuevFact->Id;
+                        $objGuiaFact->GuiaId    = $objGuiaProc->Id;
+                        $objGuiaFact->Total     = $objGuiaProc->Total;
+                        //------------------------------------------------------------
+                        // Este Save dispara el calculo de los conceptos de la guia
+                        //------------------------------------------------------------
+                        t('Voy a asociar la guia '.$objGuiaProc->Numero);
+                        $objGuiaFact->Save();
+                        t('Listo... ya quedo asociada la guia');
+                        //-----------------------------------------------
+                        // Se acumula el total de la guia en la factura
+                        //-----------------------------------------------
+                        $objNuevFact->Total += $objGuiaFact->Total;
+                        //--------------------------------------------------
+                        // Se actualiza la guia asociandola con la factura
+                        //--------------------------------------------------
+                        $objGuiaProc->FacturaId = $objNuevFact->Id;
+                        $objGuiaProc->Save();
+                        t('La guia quedo atada a la factura');
+                    } catch (Exception $e) {
+                        $strTextMens = $e->getMessage();
+                        t('Error asociado la guia a la factura: '.$strTextMens);
+                        $blnTodoOkey = false;
+                    }
+                }
+                if ($blnTodoOkey) {
+                    $objNuevFact->Save();
+                    t('Factura actualizada');
+                }
+            }
+            if ($blnTodoOkey) {
+		        t('Retornando la factura');
+		        return $objNuevFact;
+            } else {
+		        t('Retornando mensaje de error');
+                return $strTextMens;
+            }
+        }
+
         public function __total() {
             return nf($this->Total);
 		}

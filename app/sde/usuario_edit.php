@@ -515,7 +515,6 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         //---------------------------------
         $strMailPara = $objUsuario->MailUsua;
         $strLogiUsua = $objUsuario->LogiUsua;
-        //$strNuevClav = $objUsuario->PassUsua;
         $objMessage = new QEmailMessage();
         $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
         $objMessage->To = $strMailPara;

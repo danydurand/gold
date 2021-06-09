@@ -13,6 +13,9 @@ if ($strNombProg != 'index.php') {
         'sacar_a_ruta.php',
         'incidencias.php',
         'inventario_almacen.php',
+        'crear_guia_nac.php',
+        'crear_guia_exp.php',
+        'guias_list.php',
     ];
     if ( ($strNombProg != 'establecer_ubicacion.php') && (in_array($strNombProg,$arrNeceUbic)) ) {
         if (!isset($_SESSION['SucursalId'])) {

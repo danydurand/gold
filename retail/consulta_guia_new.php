@@ -1,14 +1,15 @@
 <?php
 //-------------------------------------------------------------------------------------
 // Programa       : consulta_guia.php
-// Realizado por  : Irán Anzola
-// Fecha Elab.    : 27/10/16 10:47 AM
-// Proyecto       : newliberty
 // Descripcion    : Este programa muestra información detallada de una guía al Usuario
 //-------------------------------------------------------------------------------------
 require_once('qcubed.inc.php');
-//require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
+
+use Spipu\Html2Pdf\Html2Pdf;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+
 
 class ConsultaGuiaNew extends FormularioBaseKaizen {
     /**
@@ -70,7 +71,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblMontCanc;
     protected $txtTextCome;
     protected $lblNotaEntr;
-    protected $lblServImpo;
+    protected $lblServEntr;
     protected $lblNumeFact;
 
     // Parámetros de Posición //
@@ -139,7 +140,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             }
         } else {
             $strMensMost = 'Debe especificar un Número de Guía para Consultar.';
-            $this->mensaje($strMensMost,'m','d',__iHAND__);
+            $this->danger($strMensMost);
         }
 
         $this->objRegiTrab = $this->CrearRegistroDeTrabajo();
@@ -159,10 +160,29 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 }
             }
         }
-        if ($strAcciPlus == 'ne') {
-            // Imprimir Nota de Entrega
+        if ($strAcciPlus == 'fg') {
             if ($this->objGuia) {
-                QApplication::Redirect(__SIST__.'/nota_de_entrega_pdf.php/'.$this->objGuia->Id);
+                $this->FacturarLaGuia();
+            }
+        }
+        if ($strAcciPlus == 'in') {
+            if ($this->objGuia) {
+                $this->ImprimirGuiaNacional();
+            }
+        }
+        if ($strAcciPlus == 'ie') {
+            if ($this->objGuia) {
+                $this->ImprimirGuiaExportacion();
+            }
+        }
+        if ($strAcciPlus == 'lr') {
+            if ($this->objGuia) {
+                $this->ImprimirAcuerdoDeLiberacion();
+            }
+        }
+        if ($strAcciPlus == 'ca') {
+            if ($this->objGuia) {
+                $this->ImprimirCartaAntiDroga();
             }
         }
     }
@@ -210,7 +230,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblFechHora_Create();
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
-        $this->lblservImpo_Create();
+        $this->lblServEntr_Create();
         $this->lblNumeFact_Create();
 
         // Para cargar el POD
@@ -308,38 +328,36 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('Pieza');
         $colIdxxPiez->Html = '<?= $_FORM->dtgPiezGuia_IdxxPiez_Render($_ITEM); ?>';
+        $colIdxxPiez->Width = 80;
         $this->dtgPiezGuia->AddColumn($colIdxxPiez);
 
-        $colUbicFisi = new QDataGridColumn($this);
-        $colUbicFisi->Name = QApplication::Translate('Ubicacion');
-        $colUbicFisi->Html = '<?= $_ITEM->Ubicacion; ?>';
-        $this->dtgPiezGuia->AddColumn($colUbicFisi);
+        //$colUbicFisi = new QDataGridColumn($this);
+        //$colUbicFisi->Name = QApplication::Translate('Ubicacion');
+        /*$colUbicFisi->Html = '<?= $_ITEM->Ubicacion; ?>';*/
+        //$this->dtgPiezGuia->AddColumn($colUbicFisi);
 
         $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = QApplication::Translate('Contenido');
         $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
-        $colDescPiez->Width = 200;
+        $colDescPiez->Width = 350;
         $this->dtgPiezGuia->AddColumn($colDescPiez);
 
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = QApplication::Translate('Kilos');
-        $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
+        $colKiloPiez->Html = '<?= nf($_ITEM->Kilos); ?>';
         $this->dtgPiezGuia->AddColumn($colKiloPiez);
 
-        $colLibrPiez = new QDataGridColumn($this);
-        $colLibrPiez->Name = QApplication::Translate('Libras');
-        $colLibrPiez->Html = '<?= $_ITEM->Libras; ?>';
-        $this->dtgPiezGuia->AddColumn($colLibrPiez);
+        if ($this->objGuia->Producto->Codigo == 'EXP') {
+            $colLibrPiez = new QDataGridColumn($this);
+            $colLibrPiez->Name = QApplication::Translate('Libras');
+            $colLibrPiez->Html = '<?= $_ITEM->Libras; ?>';
+            $this->dtgPiezGuia->AddColumn($colLibrPiez);
 
-        $colPiesPiez = new QDataGridColumn($this);
-        $colPiesPiez->Name = QApplication::Translate('PiesCub');
-        $colPiesPiez->Html = '<?= $_ITEM->PiesCub; ?>';
-        $this->dtgPiezGuia->AddColumn($colPiesPiez);
-
-        $colVoluPiez = new QDataGridColumn($this);
-        $colVoluPiez->Name = QApplication::Translate('Volumen');
-        $colVoluPiez->Html = '<?= $_ITEM->Volumen; ?>';
-        $this->dtgPiezGuia->AddColumn($colVoluPiez);
+            $colVoluPiez = new QDataGridColumn($this);
+            $colVoluPiez->Name = QApplication::Translate('Volumen');
+            $colVoluPiez->Html = '<?= $_ITEM->Volumen; ?>';
+            $this->dtgPiezGuia->AddColumn($colVoluPiez);
+        }
 
     }
 
@@ -358,21 +376,39 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         $strTextBoto   = TextoIcono('plus','Acciones');
         $arrOpciDrop   = array();
-        //$arrOpciDrop[] = OpcionDropDown(__SIST__.'/ver_calculos.php',TextoIcono(__iOJOS__,'Ver Calculos'));
         if ($this->objGuia->sistema() == 'RET') {
-            $arrOpciDrop[] = OpcionDropDown(__SIST__.'/cambio_sucu_rece_guia.php',TextoIcono(__iEDIT__,'Cambiar Receptoria'));
-        } else {
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/cc',
-            //    TextoIcono(__iEDIT__,'Calcular Conceptos')
-            //);
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ne',
-            //    TextoIcono('print fa-lg','Imprimir Nota de Entrega')
-            //);
+            if ($this->objGuia->Producto->Codigo == 'NAC') {
+                $strCodiAcci = 'in';
+            } else {
+                $strCodiAcci = 'ie';
+            }
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/'.$strCodiAcci,
+                TextoIcono('print',
+                    'Imprimir Guía')
+            );
+            if (is_null($this->objGuia->FacturaId)) {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/fg',
+                    TextoIcono('gg',
+                        'Facturar la Guía'));
+            } else {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/facturas_edit.php/'.$this->objGuia->FacturaId,
+                    TextoIcono('gg',
+                        'Ver la Factura'));
+            }
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/lr',
+                TextoIcono('chain-broken',
+                    'Acuerdo L.R.'));
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ca',
+                TextoIcono('thumbs-o-up',
+                    'Carta AntiDroga'));
         }
 
-        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop);
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'i');
 
     }
 
@@ -653,7 +689,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblFechGuia_Create() {
         $this->lblFechGuia = new QLabel($this);
         $this->lblFechGuia->Name = 'Fecha';
-        $this->lblFechGuia->Text = substr($this->objGuia->CreatedAt,0,10); //->__toString("DD/MM/YYYY");
+        $this->lblFechGuia->Text = $this->objGuia->Fecha->__toString("DD/MM/YYYY");
     }
 
     protected function lblDescCont_Create() {
@@ -679,9 +715,8 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblPiezPeso = new QLabel($this);
         $this->lblPiezPeso->Name = 'Piezas/Peso';
         $strPiezGuia = $this->objGuia->Piezas;
-        $strPesoGuia = $this->objGuia->ServicioImportacion == 'AER' ? $this->objGuia->Kilos : $this->objGuia->PiesCub;
-        $strUnidPeso = $this->objGuia->ServicioImportacion == 'AER' ? 'Kg' : 'P3';
-        $this->lblPiezPeso->Text = $strPiezGuia.' / '.$strPesoGuia.' ('.$strUnidPeso.')';
+        $strPesoGuia = $this->objGuia->Kilos;
+        $this->lblPiezPeso->Text = $strPiezGuia.' / '.$strPesoGuia.' (Kg)';
     }
 
     protected function lblValoDecl_Create() {
@@ -744,9 +779,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblNotaEntr->Text = $this->objGuia->NotaEntregaId ? $this->objGuia->NotaEntrega->Referencia : null;
     }
 
-    protected function lblServImpo_Create() {
-        $this->lblServImpo = new QLabel($this);
-        $this->lblServImpo->Text = strlen($this->objGuia->ServicioImportacion) ? $this->objGuia->ServicioImportacion : null;
+    protected function lblServEntr_Create() {
+        $this->lblServEntr = new QLabel($this);
+        $this->lblServEntr->Text = strlen($this->objGuia->ServicioEntrega) ? $this->objGuia->ServicioEntrega : null;
     }
 
     protected function lblNumeFact_Create() {
@@ -895,9 +930,129 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     // Acciones Asociadas a los Objetos
     //-----------------------------------
 
-    //protected function btnGuiaOrig_Click($strFormId, $strControlId, $strParameter) {
-    //    QApplication::Redirect(__SIST__.'/consulta_guia.php/'.$strParameter);
-    //}
+    protected function FacturarLaGuia() {
+        $arrGuiaFact = [$this->objGuia];
+        $mixResuFact = Facturas::crearFactura($arrGuiaFact,$this->objUsuario->CodiUsua);
+        t('Regrese de la creacion de la factura');
+        if ($mixResuFact instanceof Facturas) {
+            QApplication::Redirect(__SIST__.'/facturas_edit.php/'.$mixResuFact->Id);
+        } else {
+            $this->danger($mixResuFact);
+        }
+    }
+
+    protected function ImprimirGuiaNacional()
+    {
+        t('Imprimiendo guia nacional...');
+        $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
+        try {
+            t('voy por aqui');
+            $strNombArch = 'GuiaNac' . $this->objGuia->Numero . '.pdf';
+            $strNombForm = 'guia_nacional.php';
+            $strPosiHoja = 'P';
+
+            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
+            $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
+            t('llegando por aqui');
+
+            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+        t('Saliendo de la impresion de la guia nacional');
+    }
+
+    protected function ImprimirGuiaExportacion()
+    {
+        t('Imprimiendo guia nacional...');
+        $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
+        try {
+            t('voy por aqui');
+            $strNombArch = 'GuiaNac' . $this->objGuia->Numero . '.pdf';
+            $strNombForm = 'guia_nacional.php';
+            $strPosiHoja = 'P';
+
+            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
+            $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
+            t('llegando por aqui');
+
+            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+        t('Saliendo de la impresion de la guia nacional');
+    }
+
+    protected function ImprimirAcuerdoDeLiberacion()
+    {
+        try {
+            $strNombArch = 'AcuerdoDeLiberacion' . $this->objGuia->Numero . '.pdf';
+            $strNombForm = 'acuerdo_lr.php';
+            $strPosiHoja = 'P';
+
+            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
+            t('llegando por aqui');
+
+            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+    }
+
+    protected function ImprimirCartaAntiDroga()
+    {
+        try {
+            $strNombArch = 'CartaAntiDroga' . $this->objGuia->Numero . '.pdf';
+            $strNombForm = 'carta_ad.php';
+            $strPosiHoja = 'P';
+
+            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
+
+            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+    }
 
     protected function btnInfoPodx_Click($strFormId, $strControlId, $strParameter) {
         $this->mensaje();
@@ -1119,7 +1274,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         $colFechCkpt = new QDataGridColumn($this);
         $colFechCkpt->Name = QApplication::Translate('Fecha/Hora');
-        $colFechCkpt->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY"); ?>';
+        /*$colFechCkpt->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY"); ?>';*/
+        $colFechCkpt->Html = '<?= $_FORM->dtgGuiaCkpt_FechHora_Render($_ITEM); ?>';
+        $colFechCkpt->Width = 120;
         $this->dtgGuiaCkpt->AddColumn($colFechCkpt);
 
         $colUsuaCkpt = new QDataGridColumn($this);
@@ -1128,11 +1285,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colUsuaCkpt->Width = 15;
         $this->dtgGuiaCkpt->AddColumn($colUsuaCkpt);
 
-        $colCodiRuta = new QDataGridColumn($this);
-        $colCodiRuta->Name = QApplication::Translate('Ruta');
-        $colCodiRuta->Html = '<?= $_FORM->dtgGuiaCkpt_CodiRuta_Render($_ITEM); ?>';
-        $colCodiRuta->Width = 15;
-        $this->dtgGuiaCkpt->AddColumn($colCodiRuta);
+        //$colCodiRuta = new QDataGridColumn($this);
+        //$colCodiRuta->Name = QApplication::Translate('Ruta');
+        /*$colCodiRuta->Html = '<?= $_FORM->dtgGuiaCkpt_CodiRuta_Render($_ITEM); ?>';*/
+        //$colCodiRuta->Width = 15;
+        //$this->dtgGuiaCkpt->AddColumn($colCodiRuta);
     }
 
     public function dtgGuiaCkpt_IdxxPiez_Render(PiezaCheckpoints $objPiezCkpt) {
@@ -1144,9 +1301,15 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $strCodiCkpt = $objPiezCkpt->Checkpoint->Codigo;
         $strTextObse = $objPiezCkpt->Comentario;
         if (strlen($strTextObse) > 0) {
-            $strTextObse = '('.$strCodiCkpt.') '.limpiarCadena($strTextObse);
+            //$strTextObse = '('.$strCodiCkpt.') '.limpiarCadena($strTextObse);
+            $strTextObse = '('.$strCodiCkpt.') '.$strTextObse;
         }
         return utf8_encode($strTextObse);
+    }
+
+    public function dtgGuiaCkpt_FechHora_Render(PiezaCheckpoints $objPiezCkpt) {
+        $strFechHora = $objPiezCkpt->Fecha->__toString('DD/MM/YYYY').' '.$objPiezCkpt->Hora;
+        return utf8_encode($strFechHora);
     }
 
     public function dtgGuiaCkpt_CodiUsua_Render(PiezaCheckpoints $objPiezCkpt) {
@@ -1173,8 +1336,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             return null;
         }
     }
-
-    // ---- DataGrid de Actividad(es) de la Guía ---- //
 
     public function dtgRegiTrab_CodiUsuaObject_Render(RegistroTrabajo $objRegiTrab) {
         if (!is_null($objRegiTrab->Usuario))
@@ -1282,7 +1443,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
     protected function btnEditGuia_Click() {
-        QApplication::Redirect(__SIST__.'/cargar_guia.php/'.$this->objGuia->Id);
+        QApplication::Redirect(__SIST__.'/crear_guia_nac.php/'.$this->objGuia->Id);
     }
 
     protected function btnImprGuia_Click() {

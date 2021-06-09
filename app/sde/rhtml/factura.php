@@ -32,7 +32,7 @@ $objFactImpr = Facturas::Load($intFactIdxx);
                             <td style="width: 300px"><?= $objFactImpr->RazonSocial ?></td>
                         </tr>
                         <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="width: 300px">FISCAL ADDRESS:</td>
+                            <td style="width: 300px">ADDRESS:</td>
                         </tr>
                         <tr>
                             <td style="width: 300px"><?= $objFactImpr->DireccionFiscal ?></td>
@@ -74,7 +74,7 @@ $objFactImpr = Facturas::Load($intFactIdxx);
                 <?php $intCantPiez += $objNotaEntr->Piezas ?>
             <?php } ?>
             <tr style="background-color: #CCC; font-weight: bold">
-                <td>Totals</td>
+                <td>Total</td>
                 <td style="text-align: center"></td>
                 <td style="text-align: right"><?= nf($objFactImpr->Total) ?></td>
             </tr>

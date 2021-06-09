@@ -10,7 +10,6 @@
             1335 NW 98TH CT UNIT 2<br>
             DORAL, FL 33172<br>
             786 452 9090
-            <?= $strLimiDere; ?>
         </td>
     </tr>
 </table>

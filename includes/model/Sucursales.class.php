@@ -28,11 +28,16 @@
 			return sprintf('%s (%s)',  $this->strNombre, $this->strIata);
 		}
 
-		public static function LoadSucursalesActivas($strOrdePorx='Iata') {
+		public static function LoadSucursalesActivas($strOrdePorx='Iata',$strTipoSucu='nac') {
             $objClauOrde   = QQ::Clause();
             $objClauOrde[] = QQ::OrderBy(QQN::Sucursales()->$strOrdePorx);
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::IsNull(QQN::Sucursales()->DeletedAt);
+            if ($strTipoSucu == 'nac') {
+                $objClauWher[] = QQ::Equal(QQN::Sucursales()->EsExport,SinoType::NO);
+            } else {
+                $objClauWher[] = QQ::IsNull(QQN::Sucursales()->EsExport,SinoType::SI);
+            }
             return Sucursales::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
         }
 

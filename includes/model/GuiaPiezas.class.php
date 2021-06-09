@@ -27,7 +27,16 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
-		public function GuiaTransportista() {
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'GuiaPiezas';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->IdPieza;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = '';
+            LogDeCambios($arrLogxCamb);
+        }
+
+        public function GuiaTransportista() {
             $strGuiaTran = $this->IdPieza;
             $objGuiaTran = GuiaTransportista::LoadByGuiaPiezaId($this->Id);
             if ($objGuiaTran) {

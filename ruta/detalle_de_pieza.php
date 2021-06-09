@@ -172,7 +172,7 @@ if (isset($_GET['id'])) {
             <td class="valor">'.$strGuiaTran.'</td>
         </tr>
         ';
-    }ch
+    }
 
     $strDetaPiez = '
     <div data-role="collapsible-set" data-inset="true" data-theme="a">

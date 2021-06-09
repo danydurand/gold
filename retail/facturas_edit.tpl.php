@@ -17,8 +17,8 @@
             </div>
         </div>
         <div class="row" style="margin-top: 1em;">
-            <div class="col-md-12">
-            <?php $this->lblId->RenderWithName(); ?>
+            <div class="col-md-6">
+                <?php $this->lblId->RenderWithName(); ?>
 				<?php $this->lstClienteRetail->RenderWithName(); ?>
 				<?php $this->lstClienteCorp->RenderWithName(); ?>
 				<?php $this->calFecha->RenderWithName(); ?>
@@ -32,6 +32,8 @@
 				<?php $this->txtEstatus->RenderWithName(); ?>
 				<?php $this->txtTasa->RenderWithName(); ?>
 				<?php $this->txtTotal->RenderWithName(); ?>
+            </div>
+            <div class="col-md-6">
 				<?php $this->txtMontoDscto->RenderWithName(); ?>
 				<?php $this->txtMontoCobrado->RenderWithName(); ?>
 				<?php $this->txtMontoPendiente->RenderWithName(); ?>
@@ -43,13 +45,6 @@
 				<?php $this->txtHoraImpresion->RenderWithName(); ?>
 				<?php $this->chkTieneRetencion->RenderWithName(); ?>
 				<?php $this->txtNotaCreditoId->RenderWithName(); ?>
-	<!--			--><?php //$this->lblCreatedAt->RenderWithName(); ?>
-	<!--			--><?php //$this->lblUpdatedAt->RenderWithName(); ?>
-	<!--			--><?php //$this->lblDeletedAt->RenderWithName(); ?>
-	<!--			--><?php //$this->txtCreatedBy->RenderWithName(); ?>
-	<!--			--><?php //$this->txtUpdatedBy->RenderWithName(); ?>
-	<!--			--><?php //$this->txtDeletedBy->RenderWithName(); ?>
-	<?php //$this->dtgPagosCorpsAsFacturaPagoCorp->RenderWithName(true); ?>
 	        </div>
         </div>
     </div>

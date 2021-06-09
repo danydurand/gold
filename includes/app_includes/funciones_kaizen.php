@@ -455,7 +455,7 @@ function QuitarCaracteresEspeciales2($strCadeProc) {
     $strCadeProc = str_replace("Ó","O",$strCadeProc);
     $strCadeProc = str_replace("Ú","U",$strCadeProc);
     $strCadeProc = str_replace("\"","",$strCadeProc);
-    $strCadeProc = str_replace("&","",$strCadeProc);
+    $strCadeProc = str_replace("&","y",$strCadeProc);
     $strCadeProc = str_replace(chr(13),"",$strCadeProc);
     $strNuevLine = array("\r\n", "\n", "\r");
     return str_replace($strNuevLine, "", $strCadeProc);

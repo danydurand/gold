@@ -2330,6 +2330,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of Guias objects,
+		 * by FacturaId Index(es)
+		 * @param integer $intFacturaId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Guias[]
+		*/
+		public static function LoadArrayByFacturaId($intFacturaId, $objOptionalClauses = null) {
+			// Call Guias::QueryArray to perform the LoadArrayByFacturaId query
+			try {
+				return Guias::QueryArray(
+					QQ::Equal(QQN::Guias()->FacturaId, $intFacturaId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Guiases
+		 * by FacturaId Index(es)
+		 * @param integer $intFacturaId
+		 * @return int
+		*/
+		public static function CountByFacturaId($intFacturaId) {
+			// Call Guias::QueryCount to perform the CountByFacturaId query
+			return Guias::QueryCount(
+				QQ::Equal(QQN::Guias()->FacturaId, $intFacturaId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////

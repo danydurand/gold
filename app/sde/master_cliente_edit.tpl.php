@@ -270,7 +270,6 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 		.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
 			background-color: #4682B4;
 		}
-
 		.nav-tabs > li > a {
 			color: #4682B4;
 		}

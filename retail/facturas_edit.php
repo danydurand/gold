@@ -114,6 +114,14 @@ class FacturasEditForm extends FacturasEditFormBase {
 	// Acciones relativas a los objetos 
 	//-----------------------------------
 
+    protected function btnVolvList_Click() {
+        $objUltiAcce = PilaAcceso::Pop('D');
+        $strPagiReto = $objUltiAcce->__toString();
+        //$strPagiReto = str_replace('../','',$strPagiReto);
+        //t('Pagina de Retorno: '.$strPagiReto);
+        QApplication::Redirect(__SIST__.'/'.$strPagiReto);
+    }
+
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
         QApplication::Redirect(__SIST__.'/facturas_edit.php/'.$objRegiTabl->Id);
@@ -177,18 +185,20 @@ class FacturasEditForm extends FacturasEditFormBase {
         // Se verifica la integridad referencial
         //----------------------------------------
         $blnTodoOkey = true;
-        $arrTablRela = $this->mctFacturas->TablasRelacionadasFacturas();
-        if (count($arrTablRela)) {
-            $strTablRela = implode(',',$arrTablRela);
-            $this->warning('Existen registros relacionados en %s',$strTablRela);
-            $blnTodoOkey = false;
+        if ($this->objUsuario->LogiUsua != 'ddurand') {
+            $arrTablRela = $this->mctFacturas->TablasRelacionadasFacturas();
+            if (count($arrTablRela)) {
+                $strTablRela = implode(',',$arrTablRela);
+                $this->warning('Existen registros relacionados en '.$strTablRela);
+                $blnTodoOkey = false;
+            }
         }
         if ($blnTodoOkey) {
-            // Delegate "Delete" processing to the ArancelMetaControl
+            Guias::RomperRelacionConFactura($this->mctFacturas->Facturas->Id);
             $this->mctFacturas->DeleteFacturas();
             $arrLogxCamb['strNombTabl'] = 'Facturas';
             $arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Numero;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

@@ -1,7 +1,6 @@
 <?php
 // Load the QCubed Development Framework
 require_once('qcubed.inc.php');
-//require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__FORMBASE_CLASSES__ . '/GuiasListFormBase.class.php');
 
 /**
@@ -26,12 +25,8 @@ class GuiasListForm extends GuiasListFormBase {
     protected $objClauWher;
     protected $blnHayxCond;
     protected $arrGuiaLote;
+    protected $btnGuiaExpo;
 
-    //-------------------------------------------------------------
-    // Parámetros de Información (Criterios de Búsqueda de Guías)
-    //-------------------------------------------------------------
-
-    // Lado Izquierdo //
     protected $txtNumeGuia;
     protected $txtBuscCodi;
     protected $txtBuscNomb;
@@ -39,7 +34,7 @@ class GuiasListForm extends GuiasListFormBase {
     protected $calFechInic;
     protected $calFechFina;
     protected $txtNumePrec;
-    // Lado Derecho //
+
     protected $lstTipoPago;
     protected $lstCodiOrig;
     protected $lstCodiDest;
@@ -47,12 +42,14 @@ class GuiasListForm extends GuiasListFormBase {
     protected $lstCodiCkpt;
     protected $chkGuiaAnul;
 
-    // Botónes del Filtro de Búsqueda //
     protected $btnBuscRegi;
 
-    // Botónes del Formulario //
     protected $btnImprLote;
     protected $btnCancel;
+    protected $objProdNaci;
+
+    protected $btnFactGuia;
+    protected $colRegiSele;
 
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -68,10 +65,12 @@ class GuiasListForm extends GuiasListFormBase {
 		parent::Form_Create();
 
         $this->lblTituForm->Text = 'Guias';
+        $this->objUsuario  = unserialize($_SESSION['User']);
+        $this->objProdNaci = unserialize($_SESSION['ProdNaci']);
 
 		// Instantiate the Meta DataGrid
 		$this->dtgGuiases = new GuiasDataGrid($this);
-		$this->dtgGuiases->FontSize = 13;
+		$this->dtgGuiases->FontSize = 12.5;
 		$this->dtgGuiases->ShowFilter = false;
 
 		// Style the DataGrid (if desired)
@@ -82,7 +81,7 @@ class GuiasListForm extends GuiasListFormBase {
 		$this->dtgGuiases->Paginator = new QPaginator($this->dtgGuiases);
 		$this->dtgGuiases->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-        $this->dtgGuiases->SortColumnIndex = 0;
+        $this->dtgGuiases->SortColumnIndex = 1;
         $this->dtgGuiases->SortDirection = 1;
 
         // Higlight the datagrid rows when mousing over them
@@ -93,14 +92,20 @@ class GuiasListForm extends GuiasListFormBase {
 		// We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
 		// or $_ITEM->Id to pass the object's id, or any other data grid variable
 		$this->dtgGuiases->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-		$this->dtgGuiases->AddRowAction(new QClickEvent(), new QAjaxAction('dtgGuiasesRow_Click'));
+		$this->dtgGuiases->AddRowAction(new QDoubleClickEvent(), new QAjaxAction('dtgGuiasesRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
 		// Create the Other Columns (note that you can use strings for guias's properties, or you
 		// can traverse down QQN::guias() to display fields that are down the hierarchy)
-		$this->dtgGuiases->MetaAddColumn('Id');
-		$this->dtgGuiases->MetaAddColumn('Tracking','Name=Guia-Cliente');
+		//$this->dtgGuiases->MetaAddColumn('Id');
+
+        $this->colRegiSele = new QCheckBoxColumn('', $this->dtgGuiases);
+        $this->colRegiSele->PrimaryKey = 'Id';
+        $this->dtgGuiases->AddColumn($this->colRegiSele);
+        $this->dtgGuiases->AddAction(new QClickEvent(), new QAjaxAction('colRegiSele_Click'));
+
+        $this->dtgGuiases->MetaAddColumn('Numero','Name=Guia');
 
         $colFechGuia = new QDataGridColumn('Fecha','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
         $colFechGuia->OrderByClause = QQ::OrderBy(QQN::Guias()->Fecha, false);
@@ -108,28 +113,122 @@ class GuiasListForm extends GuiasListFormBase {
         $this->dtgGuiases->AddColumn($colFechGuia);
 
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
+        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaOrigen->Siglas,'Name=R.Orig');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
-        $this->dtgGuiases->MetaAddColumn('ServicioImportacion','Name=S.Impor');
+        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
+        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->FormaPago,'Name=F.Pag');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
         $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');
         $this->dtgGuiases->AddColumn($colUltiCkpt);
         $this->dtgGuiases->MetaAddColumn('NombreRemitente', 'Name=Remitente');
         $this->dtgGuiases->MetaAddColumn('NombreDestinatario','Name=Destinatario');
-        $this->dtgGuiases->MetaAddColumn('Total');
+        //$this->dtgGuiases->MetaAddColumn('Total');
+        $colTotaGuia = new QDataGridColumn('Total','<?= $_FORM->dtgGuiases_Total_Render($_ITEM); ?>');
+        $this->dtgGuiases->AddColumn($colTotaGuia);
+        $this->dtgGuiases->MetaAddColumn('FacturaId','Name=PreFact');
 
         $this->dtgGuiases->SetDataBinder('dtgGuias_Bind');
 
         $this->btnExpoExce_Create();
         $this->btnExpoExce->Visible = true;
 
+        $this->btnGuiaExpo_Create();
+        $this->btnFactGuia_Create();
+
+    }
+
+
+    protected function btnNuevRegi_Create() {
+        $this->btnNuevRegi = new QButtonP($this);
+        $this->btnNuevRegi->Text = TextoIcono('plus-circle','<b>NAC</b>','F','lg');
+        $this->btnNuevRegi->HtmlEntities = false;
+        $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
+    }
+
+    protected function btnNuevRegi_Click() {
+        QApplication::Redirect(__SIST__.'/crear_guia_nac.php');
+    }
+
+    protected function btnGuiaExpo_Create() {
+        $this->btnGuiaExpo = new QButtonP($this);
+        $this->btnGuiaExpo->Text = TextoIcono('plus-circle','<b>EXP</b>','F','lg');
+        $this->btnGuiaExpo->HtmlEntities = false;
+        $this->btnGuiaExpo->AddAction(new QClickEvent(), new QServerAction('btnGuiaExpo_Click'));
+    }
+
+    protected function btnFactGuia_Create() {
+        $this->btnFactGuia = new QButtonOP($this);
+        $this->btnFactGuia->Text = TextoIcono('gg','FACT','F','lg');
+        $this->btnFactGuia->HtmlEntities = false;
+        $this->btnFactGuia->Visible = false;
+        $this->btnFactGuia->AddAction(new QClickEvent(), new QServerAction('btnFactGuia_Click'));
+    }
+
+    protected function colRegiSele_Click() {
+        $this->mensaje();
+        $arrIdxxSele = $this->colRegiSele->GetChangedIds();
+        $intCantSele = count($arrIdxxSele);
+        if ($intCantSele > 0) {
+            $arrIdxxSele   = array_keys($arrIdxxSele);
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::Guias()->Id,$arrIdxxSele);
+            $objClauWher[] = QQ::Equal(QQN::Guias()->FormaPago,'PPD');
+            $objClauWher[] = QQ::IsNull(QQN::Guias()->FacturaId);
+            $intCantGuia   = Guias::QueryCount(QQ::AndCondition($objClauWher));
+            if ($intCantSele != $intCantGuia) {
+                $strTextMens  = 'Solo las Guías <b>PPD sin Factura</b>, podrán Facturarse | ';
+                $strTextMens .= 'Seleccionadas: '.$intCantSele.' | Aptas para Facturar: '.$intCantGuia;
+                $this->danger($strTextMens);
+            }
+            $this->btnFactGuia->Visible = true;
+        } else {
+            $this->btnFactGuia->Visible = false;
+        }
+    }
+
+    protected function btnFactGuia_Click() {
+        $arrIdxxSele = $this->colRegiSele->GetChangedIds();
+        $intCantSele = count($arrIdxxSele);
+        if ($intCantSele > 0) {
+            t('Buscando guias a facturar...');
+            //--------------------------------
+            // Seleccion de Guias a Facturar
+            //--------------------------------
+            $arrIdxxSele = array_keys($arrIdxxSele);
+            $objClauWher = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::Guias()->Id, $arrIdxxSele);
+            $objClauWher[] = QQ::Equal(QQN::Guias()->FormaPago, 'PPD');
+            $objClauWher[] = QQ::IsNull(QQN::Guias()->FacturaId);
+            $arrGuiaFact   = Guias::QueryArray(QQ::AndCondition($objClauWher));
+            t('Voy a crear la factura');
+            $mixResuFact = Facturas::crearFactura($arrGuiaFact,$this->objUsuario->CodiUsua);
+            t('Regrese de la creacion de la factura');
+            if ($mixResuFact instanceof Facturas) {
+                QApplication::Redirect(__SIST__.'/facturas_edit.php/'.$mixResuFact->Id);
+            } else {
+                $this->danger($mixResuFact);
+            }
+        }
+    }
+
+    protected function btnGuiaExpo_Click() {
+        QApplication::Redirect(__SIST__.'/crear_guia_exp.php');
     }
 
     protected function dtgGuias_Bind() {
         if (isset($_SESSION['CritCons'])) {
+            t('Hay un criterio..');
             $this->objClauWher = unserialize($_SESSION['CritCons']);
+            unset($_SESSION['CritCons']);
         } else {
             if (!$this->blnHayxCond) {
-                $this->objClauWher[] = QQ::All();
+                $dttFechDhoy = new QDateTime(QDateTime::Now);
+                t('Fecha de Hoy: '.$dttFechDhoy->__toString("YYYY-MM-DD"));
+
+                $this->objClauWher   = QQ::Clause();
+                $this->objClauWher[] = QQ::Equal(QQN::Guias()->ProductoId,$this->objProdNaci->Id);
+                $this->objClauWher[] = QQ::Equal(QQN::Guias()->CreatedBy,$this->objUsuario->CodiUsua);
+                //$this->objClauWher[] = QQ::Equal(QQN::Guias()->Fecha,$dttFechDhoy->__toString("YYYY-MM-DD"));
             }
         }
 
@@ -162,10 +261,12 @@ class GuiasListForm extends GuiasListFormBase {
         }
     }
 
+    public function dtgGuiases_Total_Render(Guias $objGuia) {
+        return !is_null($objGuia) ? nf($objGuia->Total) : null;
+    }
 
     public function dtgGuiasesRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
-        //QApplication::Redirect("guias_edit.php/$intId");
         QApplication::Redirect(__SIST__."/consulta_guia_new.php/$intId");
 	}
 

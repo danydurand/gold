@@ -14,7 +14,7 @@ try {
     //-------------------
     // Factura como tal
     //-------------------
-    $html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "20"));
+    $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("15", "10", "20", "30"));
     $html2pdf->pdf->SetDisplayMode('fullpage');
     $_SESSION['FactIdxx'] = $intFactIdxx;
     ob_start();
@@ -23,7 +23,7 @@ try {
     //-----------------------------------------
     // Relación de Manifiestos de la Factura
     //-----------------------------------------
-    $html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "20"));
+    $html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "30"));
     $html2pdf->pdf->SetDisplayMode('fullpage');
     $_SESSION['FactMani'] = serialize($objFactClie);
     ob_start();

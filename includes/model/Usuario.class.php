@@ -60,23 +60,23 @@
             //---------------------------------
             $strLogiUsua = $this->LogiUsua;
             $objMessage = new QEmailMessage();
-            $objMessage->From = 'LibertyExpress - Yokohama <notificaciones@libertyexpress.com>';
+            $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
             $objMessage->To = $this->MailUsua;
             $objMessage->Subject = 'Cambio de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
 
             // Also setup HTML message (optional)
             $strBody  = 'Estimado Usuario,<p><br>';
-            $strBody .= 'Desde el Sistema Yokohama, el personal autorizado ha registrado ';
+            $strBody .= 'Desde el Sistema SisCO, el personal autorizado ha registrado ';
             $strBody .= 'un cambio de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br><br>';
             $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b>.<br>';
             $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema nuevamente. Gracias!<br><br>';
             $strBody .= 'Si Usted desconoce esta transacción, por favor comuníquese a la brevedad<br>';
             $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br><br>';
-            $strBody .= 'soportelufeman@gmail.com<br>';
+            $strBody .= 'soporte@lufemansoftware.com<br>';
             $objMessage->HtmlBody = $strBody;
 
             // Add random/custom email headers
-            $objMessage->SetHeader('x-application', 'Sistema Yokohama');
+            $objMessage->SetHeader('x-application', 'Sistema SisCO');
 
             //-------------------------------------
             // Se suprimen los errores en pantalla

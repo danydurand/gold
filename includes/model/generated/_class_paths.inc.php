@@ -944,6 +944,13 @@
 		QApplicationBase::$ClassFile['piezacheckpointsmetacontrol'] = __META_CONTROLS__ . '/PiezaCheckpointsMetaControl.class.php';
 		QApplicationBase::$ClassFile['piezacheckpointsdatagrid'] = __META_CONTROLS__ . '/PiezaCheckpointsDataGrid.class.php';
 
+	// ClassPaths for the PiezasTemp class
+		QApplicationBase::$ClassFile['piezastemp'] = __MODEL__ . '/PiezasTemp.class.php';
+		QApplicationBase::$ClassFile['qqnodepiezastemp'] = __MODEL__ . '/PiezasTemp.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodepiezastemp'] = __MODEL__ . '/PiezasTemp.class.php';
+		QApplicationBase::$ClassFile['piezastempmetacontrol'] = __META_CONTROLS__ . '/PiezasTempMetaControl.class.php';
+		QApplicationBase::$ClassFile['piezastempdatagrid'] = __META_CONTROLS__ . '/PiezasTempDataGrid.class.php';
+
 	// ClassPaths for the PilaAcceso class
 		QApplicationBase::$ClassFile['pilaacceso'] = __MODEL__ . '/PilaAcceso.class.php';
 		QApplicationBase::$ClassFile['qqnodepilaacceso'] = __MODEL__ . '/PilaAcceso.class.php';

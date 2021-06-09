@@ -754,7 +754,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblNumeFact->Text = $this->objGuia->NroFactura();
     }
 
-    // ------- Información de Estatus ------- //
 
     protected function dtgGuiaCkpt_Create() {
         $this->dtgGuiaCkpt = new QDataGrid($this);
@@ -771,7 +770,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->createDtgGuiaCkptColumns();
     }
 
-    // ---- Información de Actividad(es) ---- //
 
     protected function dtgRegiTrab_Create() {
         $this->dtgRegiTrab = new QDataGrid($this);

@@ -68,6 +68,7 @@ class GuiaTransportistaListForm extends GuiaTransportistaListFormBase {
 
 		// Create the Other Columns (note that you can use strings for guia_transportista's properties, or you
 		// can traverse down QQN::guia_transportista() to display fields that are down the hierarchy)
+
         $this->colRegiSele = new QCheckBoxColumn('', $this->dtgGuiaTransportistas);
         $this->colRegiSele->PrimaryKey = 'Id';
         $this->dtgGuiaTransportistas->AddColumn($this->colRegiSele);
@@ -113,7 +114,7 @@ class GuiaTransportistaListForm extends GuiaTransportistaListFormBase {
         $objDatabase->NonQuery($strCadeSqlx);
         $this->dtgGuiaTransportistas->Refresh();
         $this->btnBorrProc->Visible = false;
-        $this->success("Trasacción Exitosa !!!");
+        $this->success("Transacción Exitosa !!!");
     }
 
     public function btnNuevRegi_Click()

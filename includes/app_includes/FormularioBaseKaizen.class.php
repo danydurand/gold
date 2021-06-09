@@ -174,7 +174,8 @@ abstract class FormularioBaseKaizen extends QForm {
 
     protected function btnCancel_Click() {
         $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__SIST__.'/'.$objUltiAcce->__toString());
+        $strPagiReto = __SIST__.'/'.$objUltiAcce->__toString();
+        QApplication::Redirect($strPagiReto);
     }
 
 }

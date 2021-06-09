@@ -137,6 +137,31 @@ class Index extends QForm {
     }
 
     protected function SetupValoresDeSesion($objUsuaConn) {
+
+        //--------------------
+        // Producto Nacional
+        //--------------------
+        $objProdNaci = Productos::LoadByCodigo('NAC');
+        $_SESSION['ProdNaci'] = serialize($objProdNaci);
+
+        //------------------------------
+        // Cliente con Tarifa Nacional
+        //------------------------------
+        $objClieNaci = MasterCliente::LoadByCodigoInterno('NAC01');
+        $_SESSION['ClieNaci'] = serialize($objClieNaci);
+
+        //-----------------------
+        // Producto Exportacion
+        //-----------------------
+        $objProdExpo = Productos::LoadByCodigo('EXP');
+        $_SESSION['ProdExpo'] = serialize($objProdExpo);
+
+        //----------------------------------
+        // Cliente con Tarifa Exportacion
+        //----------------------------------
+        $objClieExpo = MasterCliente::LoadByCodigoInterno('EXP01');
+        $_SESSION['ClieExpo'] = serialize($objClieExpo);
+
         //$strEmaiSopo = BuscarParametro('CntaSopo','EmaiSopo','Txt1','soportelufeman@gmail.com');
         //$_SESSION['EmaiSopo'] = serialize($strEmaiSopo);
         ////---------------------------------------------------------------------------------------------------------

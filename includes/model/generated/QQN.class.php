@@ -811,6 +811,12 @@
 			return new QQNodePiezaCheckpoints('pieza_checkpoints', null, null);
 		}
 		/**
+		 * @return QQNodePiezasTemp
+		 */
+		static public function PiezasTemp() {
+			return new QQNodePiezasTemp('piezas_temp', null, null);
+		}
+		/**
 		 * @return QQNodePilaAcceso
 		 */
 		static public function PilaAcceso() {

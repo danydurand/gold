@@ -20,8 +20,8 @@ require('inc/header.inc.php');
         <div class="hidden-xs hidden-sm col-md-6 col-lg-5" style="text-align: center; margin-top: -0.25em;">
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnEditGuia->Render(); ?>
-            <?php $this->btnImprGuia->Render(); ?>
-            <?php $this->btnInfoPodx->Render(); ?>
+            <?php //$this->btnImprGuia->Render(); ?>
+            <?php //$this->btnInfoPodx->Render(); ?>
             <?php $this->btnGuiaOrig->Render(); ?>
             <?php $this->btnMasxAcci->Render(); ?>
             <?php $this->lblBotoPopu->Render(); ?>
@@ -249,10 +249,10 @@ require('inc/header.inc.php');
                             </div>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <div class="titulo-c">Serv. Impor.</div>
+                                    <div class="titulo-c">Serv. Entr.</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <?php $this->lblServImpo->Render(); ?>
+                                    <?php $this->lblServEntr->Render(); ?>
                                 </div>
                             </div>
                             <div class="row">

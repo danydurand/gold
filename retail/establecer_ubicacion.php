@@ -13,18 +13,39 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
     protected $lstSucuDisp;
     protected $lstReceSucu;
     protected $lstCajaRece;
+    protected $blnEditMode = false;
+    protected $objUbicUsua;
 
     protected function Form_Create() {
         parent::Form_Create();
 
-        $this->lblTituForm->Text = 'Establecer Ubicacion';
 
         $this->objDefaultWaitIcon = new QWaitIcon($this);
         $this->btnSave->Text = '<i class="fa fa-check fa-lg"></i> Guardar';
 
+        $this->objUbicUsua = Parametros::BuscarParametro('UBICACION',$this->objUsuario->LogiUsua,'TODO');
+        if ($this->objUbicUsua instanceof Parametros) {
+            $this->blnEditMode = true;
+            t('Modo edicion');
+            $this->lblTituForm->Text = 'Confirmar Ubicacion';
+            $this->info('Presione <b>Guardar</b> para Confirmar su Ubicación');
+        } else {
+            $this->objUbicUsua = new Parametros();
+            $this->objUbicUsua->Indice = 'UBICACION';
+            $this->objUbicUsua->Codigo = $this->objUsuario->LogiUsua;
+            $this->objUbicUsua->Descripcion = 'UBICACION DEL USUARIO: '.$this->objUsuario->LogiUsua;
+            t('Modo insercion');
+            $this->lblTituForm->Text = 'Establecer Ubicacion';
+        }
+
         $this->lstSucuDisp_Create();
         $this->lstReceSucu_Create();
         $this->lstCajaRece_Create();
+
+        if ($this->blnEditMode) {
+            $this->lstSucuDisp_Change();
+            $this->lstReceSucu_Change();
+        }
 
     }
 
@@ -40,7 +61,8 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
         $intCantSucu = count($arrSucuDisp);
         $this->lstSucuDisp->AddItem('- Seleccione Una - ('.$intCantSucu.')',null);
         foreach ($arrSucuDisp as $objSucuDisp) {
-            $this->lstSucuDisp->AddItem($objSucuDisp->__toString(), $objSucuDisp->Id);
+            $blnSeleRegi = $objSucuDisp->Id == $this->objUbicUsua->Valor1 ? true : false;
+            $this->lstSucuDisp->AddItem($objSucuDisp->__toString(), $objSucuDisp->Id, $blnSeleRegi);
         }
         $this->lstSucuDisp->Width = 250;
         $this->lstSucuDisp->Required = true;
@@ -69,6 +91,14 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
     // Acciones asociadas a los objetos
     //---------------------------------------
 
+    protected function btnCancel_Click() {
+        $objUltiAcce = PilaAcceso::Pop('D');
+        $strPagiReto = $objUltiAcce->__toString();
+        $strPagiReto = str_replace('../','',$strPagiReto);
+        //t('Pagina de Retorno: '.$strPagiReto);
+        QApplication::Redirect(__SIST__.'/'.$strPagiReto);
+    }
+
     protected function lstSucuDisp_Change() {
         $intIdxxSucu = $this->lstSucuDisp->SelectedValue;
         if (!is_null($intIdxxSucu)) {
@@ -79,7 +109,11 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
             $intCantRece = count($arrReceSucu);
             $this->lstReceSucu->AddItem('- Seleccione Una - ('.$intCantRece.')',null);
             foreach ($arrReceSucu as $objReceSucu) {
-                $blnSeleRegi = $intCantRece == 1 ? true : false;
+                if ($this->blnEditMode) {
+                    $blnSeleRegi = $objReceSucu->Id == $this->objUbicUsua->Valor2 ? true : false;
+                } else {
+                    $blnSeleRegi = $intCantRece == 1 ? true : false;
+                }
                 $this->lstReceSucu->AddItem($objReceSucu->__toString(), $objReceSucu->Id, $blnSeleRegi);
                 if ($blnSeleRegi) {
                     $this->lstReceSucu_Change();
@@ -96,7 +130,11 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
             $intCantCaja = count($arrCajaRece);
             $this->lstCajaRece->AddItem('- Seleccione Una - ('.$intCantCaja.')',null);
             foreach ($arrCajaRece as $objCajaRece) {
-                $blnSeleRegi = $intCantCaja == 1 ? true : false;
+                if ($this->blnEditMode) {
+                    $blnSeleRegi = $objCajaRece->Id == $this->objUbicUsua->Valor3 ? true : false;
+                } else {
+                    $blnSeleRegi = $intCantCaja == 1 ? true : false;
+                }
                 $this->lstCajaRece->AddItem($objCajaRece->__toString(), $objCajaRece->Id, $blnSeleRegi);
             }
         }
@@ -106,6 +144,18 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
         $_SESSION['SucursalId']   = $this->lstSucuDisp->SelectedValue;
         $_SESSION['ReceptoriaId'] = $this->lstReceSucu->SelectedValue;
         $_SESSION['CajaId']       = $this->lstCajaRece->SelectedValue;
+        //-----------------------------------------------------------------------------------
+        // La Ubicacion del Usuario se guarda en la tabla parametros para futuras ocasiones
+        //-----------------------------------------------------------------------------------
+        try {
+            $this->objUbicUsua->Valor1 = $this->lstSucuDisp->SelectedValue;
+            $this->objUbicUsua->Valor2 = $this->lstReceSucu->SelectedValue;
+            $this->objUbicUsua->Valor3 = $this->lstCajaRece->SelectedValue;
+            $this->objUbicUsua->Save();
+        } catch (Exception $e) {
+            t('Error Estableciendo la Ubicacion del Usuario: '.$e->getMessage());
+            $this->danger($e->getMessage());
+        }
         $this->success('Ubicacion Establecida !!!');
     }
 
