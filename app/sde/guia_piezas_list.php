@@ -106,6 +106,8 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
 		$this->dtgGuiaPiezases->MetaAddColumn('IdPieza');
 		$colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint() ?>');
 		$this->dtgGuiaPiezases->AddColumn($colUltiCkpt);
+		$colGuiaTran = new QDataGridColumn('G-Tran','<?= $_ITEM->GuiaTransportista() ?>');
+		$this->dtgGuiaPiezases->AddColumn($colGuiaTran);
 		$this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->Guia->Destino->Iata,'Name=Dest');
         $this->dtgGuiaPiezases->MetaAddColumn('Descripcion');
         $this->dtgGuiaPiezases->MetaAddColumn('Kilos');
@@ -188,7 +190,7 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
 
     protected function btnCancel_Create() {
         $this->btnCancel = new QButton($this);
-        $this->btnCancel->Text = TextoIcono('mail-reply','Volver','','lg');
+        $this->btnCancel->Text = TextoIcono('mail-reply','Volver','F','lg');
         $this->btnCancel->AddAction(new QClickEvent(), new QServerAction('btnCancel_Click'));
         $this->btnCancel->CssClass = 'btn btn-warning btn-sm';
         $this->btnCancel->HtmlEntities = 'false';

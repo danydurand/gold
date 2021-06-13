@@ -394,29 +394,50 @@ class UsuarioEditForm extends UsuarioEditFormBase {
 
     protected function btnReseClav_Click() {
         $this->mensaje();
-        $strMensUsua = 'Clave reseteada con Éxito. El Usuario recibirá un correo con instrucciones para ingresar al Sistema';
-        $strClasMens = __tSUCC__;
-        $strNombIcon = __iCHEC__;
         if (!strlen($this->txtMailUsua->Text)) {
             $strMensUsua = 'El Usuario debe tener un email, para proceder con el reseteo de la Clave!';
-            $strClasMens = __tDANG__;
-            $strNombIcon = __iHAND__;
-        } else {
-            if (!comprobar_email($this->txtMailUsua->Text)) {
-                $strMensUsua = 'Formato de correo inválido!';
-                $strClasMens = __tWARN__;
-                $strNombIcon = __iEXCL__;
-            } else {
-                $strPassUsua = generarCodigo();
-                $this->mctUsuario->Usuario->resetearClave($strPassUsua);
-                $this->txtCantInte->Text = $this->mctUsuario->Usuario->CantInte;
-                $this->calFechClav->DateTime = new QDateTime($this->mctUsuario->Usuario->FechClav);
-                $this->txtMotiBloq->Text = $this->mctUsuario->Usuario->MotiBloq;
-                $this->lstCodiStatObject->SelectedIndex = $this->mctUsuario->Usuario->CodiStat;
-            }
+            $this->danger($strMensUsua);
+            return;
         }
-        $this->mensaje($strMensUsua,'',$strClasMens,$strNombIcon);
+        if (!comprobar_email($this->txtMailUsua->Text)) {
+            $strMensUsua = 'Formato de correo inválido!';
+            $this->danger($strMensUsua);
+            return;
+        }
+        $strPassUsua = generarCodigo();
+        $this->mctUsuario->Usuario->resetearClave($strPassUsua);
+        $this->txtCantInte->Text = $this->mctUsuario->Usuario->CantInte;
+        $this->calFechClav->DateTime = new QDateTime($this->mctUsuario->Usuario->FechClav);
+        $this->txtMotiBloq->Text = $this->mctUsuario->Usuario->MotiBloq;
+        $this->lstCodiStatObject->SelectedIndex = $this->mctUsuario->Usuario->CodiStat;
+        $this->success('Clave Re-seteada! | El Usuario recibirá un correo con las nuevas credenciales');
     }
+
+    //protected function btnReseClav_Click() {
+    //    $this->mensaje();
+    //    $strMensUsua = 'Clave reseteada con Éxito. El Usuario recibirá un correo con instrucciones para ingresar al Sistema';
+    //    $strClasMens = __tSUCC__;
+    //    $strNombIcon = __iCHEC__;
+    //    if (!strlen($this->txtMailUsua->Text)) {
+    //        $strMensUsua = 'El Usuario debe tener un email, para proceder con el reseteo de la Clave!';
+    //        $strClasMens = __tDANG__;
+    //        $strNombIcon = __iHAND__;
+    //    } else {
+    //        if (!comprobar_email($this->txtMailUsua->Text)) {
+    //            $strMensUsua = 'Formato de correo inválido!';
+    //            $strClasMens = __tWARN__;
+    //            $strNombIcon = __iEXCL__;
+    //        } else {
+    //            $strPassUsua = generarCodigo();
+    //            $this->mctUsuario->Usuario->resetearClave($strPassUsua);
+    //            $this->txtCantInte->Text = $this->mctUsuario->Usuario->CantInte;
+    //            $this->calFechClav->DateTime = new QDateTime($this->mctUsuario->Usuario->FechClav);
+    //            $this->txtMotiBloq->Text = $this->mctUsuario->Usuario->MotiBloq;
+    //            $this->lstCodiStatObject->SelectedIndex = $this->mctUsuario->Usuario->CodiStat;
+    //        }
+    //    }
+    //    $this->mensaje($strMensUsua,'',$strClasMens,$strNombIcon);
+    //}
 
     protected function lstCodiGrupObject_Change() {
         if ($this->lstCodiGrupObject->SelectedValue) {
@@ -425,13 +446,20 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
+        t('====================');
+        t('Guardando el Usuario');
         //--------------------------------------------
         // Se clona el objeto para verificar cambios
         //--------------------------------------------
         $objRegiViej = clone $this->mctUsuario->Usuario;
-        $this->lstCodiGrupObject->SelectedValue = $this->lstGrupo->SelectedValue;
-        $this->mctUsuario->SaveUsuario();
+        $this->lstCodiGrupObject->SelectedIndex = 1;
+        try {
+            $this->mctUsuario->SaveUsuario();
+        } catch (Exception $e) {
+            t('Error guardando al Usuario: '.$e->getMessage());
+        }
         if ($this->mctUsuario->EditMode) {
+            t('Estamos en modo Edicion');
             //------------------------------------------------------------------
             // Si se está en Modo Edición se verificará la existencia de algún
             // cambio en algún dato, para registralo entonces en el Log.
@@ -440,6 +468,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
             $objRegiNuev = $this->verificarActivacion($objRegiViej, $objRegiNuev);
             $objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
             if ($objResuComp->FriendlyComparisonStatus == 'different') {
+                t('Hubo cambios');
                 //------------------------------------------
                 // En caso de que el objeto haya cambiado
                 //------------------------------------------
@@ -458,18 +487,23 @@ class UsuarioEditForm extends UsuarioEditFormBase {
                 }
             }
         } else {
+            t('Estamos en modo Insercion');
             $arrLogxCamb['strNombTabl'] = 'Usuario';
             $arrLogxCamb['intRefeRegi'] = $this->mctUsuario->Usuario->CodiUsua;
             $arrLogxCamb['strNombRegi'] = $this->mctUsuario->Usuario->LogiUsua;
             $arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/usuario_edit.php/'.$this->mctUsuario->Usuario->CodiUsua;
             LogDeCambios($arrLogxCamb);
+            t('Log actualizado');
             $this->strPassUsua = generarCodigo();
+            t('Codigo Generado');
             $this->txtPassUsua->Text = md5($this->strPassUsua);
             $this->mctUsuario->SaveUsuario();
+            t('Se actualizo el password del Usuario');
             $this->RedactarEmailCreacion($this->mctUsuario->Usuario,$this->strPassUsua);
+            t('Se envio el correo al Usuario');
         }
-
+        t('Terminando la gestion del usuario');
         $this->success('Transacción Exitosa!');
     }
 
@@ -482,16 +516,14 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     }
 
     protected function RedactarEmailCreacion($objUsuario,$strPassUsua) {
-        //---------------------------------
-        // Se Envía el Mensaje por E-mail
-        //---------------------------------
         $strMailPara = $objUsuario->MailUsua;
         $strLogiUsua = $objUsuario->LogiUsua;
-        //$strNuevClav = $objUsuario->PassUsua;
         $objMessage = new QEmailMessage();
         $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
         $objMessage->To = $strMailPara;
-        $objMessage->Subject = 'Cambio de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
+        //$objMessage->Bcc = 'soporte@lufemansoftware.com';
+        $objMessage->Bcc = 'danydurand@gmail.com';
+        $objMessage->Subject = 'SISPAQ - Acceso al Sistema ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
 
         // Also setup HTML message (optional)
         $strBody  = 'Estimado Usuario,<p><br>';
@@ -510,14 +542,14 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     }
 
     protected function RedactarEmailEdicion($objUsuario,$strPassUsua) {
-        //---------------------------------
-        // Se Envía el Mensaje por E-mail
-        //---------------------------------
         $strMailPara = $objUsuario->MailUsua;
         $strLogiUsua = $objUsuario->LogiUsua;
+        /* @var $objMessage QEmailMessage */
         $objMessage = new QEmailMessage();
         $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
         $objMessage->To = $strMailPara;
+        //$objMessage->Bcc = 'soporte@lufemansoftware.com';
+        $objMessage->Bcc = 'danydurand@gmail.com';
         $objMessage->Subject = 'Reseteo de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
 
         // Also setup HTML message (optional) //

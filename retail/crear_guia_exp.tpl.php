@@ -1,11 +1,4 @@
 <?php
-//----------------------------------------------------------
-// Programa       : cargar_guia.tpl.php
-// Realizado por  : Irán Anzola
-// Fecha Elab.    : 21/04/16 06:05 PM
-// Proyecto       : newliberty
-// Descripcion    : 
-//----------------------------------------------------------
 $strPageTitle = 'Guia EXP';
 require('inc/header.inc.php');
 ?>
@@ -16,11 +9,12 @@ require('inc/header.inc.php');
         </div>
         <div class="hidden-xs hidden-sm col-md-8 col-lg-8" style="text-align: left; margin-top: -0.25em;">
             <?php $this->btnCancel->Render(); ?>
-            <?php $this->btnCalcTari->Render(); ?>
             <?php $this->btnSave->Render(); ?>
-            <?php $this->lblBotoPopu->Render(); ?>
-            <?php $this->btnMasxAcci->Render(); ?>
-            <?php $this->btnErroProc->Render(); ?>
+            <?php $this->btnNextPage->Render(); ?>
+            <?php $this->btnPrevPage->Render(); ?>
+            <?php //$this->lblBotoPopu->Render(); ?>
+            <?php //$this->btnMasxAcci->Render(); ?>
+            <?php //$this->btnErroProc->Render(); ?>
         </div>
     </div>
     <div class="form-controls">
@@ -30,81 +24,63 @@ require('inc/header.inc.php');
                     <?php $this->lblMensUsua->Render(); ?>
                 </div>
             </div>
+            <?php if ($this->blnVerpUnox) { ?>
             <div class="row" style="margin-top: 0.5em; line-height: 0.5em">
                 <div class="col-md-6" style="border-radius: 3px; padding: 0.1em">
                     <div class="titulo">Información del Remitente</div>
                 </div>
                 <div class="col-md-6" style="border-radius: 3px; padding: 0.1em">
-                    <div class="titulo">Información del Destinatario</div>
+                    <div class="titulo">Informacion del Servicio</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6" style="margin-top: 0.5em;">
-                    <?php $this->txtNumeGuia->RenderWithName(); ?>
-                    <?php $this->calFechGuia->RenderWithName(); ?>
-                    <?php $this->txtNumeCedu->RenderWithName(); ?>
-                    <?php $this->txtNombClie->RenderWithName(); ?>
-                    <?php $this->txtTeleFijo->RenderWithName(); ?>
-                    <?php $this->txtTeleMovi->RenderWithName(); ?>
-                    <?php $this->txtDireClie->RenderWithName(); ?>
+                    <?php include('info_remitente.tpl.php') ?>
                 </div>
                 <div class="col-md-6" style="margin-top: 0.5em;">
-                    <?php $this->lstSucuDest->RenderWithName(); ?>
-                    <?php $this->rdbReceDomi->RenderWithName(); ?>
-                    <?php $this->lstReceDest->RenderWithName(); ?>
-                    <?php $this->txtCeduDest->RenderWithName(); ?>
-                    <?php $this->txtNombDest->RenderWithName(); ?>
-                    <?php $this->txtTeleDest->RenderWithName(); ?>
-                    <?php $this->txtDireDest->RenderWithName(); ?>
+                    <?php include('info_destinatario_exp.tpl.php') ?>
                 </div>
             </div>
+            <?php } ?>
+            <?php if (!$this->blnVerpUnox) { ?>
             <div class="row" style="margin-top: 0.5em; line-height: 0.5em">
                 <div class="col-md-6" style="border-radius: 3px; padding: 0.1em">
-                    <div class="titulo">Información del Envio</div>
+                    <div class="titulo">Información del Envío</div>
                 </div>
                 <div class="col-md-3" style="border-radius: 3px; padding: 0.1em">
                     <div class="titulo">Costos del Servicio</div>
                 </div>
                 <div class="col-md-3" style="border-radius: 3px; padding: 0.1em">
-                    <div class="titulo">Facturacion</div>
+                    <div class="titulo">Facturación</div>
                 </div>
             </div>
-            <div class="row" style="margin-bottom: 1em">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-offset-2 col-md-4" style="margin-left: 8.5em">
-                            <?php $this->txtCantPiez->RenderWithName(); ?>
-                        </div>
-                        <div class="col-md-4" style="margin-left: 2em">
-                            <?php $this->txtPesoGuia->RenderWithName(); ?>
-                        </div>
-                    </div>
-                    <?php $this->txtDescCont->RenderWithName(); ?>
-                    <?php $this->txtValoDecl->RenderWithName(); ?>
-                    <div class="row">
-                        <div class="col-md-5" style="margin-left: 7.2em">
-                            <?php $this->rdbModaPago->RenderWithName(); ?>
-                        </div>
-                        <div class="col-md-4">
-                            <?php $this->txtPorcDcto->RenderWithName(); ?>
-                        </div>
-                    </div>
-                    <?php $this->chkConsDcto->RenderWithName(); ?>
+            <div class="row">
+                <div class="col-md-6" style="margin-top: 0.5em;">
+                    <?php include('info_envio.tpl.php') ?>
                 </div>
-                <div class="col-md-3">
-                    <?php $this->lblMontBase->RenderWithName(); ?>
-                    <?php $this->lblMontDcto->RenderWithName(); ?>
-                    <?php $this->lblMontIvax->RenderWithName(); ?>
-                    <?php $this->lblMontFran->RenderWithName(); ?>
-                    <?php $this->lblMontSegu->RenderWithName(); ?>
-                    <?php $this->lblMontTota->RenderWithName(); ?>
+                <div class="col-md-3" style="margin-top: 0.5em;">
+                    <?php include('info_servicio.tpl.php') ?>
+                </div>
+                <div class="col-md-3" style="margin-top: 0.5em;">
+                    <?php include('info_facturacion.tpl.php') ?>
                 </div>
             </div>
-            <?php $this->lblPopuModa->Render(); ?>
+            <?php } ?>
         </div>
     </div>
 
     <style type="text/css" media="all">
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+            background-color: #4682B4;
+        }
+        .nav-tabs > li > a {
+            color: #4682B4;
+        }
+        .etiqueta {
+            font-weight: bold;
+            text-align: right;
+            vertical-align: middle;
+        }
         .titulo {
             background-color: #CCCCCC;
             border-radius: 3px;
@@ -113,7 +89,7 @@ require('inc/header.inc.php');
             text-align: center;
         }
         .form-controls {
-            line-height: 0.8;
+            line-height: 0.9;
         }
         .form-name {
             width: 31%;

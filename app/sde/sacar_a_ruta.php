@@ -47,6 +47,7 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected $btnRepoErro;
     protected $btnImprReto;
+    protected $btnExpoExce;
 
     protected $intChofSele;
     protected $intVehiSele;
@@ -110,6 +111,7 @@ class SacarARuta extends FormularioBaseKaizen {
 
         $this->btnRepoErro_Create();
         $this->btnGestChve_Create();
+        $this->btnExpoExce_Create();
 
         if ($this->blnEditMode) {
             $this->lstTipoOper_Change();
@@ -128,6 +130,17 @@ class SacarARuta extends FormularioBaseKaizen {
     //-----------------------------
     // Aqui se crean los objetos
     //-----------------------------
+
+    protected function btnExpoExce_Create() {
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgPiezMani);
+        $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
+        $this->btnExpoExce->Text = TextoIcono('download','XLS','F','lg');
+        $this->btnExpoExce->HtmlEntities = false;
+        $this->btnExpoExce->CssClass = 'btn btn-outline-danger btn-sm';
+        $this->btnExpoExce->ToolTip = 'Exportar las Piezas del Manifiesto';
+        //$this->btnExpoExce->Visible = false;
+    }
+
 
     protected function btnRepoMani_Create() {
         $this->btnRepoMani = new QLabel($this);

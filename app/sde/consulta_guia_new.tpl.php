@@ -21,7 +21,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnEditGuia->Render(); ?>
             <?php $this->btnImprGuia->Render(); ?>
-            <?php $this->btnInfoPodx->Render(); ?>
+            <?php //$this->btnInfoPodx->Render(); ?>
             <?php $this->btnGuiaOrig->Render(); ?>
             <?php $this->btnMasxAcci->Render(); ?>
             <?php $this->lblBotoPopu->Render(); ?>
@@ -212,10 +212,10 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                             <?php $this->lblCreaPorx->Render(); ?>
                         </div>
                         <div class="col-md-3">
-                            <div class="titulo-c">Creada el</div>
+                            <div class="titulo-c">Guia-Transp.</div>
                         </div>
                         <div class="col-md-3">
-                            <?php $this->lblFechHora->Render(); ?>
+                            <?php $this->lblGuiaTran->Render(); ?>
                         </div>
                     </div>
                 </div>

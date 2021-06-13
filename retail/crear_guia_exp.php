@@ -1,10 +1,9 @@
 <?php
 //-----------------------------------------------------------------------------------
-// Programa       : cargar_guia.php
-// Realizado por  : Irán Anzola
-// Fecha Elab.    : 21/04/16 04:06 PM
-// Proyecto       : newliberty
-// Descripcion    : Este programa permite al Usuario crear una guía de Paq. Mas. Nac
+// Programa       : crear_guia_nac.php
+// Realizado por  : Daniel Durand
+// Fecha Elab.    : 03/06/2021
+// Descripcion    : Este programa permite al Usuario Crear una Guía Nacional
 //-----------------------------------------------------------------------------------
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
@@ -14,15 +13,22 @@ require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 QApplication::CheckRemoteAdmin();
 
 class CrearGuiaExp extends FormularioBaseKaizen {
+    /* @var $objGuia Guias */
     protected $objGuia;
-    protected $objCliePmnx;
+
+    /* @var $objClieReta ClientesRetail */
+    protected $objClieReta;
+
+    /* @var $objProdNaci Productos */
+    protected $objProdNaci;
+
     protected $objDestPmnx;
     protected $objProducto;
     protected $objGuiaOrig;
     /**
-     * @var $objClieTari MasterCliente
+     * @var $objClieNaci MasterCliente
      */
-    protected $objClieTari;
+    protected $objClieNaci;
 
     protected $blnEditMode;
     protected $blnEditClie;
@@ -55,35 +61,59 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $arrValoMaxi;
     protected $arrPorcSegu;
 
-    protected $strSucuOrig;
-    protected $strReceOrig;
+    protected $intSucuOrig;
+    protected $intReceOrig;
     protected $strCodiEsta;
     protected $strZonaIncu;
 
     protected $calFechGuia;
 
-    protected $lstSucuDest;
-    protected $lstReceDest;
 
-    protected $rdbReceDomi;
-    protected $rdbModaPago;
+    protected $lstReceDomi;
+    protected $rdbFormPago;
 
     protected $txtNumeGuia;
+
     protected $txtNumeCedu;
     protected $txtNombClie;
     protected $txtTeleFijo;
     protected $txtTeleMovi;
     protected $txtDireClie;
-    protected $txtNombDest;
+    protected $txtEmaiRemi;
+    protected $calFechNaci;
+    protected $lstProfClie;
+    protected $lstSexoClie;
+
+    protected $lstSucuDest;
+    protected $lstReceDest;
+
     protected $txtCeduDest;
-    protected $txtTeleDest;
+    protected $txtNombDest;
+    protected $lstSexoDest;
+    protected $txtTlfdFijo;
+    protected $txtTlfdMovi;
+    protected $txtEmaiDest;
     protected $txtDireDest;
+    protected $txtEstaDest;
+    protected $txtCiudDest;
+    protected $txtPostDest;
+
     protected $txtCantPiez;
-    protected $txtPesoGuia;
+    protected $txtCantKilo;
     protected $txtDescCont;
     protected $txtValoDecl;
+    protected $chkEnviSgro;
+
+    protected $dtgPiezTemp;
+
+    protected $dtgConcGuia;
+    protected $objProcEjec;
+
+    protected $txtTasaDola;
+    protected $txtTotaGuia;
+    protected $txtIdxxPref;
+
     protected $txtPorcDcto;
-    protected $chkConsDcto;
 
     protected $lblMontBase;
     protected $lblMontDcto;
@@ -93,7 +123,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lblMontTota;
 
     protected $btnErroProc;
-    protected $btnCalcTari;
     protected $btnImprGuia;
     protected $btnOtraGuia;
     protected $btnConsGuia;
@@ -103,21 +132,48 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lblPopuModa;
 
     protected $objApliReco;
+    protected $blnVerpUnox = true;
+    protected $btnNextPage;
+    protected $btnPrevPage;
 
+    protected $btnSavePiez;
+    protected $btnCancPiez;
+    protected $btnDelePiez;
+
+    protected $lblTituPiez;
+    protected $blnAgrePiez = true;
+    protected $txtContPiez;
+    protected $txtKiloPiez;
+    protected $txtAltoPiez;
+    protected $txtAnchPiez;
+    protected $txtLargPiez;
+    protected $txtVoluPiez;
+    protected $blnEditPiez = false;
+    protected $intEditPiez;
+    protected $lblContPiez;
+    protected $lblKiloPiez;
+
+    
     protected function SetupGuia() {
-        $strNumeGuia = QApplication::PathInfo(0);
+        $intIdxxGuia = QApplication::PathInfo(0);
 
-        if ($strNumeGuia) {
-            $this->objGuia = Guia::Load($strNumeGuia);
+        //----------------------------------------------------------
+        // En caso de que sea necesario el manejo de multi-piezas
+        //----------------------------------------------------------
+        $strNombProc = 'Piezas Temporales: '.$this->objUsuario->LogiUsua.' '.date('Y-m-d');
+        $this->objProcEjec = CrearProceso($strNombProc);
+
+        if ($intIdxxGuia) {
+            $this->objGuia = Guias::Load($intIdxxGuia);
             if (!$this->objGuia) {
-                throw new Exception('Could not find a Guia object with PK arguments: ' . $strNumeGuia);
+                throw new Exception('Could not find a Guia object with PK arguments: ' . $intIdxxGuia);
             }
 
             $this->blnEditMode = true;
-            $this->objCliePmnx = ClientePmn::Load($this->objGuia->CedulaRif);
-            $this->objDestPmnx = ClientePmn::Load($this->objGuia->CedulaDestinatario);
+            $this->objClieReta = ClientesRetail::Load($this->objGuia->ClienteRetailId);
+            $this->objDestPmnx = ClientesRetail::LoadByCedulaRif($this->objGuia->CedulaDestinatario);
 
-            if ($this->objCliePmnx) {
+            if ($this->objClieReta) {
                 $this->blnEditClie = true;
             }
 
@@ -125,284 +181,189 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->blnEditDest = true;
             }
 
+            //--------------------------------------------------------
+            // Las piezas de la guia, se graban en la tabla temporal
+            //--------------------------------------------------------
+            //t('Buscando piezas...');
+            $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+            foreach ($arrPiezGuia as $objPiezGuia) {
+                //t('Pieza: '.$objPiezGuia->IdPieza);
+                $objPiezTemp = new PiezasTemp();
+                $objPiezTemp->ProcesoErrorId = $this->objProcEjec->Id;
+                $objPiezTemp->Descripcion    = $objPiezGuia->Descripcion;
+                $objPiezTemp->Kilos          = $objPiezGuia->Kilos;
+                $objPiezTemp->CreatedBy      = $this->objUsuario->CodiUsua;
+                $objPiezTemp->Save();
+            }
+
         } else {
-            $this->objGuia = new Guia();
+            $this->objGuia = new Guias();
             $this->blnEditMode = false;
+            PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
+            t('Elimine todas las piezas temporales del Usuario');
         }
+        $this->intSucuOrig = $_SESSION['SucursalId'];
+        $this->intReceOrig = $_SESSION['ReceptoriaId'];
+        $this->objClieNaci = unserialize($_SESSION['ClieNaci']);
+        $this->objProdNaci = unserialize($_SESSION['ProdNaci']);
+
+
+
     }
 
-    protected function SetupValores() {
-        $this->blnEstaFact = false;
-        $this->blnEstaPref = false;
-
-        $this->arrValoMini = unserialize($_SESSION['ValoMin1']);
-        $this->arrValoMaxi = unserialize($_SESSION['ValoMax1']);
-        $this->arrPorcSegu = unserialize($_SESSION['PorcSeg1']);
-
-        $this->intCantLimi = count($this->arrValoMaxi)-1;
-        $this->decMiniSegu = $this->arrValoMini[0];
-        $this->decMaxiSegu = $this->arrValoMaxi[$this->intCantLimi];
-
-        if (!isset($_SESSION['SucuOrig'])) {
-            QApplication::Redirect('../mg.php');
-        } elseif (!isset($_SESSION['ReceOrig'])) {
-            QApplication::Redirect('../mg.php');
-        } else {
-            if (!$this->blnEditMode) {
-                //---------------------------
-                // Insertando una Guia nueva
-                //---------------------------
-                $this->objProducto = unserialize($_SESSION['ProdGuia']);
-                $this->decPorcIvax = unserialize($_SESSION['IvaxDhoy']);
-                $this->decPorcSegu = unserialize($_SESSION['PorcSegu']);
-                //-------------------------------------------
-                // Limites de Valor Declarado reconvertivos
-                //-------------------------------------------
-                $this->arrValoMini = unserialize($_SESSION['RecoMin1']);
-                $this->arrValoMaxi = unserialize($_SESSION['RecoMax1']);
-                $this->arrPorcSegu = unserialize($_SESSION['PorcSeg1']);
-
-                $this->intCantLimi = count($this->arrValoMaxi)-1;
-                $this->decMiniSegu = $this->arrValoMini[0];
-                $this->decMaxiSegu = $this->arrValoMaxi[$this->intCantLimi];
-            } else {
-                //-------------------------------------------------------------------------------------
-                // Si la Guia que se esta editando, tiene la tarifa nueva (con reconversion monteria)
-                // entonces los valores limites de Valor Declarado, deben esta reconvertidos
-                //-------------------------------------------------------------------------------------
-                $objConfReco = BuscarParametro('ConfReco','RecoMone','TODO',null);
-                if ($this->objGuia->TarifaId >= (int)$objConfReco->ParaVal3) {
-                    $this->arrValoMini = unserialize($_SESSION['RecoMin1']);
-                    $this->arrValoMaxi = unserialize($_SESSION['RecoMax1']);
-                    $this->arrPorcSegu = unserialize($_SESSION['PorcSeg1']);
-
-                    $this->intCantLimi = count($this->arrValoMaxi)-1;
-                    $this->decMiniSegu = $this->arrValoMini[0];
-                    $this->decMaxiSegu = $this->arrValoMaxi[$this->intCantLimi];
-                }
-                //-------------------------------------------------------------------------------
-                // Se crea un objeto paralelo que permita comparar las modificaciones realizadas
-                //-------------------------------------------------------------------------------
-                $this->objGuiaOrig = clone $this->objGuia;
-                $dteFechDhoy = $this->objGuia->FechGuia->__toString("YYYY-MM-DD");
-                $this->objProducto = FacProducto::Load($this->objGuia->CodiProd);
-                $this->decPorcIvax = FacImpuesto::LoadImpuestoVigente('IVA', $dteFechDhoy);
-                $this->decPorcSegu = $this->objGuia->PorcentajeSeguro;
-                //--------------------------------------------------------------------
-                // Si la Guia esta Facturada, se establece la variable global en true
-                //--------------------------------------------------------------------
-                if ($this->objGuia->EstaFacturada()) {
-                    $this->blnEstaFact = true;
-                }
-                //------------------------------------------------------------------------
-                // Si la Guia esta Pre-Facturada, se establece la variable global en true
-                //------------------------------------------------------------------------
-                if ($this->objGuia->EstaPreFacturada()) {
-                    $this->blnEstaPref = true;
-                }
-                //-------------------------------------------------------------------
-                // Si la Guia es notificable por sms se establece la variable global
-                // correspondiente en true. De lo contrario, se establece en false.
-                //-------------------------------------------------------------------
-                $this->arrNotiSmsx = $this->objGuia->NotificableSMS();
-                $this->blnEnviSmsx = $this->arrNotiSmsx['NotiSmsx'];
-            }
-
-            $this->objClieTari = unserialize($_SESSION['ClieTari']);
-            $this->intOperGene = unserialize($_SESSION['OperGene']);
-            $this->blnSeguSino = unserialize($_SESSION['SeguSino']);
-            $this->decValoMini = unserialize($_SESSION['ValoMini']);
-            $this->decValoMaxi = unserialize($_SESSION['ValoMaxi']);
-            $this->strSucuOrig = unserialize($_SESSION['SucuOrig']);
-            $this->strReceOrig = unserialize($_SESSION['ReceOrig']);
-            $this->decLimiKilo = unserialize($_SESSION['LimiKilo']);
-            //----------------------------------------------------------
-            // Vector que almacena las Receptorias con Limite de Kilos
-            //----------------------------------------------------------
-            $this->arrReceLimi = unserialize($_SESSION['ReceLimi']);
-            //-----------------------------------------------------------------------------
-            // Se valida si existe un bug con respecto a la Receptoría Destino de la Guía.
-            // Esto solamente en modo de edición y si la guía no ha sido facturada aún.
-            //-----------------------------------------------------------------------------
-            /*
-            if ($this->blnEditMode && !$this->blnEstaFact) {
-                $strSucuDest = $this->objGuia->EstaDest;
-                $strReceDest = $this->objGuia->ReceptoriaDestino;
-                //-----------------------------------------------------------------------------------------------------
-                // Se verifica si la Sucursal Destino de la Guía coincide con la de ubicación del Usuario del Sistema.
-                //-----------------------------------------------------------------------------------------------------
-                if ($this->strSucuOrig == $strSucuDest) {
-                    //------------------------------------------------------------------------------------
-                    // Se verifica si la Receptoría Destino corresponde a la Sucursal Destino de la Guía.
-                    //------------------------------------------------------------------------------------
-                    $objReceDest = Counter::LoadBySiglas($strReceDest);
-                    if ($objReceDest) {
-                        if ($objReceDest->SucursalId != $strSucuDest) {
-                            //---------------------------------------------------------------------------------------------
-                            // Se graba como Receptoría Destino aquella que pertenece a la ubicación del Usuario operador.
-                            //---------------------------------------------------------------------------------------------
-                            $this->objGuia->ReceptoriaDestino = $this->strReceOrig;
-                            $this->objGuia->Save();
-                        }
-                    }
-                }
-            }
-            */
-            //----------------------------------------------
-            // Aqui se determina si la guia es Facturable
-            //----------------------------------------------
-            $this->blnGuiaFact = false;
-            if ($this->blnEditMode) {
-                if ($this->objGuia->TipoGuia == TipoGuiaType::CODCOBROENDESTINO) {
-                    //--------------------------------------------------------------------
-                    // La Guia es COD y el Destino coincide con la localidad del Usuario
-                    //--------------------------------------------------------------------
-                    if (trim($this->objGuia->ReceptoriaDestino) == trim($this->strReceOrig)) {
-                        $this->blnGuiaFact = true;
-                    }
-                    //--------------------------------------------------------------------
-                    // La Guia es COD con entrega a DOMICILIO, tambien se puede facturar
-                    //--------------------------------------------------------------------
-                    if (trim($this->objGuia->ReceptoriaDestino) == trim($this->strSucuOrig)) {
-                        $this->blnGuiaFact = true;
-                    }
-                    if (!$this->blnGuiaFact) {
-                        //-----------------------------------------------------------------------------
-                        // Otra posibilidad para que una guia sea Facturable, es que la Sucursal en la
-                        // que se encuentra el Usuario, se el "Centro de Facturacion" del Destino de
-                        // la guia.
-                        //-----------------------------------------------------------------------------
-                        if (strlen($this->objGuia->EstaDestObject->SeFacturaEn) > 0) {
-                            if (trim($this->objGuia->EstaDestObject->SeFacturaEnObject->Siglas) == trim($this->strSucuOrig))
-                            {
-                                $this->blnGuiaFact = true;
-                            }
-                        }
-                    }
-                } else {
-                    //-------------------------
-                    // La Guia es PrePagada
-                    //-------------------------
-                    $this->blnGuiaFact = true;
-                }
-            }
-        }
-    }
 
     protected function Form_Create() {
         parent::Form_Create();
 
         $this->SetupGuia();
-        $this->SetupValores();
 
-        $this->lblTituForm->Text = QApplication::Translate('Guia Expreso Nacional');
+        $this->lblTituForm->Text = QApplication::Translate('Guia Exportación');
 
         //---------------------
         // Datos del Remitente
         //---------------------
         $this->txtNumeGuia_Create();
         $this->calFechGuia_Create();
-        $this->txtNombClie_Create();
         $this->txtNumeCedu_Create();
+        $this->txtNombClie_Create();
         $this->txtTeleFijo_Create();
         $this->txtTeleMovi_Create();
         $this->txtDireClie_Create();
+        $this->txtEmaiRemi_Create();
+        $this->calFechNaci_Create();
+        $this->lstProfClie_Create();
+        $this->lstSexoClie_Create();
+
+        //t('Voy por aqui 1');
+        //------------------------
+        // Servicio
+        //------------------------
+        $this->lstSucuDest_Create();
+        $this->lstReceDomi_Create();
+        $this->lstReceDest_Create();
+
+        //t('Voy por aqui 2');
         //------------------------
         // Datos del Destinatario
         //------------------------
-        $this->lstSucuDest_Create();
-        $this->rdbReceDomi_Create();
-        $this->lstReceDest_Create();
-        $this->txtNombDest_Create();
         $this->txtCeduDest_Create();
+        $this->txtNombDest_Create();
+        $this->lstSexoDest_Create();
         $this->txtDireDest_Create();
-        $this->txtTeleDest_Create();
+        $this->txtTlfdFijo_Create();
+        $this->txtTlfdMovi_Create();
+        $this->txtEmaiDest_Create();
+        $this->txtEstaDest_Create();
+        $this->txtCiudDest_Create();
+        $this->txtPostDest_Create();
+
+        //t('Voy por aqui 3');
+
         //-----------------
         // Datos del Envío
         //-----------------
-        $this->txtCantPiez_Create();
-        $this->txtPesoGuia_Create();
         $this->txtDescCont_Create();
         $this->txtValoDecl_Create();
-        $this->rdbModaPago_Create();
-        $this->txtPorcDcto_Create();
-        $this->chkConsDcto_Create();
+        $this->chkEnviSgro_Create();
+        $this->rdbFormPago_Create();
+        $this->txtCantPiez_Create();
+        $this->txtCantKilo_Create();
+
+        $this->txtDescCont = disableControl($this->txtDescCont);
+        $this->txtCantPiez = disableControl($this->txtCantPiez);
+        $this->txtCantKilo = disableControl($this->txtCantKilo);
+
+        //t('Voy por aqui 4');
+
         //---------------------
         // Costos del Servicio
         //---------------------
-        $this->lblMontBase_Create();
-        $this->lblMontDcto_Create();
-        $this->lblMontIvax_Create();
-        $this->lblMontFran_Create();
-        $this->lblMontSegu_Create();
-        $this->lblMontTota_Create();
+        $this->dtgConcGuia_Create();
+
+        //----------------
+        // Facturacion
+        //----------------
+        $this->txtTasaDola_Create();
+        $this->txtTasaDola = disableControl($this->txtTasaDola);
+        $this->txtTotaGuia_Create();
+        $this->txtTotaGuia = disableControl($this->txtTotaGuia);
+        $this->txtIdxxPref_Create();
+        $this->txtIdxxPref = disableControl($this->txtIdxxPref);
+
+        $this->dtgPiezTemp_Create();
+
+        //t('Voy por aqui 5');
+
         //-----------------
         // Botones y otros
         //-----------------
         $this->btnSave->Text = TextoIcono('cogs fa-lg','Guardar');
-        $this->btnCalcTari_Create();
-        $this->lblBotoPopu_Create();
-        $this->btnMasxAcci_Create();
-        $this->btnErroProc_Create();
-        $this->lblPopuModa_Create();
+        $this->btnNextPage_Create();
+        $this->btnPrevPage_Create();
+
+        $this->lblTituPiez_Create();
+        $this->lblContPiez_Create();
+        $this->lblKiloPiez_Create();
+        $this->txtContPiez_Create();
+        $this->txtKiloPiez_Create();
+        $this->btnSavePiez_Create();
+        $this->btnCancPiez_Create();
+        $this->btnDelePiez_Create();
+
+        //$this->lblBotoPopu_Create();
+        //$this->btnMasxAcci_Create();
+        //$this->btnErroProc_Create();
+        //$this->lblPopuModa_Create();
         //---------
         // Eventos
         //---------
-        $this->controlDeBotones();
-        $this->lstSucuDest_Change();
+        //$this->controlDeBotones();
+        //$this->lstSucuDest_Change();
 
-        $strTextMens = 'Evite el uso de caracteres especiales (Ej: \\~°#^*+) en <b>los nombres, las direcciones, el contenido y los teléfonos</b>';
-        $this->mensaje($strTextMens,'m','i','',__iINFO__);
+        //$strTextMens = 'Evite el uso de caracteres especiales (Ej: \\~°#^*+) en <b>los nombres, las direcciones, el contenido y los teléfonos</b>';
+        //$this->mensaje($strTextMens,'m','i','',__iINFO__);
 
-        //-----------
-        // Permisos
-        //-----------
-        $this->permisosDeDescuentos();
+        //t('Voy por aqui 6');
 
-    }
-
-    protected function permisosDeDescuentos() {
-        //------------------------------------------------------------------------------
-        // Unicamente los Usuario autorizados tendran acceso a los campos de descuento
-        //------------------------------------------------------------------------------
-        $this->txtPorcDcto->Enabled   = false;
-        $this->txtPorcDcto->ForeColor = 'blue';
-        $this->chkConsDcto->Enabled   = false;
-        $this->chkConsDcto->ForeColor = 'blue';
-        $blnUsuaAuto = BuscarParametro("DctoClie", $this->objUsuario->LogiUsua, "Val1", 0);
-        if ($blnUsuaAuto) {
-            $this->txtPorcDcto->Enabled   = true;
-            $this->txtPorcDcto->ForeColor = null;
-            $this->chkConsDcto->Enabled   = true;
-            $this->chkConsDcto->ForeColor = null;
+        if ($this->blnEditMode) {
+            if (!is_null($this->objGuia->FacturaId)) {
+                $this->warning('La Guia esta Facturada | No se admiten cambios');
+                $this->btnSave->Visible = false;
+            } else {
+                $this->txtNumeCedu->SetFocus();
+            }
+        } else {
+            $this->txtNumeCedu->SetFocus();
         }
+
     }
+
 
     //-------------------------
     // Creando los objetos ...
     //-------------------------
 
     protected function txtNumeGuia_Create() {
-        $this->txtNumeGuia = new QLabel($this);
-        $this->txtNumeGuia->Name = 'Nro de Guia';
-        $this->txtNumeGuia->Required = true;
+        $this->txtNumeGuia = new QTextBox($this);
+        $this->txtNumeGuia->Name = 'Nro Guia';
+        //$this->txtNumeGuia->Required = true;
         $this->txtNumeGuia->Width = 150;
         $this->txtNumeGuia->Enabled = false;
         $this->txtNumeGuia->ForeColor = 'blue';
         if ($this->blnEditMode) {
-            $this->txtNumeGuia->Text = $this->objGuia->NumeGuia;
+            $this->txtNumeGuia->Text = $this->objGuia->Numero;
         }
     }
 
     protected function calFechGuia_Create() {
-        $this->calFechGuia = new QLabel($this);
+        $this->calFechGuia = new QTextBox($this);
         $this->calFechGuia->Name = 'Fecha';
         $this->calFechGuia->Width = 150;
-        $this->calFechGuia->Required = true;
+        //$this->calFechGuia->Required = true;
         $this->calFechGuia->Enabled = false;
         $this->calFechGuia->ForeColor = 'blue';
         if ($this->blnEditMode) {
-            $this->calFechGuia->Text = $this->objGuia->FechGuia->__toString("YYYY-MM-DD");
+            $this->calFechGuia->Text = $this->objGuia->Fecha->__toString("DD/MM/YYYY");
         } else {
             $this->calFechGuia->Text = date('Y-m-d');
         }
@@ -412,97 +373,132 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtNumeCedu_Create() {
         $this->txtNumeCedu = new QTextBox($this);
         $this->txtNumeCedu->Name = 'Cedula/RIF';
-        $this->txtNumeCedu->Width = 100;
+        $this->txtNumeCedu->Width = 120;
         $this->txtNumeCedu->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtNumeCedu->Text = $this->objGuia->CedulaRif;
+            $this->txtNumeCedu->Text = $this->objGuia->ClienteRetail->CedulaRif;
         }
         $this->txtNumeCedu->AddAction(new QBlurEvent(), new QAjaxAction('txtNumeCedu_Blur'));
     }
 
     protected function txtNombClie_Create() {
         $this->txtNombClie = new QTextBox($this);
-        $this->txtNombClie->Name = 'Nombre';
-        $this->txtNombClie->Width = 250;
+        $this->txtNombClie->Placeholder = 'Nombre del Remitente';
+        $this->txtNombClie->Width = 260;
         $this->txtNombClie->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtNombClie->Text = $this->objGuia->NombRemi;
+            $this->txtNombClie->Text = $this->objGuia->NombreRemitente;
         }
     }
 
     protected function txtTeleFijo_Create() {
         $this->txtTeleFijo = new QTextBox($this);
-        $this->txtTeleFijo->Name = 'Tlf. Fijo';
+        $this->txtTeleFijo->Placeholder = 'Ej: 02123782514';
         $this->txtTeleFijo->Width = 120;
         if ($this->blnEditMode) {
-            $this->txtTeleFijo->Text = $this->objGuia->TeleRemi;
+            $this->txtTeleFijo->Text = $this->objGuia->TelefonoRemitente;
         }
     }
 
     protected function txtTeleMovi_Create() {
         $this->txtTeleMovi = new QTextBox($this);
-        $this->txtTeleMovi->Name = 'Tlf. Movil';
+        $this->txtTeleMovi->Placeholder = 'Ej: 04241238715';
         $this->txtTeleMovi->Width = 120;
-        if ($this->blnEditMode && $this->objCliePmnx) {
-            $this->txtTeleMovi->Text = $this->objCliePmnx->TelefonoMovil;
+        if ($this->blnEditMode && $this->objClieReta) {
+            $this->txtTeleMovi->Text = $this->objClieReta->TelefonoMovil;
         }
     }
 
     protected function txtDireClie_Create() {
         $this->txtDireClie = new QTextBox($this);
-        $this->txtDireClie->Name = 'Direccion';
-        $this->txtDireClie->Width = 250;
-        $this->txtDireClie->Height = 40;
+        $this->txtDireClie->Placeholder = 'Direccion del Remitente';
+        $this->txtDireClie->Width = 408;
+        $this->txtDireClie->Rows = 6;
         $this->txtDireClie->TextMode = QTextMode::MultiLine;
         $this->txtDireClie->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtDireClie->Text = $this->objGuia->DireRemi;
+            $this->txtDireClie->Text = $this->objGuia->DireccionRemitente;
         }
+    }
+
+    protected function calFechNaci_Create() {
+        $this->calFechNaci = new QCalendar($this);
+        $this->calFechNaci->Width = 120;
+        if ($this->blnEditMode) {
+            $this->calFechNaci->DateTime = new QDateTime($this->objGuia->ClienteRetail->FechaNacimiento);
+        }
+    }
+
+    protected function txtEmaiRemi_Create() {
+        $this->txtEmaiRemi = new QTextBox($this);
+        $this->txtEmaiRemi->Placeholder = 'correo@remitente.com';
+        $this->txtEmaiRemi->Width = 260;
+        $this->txtEmaiRemi->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
+        if ($this->blnEditMode) {
+            $this->txtEmaiRemi->Text = $this->objGuia->ClienteRetail->Email;
+        }
+    }
+
+    protected function lstProfClie_Create() {
+        $this->lstProfClie = new QListBox($this);
+        $this->lstProfClie->Width = 260;
+        if ($this->blnEditMode) {
+            $this->cargarProfesiones($this->objGuia->ClienteRetail->ProfesionId);
+        } else {
+            $this->cargarProfesiones();
+        }
+    }
+
+    protected function lstSexoClie_Create() {
+        $this->lstSexoClie = new QListBox($this);
+        $this->lstSexoClie->Width = 120;
+        $blnSeleMasc = false;
+        $blnSeleFeme = false;
+        if ($this->blnEditMode) {
+            $blnSeleMasc = $this->objGuia->ClienteRetail->Sexo == 'M' ? true : false;
+            $blnSeleFeme = $this->objGuia->ClienteRetail->Sexo == 'F' ? true : false;
+        }
+        $this->lstSexoClie->AddItem('- Selec -',null);
+        $this->lstSexoClie->AddItem('MASCULINO','M', $blnSeleMasc);
+        $this->lstSexoClie->AddItem('FEMENINO','F', $blnSeleFeme);
     }
 
     protected function lstSucuDest_Create() {
         $this->lstSucuDest = new QListBox($this);
-        $this->lstSucuDest->Name = 'Sucursal';
         $this->lstSucuDest->Width = 200;
         if ($this->blnEditMode) {
-            $this->cargarDestinos($this->objGuia->EstaDest);
+            $this->cargarDestinos($this->objGuia->DestinoId);
         } else {
             $this->cargarDestinos();
         }
-        $this->lstSucuDest->AddAction(new QChangeEvent(), new QAjaxAction('lstSucuDest_Change'));
+        //$this->lstSucuDest->AddAction(new QChangeEvent(), new QAjaxAction('lstSucuDest_Change'));
     }
 
-    protected function rdbReceDomi_Create() {
-        $this->rdbReceDomi = new QRadioButtonList($this);
-        $this->rdbReceDomi->Name = 'Servicio';
-        $this->rdbReceDomi->HtmlEntities = false;
+    protected function lstReceDomi_Create() {
+        $this->lstReceDomi = new QListBox($this);
+        $this->lstReceDomi->Name = 'Servicio';
+        $blnSeleDomi = false;
+        $blnSeleRece = false;
         if (!$this->blnEditMode) {
-            $this->rdbReceDomi->AddItem('&nbsp;RECEPTORIA&nbsp;','R');
-            $this->rdbReceDomi->AddItem('&nbsp;DOMICILIO','D');
+            $blnSeleDomi = true;
+        } else {
+            $blnSeleDomi = $this->objGuia->ServicioEntrega == 'DOM';
+            $blnSeleRece = $this->objGuia->ServicioEntrega == 'REC';
         }
-        $this->rdbReceDomi->RepeatColumns = 2;
-        $this->rdbReceDomi->AddAction(new QClickEvent(), new QAjaxAction('rdbReceDomi_Click'));
+        $this->lstReceDomi->AddItem('DOMICILIO','DOM', $blnSeleDomi);
+        $this->lstReceDomi->AddItem('RECEPTORIA','REC', $blnSeleRece);
+        //$this->lstReceDomi->AddAction(new QClickEvent(), new QAjaxAction('lstReceDomi_Click'));
     }
 
     protected function lstReceDest_Create() {
         $this->lstReceDest = new QListBox($this);
         $this->lstReceDest->Name = 'Receptoria';
-        $this->lstReceDest->Width = 200;
-        if ($this->blnEditMode) {
-            //t('En el create del listbox, la receptoria destino es: '.$this->objGuia->ReceptoriaDestino);
-            $this->cargarReceptorias($this->objGuia->EstaDest,$this->objGuia->ReceptoriaDestino);
-        }
-        $this->lstReceDest->AddAction(new QChangeEvent(), new QAjaxAction('lstReceDest_Change'));
-    }
-
-    protected function txtNombDest_Create() {
-        $this->txtNombDest = new QTextBox($this);
-        $this->txtNombDest->Name = 'Nombre';
-        $this->txtNombDest->Width = 250;
-        $this->txtNombDest->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
-        if ($this->blnEditMode) {
-            $this->txtNombDest->Text = $this->objGuia->NombDest;
-        }
+        $this->lstReceDest->Width = 150;
+        //if ($this->blnEditMode) {
+        //    //t('En el create del listbox, la receptoria destino es: '.$this->objGuia->ReceptoriaDestino);
+        //    $this->cargarReceptorias($this->objGuia->EstaDest,$this->objGuia->ReceptoriaDestino);
+        //}
+        //$this->lstReceDest->AddAction(new QChangeEvent(), new QAjaxAction('lstReceDest_Change'));
     }
 
     protected function txtCeduDest_Create() {
@@ -516,52 +512,114 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtCeduDest->AddAction(new QBlurEvent(), new QAjaxAction('txtCeduDest_Blur'));
     }
 
-    protected function txtTeleDest_Create() {
-        $this->txtTeleDest = new QTextBox($this);
-        $this->txtTeleDest->Name = 'Tlf. Movil';
-        $this->txtTeleDest->Width = 120;
+    protected function txtNombDest_Create() {
+        $this->txtNombDest = new QTextBox($this);
+        $this->txtNombDest->Placeholder = 'Nombre del Destinatario';
+        $this->txtNombDest->Width = 280;
+        $this->txtNombDest->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtTeleDest->Text = $this->objGuia->TeleDest;
+            $this->txtNombDest->Text = $this->objGuia->NombreDestinatario;
         }
     }
+
+    protected function lstSexoDest_Create() {
+        $this->lstSexoDest = new QListBox($this);
+        //if ($this->blnEditMode) {
+        //    $this->cargarSexos($this->lstSexoDest,$this->objGuia->ClienteRetail->Sexo);
+        //} else {
+        //    $this->cargarSexos($this->lstSexoDest);
+        //}
+        $blnSeleMasc = false;
+        $blnSeleFeme = false;
+        if ($this->blnEditMode) {
+            $blnSeleMasc = $this->objGuia->ClienteRetail->Sexo == 'M' ? true : false;
+            $blnSeleFeme = $this->objGuia->ClienteRetail->Sexo == 'F' ? true : false;
+        }
+        $this->lstSexoDest->AddItem('- Selec -',null);
+        $this->lstSexoDest->AddItem('MASCULINO','M', $blnSeleMasc);
+        $this->lstSexoDest->AddItem('FEMENINO','F', $blnSeleFeme);
+    }
+
+    protected function cargarSexos($strNombCtrl,$strSexoClie=null) {
+        $strNombCtrl->AddItem('- Selec -',null);
+        $strNombCtrl->AddItem('MASCULINO','M', 'M' == $strSexoClie);
+        $strNombCtrl->AddItem('FEMENINO','F', 'F' == $strSexoClie);
+    }
+
+    protected function txtTlfdFijo_Create() {
+        $this->txtTlfdFijo = new QTextBox($this);
+        $this->txtTlfdFijo->Placeholder = 'Ej: 02125261498';
+        $this->txtTlfdFijo->Width = 120;
+        if ($this->blnEditMode) {
+            $this->txtTlfdFijo->Text = $this->objGuia->TelefonoDestinatario;
+        }
+    }
+
+    protected function txtTlfdMovi_Create() {
+        $this->txtTlfdMovi = new QTextBox($this);
+        $this->txtTlfdMovi->Placeholder = 'Ej: 04162513678';
+        $this->txtTlfdMovi->Width = 120;
+        if ($this->blnEditMode) {
+            $this->txtTlfdMovi->Text = $this->objGuia->ClienteRetail->TelefonoMovil;
+        }
+    }
+
+    protected function txtEmaiDest_Create() {
+        $this->txtEmaiDest = new QTextBox($this);
+        $this->txtEmaiDest->Placeholder = 'correo@destinatario.com';
+        $this->txtEmaiDest->Width = 260;
+        $this->txtEmaiDest->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
+        if ($this->blnEditMode) {
+            $this->txtEmaiDest->Text = $this->objGuia->ClienteRetail->Email;
+        }
+    }
+
 
     protected function txtDireDest_Create() {
         $this->txtDireDest = new QTextBox($this);
-        $this->txtDireDest->Name = 'Direccion';
-        $this->txtDireDest->Width = 250;
-        $this->txtDireDest->Height = 40;
+        $this->txtDireDest->Placeholder = 'Direccion de entrega (incluya puntos de referencia)';
+        $this->txtDireDest->Width = 545;
+        $this->txtDireDest->Rows = 4;
         $this->txtDireDest->TextMode = QTextMode::MultiLine;
         $this->txtDireDest->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtDireDest->Text = $this->objGuia->DireDest;
+            $this->txtDireDest->Text = $this->objGuia->DireccionDestinatario;
         }
     }
 
-    protected function txtCantPiez_Create() {
-        $this->txtCantPiez = new QIntegerTextBox($this);
-        $this->txtCantPiez->Name = 'Piezas';
-        $this->txtCantPiez->Width = 50;
+    protected function txtEstaDest_Create() {
+        $this->txtEstaDest = new QTextBox($this);
+        $this->txtEstaDest->Placeholder = 'Estado';
+        $this->txtEstaDest->Width = 180;
         if ($this->blnEditMode) {
-            $this->txtCantPiez->Text = $this->objGuia->CantPiez;
+            $this->txtEstaDest->Text = $this->objGuia->ClienteRetail->Estado;
         }
     }
 
-    protected function txtPesoGuia_Create() {
-        $this->txtPesoGuia = new QFloatTextBox($this);
-        $this->txtPesoGuia->Name = 'Peso';
-        $this->txtPesoGuia->Width = 50;
+    protected function txtCiudDest_Create() {
+        $this->txtCiudDest = new QTextBox($this);
+        $this->txtCiudDest->Placeholder = 'Ciudad';
+        $this->txtCiudDest->Width = 180;
         if ($this->blnEditMode) {
-            $this->txtPesoGuia->Text = $this->objGuia->PesoGuia;
+            $this->txtCiudDest->Text = $this->objGuia->ClienteRetail->Ciudad;
         }
     }
 
-    protected function txtDescCont_Create() {
-        $this->txtDescCont = new QTextBox($this);
-        $this->txtDescCont->Name = 'Contenido';
-        $this->txtDescCont->Width = 300;
-        $this->txtDescCont->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+    protected function txtPostDest_Create() {
+        $this->txtPostDest = new QTextBox($this);
+        $this->txtPostDest->Placeholder = 'C. Postal';
+        $this->txtPostDest->Width = 120;
         if ($this->blnEditMode) {
-            $this->txtDescCont->Text = $this->objGuia->DescCont;
+            $this->txtPostDest->Text = $this->objGuia->ClienteRetail->CodigoPostal;
+        }
+    }
+
+
+    protected function chkEnviSgro_Create() {
+        $this->chkEnviSgro = new QCheckBox($this);
+        $this->chkEnviSgro->Name = 'Asegurado ?';
+        if ($this->blnEditMode) {
+            $this->chkEnviSgro->Checked = $this->objGuia->Asegurado;
         }
     }
 
@@ -569,7 +627,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtValoDecl = new QFloatTextBox($this);
         $this->txtValoDecl->Name = 'Valor Decl.';
         $this->txtValoDecl->Width = 120;
-        $this->txtValoDecl->HtmlAfter = " (".$this->decMiniSegu."-".$this->decMaxiSegu.")";
         $this->txtValoDecl->ToolTip = 'Un monto mayor a cero, implica que el envío se asegura';
         if ($this->blnEditMode) {
             $this->txtValoDecl->Text = $this->objGuia->ValorDeclarado;
@@ -578,96 +635,257 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
     }
 
-    protected function rdbModaPago_Create() {
-        $this->rdbModaPago = new QRadioButtonList($this);
-        $this->rdbModaPago->Name = 'F. Pago';
-        $this->rdbModaPago->HtmlEntities = false;
+    protected function rdbFormPago_Create() {
+        $this->rdbFormPago = new QRadioButtonList($this);
+        $this->rdbFormPago->Name = 'F. Pago';
+        $this->rdbFormPago->HtmlEntities = false;
         if (!$this->blnEditMode) {
             $this->cargarModalidadesDePago();
         } else {
-            $this->cargarModalidadesDePago($this->objGuia->TipoGuia);
+            $this->cargarModalidadesDePago($this->objGuia->FormaPago);
         }
-        $this->rdbModaPago->RepeatColumns = 2;
+        $this->rdbFormPago->RepeatColumns = 2;
     }
 
-    protected function txtPorcDcto_Create() {
-        $this->txtPorcDcto = new QFloatTextBox($this);
-        $this->txtPorcDcto->Name = 'Dscto';
-        $this->txtPorcDcto->Width = 50;
-        $this->txtPorcDcto->HtmlAfter = ' %';
-        $this->txtPorcDcto->ToolTip = 'Porcentaje de Descuento a otorgar';
+    protected function txtCantPiez_Create() {
+        $this->txtCantPiez = new QIntegerTextBox($this);
+        $this->txtCantPiez->Width = 50;
         if ($this->blnEditMode) {
-            $this->txtPorcDcto->Text = $this->objGuia->PorcentajeDscto;
+            $this->txtCantPiez->Text = $this->objGuia->Piezas;
+        }
+        $this->txtCantPiez->AddAction(new QChangeEvent(), new QServerAction('txtCantPiez_Change'));
+    }
+
+    protected function txtCantPiez_Change() {
+        $intCantPiez = (int)$this->txtCantPiez->Text;
+        if ( ($intCantPiez > 1) && (!$this->blnEditMode)) {
+            $arrPiezActu = PiezasTemp::LoadArrayByProcesoErrorId($this->objProcEjec->Id);
+            $intPiezActu = count($arrPiezActu);
+            $intCantProc = $intCantPiez - $intPiezActu;
+            //---------------
+            // Multi-Piezas
+            //---------------
+            for ($i = 0; $i < $intCantProc; $i++) {
+                $objPiezTemp = new PiezasTemp();
+                $objPiezTemp->ProcesoErrorId = $this->objProcEjec->Id;
+                $objPiezTemp->Descripcion    = '';
+                $objPiezTemp->Kilos          = 0;
+                $objPiezTemp->CreatedBy      = $this->objUsuario->CodiUsua;
+                $objPiezTemp->Save();
+            }
+            $this->dtgPiezTemp->Visible = true;
+            $this->dtgPiezTemp->Refresh();
+        }
+    }
+
+    protected function txtCantKilo_Create() {
+        $this->txtCantKilo = new QFloatTextBox($this);
+        $this->txtCantKilo->Width = 50;
+        if ($this->blnEditMode) {
+            $this->txtCantKilo->Text = $this->objGuia->Kilos;
+        }
+    }
+
+    protected function txtDescCont_Create() {
+        $this->txtDescCont = new QTextBox($this);
+        $this->txtDescCont->Placeholder = 'Descripcion del Contenido';
+        $this->txtDescCont->Width = 350;
+        $this->txtDescCont->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+        if ($this->blnEditMode) {
+            $this->txtDescCont->Text = $this->objGuia->Contenido;
+        }
+    }
+
+    protected function txtTasaDola_Create() {
+        $this->txtTasaDola = new QFloatTextBox($this);
+        $this->txtTasaDola->Width = 100;
+        if ($this->blnEditMode) {
+            $this->txtTasaDola->Text = $this->objGuia->Tasa;
+        }
+    }
+
+    protected function txtTotaGuia_Create() {
+        $this->txtTotaGuia = new QFloatTextBox($this);
+        $this->txtTotaGuia->Width = 100;
+        if ($this->blnEditMode) {
+            $this->txtTotaGuia->Text = $this->objGuia->Total;
+        }
+    }
+
+    protected function txtIdxxPref_Create() {
+        $this->txtIdxxPref = new QTextBox($this);
+        $this->txtIdxxPref->Width = 100;
+        if ($this->blnEditMode) {
+            $this->txtIdxxPref->Text = $this->objGuia->FacturaId;
+        }
+    }
+
+    protected function lblTituPiez_Create() {
+        $this->lblTituPiez = new QLabel($this);
+        $this->lblTituPiez->Text = 'Piezas de la Guia <i class="fa fa-plus-circle fa-lg"></i>';
+        $this->lblTituPiez->HtmlEntities = false;
+        $this->lblTituPiez->CssClass = 'titulo';
+        $this->lblTituPiez->AddAction(new QClickEvent(), new QAjaxAction('lblTituPiez_Click'));
+    }
+
+    public function lblTituPiez_Click() {
+        $this->mostrarCampos('add');
+    }
+
+    protected function lblContPiez_Create() {
+        $this->lblContPiez = new QLabel($this);
+        $this->lblContPiez->Text = 'Contenido';
+        $this->lblContPiez->Visible = false;
+    }
+
+    protected function lblKiloPiez_Create() {
+        $this->lblKiloPiez = new QLabel($this);
+        $this->lblKiloPiez->Text = 'Kilos';
+        $this->lblKiloPiez->HorizontalAlign = QHorizontalAlign::Right;
+        $this->lblKiloPiez->Visible = false;
+    }
+
+    protected function txtContPiez_Create() {
+        $this->txtContPiez = new QTextBox($this);
+        $this->txtContPiez->Placeholder = 'Descripcion del Contenido de la Pieza';
+        $this->txtContPiez->Width = 300;
+        $this->txtContPiez->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+        //$this->txtContPiez->Required = true;
+        $this->txtContPiez->Visible = false;
+    }
+
+    protected function txtKiloPiez_Create() {
+        $this->txtKiloPiez = new QTextBox($this);
+        $this->txtKiloPiez->Placeholder = 'Kg';
+        $this->txtKiloPiez->Width = 50;
+        //$this->txtKiloPiez->Required = true;
+        $this->txtKiloPiez->Visible = false;
+    }
+
+    protected function btnSavePiez_Create() {
+        $this->btnSavePiez = new QButtonP($this);
+        $this->btnSavePiez->Text = '<i class="fa fa-floppy-o fa-lg"></i>';
+        $this->btnSavePiez->Visible = false;
+        $this->btnSavePiez->AddAction(new QClickEvent(), new QServerAction('btnSavePiez_Click'));
+    }
+
+    protected function btnCancPiez_Create() {
+        $this->btnCancPiez = new QButtonW($this);
+        $this->btnCancPiez->Text = '<i class="fa fa-times-circle fa-lg"></i>';
+        $this->btnCancPiez->Visible = false;
+        $this->btnCancPiez->AddAction(new QClickEvent(), new QServerAction('btnCancPiez_Click'));
+    }
+
+    protected function btnDelePiez_Create() {
+        $this->btnDelePiez = new QButtonD($this);
+        $this->btnDelePiez->Text = '<i class="fa fa-trash fa-lg"></i>';
+        $this->btnDelePiez->Visible = false;
+        $this->btnDelePiez->AddAction(new QClickEvent(), new QConfirmAction('Seguro que desea borrar esta Pieza'));
+        $this->btnDelePiez->AddAction(new QClickEvent(), new QServerAction('btnDelePiez_Click'));
+    }
+
+
+    public function dtgPiezTempRow_Click($strFormId, $strControlId, $strParameter) {
+        $id = (int)$strParameter;
+        $this->intEditPiez = $id;
+        $this->mostrarCampos('edit');
+        $objPiezGuia = PiezasTemp::Load($id);
+
+        $this->txtContPiez->Text = $objPiezGuia->Descripcion;
+        $this->txtKiloPiez->Text = $objPiezGuia->Kilos;
+        $this->blnEditPiez       = true;
+    }
+
+    protected function btnSavePiez_Click() {
+        if (!$this->blnEditPiez) {
+            t('Estoy en modo insercion');
+            $objPiezGuia = new PiezasTemp();
+            $objPiezGuia->ProcesoErrorId = $this->objProcEjec->Id;
+            $objPiezGuia->CreatedBy      = $this->objUsuario->CodiUsua;
         } else {
-            $this->txtPorcDcto->Text = '';
+            t('Estoy en modo edicion');
+            $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
+        }
+        try {
+            $objPiezGuia->Descripcion = strtoupper(limpiarCadena($this->txtContPiez->Text));
+            $objPiezGuia->Kilos       = (float)$this->txtKiloPiez->Text;
+            $objPiezGuia->Save();
+            t('Salve en PiezasTemp');
+
+            //$this->txtDescCont->Text .= ' | '.trim($objPiezGuia->Descripcion);
+            //$this->txtCantKilo->Text  = $this->objGuia->Kilos + $objPiezGuia->Kilos;
+            //$this->txtCantPiez->Text  = $this->objGuia->Piezas + 1;
+        } catch (Exception $e) {
+            t('Error: '.$e->getMessage());
+        }
+
+        $this->dtgPiezTemp->Refresh();
+
+        $this->txtContPiez->Text = '';
+        $this->txtKiloPiez->Text = '';
+
+        $this->success('Transaccion Exitosa.  Pieza guardada !!!');
+    }
+
+    protected function btnDelePiez_Click() {
+        t('Borrando pieza');
+        $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
+
+        //$this->txtCantKilo->Text  = $this->objGuia->Kilos - $objPiezGuia->Kilos;
+        //$this->txtCantPiez->Text  = $this->objGuia->Piezas - 1;
+
+        $objPiezGuia->Delete();
+        t('Pieza borrada');
+
+
+        $this->dtgPiezTemp->Refresh();
+
+        $this->txtContPiez->Text = '';
+        $this->txtKiloPiez->Text = '';
+        t('Listo el borrado');
+        $this->success('Transaccion Exitosa.  Pieza borrada !!!');
+    }
+
+
+    protected function btnCancPiez_Click() {
+        $this->mostrarCampos('add');
+    }
+
+    protected function mostrarCampos($strAction='add') {
+        $this->mensaje();
+        if ($strAction == 'add') {
+            $this->blnEditPiez = false;
+            $this->lblContPiez->Visible = !$this->lblContPiez->Visible;
+            $this->lblKiloPiez->Visible = !$this->lblKiloPiez->Visible;
+            $this->txtContPiez->Visible = !$this->txtContPiez->Visible;
+            $this->txtKiloPiez->Visible = !$this->txtKiloPiez->Visible;
+            $this->btnSavePiez->Visible = !$this->btnSavePiez->Visible;
+            $this->btnCancPiez->Visible = !$this->btnCancPiez->Visible;
+            $this->btnDelePiez->Visible = false;
+
+            $this->txtContPiez->Text = '';
+            $this->txtKiloPiez->Text = '';
+
+        }
+        if ($strAction == 'edit') {
+            $this->blnEditPiez = true;
+            $this->lblContPiez->Visible = true;
+            $this->lblKiloPiez->Visible = true;
+            $this->txtContPiez->Visible = true;
+            $this->txtKiloPiez->Visible = true;
+            $this->btnSavePiez->Visible = true;
+            $this->btnCancPiez->Visible = true;
+            $this->btnDelePiez->Visible = true;
+
         }
     }
 
-    protected function chkConsDcto_Create() {
-        $this->chkConsDcto = new QCheckBox($this);
-        $this->chkConsDcto->Name = 'Cons. Dscto?';
-        $this->chkConsDcto->ToolTip = '¿Considerar este Descuento en las estadísticas mensuales del Cliente?';
-        $this->chkConsDcto->HtmlAfter = ' ¿Considerar en las estadísticas mensuales?';
-        if ($this->blnEditMode) {
-            $this->chkConsDcto->Checked = $this->objGuia->ConsiderarDscto;
-        }
+    protected function btnCancel_Click() {
+        PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
+        $objUltiAcce = PilaAcceso::Pop('D');
+        QApplication::Redirect(__SIST__.'/'.$objUltiAcce->__toString());
     }
 
-    protected function lblMontBase_Create() {
-        $this->lblMontBase = new QLabel($this);
-        $this->lblMontBase->Name = 'Base';
-        $this->lblMontBase->Width = 120;
-        if ($this->blnEditMode) {
-            $this->lblMontBase->Text = nf($this->objGuia->MontoBase);
-        }
-    }
-
-    protected function lblMontDcto_Create() {
-        $this->lblMontDcto = new QLabel($this);
-        $this->lblMontDcto->Name = 'Dscto';
-        $this->lblMontDcto->Width = 120;
-        if ($this->blnEditMode) {
-            $this->lblMontDcto->Name = 'Dscto('.$this->objGuia->PorcentajeDscto.'%)';
-            $this->lblMontDcto->Text = nf($this->objGuia->MontoDscto);
-        }
-    }
-
-    protected function lblMontIvax_Create() {
-        $this->lblMontIvax = new QLabel($this);
-        $this->lblMontIvax->Name = 'I.V.A.';
-        $this->lblMontIvax->Width = 80;
-        if ($this->blnEditMode) {
-            $this->lblMontIvax->Name = 'IVA('.$this->objGuia->PorcentajeIva.'%)';
-            $this->lblMontIvax->Text = nf($this->objGuia->MontoIva);
-        }
-    }
-
-    protected function lblMontFran_Create() {
-        $this->lblMontFran = new QLabel($this);
-        $this->lblMontFran->Name = 'Franqueo';
-        $this->lblMontFran->Width = 80;
-        if ($this->blnEditMode) {
-            $this->lblMontFran->Text = nf($this->objGuia->MontoFranqueo);
-        }
-    }
-
-    protected function lblMontSegu_Create() {
-        $this->lblMontSegu = new QLabel($this);
-        $this->lblMontSegu->Name = 'Seguro';
-        $this->lblMontSegu->Width = 80;
-        if ($this->blnEditMode) {
-            $this->lblMontSegu->Text = nf($this->objGuia->MontoSeguro);
-        }
-    }
-
-    protected function lblMontTota_Create() {
-        $this->lblMontTota = new QLabel($this);
-        $this->lblMontTota->Name = 'Mto. Total';
-        $this->lblMontTota->Width = 80;
-        if ($this->blnEditMode) {
-            $this->lblMontTota->Text = nf($this->objGuia->MontoTotal);
-        }
-    }
 
     protected function lblBotoPopu_Create() {
         $this->lblBotoPopu = new QLabel($this);
@@ -676,13 +894,31 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lblBotoPopu->CssClass = '';
     }
 
-    protected function btnCalcTari_Create() {
-        $this->btnCalcTari = new QButtonP($this);
-        $this->btnCalcTari->Text = TextoIcono('eye fa-lg','Cotizar');
-        $this->btnCalcTari->AddAction(new QClickEvent(), new QServerAction('btnCalcTari_Click'));
-        if ($this->blnEditMode) {
-            $this->btnCalcTari->Visible = false;
-        }
+    protected function btnNextPage_Create() {
+        $this->btnNextPage = new QButtonP($this);
+        $this->btnNextPage->Text = TextoIcono('chevron-right fa-lg','Siguiente','L');
+        $this->btnNextPage->AddAction(new QClickEvent(), new QServerAction('btnNextPage_Click'));
+        $this->btnNextPage->ToolTip = 'Ir a la Siguiente Pantalla';
+    }
+
+    protected function btnNextPage_Click() {
+        $this->blnVerpUnox = !$this->blnVerpUnox;
+        $this->btnPrevPage->Visible = !$this->btnPrevPage->Visible;
+        $this->btnNextPage->Visible = !$this->btnNextPage->Visible;
+    }
+
+    protected function btnPrevPage_Create() {
+        $this->btnPrevPage = new QButtonP($this);
+        $this->btnPrevPage->Text = TextoIcono('chevron-left fa-lg','Anterior');
+        $this->btnPrevPage->AddAction(new QClickEvent(), new QServerAction('btnPrevPage_Click'));
+        $this->btnPrevPage->ToolTip = 'Ir a la Pantalla Anterior';
+        $this->btnPrevPage->Visible = false;
+    }
+
+    protected function btnPrevPage_Click() {
+        $this->blnVerpUnox = !$this->blnVerpUnox;
+        $this->btnPrevPage->Visible = !$this->btnPrevPage->Visible;
+        $this->btnNextPage->Visible = !$this->btnNextPage->Visible;
     }
 
     protected function btnMasxAcci_Create() {
@@ -752,6 +988,97 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->btnErroProc->Visible = false;
     }
 
+    protected function dtgConcGuia_Create() {
+        $this->dtgConcGuia = new QDataGrid($this);
+        $this->dtgConcGuia->FontSize = 12;
+        $this->dtgConcGuia->ShowFilter = false;
+
+        $this->dtgConcGuia->CssClass = 'datagrid';
+        $this->dtgConcGuia->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgConcGuia->SetDataBinder('dtgConcGuia_Bind');
+
+        $this->createDtgConcGuiaColumns();
+    }
+
+    protected function dtgConcGuia_Bind() {
+        $objCondicion   = QQ::Clause();
+        $objCondicion[] = QQ::Equal(QQN::GuiaConceptos()->GuiaId, $this->objGuia->Id);
+        $this->dtgConcGuia->DataSource = GuiaConceptos::QueryArray(
+            QQ::AndCondition($objCondicion),
+            QQ::Clause(QQ::OrderBy(
+                QQN::GuiaConceptos()->Concepto->Orden)
+            )
+        );
+    }
+
+
+    protected function createDtgConcGuiaColumns() {
+        $colMostComo = new QDataGridColumn($this);
+        $colMostComo->Name = 'CONCEPTO';
+        $colMostComo->Html = '<?= $_ITEM->MostrarComo; ?>';
+        $colMostComo->Width = 180;
+        $colMostComo->HorizontalAlign = QHorizontalAlign::Left;
+        $this->dtgConcGuia->AddColumn($colMostComo);
+
+        $colMontConc = new QDataGridColumn($this);
+        $colMontConc->Name = 'MONTO';
+        $colMontConc->Html = '<?= nf($_ITEM->Monto); ?>';
+        $colMontConc->Width = 100;
+        $colMontConc->HorizontalAlign = QHorizontalAlign::Right;
+        $this->dtgConcGuia->AddColumn($colMontConc);
+
+    }
+
+    protected function dtgPiezTemp_Create() {
+        $this->dtgPiezTemp = new QDataGrid($this);
+        $this->dtgPiezTemp->FontSize = 12;
+        $this->dtgPiezTemp->ShowFilter = false;
+
+        $this->dtgPiezTemp->CssClass = 'datagrid';
+        $this->dtgPiezTemp->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgPiezTemp->UseAjax = true;
+
+        $this->dtgPiezTemp->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgPiezTemp->AddRowAction(new QClickEvent(), new QAjaxAction('dtgPiezTempRow_Click'));
+
+        $this->dtgPiezTemp->SetDataBinder('dtgPiezTemp_Bind');
+
+        $this->createDtgPiezTempColumns();
+    }
+
+    protected function dtgPiezTemp_Bind() {
+        $objCondicion   = QQ::Clause();
+        $objCondicion[] = QQ::Equal(QQN::PiezasTemp()->ProcesoErrorId, $this->objProcEjec->Id);
+        $this->dtgPiezTemp->DataSource = PiezasTemp::QueryArray(
+            QQ::AndCondition($objCondicion),
+            QQ::Clause(QQ::OrderBy(
+                QQN::PiezasTemp()->Id)
+            )
+        );
+        //$intPiezTemp = PiezasTemp::QueryCount(QQ::AndCondition($objCondicion));
+        //t('Hay '.$intPiezTemp.' piezas');
+    }
+
+
+    protected function createdtgPiezTempColumns() {
+        $colDescPiez = new QDataGridColumn($this);
+        $colDescPiez->Name = 'DESCRIPCION';
+        $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
+        $colDescPiez->Width = 220;
+        $colDescPiez->HorizontalAlign = QHorizontalAlign::Left;
+        $this->dtgPiezTemp->AddColumn($colDescPiez);
+
+        $colKiloPiez = new QDataGridColumn($this);
+        $colKiloPiez->Name = 'KILOS';
+        $colKiloPiez->Html = '<?= nf($_ITEM->Kilos); ?>';
+        $colKiloPiez->Width = 50;
+        $colKiloPiez->HorizontalAlign = QHorizontalAlign::Right;
+        $this->dtgPiezTemp->AddColumn($colKiloPiez);
+
+    }
+
     //--------------------------------------------------------------------------------------------------------------
     // Función que busca y muestra los datos de un cliente remitente existente a través de su cédula. En caso de no
     // existir, se declara al mismo como nuevo cliente.
@@ -760,24 +1087,30 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if (!$this->blnEditMode) {
             $strNumeCedu = DejarNumerosVJGuion($this->txtNumeCedu->Text);
             if (strlen($strNumeCedu) > 0) {
-                $this->objCliePmnx = ClientePmn::Load($strNumeCedu);
-                if ($this->objCliePmnx) {
+                $this->objClieReta = ClientesRetail::LoadByCedulaRif($strNumeCedu);
+                if ($this->objClieReta) {
                     $this->blnEditClie = true;
-                    $this->txtNumeCedu->HtmlAfter = '';
-                    $this->txtNombClie->Text = $this->objCliePmnx->Nombre;
-                    $this->txtTeleFijo->Text = $this->objCliePmnx->TelefonoFijo;
-                    $this->txtTeleMovi->Text = $this->objCliePmnx->TelefonoMovil;
-                    $this->txtDireClie->Text = $this->objCliePmnx->Direccion;
+                    //$this->txtNumeCedu->HtmlAfter = '';
+                    $this->txtNombClie->Text = $this->objClieReta->Nombre;
+                    $this->txtTeleFijo->Text = $this->objClieReta->TelefonoFijo;
+                    $this->txtTeleMovi->Text = $this->objClieReta->TelefonoMovil;
+                    $this->txtDireClie->Text = $this->objClieReta->Direccion;
+                    $this->txtEmaiRemi->Text = $this->objClieReta->Email;
+                    $this->calFechNaci->DateTime = new QDateTime($this->objClieReta->FechaNacimiento);
+                    $this->lstSexoClie->SelectedIndex = $this->objClieReta->Sexo == 'M' ? 1 : 2;
                     $this->lstSucuDest->SetFocus();
                 } else {
                     $this->blnEditClie = false;
-                    $this->objCliePmnx = new ClientePmn();
-                    $this->objCliePmnx->CedulaRif = $strNumeCedu;
-                    $this->txtNumeCedu->HtmlAfter = ' (Nuevo Cliente)';
+                    $this->objClieReta = new ClientesRetail();
+                    $this->objClieReta->CedulaRif = $strNumeCedu;
+                    //$this->txtNumeCedu->HtmlAfter = ' (Nuevo Cliente)';
                     $this->txtNombClie->Text = '';
                     $this->txtTeleFijo->Text = '';
                     $this->txtTeleMovi->Text = '';
                     $this->txtDireClie->Text = '';
+                    $this->txtEmaiRemi->Text = '';
+                    $this->calFechNaci->DateTime = null;
+                    $this->lstSexoClie->SelectedIndex = 0;
                     $this->txtNombClie->SetFocus();
                 }
             }
@@ -792,22 +1125,27 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if (!$this->blnEditMode) {
             $strNumeCedu = DejarNumerosVJGuion($this->txtCeduDest->Text);
             if (strlen($strNumeCedu) > 0) {
-                $this->objDestPmnx = ClientePmn::Load($strNumeCedu);
+                $this->objDestPmnx = ClientesRetail::LoadByCedulaRif($strNumeCedu);
                 if ($this->objDestPmnx) {
                     $this->blnEditDest = true;
-                    $this->txtNumeCedu->HtmlAfter = '';
-                    $this->txtNombDest->Text = $this->objDestPmnx->Nombre;
-                    $this->txtTeleDest->Text = $this->objDestPmnx->TelefonoMovil;
-                    if ($this->rdbReceDomi->SelectedValue == 'D') {
+                    //$this->txtCeduDest->HtmlAfter = '';
+                    $this->txtNombDest->Text          = $this->objDestPmnx->Nombre;
+                    $this->txtTlfdFijo->Text          = $this->objDestPmnx->TelefonoFijo;
+                    $this->txtTlfdMovi->Text          = $this->objDestPmnx->TelefonoMovil;
+                    $this->txtEmaiDest->Text          = $this->objDestPmnx->Email;
+                    $this->lstSexoDest->SelectedIndex = $this->objDestPmnx->Sexo == 'M' ? 1 : 2;
+                    if ($this->lstReceDomi->SelectedValue == 'DOM') {
                         $this->txtDireDest->Text = $this->objDestPmnx->Direccion;
                     }
                 } else {
                     $this->blnEditDest = false;
-                    $this->objDestPmnx = new ClientePmn();
-                    $this->objDestPmnx->CedulaRif = $strNumeCedu;
-                    $this->txtCeduDest->HtmlAfter = ' (Nuevo Cliente)';
-                    $this->txtNombDest->Text = '';
-                    $this->txtTeleDest->Text = '';
+                    $this->objDestPmnx = new ClientesRetail();
+                    $this->objDestPmnx->CedulaRif     = $strNumeCedu;
+                    //$this->txtCeduDest->HtmlAfter     = ' (Nuevo Cliente)';
+                    $this->txtNombDest->Text          = '';
+                    $this->txtTlfdFijo->Text          = '';
+                    $this->txtTlfdMovi->Text          = '';
+                    $this->lstSexoDest->SelectedIndex = 0;
                     if (is_null($this->lstReceDest->SelectedValue)) {
                         $this->txtDireDest->Text = '';
                     }
@@ -817,31 +1155,44 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
     }
 
-    //---------------------------------------------------------------------------
-    // Función que carga las sucursales en el QListBox de las sucursales destino
-    //---------------------------------------------------------------------------
-    protected function cargarDestinos($strCodiEsta=null) {
-        $this->lstSucuDest->RemoveAllItems();
-        $this->lstSucuDest->Width = 200;
+    protected function cargarProfesiones($strCodiProf=null) {
+        $this->lstProfClie->RemoveAllItems();
+        $this->lstProfClie->Width = 260;
         $objClauOrde   = QQ::Clause();
-        $objClauOrde[] = QQ::OrderBy(QQN::Estacion()->DescEsta);
-        //-----------------------------------------------------------
-        // Se cargan unicamente las Sucursales que tenga receptorias
-        //-----------------------------------------------------------
-        $arrCodiEsta   = Estacion::LoadArrayConCantidadDeReceptorias();
-        $intCantDest   = count($arrCodiEsta);
-        $this->lstSucuDest->AddItem('- Seleccione Uno - ('.$intCantDest.')', null);
-        if ($arrCodiEsta) {
-            foreach ($arrCodiEsta as $objSucuDest) {
+        $objClauOrde[] = QQ::OrderBy(QQN::Profesiones()->Nombre);
+        $arrProfClie   = Profesiones::LoadAll($objClauOrde);
+        $intCantProf   = count($arrProfClie);
+        $this->lstProfClie->AddItem('- Seleccione Uno - ('.$intCantProf.')', null);
+        if ($arrProfClie) {
+            foreach ($arrProfClie as $objProfClie) {
                 $blnSeleRegi = false;
-                if (strlen($strCodiEsta) > 0) {
-                    if (trim($objSucuDest->CodiEsta) == trim($strCodiEsta)) {
+                if (strlen($strCodiProf) > 0) {
+                    if (trim($objProfClie->Id) == trim($strCodiProf)) {
                         $blnSeleRegi = true;
-                        $this->strCodiEsta = $strCodiEsta;
                     }
                 }
-                $strEstaAuxi = trim($objSucuDest->CodiEsta).'|'.$objSucuDest->GetVirtualAttribute('cant_rece');
-                $this->lstSucuDest->AddItem($objSucuDest->__toStringConTiempoDeEntrega(), $strEstaAuxi, $blnSeleRegi);
+                $this->lstProfClie->AddItem($objProfClie->__toString(), $objProfClie->Id, $blnSeleRegi);
+            }
+        }
+    }
+
+    protected function cargarDestinos($strCodiDest=null) {
+        $this->lstSucuDest->RemoveAllItems();
+        $this->lstSucuDest->Width = 200;
+        $arrCodiDest = Sucursales::LoadSucursalesActivas('Nombre','exp');
+        $intCantDest = count($arrCodiDest);
+        $this->lstSucuDest->AddItem('- Seleccione Uno - ('.$intCantDest.')', null);
+        if ($arrCodiDest) {
+            foreach ($arrCodiDest as $objSucuDest) {
+                $blnSeleRegi = false;
+                if ($this->blnEditMode) {
+                    $blnSeleRegi = $this->objGuia->DestinoId == $objSucuDest->Id ? true : false;
+                } else {
+                    if ($intCantDest == 1) {
+                        $blnSeleRegi = true;
+                    }
+                }
+                $this->lstSucuDest->AddItem($objSucuDest->__toString(), $objSucuDest->Id, $blnSeleRegi);
             }
         }
     }
@@ -849,8 +1200,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     //-------------------------------------------------------------------------------------
     // Función que define el evento click del QRadioButtonList de los tipos de receptorías
     //-------------------------------------------------------------------------------------
-    public function rdbReceDomi_Click() {
-        if ($this->rdbReceDomi->SelectedValue == 'D') {
+    public function lstReceDomi_Click() {
+        if ($this->lstReceDomi->SelectedValue == 'DOM') {
             $this->lstReceDest->RemoveAllItems();
             $this->lstReceDest->Enabled = false;
             $this->lstReceDest->ForeColor = 'blue';
@@ -865,18 +1216,17 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 //--------------------------------------
                 // Cuando existe mas de una Receptoria
                 //--------------------------------------
-                $this->cargarReceptorias($this->strCodiEsta,$this->objGuia->ReceptoriaDestino);
+                $this->cargarReceptorias($this->strCodiDest,$this->objGuia->ReceptoriaDestino);
                 $this->lstReceDest->Enabled = true;
                 $this->lstReceDest->ForeColor = null;
             } else {
                 //--------------------------------------
                 // Cuando solo existe una Receptoria
                 //--------------------------------------
-                //$this->lstReceDest->RemoveAllItems();
                 $this->cargarReceptorias($this->strCodiEsta,$this->objGuia->ReceptoriaDestino);
                 $this->lstReceDest->Enabled = false;
                 $this->lstReceDest->ForeColor = 'blue';
-                $this->txtDireDest->Text = 'OFICINA LIBERTY ('.$this->strCodiEsta.')';
+                $this->txtDireDest->Text = 'TIENDA GOLD COAST ('.$this->strCodiEsta.')';
                 $this->txtDireDest->Enabled = false;
                 $this->txtDireDest->ForeColor = 'blue';
             }
@@ -902,7 +1252,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             //-----------------------------------------------------------------------------
             // Si se trata de una Guia nueva, la Receptoria del Usuario no debe cargarse
             //-----------------------------------------------------------------------------
-            $objClauWher[] = QQ::NotEqual(QQN::Counter()->Siglas,$this->strReceOrig);
+            $objClauWher[] = QQ::NotEqual(QQN::Counter()->Siglas,$this->intReceOrig);
         }
         $arrReceDest = Counter::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
         $intCantRece = count($arrReceDest);
@@ -925,7 +1275,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     //-----------------------------------------------------------------------------
     protected function lstReceDest_Change() {
         if (!is_null($this->lstReceDest->SelectedValue)) {
-            $this->txtDireDest->Text = 'OFICINA LIBERTY ('.$this->lstReceDest->SelectedName.')';
+            $this->txtDireDest->Text = 'TIENDA GOLD COAST ('.$this->lstReceDest->SelectedName.')';
             $this->txtDireDest->Enabled = false;
             $this->txtDireDest->ForeColor = 'blue';
         }
@@ -940,7 +1290,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->lstReceDest->Enabled = false;
             $this->lstReceDest->ForeColor = 'blue';
 
-            $this->rdbReceDomi->RemoveAllItems();
+            $this->lstReceDomi->RemoveAllItems();
             $this->lstReceDest->RemoveAllItems();
 
             if ($this->blnEditMode) {
@@ -964,12 +1314,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                         $blnSeleRegi = true;
                     }
 
-                    $this->rdbReceDomi->AddItem('&nbsp;RECEPTORIA&nbsp;','R',$blnSeleRegi);
-                    $this->rdbReceDomi->AddItem('&nbsp;DOMICILIO','D',!$blnSeleRegi);
+                    $this->lstReceDomi->AddItem('&nbsp;RECEPTORIA&nbsp;','R',$blnSeleRegi);
+                    $this->lstReceDomi->AddItem('&nbsp;DOMICILIO','D',!$blnSeleRegi);
 
                 } else {
-                    $this->rdbReceDomi->AddItem('&nbsp;RECEPTORIA&nbsp;','R');
-                    $this->rdbReceDomi->AddItem('&nbsp;DOMICILIO','D');
+                    $this->lstReceDomi->AddItem('&nbsp;RECEPTORIA&nbsp;','R');
+                    $this->lstReceDomi->AddItem('&nbsp;DOMICILIO','D');
                 }
 
                 if ($intCantRece > 1) {
@@ -982,7 +1332,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     // Si la guia se encuentra en modo de edicion, y el RaioButton seleccionado es "RECEPTORIA", se
                     // carga y selecciona por defecto la receptoria del destino de la guia en la lista de receptorias.
                     //-------------------------------------------------------------------------------------------------
-                    if ($this->blnEditMode && $this->rdbReceDomi->SelectedValue = 'R') {
+                    if ($this->blnEditMode && $this->lstReceDomi->SelectedValue = 'R') {
                         $this->cargarReceptorias($this->strCodiEsta,$this->objGuia->ReceptoriaDestino);
                         $this->lstReceDest->Enabled = true;
                         $this->lstReceDest->ForeColor = null;
@@ -1004,7 +1354,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     // carga y selecciona por defecto la receptoria del destino de la guia en la lista de receptorias,
                     // y la misma se bloquea al igual que el campo de direccion del destino.
                     //-------------------------------------------------------------------------------------------------
-                    if ($this->blnEditMode && $this->rdbReceDomi->SelectedValue = 'R') {
+                    if ($this->blnEditMode && $this->lstReceDomi->SelectedValue = 'R') {
                         $this->cargarReceptorias($this->strCodiEsta,$this->objGuia->ReceptoriaDestino);
                         $this->lstReceDest->Enabled = false;
                         $this->lstReceDest->ForeColor = 'blue';
@@ -1026,7 +1376,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 // Cuando no existen receptorías, se agrega solamente el RadioButton "DOMICILIO" y se selecciona por
                 // defecto.
                 //---------------------------------------------------------------------------------------------------
-                $this->rdbReceDomi->AddItem('&nbsp;DOMICILIO','D',true);
+                $this->lstReceDomi->AddItem('&nbsp;DOMICILIO','D',true);
                 $this->lstReceDest->RemoveAllItems();
                 $this->lstReceDest->Enabled = false;
                 $this->lstReceDest->ForeColor = 'blue';
@@ -1046,21 +1396,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
     }
 
-    //------------------------------------------------------------------------------------------
-    // función que carga las modalidades de pago en el QRadioButtonList de la modalidad de pago
-    //------------------------------------------------------------------------------------------
-    protected function cargarModalidadesDePago($intSeleEsta=null) {
-        $this->rdbModaPago->RemoveAllItems();
-        if (is_null($intSeleEsta)) {
-            $this->rdbModaPago->AddItem('&nbsp;PPD&nbsp;',TipoGuiaType::PPDPREPAGADA);
-            //$this->rdbModaPago->AddItem('&nbsp;COD',TipoGuiaType::CODCOBROENDESTINO);
-        } else {
-            $this->rdbModaPago->AddItem('&nbsp;PPD&nbsp;',TipoGuiaType::PPDPREPAGADA,
-                TipoGuiaType::PPDPREPAGADA==$intSeleEsta);
-
-            //$this->rdbModaPago->AddItem('&nbsp;COD',TipoGuiaType::CODCOBROENDESTINO,
-            //    TipoGuiaType::CODCOBROENDESTINO==$intSeleEsta);
-        }
+    protected function cargarModalidadesDePago($strFormPago=null) {
+        $this->rdbFormPago->RemoveAllItems();
+        $this->rdbFormPago->AddItem('&nbsp;PPD&nbsp;','PPD',$strFormPago=='PPD');
+        $this->rdbFormPago->AddItem('&nbsp;COD','COD',$strFormPago=='COD');
     }
 
     //------------------------------------------------------------
@@ -1103,181 +1442,219 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //QApplication::Redirect('cargar_pod.php/'.$this->objGuia->NumeGuia);
     }
 
-    //-----------------------------------------------------
-    // Funcion que define el evento del QButton de Cotizar
-    //-----------------------------------------------------
-    protected function btnCalcTari_Click() {
-        if ($this->verificarDatos()) {
-            $this->calcularTarifa();
-        }
-    }
-
-    //-----------------------------------------------------
-    // funcion que define el evento del QButton de Guardar
-    //-----------------------------------------------------
     protected function btnSave_Click() {
-        $blnTodoOkey = true;
+        t('=================');
+        t('Guardando la Guia');
         //------------------------------------------------------------------------------------------------
         // Si los datos del Remitente no existen, se almacenan en la base de datos, para futuros envios.
         // En caso de que exista, se actualizan sus datos.
         //------------------------------------------------------------------------------------------------
-        $this->objCliePmnx->Nombre        = substr(limpiarCadena($this->txtNombClie->Text),0,100);
-        $this->objCliePmnx->CedulaRif     = DejarNumerosVJGuion($this->txtNumeCedu->Text);
-        $this->objCliePmnx->TelefonoFijo  = DejarSoloLosNumeros($this->txtTeleFijo->Text);
-        $this->objCliePmnx->TelefonoMovil = DejarSoloLosNumeros($this->txtTeleMovi->Text);
-        $this->objCliePmnx->Direccion     = substr(limpiarCadena($this->txtDireClie->Text),0,200);
-        //----------------------------------------------------------------------------------
-        // Si el Cliente Remitente no existe aún, se graba Usuario y la fecha de creación.
-        //----------------------------------------------------------------------------------
-        if (!$this->blnEditClie) {
-            $this->objCliePmnx->SucursalId    = $this->objUsuario->CodiEsta;
-            $this->objCliePmnx->RegistradoPor = $this->objUsuario->CodiUsua;
-            $this->objCliePmnx->RegistradoEl  = new QDateTime(QDateTime::Now);
+        try {
+            $this->objClieReta->Nombre          = substr(limpiarCadena($this->txtNombClie->Text),0,100);
+            $this->objClieReta->CedulaRif       = DejarNumerosVJGuion($this->txtNumeCedu->Text);
+            $this->objClieReta->TelefonoFijo    = DejarSoloLosNumeros($this->txtTeleFijo->Text);
+            $this->objClieReta->TelefonoMovil   = DejarSoloLosNumeros($this->txtTeleMovi->Text);
+            $this->objClieReta->Direccion       = substr(limpiarCadena($this->txtDireClie->Text),0,250);
+            $this->objClieReta->Email           = substr(strtolower($this->txtEmaiRemi->Text),0,191);
+            $this->objClieReta->FechaNacimiento = new QDateTime($this->calFechNaci->DateTime);
+            //----------------------------------------------------------------------------------
+            // Si el Cliente Remitente no existe aún, se graba Usuario y la fecha de creación.
+            //----------------------------------------------------------------------------------
+            if (!$this->blnEditClie) {
+                $this->objClieReta->SucursalId = $this->objUsuario->SucursalId;
+                $this->objClieReta->CreatedBy  = $this->objUsuario->CodiUsua;
+            }
+            $this->objClieReta->Save();
+        } catch (Exception $e) {
+            t('Error guardando Remitente: '.$e->getMessage());
+            $this->danger($e->getMessage());
+            return;
         }
-        //------------------------------
-        // Se salva la data del Cliente
-        //------------------------------
-        $this->objCliePmnx->Save();
+        t('Remitente almacenado');
         //---------------------------------------------------------------------------------------------------
         // Si los datos del Destinatario no existen, se almacenan en la base de datos, para futuros envios.
         //  En caso de que exista, se actualizan sus datos.
         //---------------------------------------------------------------------------------------------------
-        if (!$this->objDestPmnx) {
-            $this->objDestPmnx = new ClientePmn();
-            $this->objDestPmnx->CedulaRif = DejarNumerosVJGuion($this->txtCeduDest->Text);
-        }
-        $this->objDestPmnx->Nombre        = substr(limpiarCadena($this->txtNombDest->Text),0,100);
-        $this->objDestPmnx->TelefonoMovil = DejarSoloLosNumeros($this->txtTeleDest->Text);
-        $this->objDestPmnx->Direccion     = substr(limpiarCadena($this->txtDireDest->Text),0,200);
-        if (!$this->blnEditDest) {
-            $this->objDestPmnx->TelefonoFijo  = 'N/A';
-            $this->objDestPmnx->SucursalId    = $this->objUsuario->CodiEsta;
-            $this->objDestPmnx->RegistradoPor = $this->objUsuario->CodiUsua;
-            $this->objDestPmnx->RegistradoEl  = new QDateTime(QDateTime::Now);
-        }
-        $this->objDestPmnx->Save();
-        //---------------------------------------------------
-        // Se calcula la tarifa y se guarda la guia en la BD
-        //---------------------------------------------------
-        if ($this->verificarDatos()) {
-            if ($this->calcularTarifa()) {
-                $strNombProc = 'Creando/Editando Guía desde el Exp. Nac. del Cliente: '.$this->txtNombClie->Text;
-                $objProcEjec = CrearProceso($strNombProc);
-                //-------------------------------------
-                // Se suprimen los errores en pantalla
-                //-------------------------------------
-                $mixErroOrig = error_reporting();
-                error_reporting(0);
-                $strTextMens = 'Transaccion Exitosa';
-                $strTipoMens = 's';
-                $strIconMens = __iCHEC__; //'check';
-                $strMotiNook = '';
-                //------------------------------------------------------------------------------------
-                // Si se guarda por primera vez la guía, a la misma se le genera un número o Id nuevo
-                //------------------------------------------------------------------------------------
-                if (!$this->blnEditMode) {
-                    $this->txtNumeGuia->Text = proxNroDeGuia();
-                }
-                $this->UpdateGuiaFields();
-                try {
-                    $this->objGuia->Save();
-                    //--------------------------------
-                    // Se graba el checkpoint Pick-Up
-                    //--------------------------------
-                    if (!$this->blnEditMode) {
-                        $blnGrabPick = true;
-                    } else {
-                        if (!$this->objGuia->tieneCheckpoint('PU')) {
-                            $blnGrabPick = true;
-                        } else {
-                            $blnGrabPick = false;
-                        }
-                    }
-                    if ($blnGrabPick) {
-                        //-----------------------------------------------------
-                        // Vector de datos del checkpoint que se desea grabar
-                        //-----------------------------------------------------
-                        $objCheckpoint = unserialize($_SESSION['ChecPick']);
-                        $arrDatoCkpt = array();
-                        $arrDatoCkpt['NumeGuia'] = $this->objGuia->NumeGuia;
-                        $arrDatoCkpt['UltiCkpt'] = '';
-                        $arrDatoCkpt['GuiaAnul'] = SinoType::NO;
-                        $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->CodiCkpt;
-                        $arrDatoCkpt['TextCkpt'] = $objCheckpoint->DescCkpt;
-                        $arrDatoCkpt['CodiRuta'] = $this->strReceOrig;
-                        $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                        if (!$arrResuGrab['TodoOkey']) {
-                            $strMotiNook = $arrResuGrab['MotiNook'];
-                            $blnTodoOkey = false;
-                        }
-                    }
-                    if ($blnTodoOkey) {
-                        QApplication::Redirect(__PMN__.'/consulta_guia.php/'.$this->objGuia->NumeGuia);
-                    }
-                } catch (Exception $e) {
-                    $strPrefAcci = 'actualizacion';
-                    if (!$this->blnEditMode) {
-                        $strPrefAcci = 'creacion';
-                    }
-                    $strMensErro = $e->getMessage();
-                    $strComeErro = "Fallo la $strPrefAcci de la Guia";
-                    $strTextMens = "$strComeErro: $strMensErro";
-                    $strTipoMens = 'd';
-                    $strIconMens = __iHAND__; //'hand-stop-o';
-                    $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
-                    $arrParaErro['NumeRefe'] = 'Guia: '.$this->objGuia->NumeGuia;
-                    $arrParaErro['MensErro'] = $strMensErro;
-                    $arrParaErro['ComeErro'] = $strComeErro;
-                    GrabarError($arrParaErro);
-                    $blnTodoOkey = false;
-                }
-                //------------------------------------------------
-                // Se levantan nuevamente los errores en pantalla
-                //------------------------------------------------
-                error_reporting($mixErroOrig);
-                if (strlen($strMotiNook) > 0) {
-                    $strTipoMens = 'w';
-                    $strIconMens = __iEXCL__; //'exclamation-triangle';
-                    $strTextMens  = 'La Guía se ha creado con excepcion(es) - <b>';
-                    $strTextMens .= $strMotiNook;
-                    $strTextMens .= '</b>.';
-                }
-                //-----------------------------------------
-                // Se construye el mensaje correspondiente
-                //-----------------------------------------
-                $this->mensaje($strTextMens,'m',$strTipoMens,null,$strIconMens);
-                if ($blnTodoOkey) {
-                    $this->SetupGuia();
-                    $this->SetupValores();
-                    $this->controlDeBotones();
-                    $this->btnMasxAcci->Visible = true;
-                }
-                //--------------------------------------
-                // Se almacena el resultado del proceso
-                //--------------------------------------
-                $objProcEjec->HoraFinal      = new QDateTime(QDateTime::Now);
-                $objProcEjec->Comentario     = $strTextMens;
-                $objProcEjec->NotificarAdmin = !$blnTodoOkey ? true : false;
-                $objProcEjec->Save();
-                //----------------------------------------------
-                // Se deja registro de la transacción realizada
-                //----------------------------------------------
-                $arrLogxCamb['strNombTabl'] = 'ProcesoError';
-                $arrLogxCamb['intRefeRegi'] = $objProcEjec->Id;
-                $arrLogxCamb['strNombRegi'] = $objProcEjec->Nombre;
-                $arrLogxCamb['strDescCamb'] = 'Ejecutado';
-                $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$objProcEjec->Id;
-                LogDeCambios($arrLogxCamb);
+        try {
+            if (!$this->objDestPmnx) {
+                $this->objDestPmnx = new ClientesRetail();
+                $this->objDestPmnx->CedulaRif = DejarNumerosVJGuion($this->txtCeduDest->Text);
             }
+            $this->objDestPmnx->Nombre        = substr(limpiarCadena($this->txtNombDest->Text),0,100);
+            $this->objDestPmnx->TelefonoFijo = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
+            $this->objDestPmnx->TelefonoMovil = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
+            $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
+            $this->objDestPmnx->Email         = substr(strtolower($this->txtEmaiDest->Text),0,191);
+            $this->objDestPmnx->Direccion     = substr(limpiarCadena($this->txtDireDest->Text),0,250);
+            if (!$this->blnEditDest) {
+                $this->objDestPmnx->SucursalId   = $this->objUsuario->SucursalId;
+                $this->objDestPmnx->CreatedBy    = $this->objUsuario->CodiUsua;
+            }
+            $this->objDestPmnx->Save();
+        } catch (Exception $e) {
+            t('Error guardando Destinatario: '.$e->getMessage());
+            $this->danger($e->getMessage());
+            return;
+        }
+        t('Destinatario almacenado');
+        //---------------------------------------------------
+        // Se guarda la guia en la base de datos
+        //---------------------------------------------------
+        if (!$this->blnEditMode) {
+            $this->txtNumeGuia->Text = Guias::proxNroDeGuia();
+        }
+        $arrResuUpda = $this->UpdateGuiaFields();
+        $blnTodoOkey = $arrResuUpda['TodoOkey'];
+        t('Todo Okey: '.$blnTodoOkey);
+        if ($blnTodoOkey) {
+            try {
+                t('Alla voy...');
+                $this->objGuia->Save();
+                t('Guia Guardada');
+            } catch (Exception $e) {
+                t('Error grabando la guia: '.$e->getMessage());
+                $this->danger($e->getMessage());
+                $blnTodoOkey = false;
+            }
+        } else {
+            t($arrResuUpda['MensErro']);
+            $this->danger($arrResuUpda['MensErro']);
+        }
+        //---------------------------------------
+        // Se crean las piezas correspondientes
+        //---------------------------------------
+        if ($blnTodoOkey) {
+            $this->procesamientoDePiezas();
+            $this->txtDescCont->Text = $this->objGuia->Contenido;
+            $this->txtCantPiez->Text = $this->objGuia->Piezas;
+            $this->txtCantKilo->Text = $this->objGuia->Kilos;
+        }
+        //---------------------------------------
+        // Se calculan los Importes y Conceptos
+        //---------------------------------------
+        if ($blnTodoOkey) {
+            $arrConcActi = Conceptos::conceptosActivos($this->objGuia->Producto->Codigo);
+            $this->objGuia->calcularTodoLosConceptos($arrConcActi);
+            $this->txtTotaGuia->Text = $this->objGuia->Total;
+        }
+        t('Conceptos calculados');
+        //-------------------------------------
+        // Se graga el Pick-Up de cada piezas
+        //-------------------------------------
+        $intContCkpt = $this->grabarPickUp();
+        t('Ckpt grabados: '.$intContCkpt);
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        //$this->objProcEjec->HoraFinal      = new QDateTime(QDateTime::Now);
+        //$this->objProcEjec->Comentario     = !$blnTodoOkey ? 'Guia creada exitosamente' : 'No se pudo crear la guia';
+        //$this->objProcEjec->NotificarAdmin = !$blnTodoOkey ? true : false;
+        //$this->objProcEjec->Save();
+        //----------------------------------------------
+        // Se deja registro de la transacción realizada
+        //----------------------------------------------
+        //$arrLogxCamb['strNombTabl'] = 'ProcesoError';
+        //$arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
+        //$arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
+        //$arrLogxCamb['strDescCamb'] = 'Ejecutado';
+        //LogDeCambios($arrLogxCamb);
+        if ($blnTodoOkey) {
+            $this->success('Transaccion Exitosa !!!');
         }
     }
 
-    //---------------------------------------------------------------------
-    // Función que define el evento click del QButton de Volver o Cancelar
-    //---------------------------------------------------------------------
-    protected function btnCancel_Click() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
+    protected function grabarPickUp() {
+        $objSucuUsua = Sucursales::Load($_SESSION['SucursalId']);
+        $objReceUsua = Counter::Load($_SESSION['ReceptoriaId']);
+        $objCkptPick = Checkpoints::LoadByCodigo('PU');
+        if (!$objCkptPick) {
+            $this->danger('No existe el Checkpoint <b>Pick-Up</b>. Notifique al Administrador del Sistema');
+            return;
+        }
+        $strTextCkpt = trim($objCkptPick->Descripcion).' | SUCURSAL: '.$objSucuUsua->Iata.' | RECEPTORIA: '.$objReceUsua->Siglas;
+        $_SESSION['ValiRepe'] = Parametros::BuscarParametro('VALIREPE','CKPTREPE','Val1',1);
+        //---------------------------------------------------
+        // Se registra el PickUp para cada pieza de la guia
+        //---------------------------------------------------
+        $intContCkpt = 0;
+        $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+        foreach ($arrPiezGuia as $objGuiaPiez) {
+            $arrDatoCkpt = array();
+            $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+            $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+            $arrDatoCkpt['CodiCkpt'] = $objCkptPick->Id;
+            $arrDatoCkpt['TextCkpt'] = $strTextCkpt;
+            $arrDatoCkpt['NotiCkpt'] = $objCkptPick->Notificar;
+            $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+            if ($arrResuGrab['TodoOkey']) {
+                t('Se grabo el checkpoint a la pieza');
+                $intContCkpt ++;
+            } else {
+                t('Hubo algun error: '.$arrResuGrab['MotiNook']);
+                //$this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
+            }
+
+        }
+        return $intContCkpt;
+    }
+
+    protected function procesamientoDePiezas() {
+        $intCantPiez = 0;
+        $decSumaKilo = 0;
+        $strDescCont = '';
+        $this->objGuia->borrarPiezas();
+        $arrPiezTemp = PiezasTemp::LoadArrayByProcesoErrorId($this->objProcEjec->Id);
+        t('Hay '.count($arrPiezTemp).' piezas');
+        foreach ($arrPiezTemp as $objPiezTemp) {
+            if ($objPiezTemp->Kilos > 0) {
+                t('Procesando pieza: '.$intCantPiez);
+                try {
+                    $objGuiaPiez = new GuiaPiezas();
+                    $objGuiaPiez->GuiaId         = $this->objGuia->Id;
+                    $objGuiaPiez->IdPieza        = $this->objGuia->proximoIdPieza();
+                    $objGuiaPiez->Descripcion    = $objPiezTemp->Descripcion;
+                    $objGuiaPiez->Kilos          = $objPiezTemp->Kilos;
+                    $objGuiaPiez->Save();
+                    t('Pieza guardada');
+                    $strSepaPiez = '';
+                    if ($intCantPiez > 0) {
+                        $strSepaPiez = ' | ';
+                    }
+                    $strDescCont .= $strSepaPiez.$objGuiaPiez->Descripcion;
+                    $decSumaKilo += $objGuiaPiez->Kilos;
+                    $intCantPiez++;
+                    t('acumulando...');
+                } catch (Exception $e) {
+                    t('Error grabando pieza: '.$e->getMessage());
+                }
+            }
+        }
+        t('Termine la piezas, voy a actualizar la guia');
+        //-------------------------------------------------------------------
+        // Se actualiza la descripcion del contenido y los kilos de la Guia
+        //-------------------------------------------------------------------
+        $this->objGuia->Contenido = $strDescCont;
+        $this->objGuia->Piezas    = $intCantPiez;
+        $this->objGuia->Kilos     = $decSumaKilo;
+        $this->objGuia->Save();
+        t('Guia actualizada');
+        PiezasTemp::EliminarDelProceso($this->objProcEjec->Id);
+        t('Piezas eliminadas');
+        //--------------------------------------------------------
+        // Las piezas de la guia, se graban en la tabla temporal
+        //--------------------------------------------------------
+        //$arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+        //foreach ($arrPiezGuia as $objPiezGuia) {
+        //    $objPiezTemp = new PiezasTemp();
+        //    $objPiezTemp->ProcesoErrorId = $this->objProcEjec->Id;
+        //    $objPiezTemp->Descripcion    = $objPiezGuia->Descripcion;
+        //    $objPiezTemp->Kilos          = $objPiezGuia->Kilos;
+        //    $objPiezTemp->CreatedBy      = $this->objUsuario->CodiUsua;
+        //    $objPiezTemp->Save();
+        //}
+        //$this->dtgPiezTemp->Refresh();
+        //t('Terminando...');
+        QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id);
     }
 
     //---------------------------------------------------------------------
@@ -1297,316 +1674,88 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         return $decPorcSegu;
     }
 
-    protected function aplicaReconversion(Guia $objGuiaReco) {
-        $objApliReco = new stdClass();
-        $objApliReco->blnApliReco = false;
-        $objApliReco->decFactReco = 1;
-        //-------------------------------------------------------------------
-        // Aqui se identifica si la Reconversion Monetaria esta activa o no
-        //-------------------------------------------------------------------
-        $objConfReco = BuscarParametro('ConfReco','RecoMone','TODO',null);
-        if ($objConfReco) {
-            $objApliReco->blnApliReco = (boolean)$objConfReco->ParaVal1;
-            $objApliReco->decFactReco = (float)$objConfReco->ParaVal2;
-            $intTariRefe = (int)$objConfReco->ParaVal3;
-            //---------------------------------------------------------------
-            // Aqui se determina si la reconversion debe ser aplicada o no
-            //---------------------------------------------------------------
-            if ($objApliReco->blnApliReco) {
-                $objApliReco->blnApliReco = false;
-                if ($objGuiaReco->TarifaId < $intTariRefe) {
-                    $objApliReco->blnApliReco = true;
-                }
-            }
-        }
-        return $objApliReco;
-    }
 
     //-------------------------------------------------------------------
     // Función responsable del cálculo de la Tarifa del Expreso Nacional
     //-------------------------------------------------------------------
-    protected function calcularTarifa() {
-        $blnTodoOkey = false;
 
-        if (!$this->blnEditMode) {
-            $objTarifa = unserialize($_SESSION['TariPmnx']);
-        } else {
-            $objTarifa = FacTarifa::Load($this->objGuia->TarifaId);
-        }
-        $objApliReco = $this->aplicaReconversion($this->objGuia);
-
-        if ($objTarifa) {
-            $arrSucuDest = explode('|',$this->lstSucuDest->SelectedValue);
-            $strCodiDest = $arrSucuDest[0];
-            //------------------------------------------
-            // Se procede ahora al calculo de la Tarifa
-            //------------------------------------------
-            $arrParaTari['dttFechGuia'] = $this->calFechGuia->Text;
-            $arrParaTari['strCodiOrig'] = $this->strSucuOrig;
-            $arrParaTari['strCodiDest'] = $strCodiDest;
-            $arrParaTari['dblPesoGuia'] = $this->txtPesoGuia->Text;
-            $arrParaTari['dblValoDecl'] = $this->txtValoDecl->Text;
-            $arrParaTari['intChecAseg'] = strlen($this->txtValoDecl->Text);
-            $arrParaTari['dblPorcSgro'] = $this->AsigPorcSeguro($this->decValoDecl);
-            $arrParaTari['strModaPago'] = TipoGuiaType::ToStringCorto($this->rdbModaPago->SelectedValue);
-            $arrParaTari['strEstaUsua'] = $this->objUsuario->CodiEsta;
-            $arrParaTari['decSgroClie'] = $this->objClieTari->PorcentajeSeguro;
-            $arrParaTari['objTariGuia'] = $objTarifa;
-            $arrParaTari['decPorcDcto'] = strlen($this->txtPorcDcto->Text) > 0 ? $this->txtPorcDcto->Text : 0 ;
-
-            $arrValoTari = calcularTarifaParcialPmn($arrParaTari);
-
-            $blnTodoOkey = $arrValoTari['blnTodoOkey'];
-            $strMensUsua = $arrValoTari['strMensUsua'];
-            $dblMontBase = $arrValoTari['dblMontBase'];
-            $decMontDcto = $arrValoTari['decMontDcto'];
-            $dblFranPost = $arrValoTari['dblFranPost'];
-            $dblMontDiva = $arrValoTari['dblMontDiva'];
-            $dblMontSgro = $arrValoTari['dblMontSgro'];
-            $dblMontTota = $arrValoTari['dblMontTota'];
-            $dblMontOtro = $arrValoTari['dblMontOtro'];
-            
-            $this->decPorcIvax = $arrValoTari['dblPorcDiva'];
-
-            $this->lblMontBase->Text = nfp($dblMontBase);
-            $this->lblMontDcto->Text = nfp($decMontDcto);
-            $this->lblMontFran->Text = nfp($dblFranPost);
-            $this->lblMontSegu->Text = nfp($dblMontSgro);
-            $this->lblMontIvax->Text = nfp($dblMontDiva);
-            $this->lblMontTota->Text = nfp($dblMontTota);
-
-            if ($blnTodoOkey) {
-                $this->mensaje();
-            } else {
-                $this->mensaje('No hay Tarifa! '.$strMensUsua.'!','','d','',__iEXCL__);
-            }
-        } else {
-            $this->mensaje('Tarifa Nacional No Definida!','','d','',__iEXCL__);
-        }
-
-        return $blnTodoOkey;
-    }
-
-    //--------------------------------------------------------------------------------
-    // Función que suministra datos a la guía, bien sea por primera vez o actualizados
-    //--------------------------------------------------------------------------------
     protected function UpdateGuiaFields() {
-        $this->objGuia->NumeGuia = $this->txtNumeGuia->Text;
-        $this->objGuia->CodiClie = $this->objClieTari->CodiClie;
-        $this->objGuia->FechGuia = new QDateTime($this->calFechGuia->Text);
+        $arrResuUpda['TodoOkey'] = true;
+        $arrResuUpda['MensErro'] = '';
+        //-------------------------------------
+        // Se suprimen los errores en pantalla
+        //-------------------------------------
+        //$mixErroOrig = error_reporting();
+        //error_reporting(0);
 
-        if (!$this->blnEditSupe || !$this->blnEditMode) {
-            $this->objGuia->EstaOrig = $this->strSucuOrig;
-            $this->objGuia->ReceptoriaOrigen = $this->strReceOrig;
-        }
-        //-----------------------------------------------------------------------------------------
-        // Si el Valor Declarado es mayor a cero, entonces se entiende que la Guia esta asegurada
-        //-----------------------------------------------------------------------------------------
-        $blnEnviAseg = false;
-        if (strlen($this->txtValoDecl->Text) > 0) {
-            if ($this->txtValoDecl->Text > 0) {
-                $blnEnviAseg = true;
+        try {
+            $this->objGuia->Numero          = $this->txtNumeGuia->Text;
+            $this->objGuia->Tracking        = $this->txtNumeGuia->Text;
+            $this->objGuia->ClienteRetailId = $this->objClieReta->Id;
+            $this->objGuia->Fecha           = new QDateTime($this->calFechGuia->Text);
+
+            if (!$this->blnEditSupe || !$this->blnEditMode) {
+                $this->objGuia->OrigenId           = $this->intSucuOrig;
+                $this->objGuia->ReceptoriaOrigenId = $this->intReceOrig;
             }
-        }
-        $this->objGuia->EstaDest           = $this->strCodiEsta;
-        $this->objGuia->PesoGuia           = $this->txtPesoGuia->Text;
-        $this->objGuia->NombRemi           = $this->txtNombClie->Text;
-        $this->objGuia->DireRemi           = $this->txtDireClie->Text;
-        $this->objGuia->TeleRemi           = DejarSoloLosNumeros($this->txtTeleMovi->Text);
-        $this->objGuia->NombDest           = $this->txtNombDest->Text;
-        $this->objGuia->DireDest           = $this->txtDireDest->Text;
-        $this->objGuia->CedulaDestinatario = DejarNumerosVJGuion($this->txtCeduDest->Text);
-        $this->objGuia->TeleDest           = DejarSoloLosNumeros($this->txtTeleDest->Text);
-        $this->objGuia->CantPiez           = $this->txtCantPiez->Text;
-        $this->objGuia->DescCont           = $this->txtDescCont->Text;
-        $this->objGuia->CodiProd           = $this->objProducto->CodiProd;
-        $this->objGuia->TipoGuia           = $this->rdbModaPago->SelectedValue;
-        $this->objGuia->ValorDeclarado     = str_replace(",", '', $this->txtValoDecl->Text);
-        $this->objGuia->PorcentajeIva      = str_replace(",", '', $this->decPorcIvax);
-        $this->objGuia->MontoIva           = str_replace(",", '', $this->lblMontIvax->Text);
-        $this->objGuia->Asegurado          = $blnEnviAseg;
-        $this->objGuia->PorcentajeSeguro   = $this->AsigPorcSeguro($this->decValoDecl);
-        $this->objGuia->MontoSeguro        = str_replace(",", '', $this->lblMontSegu->Text);
-        $this->objGuia->MontoBase          = str_replace(",", '', $this->lblMontBase->Text);
-        $this->objGuia->MontoFranqueo      = str_replace(",", '', $this->lblMontFran->Text);
-        $this->objGuia->MontoOtros         = 0;
-        $this->objGuia->MontoTotal         = str_replace(",", '', $this->lblMontTota->Text);
-        $this->objGuia->TieneGuiaRetorno   = 0;
-        $this->objGuia->GuiaRetorno        = null;
-        $this->objGuia->Observacion        = '';
-        $this->objGuia->TipoDocumentoId    = "V";
-        $this->objGuia->CedulaRif          = DejarNumerosVJGuion($this->txtNumeCedu->Text);
-        $this->objGuia->PorcentajeDscto    = $this->txtPorcDcto->Text;
-        $this->objGuia->MontoDscto         = str_replace(",", '', $this->lblMontDcto->Text);
-        $this->objGuia->ConsiderarDscto    = (int)$this->chkConsDcto->Checked;
+            //-----------------------------------------------------------------------------------------
+            // Si el Valor Declarado es mayor a cero, entonces se entiende que la Guia esta asegurada
+            //-----------------------------------------------------------------------------------------
+            $blnEnviAseg = false;
+            if (strlen($this->txtValoDecl->Text) > 0) {
+                if ($this->txtValoDecl->Text > 0) {
+                    $blnEnviAseg = true;
+                }
+            }
+            $this->objGuia->ServicioEntrega       = $this->lstReceDomi->SelectedValue;
+            $this->objGuia->DestinoId             = $this->lstSucuDest->SelectedValue;
+            $this->objGuia->ReceptoriaDestinoId   = !is_null($this->lstReceDest->SelectedValue) ? $this->lstReceDest->SelectedValue : null;
+            $this->objGuia->NombreRemitente       = $this->txtNombClie->Text;
+            $this->objGuia->DireccionRemitente    = $this->txtDireClie->Text;
+            $this->objGuia->TelefonoRemitente     = DejarSoloLosNumeros($this->txtTeleMovi->Text);
+            $this->objGuia->NombreDestinatario    = $this->txtNombDest->Text;
+            $this->objGuia->DireccionDestinatario = $this->txtDireDest->Text;
+            $this->objGuia->CedulaDestinatario    = DejarNumerosVJGuion($this->txtCeduDest->Text);
+            $this->objGuia->TelefonoDestinatario  = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
+            $this->objGuia->Piezas                = $this->txtCantPiez->Text;
+            $this->objGuia->FormaPago             = $this->rdbFormPago->SelectedValue;
+            $this->objGuia->ValorDeclarado        = str_replace(",", '', $this->txtValoDecl->Text);
+            $this->objGuia->Asegurado             = $blnEnviAseg;
+            $this->objGuia->Observacion           = '';
+            $this->objGuia->VendedorId            = $this->objClieNaci->VendedorId;
+            $this->objGuia->Contenido             = ''; //$this->txtDescCont->Text;
+            $this->objGuia->Kilos                 = 0; //$this->txtCantKilo->Text;
 
-        if (!$this->objGuia->CobroCod) {
-            $this->objGuia->CobroCod = null;
-        }
+            if (!$this->blnEditMode) {
+                //------------------------------------------------------------------------
+                // En caso de Insercion, se asignan valores por defecto ciertos campos
+                //------------------------------------------------------------------------
+                $this->objGuia->ClienteCorpId = $this->objClieNaci->CodiClie;
+                $this->objGuia->ProductoId    = $this->objProdNaci->Id;
+                $this->objGuia->Tasa          = null;
+                $this->objGuia->Alto          = null;
+                $this->objGuia->Ancho         = null;
+                $this->objGuia->Largo         = null;
+                $this->objGuia->Total         = 0;
+                $this->objGuia->CreatedBy     = $this->objUsuario->CodiUsua;
+                $this->objGuia->TarifaId      = $this->objClieNaci->TarifaId;
+            }
 
-        $this->objGuia->VendedorId = $this->objClieTari->VendedorId;
-        $this->objGuia->OperacionId = $this->intOperGene;
-
-        if ($this->lstReceDest->SelectedValue) {
-            $strReceDest = $this->lstReceDest->SelectedValue;
-        } else {
-            $arrSucuDest = explode('|',$this->lstSucuDest->SelectedValue);
-            $strReceDest = $arrSucuDest[0];
-        }
-        $this->objGuia->ReceptoriaDestino = $strReceDest;
-
-        if (!$this->blnEditMode) {
-            //------------------------------------------------------------------------
-            // En caso de Insercion, se asignan valores por defecto ciertos campos
-            //------------------------------------------------------------------------
-            $this->objGuia->ClienteId          = null;
-            $this->objGuia->EntregadoA         = null;
-            $this->objGuia->FechaEntrega       = null;
-            $this->objGuia->HoraEntrega        = null;
-            $this->objGuia->CodiCkpt           = null;
-            $this->objGuia->EstaCkpt           = null;
-            $this->objGuia->FechCkpt           = null;
-            $this->objGuia->HoraCkpt           = null;
-            $this->objGuia->ObseCkpt           = null;
-            $this->objGuia->UsuaCkpt           = null;
-            $this->objGuia->FechaPod           = null;
-            $this->objGuia->HoraPod            = null;
-            $this->objGuia->UsuarioPod         = null;
-            $this->objGuia->CantAyudantes      = 0;
-            $this->objGuia->ParadasAdicionales = 0;
-            $this->objGuia->GuiaExterna        = null;
-            $this->objGuia->CajaId             = null;
-            $this->objGuia->ProductoId         = null;
-            $this->objGuia->TasaDolar          = null;
-            $this->objGuia->VolMaritimoPies    = null;
-            $this->objGuia->VolMaritimoMts     = null;
-            $this->objGuia->DescripcionGral    = null;
-            $this->objGuia->Alto               = null;
-            $this->objGuia->Ancho              = null;
-            $this->objGuia->Largo              = null;
-            $this->objGuia->MontoBaseInt       = 0;
-            $this->objGuia->PorcentajeSgroInt  = 0;
-            $this->objGuia->MontoSgroInt       = 0;
-            $this->objGuia->MontoTotalInt      = 0;
-            $this->objGuia->TotalIntLocal      = 0;
-            $this->objGuia->PesoVolumetrico    = 0;
-            $this->objGuia->PesoLibras         = 0;
-            $this->objGuia->HojaEntrega        = null;
-            $this->objGuia->RecolectaId        = null;
-            $this->objGuia->FleteDirecto       = 0;
-            $this->objGuia->TransFac           = 0;
-            $this->objGuia->CourierId          = 1;
-            $this->objGuia->CierreCaja         = 0;
-            $this->objGuia->UsuarioCreacion    = $this->objUsuario->LogiUsua;
-            $this->objGuia->FechaCreacion      = new QDateTime(QDateTime::Now);
-            $this->objGuia->HoraCreacion       = date("H:i");
-            $this->objGuia->SistemaId          = 'cnt';
-            $this->objGuia->Anulada            = 0;
-            $this->objGuia->EnEfectivo         = 0;
-            $this->objGuia->TarifaId           = $this->objClieTari->TarifaId;
+        } catch (Exception $e) {
+            t('Error actualizando campos de la guia: '.$e->getMessage());
+            $arrResuUpda['TodoOkey'] = false;
+            $arrResuUpda['MensErro'] = $e->getMessage();
         }
 
-        //------------------------------------------------------------------------------------------------
-        // Se compara el objeto que se esta guardando con el objeto original, en caso de estar la guía en
-        // modo de edición.
-        //------------------------------------------------------------------------------------------------
-        if ($this->blnEditMode) {
-            $this->RegistroDeCambios($this->objGuiaOrig,$this->objGuia);
-        } else {
-            $arrLogxCamb['strNombTabl'] = 'Guia';
-            $arrLogxCamb['intRefeRegi'] = $this->objGuia->NumeGuia;
-            $arrLogxCamb['strNombRegi'] = $this->objGuia->NombRemi;
-            $arrLogxCamb['strDescCamb'] = "Creada (PMN)";
-            LogDeCambios($arrLogxCamb);
-        }
+        //------------------------------------------------
+        // Se levantan nuevamente los errores en pantalla
+        //------------------------------------------------
+        //error_reporting($mixErroOrig);
+
+        return $arrResuUpda;
     }
 
 
-    protected function RegistroDeCambios($objGuiaOrig, $objNuevGuia) {
-        $strTextMens = '';
-        $strCodiCkpt = 'MG';  // Modifico la Guia
-        //-----------------------
-        // Receptoria Destino
-        //-----------------------
-        if ($objGuiaOrig->ReceptoriaDestino != $this->objGuia->ReceptoriaDestino) {
-            if (strlen($strTextMens) > 0) {
-                $strCaraSepa = ' / ';
-            } else {
-                $strCaraSepa = '';
-            }
-            $strTextMens .= $strCaraSepa."Recep. Destino: ".$objGuiaOrig->ReceptoriaDestino.
-                            " --> ".$objNuevGuia->ReceptoriaDestino;
-        }
-        //-----------------------
-        // Cantidad de Piezas
-        //-----------------------
-        if ($objGuiaOrig->CantPiez != $objNuevGuia->CantPiez) {
-            if (strlen($strTextMens) > 0) {
-                $strCaraSepa = ' / ';
-            } else {
-                $strCaraSepa = '';
-            }
-            $strTextMens .= $strCaraSepa."Piezas: ".$objGuiaOrig->CantPiez." --> ".$objNuevGuia->CantPiez;
-        }
-        //-----------------------
-        // Peso
-        //-----------------------
-        if ($objGuiaOrig->PesoGuia != $objNuevGuia->PesoGuia) {
-            if (strlen($strTextMens) > 0) {
-                $strCaraSepa = ' / ';
-            } else {
-                $strCaraSepa = '';
-            }
-            $strTextMens .= $strCaraSepa."Peso: ".$objGuiaOrig->PesoGuia." --> ".$objNuevGuia->PesoGuia;
-            // $this->controlDeCambioDePeso($objGuiaOrig,$objNuevGuia);
-        }
-        //-----------------------
-        // Valor Declarado
-        //-----------------------
-        if ($objGuiaOrig->ValorDeclarado != $objNuevGuia->ValorDeclarado) {
-            if (strlen($strTextMens) > 0) {
-                $strCaraSepa = ' / ';
-            } else {
-                $strCaraSepa = '';
-            }
-            $strTextMens .= $strCaraSepa."V.Declarado: ".$objGuiaOrig->ValorDeclarado.
-                            " --> ".$objNuevGuia->ValorDeclarado;
-        }
-        //-----------------------
-        // Modalidad de Pago
-        //-----------------------
-        if ($objGuiaOrig->TipoGuia != $objNuevGuia->TipoGuia) {
-            if (strlen($strTextMens) > 0) {
-                $strCaraSepa = ' / ';
-            } else {
-                $strCaraSepa = '';
-            }
-            $strTextMens .= $strCaraSepa."M.Pago: ".TipoGuiaType::ToStringCorto($objGuiaOrig->TipoGuia).
-                            " --> ".TipoGuiaType::ToStringCorto($objNuevGuia->TipoGuia);
-        }
-        if (strlen($strTextMens) > 0) {
-            //----------------------------------------------------------------------------------------
-            // En el Registro de Trabajo, debe quedar constancia de los cambios ocurridos a la Guia,
-            // igualmente en el Log de Cambios
-            //----------------------------------------------------------------------------------------
-            $arrParaRegi['CodiCkpt'] = $strCodiCkpt;
-            $arrParaRegi['TextMens'] = $strTextMens;
-            $arrParaRegi['NumeGuia'] = $objGuiaOrig->NumeGuia;
-            $arrParaRegi['CodiUsua'] = $this->objUsuario->CodiUsua;
-            $arrParaRegi['CodiEsta'] = $this->objUsuario->CodiEsta;
-            CrearRegistroDeTrabajo($arrParaRegi);
-
-            $arrLogxCamb['strNombTabl'] = 'Guia';
-            $arrLogxCamb['intRefeRegi'] = $this->objGuia->NumeGuia;
-            $arrLogxCamb['strNombRegi'] = $this->objGuia->NombRemi;
-            $arrLogxCamb['strDescCamb'] = $strTextMens;
-            LogDeCambios($arrLogxCamb);
-        }
-    }
-
-    //------------------------------------------------------------------------------------
-    // Función responsable de los distintos comportamientos de los botones del formulario
-    //------------------------------------------------------------------------------------
     protected function controlDeBotones() {
         $this->blnEditSupe = true;
 
@@ -1651,266 +1800,184 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     }
 
 
-    protected function enviarMensajeDeError($strTextMens) {
-        $this->mensaje($strTextMens,'','d', '', __iHAND__);
+    protected function danger($strTextMens) {
+        $this->mensaje($strTextMens.' !','','d', '', __iHAND__);
     }
 
-
-    protected function verificarDatos() {
-        if (strlen($this->txtPesoGuia->Text) == 0) {
-            $strMensUsua = 'Debe especificar el Peso!';
-            $this->mensaje($strMensUsua,'','d', '',__iHAND__);
-            return false;
-        } else {
-            if ($this->txtPesoGuia->Text <= 0) {
-                $strMensUsua = 'El Peso <b>debe ser Mayor a cero!</b>';
-                $this->mensaje($strMensUsua,'', 'd','',__iHAND__);
-                return false;
-            }
-        }
-
-        if (is_null($this->lstSucuDest->SelectedValue)) {
-            $strMensUsua = 'Debe especificar el Destino del Envío!';
-            $this->mensaje($strMensUsua,'', 'd','',__iHAND__);
-            return false;
-        }
-
-        //--------------------------------------------------------------------------
-        // Se verifica que la Receptoría Destino corresponda a la Sucursal Destino
-        //--------------------------------------------------------------------------
-        if (!is_null($this->lstReceDest->SelectedValue)) {
-            $strReceDest = $this->lstReceDest->SelectedValue;
-            $objReceDest = Counter::LoadBySiglas($strReceDest);
-            if ($objReceDest->SucursalId != $this->strCodiEsta) {
-                $strMensUsua = 'La Receptoría Destino <b>'.$strReceDest.
-                               '</b> no corresponde a la Sucursal Destino <b>'.$this->strCodiEsta.'</b>!';
-                $this->mensaje($strMensUsua,'','d','i',__iHAND__);
-                return false;
-            }
-        }
-
-        $this->decValoDecl = $this->txtValoDecl->Text;
-        if (strlen($this->txtValoDecl->Text) > 0) {
-            $this->txtValoDecl->Text = DejarSoloLosNumeros($this->txtValoDecl->Text);
-            //----------------------------------------------------------------------------------------------------
-            // Si el valor declarado es mayor a cero, y a su vez, es menor al rango reglamentario, se notifica al
-            // usuario que dicho valor tiene que ser mayor o igual al valor mínimo reglamentario.
-            //----------------------------------------------------------------------------------------------------
-            if ($this->txtValoDecl->Text > 0 && $this->txtValoDecl->Text < $this->decMiniSegu) {
-                $strMensUsua ='El Valor Declarado <b>mínimo aceptable es: '.$this->decMiniSegu.'!</b>';
-                $this->mensaje($strMensUsua, '','d','',__iHAND__);
-                return false;
-            }
-            //---------------------------------------------------------------------------------------------------
-            // Si el valor declarado es mayor a cero, y a su vez, es mayor al rango reglamentario, se notifica al
-            // usuario que dicho valor tiene que ser menor o igual al valor máximo reglamentario.
-            //---------------------------------------------------------------------------------------------------
-            if ($this->txtValoDecl->Text > 0 && $this->txtValoDecl->Text > $this->decMaxiSegu) {
-                $this->txtValoDecl->Text = $this->decMaxiSegu;
-                $this->decValoDecl = $this->decMaxiSegu;
-                $strMensUsua ='El Valor Declarado <b>se ajustó al máximo permitido (Bs.'. $this->decMaxiSegu.')</b>';
-                $this->mensaje($strMensUsua, '', 'w', '', __iEXCL__);
-                return false;
-            }
-        }
-
-        if (is_null($this->rdbModaPago->SelectedValue)) {
-            $strMensUsua ='Debe especificar la Forma de Pago!';
-            $this->mensaje($strMensUsua,'', 'd','',__iHAND__);
-            return false;
-        }
-
-        if (strlen($this->txtCantPiez->Text) == 0) {
-            $strMensUsua = 'Debe especificar la cantidad de piezas!';
-            $this->mensaje($strMensUsua,'m', 'd','',__iHAND__);
-            return false;
-        } else {
-            if ($this->txtCantPiez->Text <= 0) {
-                $strMensUsua ='La Cantidad de Piezas <b>debe ser mayor a Cero(0)!</b>';
-                $this->mensaje($strMensUsua,'m', 'd','',__iHAND__);
-                return false;
-            }
-        }
-
-        //-------------------------------------------------------------------------
-        // Se verifica el Limite de Kilos en funcion del Origen/Destino de la guia
-        //-------------------------------------------------------------------------
-        $decPesoGuia = $this->txtPesoGuia->Text;
-        $intCantPiez = $this->txtCantPiez->Text;
-        $decPromPeso = $decPesoGuia / $intCantPiez;
-
-        foreach ($this->arrReceLimi as $key => $value) {
-            //--------------------------------------------------------------------
-            // Si el Origen o el Destino estan en la lista de las Receptorias con
-            // limite de peso, entonces se notifica al Usuario
-            //--------------------------------------------------------------------
-            if ($this->strReceOrig == $key || $this->lstReceDest->SelectedValue == $key) {
-                if ($decPromPeso > $value) {
-                    $strMensUsua ='El Peso <b>no puede exceder '.$value.' Kg (Origen/Destino con Limite de Kilos)</b>';
-                    $this->mensaje($strMensUsua, '','d','',__iHAND__);
-                    return false;
-                }
-            }
-        }
-
-        $this->mensaje();
-        return true;
-    }
 
     protected function Form_Validate() {
         $this->mensaje();
+        t('1');
+        $this->txtNumeCedu->Text = DejarNumerosVJGuion($this->txtNumeCedu->Text);
         if (strlen($this->txtNumeCedu->Text) == 0) {
             $strTextMens = 'Cédula/RIF del Remitente <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtNumeCedu->Text = DejarNumerosVJGuion($this->txtNumeCedu->Text);
         }
+        //t('2');
+        $this->txtNombClie->Text = limpiarCadena($this->txtNombClie->Text);
         if (strlen($this->txtNombClie->Text) == 0) {
             $strTextMens = 'Nombre del Remitente <b>Requerido</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtNombClie->Text = limpiarCadena($this->txtNombClie->Text);
         }
+        //t('3');
+        $this->txtTeleFijo->Text = DejarSoloLosNumeros($this->txtTeleFijo->Text);
         if (strlen($this->txtTeleFijo->Text) == 0) {
             $strTextMens = 'Teléfono Fijo del Remitente <b>Requerido</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtTeleFijo->Text = DejarSoloLosNumeros($this->txtTeleFijo->Text);
         }
-        if (strlen($this->txtTeleFijo->Text) > 11) {
-            $strTextMens = 'Teléfono Fijo del Remitente <b>No debe tener más de 11 caracteres numéricos</b>';
-            $this->enviarMensajeDeError($strTextMens);
+        //t('4');
+        if (strlen($this->txtTeleFijo->Text) > 12) {
+            $strTextMens = 'Teléfono Fijo del Remitente <b>No debe tener más de 12 caracteres numéricos</b>';
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtTeleFijo->Text = DejarSoloLosNumeros($this->txtTeleFijo->Text);
         }
+        //t('5');
+        $this->txtTeleMovi->Text = DejarSoloLosNumeros($this->txtTeleMovi->Text);
         if (strlen($this->txtTeleMovi->Text) == 0) {
             $strTextMens = 'Teléfono Movil del Remitente <b>Requerido</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtTeleMovi->Text = DejarSoloLosNumeros($this->txtTeleMovi->Text);
         }
-        if (strlen($this->txtTeleMovi->Text) > 11) {
-            $strTextMens = 'Teléfono Movil del Remitente <b>No debe tener más de 11 caracteres numéricos</b>';
-            $this->enviarMensajeDeError($strTextMens);
+        //t('6');
+        if (strlen($this->txtTeleMovi->Text) > 12) {
+            $strTextMens = 'Teléfono Movil del Remitente <b>No debe tener más de 12 caracteres numéricos</b>';
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtTeleMovi->Text = DejarSoloLosNumeros($this->txtTeleMovi->Text);
         }
+        //t('7');
+        $this->txtDireClie->Text = limpiarCadena($this->txtDireClie->Text);
         if (strlen($this->txtDireClie->Text) == 0) {
             $strTextMens = 'Dirección del Remitente <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtDireClie->Text = limpiarCadena($this->txtDireClie->Text);
         }
+        //t('8');
+        if (strlen($this->txtDireClie->Text) > 250) {
+            $strTextMens = 'Dirección del Remitente <b>No debe exceder los 250 caracteres</b>';
+            $this->danger($strTextMens);
+            return false;
+        }
+        //t('9');
         if (is_null($this->lstSucuDest->SelectedValue)) {
             $strTextMens = 'Sucursal Destino <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
         }
+        //t('10');
+        $this->txtCeduDest->Text = DejarNumerosVJGuion($this->txtCeduDest->Text);
         if (strlen($this->txtCeduDest->Text) == 0) {
             $strTextMens = 'Cédula del Destinario <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtCeduDest->Text = DejarNumerosVJGuion($this->txtCeduDest->Text);
         }
+        //t('11');
+        $this->txtNombDest->Text = limpiarCadena($this->txtNombDest->Text);
         if (strlen($this->txtNombDest->Text) == 0) {
             $strTextMens = 'Nombre del Destinario <b>Requerido</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtNombDest->Text = limpiarCadena($this->txtNombDest->Text);
         }
-        if (strlen($this->txtTeleDest->Text) == 0) {
+        //t('12');
+        $this->txtTlfdFijo->Text = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
+        if (strlen($this->txtTlfdFijo->Text) == 0) {
+            $strTextMens = 'Teléfono Fijo del Destinario <b>Requerido</b>';
+            $this->danger($strTextMens);
+            return false;
+        }
+        //t('13');
+        if (strlen($this->txtTlfdFijo->Text) > 12) {
+            $strTextMens = 'Teléfono Movil del Destinatario <b>No debe tener más de 12 caracteres numéricos</b>';
+            $this->danger($strTextMens);
+            return false;
+        }
+        //t('14');
+        $this->txtTlfdMovi->Text = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
+        if (strlen($this->txtTlfdMovi->Text) == 0) {
             $strTextMens = 'Teléfono Movil del Destinario <b>Requerido</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtTeleDest->Text = DejarSoloLosNumeros($this->txtTeleDest->Text);
         }
-        if (strlen($this->txtTeleDest->Text) > 11) {
-            $strTextMens = 'Teléfono Movil del Destinatario <b>No debe tener más de 11 caracteres numéricos</b>';
-            $this->enviarMensajeDeError($strTextMens);
+        //t('15');
+        if (strlen($this->txtTlfdMovi->Text) > 12) {
+            $strTextMens = 'Teléfono Movil del Destinatario <b>No debe tener más de 12 caracteres numéricos</b>';
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtTeleDest->Text = DejarSoloLosNumeros($this->txtTeleDest->Text);
         }
+        //t('16');
+        $this->txtDireDest->Text = limpiarCadena($this->txtDireDest->Text);
         if (strlen($this->txtDireDest->Text) == 0) {
             $strTextMens = 'Dirección del Destinatario <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
-        } else {
-            $this->txtDireDest->Text = limpiarCadena($this->txtDireDest->Text);
+        }
+        //t('17');
+        if (strlen($this->txtDireDest->Text) > 250) {
+            $strTextMens = 'Dirección del Destinatario <b>No debe exceder los 250 caracteres</b>';
+            $this->danger($strTextMens);
+            return false;
+        }
+        //t('18');
+        if (is_null($this->rdbFormPago->SelectedValue)) {
+            $strTextMens = 'Modalidad de Pago <b>Requerida</b>';
+            $this->danger($strTextMens);
+            return false;
         }
         if (strlen($this->txtCantPiez->Text) == 0) {
             $strTextMens = 'Cantidad de Piezas <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
         }
+        //t('19');
         if ($this->txtCantPiez->Text <= 0) {
             $strTextMens = 'Cantidad de Piezas <b>Debe ser Mayor a Cero (0)</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
         }
-        if (strlen($this->txtPesoGuia->Text) == 0) {
+        if (strlen($this->txtCantKilo->Text) == 0) {
             $strTextMens = 'Peso <b>Requerido</b>';
-            $this->enviarMensajeDeError($strTextMens);
+            $this->danger($strTextMens);
             return false;
         }
-        if ($this->txtPesoGuia->Text <= 0) {
-            $strTextMens = 'Peso <b>Debe ser Mayor a Cero (0)</b>';
-            $this->enviarMensajeDeError($strTextMens);
-            return false;
-        }
-        if (strlen($this->txtDescCont->Text) == 0) {
-            $strTextMens = 'Descripción del Contenido <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
-            return false;
-        } else {
-            $this->txtDescCont->Text = limpiarCadena($this->txtDescCont->Text);
-        }
+        //$this->txtDescCont->Text = limpiarCadena($this->txtDescCont->Text);
+        //if (strlen($this->txtDescCont->Text) == 0) {
+        //    $strTextMens = 'Descripción del Contenido <b>Requerida</b>';
+        //    $this->danger($strTextMens);
+        //    return false;
+        //}
+        //if ($this->txtCantKilo->Text <= 0) {
+        //    $strTextMens = 'Peso <b>Debe ser Mayor a Cero (0)</b>';
+        //    $this->danger($strTextMens);
+        //    return false;
+        //}
+        //t('20');
         if (strlen($this->txtValoDecl->Text) == 0) {
             $this->txtValoDecl->Text = 0;
         }
-        if (is_null($this->rdbModaPago->SelectedValue)) {
-            $strTextMens = 'Modalidad de Pago <b>Requerida</b>';
-            $this->enviarMensajeDeError($strTextMens);
-            return false;
-        }
-        if ($this->rdbReceDomi->SelectedValue == 'R') {
-            $strSiglRece = $this->lstReceDest->SelectedValue;
-            if (strlen($strSiglRece) == 0) {
-                $strTextMens = 'Receptoría Destino <b>Requerida</b>';
-                $this->enviarMensajeDeError($strTextMens);
-                return false;
-            }
-            $objReceDest = Counter::LoadBySiglas($strSiglRece);
-            if (!$objReceDest) {
-                $strTextMens = 'Receptoría Destino <b>Requerida</b>';
-                $this->enviarMensajeDeError($strTextMens);
-                return false;
-            }
-            $arrSucuDest = explode('|',$this->lstSucuDest->SelectedValue);
-            $strSucuDest = $arrSucuDest[0];
-            if ($objReceDest->SucursalId != $strSucuDest) {
-                $strTextMens = 'La Receptoría <b>No pertenece a la Sucursal '.$strSucuDest.'</b>';
-                $this->enviarMensajeDeError($strTextMens);
-                return false;
-            }
-        }
-        if (strlen($this->txtPorcDcto->Text) > 0) {
-            if ($this->txtPorcDcto->Text > 100) {
-                $strMensErro = 'Porcentaje de Descuento <b>No puede ser mayor a 100</b>';
-                $this->enviarMensajeDeError($strMensErro);
-                return false;
-            }
-        }
+        //if ($this->lstReceDomi->SelectedValue == 'R') {
+        //    $strSiglRece = $this->lstReceDest->SelectedValue;
+        //    if (strlen($strSiglRece) == 0) {
+        //        $strTextMens = 'Receptoría Destino <b>Requerida</b>';
+        //        $this->danger($strTextMens);
+        //        return false;
+        //    }
+        //    $objReceDest = Counter::LoadBySiglas($strSiglRece);
+        //    if (!$objReceDest) {
+        //        $strTextMens = 'Receptoría Destino <b>Requerida</b>';
+        //        $this->danger($strTextMens);
+        //        return false;
+        //    }
+        //    $arrSucuDest = explode('|',$this->lstSucuDest->SelectedValue);
+        //    $strSucuDest = $arrSucuDest[0];
+        //    if ($objReceDest->SucursalId != $strSucuDest) {
+        //        $strTextMens = 'La Receptoría <b>No pertenece a la Sucursal '.$strSucuDest.'</b>';
+        //        $this->danger($strTextMens);
+        //        return false;
+        //    }
+        //}
+        t('21');
         return true;
     }
 

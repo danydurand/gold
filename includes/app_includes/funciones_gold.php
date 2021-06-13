@@ -50,6 +50,7 @@ function LoginPropuesto($strCadeNomb, $strCadeApel) {
  * Esta rutina toma un numero de guia al estilo Sthepy y lo transforma en algo
  * util y legible al estilo SisCO
  * Ej: Si recibe: 309004-1/001-001:200  devuelve: 309004-001
+ * Ej: Si recibe: 168945-1/001-001:114  devuelve: 309004-001
  *
  * @param $strNumeGuia string
  * @return string
@@ -76,8 +77,15 @@ function transformar($strNumeGuia) {
             }
         }
         if ( ($intCantDosp == 1) && ($intCantGuio == 2) ) {
-            t('Caso Stephy');
-            return caso_stephy($strNumeGuia);
+            $intPosiDosp = strpos($strNumeGuia,':');
+            $strLastPart = substr($strNumeGuia,$intPosiDosp+1);
+            if ($strLastPart == '114') {
+                t('Caso Stephy ATC');
+                return caso_stephy_atc($strNumeGuia);
+            } else {
+                t('Caso Stephy GOLD');
+                return caso_stephy($strNumeGuia);
+            }
         }
         if ($intCantGuio == 0) {
             t('Caso Sin Pieza');
@@ -95,6 +103,13 @@ function transformar($strNumeGuia) {
     } else {
         return '';
     }
+}
+
+function caso_stephy_atc($strNumeGuia) {
+    $intPosiDiag = strpos($strNumeGuia,'/');
+    $strGuiaReal = substr($strNumeGuia,0, $intPosiDiag-2);
+    $strIdxxPiez = '001';
+    return $strGuiaReal.'-'.$strIdxxPiez;
 }
 
 function caso_stephy($strNumeGuia) {

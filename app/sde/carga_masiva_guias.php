@@ -749,12 +749,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->objNotaEntr->PorProcesar = $this->lblNumePend->Text;
         $this->objNotaEntr->Piezas      = $this->objNotaEntr->cantidadDePiezas();
         t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
-        //if ($this->objNotaEntr->PorCorregir == 0) {
-        //    t('Voy a marcarlo como RECIBID@');
-            // Si todas las piezas fueron procesadas exitosamente, el Manifiesto se da por Recibido
-            //$this->objNotaEntr->Recibidas = $this->objNotaEntr->Procesadas;
-            //$this->objNotaEntr->Estatus = 'RECIBID@';
-        //}
         $this->objNotaEntr->Save();
         t('Manifiesto actualizado...');
         //--------------------------------------
@@ -830,9 +824,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $this->lstServImpo = disableControl($this->lstServImpo);
                 $this->txtNumeRefe = disableControl($this->txtNumeRefe);
             }
-            //if ($this->objNotaEntr->Estatus == 'RECIBID@') {
-            //    $this->btnBorrNota->Visible = false;
-            //}
         }
     }
 
@@ -1281,8 +1272,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function crearGuiaMasiva(GuiaCacesa $objGuiaMasi, $objCkptProc) {
         $blnTodoOkey = true;
-        //$objDatabase = Guias::GetDatabase();
-        //$objDatabase->TransactionBegin();
+
         t('Procesando la Guia-Cliente Nro: '.$objGuiaMasi->GuiaExte);
         $objSucuDest = Sucursales::LoadByIata($objGuiaMasi->DestGuia);
         try {

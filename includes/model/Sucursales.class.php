@@ -36,7 +36,7 @@
             if ($strTipoSucu == 'nac') {
                 $objClauWher[] = QQ::Equal(QQN::Sucursales()->EsExport,SinoType::NO);
             } else {
-                $objClauWher[] = QQ::IsNull(QQN::Sucursales()->EsExport,SinoType::SI);
+                $objClauWher[] = QQ::Equal(QQN::Sucursales()->EsExport,SinoType::SI);
             }
             return Sucursales::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
         }

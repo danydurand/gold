@@ -65,7 +65,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblPersReci;
     protected $lblFechPago;
     protected $lblCreaPorx;
-    protected $lblFechHora;
+    protected $lblGuiaTran;
     protected $lblTipoDocu;
     protected $lblMontCanc;
     protected $txtTextCome;
@@ -207,7 +207,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblFechEntr_Create();
         $this->lblTextObse_Create();
         $this->lblCreaPorx_Create();
-        $this->lblFechHora_Create();
+        $this->lblGuiaTran_Create();
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
         $this->lblservImpo_Create();
@@ -310,6 +310,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colIdxxPiez->Html = '<?= $_FORM->dtgPiezGuia_IdxxPiez_Render($_ITEM); ?>';
         $this->dtgPiezGuia->AddColumn($colIdxxPiez);
 
+        $colGuiaTran = new QDataGridColumn($this);
+        $colGuiaTran->Name = QApplication::Translate('G.Tran');
+        $colGuiaTran->Html = '<?= $_FORM->dtgPiezGuia_GuiaTran_Render($_ITEM); ?>';
+        $this->dtgPiezGuia->AddColumn($colGuiaTran);
+
         $colUbicFisi = new QDataGridColumn($this);
         $colUbicFisi->Name = QApplication::Translate('Ubicacion');
         $colUbicFisi->Html = '<?= $_ITEM->Ubicacion; ?>';
@@ -346,6 +351,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     public function dtgPiezGuia_IdxxPiez_Render(GuiaPiezas $objGuiaPiez) {
         $strIdxxPiez = explode('-',$objGuiaPiez->IdPieza)[1];
         return utf8_encode($strIdxxPiez);
+    }
+
+    public function dtgPiezGuia_GuiaTran_Render(GuiaPiezas $objGuiaPiez) {
+        $objGuiaTran = GuiaTransportista::LoadByGuiaPiezaId($objGuiaPiez->Id);
+        return ($objGuiaTran) ? $objGuiaTran->Guia : '';
     }
 
     protected function btnMasxAcci_Create() {
@@ -725,10 +735,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblCreaPorx->Text = $strUsuaCrea;
     }
 
-    protected function lblFechHora_Create() {
-        $this->lblFechHora = new QLabel($this);
-        $this->lblFechHora->Text = substr($this->objGuia->CreatedAt,0,10);
-        $this->lblFechHora->ToolTip = $this->objGuia->CreatedAt;
+    protected function lblGuiaTran_Create() {
+        $this->lblGuiaTran = new QLabel($this);
+        $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+        $strGuiaTran = '';
+        foreach ($arrPiezGuia as $objPiezGuia) {
+            $objGuiaTran = GuiaTransportista::LoadByGuiaPiezaId($objPiezGuia->Id);
+            if ($objGuiaTran) {
+                $strGuiaTran .= $objGuiaTran->Guia.' | ';
+            }
+        }
+        $this->lblGuiaTran->Text = substr($strGuiaTran,0,10);
     }
 
     protected function txtTextCome_Create() {
@@ -989,13 +1006,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         if (strlen($this->txtOtraGuia->Text) > 0) {
             $arrVariGuia = explode(',',nl2br2($this->txtOtraGuia->Text));
             $this->txtOtraGuia->Text = '';
-            //-------------------------------------------------------------------------------------
-            // Con la funcion DejarSoloLosNumeros1 se eliminan los caracteres especiales y letras
-            //-------------------------------------------------------------------------------------
-            //array_walk($arrVariGuia,'DejarSoloLosNumeros1');
-            //---------------------------------------------------------------------------
-            // Con array_unique se eliminan las guias repetidas en caso de que las haya
-            //---------------------------------------------------------------------------
             $arrVariGuia = array_unique($arrVariGuia,SORT_STRING);
             //---------------------------------------------------------------------
             // Una vez que hemos "limipiado" la lista, se procesa guia por guia
@@ -1055,7 +1065,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $this->objRegiTrab->Save();
             $this->mensaje();
         } else {
-            $this->mensaje('El Comentario debe tener al menos 10 caracteres','','d','',__iHAND__);
+            $this->danger('El Comentario debe tener al menos 10 caracteres');
             $this->txtTextCome->SetFocus();
         }
         $this->dtgRegiTrab->Refresh();
@@ -1280,7 +1290,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
     protected function btnEditGuia_Click() {
-        QApplication::Redirect(__SIST__.'/cargar_guia.php/'.$this->objGuia->Id);
+        QApplication::Redirect(__SIST__.'/guias_edit.php/'.$this->objGuia->Id);
     }
 
     protected function btnImprGuia_Click() {

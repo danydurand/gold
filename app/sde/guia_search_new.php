@@ -48,6 +48,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $lstCodiCkpt;
     protected $txtSepaColu;
     protected $chkConxDesc;
+    protected $txtGuiaTran;
     protected $chkMostQuer;
 
 
@@ -75,6 +76,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->lstFormPago_Create();
         $this->lstCodiOrig_Create();
         $this->lstReceOrig_Create();
+
         $this->lstCodiDest_Create();
         $this->lstReceDest_Create();
         $this->lstCodiVend_Create();
@@ -84,11 +86,9 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->lstTariIdxx_Create();
         $this->txtUsuaPodx_Create();
         $this->txtRefeFact_Create();
-        //$this->txtUsuaCrea_Create();
+        $this->txtGuiaTran_Create();
         $this->txtUbicFisi_Create();
-        //$this->lstCodiCkpt_Create();
         $this->chkMostQuer_Create();
-        //$this->chkConxDesc_Create();
         $this->chkInclSubc_Create();
 
         // Botónes del Formulario //
@@ -299,6 +299,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtRefeFact->Width = 100;
     }
 
+    protected function txtGuiaTran_Create() {
+        $this->txtGuiaTran = new QTextBox($this);
+        $this->txtGuiaTran->Name = 'Guia-Transportista';
+        $this->txtGuiaTran->Width = 100;
+    }
+
     protected function txtUbicFisi_Create() {
         $this->txtUbicFisi = new QTextBox($this);
         $this->txtUbicFisi->Name = 'Ubicación Física';
@@ -505,7 +511,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $intUsuaPodx = $objUsuaPodx->CodiUsua;
             }
         }
-        $intRefeFact   = null;
+        $intRefeFact = null;
         if (strlen($this->txtRefeFact->Text)) {
             $strRefeFact = trim($this->txtRefeFact->Text);
             //---------------------------------------------------------------------------
@@ -521,6 +527,21 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $blnTodoOkey = false;
             } else {
                 $intRefeFact = $arrRefeFact[0]->Id;
+            }
+        }
+        $intGuiaTran = null;
+        if (strlen($this->txtGuiaTran->Text)) {
+            $strGuiaTran = trim($this->txtGuiaTran->Text);
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::GuiaTransportista()->Guia,$strGuiaTran);
+            $objAdicClau   = QQ::Clause();
+            $objAdicClau[] = QQ::LimitInfo(1);
+            $arrGuiaTran   = GuiaTransportista::QueryArray(QQ::AndCondition($objClauWher),$objAdicClau);
+            if (count($arrGuiaTran) == 0) {
+                $strMensMost = 'No existe la Guia-Transportista: <b>'.$strGuiaTran.'</b> !';
+                $blnTodoOkey = false;
+            } else {
+                $intGuiaTran = $arrGuiaTran[0]->GuiaPieza->Guia->Id;
             }
         }
         if ($blnTodoOkey) {
@@ -632,6 +653,10 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
             if (!is_null($intRefeFact)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->FacturaId,$intRefeFact);
                 $strCadeSqlx  .= " and g.factura_id = $intRefeFact";
+            }
+            if (!is_null($intGuiaTran)) {
+                $objClausula[] = QQ::Equal(QQN::Guias()->Id,$intGuiaTran);
+                $strCadeSqlx  .= " and g.id = $intGuiaTran";
             }
             $objClausula[] = QQ::IsNull(QQN::Guias()->DeletedBy);
             $strCadeSqlx  .= " and g.deleted_by IS NULL ";

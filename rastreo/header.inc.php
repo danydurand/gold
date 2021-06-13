@@ -38,7 +38,7 @@
     <![endif]-->
     <style>
         .navbar-default {
-            background: #A52422;
+            background: #4682B4;
         }
 
     </style>
@@ -59,7 +59,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" style="color: white; text-decoration: none">LibertyExpress | SISPAQ | TRACKING</a>
+                <a class="navbar-brand" style="color: white; text-decoration: none">GOLD COAST | RASTREO</a>
             </div>
 
             <!--

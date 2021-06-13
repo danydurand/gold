@@ -28,7 +28,6 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->txtCodiInte->RenderWithName(); ?>
                 <?php $this->txtNombBusc->RenderWithName(); ?>
                 <?php $this->lstCodiClie->RenderWithName(); ?>
-                <?php //$this->chkInclSubc->RenderWithName(); ?>
                 <?php $this->lstCodiProd->RenderWithName(); ?>
             </div>
             <div class="col-xs-12 col-md-4">
@@ -36,23 +35,16 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->txtNumeMast->RenderWithName(); ?>
                 <?php $this->calFechInic->RenderWithName(); ?>
                 <?php $this->calFechFina->RenderWithName(); ?>
-                <?php //$this->lstFormPago->RenderWithName(); ?>
                 <?php $this->txtUbicFisi->RenderWithName(); ?>
-                <?php //$this->lstReceOrig->RenderWithName(); ?>
-                <?php //$this->lstReceDest->RenderWithName(); ?>
                 <?php $this->lstCodiOrig->RenderWithName(); ?>
             </div>
             <div class="col-xs-12 col-md-4">
                 <?php $this->lstCodiDest->RenderWithName(); ?>
-                <?php //$this->lstCodiVend->RenderWithName(); ?>
                 <?php $this->calEntrInic->RenderWithName(); ?>
                 <?php $this->calEntrFina->RenderWithName(); ?>
-                <?php //$this->rdbTienPodx->RenderWithName(); ?>
-                <?php //$this->lstTariIdxx->RenderWithName(); ?>
                 <?php $this->txtUsuaPodx->RenderWithName(); ?>
                 <?php $this->txtRefeFact->RenderWithName(); ?>
-                <?php //$this->lstCodiCkpt->RenderWithName(); ?>
-                <?php //$this->txtSepaColu->RenderWithName(); ?>
+                <?php $this->txtGuiaTran->RenderWithName(); ?>
                 <?php $this->chkMostQuer->RenderWithName(); ?>
             </div>
         </div>

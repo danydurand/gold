@@ -458,7 +458,6 @@
         /**
          * Esta rutina crea las piezas correspondientes a la Guia
          */
-		//public function crearPieza(GuiaCacesa $objGuiaMasi, $objProcEjec, $objCkptProc, $intIdxxPiez) {
 		public function crearPieza($objParaPiez) {
             $objProcEjec = $objParaPiez->ProcEjec;
             $objCkptProc = $objParaPiez->CkptProc;

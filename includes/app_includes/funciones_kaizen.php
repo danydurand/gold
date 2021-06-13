@@ -237,6 +237,7 @@ function t($strTextTraz) {
             $arrLineAudi = array();
             $arrLineAudi[] = date('Y-m-d');
             $arrLineAudi[] = date('H:i:s');
+            $arrLineAudi[] = $objUsuario->LogiUsua;
             if (isset($_SESSION['NombProg'])) {
                 $arrLineAudi[] = str_replace('.php','',basename($_SESSION['NombProg']));
             }

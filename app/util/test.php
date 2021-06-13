@@ -1,15 +1,22 @@
 <?php
 require_once('qcubed.inc.php');
 
+
+$strNumeGuia = '169841-1/002-002:200';
+echo "Entrando: ".$strNumeGuia."<br><br>";
+$strNumeGuia = transformar($strNumeGuia);
+echo "Transformada: ".$strNumeGuia;
+
+
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
-$arrManiSist = NotaEntrega::LoadAll();
-foreach ($arrManiSist as $objManiSist) {
-    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
-    $objManiSist->Save();
-    $objManiSist->ContarActualizarRecibidas();
-    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
-    echo "<br>";
-}
+//$arrManiSist = NotaEntrega::LoadAll();
+//foreach ($arrManiSist as $objManiSist) {
+//    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
+//    $objManiSist->Save();
+//    $objManiSist->ContarActualizarRecibidas();
+//    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
+//    echo "<br>";
+//}
 
 //-------------------
 // Buscar Parametro
