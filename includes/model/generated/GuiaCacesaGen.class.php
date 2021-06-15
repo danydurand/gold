@@ -33,7 +33,7 @@
 	 * @property string $CeluDest the value for strCeluDest (Not Null)
 	 * @property string $DescCont the value for strDescCont (Not Null)
 	 * @property integer $CantPiez the value for intCantPiez (Not Null)
-	 * @property string $PesoGuia the value for strPesoGuia (Not Null)
+	 * @property double $PesoGuia the value for fltPesoGuia (Not Null)
 	 * @property double $ValorDeclarado the value for fltValorDeclarado 
 	 * @property string $CedulaRif the value for strCedulaRif 
 	 * @property string $RegistradoPor the value for strRegistradoPor (Not Null)
@@ -228,9 +228,9 @@
 
 		/**
 		 * Protected member variable that maps to the database column guia_cacesa.peso_guia
-		 * @var string strPesoGuia
+		 * @var double fltPesoGuia
 		 */
-		protected $strPesoGuia;
+		protected $fltPesoGuia;
 		const PesoGuiaDefault = null;
 
 
@@ -509,7 +509,7 @@
 			$this->strCeluDest = GuiaCacesa::CeluDestDefault;
 			$this->strDescCont = GuiaCacesa::DescContDefault;
 			$this->intCantPiez = GuiaCacesa::CantPiezDefault;
-			$this->strPesoGuia = GuiaCacesa::PesoGuiaDefault;
+			$this->fltPesoGuia = GuiaCacesa::PesoGuiaDefault;
 			$this->fltValorDeclarado = GuiaCacesa::ValorDeclaradoDefault;
 			$this->strCedulaRif = GuiaCacesa::CedulaRifDefault;
 			$this->strRegistradoPor = GuiaCacesa::RegistradoPorDefault;
@@ -1101,7 +1101,7 @@
 			$objToReturn->intCantPiez = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'peso_guia';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strPesoGuia = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->fltPesoGuia = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'valor_declarado';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltValorDeclarado = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1505,7 +1505,7 @@
 							' . $objDatabase->SqlVariable($this->strCeluDest) . ',
 							' . $objDatabase->SqlVariable($this->strDescCont) . ',
 							' . $objDatabase->SqlVariable($this->intCantPiez) . ',
-							' . $objDatabase->SqlVariable($this->strPesoGuia) . ',
+							' . $objDatabase->SqlVariable($this->fltPesoGuia) . ',
 							' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
 							' . $objDatabase->SqlVariable($this->strCedulaRif) . ',
 							' . $objDatabase->SqlVariable($this->strRegistradoPor) . ',
@@ -1563,7 +1563,7 @@
 							`celu_dest` = ' . $objDatabase->SqlVariable($this->strCeluDest) . ',
 							`desc_cont` = ' . $objDatabase->SqlVariable($this->strDescCont) . ',
 							`cant_piez` = ' . $objDatabase->SqlVariable($this->intCantPiez) . ',
-							`peso_guia` = ' . $objDatabase->SqlVariable($this->strPesoGuia) . ',
+							`peso_guia` = ' . $objDatabase->SqlVariable($this->fltPesoGuia) . ',
 							`valor_declarado` = ' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
 							`cedula_rif` = ' . $objDatabase->SqlVariable($this->strCedulaRif) . ',
 							`registrado_por` = ' . $objDatabase->SqlVariable($this->strRegistradoPor) . ',
@@ -1710,7 +1710,7 @@
 			$this->strCeluDest = $objReloaded->strCeluDest;
 			$this->strDescCont = $objReloaded->strDescCont;
 			$this->intCantPiez = $objReloaded->intCantPiez;
-			$this->strPesoGuia = $objReloaded->strPesoGuia;
+			$this->fltPesoGuia = $objReloaded->fltPesoGuia;
 			$this->fltValorDeclarado = $objReloaded->fltValorDeclarado;
 			$this->strCedulaRif = $objReloaded->strCedulaRif;
 			$this->strRegistradoPor = $objReloaded->strRegistradoPor;
@@ -1884,10 +1884,10 @@
 
 				case 'PesoGuia':
 					/**
-					 * Gets the value for strPesoGuia (Not Null)
-					 * @return string
+					 * Gets the value for fltPesoGuia (Not Null)
+					 * @return double
 					 */
-					return $this->strPesoGuia;
+					return $this->fltPesoGuia;
 
 				case 'ValorDeclarado':
 					/**
@@ -2352,12 +2352,12 @@
 
 				case 'PesoGuia':
 					/**
-					 * Sets the value for strPesoGuia (Not Null)
-					 * @param string $mixValue
-					 * @return string
+					 * Sets the value for fltPesoGuia (Not Null)
+					 * @param double $mixValue
+					 * @return double
 					 */
 					try {
-						return ($this->strPesoGuia = QType::Cast($mixValue, QType::String));
+						return ($this->fltPesoGuia = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2854,7 +2854,7 @@
 			$strToReturn .= '<element name="CeluDest" type="xsd:string"/>';
 			$strToReturn .= '<element name="DescCont" type="xsd:string"/>';
 			$strToReturn .= '<element name="CantPiez" type="xsd:int"/>';
-			$strToReturn .= '<element name="PesoGuia" type="xsd:string"/>';
+			$strToReturn .= '<element name="PesoGuia" type="xsd:float"/>';
 			$strToReturn .= '<element name="ValorDeclarado" type="xsd:float"/>';
 			$strToReturn .= '<element name="CedulaRif" type="xsd:string"/>';
 			$strToReturn .= '<element name="RegistradoPor" type="xsd:string"/>';
@@ -2941,7 +2941,7 @@
 			if (property_exists($objSoapObject, 'CantPiez'))
 				$objToReturn->intCantPiez = $objSoapObject->CantPiez;
 			if (property_exists($objSoapObject, 'PesoGuia'))
-				$objToReturn->strPesoGuia = $objSoapObject->PesoGuia;
+				$objToReturn->fltPesoGuia = $objSoapObject->PesoGuia;
 			if (property_exists($objSoapObject, 'ValorDeclarado'))
 				$objToReturn->fltValorDeclarado = $objSoapObject->ValorDeclarado;
 			if (property_exists($objSoapObject, 'CedulaRif'))
@@ -3060,7 +3060,7 @@
 			$iArray['CeluDest'] = $this->strCeluDest;
 			$iArray['DescCont'] = $this->strDescCont;
 			$iArray['CantPiez'] = $this->intCantPiez;
-			$iArray['PesoGuia'] = $this->strPesoGuia;
+			$iArray['PesoGuia'] = $this->fltPesoGuia;
 			$iArray['ValorDeclarado'] = $this->fltValorDeclarado;
 			$iArray['CedulaRif'] = $this->strCedulaRif;
 			$iArray['RegistradoPor'] = $this->strRegistradoPor;
@@ -3217,7 +3217,7 @@
 				case 'CantPiez':
 					return new QQNode('cant_piez', 'CantPiez', 'Integer', $this);
 				case 'PesoGuia':
-					return new QQNode('peso_guia', 'PesoGuia', 'VarChar', $this);
+					return new QQNode('peso_guia', 'PesoGuia', 'Float', $this);
 				case 'ValorDeclarado':
 					return new QQNode('valor_declarado', 'ValorDeclarado', 'Float', $this);
 				case 'CedulaRif':
@@ -3381,7 +3381,7 @@
 				case 'CantPiez':
 					return new QQNode('cant_piez', 'CantPiez', 'integer', $this);
 				case 'PesoGuia':
-					return new QQNode('peso_guia', 'PesoGuia', 'string', $this);
+					return new QQNode('peso_guia', 'PesoGuia', 'double', $this);
 				case 'ValorDeclarado':
 					return new QQNode('valor_declarado', 'ValorDeclarado', 'double', $this);
 				case 'CedulaRif':

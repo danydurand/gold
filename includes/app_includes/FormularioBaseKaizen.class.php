@@ -4,6 +4,7 @@ abstract class FormularioBaseKaizen extends QForm {
     protected $lblTituForm;
     protected $lblMensUsua;
     protected $lblNotiUsua;
+    protected $blnTodoOkey = true;
 
     /**
      * @var $objUsuario Usuario
@@ -23,6 +24,7 @@ abstract class FormularioBaseKaizen extends QForm {
 
         $this->btnSave_Create();
         $this->btnCancel_Create();
+
     }
 
     //----------------------------

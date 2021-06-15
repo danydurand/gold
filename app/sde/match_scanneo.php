@@ -89,7 +89,34 @@ class MatchScanneo extends FormularioBaseKaizen {
     }
 
     protected function dtgManiPend_Bind() {
+        $blnSecuEstr = Parametros::BuscarParametro('SECUESTR','MATCSCAN','Val1',false);
+        $arrIdxxMani = [];
+        if ($blnSecuEstr) {
+            //----------------------------------------------------------------------------------------
+            // Los Manifestos a procesar, serán estrictamente aquellos que hayan sido Nacionalizados
+            //----------------------------------------------------------------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');
+            $objClauSele   = QQ::Select(QQN::NotaEntregaCkpt()->ContainerId);
+            $arrManiNaci   = NotaEntregaCkpt::QueryArray(
+                QQ::AndCondition($objClauWher),
+                QQ::Clause(
+                    $objClauSele,
+                    QQ::Distinct()
+                ));
+            $arrIdxxMani   = [];
+            foreach ($arrManiNaci as $objManiNaci) {
+                $arrIdxxMani[] = $objManiNaci->ContainerId;
+            }
+        }
+        //--------------------------------------------------------------------------------------
+        // Adicionalmente, se deben considerar los Manifiestos ya Procesados, con diferencias
+        // entre la cantidad de piezas recibidas y la cantidad de piezas total del Manifiesto
+        //--------------------------------------------------------------------------------------
         $objClauWher   = QQ::Clause();
+        if ($blnSecuEstr) {
+            $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id,$arrIdxxMani);
+        }
         $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
         $objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
 

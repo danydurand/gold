@@ -2216,6 +2216,39 @@ function GrabarCheckpointContenedorNew($arrDatoCkpt) {
     return $arrResuGrab;
 }
 
+function GrabarCheckpointManifiesto($arrDatoCkpt) {
+    /**
+     * @var $objUsuario Usuario
+     */
+    //--------------------------------------------------------
+    // Esta rutina controla lo concerniente al ingresos de
+    // informacion de la tabla de checkpoints del contenedor
+    //--------------------------------------------------------
+    $arrResuGrab = array();
+    $arrResuGrab['TodoOkey'] = true;
+    $arrResuGrab['MotiNook'] = '';
+    $arrResuGrab['CkptManu'] = null;
+    $objUsuario = unserialize($_SESSION['User']);
+
+    try {
+        $objContCkpt               = new NotaEntregaCkpt();
+        $objContCkpt->ContainerId  = $arrDatoCkpt['NumeCont'];
+        $objContCkpt->SucursalId   = $objUsuario->SucursalId;
+        $objContCkpt->CheckpointId = $arrDatoCkpt['CodiCkpt'];
+        $objContCkpt->Fecha        = new QDateTime(QDateTime::Now);
+        $objContCkpt->Hora         = date('H:i');
+        $objContCkpt->Observacion  = strtoupper($arrDatoCkpt['TextObse']);
+        $objContCkpt->UsuarioId    = $objUsuario->CodiUsua;
+        $objContCkpt->Save();
+        $arrResuGrab['CkptMani']   = $objContCkpt;
+    } catch (Exception $e) {
+        $arrResuGrab['TodoOkey'] = false;
+        $arrResuGrab['MotiNook'] = $e->getMessage();
+    }
+
+    return $arrResuGrab;
+}
+
 function GrabarCheckpointContenedor($arrDatoCkpt) {
     /**
      * @var $objUsuario Usuario

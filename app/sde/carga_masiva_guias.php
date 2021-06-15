@@ -71,6 +71,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $objProcAnte;
     protected $intErroAnte;
 
+    protected $btnMasxAcci;
+
 
     protected function Form_Create() {
         parent::Form_Create();
@@ -175,11 +177,41 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->chkManiFact = disableControl($this->chkManiFact);
         }
 
+        $this->btnMasxAcci_Create();
+
+
     }
 
     //-------------------------
     // Creación de objetos ...
     //-------------------------
+
+
+    protected function btnMasxAcci_Create() {
+        $this->btnMasxAcci = new QLabel($this);
+        $this->btnMasxAcci->HtmlEntities = false;
+        $this->btnMasxAcci->CssClass = '';
+
+        $strTextBoto   = TextoIcono('plus','Acciones');
+        $arrOpciDrop   = array();
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/sucursales_list.php',
+            TextoIcono(__iOJOS__,'Sucursales')
+        );
+        if ($this->blnEditMode) {
+            if ($this->objNotaEntr->Recibidas > 0) {
+                if ($this->objNotaEntr->Piezas == $this->objNotaEntr->Recibidas) {
+                    $arrOpciDrop[] = OpcionDropDown(
+                        __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objNotaEntr->Id,
+                        TextoIcono(__iEDIT__,'Camb. Estatus')
+                    );
+                }
+            }
+        }
+
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop);
+
+    }
 
     protected function dtgGuiaMani_Create() {
         $this->dtgGuiaMani = new QDataGrid($this);
@@ -922,6 +954,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $arrContVali['SucuDest'] = $strSucuDest;
         }
         $decPesoEnvi = flotar($arrCampClie[6]);
+        //$decPesoEnvi = str_replace('.',',',$arrCampClie[6]);
         $arrContVali['PesoEnvi'] = $decPesoEnvi;
         if ($blnTodoOkey) {
             if ($decPesoEnvi < 0) {
@@ -1045,12 +1078,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             //-------------------------------
             $strLibrExce = $strExteArch == 'xls' ? 'SimpleXLS' : 'SimpleXLSX';
             if ( $xls = $strLibrExce::parseFile($strNombArch) ) {
-                //foreach ($xls->rows() as $row) {
-                //    echo $row[0]."<br>";
-                //}
-                //return;
-                //print_r( $xls->rows() );
-                // echo $xls->toHTML();
+
             } else {
                 $strMensErro = $strLibrExce::parseError();
                 t('Error leyendo el archivo: '.$strMensErro);
@@ -1061,7 +1089,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 GrabarError($arrParaErro);
                 $this->danger($strMensErro);
                 return;
-                //echo SimpleXLS::parseError();
             }
             //----------------------------------
             // Se lee el archivo linea a linea
@@ -1172,7 +1199,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                         $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
                         $arrParaErro['NumeRefe'] = $strNombArch;
                         $arrParaErro['MensErro'] = $e->getMessage();
-                        $arrParaErro['ComeErro'] = 'Falla cargando Manifiesto del Cliente ('.$this->objCliente->NombClie.')';
+                        $arrParaErro['ComeErro'] = 'Creando Guia Masiva ('.$strNumeGuia.')';
                         GrabarError($arrParaErro);
                         $intCantErro ++;
                         $blnErroProc = true;

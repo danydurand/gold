@@ -46,14 +46,6 @@ class Permisos extends FormularioBaseKaizen {
         $this->dtgUsuaGrup->CssClass = 'datagrid';
         $this->dtgUsuaGrup->AlternateRowStyle->CssClass = 'alternate';
 
-        // Los registros "Borrados" no deben mostrarse
-        /*
-        $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::IsNull(QQN::Usuario()->DeleteAt);
-        $objClauWher[] = QQ::Equal(QQN::Usuario()->GrupoId,$this->lstCodiGrup->SelectedValue);
-        $this->dtgUsuaGrup->AdditionalConditions = QQ::AndCondition($objClauWher);
-        */
-
         // Add Pagination (if desired)
         $this->dtgUsuaGrup->Paginator = new QPaginator($this->dtgUsuaGrup);
         $this->dtgUsuaGrup->ItemsPerPage = 10; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
@@ -62,18 +54,10 @@ class Permisos extends FormularioBaseKaizen {
         $this->dtgUsuaGrup->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
         $this->dtgUsuaGrup->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
-        /*
-        $this->dtgUsuaGrup->RowActionParameterHtml = '<?= $_ITEM->CodiUsua ?>';
-        $this->dtgUsuaGrup->AddRowAction(new QClickEvent(), new QAjaxAction('dtgUsuaGrupRow_Click'));
-        */
-
-
         $this->dtgUsuaGrup->MetaAddColumn('LogiUsua');
         $this->dtgUsuaGrup->MetaAddColumn('NombUsua');
         $this->dtgUsuaGrup->MetaAddColumn('ApelUsua');
-//        $this->dtgUsuaGrup->MetaAddTypeColumn('CodiStat', 'StatusType');
-        $colSucuUsua = $this->dtgUsuaGrup->MetaAddColumn(QQN::Usuario()->Sucursal->Iata);
-        $colSucuUsua->Name = 'Suc.';
+        $this->dtgUsuaGrup->MetaAddColumn(QQN::Usuario()->Sucursal->Iata,'Name=Suc');
         $this->dtgUsuaGrup->MetaAddColumn('FechAcce');
         $this->dtgUsuaGrup->SetDataBinder('dtgUsuaGrup_Binder');
 
@@ -100,7 +84,13 @@ class Permisos extends FormularioBaseKaizen {
         $this->lstCodiGrup = new QListBox($this);
         $this->lstCodiGrup->Name = QApplication::Translate('Grupo');
         $this->lstCodiGrup->Width = 320;
-        $arrNewxGrup = NewGrupo::LoadArrayBySistemaId('sde');
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::NewGrupo()->Nombre);
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::NewGrupo()->SistemaId,'sde');
+        $objClauWher[] = QQ::Equal(QQN::NewGrupo()->Activo,SinoType::SI);
+        $objClauWher[] = QQ::IsNull(QQN::NewGrupo()->DeletedAt);
+        $arrNewxGrup   = NewGrupo::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
         $intCanrGrup = count($arrNewxGrup);
         $this->lstCodiGrup->AddItem(QApplication::Translate('- Seleccione Uno - ('.$intCanrGrup.')'),null);
         foreach ($arrNewxGrup as $objGrupo) {
@@ -150,7 +140,7 @@ class Permisos extends FormularioBaseKaizen {
     //-----------------------------------
 
     protected function lstOpciSist_Click() {
-        $this->lblMensUsua->Text = '';
+        $this->mensaje();
     }
 
     protected function btnCopiPerm_Click() {
@@ -158,59 +148,53 @@ class Permisos extends FormularioBaseKaizen {
     }
 
     protected function btnAgreUsua_Click() {
-        $blnTodoOkey = true;
         $strLogiUsua = trim($this->txtLogiUsua->Text);
         if (strlen($strLogiUsua) == 0) {
-            $blnTodoOkey = false;
-            $this->mensaje('Debe especificar un Login de Usuario','','d','',__iHAND__);
+            $this->danger('Debe especificar un Login de Usuario');
+            return;
         }
-        if ($blnTodoOkey) {
-            $objUsuaAgre = Usuario::LoadByLogiUsua($strLogiUsua);
-            if (!$objUsuaAgre) {
-                $blnTodoOkey = false;
-                $this->mensaje('El Usuario indicado, no existe','','d','',__iHAND__);
-            } else {
-                if (!is_null($objUsuaAgre->DeleteAt)) {
-                    $blnTodoOkey = false;
-                    $this->mensaje('El Usuario indicado, no existe','','d','',__iHAND__);
-                }
-            }
+        $objUsuaAgre = Usuario::LoadByLogiUsua($strLogiUsua);
+        if (!$objUsuaAgre) {
+            $this->danger('El Usuario indicado, no existe');
+            return;
         }
-        if ($blnTodoOkey) {
-            try {
-                $objUsuaAgre->GrupoId = $this->lstCodiGrup->SelectedValue;
-                $objUsuaAgre->Save();
-            } catch (Exception $e) {
-                $this->mensaje($e->getMessage(),'','d','',__iHAND__);
-            }
-            //----------------------------------------------
-            // Se deja rastro de la transaccion realizada
-            //----------------------------------------------
-            $arrLogxCamb['strNombTabl'] = 'Usuario';
-            $arrLogxCamb['intRefeRegi'] = $objUsuaAgre->CodiUsua;
-            $arrLogxCamb['strNombRegi'] = $objUsuaAgre->LogiUsua;
-            $arrLogxCamb['strDescCamb'] = 'Cambiado al Grupo: '.$this->lstCodiGrup->SelectedName;
-            LogDeCambios($arrLogxCamb);
-            $this->mensaje('Usuario Cambiado Exitosamente !','','','',__iCHEC__);
-            $this->txtLogiUsua->Text = '';
-            $this->dtgUsuaGrup->Refresh();
-            //-------------------------------------------------------------------------------
-            // Se actualiza el listado de Grupos, para mostrar la cantidad real de Usuarios
-            //-------------------------------------------------------------------------------
-            $intIndiActu = $this->lstCodiGrup->SelectedIndex;
-            $this->lstCodiGrup->RemoveAllItems();
-            $arrNewxGrup = NewGrupo::LoadArrayBySistemaId('sde');
-            $intCanrGrup = count($arrNewxGrup);
-            $this->lstCodiGrup->AddItem(QApplication::Translate('- Seleccione Uno - ('.$intCanrGrup.')'),null);
-            foreach ($arrNewxGrup as $objGrupo) {
-                $this->lstCodiGrup->AddItem($objGrupo->__toStringConCantUsuarios(),$objGrupo->Id);
-            }
-            $this->lstCodiGrup->SelectedIndex = $intIndiActu;
+        if (!is_null($objUsuaAgre->DeleteAt)) {
+            $this->danger('El Usuario indicado, no existe');
+            return;
         }
+        try {
+            $objUsuaAgre->GrupoId = $this->lstCodiGrup->SelectedValue;
+            $objUsuaAgre->Save();
+        } catch (Exception $e) {
+            $this->mensaje($e->getMessage());
+        }
+        //----------------------------------------------
+        // Se deja rastro de la transaccion realizada
+        //----------------------------------------------
+        $arrLogxCamb['strNombTabl'] = 'Usuario';
+        $arrLogxCamb['intRefeRegi'] = $objUsuaAgre->CodiUsua;
+        $arrLogxCamb['strNombRegi'] = $objUsuaAgre->LogiUsua;
+        $arrLogxCamb['strDescCamb'] = 'Cambiado al Grupo: '.$this->lstCodiGrup->SelectedName;
+        LogDeCambios($arrLogxCamb);
+        $this->success('Usuario Cambiado Exitosamente !');
+        $this->txtLogiUsua->Text = '';
+        $this->dtgUsuaGrup->Refresh();
+        //-------------------------------------------------------------------------------
+        // Se actualiza el listado de Grupos, para mostrar la cantidad real de Usuarios
+        //-------------------------------------------------------------------------------
+        $intIndiActu = $this->lstCodiGrup->SelectedIndex;
+        $this->lstCodiGrup->RemoveAllItems();
+        $arrNewxGrup = NewGrupo::LoadArrayBySistemaId('sde');
+        $intCanrGrup = count($arrNewxGrup);
+        $this->lstCodiGrup->AddItem(QApplication::Translate('- Seleccione Uno - ('.$intCanrGrup.')'),null);
+        foreach ($arrNewxGrup as $objGrupo) {
+            $this->lstCodiGrup->AddItem($objGrupo->__toStringConCantUsuarios(),$objGrupo->Id);
+        }
+        $this->lstCodiGrup->SelectedIndex = $intIndiActu;
     }
 
     protected function actualizarOpciones() {
-        $this->mensaje('Presione la tecla <strong>CTRL</strong>, mientras hace <strong>CLICK</strong> en las Opciones','m','i','',__iINFO__);
+        $this->info('Presione la tecla <strong>CTRL</strong>, mientras hace <strong>CLICK</strong> en las Opciones');
         $this->dtgUsuaGrup->Refresh();
         $this->txtLogiUsua->Enabled = false;
         $this->btnAgreUsua->Enabled = false;
@@ -324,17 +308,6 @@ class Permisos extends FormularioBaseKaizen {
         $intCantPerm = $objGrupSele->CountPermisosAsGrupo();
         $arrPermAnte = $objGrupSele->GetPermisoAsGrupoArray();
         $strTextCamb = 'El Grupo tenia <b>('.$intCantPerm.')</b> permisos ';
-        /*
-        t('El Grupo tenia ('.$intCantPerm.') permisos');
-        t('El vector tiene ('.count($arrPermAnte).' elementos');
-        foreach ($arrPermAnte as $objPermAnte) {
-            if (isset($objPermAnte->Opcion->Nombre)) {
-                t('Permiso: '.$objPermAnte->Id.' Opcion: '.$objPermAnte->OpcionId);
-                $strTextCamb .= $objPermAnte->Opcion->Nombre.', ';
-            }
-        }
-        $strTextCamb = substr($strTextCamb,0,strlen(trim($strTextCamb))-1);
-        */
         //-----------------------------------------------------
         // Antes que nada, se eliminan los permisos del Grupo
         //-----------------------------------------------------
@@ -366,7 +339,7 @@ class Permisos extends FormularioBaseKaizen {
         $arrLogxCamb['strNombRegi'] = $this->lstCodiGrup->SelectedName;
         $arrLogxCamb['strDescCamb'] = $strTextCamb;
         LogDeCambios($arrLogxCamb);
-        $this->mensaje('Transaccion Exitosa !','m','s','',__iCHEC__);
+        $this->success('Transaccion Exitosa !');
     }
 
     protected function btnCancel_Click() {

@@ -137,27 +137,6 @@ class RecepcionNde extends FormularioBaseKaizen {
         );
     }
 
-    //protected function dtgPiezNota_Bind() {
-    //    $this->arrPiezNore = [];
-    //    $this->intCantNore = 0;
-    //    if (!is_null($this->lstNotaEntr->SelectedValue)) {
-    //        $intNotaEntr   = $this->lstNotaEntr->SelectedValue;
-    //        $objClauWher   = QQ::Clause();
-    //        $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Guia->NotaEntregaId,$intNotaEntr);
-    //        $objClauOrde   = QQ::Clause();
-    //        $objClauOrde[] = QQ::OrderBy(QQN::GuiaPiezas()->IdPieza);
-    //        $arrPiezNota   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
-    //        $this->arrPiezNore = [];
-    //        foreach ($arrPiezNota as $objPiezNota) {
-    //            if (!$objPiezNota->tieneCheckpoint('RA')) {
-    //                $this->arrPiezNore[] = $objPiezNota;
-    //                $this->intCantNore ++;
-    //            }
-    //        }
-    //    }
-    //    $this->dtgPiezNota->DataSource = $this->arrPiezNore;
-    //}
-
     protected function dtgPiezNotaColumns() {
         $colPiezIdxx = new QDataGridColumn($this);
         $colPiezIdxx->Name = QApplication::Translate('IdPieza');
@@ -230,12 +209,35 @@ class RecepcionNde extends FormularioBaseKaizen {
     }
 
     protected function lstClieCorp_Change($strFormId, $strControlId, $strParameter=false) {
+        $blnSecuEstr = Parametros::BuscarParametro('SECUESTR','MATCSCAN','Val1',false);
+        $arrIdxxMani = [];
+        if ($blnSecuEstr) {
+            //----------------------------------------------------------------------------------------
+            // Los Manifestos a procesar, serán estrictamente aquellos que hayan sido Nacionalizados
+            //----------------------------------------------------------------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');
+            $objClauSele   = QQ::Select(QQN::NotaEntregaCkpt()->ContainerId);
+            $arrManiNaci   = NotaEntregaCkpt::QueryArray(
+                QQ::AndCondition($objClauWher),
+                QQ::Clause(
+                    $objClauSele,
+                    QQ::Distinct()
+                ));
+            $arrIdxxMani   = [];
+            foreach ($arrManiNaci as $objManiNaci) {
+                $arrIdxxMani[] = $objManiNaci->ContainerId;
+            }
+        }
         //----------------------------------------------------------
         // Se cargan las notas de entrega del Cliente seleccionado
         //----------------------------------------------------------
         $this->lstNotaEntr->RemoveAllItems();
         $intClieSele   = $this->lstClieCorp->SelectedValue;
         $objClauWher   = QQ::Clause();
+        if ($blnSecuEstr) {
+            $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id,$arrIdxxMani);
+        }
         $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorpId,$intClieSele);
         $objClauWher[] = QQ::In(QQN::NotaEntrega()->Estatus,['CREAD@','RECIBID@']);
         $arrNotaClie   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
@@ -243,7 +245,7 @@ class RecepcionNde extends FormularioBaseKaizen {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->ClienteCorpId,$intClieSele);
             $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Estatus,'RECIBID@');
-            $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Cargadas,QQN::NotaEntrega()->Recibidas);
+            $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
             $arrNotaReci   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
             foreach ($arrNotaReci as $objNotaReci) {
                 $arrNotaClie[] = $objNotaReci;

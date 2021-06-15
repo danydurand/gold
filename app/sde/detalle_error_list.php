@@ -129,10 +129,9 @@ class DetalleErrorListForm extends DetalleErrorListFormBase {
 	}
 
 	protected function btnCancel_Create() {
-		$this->btnCancel = new QButton($this);
-		$this->btnCancel->Text = TextoIcono('mail-reply','Volver','','lg');
+		$this->btnCancel = new QButtonW($this);
+		$this->btnCancel->Text = TextoIcono('mail-reply','Volver','F','lg');
 		$this->btnCancel->AddAction(new QClickEvent(), new QServerAction('btnCancel_Click'));
-		$this->btnCancel->CssClass = 'btn btn-warning btn-sm';
 		$this->btnCancel->HtmlEntities = 'false';
 		$this->btnCancel->CausesValidation = false;
 	}
@@ -142,9 +141,14 @@ class DetalleErrorListForm extends DetalleErrorListFormBase {
 	//----------------------------------
 
 	protected function btnCancel_Click() {
-		$strPagiRetro = $_SESSION['PagiBack'];
-		QApplication::Redirect($strPagiRetro);
-		//QApplication::Redirect(__SIST__."/carga_masiva_guias.php");
+        if (isset($_SESSION['PagiBack'])) {
+			$strPagiReto = $_SESSION['PagiBack'];
+            QApplication::Redirect($strPagiReto);
+        } else {
+            $objUltiAcce = PilaAcceso::Pop('D');
+            $strPagiReto = $objUltiAcce->__toString();
+            QApplication::Redirect(__SIST__.'/'.$strPagiReto);
+        }
 	}
 
 }

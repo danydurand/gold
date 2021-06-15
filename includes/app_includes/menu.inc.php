@@ -39,6 +39,7 @@ if (($objUsuario->GrupoId != 1) && ($_SESSION['Sistema'] == 'sde')) {
 $arrOpciMenu = NewOpcion::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
 $strHtmlMenu = "<ul class='nav' id='side-menu'>\n";
 foreach ($arrOpciMenu as $objOpcion) {
+    t('Procesando HTML de la opcion: '.$objOpcion->Nombre);
     $strHtmlMenu .= $objOpcion->HtmlMenuBootstrap();
 }
 $strHtmlMenu .= "</ul>\n";

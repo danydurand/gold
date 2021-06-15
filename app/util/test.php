@@ -2,10 +2,32 @@
 require_once('qcubed.inc.php');
 
 
-$strNumeGuia = '169841-1/002-002:200';
-echo "Entrando: ".$strNumeGuia."<br><br>";
-$strNumeGuia = transformar($strNumeGuia);
-echo "Transformada: ".$strNumeGuia;
+
+echo str_replace('.',',',211 * 0.45359237);
+
+
+//$objClauWher   = QQ::Clause();
+//$objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');
+//$objClauSele   = QQ::Select(QQN::NotaEntregaCkpt()->ContainerId);
+//$arrManiNaci   = NotaEntregaCkpt::QueryArray(
+//    QQ::AndCondition($objClauWher),
+//    QQ::Clause(
+//        $objClauSele,
+//        QQ::Distinct()
+//    ));
+//$arrIdxxMani   = [];
+//foreach ($arrManiNaci as $objManiNaci) {
+//    $arrIdxxMani[] = $objManiNaci->ContainerId;
+//}
+//echo 'IDs de los Manifiestos Nacionalizados: ';
+//print_r($arrIdxxMani);
+
+
+// Pruebas de interpretacion del scanneo de Stephy ATC
+//$strNumeGuia = '169841-1/002-002:200';
+//echo "Entrando: ".$strNumeGuia."<br><br>";
+//$strNumeGuia = transformar($strNumeGuia);
+//echo "Transformada: ".$strNumeGuia;
 
 
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas

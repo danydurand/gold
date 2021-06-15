@@ -27,6 +27,14 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
+		public function ultimoCheckpoint() {
+		    $objClauAdic   = QQ::Clause();
+		    $objClauAdic[] = QQ::OrderBy(QQN::NotaEntregaCkpt()->Id,false);
+		    $objClauAdic[] = QQ::LimitInfo(1);
+            $arrCkptMani   = $this->GetNotaEntregaCkptAsContainerArray($objClauAdic);
+            return count($arrCkptMani) > 0 ? $arrCkptMani[0] : null;
+        }
+
 		public function ContarActualizarRecibidas() {
             //-----------------------------------------------------------------------------------
             // Se identifican las piezas y se verifica cuantas han sido Recibidas en el Almacen

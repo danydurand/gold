@@ -21,7 +21,9 @@ require_once(__FORMBASE_CLASSES__ . '/SucursalesListFormBase.class.php');
  * @subpackage Drafts
  */
 class SucursalesListForm extends SucursalesListFormBase {
-	// Override Form Event Handlers as Needed
+    protected $btnVolvList;
+
+    // Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
 
@@ -92,10 +94,26 @@ class SucursalesListForm extends SucursalesListFormBase {
 
         $this->btnExpoExce_Create();
         $this->btnExpoExce->Visible = true;
+        $this->btnVolvList_Create();
 
     }
 
-	public function dtgSucursalesesRow_Click($strFormId, $strControlId, $strParameter) {
+    protected function btnVolvList_Create() {
+        $this->btnVolvList = new QButtonW($this);
+        $this->btnVolvList->Text = TextoIcono('mail-reply','Volver','F','lg'); //'<i class="fa fa-mail-reply fa-lg"></i> Volver';
+        //$this->btnVolvList->CssClass = 'btn btn-warning btn-sm';
+        $this->btnVolvList->HtmlEntities = false;
+        $this->btnVolvList->AddAction(new QClickEvent(), new QServerAction('btnVolvList_Click'));
+    }
+
+
+    protected function btnVolvList_Click() {
+        $objUltiAcce = PilaAcceso::Pop('D');
+        $strPagiReto = $objUltiAcce->__toString();
+        QApplication::Redirect(__SIST__.'/'.$strPagiReto);
+    }
+
+    public function dtgSucursalesesRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
         QApplication::Redirect("sucursales_edit.php/$intId");
 	}		

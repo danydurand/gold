@@ -121,7 +121,7 @@
                     // Aqui se identifican las Opciones del grupo del Usuario
                     //---------------------------------------------------------
                     $objClauPerm   = QQ::Clause();
-                    $objClauPerm[] = QQ::Equal(QQN::Permiso()->GrupoId,$objUsuario->CodiGrup);
+                    $objClauPerm[] = QQ::Equal(QQN::Permiso()->GrupoId,$objUsuario->GrupoId);
                     $arrOpciGrup   = Permiso::QueryArray(QQ::AndCondition($objClauPerm));
                     $arrGroupId = array();
                     foreach ($arrOpciGrup as $objOpciGrup) {

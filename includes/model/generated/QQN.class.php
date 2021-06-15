@@ -733,6 +733,12 @@
 			return new QQNodeNotaEntrega('nota_entrega', null, null);
 		}
 		/**
+		 * @return QQNodeNotaEntregaCkpt
+		 */
+		static public function NotaEntregaCkpt() {
+			return new QQNodeNotaEntregaCkpt('nota_entrega_ckpt', null, null);
+		}
+		/**
 		 * @return QQNodeNotificacion
 		 */
 		static public function Notificacion() {
@@ -947,6 +953,12 @@
 		 */
 		static public function Sistema() {
 			return new QQNodeSistema('sistema', null, null);
+		}
+		/**
+		 * @return QQNodeSocialAccounts
+		 */
+		static public function SocialAccounts() {
+			return new QQNodeSocialAccounts('social_accounts', null, null);
 		}
 		/**
 		 * @return QQNodeSodexoInput

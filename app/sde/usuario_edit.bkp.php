@@ -47,6 +47,23 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         // Call MetaControl's methods to create qcontrols based on Usuario's data fields
         $this->lblCodiUsua = $this->mctUsuario->lblCodiUsua_Create();
 
+        // Query para obtener los Grupos de Usuarios Activos.
+        $objClauGrup   = QQ::Clause();
+        //$objClauGrup[] = QQ::Equal(QQN::Grupo()->CodiStat,1);
+        $objClauGrup[] = QQ::Equal(QQN::NewGrupo()->Activo,1);
+        // Lista de Usuarios según el query anterior.
+        $this->lstCodiGrupObject = $this->mctUsuario->lstCodiGrupObject_Create(null,QQ::AndCondition($objClauGrup));
+        if ($this->mctUsuario->EditMode) {
+            if (!$this->mctUsuario->Usuario->CodiGrupObject->CodiStat) {
+                $this->lstCodiGrupObject->AddItem($this->mctUsuario->Usuario->CodiGrupObject->DescGrup,$this->mctUsuario->Usuario->CodiGrup,true);
+            } else {
+                $this->lstCodiGrupObject->SelectedValue = $this->mctUsuario->Usuario->CodiGrup;
+            }
+        }
+        $this->lstCodiGrupObject->Name = 'Grupo';
+        $this->lstCodiGrupObject->Required = true;
+        $this->lstCodiGrupObject->AddAction(new QChangeEvent(), new QAjaxAction('lstCodiGrupObject_Change'));
+
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::NewGrupo()->Activo,StatusType::ACTIVO);
         $objClauWher[] = QQ::Equal(QQN::NewGrupo()->SistemaId,$_SESSION['Sistema']);
@@ -397,6 +414,11 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $this->success('Clave Re-seteada! | El Usuario recibirá un correo con las nuevas credenciales');
     }
 
+    protected function lstCodiGrupObject_Change() {
+        if ($this->lstCodiGrupObject->SelectedValue) {
+            $this->lstGrupo->SelectedValue = $this->lstCodiGrupObject->SelectedValue;
+        }
+    }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         t('====================');
@@ -405,7 +427,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         // Se clona el objeto para verificar cambios
         //--------------------------------------------
         $objRegiViej = clone $this->mctUsuario->Usuario;
-        $this->lstCodiGrupObject->SelectedIndex = 1; //$this->lstGrupo->SelectedIndex;
+        $this->lstCodiGrupObject->SelectedIndex = $this->lstGrupo->SelectedIndex;
         try {
             $this->mctUsuario->SaveUsuario();
         } catch (Exception $e) {

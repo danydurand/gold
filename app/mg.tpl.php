@@ -25,7 +25,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 </div>
                 <p class="lead">
                     <!-- Usuario: <small style="font-size: .7em"><?= $strNombUsua ?></small><br>
-                    Grupo: <small style="font-size: .7em"><?= $objUsuaCone->CodiGrupObject->DescGrup ?></small><br> -->
+                    Grupo: <small style="font-size: .7em"><?= $objUsuaCone->Grupo->Nombre ?></small><br> -->
                     Ultimo Acceso: <small style="font-size: .7em"><?= $objUsuaCone->FechAcce->__toString("YYYY-MM-DD") ?></small><br>
                 </p>
             </div>

@@ -853,6 +853,13 @@
 		QApplicationBase::$ClassFile['notaentregametacontrol'] = __META_CONTROLS__ . '/NotaEntregaMetaControl.class.php';
 		QApplicationBase::$ClassFile['notaentregadatagrid'] = __META_CONTROLS__ . '/NotaEntregaDataGrid.class.php';
 
+	// ClassPaths for the NotaEntregaCkpt class
+		QApplicationBase::$ClassFile['notaentregackpt'] = __MODEL__ . '/NotaEntregaCkpt.class.php';
+		QApplicationBase::$ClassFile['qqnodenotaentregackpt'] = __MODEL__ . '/NotaEntregaCkpt.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodenotaentregackpt'] = __MODEL__ . '/NotaEntregaCkpt.class.php';
+		QApplicationBase::$ClassFile['notaentregackptmetacontrol'] = __META_CONTROLS__ . '/NotaEntregaCkptMetaControl.class.php';
+		QApplicationBase::$ClassFile['notaentregackptdatagrid'] = __META_CONTROLS__ . '/NotaEntregaCkptDataGrid.class.php';
+
 	// ClassPaths for the Notificacion class
 		QApplicationBase::$ClassFile['notificacion'] = __MODEL__ . '/Notificacion.class.php';
 		QApplicationBase::$ClassFile['qqnodenotificacion'] = __MODEL__ . '/Notificacion.class.php';
@@ -1104,6 +1111,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodesistema'] = __MODEL__ . '/Sistema.class.php';
 		QApplicationBase::$ClassFile['sistemametacontrol'] = __META_CONTROLS__ . '/SistemaMetaControl.class.php';
 		QApplicationBase::$ClassFile['sistemadatagrid'] = __META_CONTROLS__ . '/SistemaDataGrid.class.php';
+
+	// ClassPaths for the SocialAccounts class
+		QApplicationBase::$ClassFile['socialaccounts'] = __MODEL__ . '/SocialAccounts.class.php';
+		QApplicationBase::$ClassFile['qqnodesocialaccounts'] = __MODEL__ . '/SocialAccounts.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodesocialaccounts'] = __MODEL__ . '/SocialAccounts.class.php';
+		QApplicationBase::$ClassFile['socialaccountsmetacontrol'] = __META_CONTROLS__ . '/SocialAccountsMetaControl.class.php';
+		QApplicationBase::$ClassFile['socialaccountsdatagrid'] = __META_CONTROLS__ . '/SocialAccountsDataGrid.class.php';
 
 	// ClassPaths for the SodexoInput class
 		QApplicationBase::$ClassFile['sodexoinput'] = __MODEL__ . '/SodexoInput.class.php';

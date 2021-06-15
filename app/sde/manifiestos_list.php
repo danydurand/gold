@@ -24,7 +24,8 @@ class ManifiestosList extends NotaEntregaListFormBase {
     protected $btnCambFact;
     protected $colManiSele;
 
-	// Override Form Event Handlers as Needed
+
+    // Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
 
@@ -32,6 +33,7 @@ class ManifiestosList extends NotaEntregaListFormBase {
 		// To allow access REGARDLESS of ALLOW_REMOTE_ADMIN, simply remove the line below
 		QApplication::CheckRemoteAdmin();		    
 	}
+
 
 //		protected function Form_Load() {}
 
@@ -95,11 +97,13 @@ class ManifiestosList extends NotaEntregaListFormBase {
         $this->dtgNotaEntregas->AddColumn($colFechMani);
         $this->dtgNotaEntregas->MetaAddColumn('Estatus','FilterBoxSize=6');
         $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion', 'Name=S.Impor', 'FilterBoxSize=3');
-        $this->dtgNotaEntregas->MetaAddColumn('Facturable');
-        $this->dtgNotaEntregas->MetaAddColumn('Cargadas', 'FilterBoxSize=2');
-        $this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=xProc', 'FilterBoxSize=2');
-        $this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=xCorr', 'FilterBoxSize=2');
-        $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Proc', 'FilterBoxSize=2');
+        $this->dtgNotaEntregas->MetaAddColumn('Facturable','Name=Fctble');
+        $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_FORM->colUltiCkpt_Render($_ITEM) ?>');
+        $this->dtgNotaEntregas->AddColumn($colUltiCkpt);
+        $colUltiFech = new QDataGridColumn('U.Fech','<?= $_FORM->colUltiFech_Render($_ITEM) ?>');
+        $this->dtgNotaEntregas->AddColumn($colUltiFech);
+        $colResuPiez = new QDataGridColumn('C/xC/xP/P','<?= $_FORM->colResuPiez_Render($_ITEM) ?>');
+        $this->dtgNotaEntregas->AddColumn($colResuPiez);
         $this->dtgNotaEntregas->MetaAddColumn('Kilos', 'FilterBoxSize=2');
         $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=Pies3', 'FilterBoxSize=2');
         $this->dtgNotaEntregas->MetaAddColumn('Total', 'FilterBoxSize=1');
@@ -111,11 +115,29 @@ class ManifiestosList extends NotaEntregaListFormBase {
 
     }
 
+    public function colUltiCkpt_Render(NotaEntrega $objManiCarg) {
+	    $objUltiCkpt = $objManiCarg->ultimoCheckpoint();
+	    return $objUltiCkpt instanceof NotaEntregaCkpt ? $objUltiCkpt->Checkpoint->Codigo : null;
+    }
+
+    public function colUltiFech_Render(NotaEntrega $objManiCarg) {
+	    $objUltiCkpt = $objManiCarg->ultimoCheckpoint();
+	    return $objUltiCkpt instanceof NotaEntregaCkpt ? $objUltiCkpt->Fecha->__toString("DD/MM/YYYY") : null;
+    }
+
+    public function colResuPiez_Render(NotaEntrega $objManiCarg) {
+	    $strColuResu  = $objManiCarg->Cargadas.'/';
+	    $strColuResu .= $objManiCarg->PorCorregir.'/';
+	    $strColuResu .= $objManiCarg->PorProcesar.'/';
+	    $strColuResu .= $objManiCarg->Procesadas;
+	    return $strColuResu;
+    }
+
     protected function btnCambFact_Create() {
-        $this->btnCambFact = new QButtonP($this);
-        $this->btnCambFact->Text = '<i class="fa fa-exchange fa-lg"></i> Camb. Fact';
+        $this->btnCambFact = new QButtonOP($this);
+        $this->btnCambFact->Text = TextoIcono('exchange','Camb. Fact', 'F','lg');
         $this->btnCambFact->Visible = false;
-        $this->btnCambFact->CssClass = 'btn btn-outline-primary btn-sm';
+        $this->btnCambFact->ToolTip = 'Cambia el estatus del Manifiesto FACTURABLE/NOFACTURABLE';
         $this->btnCambFact->AddAction(new QClickEvent(), new QAjaxAction('btnCambFact_Click'));
     }
 
@@ -159,8 +181,7 @@ class ManifiestosList extends NotaEntregaListFormBase {
     }
 
 
-    public function btnNuevRegi_Click()
-    {
+    public function btnNuevRegi_Click() {
         QApplication::Redirect("carga_masiva_guias.php");
     }
 
