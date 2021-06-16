@@ -224,8 +224,12 @@ function ordenar_array() {
 function t($strTextTraz) {
     if (isset($_SESSION['User'])) {
         $objUsuario  = unserialize($_SESSION['User']);
+        $arrLogiTraz = ['ddurand'];
+        if (isset($_SESSION['LogiTraz'])) {
+            $arrLogiTraz = $_SESSION['LogiTraz'];
+        }
         $blnTodoOkey = false;
-        if ( ($objUsuario instanceof Usuario) && (in_array($objUsuario->LogiUsua,['ddurand','amartine','pmarcano','jmartine'])) ) {
+        if ( ($objUsuario instanceof Usuario) && (in_array($objUsuario->LogiUsua,$arrLogiTraz)) ) {
             $blnTodoOkey = true;
         } else {
             if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'scuevas') ) {

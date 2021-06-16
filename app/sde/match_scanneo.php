@@ -287,7 +287,8 @@ class MatchScanneo extends FormularioBaseKaizen {
         $arrNumePiez = array_map('transformar',$arrNumePiez);
 
         $this->txtNumePiez->Text = '';
-        $objCkptRece = Checkpoints::LoadByCodigo('RA');
+        $objCkptMani = Checkpoints::LoadByCodigo('RA');
+        //$objCkptAlma = Checkpoints::LoadByCodigo('IA');
         $intContCkpt = 0;
         $intCantSobr = 0;
         $arrRelaSobr = [];
@@ -316,14 +317,23 @@ class MatchScanneo extends FormularioBaseKaizen {
                 $arrDatoCkpt = array();
                 $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
                 $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
-                $arrDatoCkpt['CodiCkpt'] = $objCkptRece->Id;
-                $arrDatoCkpt['TextCkpt'] = $objCkptRece->Descripcion;
+                $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+                $arrDatoCkpt['TextCkpt'] = $objCkptMani->Descripcion;
                 $arrDatoCkpt['CodiRuta'] = '';
                 $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
 
                 if ($arrResuGrab['TodoOkey']) {
                     $intContCkpt++;
-                    //t("Ya grabe el checkpoint para la pieza. Van: " . $intContCkpt . " checkpoints grabados");
+                    //-------------------------------------------------------
+                    // Se registra tambien el Checkpoint IA para cada pieza
+                    //-------------------------------------------------------
+                    //$arrDatoCkpt = array();
+                    //$arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+                    //$arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+                    //$arrDatoCkpt['CodiCkpt'] = $objCkptAlma->Id;
+                    //$arrDatoCkpt['TextCkpt'] = $objCkptMani->Descripcion;
+                    //$arrDatoCkpt['CodiRuta'] = '';
+                    //$arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
                 } else {
                     $strMensUsua = "Error al registrar Checkpoint a la pieza: " . $objGuiaPiez->IdPieza;
                     $strMensUsua .= " - " . $arrResuGrab['MotiNook'];
@@ -343,7 +353,7 @@ class MatchScanneo extends FormularioBaseKaizen {
         //-------------------------------------------------------------------
         // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
         //-------------------------------------------------------------------
-        $objCkptMani = Checkpoints::LoadByCodigo('RA');
+        //$objCkptMani = Checkpoints::LoadByCodigo('RA');
         /* @var $objManiPend NotaEntrega */
         foreach ($this->arrManiPend as $objManiPend) {
             $objManiPend->ContarActualizarRecibidas();

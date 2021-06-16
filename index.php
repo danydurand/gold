@@ -242,6 +242,12 @@ class Index extends QForm {
         $objClieTari = MasterCliente::LoadByCodigoInterno('NAC01');
         $objTariPmnx = $objClieTari->Tarifa;
         $_SESSION['TariPmnx'] = serialize($objTariPmnx);
+        //--------------------------------
+        // Logines que deben dejar traza
+        //--------------------------------
+        $strLogiTraz = Parametros::BuscarParametro('LOGITRAZ','PARATRAZ','Txt1','ddurand');
+        $arrLogiTraz = explode(',',$strLogiTraz);
+        $_SESSION['LogiTraz'] = $arrLogiTraz;
 
     }
 }
