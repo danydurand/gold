@@ -187,7 +187,6 @@ class CheckpointsEditForm extends CheckpointsEditFormBase {
             //-----------------------
             // Campos de auditoria
             //-----------------------
-            //$this->mctCheckpoints->Checkpoints->UpdatedAt = date('YmdHis');
             $this->mctCheckpoints->Checkpoints->UpdatedBy = $this->objUsuario->CodiUsua;
             $this->mctCheckpoints->Checkpoints->Save();
 			//---------------------------------------------------------------------
@@ -207,13 +206,12 @@ class CheckpointsEditForm extends CheckpointsEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/checkpoints_edit.php/'.$this->mctCheckpoints->Checkpoints->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa');
 			}
 		} else {
             //-----------------------
             // Campos de auditoria
             //-----------------------
-            //$this->mctCheckpoints->Checkpoints->CreatedAt = date('YmdHis');
             $this->mctCheckpoints->Checkpoints->CreatedBy = $this->objUsuario->CodiUsua;
             $this->mctCheckpoints->Checkpoints->Save();
 			$arrLogxCamb['strNombTabl'] = 'Checkpoints';
@@ -222,7 +220,7 @@ class CheckpointsEditForm extends CheckpointsEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/checkpoints_edit.php/'.$this->mctCheckpoints->Checkpoints->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa !');
 		}
 	}
 
@@ -233,10 +231,11 @@ class CheckpointsEditForm extends CheckpointsEditFormBase {
         $blnTodoOkey = true;
         $arrTablRela = $this->mctCheckpoints->TablasRelacionadasCheckpoints();
         if (count($arrTablRela)) {
-            $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            //---------------------------------------------------------------
+            // Si el Checkpoint ha sido utilizado, se realiza un SoftDelete
+            //---------------------------------------------------------------
+            $this->mctCheckpoints->Checkpoints->DeletedBy = $this->objUsuario->CodiUsua;
+            $this->mctCheckpoints->Checkpoints->Save();
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
@@ -244,11 +243,11 @@ class CheckpointsEditForm extends CheckpointsEditFormBase {
             $this->mctCheckpoints->DeleteCheckpoints();
             $arrLogxCamb['strNombTabl'] = 'Checkpoints';
             $arrLogxCamb['intRefeRegi'] = $this->mctCheckpoints->Checkpoints->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctCheckpoints->Checkpoints->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->mctCheckpoints->Checkpoints->Descripcion;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
-            $this->RedirectToListPage();
         }
+        $this->RedirectToListPage();
     }
 }
 

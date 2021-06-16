@@ -19,17 +19,19 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
     protected $lstCkptMani;
     protected $txtComeCkpt;
     protected $dtgCkptMani;
+    protected $blnEditMode = true;
 
 
     protected function SetupValores() {
         $intIdxxMani = QApplication::PathInfo(0);
+        $strOpciAdic = QApplication::PathInfo(1);
         $this->objManiProc = NotaEntrega::Load($intIdxxMani);
         if (!$this->objManiProc) {
             $this->danger('No Existe el Manifiesto');
             $this->blnTodoOkey = false;
         }
         $_SESSION['ValiRepe'] = Parametros::BuscarParametro('VALIREPE','CKPTREPE','Val1',1);
-
+        $this->blnEditMode = (!is_null($strOpciAdic) && $strOpciAdic == 'sc') ? false : true;
     }
 
     protected function Form_Create() {
@@ -48,6 +50,12 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
         $this->btnErroProc_Create();
 
         $this->txtNumeCont = disableControl($this->txtNumeCont);
+        if (!$this->blnEditMode) {
+            $this->lblTituForm->Text = 'Consulta Estatus Manifiesto';
+            $this->lstCkptMani->Visible = false;
+            $this->txtComeCkpt->Visible = false;
+            $this->btnSave->Visible     = false;
+        }
     }
 
     //----------------------------
@@ -83,7 +91,7 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
         $arrProxVali = ['TI','TD'];
         if ($objUltiCkpt instanceof NotaEntregaCkpt) {
             $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
-            if ($strUltiCkpt == 'NR') {
+            if ($strUltiCkpt == 'MC') {
                 $arrProxVali = ['TI','TD'];
             }
             if ($strUltiCkpt == 'TI') {
@@ -94,6 +102,9 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
             }
             if ($strUltiCkpt == 'CR') {
                 $arrProxVali = [];
+            }
+            if ($strUltiCkpt == 'RA') {
+                $arrProxVali = ['OK'];
             }
         }
         $objClauWher   = QQ::Clause();
@@ -173,6 +184,16 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
         QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
     }
 
+    protected function btnCancel_Click() {
+        if ($_SESSION['PagiBack']) {
+            $strPagiReto = $_SESSION['PagiBack'];
+        } else {
+            $objUltiAcce = PilaAcceso::Pop('D');
+            $strPagiReto = $objUltiAcce->__toString();
+        }
+        QApplication::Redirect(__SIST__."/".$strPagiReto);
+    }
+
 
     protected function btnSave_Click() {
         $strNombProc = 'Cambiando estatus del Manifiesto: '.$this->objManiProc->Referencia;
@@ -238,35 +259,13 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
                 }
             }
         }
+        //---------------------------------------
+        // Se graba el checkpoint al Manifiesto
+        //---------------------------------------
         if ($intContCkpt > 0) {
-            try {
-                //-----------------------------------------------
-                // Se graba un checkpoint al Manifiesto
-                //-----------------------------------------------
-                if (strlen($strComeCkpt) > 0) {
-                    $strDescCkpt = $objCkptMani->Descripcion . " (" . $strComeCkpt . ")";
-                } else {
-                    $strDescCkpt = $objCkptMani->Descripcion;
-                }
-                $arrDatoCkpt = array();
-                $arrDatoCkpt['NumeCont'] = $this->objManiProc->Id;
-                $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
-                $arrDatoCkpt['TextObse'] = $strDescCkpt;
-                $arrResuGrab = GrabarCheckpointManifiesto($arrDatoCkpt);
-                if ($arrResuGrab['TodoOkey']) {
-                    $intContMani++;
-                    $this->RedactarEmailCkptMani($objCkptMani,$arrResuGrab['CkptMani']);
-                } else {
-                    throw new Exception($arrResuGrab['MotiNook']);
-                }
-            } catch (Exception $e) {
-                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-                $arrParaErro['NumeRefe'] = 'Referencia: '.$strRefeMani;
-                $arrParaErro['MensErro'] = $e->getMessage();
-                $arrParaErro['ComeErro'] = 'Grabando Ckpt al Manifiesto';
-                GrabarError($arrParaErro);
+            $arrResuGrab = $this->objManiProc->GrabarCheckpoint($objCkptMani, $this->objProcEjec, $strComeCkpt);
+            if (!$arrResuGrab['TodoOkey']) {
                 $intCantErro++;
-                $blnTodoOkey = false;
             }
         }
         //------------------------------------------------
@@ -294,37 +293,6 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
     }
 
 
-    protected function RedactarEmailCkptMani(Checkpoints $objCkptGrab, NotaEntregaCkpt $objCkptMani) {
-        $blnNotiCkpt = false;
-        $strDireMail = '';
-        if (in_array($objCkptGrab->Codigo,['TI','CR'])) {
-            $blnNotiCkpt = true;
-            $strDireMail = Parametros::BuscarParametro('ESTAMANI',$objCkptGrab->Codigo,'Txt1','soporte@lufemansoftwware.com');
-        }
-        if ($blnNotiCkpt) {
-            $strRefeMani = $this->objManiProc->Referencia;
-            $objMessage = new QEmailMessage();
-            $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
-            $objMessage->To = $strDireMail;
-            $objMessage->Bcc = 'danydurand@gmail.com';
-            $objMessage->Subject = 'Manif.: ' . $strRefeMani.' | Estatus: '.trim($objCkptGrab->Descripcion);
-
-            // Also setup HTML message (optional)
-            $strBody  = 'Estimado Usuario,<p><br>';
-            $strBody .= 'Se ha registrado un cambio en el Estatus del Manifiesto Ref.: '.$strRefeMani.'<br><br>';
-            $strBody .= 'Descripcion: <b>'.$objCkptMani->Observacion.'</b><br><br>';
-            $strBody .= 'Fecha: <b>'.$objCkptMani->Fecha->__toString("DD/MM/YYYY").'</b><br>';
-            $strBody .= 'Hora: <b>'.$objCkptMani->Hora.'</b><br>';
-            $strBody .= 'Usuario: <b>'.$objCkptMani->Usuario->LogiUsua.'</b><br>';
-            $objMessage->HtmlBody = $strBody;
-
-            // Add random/custom email headers
-            $objMessage->SetHeader('x-application', 'Sistema SisCO');
-
-            // Send the Message (Commented out for obvious reasons)
-            QEmailServer::Send($objMessage);
-        }
-    }
 
 }
 

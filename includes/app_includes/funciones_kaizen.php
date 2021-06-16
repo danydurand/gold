@@ -225,7 +225,7 @@ function t($strTextTraz) {
     if (isset($_SESSION['User'])) {
         $objUsuario  = unserialize($_SESSION['User']);
         $blnTodoOkey = false;
-        if ( ($objUsuario instanceof Usuario) && (in_array($objUsuario->LogiUsua,['ddurand','amartine'])) ) {
+        if ( ($objUsuario instanceof Usuario) && (in_array($objUsuario->LogiUsua,['ddurand','amartine','pmarcano','jmartine'])) ) {
             $blnTodoOkey = true;
         } else {
             if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'scuevas') ) {

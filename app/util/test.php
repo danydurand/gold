@@ -3,9 +3,6 @@ require_once('qcubed.inc.php');
 
 
 
-echo str_replace('.',',',211 * 0.45359237);
-
-
 //$objClauWher   = QQ::Clause();
 //$objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');
 //$objClauSele   = QQ::Select(QQN::NotaEntregaCkpt()->ContainerId);
@@ -31,14 +28,14 @@ echo str_replace('.',',',211 * 0.45359237);
 
 
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
-//$arrManiSist = NotaEntrega::LoadAll();
-//foreach ($arrManiSist as $objManiSist) {
-//    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
-//    $objManiSist->Save();
-//    $objManiSist->ContarActualizarRecibidas();
-//    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
-//    echo "<br>";
-//}
+$arrManiSist = NotaEntrega::LoadAll();
+foreach ($arrManiSist as $objManiSist) {
+    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
+    $objManiSist->Save();
+    $objManiSist->ContarActualizarRecibidas();
+    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
+    echo "<br>";
+}
 
 //-------------------
 // Buscar Parametro

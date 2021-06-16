@@ -27,7 +27,69 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
-		public function ultimoCheckpoint() {
+		public function GrabarCheckpoint(Checkpoints $objCkptMani, ProcesoError $objProcEjec, $strComeAdic=null) {
+		    $arrResuGrab['TodoOkey'] = true;
+		    $arrResuGrab['MotiNook'] = '';
+		    $arrResuGrab['CkptMani'] = null;
+            try {
+                $strComeAdic = strlen($strComeAdic) > 0 ? ' ('.$strComeAdic.')' : '';
+                $strDescCkpt = $objCkptMani->Descripcion.$strComeAdic;
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumeCont'] = $this->Id;
+                $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+                $arrDatoCkpt['TextObse'] = $strDescCkpt;
+                $arrResuGrab = GrabarCheckpointManifiesto($arrDatoCkpt);
+                if ($arrResuGrab['TodoOkey']) {
+                    $this->RedactarEmailCkptMani($objCkptMani,$arrResuGrab['CkptMani']);
+                } else {
+                    throw new Exception($arrResuGrab['MotiNook']);
+                }
+            } catch (Exception $e) {
+                $strComeErro = 'Grabando Ckpt '.$objCkptMani->Codigo.' al Manifiesto';
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = 'Referencia: '.$this->Referencia;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = $strComeErro;
+                GrabarError($arrParaErro);
+                $arrResuGrab['TodoOkey'] = false;
+                $arrResuGrab['MotiNook'] = $strComeErro;
+            }
+		    return $arrResuGrab;
+        }
+
+        protected function RedactarEmailCkptMani(Checkpoints $objCkptGrab, NotaEntregaCkpt $objCkptMani) {
+            $blnNotiCkpt = false;
+            $strDireMail = '';
+            if (in_array($objCkptGrab->Codigo,['TI','CR'])) {
+                $blnNotiCkpt = true;
+                $strDireMail = Parametros::BuscarParametro('ESTAMANI',$objCkptGrab->Codigo,'Txt1','soporte@lufemansoftwware.com');
+            }
+            if ($blnNotiCkpt) {
+                $strRefeMani = $objCkptMani->Container->Referencia;
+                $objMessage = new QEmailMessage();
+                $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
+                $objMessage->To = $strDireMail;
+                $objMessage->Bcc = 'danydurand@gmail.com';
+                $objMessage->Subject = 'Manif.: ' . $strRefeMani.' | Estatus: '.trim($objCkptGrab->Descripcion);
+
+                // Also setup HTML message (optional)
+                $strBody  = 'Estimado Usuario,<p><br>';
+                $strBody .= 'Se ha registrado un cambio en el Estatus del Manifiesto Ref.: '.$strRefeMani.'<br><br>';
+                $strBody .= 'Descripcion: <b>'.$objCkptMani->Observacion.'</b><br><br>';
+                $strBody .= 'Fecha: <b>'.$objCkptMani->Fecha->__toString("DD/MM/YYYY").'</b><br>';
+                $strBody .= 'Hora: <b>'.$objCkptMani->Hora.'</b><br>';
+                $strBody .= 'Usuario: <b>'.$objCkptMani->Usuario->LogiUsua.'</b><br>';
+                $objMessage->HtmlBody = $strBody;
+
+                // Add random/custom email headers
+                $objMessage->SetHeader('x-application', 'Sistema SisCO');
+
+                // Send the Message (Commented out for obvious reasons)
+                QEmailServer::Send($objMessage);
+            }
+        }
+
+        public function ultimoCheckpoint() {
 		    $objClauAdic   = QQ::Clause();
 		    $objClauAdic[] = QQ::OrderBy(QQN::NotaEntregaCkpt()->Id,false);
 		    $objClauAdic[] = QQ::LimitInfo(1);

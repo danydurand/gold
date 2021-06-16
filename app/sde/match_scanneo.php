@@ -343,9 +343,39 @@ class MatchScanneo extends FormularioBaseKaizen {
         //-------------------------------------------------------------------
         // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
         //-------------------------------------------------------------------
+        $objCkptMani = Checkpoints::LoadByCodigo('RA');
         /* @var $objManiPend NotaEntrega */
         foreach ($this->arrManiPend as $objManiPend) {
             $objManiPend->ContarActualizarRecibidas();
+            //---------------------------------------
+            // Se graba el checkpoint al Manifiesto
+            //---------------------------------------
+            if ($objManiPend->Recibidas > 0) {
+                $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+                if (!$arrResuGrab['TodoOkey']) {
+                    $blnHayxErro = true;
+                }
+            }
+            //if ($objManiPend->Recibidas > 0) {
+            //    try {
+            //        $strDescCkpt = $objCkptMani->Descripcion;
+            //        $arrDatoCkpt = array();
+            //        $arrDatoCkpt['NumeCont'] = $objManiPend->Id;
+            //        $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+            //        $arrDatoCkpt['TextObse'] = $strDescCkpt;
+            //        $arrResuGrab = GrabarCheckpointManifiesto($arrDatoCkpt);
+            //        if (!$arrResuGrab['TodoOkey']) {
+            //            throw new Exception($arrResuGrab['MotiNook']);
+            //        }
+            //    } catch (Exception $e) {
+            //        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            //        $arrParaErro['NumeRefe'] = 'Referencia: '.$objManiPend->Referencia;
+            //        $arrParaErro['MensErro'] = $e->getMessage();
+            //        $arrParaErro['ComeErro'] = 'Grabando Ckpt al Manifiesto';
+            //        GrabarError($arrParaErro);
+            //        $blnHayxErro = true;
+            //    }
+            //}
         }
         //--------------------------------------
         // Se almacena el resultado del proceso

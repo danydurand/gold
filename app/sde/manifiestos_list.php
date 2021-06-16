@@ -102,7 +102,9 @@ class ManifiestosList extends NotaEntregaListFormBase {
         $this->dtgNotaEntregas->AddColumn($colUltiCkpt);
         $colUltiFech = new QDataGridColumn('U.Fech','<?= $_FORM->colUltiFech_Render($_ITEM) ?>');
         $this->dtgNotaEntregas->AddColumn($colUltiFech);
-        $colResuPiez = new QDataGridColumn('C/xC/xP/P','<?= $_FORM->colResuPiez_Render($_ITEM) ?>');
+        $colUltiSucu = new QDataGridColumn('U.Sucu','<?= $_FORM->colUltiSucu_Render($_ITEM) ?>');
+        $this->dtgNotaEntregas->AddColumn($colUltiSucu);
+        $colResuPiez = new QDataGridColumn('C | xC | xP | P','<?= $_FORM->colResuPiez_Render($_ITEM) ?>');
         $this->dtgNotaEntregas->AddColumn($colResuPiez);
         $this->dtgNotaEntregas->MetaAddColumn('Kilos', 'FilterBoxSize=2');
         $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=Pies3', 'FilterBoxSize=2');
@@ -125,10 +127,15 @@ class ManifiestosList extends NotaEntregaListFormBase {
 	    return $objUltiCkpt instanceof NotaEntregaCkpt ? $objUltiCkpt->Fecha->__toString("DD/MM/YYYY") : null;
     }
 
+    public function colUltiSucu_Render(NotaEntrega $objManiCarg) {
+	    $objUltiCkpt = $objManiCarg->ultimoCheckpoint();
+	    return $objUltiCkpt instanceof NotaEntregaCkpt ? $objUltiCkpt->Sucursal->Iata : null;
+    }
+
     public function colResuPiez_Render(NotaEntrega $objManiCarg) {
-	    $strColuResu  = $objManiCarg->Cargadas.'/';
-	    $strColuResu .= $objManiCarg->PorCorregir.'/';
-	    $strColuResu .= $objManiCarg->PorProcesar.'/';
+	    $strColuResu  = $objManiCarg->Cargadas.' | ';
+	    $strColuResu .= $objManiCarg->PorCorregir.' | ';
+	    $strColuResu .= $objManiCarg->PorProcesar.' | ';
 	    $strColuResu .= $objManiCarg->Procesadas;
 	    return $strColuResu;
     }

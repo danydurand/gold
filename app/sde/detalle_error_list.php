@@ -143,7 +143,7 @@ class DetalleErrorListForm extends DetalleErrorListFormBase {
 	protected function btnCancel_Click() {
         if (isset($_SESSION['PagiBack'])) {
 			$strPagiReto = $_SESSION['PagiBack'];
-            QApplication::Redirect($strPagiReto);
+            QApplication::Redirect(__SIST__.'/'.$strPagiReto);
         } else {
             $objUltiAcce = PilaAcceso::Pop('D');
             $strPagiReto = $objUltiAcce->__toString();

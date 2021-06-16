@@ -199,13 +199,35 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             TextoIcono(__iOJOS__,'Sucursales')
         );
         if ($this->blnEditMode) {
-            if ($this->objNotaEntr->Recibidas > 0) {
-                if ($this->objNotaEntr->Piezas == $this->objNotaEntr->Recibidas) {
-                    $arrOpciDrop[] = OpcionDropDown(
-                        __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objNotaEntr->Id,
-                        TextoIcono(__iEDIT__,'Camb. Estatus')
-                    );
+            $_SESSION['PagiBack'] = 'carga_masiva_guias.php/'.$this->objNotaEntr->Id;
+            $blnCambStat = false;
+            if ($this->objUsuario->Sucursal->Iata == 'MIA') {
+                if ( ($this->objNotaEntr->Procesadas > 0) && ($this->objNotaEntr->Recibidas == 0) ) {
+                    $blnCambStat = true;
                 }
+            } else {
+                $strUltiCkpt = '';
+                $objUltiCkpt = $this->objNotaEntr->ultimoCheckpoint();
+                if ($objUltiCkpt instanceof NotaEntregaCkpt) {
+                    $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
+                }
+                if ( ($this->objNotaEntr->Recibidas == 0) && (in_array($strUltiCkpt,['TI','IC']) ) ) {
+                    $blnCambStat = true;
+                }
+                if ( ($this->objNotaEntr->Recibidas > 0) && (in_array($strUltiCkpt,['RA']) ) ) {
+                    $blnCambStat = true;
+                }
+            }
+            if ($blnCambStat) {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objNotaEntr->Id,
+                    TextoIcono(__iEDIT__,'Camb. Estatus')
+                );
+            } else {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objNotaEntr->Id.'/sc',
+                    TextoIcono('list','Hist. Estatus')
+                );
             }
         }
 
@@ -733,10 +755,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         if ($this->objNotaEntr->CargaRecibida) {
             $strCodiCkpt = 'RA';
         } else {
-            $strCodiCkpt = 'NR';
+            $strCodiCkpt = 'MC';
         }
-        $objCkptMasi = Checkpoints::LoadByCodigo($strCodiCkpt);
-        if (!$objCkptMasi) {
+        $objCkptMani = Checkpoints::LoadByCodigo($strCodiCkpt);
+        if (!$objCkptMani) {
             $this->danger("No existe el Checkpoint $strCodiCkpt");
             return;
         }
@@ -757,7 +779,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 //------------------------------------------------------------
                 // Se crea una Guia Interna correspondiente a la Guia Masiva
                 //------------------------------------------------------------
-                $blnTodoOkey = $this->crearGuiaMasiva($objGuiaMasi, $objCkptMasi);
+                $blnTodoOkey = $this->crearGuiaMasiva($objGuiaMasi, $objCkptMani);
                 if ($blnTodoOkey) {
                     // Se incrementa el contador de guías procesadas.
                     $intCantGuia++;
@@ -783,6 +805,37 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
         $this->objNotaEntr->Save();
         t('Manifiesto actualizado...');
+
+        //-----------------------------------------------
+        // Se graba el checkpoint al Manifiesto
+        //-----------------------------------------------
+        if ($intCantGuia > 0) {
+            $arrResuGrab = $this->objNotaEntr->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+            if (!$arrResuGrab['TodoOkey']) {
+                $intCantErro++;
+            }
+        }
+        //if ($intCantGuia > 0) {
+            //try {
+            //    $strDescCkpt = $objCkptMani->Descripcion;
+            //    $arrDatoCkpt = array();
+            //    $arrDatoCkpt['NumeCont'] = $this->objNotaEntr->Id;
+            //    $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+            //    $arrDatoCkpt['TextObse'] = $strDescCkpt;
+            //    $arrResuGrab = GrabarCheckpointManifiesto($arrDatoCkpt);
+            //    if (!$arrResuGrab['TodoOkey']) {
+            //        throw new Exception($arrResuGrab['MotiNook']);
+            //    }
+            //} catch (Exception $e) {
+            //    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            //    $arrParaErro['NumeRefe'] = 'Referencia: '.$this->objNotaEntr->Referencia;
+            //    $arrParaErro['MensErro'] = $e->getMessage();
+            //    $arrParaErro['ComeErro'] = 'Grabando Ckpt al Manifiesto';
+            //    GrabarError($arrParaErro);
+            //    $intCantErro++;
+            //    $blnTodoOkey = false;
+            //}
+        //}
         //--------------------------------------
         // Se almacena el resultado del proceso
         //--------------------------------------

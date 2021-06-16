@@ -403,6 +403,16 @@ class RecepcionNde extends FormularioBaseKaizen {
             $arrParaErro['ComeErro'] = 'Actualizando estatus y contadores del Manifiesto';
             GrabarError($arrParaErro);
         }
+        //---------------------------------------
+        // Se graba el checkpoint al Manifiesto
+        //---------------------------------------
+        if ($objNotaEntr->Recibidas > 0) {
+            $objCkptMani = Checkpoints::LoadByCodigo('RA');
+            $arrResuGrab = $objNotaEntr->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+            if (!$arrResuGrab['TodoOkey']) {
+                $blnHayxErro = true;
+            }
+        }
         //-----------------
         // Log de cambios
         //-----------------

@@ -116,7 +116,7 @@
                 $objClauWher[] = QQ::Equal(QQN::NewOpcion()->SistemaId,$_SESSION['Sistema']);
                 $objClauWher[] = QQ::Equal(QQN::NewOpcion()->Dependencia,$this->intId);
                 $objClauWher[] = QQ::Equal(QQN::NewOpcion()->Activo,true);
-                if ( ($objUsuario->CodiGrup != 1) && (in_array($_SESSION['Sistema'], ['sde','ret'])) ) {
+                if ( ($objUsuario->GrupoId != 1) && (in_array($_SESSION['Sistema'], ['sde','ret'])) ) {
                     //---------------------------------------------------------
                     // Aqui se identifican las Opciones del grupo del Usuario
                     //---------------------------------------------------------
