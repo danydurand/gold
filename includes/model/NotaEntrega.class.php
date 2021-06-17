@@ -27,7 +27,72 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
-		public function GrabarCheckpoint(Checkpoints $objCkptMani, ProcesoError $objProcEjec, $strComeAdic=null) {
+        public function TransferirHistorico(ProcesoError $objProcEjec) {
+		    //t('Transfiriendo Manif Referencia: '.$this->Referencia);
+		    $strTextMens = '';
+		    $strTranInte = '';
+            $intCantGuia = 0;
+            //------------------------------
+            // Se transfiere el Manifiesto
+            //------------------------------
+            try {
+                $objManiHist = new NotaEntregaH();
+                $objManiHist->ClienteCorpId       = $this->ClienteCorpId;
+                $objManiHist->Referencia          = $this->Referencia;
+                $objManiHist->NombreArchivo       = $this->NombreArchivo;
+                $objManiHist->Estatus             = $this->Estatus;
+                $objManiHist->ServicioImportacion = $this->ServicioImportacion;
+                $objManiHist->Facturable          = $this->Facturable;
+                $objManiHist->EnKilos             = $this->EnKilos;
+                $objManiHist->CargaRecibida       = $this->CargaRecibida;
+                $objManiHist->Cargadas            = $this->Cargadas;
+                $objManiHist->PorProcesar         = $this->PorProcesar;
+                $objManiHist->PorCorregir         = $this->PorCorregir;
+                $objManiHist->Procesadas          = $this->Procesadas;
+                $objManiHist->Recibidas           = $this->Recibidas;
+                $objManiHist->Sobrantes           = $this->Sobrantes;
+                $objManiHist->Libras              = $this->Libras;
+                $objManiHist->Kilos               = $this->Kilos;
+                $objManiHist->PiesCub             = $this->PiesCub;
+                $objManiHist->Volumen             = $this->Volumen;
+                $objManiHist->Piezas              = $this->Piezas;
+                $objManiHist->Fecha               = $this->Fecha;
+                $objManiHist->Hora                = $this->Hora;
+                $objManiHist->UsuarioId           = $this->UsuarioId;
+                $objManiHist->TarifaId            = $this->TarifaId;
+                $objManiHist->FacturaId           = $this->FacturaId;
+                $objManiHist->Total               = $this->Total;
+                $objManiHist->ValorDeclarado      = $this->ValorDeclarado;
+                $objManiHist->Observacion         = $this->Observacion;
+                $objManiHist->RelacionSobrantes   = $this->RelacionSobrantes;
+                $objManiHist->CreatedBy           = $this->CreatedBy;
+                $objManiHist->UpdatedBy           = $this->UpdatedBy;
+                $objManiHist->DeletedBy           = $this->DeletedBy;
+                $objManiHist->Save();
+                //t('Manifiesto Transferido');
+                //------------------------------------------
+                // Se transfieren las guias del Manifiesto
+                //------------------------------------------
+                $arrGuiaMani = $this->GetGuiasArray();
+                //t('Voy a transferir las guias');
+                foreach ($arrGuiaMani as $objGuiaMani) {
+                    $strTranInte = $objGuiaMani->TransferirHistorico($objManiHist->Id, $objProcEjec);
+                    $intCantGuia++;
+                }
+                $strTextMens  = 'Manifiesto Transferido | Guias transferidas: '.$intCantGuia;
+                //$strTextMens .= $strTranInte;
+            } catch (Exception $e) {
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = 'Referencia: '.$this->Referencia;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'Transfiriendo Manifiesto al Historico';
+                GrabarError($arrParaErro);
+            }
+            return $strTextMens;
+        }
+
+
+        public function GrabarCheckpoint(Checkpoints $objCkptMani, ProcesoError $objProcEjec, $strComeAdic=null) {
 		    $arrResuGrab['TodoOkey'] = true;
 		    $arrResuGrab['MotiNook'] = '';
 		    $arrResuGrab['CkptMani'] = null;

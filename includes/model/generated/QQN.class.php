@@ -565,6 +565,12 @@
 			return new QQNodeGuiaPiezas('guia_piezas', null, null);
 		}
 		/**
+		 * @return QQNodeGuiaPiezasH
+		 */
+		static public function GuiaPiezasH() {
+			return new QQNodeGuiaPiezasH('guia_piezas_h', null, null);
+		}
+		/**
 		 * @return QQNodeGuiaPod
 		 */
 		static public function GuiaPod() {
@@ -581,6 +587,12 @@
 		 */
 		static public function Guias() {
 			return new QQNodeGuias('guias', null, null);
+		}
+		/**
+		 * @return QQNodeGuiasH
+		 */
+		static public function GuiasH() {
+			return new QQNodeGuiasH('guias_h', null, null);
 		}
 		/**
 		 * @return QQNodeHistoriaCliente
@@ -739,6 +751,18 @@
 			return new QQNodeNotaEntregaCkpt('nota_entrega_ckpt', null, null);
 		}
 		/**
+		 * @return QQNodeNotaEntregaCkptH
+		 */
+		static public function NotaEntregaCkptH() {
+			return new QQNodeNotaEntregaCkptH('nota_entrega_ckpt_h', null, null);
+		}
+		/**
+		 * @return QQNodeNotaEntregaH
+		 */
+		static public function NotaEntregaH() {
+			return new QQNodeNotaEntregaH('nota_entrega_h', null, null);
+		}
+		/**
 		 * @return QQNodeNotificacion
 		 */
 		static public function Notificacion() {
@@ -815,6 +839,12 @@
 		 */
 		static public function PiezaCheckpoints() {
 			return new QQNodePiezaCheckpoints('pieza_checkpoints', null, null);
+		}
+		/**
+		 * @return QQNodePiezaCheckpointsH
+		 */
+		static public function PiezaCheckpointsH() {
+			return new QQNodePiezaCheckpointsH('pieza_checkpoints_h', null, null);
 		}
 		/**
 		 * @return QQNodePiezasTemp

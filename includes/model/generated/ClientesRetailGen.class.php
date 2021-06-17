@@ -41,6 +41,8 @@
 	 * @property-read Facturas[] $_FacturasAsClienteRetailArray the value for the private _objFacturasAsClienteRetailArray (Read-Only) if set due to an ExpandAsArray on the facturas.cliente_retail_id reverse relationship
 	 * @property-read Guias $_GuiasAsClienteRetail the value for the private _objGuiasAsClienteRetail (Read-Only) if set due to an expansion on the guias.cliente_retail_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsClienteRetailArray the value for the private _objGuiasAsClienteRetailArray (Read-Only) if set due to an ExpandAsArray on the guias.cliente_retail_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsClienteRetail the value for the private _objGuiasHAsClienteRetail (Read-Only) if set due to an expansion on the guias_h.cliente_retail_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsClienteRetailArray the value for the private _objGuiasHAsClienteRetailArray (Read-Only) if set due to an ExpandAsArray on the guias_h.cliente_retail_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ClientesRetailGen extends QBaseClass implements IteratorAggregate {
@@ -249,6 +251,22 @@
 		 * @var Guias[] _objGuiasAsClienteRetailArray;
 		 */
 		private $_objGuiasAsClienteRetailArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasHAsClienteRetail object
+		 * (of type GuiasH), if this ClientesRetail object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsClienteRetail;
+		 */
+		private $_objGuiasHAsClienteRetail;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsClienteRetail objects
+		 * (of type GuiasH[]), if this ClientesRetail object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsClienteRetailArray;
+		 */
+		private $_objGuiasHAsClienteRetailArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -939,6 +957,21 @@
 					$objToReturn->_objGuiasAsClienteRetailArray[] = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasasclienteretail__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiasAsClienteRetail)) {
 					$objToReturn->_objGuiasAsClienteRetail = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasasclienteretail__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiasHAsClienteRetail Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasclienteretail__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasclienteretail']) ? null : $objExpansionAliasArray['guiashasclienteretail']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsClienteRetailArray)
+				$objToReturn->_objGuiasHAsClienteRetailArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsClienteRetailArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasclienteretail__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsClienteRetail)) {
+					$objToReturn->_objGuiasHAsClienteRetail = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasclienteretail__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -1644,6 +1677,22 @@
 					 */
 					return $this->_objGuiasAsClienteRetailArray;
 
+				case '_GuiasHAsClienteRetail':
+					/**
+					 * Gets the value for the private _objGuiasHAsClienteRetail (Read-Only)
+					 * if set due to an expansion on the guias_h.cliente_retail_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsClienteRetail;
+
+				case '_GuiasHAsClienteRetailArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsClienteRetailArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.cliente_retail_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsClienteRetailArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1985,6 +2034,9 @@
 			if ($this->CountGuiasesAsClienteRetail()) {
 				$arrTablRela[] = 'guias';
 			}
+			if ($this->CountGuiasHsAsClienteRetail()) {
+				$arrTablRela[] = 'guias_h';
+			}
 			
 			return $arrTablRela;
 		}
@@ -2293,6 +2345,155 @@
 		}
 
 
+		// Related Objects' Methods for GuiasHAsClienteRetail
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsClienteRetail as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsClienteRetailArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByClienteRetailId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsClienteRetail
+		 * @return int
+		*/
+		public function CountGuiasHsAsClienteRetail() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByClienteRetailId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsClienteRetail
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsClienteRetail(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsClienteRetail on this unsaved ClientesRetail.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsClienteRetail on this ClientesRetail with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ClientesRetail::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`cliente_retail_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsClienteRetail
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsClienteRetail(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteRetail on this unsaved ClientesRetail.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteRetail on this ClientesRetail with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ClientesRetail::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`cliente_retail_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`cliente_retail_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsClienteRetail
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsClienteRetail() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteRetail on this unsaved ClientesRetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ClientesRetail::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`cliente_retail_id` = null
+				WHERE
+					`cliente_retail_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsClienteRetail
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsClienteRetail(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteRetail on this unsaved ClientesRetail.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteRetail on this ClientesRetail with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ClientesRetail::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`cliente_retail_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsClienteRetail
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsClienteRetail() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteRetail on this unsaved ClientesRetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ClientesRetail::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`cliente_retail_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -2542,6 +2743,7 @@
      *
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsClienteRetail
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteRetail
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsClienteRetail
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2599,6 +2801,8 @@
 					return new QQReverseReferenceNodeFacturas($this, 'facturasasclienteretail', 'reverse_reference', 'cliente_retail_id', 'FacturasAsClienteRetail');
 				case 'GuiasAsClienteRetail':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasclienteretail', 'reverse_reference', 'cliente_retail_id', 'GuiasAsClienteRetail');
+				case 'GuiasHAsClienteRetail':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasclienteretail', 'reverse_reference', 'cliente_retail_id', 'GuiasHAsClienteRetail');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2640,6 +2844,7 @@
      *
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsClienteRetail
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteRetail
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsClienteRetail
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2697,6 +2902,8 @@
 					return new QQReverseReferenceNodeFacturas($this, 'facturasasclienteretail', 'reverse_reference', 'cliente_retail_id', 'FacturasAsClienteRetail');
 				case 'GuiasAsClienteRetail':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasclienteretail', 'reverse_reference', 'cliente_retail_id', 'GuiasAsClienteRetail');
+				case 'GuiasHAsClienteRetail':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasclienteretail', 'reverse_reference', 'cliente_retail_id', 'GuiasHAsClienteRetail');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

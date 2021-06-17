@@ -28,6 +28,8 @@
 	 * @property-read Empresa[] $_EmpresaAsVendedorArray the value for the private _objEmpresaAsVendedorArray (Read-Only) if set due to an ExpandAsArray on the empresa.vendedor_id reverse relationship
 	 * @property-read Guias $_GuiasAsVendedor the value for the private _objGuiasAsVendedor (Read-Only) if set due to an expansion on the guias.vendedor_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsVendedorArray the value for the private _objGuiasAsVendedorArray (Read-Only) if set due to an ExpandAsArray on the guias.vendedor_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsVendedor the value for the private _objGuiasHAsVendedor (Read-Only) if set due to an expansion on the guias_h.vendedor_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsVendedorArray the value for the private _objGuiasHAsVendedorArray (Read-Only) if set due to an ExpandAsArray on the guias_h.vendedor_id reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsVendedor the value for the private _objMasterClienteAsVendedor (Read-Only) if set due to an expansion on the master_cliente.vendedor_id reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsVendedorArray the value for the private _objMasterClienteAsVendedorArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.vendedor_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -143,6 +145,22 @@
 		 * @var Guias[] _objGuiasAsVendedorArray;
 		 */
 		private $_objGuiasAsVendedorArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasHAsVendedor object
+		 * (of type GuiasH), if this FacVendedor object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsVendedor;
+		 */
+		private $_objGuiasHAsVendedor;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsVendedor objects
+		 * (of type GuiasH[]), if this FacVendedor object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsVendedorArray;
+		 */
+		private $_objGuiasHAsVendedorArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MasterClienteAsVendedor object
@@ -776,6 +794,21 @@
 				}
 			}
 
+			// Check for GuiasHAsVendedor Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasvendedor__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasvendedor']) ? null : $objExpansionAliasArray['guiashasvendedor']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsVendedorArray)
+				$objToReturn->_objGuiasHAsVendedorArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsVendedorArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasvendedor__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsVendedor)) {
+					$objToReturn->_objGuiasHAsVendedor = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasvendedor__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for MasterClienteAsVendedor Virtual Binding
 			$strAlias = $strAliasPrefix . 'masterclienteasvendedor__codi_clie';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1264,6 +1297,22 @@
 					 */
 					return $this->_objGuiasAsVendedorArray;
 
+				case '_GuiasHAsVendedor':
+					/**
+					 * Gets the value for the private _objGuiasHAsVendedor (Read-Only)
+					 * if set due to an expansion on the guias_h.vendedor_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsVendedor;
+
+				case '_GuiasHAsVendedorArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsVendedorArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.vendedor_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsVendedorArray;
+
 				case '_MasterClienteAsVendedor':
 					/**
 					 * Gets the value for the private _objMasterClienteAsVendedor (Read-Only)
@@ -1483,6 +1532,9 @@
 			}
 			if ($this->CountGuiasesAsVendedor()) {
 				$arrTablRela[] = 'guias';
+			}
+			if ($this->CountGuiasHsAsVendedor()) {
+				$arrTablRela[] = 'guias_h';
 			}
 			if ($this->CountMasterClientesAsVendedor()) {
 				$arrTablRela[] = 'master_cliente';
@@ -1789,6 +1841,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guias`
+				WHERE
+					`vendedor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasHAsVendedor
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsVendedor as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsVendedorArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByVendedorId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsVendedor
+		 * @return int
+		*/
+		public function CountGuiasHsAsVendedor() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByVendedorId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsVendedor
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsVendedor(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsVendedor on this unsaved FacVendedor.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsVendedor on this FacVendedor with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacVendedor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`vendedor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsVendedor
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsVendedor(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsVendedor on this unsaved FacVendedor.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsVendedor on this FacVendedor with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacVendedor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`vendedor_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`vendedor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsVendedor
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsVendedor() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsVendedor on this unsaved FacVendedor.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacVendedor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`vendedor_id` = null
+				WHERE
+					`vendedor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsVendedor
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsVendedor(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsVendedor on this unsaved FacVendedor.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsVendedor on this FacVendedor with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacVendedor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`vendedor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsVendedor
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsVendedor() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsVendedor on this unsaved FacVendedor.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacVendedor::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
 				WHERE
 					`vendedor_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2126,6 +2327,7 @@
      *
      * @property-read QQReverseReferenceNodeEmpresa $EmpresaAsVendedor
      * @property-read QQReverseReferenceNodeGuias $GuiasAsVendedor
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsVendedor
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsVendedor
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2158,6 +2360,8 @@
 					return new QQReverseReferenceNodeEmpresa($this, 'empresaasvendedor', 'reverse_reference', 'vendedor_id', 'EmpresaAsVendedor');
 				case 'GuiasAsVendedor':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasvendedor', 'reverse_reference', 'vendedor_id', 'GuiasAsVendedor');
+				case 'GuiasHAsVendedor':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasvendedor', 'reverse_reference', 'vendedor_id', 'GuiasHAsVendedor');
 				case 'MasterClienteAsVendedor':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteasvendedor', 'reverse_reference', 'vendedor_id', 'MasterClienteAsVendedor');
 
@@ -2188,6 +2392,7 @@
      *
      * @property-read QQReverseReferenceNodeEmpresa $EmpresaAsVendedor
      * @property-read QQReverseReferenceNodeGuias $GuiasAsVendedor
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsVendedor
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsVendedor
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2220,6 +2425,8 @@
 					return new QQReverseReferenceNodeEmpresa($this, 'empresaasvendedor', 'reverse_reference', 'vendedor_id', 'EmpresaAsVendedor');
 				case 'GuiasAsVendedor':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasvendedor', 'reverse_reference', 'vendedor_id', 'GuiasAsVendedor');
+				case 'GuiasHAsVendedor':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasvendedor', 'reverse_reference', 'vendedor_id', 'GuiasHAsVendedor');
 				case 'MasterClienteAsVendedor':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteasvendedor', 'reverse_reference', 'vendedor_id', 'MasterClienteAsVendedor');
 

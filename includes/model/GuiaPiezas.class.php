@@ -27,6 +27,54 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+        public function TransferirHistorico($intGuiaIdxx, ProcesoError $objProcEjec) {
+		    //t('Transfiriendo pieza: '.$this->IdPieza);
+		    $strTranInte = '';
+		    $strTextMens = '';
+            $intCantCkpt = 0;
+            //-------------------------
+            // Se transfiere la pieza
+            //-------------------------
+            try {
+                $objPiezHist = new GuiaPiezasH();
+                $objPiezHist->GuiaId      = $intGuiaIdxx; //$this->GuiaId;
+                $objPiezHist->IdPieza     = $this->IdPieza;
+                $objPiezHist->Kilos       = $this->Kilos;
+                $objPiezHist->Libras      = $this->Libras;
+                $objPiezHist->Largo       = $this->Largo;
+                $objPiezHist->Alto        = $this->Alto;
+                $objPiezHist->Ancho       = $this->Ancho;
+                $objPiezHist->Volumen     = $this->Volumen;
+                $objPiezHist->Descripcion = $this->Descripcion;
+                $objPiezHist->PiesCub     = $this->PiesCub;
+                $objPiezHist->MetrosCub   = $this->MetrosCub;
+                $objPiezHist->HojaEntrega = $this->HojaEntrega;
+                $objPiezHist->Ubicacion   = $this->Ubicacion;
+                $objPiezHist->Save();
+                //t('Pieza transferida');
+                //---------------------------------------------
+                // Se transfieren los checkpoints de la pieza
+                //---------------------------------------------
+                $arrCkptPiez = $this->GetPiezaCheckpointsAsPiezaArray();
+                //t('Voy a transferir los checkpoints');
+                foreach ($arrCkptPiez as $objCkptPiez) {
+                    $strTranInte = $objCkptPiez->TransferirHistorico($objPiezHist->Id, $objProcEjec);
+                    $intCantCkpt++;
+                }
+                $strTextMens  = ' | Checkpoints: '.$intCantCkpt;
+                $strTextMens .= $strTranInte;
+            } catch (Exception $e) {
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = 'Referencia: '.$this->IdPieza;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'Transfiriendo Pieza al Historico';
+                GrabarError($arrParaErro);
+            }
+            return $strTextMens;
+
+        }
+
+
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'GuiaPiezas';
             $arrLogxCamb['intRefeRegi'] = $this->Id;

@@ -26,6 +26,8 @@
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property-read Guias $_GuiasAsTarifaAgente the value for the private _objGuiasAsTarifaAgente (Read-Only) if set due to an expansion on the guias.tarifa_agente_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsTarifaAgenteArray the value for the private _objGuiasAsTarifaAgenteArray (Read-Only) if set due to an ExpandAsArray on the guias.tarifa_agente_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsTarifaAgente the value for the private _objGuiasHAsTarifaAgente (Read-Only) if set due to an expansion on the guias_h.tarifa_agente_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsTarifaAgenteArray the value for the private _objGuiasHAsTarifaAgenteArray (Read-Only) if set due to an ExpandAsArray on the guias_h.tarifa_agente_id reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsTarifaAgente the value for the private _objMasterClienteAsTarifaAgente (Read-Only) if set due to an expansion on the master_cliente.tarifa_agente_id reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsTarifaAgenteArray the value for the private _objMasterClienteAsTarifaAgenteArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.tarifa_agente_id reverse relationship
 	 * @property-read TarifaAgentesZonas $_TarifaAgentesZonasAsTarifa the value for the private _objTarifaAgentesZonasAsTarifa (Read-Only) if set due to an expansion on the tarifa_agentes_zonas.tarifa_id reverse relationship
@@ -126,6 +128,22 @@
 		 * @var Guias[] _objGuiasAsTarifaAgenteArray;
 		 */
 		private $_objGuiasAsTarifaAgenteArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasHAsTarifaAgente object
+		 * (of type GuiasH), if this TarifaAgentes object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsTarifaAgente;
+		 */
+		private $_objGuiasHAsTarifaAgente;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsTarifaAgente objects
+		 * (of type GuiasH[]), if this TarifaAgentes object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsTarifaAgenteArray;
+		 */
+		private $_objGuiasHAsTarifaAgenteArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MasterClienteAsTarifaAgente object
@@ -747,6 +765,21 @@
 				}
 			}
 
+			// Check for GuiasHAsTarifaAgente Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashastarifaagente__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashastarifaagente']) ? null : $objExpansionAliasArray['guiashastarifaagente']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsTarifaAgenteArray)
+				$objToReturn->_objGuiasHAsTarifaAgenteArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsTarifaAgenteArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashastarifaagente__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsTarifaAgente)) {
+					$objToReturn->_objGuiasHAsTarifaAgente = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashastarifaagente__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for MasterClienteAsTarifaAgente Virtual Binding
 			$strAlias = $strAliasPrefix . 'masterclienteastarifaagente__codi_clie';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1234,6 +1267,22 @@
 					 */
 					return $this->_objGuiasAsTarifaAgenteArray;
 
+				case '_GuiasHAsTarifaAgente':
+					/**
+					 * Gets the value for the private _objGuiasHAsTarifaAgente (Read-Only)
+					 * if set due to an expansion on the guias_h.tarifa_agente_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsTarifaAgente;
+
+				case '_GuiasHAsTarifaAgenteArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsTarifaAgenteArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.tarifa_agente_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsTarifaAgenteArray;
+
 				case '_MasterClienteAsTarifaAgente':
 					/**
 					 * Gets the value for the private _objMasterClienteAsTarifaAgente (Read-Only)
@@ -1395,6 +1444,9 @@
 			if ($this->CountGuiasesAsTarifaAgente()) {
 				$arrTablRela[] = 'guias';
 			}
+			if ($this->CountGuiasHsAsTarifaAgente()) {
+				$arrTablRela[] = 'guias_h';
+			}
 			if ($this->CountMasterClientesAsTarifaAgente()) {
 				$arrTablRela[] = 'master_cliente';
 			}
@@ -1554,6 +1606,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guias`
+				WHERE
+					`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasHAsTarifaAgente
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsTarifaAgente as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsTarifaAgenteArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByTarifaAgenteId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsTarifaAgente
+		 * @return int
+		*/
+		public function CountGuiasHsAsTarifaAgente() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByTarifaAgenteId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsTarifaAgente
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsTarifaAgente(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsTarifaAgente on this unsaved TarifaAgentes.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsTarifaAgente on this TarifaAgentes with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = TarifaAgentes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsTarifaAgente
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsTarifaAgente(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifaAgente on this unsaved TarifaAgentes.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifaAgente on this TarifaAgentes with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = TarifaAgentes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`tarifa_agente_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsTarifaAgente
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsTarifaAgente() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifaAgente on this unsaved TarifaAgentes.');
+
+			// Get the Database Object for this Class
+			$objDatabase = TarifaAgentes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`tarifa_agente_id` = null
+				WHERE
+					`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsTarifaAgente
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsTarifaAgente(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifaAgente on this unsaved TarifaAgentes.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifaAgente on this TarifaAgentes with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = TarifaAgentes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsTarifaAgente
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsTarifaAgente() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifaAgente on this unsaved TarifaAgentes.');
+
+			// Get the Database Object for this Class
+			$objDatabase = TarifaAgentes::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
 				WHERE
 					`tarifa_agente_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2037,6 +2238,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeGuias $GuiasAsTarifaAgente
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsTarifaAgente
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsTarifaAgente
      * @property-read QQReverseReferenceNodeTarifaAgentesZonas $TarifaAgentesZonasAsTarifa
 
@@ -2068,6 +2270,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'Integer', $this);
 				case 'GuiasAsTarifaAgente':
 					return new QQReverseReferenceNodeGuias($this, 'guiasastarifaagente', 'reverse_reference', 'tarifa_agente_id', 'GuiasAsTarifaAgente');
+				case 'GuiasHAsTarifaAgente':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashastarifaagente', 'reverse_reference', 'tarifa_agente_id', 'GuiasHAsTarifaAgente');
 				case 'MasterClienteAsTarifaAgente':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteastarifaagente', 'reverse_reference', 'tarifa_agente_id', 'MasterClienteAsTarifaAgente');
 				case 'TarifaAgentesZonasAsTarifa':
@@ -2099,6 +2303,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeGuias $GuiasAsTarifaAgente
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsTarifaAgente
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsTarifaAgente
      * @property-read QQReverseReferenceNodeTarifaAgentesZonas $TarifaAgentesZonasAsTarifa
 
@@ -2130,6 +2335,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'integer', $this);
 				case 'GuiasAsTarifaAgente':
 					return new QQReverseReferenceNodeGuias($this, 'guiasastarifaagente', 'reverse_reference', 'tarifa_agente_id', 'GuiasAsTarifaAgente');
+				case 'GuiasHAsTarifaAgente':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashastarifaagente', 'reverse_reference', 'tarifa_agente_id', 'GuiasHAsTarifaAgente');
 				case 'MasterClienteAsTarifaAgente':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteastarifaagente', 'reverse_reference', 'tarifa_agente_id', 'MasterClienteAsTarifaAgente');
 				case 'TarifaAgentesZonasAsTarifa':

@@ -27,7 +27,94 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
-		public function __zona() {
+        public function TransferirHistorico($intManiIdxx, ProcesoError $objProcEjec) {
+		    //t('Transfiriendo Guia Nro: '.$this->Tracking);
+		    $strTranInte = '';
+		    $strTextMens = '';
+            $intCantPiez = 0;
+            //-------------------------
+            // Se transfiere la Guia
+            //-------------------------
+            try {
+                $objGuiaHist = new GuiasH();
+                $objGuiaHist->Numero                = $this->Numero;
+                $objGuiaHist->Tracking              = $this->Tracking;
+                $objGuiaHist->Fecha                 = $this->Fecha;
+                $objGuiaHist->ClienteRetailId       = $this->ClienteRetailId;
+                $objGuiaHist->ClienteCorpId         = $this->ClienteCorpId;
+                $objGuiaHist->ClienteIntId          = $this->ClienteIntId;
+                $objGuiaHist->OrigenId              = $this->OrigenId;
+                $objGuiaHist->DestinoId             = $this->DestinoId;
+                $objGuiaHist->ServicioEntrega       = $this->ServicioEntrega;
+                $objGuiaHist->ServicioImportacion   = $this->ServicioImportacion;
+                $objGuiaHist->ProductoId            = $this->ProductoId;
+                $objGuiaHist->FormaPago             = $this->FormaPago;
+                $objGuiaHist->NombreRemitente       = $this->NombreRemitente;
+                $objGuiaHist->TelefonoRemitente     = $this->TelefonoRemitente;
+                $objGuiaHist->DireccionRemitente    = $this->DireccionRemitente;
+                $objGuiaHist->TelefonoRemitente     = $this->TelefonoRemitente;
+                $objGuiaHist->NombreDestinatario    = $this->NombreDestinatario;
+                $objGuiaHist->TelefonoDestinatario  = $this->TelefonoDestinatario;
+                $objGuiaHist->DireccionDestinatario = $this->DireccionDestinatario;
+                $objGuiaHist->TelefonoDestinatario  = $this->TelefonoDestinatario;
+                $objGuiaHist->Contenido             = $this->Contenido;
+                $objGuiaHist->Piezas                = $this->Piezas;
+                $objGuiaHist->ValorDeclarado        = $this->ValorDeclarado;
+                $objGuiaHist->TipoExport            = $this->TipoExport;
+                $objGuiaHist->Asegurado             = $this->Asegurado;
+                $objGuiaHist->Total                 = $this->Total;
+                $objGuiaHist->Estado                = $this->Estado;
+                $objGuiaHist->Ciudad                = $this->Ciudad;
+                $objGuiaHist->CodigoPostal          = $this->CodigoPostal;
+                $objGuiaHist->Tasa                  = $this->Tasa;
+                $objGuiaHist->Ubicacion             = $this->Ubicacion;
+                $objGuiaHist->VendedorId            = $this->VendedorId;
+                $objGuiaHist->TarifaId              = $this->TarifaId;
+                $objGuiaHist->TarifaId              = $this->TarifaId;
+                $objGuiaHist->TarifaAgenteId        = $this->TarifaAgenteId;
+                $objGuiaHist->ReceptoriaOrigenId    = $this->ReceptoriaOrigenId;
+                $objGuiaHist->ReceptoriaDestinoId   = $this->ReceptoriaDestinoId;
+                $objGuiaHist->Kilos                 = $this->Kilos;
+                $objGuiaHist->Libras                = $this->Libras;
+                $objGuiaHist->Largo                 = $this->Largo;
+                $objGuiaHist->Ancho                 = $this->Ancho;
+                $objGuiaHist->Alto                  = $this->Alto;
+                $objGuiaHist->Volumen               = $this->Volumen;
+                $objGuiaHist->PiesCub               = $this->PiesCub;
+                $objGuiaHist->MetrosCub             = $this->MetrosCub;
+                $objGuiaHist->CedulaDestinatario    = $this->CedulaDestinatario;
+                $objGuiaHist->FacturaId             = $this->FacturaId;
+                $objGuiaHist->GuiaPodId             = $this->GuiaPodId;
+                $objGuiaHist->NotaEntregaId         = $intManiIdxx; //$this->NotaEntregaId;
+                $objGuiaHist->Observacion           = $this->Observacion;
+                $objGuiaHist->CreatedBy             = $this->CreatedBy;
+                $objGuiaHist->UpdatedBy             = $this->UpdatedBy;
+                $objGuiaHist->DeletedBy             = $this->DeletedBy;
+                $objGuiaHist->Save();
+                //t('Guia transferida');
+                //---------------------------------------------
+                // Se transfieren las piezas de la guia
+                //---------------------------------------------
+                $arrPiezGuia = $this->GetGuiaPiezasAsGuiaArray();
+                //t('Voy a transferir las piezas');
+                foreach ($arrPiezGuia as $objPiezGuia) {
+                    $strTranInte = $objPiezGuia->TransferirHistorico($objGuiaHist->Id, $objProcEjec);
+                    $intCantPiez++;
+                }
+                $strTextMens  = ' | Piezas: '.$intCantPiez;
+                $strTextMens .= $strTranInte;
+            } catch (Exception $e) {
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = 'Referencia: '.$this->Tracking;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'Transfiriendo Guia al Historico';
+                GrabarError($arrParaErro);
+            }
+            return $strTextMens;
+
+        }
+
+        public function __zona() {
             return Parametros::BuscarParametro('ZONA',$this->Destino->Zona,'Desc',$this->Destino->Zona);
         }
 

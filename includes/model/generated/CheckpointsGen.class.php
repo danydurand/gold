@@ -40,10 +40,14 @@
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsCheckpointArray the value for the private _objHistoriaClienteAsCheckpointArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.checkpoint_id reverse relationship
 	 * @property-read NotaEntregaCkpt $_NotaEntregaCkptAsCheckpoint the value for the private _objNotaEntregaCkptAsCheckpoint (Read-Only) if set due to an expansion on the nota_entrega_ckpt.checkpoint_id reverse relationship
 	 * @property-read NotaEntregaCkpt[] $_NotaEntregaCkptAsCheckpointArray the value for the private _objNotaEntregaCkptAsCheckpointArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_ckpt.checkpoint_id reverse relationship
+	 * @property-read NotaEntregaCkptH $_NotaEntregaCkptHAsCheckpoint the value for the private _objNotaEntregaCkptHAsCheckpoint (Read-Only) if set due to an expansion on the nota_entrega_ckpt_h.checkpoint_id reverse relationship
+	 * @property-read NotaEntregaCkptH[] $_NotaEntregaCkptHAsCheckpointArray the value for the private _objNotaEntregaCkptHAsCheckpointArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_ckpt_h.checkpoint_id reverse relationship
 	 * @property-read Notificacion $_NotificacionAsCheckpoint the value for the private _objNotificacionAsCheckpoint (Read-Only) if set due to an expansion on the notificacion.checkpoint_id reverse relationship
 	 * @property-read Notificacion[] $_NotificacionAsCheckpointArray the value for the private _objNotificacionAsCheckpointArray (Read-Only) if set due to an ExpandAsArray on the notificacion.checkpoint_id reverse relationship
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsCheckpoint the value for the private _objPiezaCheckpointsAsCheckpoint (Read-Only) if set due to an expansion on the pieza_checkpoints.checkpoint_id reverse relationship
 	 * @property-read PiezaCheckpoints[] $_PiezaCheckpointsAsCheckpointArray the value for the private _objPiezaCheckpointsAsCheckpointArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints.checkpoint_id reverse relationship
+	 * @property-read PiezaCheckpointsH $_PiezaCheckpointsHAsCheckpoint the value for the private _objPiezaCheckpointsHAsCheckpoint (Read-Only) if set due to an expansion on the pieza_checkpoints_h.checkpoint_id reverse relationship
+	 * @property-read PiezaCheckpointsH[] $_PiezaCheckpointsHAsCheckpointArray the value for the private _objPiezaCheckpointsHAsCheckpointArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints_h.checkpoint_id reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajoAsCheckpoint the value for the private _objRegistroTrabajoAsCheckpoint (Read-Only) if set due to an expansion on the registro_trabajo.checkpoint_id reverse relationship
 	 * @property-read RegistroTrabajo[] $_RegistroTrabajoAsCheckpointArray the value for the private _objRegistroTrabajoAsCheckpointArray (Read-Only) if set due to an ExpandAsArray on the registro_trabajo.checkpoint_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -261,6 +265,22 @@
 		private $_objNotaEntregaCkptAsCheckpointArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single NotaEntregaCkptHAsCheckpoint object
+		 * (of type NotaEntregaCkptH), if this Checkpoints object was restored with
+		 * an expansion on the nota_entrega_ckpt_h association table.
+		 * @var NotaEntregaCkptH _objNotaEntregaCkptHAsCheckpoint;
+		 */
+		private $_objNotaEntregaCkptHAsCheckpoint;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaEntregaCkptHAsCheckpoint objects
+		 * (of type NotaEntregaCkptH[]), if this Checkpoints object was restored with
+		 * an ExpandAsArray on the nota_entrega_ckpt_h association table.
+		 * @var NotaEntregaCkptH[] _objNotaEntregaCkptHAsCheckpointArray;
+		 */
+		private $_objNotaEntregaCkptHAsCheckpointArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single NotificacionAsCheckpoint object
 		 * (of type Notificacion), if this Checkpoints object was restored with
 		 * an expansion on the notificacion association table.
@@ -291,6 +311,22 @@
 		 * @var PiezaCheckpoints[] _objPiezaCheckpointsAsCheckpointArray;
 		 */
 		private $_objPiezaCheckpointsAsCheckpointArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PiezaCheckpointsHAsCheckpoint object
+		 * (of type PiezaCheckpointsH), if this Checkpoints object was restored with
+		 * an expansion on the pieza_checkpoints_h association table.
+		 * @var PiezaCheckpointsH _objPiezaCheckpointsHAsCheckpoint;
+		 */
+		private $_objPiezaCheckpointsHAsCheckpoint;
+
+		/**
+		 * Private member variable that stores a reference to an array of PiezaCheckpointsHAsCheckpoint objects
+		 * (of type PiezaCheckpointsH[]), if this Checkpoints object was restored with
+		 * an ExpandAsArray on the pieza_checkpoints_h association table.
+		 * @var PiezaCheckpointsH[] _objPiezaCheckpointsHAsCheckpointArray;
+		 */
+		private $_objPiezaCheckpointsHAsCheckpointArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single RegistroTrabajoAsCheckpoint object
@@ -981,6 +1017,21 @@
 				}
 			}
 
+			// Check for NotaEntregaCkptHAsCheckpoint Virtual Binding
+			$strAlias = $strAliasPrefix . 'notaentregackpthascheckpoint__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notaentregackpthascheckpoint']) ? null : $objExpansionAliasArray['notaentregackpthascheckpoint']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaEntregaCkptHAsCheckpointArray)
+				$objToReturn->_objNotaEntregaCkptHAsCheckpointArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaEntregaCkptHAsCheckpointArray[] = NotaEntregaCkptH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpthascheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaEntregaCkptHAsCheckpoint)) {
+					$objToReturn->_objNotaEntregaCkptHAsCheckpoint = NotaEntregaCkptH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpthascheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for NotificacionAsCheckpoint Virtual Binding
 			$strAlias = $strAliasPrefix . 'notificacionascheckpoint__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1008,6 +1059,21 @@
 					$objToReturn->_objPiezaCheckpointsAsCheckpointArray[] = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsascheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPiezaCheckpointsAsCheckpoint)) {
 					$objToReturn->_objPiezaCheckpointsAsCheckpoint = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsascheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for PiezaCheckpointsHAsCheckpoint Virtual Binding
+			$strAlias = $strAliasPrefix . 'piezacheckpointshascheckpoint__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['piezacheckpointshascheckpoint']) ? null : $objExpansionAliasArray['piezacheckpointshascheckpoint']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPiezaCheckpointsHAsCheckpointArray)
+				$objToReturn->_objPiezaCheckpointsHAsCheckpointArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPiezaCheckpointsHAsCheckpointArray[] = PiezaCheckpointsH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointshascheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPiezaCheckpointsHAsCheckpoint)) {
+					$objToReturn->_objPiezaCheckpointsHAsCheckpoint = PiezaCheckpointsH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointshascheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -1667,6 +1733,22 @@
 					 */
 					return $this->_objNotaEntregaCkptAsCheckpointArray;
 
+				case '_NotaEntregaCkptHAsCheckpoint':
+					/**
+					 * Gets the value for the private _objNotaEntregaCkptHAsCheckpoint (Read-Only)
+					 * if set due to an expansion on the nota_entrega_ckpt_h.checkpoint_id reverse relationship
+					 * @return NotaEntregaCkptH
+					 */
+					return $this->_objNotaEntregaCkptHAsCheckpoint;
+
+				case '_NotaEntregaCkptHAsCheckpointArray':
+					/**
+					 * Gets the value for the private _objNotaEntregaCkptHAsCheckpointArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_entrega_ckpt_h.checkpoint_id reverse relationship
+					 * @return NotaEntregaCkptH[]
+					 */
+					return $this->_objNotaEntregaCkptHAsCheckpointArray;
+
 				case '_NotificacionAsCheckpoint':
 					/**
 					 * Gets the value for the private _objNotificacionAsCheckpoint (Read-Only)
@@ -1698,6 +1780,22 @@
 					 * @return PiezaCheckpoints[]
 					 */
 					return $this->_objPiezaCheckpointsAsCheckpointArray;
+
+				case '_PiezaCheckpointsHAsCheckpoint':
+					/**
+					 * Gets the value for the private _objPiezaCheckpointsHAsCheckpoint (Read-Only)
+					 * if set due to an expansion on the pieza_checkpoints_h.checkpoint_id reverse relationship
+					 * @return PiezaCheckpointsH
+					 */
+					return $this->_objPiezaCheckpointsHAsCheckpoint;
+
+				case '_PiezaCheckpointsHAsCheckpointArray':
+					/**
+					 * Gets the value for the private _objPiezaCheckpointsHAsCheckpointArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pieza_checkpoints_h.checkpoint_id reverse relationship
+					 * @return PiezaCheckpointsH[]
+					 */
+					return $this->_objPiezaCheckpointsHAsCheckpointArray;
 
 				case '_RegistroTrabajoAsCheckpoint':
 					/**
@@ -1957,11 +2055,17 @@
 			if ($this->CountNotaEntregaCkptsAsCheckpoint()) {
 				$arrTablRela[] = 'nota_entrega_ckpt';
 			}
+			if ($this->CountNotaEntregaCkptHsAsCheckpoint()) {
+				$arrTablRela[] = 'nota_entrega_ckpt_h';
+			}
 			if ($this->CountNotificacionsAsCheckpoint()) {
 				$arrTablRela[] = 'notificacion';
 			}
 			if ($this->CountPiezaCheckpointsesAsCheckpoint()) {
 				$arrTablRela[] = 'pieza_checkpoints';
+			}
+			if ($this->CountPiezaCheckpointsHsAsCheckpoint()) {
+				$arrTablRela[] = 'pieza_checkpoints_h';
 			}
 			if ($this->CountRegistroTrabajosAsCheckpoint()) {
 				$arrTablRela[] = 'registro_trabajo';
@@ -2572,6 +2676,155 @@
 		}
 
 
+		// Related Objects' Methods for NotaEntregaCkptHAsCheckpoint
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaEntregaCkptHsAsCheckpoint as an array of NotaEntregaCkptH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaEntregaCkptH[]
+		*/
+		public function GetNotaEntregaCkptHAsCheckpointArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return NotaEntregaCkptH::LoadArrayByCheckpointId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaEntregaCkptHsAsCheckpoint
+		 * @return int
+		*/
+		public function CountNotaEntregaCkptHsAsCheckpoint() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return NotaEntregaCkptH::CountByCheckpointId($this->intId);
+		}
+
+		/**
+		 * Associates a NotaEntregaCkptHAsCheckpoint
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function AssociateNotaEntregaCkptHAsCheckpoint(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaCkptHAsCheckpoint on this unsaved Checkpoints.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaCkptHAsCheckpoint on this Checkpoints with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaEntregaCkptHAsCheckpoint
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function UnassociateNotaEntregaCkptHAsCheckpoint(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsCheckpoint on this unsaved Checkpoints.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsCheckpoint on this Checkpoints with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`checkpoint_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . ' AND
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaEntregaCkptHsAsCheckpoint
+		 * @return void
+		*/
+		public function UnassociateAllNotaEntregaCkptHsAsCheckpoint() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsCheckpoint on this unsaved Checkpoints.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`checkpoint_id` = null
+				WHERE
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaEntregaCkptHAsCheckpoint
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaEntregaCkptHAsCheckpoint(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsCheckpoint on this unsaved Checkpoints.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsCheckpoint on this Checkpoints with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_ckpt_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . ' AND
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaEntregaCkptHsAsCheckpoint
+		 * @return void
+		*/
+		public function DeleteAllNotaEntregaCkptHsAsCheckpoint() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsCheckpoint on this unsaved Checkpoints.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_ckpt_h`
+				WHERE
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for NotificacionAsCheckpoint
 		//-------------------------------------------------------------------
 
@@ -2864,6 +3117,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`pieza_checkpoints`
+				WHERE
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for PiezaCheckpointsHAsCheckpoint
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PiezaCheckpointsHsAsCheckpoint as an array of PiezaCheckpointsH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PiezaCheckpointsH[]
+		*/
+		public function GetPiezaCheckpointsHAsCheckpointArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return PiezaCheckpointsH::LoadArrayByCheckpointId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PiezaCheckpointsHsAsCheckpoint
+		 * @return int
+		*/
+		public function CountPiezaCheckpointsHsAsCheckpoint() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return PiezaCheckpointsH::CountByCheckpointId($this->intId);
+		}
+
+		/**
+		 * Associates a PiezaCheckpointsHAsCheckpoint
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function AssociatePiezaCheckpointsHAsCheckpoint(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaCheckpointsHAsCheckpoint on this unsaved Checkpoints.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaCheckpointsHAsCheckpoint on this Checkpoints with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PiezaCheckpointsHAsCheckpoint
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function UnassociatePiezaCheckpointsHAsCheckpoint(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsCheckpoint on this unsaved Checkpoints.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsCheckpoint on this Checkpoints with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`checkpoint_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . ' AND
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PiezaCheckpointsHsAsCheckpoint
+		 * @return void
+		*/
+		public function UnassociateAllPiezaCheckpointsHsAsCheckpoint() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsCheckpoint on this unsaved Checkpoints.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`checkpoint_id` = null
+				WHERE
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PiezaCheckpointsHAsCheckpoint
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function DeleteAssociatedPiezaCheckpointsHAsCheckpoint(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsCheckpoint on this unsaved Checkpoints.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsCheckpoint on this Checkpoints with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_checkpoints_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . ' AND
+					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PiezaCheckpointsHsAsCheckpoint
+		 * @return void
+		*/
+		public function DeleteAllPiezaCheckpointsHsAsCheckpoint() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsCheckpoint on this unsaved Checkpoints.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Checkpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_checkpoints_h`
 				WHERE
 					`checkpoint_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -3239,8 +3641,10 @@
      * @property-read QQReverseReferenceNodeContenedorCkpt $ContenedorCkptAsCheckpoint
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCheckpoint
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsCheckpoint
+     * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsCheckpoint
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsCheckpoint
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsCheckpoint
+     * @property-read QQReverseReferenceNodePiezaCheckpointsH $PiezaCheckpointsHAsCheckpoint
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsCheckpoint
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -3293,10 +3697,14 @@
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascheckpoint', 'reverse_reference', 'checkpoint_id', 'HistoriaClienteAsCheckpoint');
 				case 'NotaEntregaCkptAsCheckpoint':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackptascheckpoint', 'reverse_reference', 'checkpoint_id', 'NotaEntregaCkptAsCheckpoint');
+				case 'NotaEntregaCkptHAsCheckpoint':
+					return new QQReverseReferenceNodeNotaEntregaCkptH($this, 'notaentregackpthascheckpoint', 'reverse_reference', 'checkpoint_id', 'NotaEntregaCkptHAsCheckpoint');
 				case 'NotificacionAsCheckpoint':
 					return new QQReverseReferenceNodeNotificacion($this, 'notificacionascheckpoint', 'reverse_reference', 'checkpoint_id', 'NotificacionAsCheckpoint');
 				case 'PiezaCheckpointsAsCheckpoint':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsascheckpoint', 'reverse_reference', 'checkpoint_id', 'PiezaCheckpointsAsCheckpoint');
+				case 'PiezaCheckpointsHAsCheckpoint':
+					return new QQReverseReferenceNodePiezaCheckpointsH($this, 'piezacheckpointshascheckpoint', 'reverse_reference', 'checkpoint_id', 'PiezaCheckpointsHAsCheckpoint');
 				case 'RegistroTrabajoAsCheckpoint':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajoascheckpoint', 'reverse_reference', 'checkpoint_id', 'RegistroTrabajoAsCheckpoint');
 
@@ -3337,8 +3745,10 @@
      * @property-read QQReverseReferenceNodeContenedorCkpt $ContenedorCkptAsCheckpoint
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCheckpoint
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsCheckpoint
+     * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsCheckpoint
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsCheckpoint
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsCheckpoint
+     * @property-read QQReverseReferenceNodePiezaCheckpointsH $PiezaCheckpointsHAsCheckpoint
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsCheckpoint
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -3391,10 +3801,14 @@
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascheckpoint', 'reverse_reference', 'checkpoint_id', 'HistoriaClienteAsCheckpoint');
 				case 'NotaEntregaCkptAsCheckpoint':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackptascheckpoint', 'reverse_reference', 'checkpoint_id', 'NotaEntregaCkptAsCheckpoint');
+				case 'NotaEntregaCkptHAsCheckpoint':
+					return new QQReverseReferenceNodeNotaEntregaCkptH($this, 'notaentregackpthascheckpoint', 'reverse_reference', 'checkpoint_id', 'NotaEntregaCkptHAsCheckpoint');
 				case 'NotificacionAsCheckpoint':
 					return new QQReverseReferenceNodeNotificacion($this, 'notificacionascheckpoint', 'reverse_reference', 'checkpoint_id', 'NotificacionAsCheckpoint');
 				case 'PiezaCheckpointsAsCheckpoint':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsascheckpoint', 'reverse_reference', 'checkpoint_id', 'PiezaCheckpointsAsCheckpoint');
+				case 'PiezaCheckpointsHAsCheckpoint':
+					return new QQReverseReferenceNodePiezaCheckpointsH($this, 'piezacheckpointshascheckpoint', 'reverse_reference', 'checkpoint_id', 'PiezaCheckpointsHAsCheckpoint');
 				case 'RegistroTrabajoAsCheckpoint':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajoascheckpoint', 'reverse_reference', 'checkpoint_id', 'RegistroTrabajoAsCheckpoint');
 

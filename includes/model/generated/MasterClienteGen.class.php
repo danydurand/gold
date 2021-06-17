@@ -112,6 +112,8 @@
 	 * @property-read GuiaCacesa[] $_GuiaCacesaAsClienteArray the value for the private _objGuiaCacesaAsClienteArray (Read-Only) if set due to an ExpandAsArray on the guia_cacesa.cliente_id reverse relationship
 	 * @property-read Guias $_GuiasAsClienteCorp the value for the private _objGuiasAsClienteCorp (Read-Only) if set due to an expansion on the guias.cliente_corp_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsClienteCorpArray the value for the private _objGuiasAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the guias.cliente_corp_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsClienteCorp the value for the private _objGuiasHAsClienteCorp (Read-Only) if set due to an expansion on the guias_h.cliente_corp_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsClienteCorpArray the value for the private _objGuiasHAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the guias_h.cliente_corp_id reverse relationship
 	 * @property-read MasCartaDevo $_MasCartaDevoAsCodiClie the value for the private _objMasCartaDevoAsCodiClie (Read-Only) if set due to an expansion on the mas_carta_devo.codi_clie reverse relationship
 	 * @property-read MasCartaDevo[] $_MasCartaDevoAsCodiClieArray the value for the private _objMasCartaDevoAsCodiClieArray (Read-Only) if set due to an ExpandAsArray on the mas_carta_devo.codi_clie reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsCodiDepe the value for the private _objMasterClienteAsCodiDepe (Read-Only) if set due to an expansion on the master_cliente.codi_depe reverse relationship
@@ -120,6 +122,8 @@
 	 * @property-read NotaCreditoCorp[] $_NotaCreditoCorpAsClienteCorpArray the value for the private _objNotaCreditoCorpAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the nota_credito_corp.cliente_corp_id reverse relationship
 	 * @property-read NotaEntrega $_NotaEntregaAsClienteCorp the value for the private _objNotaEntregaAsClienteCorp (Read-Only) if set due to an expansion on the nota_entrega.cliente_corp_id reverse relationship
 	 * @property-read NotaEntrega[] $_NotaEntregaAsClienteCorpArray the value for the private _objNotaEntregaAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega.cliente_corp_id reverse relationship
+	 * @property-read NotaEntregaH $_NotaEntregaHAsClienteCorp the value for the private _objNotaEntregaHAsClienteCorp (Read-Only) if set due to an expansion on the nota_entrega_h.cliente_corp_id reverse relationship
+	 * @property-read NotaEntregaH[] $_NotaEntregaHAsClienteCorpArray the value for the private _objNotaEntregaHAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_h.cliente_corp_id reverse relationship
 	 * @property-read PagosCorp $_PagosCorpAsClienteCorp the value for the private _objPagosCorpAsClienteCorp (Read-Only) if set due to an expansion on the pagos_corp.cliente_corp_id reverse relationship
 	 * @property-read PagosCorp[] $_PagosCorpAsClienteCorpArray the value for the private _objPagosCorpAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the pagos_corp.cliente_corp_id reverse relationship
 	 * @property-read UsuarioConnect $_UsuarioConnectAsCliente the value for the private _objUsuarioConnectAsCliente (Read-Only) if set due to an expansion on the usuario_connect.cliente_id reverse relationship
@@ -855,6 +859,22 @@
 		private $_objGuiasAsClienteCorpArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single GuiasHAsClienteCorp object
+		 * (of type GuiasH), if this MasterCliente object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsClienteCorp;
+		 */
+		private $_objGuiasHAsClienteCorp;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsClienteCorp objects
+		 * (of type GuiasH[]), if this MasterCliente object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsClienteCorpArray;
+		 */
+		private $_objGuiasHAsClienteCorpArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single MasCartaDevoAsCodiClie object
 		 * (of type MasCartaDevo), if this MasterCliente object was restored with
 		 * an expansion on the mas_carta_devo association table.
@@ -917,6 +937,22 @@
 		 * @var NotaEntrega[] _objNotaEntregaAsClienteCorpArray;
 		 */
 		private $_objNotaEntregaAsClienteCorpArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single NotaEntregaHAsClienteCorp object
+		 * (of type NotaEntregaH), if this MasterCliente object was restored with
+		 * an expansion on the nota_entrega_h association table.
+		 * @var NotaEntregaH _objNotaEntregaHAsClienteCorp;
+		 */
+		private $_objNotaEntregaHAsClienteCorp;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaEntregaHAsClienteCorp objects
+		 * (of type NotaEntregaH[]), if this MasterCliente object was restored with
+		 * an ExpandAsArray on the nota_entrega_h association table.
+		 * @var NotaEntregaH[] _objNotaEntregaHAsClienteCorpArray;
+		 */
+		private $_objNotaEntregaHAsClienteCorpArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single PagosCorpAsClienteCorp object
@@ -2170,6 +2206,21 @@
 				}
 			}
 
+			// Check for GuiasHAsClienteCorp Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasclientecorp__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasclientecorp']) ? null : $objExpansionAliasArray['guiashasclientecorp']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsClienteCorpArray)
+				$objToReturn->_objGuiasHAsClienteCorpArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsClienteCorpArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsClienteCorp)) {
+					$objToReturn->_objGuiasHAsClienteCorp = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for MasCartaDevoAsCodiClie Virtual Binding
 			$strAlias = $strAliasPrefix . 'mascartadevoascodiclie__nume_cart';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -2227,6 +2278,21 @@
 					$objToReturn->_objNotaEntregaAsClienteCorpArray[] = NotaEntrega::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregaasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objNotaEntregaAsClienteCorp)) {
 					$objToReturn->_objNotaEntregaAsClienteCorp = NotaEntrega::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregaasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for NotaEntregaHAsClienteCorp Virtual Binding
+			$strAlias = $strAliasPrefix . 'notaentregahasclientecorp__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notaentregahasclientecorp']) ? null : $objExpansionAliasArray['notaentregahasclientecorp']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaEntregaHAsClienteCorpArray)
+				$objToReturn->_objNotaEntregaHAsClienteCorpArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaEntregaHAsClienteCorpArray[] = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregahasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaEntregaHAsClienteCorp)) {
+					$objToReturn->_objNotaEntregaHAsClienteCorp = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregahasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -4203,6 +4269,22 @@
 					 */
 					return $this->_objGuiasAsClienteCorpArray;
 
+				case '_GuiasHAsClienteCorp':
+					/**
+					 * Gets the value for the private _objGuiasHAsClienteCorp (Read-Only)
+					 * if set due to an expansion on the guias_h.cliente_corp_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsClienteCorp;
+
+				case '_GuiasHAsClienteCorpArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsClienteCorpArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.cliente_corp_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsClienteCorpArray;
+
 				case '_MasCartaDevoAsCodiClie':
 					/**
 					 * Gets the value for the private _objMasCartaDevoAsCodiClie (Read-Only)
@@ -4266,6 +4348,22 @@
 					 * @return NotaEntrega[]
 					 */
 					return $this->_objNotaEntregaAsClienteCorpArray;
+
+				case '_NotaEntregaHAsClienteCorp':
+					/**
+					 * Gets the value for the private _objNotaEntregaHAsClienteCorp (Read-Only)
+					 * if set due to an expansion on the nota_entrega_h.cliente_corp_id reverse relationship
+					 * @return NotaEntregaH
+					 */
+					return $this->_objNotaEntregaHAsClienteCorp;
+
+				case '_NotaEntregaHAsClienteCorpArray':
+					/**
+					 * Gets the value for the private _objNotaEntregaHAsClienteCorpArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_entrega_h.cliente_corp_id reverse relationship
+					 * @return NotaEntregaH[]
+					 */
+					return $this->_objNotaEntregaHAsClienteCorpArray;
 
 				case '_PagosCorpAsClienteCorp':
 					/**
@@ -5567,6 +5665,9 @@
 			if ($this->CountGuiasesAsClienteCorp()) {
 				$arrTablRela[] = 'guias';
 			}
+			if ($this->CountGuiasHsAsClienteCorp()) {
+				$arrTablRela[] = 'guias_h';
+			}
 			if ($this->CountMasCartaDevosAsCodiClie()) {
 				$arrTablRela[] = 'mas_carta_devo';
 			}
@@ -5578,6 +5679,9 @@
 			}
 			if ($this->CountNotaEntregasAsClienteCorp()) {
 				$arrTablRela[] = 'nota_entrega';
+			}
+			if ($this->CountNotaEntregaHsAsClienteCorp()) {
+				$arrTablRela[] = 'nota_entrega_h';
 			}
 			if ($this->CountPagosCorpsAsClienteCorp()) {
 				$arrTablRela[] = 'pagos_corp';
@@ -7240,6 +7344,155 @@
 		}
 
 
+		// Related Objects' Methods for GuiasHAsClienteCorp
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsClienteCorp as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsClienteCorpArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiClie)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByClienteCorpId($this->intCodiClie, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsClienteCorp
+		 * @return int
+		*/
+		public function CountGuiasHsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				return 0;
+
+			return GuiasH::CountByClienteCorpId($this->intCodiClie);
+		}
+
+		/**
+		 * Associates a GuiasHAsClienteCorp
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsClienteCorp(GuiasH $objGuiasH) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsClienteCorp on this MasterCliente with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsClienteCorp
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsClienteCorp(GuiasH $objGuiasH) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteCorp on this MasterCliente with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsClienteCorp
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsClienteCorp
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsClienteCorp(GuiasH $objGuiasH) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteCorp on this MasterCliente with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsClienteCorp
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+
 		// Related Objects' Methods for MasCartaDevoAsCodiClie
 		//-------------------------------------------------------------------
 
@@ -7830,6 +8083,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`nota_entrega`
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+
+		// Related Objects' Methods for NotaEntregaHAsClienteCorp
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaEntregaHsAsClienteCorp as an array of NotaEntregaH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaEntregaH[]
+		*/
+		public function GetNotaEntregaHAsClienteCorpArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiClie)))
+				return array();
+
+			try {
+				return NotaEntregaH::LoadArrayByClienteCorpId($this->intCodiClie, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaEntregaHsAsClienteCorp
+		 * @return int
+		*/
+		public function CountNotaEntregaHsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				return 0;
+
+			return NotaEntregaH::CountByClienteCorpId($this->intCodiClie);
+		}
+
+		/**
+		 * Associates a NotaEntregaHAsClienteCorp
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function AssociateNotaEntregaHAsClienteCorp(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaHAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaHAsClienteCorp on this MasterCliente with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaEntregaHAsClienteCorp
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function UnassociateNotaEntregaHAsClienteCorp(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsClienteCorp on this MasterCliente with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaEntregaHsAsClienteCorp
+		 * @return void
+		*/
+		public function UnassociateAllNotaEntregaHsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`cliente_corp_id` = null
+				WHERE
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaEntregaHAsClienteCorp
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaEntregaHAsClienteCorp(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsClienteCorp on this unsaved MasterCliente.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsClienteCorp on this MasterCliente with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . ' AND
+					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaEntregaHsAsClienteCorp
+		 * @return void
+		*/
+		public function DeleteAllNotaEntregaHsAsClienteCorp() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsClienteCorp on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_h`
 				WHERE
 					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
 			');
@@ -8663,10 +9065,12 @@
      * @property-read QQReverseReferenceNodeFechaUltimaGuia $FechaUltimaGuiaAsCliente
      * @property-read QQReverseReferenceNodeGuiaCacesa $GuiaCacesaAsCliente
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteCorp
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsClienteCorp
      * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiClie
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsCodiDepe
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
+     * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsClienteCorp
      * @property-read QQReverseReferenceNodePagosCorp $PagosCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsCliente
 
@@ -8850,6 +9254,8 @@
 					return new QQReverseReferenceNodeGuiaCacesa($this, 'guiacacesaascliente', 'reverse_reference', 'cliente_id', 'GuiaCacesaAsCliente');
 				case 'GuiasAsClienteCorp':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasAsClienteCorp');
+				case 'GuiasHAsClienteCorp':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasHAsClienteCorp');
 				case 'MasCartaDevoAsCodiClie':
 					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodiclie', 'reverse_reference', 'codi_clie', 'MasCartaDevoAsCodiClie');
 				case 'MasterClienteAsCodiDepe':
@@ -8858,6 +9264,8 @@
 					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaCreditoCorpAsClienteCorp');
 				case 'NotaEntregaAsClienteCorp':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaAsClienteCorp');
+				case 'NotaEntregaHAsClienteCorp':
+					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaHAsClienteCorp');
 				case 'PagosCorpAsClienteCorp':
 					return new QQReverseReferenceNodePagosCorp($this, 'pagoscorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'PagosCorpAsClienteCorp');
 				case 'UsuarioConnectAsCliente':
@@ -8965,10 +9373,12 @@
      * @property-read QQReverseReferenceNodeFechaUltimaGuia $FechaUltimaGuiaAsCliente
      * @property-read QQReverseReferenceNodeGuiaCacesa $GuiaCacesaAsCliente
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteCorp
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsClienteCorp
      * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiClie
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsCodiDepe
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
+     * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsClienteCorp
      * @property-read QQReverseReferenceNodePagosCorp $PagosCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsCliente
 
@@ -9152,6 +9562,8 @@
 					return new QQReverseReferenceNodeGuiaCacesa($this, 'guiacacesaascliente', 'reverse_reference', 'cliente_id', 'GuiaCacesaAsCliente');
 				case 'GuiasAsClienteCorp':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasAsClienteCorp');
+				case 'GuiasHAsClienteCorp':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasHAsClienteCorp');
 				case 'MasCartaDevoAsCodiClie':
 					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodiclie', 'reverse_reference', 'codi_clie', 'MasCartaDevoAsCodiClie');
 				case 'MasterClienteAsCodiDepe':
@@ -9160,6 +9572,8 @@
 					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaCreditoCorpAsClienteCorp');
 				case 'NotaEntregaAsClienteCorp':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaAsClienteCorp');
+				case 'NotaEntregaHAsClienteCorp':
+					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaHAsClienteCorp');
 				case 'PagosCorpAsClienteCorp':
 					return new QQReverseReferenceNodePagosCorp($this, 'pagoscorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'PagosCorpAsClienteCorp');
 				case 'UsuarioConnectAsCliente':

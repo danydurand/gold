@@ -27,6 +27,33 @@
 			return sprintf('%s',  $this->Pieza->IdPieza);
 		}
 
+        public function TransferirHistorico($intPiexIdxx, ProcesoError $objProcEjec) {
+		    //t('Transfiriendo checkpoint: '.$this->Checkpoint->Codigo);
+            $strTranInte = '';
+            try {
+                $objCkptHist = new PiezaCheckpointsH();
+                $objCkptHist->PiezaId      = $intPiexIdxx; //$this->PiezaId;
+                $objCkptHist->CheckpointId = $this->CheckpointId;
+                $objCkptHist->SucursalId   = $this->SucursalId;
+                $objCkptHist->Fecha        = $this->Fecha;
+                $objCkptHist->Hora         = $this->Hora;
+                $objCkptHist->Comentario   = $this->Comentario;
+                $objCkptHist->RutaId       = $this->RutaId;
+                $objCkptHist->CreatedBy    = $this->CreatedBy;
+                $objCkptHist->UpdatedBy    = $this->UpdatedBy;
+                $objCkptHist->Save();
+                //t('Ckpt transferido');
+            } catch (Exception $e) {
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = 'Referencia: '.$this->Checkpoint->Codigo;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'Transfiriendo Ckpt al Historico';
+                GrabarError($arrParaErro);
+            }
+            return $strTranInte;
+
+        }
+
         public static function ConCheckpointRegistradoPor($strCodiCkpt, $intCodiUsua) {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Codigo,$strCodiCkpt);

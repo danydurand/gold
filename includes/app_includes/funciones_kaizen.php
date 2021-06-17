@@ -258,6 +258,42 @@ function t($strTextTraz) {
     }
 }
 
+function ta($strTextTraz,$mixManeArch) {
+    if (isset($_SESSION['User'])) {
+        $objUsuario  = unserialize($_SESSION['User']);
+        $arrLogiTraz = ['ddurand'];
+        if (isset($_SESSION['LogiTraz'])) {
+            $arrLogiTraz = $_SESSION['LogiTraz'];
+        }
+        $blnTodoOkey = false;
+        if ( ($objUsuario instanceof Usuario) && (in_array($objUsuario->LogiUsua,$arrLogiTraz)) ) {
+            $blnTodoOkey = true;
+        } else {
+            if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'scuevas') ) {
+                $blnTodoOkey = true;
+            }
+        }
+        if ($blnTodoOkey) {
+            $arrLineAudi = array();
+            $arrLineAudi[] = date('Y-m-d');
+            $arrLineAudi[] = date('H:i:s');
+            $arrLineAudi[] = $objUsuario->LogiUsua;
+            if (isset($_SESSION['NombProg'])) {
+                $arrLineAudi[] = str_replace('.php','',basename($_SESSION['NombProg']));
+            }
+            if (!is_array($strTextTraz)) {
+                $arrLineAudi[] = $strTextTraz;
+            } else {
+                foreach ($strTextTraz as $strElemArra) {
+                    $arrLineAudi[] = $strElemArra;
+                }
+            }
+            $strCadeAudi = implode('|',$arrLineAudi);
+            fputs($mixManeArch,$strCadeAudi."|\n");
+        }
+    }
+}
+
 function RangoDeFechas($intNumeAnio,$intNumeDmes) {
     //-----------------------------------------------------------
     // En funcion del anio y mes especificados, construyo el

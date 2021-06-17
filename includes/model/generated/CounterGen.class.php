@@ -63,6 +63,10 @@
 	 * @property-read Guias[] $_GuiasAsReceptoriaDestinoArray the value for the private _objGuiasAsReceptoriaDestinoArray (Read-Only) if set due to an ExpandAsArray on the guias.receptoria_destino_id reverse relationship
 	 * @property-read Guias $_GuiasAsReceptoriaOrigen the value for the private _objGuiasAsReceptoriaOrigen (Read-Only) if set due to an expansion on the guias.receptoria_origen_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsReceptoriaOrigenArray the value for the private _objGuiasAsReceptoriaOrigenArray (Read-Only) if set due to an ExpandAsArray on the guias.receptoria_origen_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsReceptoriaDestino the value for the private _objGuiasHAsReceptoriaDestino (Read-Only) if set due to an expansion on the guias_h.receptoria_destino_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsReceptoriaDestinoArray the value for the private _objGuiasHAsReceptoriaDestinoArray (Read-Only) if set due to an ExpandAsArray on the guias_h.receptoria_destino_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsReceptoriaOrigen the value for the private _objGuiasHAsReceptoriaOrigen (Read-Only) if set due to an expansion on the guias_h.receptoria_origen_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsReceptoriaOrigenArray the value for the private _objGuiasHAsReceptoriaOrigenArray (Read-Only) if set due to an ExpandAsArray on the guias_h.receptoria_origen_id reverse relationship
 	 * @property-read NotaCredito $_NotaCreditoAsReceptoria the value for the private _objNotaCreditoAsReceptoria (Read-Only) if set due to an expansion on the nota_credito.receptoria_id reverse relationship
 	 * @property-read NotaCredito[] $_NotaCreditoAsReceptoriaArray the value for the private _objNotaCreditoAsReceptoriaArray (Read-Only) if set due to an ExpandAsArray on the nota_credito.receptoria_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -442,6 +446,38 @@
 		 * @var Guias[] _objGuiasAsReceptoriaOrigenArray;
 		 */
 		private $_objGuiasAsReceptoriaOrigenArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasHAsReceptoriaDestino object
+		 * (of type GuiasH), if this Counter object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsReceptoriaDestino;
+		 */
+		private $_objGuiasHAsReceptoriaDestino;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsReceptoriaDestino objects
+		 * (of type GuiasH[]), if this Counter object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsReceptoriaDestinoArray;
+		 */
+		private $_objGuiasHAsReceptoriaDestinoArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasHAsReceptoriaOrigen object
+		 * (of type GuiasH), if this Counter object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsReceptoriaOrigen;
+		 */
+		private $_objGuiasHAsReceptoriaOrigen;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsReceptoriaOrigen objects
+		 * (of type GuiasH[]), if this Counter object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsReceptoriaOrigenArray;
+		 */
+		private $_objGuiasHAsReceptoriaOrigenArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single NotaCreditoAsReceptoria object
@@ -1290,6 +1326,36 @@
 					$objToReturn->_objGuiasAsReceptoriaOrigenArray[] = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasasreceptoriaorigen__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiasAsReceptoriaOrigen)) {
 					$objToReturn->_objGuiasAsReceptoriaOrigen = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasasreceptoriaorigen__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiasHAsReceptoriaDestino Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasreceptoriadestino__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasreceptoriadestino']) ? null : $objExpansionAliasArray['guiashasreceptoriadestino']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsReceptoriaDestinoArray)
+				$objToReturn->_objGuiasHAsReceptoriaDestinoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsReceptoriaDestinoArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasreceptoriadestino__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsReceptoriaDestino)) {
+					$objToReturn->_objGuiasHAsReceptoriaDestino = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasreceptoriadestino__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiasHAsReceptoriaOrigen Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasreceptoriaorigen__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasreceptoriaorigen']) ? null : $objExpansionAliasArray['guiashasreceptoriaorigen']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsReceptoriaOrigenArray)
+				$objToReturn->_objGuiasHAsReceptoriaOrigenArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsReceptoriaOrigenArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasreceptoriaorigen__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsReceptoriaOrigen)) {
+					$objToReturn->_objGuiasHAsReceptoriaOrigen = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasreceptoriaorigen__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2615,6 +2681,38 @@
 					 */
 					return $this->_objGuiasAsReceptoriaOrigenArray;
 
+				case '_GuiasHAsReceptoriaDestino':
+					/**
+					 * Gets the value for the private _objGuiasHAsReceptoriaDestino (Read-Only)
+					 * if set due to an expansion on the guias_h.receptoria_destino_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsReceptoriaDestino;
+
+				case '_GuiasHAsReceptoriaDestinoArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsReceptoriaDestinoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.receptoria_destino_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsReceptoriaDestinoArray;
+
+				case '_GuiasHAsReceptoriaOrigen':
+					/**
+					 * Gets the value for the private _objGuiasHAsReceptoriaOrigen (Read-Only)
+					 * if set due to an expansion on the guias_h.receptoria_origen_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsReceptoriaOrigen;
+
+				case '_GuiasHAsReceptoriaOrigenArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsReceptoriaOrigenArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.receptoria_origen_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsReceptoriaOrigenArray;
+
 				case '_NotaCreditoAsReceptoria':
 					/**
 					 * Gets the value for the private _objNotaCreditoAsReceptoria (Read-Only)
@@ -3185,6 +3283,12 @@
 			}
 			if ($this->CountGuiasesAsReceptoriaOrigen()) {
 				$arrTablRela[] = 'guias';
+			}
+			if ($this->CountGuiasHsAsReceptoriaDestino()) {
+				$arrTablRela[] = 'guias_h';
+			}
+			if ($this->CountGuiasHsAsReceptoriaOrigen()) {
+				$arrTablRela[] = 'guias_h';
 			}
 			if ($this->CountNotaCreditosAsReceptoria()) {
 				$arrTablRela[] = 'nota_credito';
@@ -4093,6 +4197,304 @@
 		}
 
 
+		// Related Objects' Methods for GuiasHAsReceptoriaDestino
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsReceptoriaDestino as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsReceptoriaDestinoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByReceptoriaDestinoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsReceptoriaDestino
+		 * @return int
+		*/
+		public function CountGuiasHsAsReceptoriaDestino() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByReceptoriaDestinoId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsReceptoriaDestino
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsReceptoriaDestino(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsReceptoriaDestino on this unsaved Counter.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsReceptoriaDestino on this Counter with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`receptoria_destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsReceptoriaDestino
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsReceptoriaDestino(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaDestino on this unsaved Counter.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaDestino on this Counter with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`receptoria_destino_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`receptoria_destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsReceptoriaDestino
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsReceptoriaDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaDestino on this unsaved Counter.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`receptoria_destino_id` = null
+				WHERE
+					`receptoria_destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsReceptoriaDestino
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsReceptoriaDestino(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaDestino on this unsaved Counter.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaDestino on this Counter with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`receptoria_destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsReceptoriaDestino
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsReceptoriaDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaDestino on this unsaved Counter.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`receptoria_destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasHAsReceptoriaOrigen
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsReceptoriaOrigen as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsReceptoriaOrigenArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByReceptoriaOrigenId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsReceptoriaOrigen
+		 * @return int
+		*/
+		public function CountGuiasHsAsReceptoriaOrigen() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByReceptoriaOrigenId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsReceptoriaOrigen
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsReceptoriaOrigen(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsReceptoriaOrigen on this unsaved Counter.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsReceptoriaOrigen on this Counter with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`receptoria_origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsReceptoriaOrigen
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsReceptoriaOrigen(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaOrigen on this unsaved Counter.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaOrigen on this Counter with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`receptoria_origen_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`receptoria_origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsReceptoriaOrigen
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsReceptoriaOrigen() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaOrigen on this unsaved Counter.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`receptoria_origen_id` = null
+				WHERE
+					`receptoria_origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsReceptoriaOrigen
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsReceptoriaOrigen(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaOrigen on this unsaved Counter.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaOrigen on this Counter with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`receptoria_origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsReceptoriaOrigen
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsReceptoriaOrigen() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsReceptoriaOrigen on this unsaved Counter.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Counter::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`receptoria_origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for NotaCreditoAsReceptoria
 		//-------------------------------------------------------------------
 
@@ -4565,6 +4967,8 @@
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsReceptoria
      * @property-read QQReverseReferenceNodeGuias $GuiasAsReceptoriaDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsReceptoriaOrigen
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsReceptoriaDestino
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsReceptoriaOrigen
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsReceptoria
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -4659,6 +5063,10 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasreceptoriadestino', 'reverse_reference', 'receptoria_destino_id', 'GuiasAsReceptoriaDestino');
 				case 'GuiasAsReceptoriaOrigen':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasreceptoriaorigen', 'reverse_reference', 'receptoria_origen_id', 'GuiasAsReceptoriaOrigen');
+				case 'GuiasHAsReceptoriaDestino':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasreceptoriadestino', 'reverse_reference', 'receptoria_destino_id', 'GuiasHAsReceptoriaDestino');
+				case 'GuiasHAsReceptoriaOrigen':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasreceptoriaorigen', 'reverse_reference', 'receptoria_origen_id', 'GuiasHAsReceptoriaOrigen');
 				case 'NotaCreditoAsReceptoria':
 					return new QQReverseReferenceNodeNotaCredito($this, 'notacreditoasreceptoria', 'reverse_reference', 'receptoria_id', 'NotaCreditoAsReceptoria');
 
@@ -4720,6 +5128,8 @@
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsReceptoria
      * @property-read QQReverseReferenceNodeGuias $GuiasAsReceptoriaDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsReceptoriaOrigen
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsReceptoriaDestino
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsReceptoriaOrigen
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsReceptoria
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -4814,6 +5224,10 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasreceptoriadestino', 'reverse_reference', 'receptoria_destino_id', 'GuiasAsReceptoriaDestino');
 				case 'GuiasAsReceptoriaOrigen':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasreceptoriaorigen', 'reverse_reference', 'receptoria_origen_id', 'GuiasAsReceptoriaOrigen');
+				case 'GuiasHAsReceptoriaDestino':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasreceptoriadestino', 'reverse_reference', 'receptoria_destino_id', 'GuiasHAsReceptoriaDestino');
+				case 'GuiasHAsReceptoriaOrigen':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasreceptoriaorigen', 'reverse_reference', 'receptoria_origen_id', 'GuiasHAsReceptoriaOrigen');
 				case 'NotaCreditoAsReceptoria':
 					return new QQReverseReferenceNodeNotaCredito($this, 'notacreditoasreceptoria', 'reverse_reference', 'receptoria_id', 'NotaCreditoAsReceptoria');
 

@@ -28,6 +28,8 @@
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property-read Guias $_GuiasAsProducto the value for the private _objGuiasAsProducto (Read-Only) if set due to an expansion on the guias.producto_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsProductoArray the value for the private _objGuiasAsProductoArray (Read-Only) if set due to an ExpandAsArray on the guias.producto_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsProducto the value for the private _objGuiasHAsProducto (Read-Only) if set due to an expansion on the guias_h.producto_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsProductoArray the value for the private _objGuiasHAsProductoArray (Read-Only) if set due to an ExpandAsArray on the guias_h.producto_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ProductosGen extends QBaseClass implements IteratorAggregate {
@@ -142,6 +144,22 @@
 		 * @var Guias[] _objGuiasAsProductoArray;
 		 */
 		private $_objGuiasAsProductoArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasHAsProducto object
+		 * (of type GuiasH), if this Productos object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsProducto;
+		 */
+		private $_objGuiasHAsProducto;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsProducto objects
+		 * (of type GuiasH[]), if this Productos object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsProductoArray;
+		 */
+		private $_objGuiasHAsProductoArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -741,6 +759,21 @@
 				}
 			}
 
+			// Check for GuiasHAsProducto Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasproducto__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasproducto']) ? null : $objExpansionAliasArray['guiashasproducto']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsProductoArray)
+				$objToReturn->_objGuiasHAsProductoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsProductoArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasproducto__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsProducto)) {
+					$objToReturn->_objGuiasHAsProducto = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasproducto__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			return $objToReturn;
 		}
 		
@@ -1252,6 +1285,22 @@
 					 */
 					return $this->_objGuiasAsProductoArray;
 
+				case '_GuiasHAsProducto':
+					/**
+					 * Gets the value for the private _objGuiasHAsProducto (Read-Only)
+					 * if set due to an expansion on the guias_h.producto_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsProducto;
+
+				case '_GuiasHAsProductoArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsProductoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.producto_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsProductoArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1407,6 +1456,9 @@
 			if ($this->CountGuiasesAsProducto()) {
 				$arrTablRela[] = 'guias';
 			}
+			if ($this->CountGuiasHsAsProducto()) {
+				$arrTablRela[] = 'guias_h';
+			}
 			
 			return $arrTablRela;
 		}
@@ -1560,6 +1612,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guias`
+				WHERE
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasHAsProducto
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsProducto as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsProductoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByProductoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsProducto
+		 * @return int
+		*/
+		public function CountGuiasHsAsProducto() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByProductoId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsProducto
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsProducto(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsProducto on this unsaved Productos.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsProducto on this Productos with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsProducto
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsProducto(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsProducto on this unsaved Productos.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsProducto on this Productos with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`producto_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsProducto
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsProducto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsProducto on this unsaved Productos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`producto_id` = null
+				WHERE
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsProducto
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsProducto(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsProducto on this unsaved Productos.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsProducto on this Productos with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsProducto
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsProducto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsProducto on this unsaved Productos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
 				WHERE
 					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -1753,6 +1954,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeGuias $GuiasAsProducto
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsProducto
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1786,6 +1988,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'Integer', $this);
 				case 'GuiasAsProducto':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasproducto', 'reverse_reference', 'producto_id', 'GuiasAsProducto');
+				case 'GuiasHAsProducto':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasproducto', 'reverse_reference', 'producto_id', 'GuiasHAsProducto');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -1815,6 +2019,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeGuias $GuiasAsProducto
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsProducto
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1848,6 +2053,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'integer', $this);
 				case 'GuiasAsProducto':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasproducto', 'reverse_reference', 'producto_id', 'GuiasAsProducto');
+				case 'GuiasHAsProducto':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasproducto', 'reverse_reference', 'producto_id', 'GuiasHAsProducto');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

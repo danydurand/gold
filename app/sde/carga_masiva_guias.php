@@ -205,8 +205,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 if ( ($this->objNotaEntr->Procesadas > 0) && ($this->objNotaEntr->Recibidas == 0) ) {
                     $blnCambStat = true;
                 }
-            } else {
-                $strUltiCkpt = '';
+            }
+            $strUltiCkpt = '';
+            if ($this->objUsuario->Sucursal->Iata != 'MIA') {
                 $objUltiCkpt = $this->objNotaEntr->ultimoCheckpoint();
                 if ($objUltiCkpt instanceof NotaEntregaCkpt) {
                     $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
@@ -227,6 +228,13 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $arrOpciDrop[] = OpcionDropDown(
                     __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objNotaEntr->Id.'/sc',
                     TextoIcono('list','Hist. Estatus')
+                );
+            }
+            //if ( ($strUltiCkpt == 'OK') && ($this->objNotaEntr->Facturable == SinoType::NO) ) {
+            if ( ($this->objNotaEntr->Facturable == SinoType::NO) ) {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/transferir_historico.php/'.$this->objNotaEntr->Id,
+                    TextoIcono('folder-o','Trans. a Histórico')
                 );
             }
         }
@@ -912,6 +920,21 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         }
     }
 
+    protected function quitarPuntoYPieza($strNumeGuia) {
+        $intLongCade = strlen($strNumeGuia);
+        $intCantPnto = 0;
+        for ($i=0; $i < $intLongCade; $i++) {
+            if ($strNumeGuia[$i] == '.') {
+                $intCantPnto++;
+            }
+        }
+        if ($intCantPnto > 0) {
+            $intPosiPnto = strpos($strNumeGuia,'.');
+            $strNumeGuia = substr($strNumeGuia,0,$intPosiPnto);
+        }
+        return $strNumeGuia;
+    }
+
     protected function verificarDatosMasivos($arrCampClie,$intNumeLine) {
         t('Verificando datos de la linea: '.$intNumeLine);
         $arrContVali = [];
@@ -924,6 +947,13 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         // Se verifica la existencia previa de la Guia en la tabla
         //--------------------------------------------------------
         $strGuiaClie = $arrCampClie[0];
+
+        //--------------------------------------------------------------
+        // Caso Stephy de ATC.  Viene con un punto y luego la ordinal
+        // de la pieza, lo cual debe eliminarse
+        //--------------------------------------------------------------
+        //$strGuiaClie = $this->quitarPuntoYPieza($strGuiaClie);
+
         if (strlen($strGuiaClie) > 0) {
             //-------------------------------------------------------------------
             // Primero se verifica si existe una Guía con el Tracking indicado

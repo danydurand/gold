@@ -39,10 +39,14 @@
 	 * @property-read FacTarifaPeso[] $_FacTarifaPesoAsTarifaArray the value for the private _objFacTarifaPesoAsTarifaArray (Read-Only) if set due to an ExpandAsArray on the fac_tarifa_peso.tarifa_id reverse relationship
 	 * @property-read Guias $_GuiasAsTarifa the value for the private _objGuiasAsTarifa (Read-Only) if set due to an expansion on the guias.tarifa_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsTarifaArray the value for the private _objGuiasAsTarifaArray (Read-Only) if set due to an ExpandAsArray on the guias.tarifa_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsTarifa the value for the private _objGuiasHAsTarifa (Read-Only) if set due to an expansion on the guias_h.tarifa_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsTarifaArray the value for the private _objGuiasHAsTarifaArray (Read-Only) if set due to an ExpandAsArray on the guias_h.tarifa_id reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsTarifa the value for the private _objMasterClienteAsTarifa (Read-Only) if set due to an expansion on the master_cliente.tarifa_id reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsTarifaArray the value for the private _objMasterClienteAsTarifaArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.tarifa_id reverse relationship
 	 * @property-read NotaEntrega $_NotaEntregaAsTarifa the value for the private _objNotaEntregaAsTarifa (Read-Only) if set due to an expansion on the nota_entrega.tarifa_id reverse relationship
 	 * @property-read NotaEntrega[] $_NotaEntregaAsTarifaArray the value for the private _objNotaEntregaAsTarifaArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega.tarifa_id reverse relationship
+	 * @property-read NotaEntregaH $_NotaEntregaHAsTarifa the value for the private _objNotaEntregaHAsTarifa (Read-Only) if set due to an expansion on the nota_entrega_h.tarifa_id reverse relationship
+	 * @property-read NotaEntregaH[] $_NotaEntregaHAsTarifaArray the value for the private _objNotaEntregaHAsTarifaArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_h.tarifa_id reverse relationship
 	 * @property-read TarifaPeso $_TarifaPesoAsTarifa the value for the private _objTarifaPesoAsTarifa (Read-Only) if set due to an expansion on the tarifa_peso.tarifa_id reverse relationship
 	 * @property-read TarifaPeso[] $_TarifaPesoAsTarifaArray the value for the private _objTarifaPesoAsTarifaArray (Read-Only) if set due to an ExpandAsArray on the tarifa_peso.tarifa_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -247,6 +251,22 @@
 		private $_objGuiasAsTarifaArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single GuiasHAsTarifa object
+		 * (of type GuiasH), if this FacTarifa object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsTarifa;
+		 */
+		private $_objGuiasHAsTarifa;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsTarifa objects
+		 * (of type GuiasH[]), if this FacTarifa object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsTarifaArray;
+		 */
+		private $_objGuiasHAsTarifaArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single MasterClienteAsTarifa object
 		 * (of type MasterCliente), if this FacTarifa object was restored with
 		 * an expansion on the master_cliente association table.
@@ -277,6 +297,22 @@
 		 * @var NotaEntrega[] _objNotaEntregaAsTarifaArray;
 		 */
 		private $_objNotaEntregaAsTarifaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single NotaEntregaHAsTarifa object
+		 * (of type NotaEntregaH), if this FacTarifa object was restored with
+		 * an expansion on the nota_entrega_h association table.
+		 * @var NotaEntregaH _objNotaEntregaHAsTarifa;
+		 */
+		private $_objNotaEntregaHAsTarifa;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaEntregaHAsTarifa objects
+		 * (of type NotaEntregaH[]), if this FacTarifa object was restored with
+		 * an ExpandAsArray on the nota_entrega_h association table.
+		 * @var NotaEntregaH[] _objNotaEntregaHAsTarifaArray;
+		 */
+		private $_objNotaEntregaHAsTarifaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single TarifaPesoAsTarifa object
@@ -962,6 +998,21 @@
 				}
 			}
 
+			// Check for GuiasHAsTarifa Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashastarifa__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashastarifa']) ? null : $objExpansionAliasArray['guiashastarifa']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsTarifaArray)
+				$objToReturn->_objGuiasHAsTarifaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsTarifaArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashastarifa__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsTarifa)) {
+					$objToReturn->_objGuiasHAsTarifa = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashastarifa__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for MasterClienteAsTarifa Virtual Binding
 			$strAlias = $strAliasPrefix . 'masterclienteastarifa__codi_clie';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -989,6 +1040,21 @@
 					$objToReturn->_objNotaEntregaAsTarifaArray[] = NotaEntrega::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregaastarifa__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objNotaEntregaAsTarifa)) {
 					$objToReturn->_objNotaEntregaAsTarifa = NotaEntrega::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregaastarifa__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for NotaEntregaHAsTarifa Virtual Binding
+			$strAlias = $strAliasPrefix . 'notaentregahastarifa__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notaentregahastarifa']) ? null : $objExpansionAliasArray['notaentregahastarifa']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaEntregaHAsTarifaArray)
+				$objToReturn->_objNotaEntregaHAsTarifaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaEntregaHAsTarifaArray[] = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregahastarifa__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaEntregaHAsTarifa)) {
+					$objToReturn->_objNotaEntregaHAsTarifa = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregahastarifa__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -1533,6 +1599,22 @@
 					 */
 					return $this->_objGuiasAsTarifaArray;
 
+				case '_GuiasHAsTarifa':
+					/**
+					 * Gets the value for the private _objGuiasHAsTarifa (Read-Only)
+					 * if set due to an expansion on the guias_h.tarifa_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsTarifa;
+
+				case '_GuiasHAsTarifaArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsTarifaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.tarifa_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsTarifaArray;
+
 				case '_MasterClienteAsTarifa':
 					/**
 					 * Gets the value for the private _objMasterClienteAsTarifa (Read-Only)
@@ -1564,6 +1646,22 @@
 					 * @return NotaEntrega[]
 					 */
 					return $this->_objNotaEntregaAsTarifaArray;
+
+				case '_NotaEntregaHAsTarifa':
+					/**
+					 * Gets the value for the private _objNotaEntregaHAsTarifa (Read-Only)
+					 * if set due to an expansion on the nota_entrega_h.tarifa_id reverse relationship
+					 * @return NotaEntregaH
+					 */
+					return $this->_objNotaEntregaHAsTarifa;
+
+				case '_NotaEntregaHAsTarifaArray':
+					/**
+					 * Gets the value for the private _objNotaEntregaHAsTarifaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_entrega_h.tarifa_id reverse relationship
+					 * @return NotaEntregaH[]
+					 */
+					return $this->_objNotaEntregaHAsTarifaArray;
 
 				case '_TarifaPesoAsTarifa':
 					/**
@@ -1849,11 +1947,17 @@
 			if ($this->CountGuiasesAsTarifa()) {
 				$arrTablRela[] = 'guias';
 			}
+			if ($this->CountGuiasHsAsTarifa()) {
+				$arrTablRela[] = 'guias_h';
+			}
 			if ($this->CountMasterClientesAsTarifa()) {
 				$arrTablRela[] = 'master_cliente';
 			}
 			if ($this->CountNotaEntregasAsTarifa()) {
 				$arrTablRela[] = 'nota_entrega';
+			}
+			if ($this->CountNotaEntregaHsAsTarifa()) {
+				$arrTablRela[] = 'nota_entrega_h';
 			}
 			if ($this->CountTarifaPesosAsTarifa()) {
 				$arrTablRela[] = 'tarifa_peso';
@@ -2464,6 +2568,155 @@
 		}
 
 
+		// Related Objects' Methods for GuiasHAsTarifa
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsTarifa as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsTarifaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByTarifaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsTarifa
+		 * @return int
+		*/
+		public function CountGuiasHsAsTarifa() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByTarifaId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsTarifa
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsTarifa(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsTarifa on this unsaved FacTarifa.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsTarifa on this FacTarifa with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsTarifa
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsTarifa(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifa on this unsaved FacTarifa.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifa on this FacTarifa with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`tarifa_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsTarifa
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsTarifa() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifa on this unsaved FacTarifa.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`tarifa_id` = null
+				WHERE
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsTarifa
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsTarifa(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifa on this unsaved FacTarifa.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifa on this FacTarifa with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsTarifa
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsTarifa() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsTarifa on this unsaved FacTarifa.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for MasterClienteAsTarifa
 		//-------------------------------------------------------------------
 
@@ -2756,6 +3009,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`nota_entrega`
+				WHERE
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for NotaEntregaHAsTarifa
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaEntregaHsAsTarifa as an array of NotaEntregaH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaEntregaH[]
+		*/
+		public function GetNotaEntregaHAsTarifaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return NotaEntregaH::LoadArrayByTarifaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaEntregaHsAsTarifa
+		 * @return int
+		*/
+		public function CountNotaEntregaHsAsTarifa() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return NotaEntregaH::CountByTarifaId($this->intId);
+		}
+
+		/**
+		 * Associates a NotaEntregaHAsTarifa
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function AssociateNotaEntregaHAsTarifa(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaHAsTarifa on this unsaved FacTarifa.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaHAsTarifa on this FacTarifa with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaEntregaHAsTarifa
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function UnassociateNotaEntregaHAsTarifa(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsTarifa on this unsaved FacTarifa.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsTarifa on this FacTarifa with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`tarifa_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . ' AND
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaEntregaHsAsTarifa
+		 * @return void
+		*/
+		public function UnassociateAllNotaEntregaHsAsTarifa() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsTarifa on this unsaved FacTarifa.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`tarifa_id` = null
+				WHERE
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaEntregaHAsTarifa
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaEntregaHAsTarifa(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsTarifa on this unsaved FacTarifa.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsTarifa on this FacTarifa with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . ' AND
+					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaEntregaHsAsTarifa
+		 * @return void
+		*/
+		public function DeleteAllNotaEntregaHsAsTarifa() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaHAsTarifa on this unsaved FacTarifa.');
+
+			// Get the Database Object for this Class
+			$objDatabase = FacTarifa::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_h`
 				WHERE
 					`tarifa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -3126,8 +3528,10 @@
      * @property-read QQReverseReferenceNodeCambioTarifa $CambioTarifaAsTarifaOrigen
      * @property-read QQReverseReferenceNodeFacTarifaPeso $FacTarifaPesoAsTarifa
      * @property-read QQReverseReferenceNodeGuias $GuiasAsTarifa
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsTarifa
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsTarifa
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsTarifa
+     * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsTarifa
      * @property-read QQReverseReferenceNodeTarifaPeso $TarifaPesoAsTarifa
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -3178,10 +3582,14 @@
 					return new QQReverseReferenceNodeFacTarifaPeso($this, 'factarifapesoastarifa', 'reverse_reference', 'tarifa_id', 'FacTarifaPesoAsTarifa');
 				case 'GuiasAsTarifa':
 					return new QQReverseReferenceNodeGuias($this, 'guiasastarifa', 'reverse_reference', 'tarifa_id', 'GuiasAsTarifa');
+				case 'GuiasHAsTarifa':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashastarifa', 'reverse_reference', 'tarifa_id', 'GuiasHAsTarifa');
 				case 'MasterClienteAsTarifa':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteastarifa', 'reverse_reference', 'tarifa_id', 'MasterClienteAsTarifa');
 				case 'NotaEntregaAsTarifa':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaastarifa', 'reverse_reference', 'tarifa_id', 'NotaEntregaAsTarifa');
+				case 'NotaEntregaHAsTarifa':
+					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahastarifa', 'reverse_reference', 'tarifa_id', 'NotaEntregaHAsTarifa');
 				case 'TarifaPesoAsTarifa':
 					return new QQReverseReferenceNodeTarifaPeso($this, 'tarifapesoastarifa', 'reverse_reference', 'tarifa_id', 'TarifaPesoAsTarifa');
 
@@ -3221,8 +3629,10 @@
      * @property-read QQReverseReferenceNodeCambioTarifa $CambioTarifaAsTarifaOrigen
      * @property-read QQReverseReferenceNodeFacTarifaPeso $FacTarifaPesoAsTarifa
      * @property-read QQReverseReferenceNodeGuias $GuiasAsTarifa
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsTarifa
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsTarifa
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsTarifa
+     * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsTarifa
      * @property-read QQReverseReferenceNodeTarifaPeso $TarifaPesoAsTarifa
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -3273,10 +3683,14 @@
 					return new QQReverseReferenceNodeFacTarifaPeso($this, 'factarifapesoastarifa', 'reverse_reference', 'tarifa_id', 'FacTarifaPesoAsTarifa');
 				case 'GuiasAsTarifa':
 					return new QQReverseReferenceNodeGuias($this, 'guiasastarifa', 'reverse_reference', 'tarifa_id', 'GuiasAsTarifa');
+				case 'GuiasHAsTarifa':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashastarifa', 'reverse_reference', 'tarifa_id', 'GuiasHAsTarifa');
 				case 'MasterClienteAsTarifa':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteastarifa', 'reverse_reference', 'tarifa_id', 'MasterClienteAsTarifa');
 				case 'NotaEntregaAsTarifa':
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaastarifa', 'reverse_reference', 'tarifa_id', 'NotaEntregaAsTarifa');
+				case 'NotaEntregaHAsTarifa':
+					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahastarifa', 'reverse_reference', 'tarifa_id', 'NotaEntregaHAsTarifa');
 				case 'TarifaPesoAsTarifa':
 					return new QQReverseReferenceNodeTarifaPeso($this, 'tarifapesoastarifa', 'reverse_reference', 'tarifa_id', 'TarifaPesoAsTarifa');
 

@@ -32,6 +32,8 @@
 	 * @property-read Counter[] $_CounterAsRutaArray the value for the private _objCounterAsRutaArray (Read-Only) if set due to an ExpandAsArray on the counter.ruta_id reverse relationship
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsRuta the value for the private _objPiezaCheckpointsAsRuta (Read-Only) if set due to an expansion on the pieza_checkpoints.ruta_id reverse relationship
 	 * @property-read PiezaCheckpoints[] $_PiezaCheckpointsAsRutaArray the value for the private _objPiezaCheckpointsAsRutaArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints.ruta_id reverse relationship
+	 * @property-read PiezaCheckpointsH $_PiezaCheckpointsHAsRuta the value for the private _objPiezaCheckpointsHAsRuta (Read-Only) if set due to an expansion on the pieza_checkpoints_h.ruta_id reverse relationship
+	 * @property-read PiezaCheckpointsH[] $_PiezaCheckpointsHAsRutaArray the value for the private _objPiezaCheckpointsHAsRutaArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints_h.ruta_id reverse relationship
 	 * @property-read SdeOperacion $_SdeOperacionAsRuta the value for the private _objSdeOperacionAsRuta (Read-Only) if set due to an expansion on the sde_operacion.ruta_id reverse relationship
 	 * @property-read SdeOperacion[] $_SdeOperacionAsRutaArray the value for the private _objSdeOperacionAsRutaArray (Read-Only) if set due to an ExpandAsArray on the sde_operacion.ruta_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -172,6 +174,22 @@
 		 * @var PiezaCheckpoints[] _objPiezaCheckpointsAsRutaArray;
 		 */
 		private $_objPiezaCheckpointsAsRutaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PiezaCheckpointsHAsRuta object
+		 * (of type PiezaCheckpointsH), if this Rutas object was restored with
+		 * an expansion on the pieza_checkpoints_h association table.
+		 * @var PiezaCheckpointsH _objPiezaCheckpointsHAsRuta;
+		 */
+		private $_objPiezaCheckpointsHAsRuta;
+
+		/**
+		 * Private member variable that stores a reference to an array of PiezaCheckpointsHAsRuta objects
+		 * (of type PiezaCheckpointsH[]), if this Rutas object was restored with
+		 * an ExpandAsArray on the pieza_checkpoints_h association table.
+		 * @var PiezaCheckpointsH[] _objPiezaCheckpointsHAsRutaArray;
+		 */
+		private $_objPiezaCheckpointsHAsRutaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single SdeOperacionAsRuta object
@@ -824,6 +842,21 @@
 				}
 			}
 
+			// Check for PiezaCheckpointsHAsRuta Virtual Binding
+			$strAlias = $strAliasPrefix . 'piezacheckpointshasruta__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['piezacheckpointshasruta']) ? null : $objExpansionAliasArray['piezacheckpointshasruta']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPiezaCheckpointsHAsRutaArray)
+				$objToReturn->_objPiezaCheckpointsHAsRutaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPiezaCheckpointsHAsRutaArray[] = PiezaCheckpointsH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointshasruta__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPiezaCheckpointsHAsRuta)) {
+					$objToReturn->_objPiezaCheckpointsHAsRuta = PiezaCheckpointsH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointshasruta__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for SdeOperacionAsRuta Virtual Binding
 			$strAlias = $strAliasPrefix . 'sdeoperacionasruta__codi_oper';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1439,6 +1472,22 @@
 					 */
 					return $this->_objPiezaCheckpointsAsRutaArray;
 
+				case '_PiezaCheckpointsHAsRuta':
+					/**
+					 * Gets the value for the private _objPiezaCheckpointsHAsRuta (Read-Only)
+					 * if set due to an expansion on the pieza_checkpoints_h.ruta_id reverse relationship
+					 * @return PiezaCheckpointsH
+					 */
+					return $this->_objPiezaCheckpointsHAsRuta;
+
+				case '_PiezaCheckpointsHAsRutaArray':
+					/**
+					 * Gets the value for the private _objPiezaCheckpointsHAsRutaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pieza_checkpoints_h.ruta_id reverse relationship
+					 * @return PiezaCheckpointsH[]
+					 */
+					return $this->_objPiezaCheckpointsHAsRutaArray;
+
 				case '_SdeOperacionAsRuta':
 					/**
 					 * Gets the value for the private _objSdeOperacionAsRuta (Read-Only)
@@ -1658,6 +1707,9 @@
 			}
 			if ($this->CountPiezaCheckpointsesAsRuta()) {
 				$arrTablRela[] = 'pieza_checkpoints';
+			}
+			if ($this->CountPiezaCheckpointsHsAsRuta()) {
+				$arrTablRela[] = 'pieza_checkpoints_h';
 			}
 			if ($this->CountSdeOperacionsAsRuta()) {
 				$arrTablRela[] = 'sde_operacion';
@@ -1964,6 +2016,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`pieza_checkpoints`
+				WHERE
+					`ruta_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for PiezaCheckpointsHAsRuta
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PiezaCheckpointsHsAsRuta as an array of PiezaCheckpointsH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PiezaCheckpointsH[]
+		*/
+		public function GetPiezaCheckpointsHAsRutaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return PiezaCheckpointsH::LoadArrayByRutaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PiezaCheckpointsHsAsRuta
+		 * @return int
+		*/
+		public function CountPiezaCheckpointsHsAsRuta() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return PiezaCheckpointsH::CountByRutaId($this->intId);
+		}
+
+		/**
+		 * Associates a PiezaCheckpointsHAsRuta
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function AssociatePiezaCheckpointsHAsRuta(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaCheckpointsHAsRuta on this unsaved Rutas.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaCheckpointsHAsRuta on this Rutas with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Rutas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`ruta_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PiezaCheckpointsHAsRuta
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function UnassociatePiezaCheckpointsHAsRuta(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsRuta on this unsaved Rutas.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsRuta on this Rutas with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Rutas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`ruta_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . ' AND
+					`ruta_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PiezaCheckpointsHsAsRuta
+		 * @return void
+		*/
+		public function UnassociateAllPiezaCheckpointsHsAsRuta() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsRuta on this unsaved Rutas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Rutas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`ruta_id` = null
+				WHERE
+					`ruta_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PiezaCheckpointsHAsRuta
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function DeleteAssociatedPiezaCheckpointsHAsRuta(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsRuta on this unsaved Rutas.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsRuta on this Rutas with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Rutas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_checkpoints_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . ' AND
+					`ruta_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PiezaCheckpointsHsAsRuta
+		 * @return void
+		*/
+		public function DeleteAllPiezaCheckpointsHsAsRuta() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsRuta on this unsaved Rutas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Rutas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_checkpoints_h`
 				WHERE
 					`ruta_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2319,6 +2520,7 @@
      *
      * @property-read QQReverseReferenceNodeCounter $CounterAsRuta
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsRuta
+     * @property-read QQReverseReferenceNodePiezaCheckpointsH $PiezaCheckpointsHAsRuta
      * @property-read QQReverseReferenceNodeSdeOperacion $SdeOperacionAsRuta
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2359,6 +2561,8 @@
 					return new QQReverseReferenceNodeCounter($this, 'counterasruta', 'reverse_reference', 'ruta_id', 'CounterAsRuta');
 				case 'PiezaCheckpointsAsRuta':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsasruta', 'reverse_reference', 'ruta_id', 'PiezaCheckpointsAsRuta');
+				case 'PiezaCheckpointsHAsRuta':
+					return new QQReverseReferenceNodePiezaCheckpointsH($this, 'piezacheckpointshasruta', 'reverse_reference', 'ruta_id', 'PiezaCheckpointsHAsRuta');
 				case 'SdeOperacionAsRuta':
 					return new QQReverseReferenceNodeSdeOperacion($this, 'sdeoperacionasruta', 'reverse_reference', 'ruta_id', 'SdeOperacionAsRuta');
 
@@ -2393,6 +2597,7 @@
      *
      * @property-read QQReverseReferenceNodeCounter $CounterAsRuta
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsRuta
+     * @property-read QQReverseReferenceNodePiezaCheckpointsH $PiezaCheckpointsHAsRuta
      * @property-read QQReverseReferenceNodeSdeOperacion $SdeOperacionAsRuta
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2433,6 +2638,8 @@
 					return new QQReverseReferenceNodeCounter($this, 'counterasruta', 'reverse_reference', 'ruta_id', 'CounterAsRuta');
 				case 'PiezaCheckpointsAsRuta':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsasruta', 'reverse_reference', 'ruta_id', 'PiezaCheckpointsAsRuta');
+				case 'PiezaCheckpointsHAsRuta':
+					return new QQReverseReferenceNodePiezaCheckpointsH($this, 'piezacheckpointshasruta', 'reverse_reference', 'ruta_id', 'PiezaCheckpointsHAsRuta');
 				case 'SdeOperacionAsRuta':
 					return new QQReverseReferenceNodeSdeOperacion($this, 'sdeoperacionasruta', 'reverse_reference', 'ruta_id', 'SdeOperacionAsRuta');
 

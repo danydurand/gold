@@ -28,6 +28,8 @@
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property-read Guias $_Guias the value for the private _objGuias (Read-Only) if set due to an expansion on the guias.guia_pod_id reverse relationship
 	 * @property-read Guias[] $_GuiasArray the value for the private _objGuiasArray (Read-Only) if set due to an ExpandAsArray on the guias.guia_pod_id reverse relationship
+	 * @property-read GuiasH $_GuiasH the value for the private _objGuiasH (Read-Only) if set due to an expansion on the guias_h.guia_pod_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHArray the value for the private _objGuiasHArray (Read-Only) if set due to an ExpandAsArray on the guias_h.guia_pod_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class GuiaPodGen extends QBaseClass implements IteratorAggregate {
@@ -141,6 +143,22 @@
 		 * @var Guias[] _objGuiasArray;
 		 */
 		private $_objGuiasArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasH object
+		 * (of type GuiasH), if this GuiaPod object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasH;
+		 */
+		private $_objGuiasH;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasH objects
+		 * (of type GuiasH[]), if this GuiaPod object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHArray;
+		 */
+		private $_objGuiasHArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -740,6 +758,21 @@
 				}
 			}
 
+			// Check for GuiasH Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiash__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiash']) ? null : $objExpansionAliasArray['guiash']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHArray)
+				$objToReturn->_objGuiasHArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiash__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasH)) {
+					$objToReturn->_objGuiasH = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiash__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			return $objToReturn;
 		}
 		
@@ -1235,6 +1268,22 @@
 					 */
 					return $this->_objGuiasArray;
 
+				case '_GuiasH':
+					/**
+					 * Gets the value for the private _objGuiasH (Read-Only)
+					 * if set due to an expansion on the guias_h.guia_pod_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasH;
+
+				case '_GuiasHArray':
+					/**
+					 * Gets the value for the private _objGuiasHArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.guia_pod_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1390,6 +1439,9 @@
 			if ($this->CountGuiases()) {
 				$arrTablRela[] = 'guias';
 			}
+			if ($this->CountGuiasHs()) {
+				$arrTablRela[] = 'guias_h';
+			}
 			
 			return $arrTablRela;
 		}
@@ -1543,6 +1595,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guias`
+				WHERE
+					`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasH
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHs as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByGuiaPodId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHs
+		 * @return int
+		*/
+		public function CountGuiasHs() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByGuiaPodId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasH
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasH(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasH on this unsaved GuiaPod.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasH on this GuiaPod with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPod::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasH
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasH(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasH on this unsaved GuiaPod.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasH on this GuiaPod with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPod::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`guia_pod_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHs
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHs() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasH on this unsaved GuiaPod.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPod::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`guia_pod_id` = null
+				WHERE
+					`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasH
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasH(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasH on this unsaved GuiaPod.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasH on this GuiaPod with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPod::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHs
+		 * @return void
+		*/
+		public function DeleteAllGuiasHs() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasH on this unsaved GuiaPod.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPod::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
 				WHERE
 					`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -1738,6 +1939,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeGuias $Guias
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasH
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1771,6 +1973,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'Integer', $this);
 				case 'Guias':
 					return new QQReverseReferenceNodeGuias($this, 'guias', 'reverse_reference', 'guia_pod_id', 'Guias');
+				case 'GuiasH':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiash', 'reverse_reference', 'guia_pod_id', 'GuiasH');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -1800,6 +2004,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeGuias $Guias
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasH
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1833,6 +2038,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'integer', $this);
 				case 'Guias':
 					return new QQReverseReferenceNodeGuias($this, 'guias', 'reverse_reference', 'guia_pod_id', 'Guias');
+				case 'GuiasH':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiash', 'reverse_reference', 'guia_pod_id', 'GuiasH');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

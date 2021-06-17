@@ -2,6 +2,24 @@
 require_once('qcubed.inc.php');
 
 
+$strNumeGuia = '169695.1';
+echo quitarPuntoYPieza($strNumeGuia);
+
+
+function quitarPuntoYPieza($strNumeGuia) {
+    $intLongCade = strlen($strNumeGuia);
+    $intCantPnto = 0;
+    for ($i=0; $i < $intLongCade; $i++) {
+        if ($strNumeGuia[$i] == '.') {
+            $intCantPnto++;
+        }
+    }
+    if ($intCantPnto > 0) {
+        $intPosiPnto = strpos($strNumeGuia,'.');
+        $strNumeGuia = substr($strNumeGuia,0,$intPosiPnto);
+    }
+    return $strNumeGuia;
+}
 
 //$objClauWher   = QQ::Clause();
 //$objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');

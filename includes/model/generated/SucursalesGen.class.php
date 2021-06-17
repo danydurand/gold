@@ -65,6 +65,10 @@
 	 * @property-read Guias[] $_GuiasAsDestinoArray the value for the private _objGuiasAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the guias.destino_id reverse relationship
 	 * @property-read Guias $_GuiasAsOrigen the value for the private _objGuiasAsOrigen (Read-Only) if set due to an expansion on the guias.origen_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsOrigenArray the value for the private _objGuiasAsOrigenArray (Read-Only) if set due to an ExpandAsArray on the guias.origen_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsDestino the value for the private _objGuiasHAsDestino (Read-Only) if set due to an expansion on the guias_h.destino_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsDestinoArray the value for the private _objGuiasHAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the guias_h.destino_id reverse relationship
+	 * @property-read GuiasH $_GuiasHAsOrigen the value for the private _objGuiasHAsOrigen (Read-Only) if set due to an expansion on the guias_h.origen_id reverse relationship
+	 * @property-read GuiasH[] $_GuiasHAsOrigenArray the value for the private _objGuiasHAsOrigenArray (Read-Only) if set due to an ExpandAsArray on the guias_h.origen_id reverse relationship
 	 * @property-read HistoriaCliente $_HistoriaClienteAsSucursal the value for the private _objHistoriaClienteAsSucursal (Read-Only) if set due to an expansion on the historia_cliente.sucursal_id reverse relationship
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsSucursalArray the value for the private _objHistoriaClienteAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.sucursal_id reverse relationship
 	 * @property-read ManifiestoExp $_ManifiestoExpAsDestino the value for the private _objManifiestoExpAsDestino (Read-Only) if set due to an expansion on the manifiesto_exp.destino_id reverse relationship
@@ -73,8 +77,12 @@
 	 * @property-read MasterCliente[] $_MasterClienteAsSucursalArray the value for the private _objMasterClienteAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.sucursal_id reverse relationship
 	 * @property-read NotaEntregaCkpt $_NotaEntregaCkptAsSucursal the value for the private _objNotaEntregaCkptAsSucursal (Read-Only) if set due to an expansion on the nota_entrega_ckpt.sucursal_id reverse relationship
 	 * @property-read NotaEntregaCkpt[] $_NotaEntregaCkptAsSucursalArray the value for the private _objNotaEntregaCkptAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_ckpt.sucursal_id reverse relationship
+	 * @property-read NotaEntregaCkptH $_NotaEntregaCkptHAsSucursal the value for the private _objNotaEntregaCkptHAsSucursal (Read-Only) if set due to an expansion on the nota_entrega_ckpt_h.sucursal_id reverse relationship
+	 * @property-read NotaEntregaCkptH[] $_NotaEntregaCkptHAsSucursalArray the value for the private _objNotaEntregaCkptHAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_ckpt_h.sucursal_id reverse relationship
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsSucursal the value for the private _objPiezaCheckpointsAsSucursal (Read-Only) if set due to an expansion on the pieza_checkpoints.sucursal_id reverse relationship
 	 * @property-read PiezaCheckpoints[] $_PiezaCheckpointsAsSucursalArray the value for the private _objPiezaCheckpointsAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints.sucursal_id reverse relationship
+	 * @property-read PiezaCheckpointsH $_PiezaCheckpointsHAsSucursal the value for the private _objPiezaCheckpointsHAsSucursal (Read-Only) if set due to an expansion on the pieza_checkpoints_h.sucursal_id reverse relationship
+	 * @property-read PiezaCheckpointsH[] $_PiezaCheckpointsHAsSucursalArray the value for the private _objPiezaCheckpointsHAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints_h.sucursal_id reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajoAsSucursal the value for the private _objRegistroTrabajoAsSucursal (Read-Only) if set due to an expansion on the registro_trabajo.sucursal_id reverse relationship
 	 * @property-read RegistroTrabajo[] $_RegistroTrabajoAsSucursalArray the value for the private _objRegistroTrabajoAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the registro_trabajo.sucursal_id reverse relationship
 	 * @property-read Ruta $_RutaAsSucursal the value for the private _objRutaAsSucursal (Read-Only) if set due to an expansion on the ruta.sucursal_id reverse relationship
@@ -495,6 +503,38 @@
 		private $_objGuiasAsOrigenArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single GuiasHAsDestino object
+		 * (of type GuiasH), if this Sucursales object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsDestino;
+		 */
+		private $_objGuiasHAsDestino;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsDestino objects
+		 * (of type GuiasH[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsDestinoArray;
+		 */
+		private $_objGuiasHAsDestinoArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasHAsOrigen object
+		 * (of type GuiasH), if this Sucursales object was restored with
+		 * an expansion on the guias_h association table.
+		 * @var GuiasH _objGuiasHAsOrigen;
+		 */
+		private $_objGuiasHAsOrigen;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasHAsOrigen objects
+		 * (of type GuiasH[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the guias_h association table.
+		 * @var GuiasH[] _objGuiasHAsOrigenArray;
+		 */
+		private $_objGuiasHAsOrigenArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single HistoriaClienteAsSucursal object
 		 * (of type HistoriaCliente), if this Sucursales object was restored with
 		 * an expansion on the historia_cliente association table.
@@ -559,6 +599,22 @@
 		private $_objNotaEntregaCkptAsSucursalArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single NotaEntregaCkptHAsSucursal object
+		 * (of type NotaEntregaCkptH), if this Sucursales object was restored with
+		 * an expansion on the nota_entrega_ckpt_h association table.
+		 * @var NotaEntregaCkptH _objNotaEntregaCkptHAsSucursal;
+		 */
+		private $_objNotaEntregaCkptHAsSucursal;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaEntregaCkptHAsSucursal objects
+		 * (of type NotaEntregaCkptH[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the nota_entrega_ckpt_h association table.
+		 * @var NotaEntregaCkptH[] _objNotaEntregaCkptHAsSucursalArray;
+		 */
+		private $_objNotaEntregaCkptHAsSucursalArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single PiezaCheckpointsAsSucursal object
 		 * (of type PiezaCheckpoints), if this Sucursales object was restored with
 		 * an expansion on the pieza_checkpoints association table.
@@ -573,6 +629,22 @@
 		 * @var PiezaCheckpoints[] _objPiezaCheckpointsAsSucursalArray;
 		 */
 		private $_objPiezaCheckpointsAsSucursalArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PiezaCheckpointsHAsSucursal object
+		 * (of type PiezaCheckpointsH), if this Sucursales object was restored with
+		 * an expansion on the pieza_checkpoints_h association table.
+		 * @var PiezaCheckpointsH _objPiezaCheckpointsHAsSucursal;
+		 */
+		private $_objPiezaCheckpointsHAsSucursal;
+
+		/**
+		 * Private member variable that stores a reference to an array of PiezaCheckpointsHAsSucursal objects
+		 * (of type PiezaCheckpointsH[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the pieza_checkpoints_h association table.
+		 * @var PiezaCheckpointsH[] _objPiezaCheckpointsHAsSucursalArray;
+		 */
+		private $_objPiezaCheckpointsHAsSucursalArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single RegistroTrabajoAsSucursal object
@@ -1542,6 +1614,36 @@
 				}
 			}
 
+			// Check for GuiasHAsDestino Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasdestino__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasdestino']) ? null : $objExpansionAliasArray['guiashasdestino']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsDestinoArray)
+				$objToReturn->_objGuiasHAsDestinoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsDestinoArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasdestino__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsDestino)) {
+					$objToReturn->_objGuiasHAsDestino = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasdestino__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiasHAsOrigen Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiashasorigen__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiashasorigen']) ? null : $objExpansionAliasArray['guiashasorigen']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasHAsOrigenArray)
+				$objToReturn->_objGuiasHAsOrigenArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasHAsOrigenArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasorigen__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasHAsOrigen)) {
+					$objToReturn->_objGuiasHAsOrigen = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasorigen__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for HistoriaClienteAsSucursal Virtual Binding
 			$strAlias = $strAliasPrefix . 'historiaclienteassucursal__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1602,6 +1704,21 @@
 				}
 			}
 
+			// Check for NotaEntregaCkptHAsSucursal Virtual Binding
+			$strAlias = $strAliasPrefix . 'notaentregackpthassucursal__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notaentregackpthassucursal']) ? null : $objExpansionAliasArray['notaentregackpthassucursal']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaEntregaCkptHAsSucursalArray)
+				$objToReturn->_objNotaEntregaCkptHAsSucursalArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaEntregaCkptHAsSucursalArray[] = NotaEntregaCkptH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpthassucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaEntregaCkptHAsSucursal)) {
+					$objToReturn->_objNotaEntregaCkptHAsSucursal = NotaEntregaCkptH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpthassucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for PiezaCheckpointsAsSucursal Virtual Binding
 			$strAlias = $strAliasPrefix . 'piezacheckpointsassucursal__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1614,6 +1731,21 @@
 					$objToReturn->_objPiezaCheckpointsAsSucursalArray[] = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsassucursal__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPiezaCheckpointsAsSucursal)) {
 					$objToReturn->_objPiezaCheckpointsAsSucursal = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsassucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for PiezaCheckpointsHAsSucursal Virtual Binding
+			$strAlias = $strAliasPrefix . 'piezacheckpointshassucursal__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['piezacheckpointshassucursal']) ? null : $objExpansionAliasArray['piezacheckpointshassucursal']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPiezaCheckpointsHAsSucursalArray)
+				$objToReturn->_objPiezaCheckpointsHAsSucursalArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPiezaCheckpointsHAsSucursalArray[] = PiezaCheckpointsH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointshassucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPiezaCheckpointsHAsSucursal)) {
+					$objToReturn->_objPiezaCheckpointsHAsSucursal = PiezaCheckpointsH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointshassucursal__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2634,6 +2766,38 @@
 					 */
 					return $this->_objGuiasAsOrigenArray;
 
+				case '_GuiasHAsDestino':
+					/**
+					 * Gets the value for the private _objGuiasHAsDestino (Read-Only)
+					 * if set due to an expansion on the guias_h.destino_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsDestino;
+
+				case '_GuiasHAsDestinoArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsDestinoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.destino_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsDestinoArray;
+
+				case '_GuiasHAsOrigen':
+					/**
+					 * Gets the value for the private _objGuiasHAsOrigen (Read-Only)
+					 * if set due to an expansion on the guias_h.origen_id reverse relationship
+					 * @return GuiasH
+					 */
+					return $this->_objGuiasHAsOrigen;
+
+				case '_GuiasHAsOrigenArray':
+					/**
+					 * Gets the value for the private _objGuiasHAsOrigenArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_h.origen_id reverse relationship
+					 * @return GuiasH[]
+					 */
+					return $this->_objGuiasHAsOrigenArray;
+
 				case '_HistoriaClienteAsSucursal':
 					/**
 					 * Gets the value for the private _objHistoriaClienteAsSucursal (Read-Only)
@@ -2698,6 +2862,22 @@
 					 */
 					return $this->_objNotaEntregaCkptAsSucursalArray;
 
+				case '_NotaEntregaCkptHAsSucursal':
+					/**
+					 * Gets the value for the private _objNotaEntregaCkptHAsSucursal (Read-Only)
+					 * if set due to an expansion on the nota_entrega_ckpt_h.sucursal_id reverse relationship
+					 * @return NotaEntregaCkptH
+					 */
+					return $this->_objNotaEntregaCkptHAsSucursal;
+
+				case '_NotaEntregaCkptHAsSucursalArray':
+					/**
+					 * Gets the value for the private _objNotaEntregaCkptHAsSucursalArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_entrega_ckpt_h.sucursal_id reverse relationship
+					 * @return NotaEntregaCkptH[]
+					 */
+					return $this->_objNotaEntregaCkptHAsSucursalArray;
+
 				case '_PiezaCheckpointsAsSucursal':
 					/**
 					 * Gets the value for the private _objPiezaCheckpointsAsSucursal (Read-Only)
@@ -2713,6 +2893,22 @@
 					 * @return PiezaCheckpoints[]
 					 */
 					return $this->_objPiezaCheckpointsAsSucursalArray;
+
+				case '_PiezaCheckpointsHAsSucursal':
+					/**
+					 * Gets the value for the private _objPiezaCheckpointsHAsSucursal (Read-Only)
+					 * if set due to an expansion on the pieza_checkpoints_h.sucursal_id reverse relationship
+					 * @return PiezaCheckpointsH
+					 */
+					return $this->_objPiezaCheckpointsHAsSucursal;
+
+				case '_PiezaCheckpointsHAsSucursalArray':
+					/**
+					 * Gets the value for the private _objPiezaCheckpointsHAsSucursalArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pieza_checkpoints_h.sucursal_id reverse relationship
+					 * @return PiezaCheckpointsH[]
+					 */
+					return $this->_objPiezaCheckpointsHAsSucursalArray;
 
 				case '_RegistroTrabajoAsSucursal':
 					/**
@@ -3203,6 +3399,12 @@
 			if ($this->CountGuiasesAsOrigen()) {
 				$arrTablRela[] = 'guias';
 			}
+			if ($this->CountGuiasHsAsDestino()) {
+				$arrTablRela[] = 'guias_h';
+			}
+			if ($this->CountGuiasHsAsOrigen()) {
+				$arrTablRela[] = 'guias_h';
+			}
 			if ($this->CountHistoriaClientesAsSucursal()) {
 				$arrTablRela[] = 'historia_cliente';
 			}
@@ -3215,8 +3417,14 @@
 			if ($this->CountNotaEntregaCkptsAsSucursal()) {
 				$arrTablRela[] = 'nota_entrega_ckpt';
 			}
+			if ($this->CountNotaEntregaCkptHsAsSucursal()) {
+				$arrTablRela[] = 'nota_entrega_ckpt_h';
+			}
 			if ($this->CountPiezaCheckpointsesAsSucursal()) {
 				$arrTablRela[] = 'pieza_checkpoints';
+			}
+			if ($this->CountPiezaCheckpointsHsAsSucursal()) {
+				$arrTablRela[] = 'pieza_checkpoints_h';
 			}
 			if ($this->CountRegistroTrabajosAsSucursal()) {
 				$arrTablRela[] = 'registro_trabajo';
@@ -5043,6 +5251,304 @@
 		}
 
 
+		// Related Objects' Methods for GuiasHAsDestino
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsDestino as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsDestinoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByDestinoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsDestino
+		 * @return int
+		*/
+		public function CountGuiasHsAsDestino() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByDestinoId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsDestino
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsDestino(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsDestino on this unsaved Sucursales.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsDestino on this Sucursales with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsDestino
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsDestino(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsDestino on this unsaved Sucursales.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsDestino on this Sucursales with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`destino_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsDestino
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`destino_id` = null
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsDestino
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsDestino(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsDestino on this unsaved Sucursales.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsDestino on this Sucursales with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsDestino
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasHAsOrigen
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasHsAsOrigen as an array of GuiasH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasH[]
+		*/
+		public function GetGuiasHAsOrigenArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasH::LoadArrayByOrigenId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasHsAsOrigen
+		 * @return int
+		*/
+		public function CountGuiasHsAsOrigen() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasH::CountByOrigenId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasHAsOrigen
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function AssociateGuiasHAsOrigen(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsOrigen on this unsaved Sucursales.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasHAsOrigen on this Sucursales with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasHAsOrigen
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function UnassociateGuiasHAsOrigen(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsOrigen on this unsaved Sucursales.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsOrigen on this Sucursales with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`origen_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasHsAsOrigen
+		 * @return void
+		*/
+		public function UnassociateAllGuiasHsAsOrigen() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsOrigen on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_h`
+				SET
+					`origen_id` = null
+				WHERE
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasHAsOrigen
+		 * @param GuiasH $objGuiasH
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasHAsOrigen(GuiasH $objGuiasH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsOrigen on this unsaved Sucursales.');
+			if ((is_null($objGuiasH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsOrigen on this Sucursales with an unsaved GuiasH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiasH->Id) . ' AND
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasHsAsOrigen
+		 * @return void
+		*/
+		public function DeleteAllGuiasHsAsOrigen() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasHAsOrigen on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_h`
+				WHERE
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for HistoriaClienteAsSucursal
 		//-------------------------------------------------------------------
 
@@ -5639,6 +6145,155 @@
 		}
 
 
+		// Related Objects' Methods for NotaEntregaCkptHAsSucursal
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaEntregaCkptHsAsSucursal as an array of NotaEntregaCkptH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaEntregaCkptH[]
+		*/
+		public function GetNotaEntregaCkptHAsSucursalArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return NotaEntregaCkptH::LoadArrayBySucursalId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaEntregaCkptHsAsSucursal
+		 * @return int
+		*/
+		public function CountNotaEntregaCkptHsAsSucursal() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return NotaEntregaCkptH::CountBySucursalId($this->intId);
+		}
+
+		/**
+		 * Associates a NotaEntregaCkptHAsSucursal
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function AssociateNotaEntregaCkptHAsSucursal(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaCkptHAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaCkptHAsSucursal on this Sucursales with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaEntregaCkptHAsSucursal
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function UnassociateNotaEntregaCkptHAsSucursal(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsSucursal on this Sucursales with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`sucursal_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . ' AND
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaEntregaCkptHsAsSucursal
+		 * @return void
+		*/
+		public function UnassociateAllNotaEntregaCkptHsAsSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`sucursal_id` = null
+				WHERE
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaEntregaCkptHAsSucursal
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaEntregaCkptHAsSucursal(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsSucursal on this Sucursales with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_ckpt_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . ' AND
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaEntregaCkptHsAsSucursal
+		 * @return void
+		*/
+		public function DeleteAllNotaEntregaCkptHsAsSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptHAsSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_ckpt_h`
+				WHERE
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for PiezaCheckpointsAsSucursal
 		//-------------------------------------------------------------------
 
@@ -5782,6 +6437,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`pieza_checkpoints`
+				WHERE
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for PiezaCheckpointsHAsSucursal
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PiezaCheckpointsHsAsSucursal as an array of PiezaCheckpointsH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PiezaCheckpointsH[]
+		*/
+		public function GetPiezaCheckpointsHAsSucursalArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return PiezaCheckpointsH::LoadArrayBySucursalId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PiezaCheckpointsHsAsSucursal
+		 * @return int
+		*/
+		public function CountPiezaCheckpointsHsAsSucursal() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return PiezaCheckpointsH::CountBySucursalId($this->intId);
+		}
+
+		/**
+		 * Associates a PiezaCheckpointsHAsSucursal
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function AssociatePiezaCheckpointsHAsSucursal(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaCheckpointsHAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaCheckpointsHAsSucursal on this Sucursales with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PiezaCheckpointsHAsSucursal
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function UnassociatePiezaCheckpointsHAsSucursal(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsSucursal on this Sucursales with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`sucursal_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . ' AND
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PiezaCheckpointsHsAsSucursal
+		 * @return void
+		*/
+		public function UnassociateAllPiezaCheckpointsHsAsSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_checkpoints_h`
+				SET
+					`sucursal_id` = null
+				WHERE
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PiezaCheckpointsHAsSucursal
+		 * @param PiezaCheckpointsH $objPiezaCheckpointsH
+		 * @return void
+		*/
+		public function DeleteAssociatedPiezaCheckpointsHAsSucursal(PiezaCheckpointsH $objPiezaCheckpointsH) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objPiezaCheckpointsH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsSucursal on this Sucursales with an unsaved PiezaCheckpointsH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_checkpoints_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaCheckpointsH->Id) . ' AND
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PiezaCheckpointsHsAsSucursal
+		 * @return void
+		*/
+		public function DeleteAllPiezaCheckpointsHsAsSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaCheckpointsHAsSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_checkpoints_h`
 				WHERE
 					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -7255,11 +8059,15 @@
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsSucursal
      * @property-read QQReverseReferenceNodeGuias $GuiasAsDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsOrigen
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsDestino
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsOrigen
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsSucursal
+     * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsSucursal
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsSucursal
+     * @property-read QQReverseReferenceNodePiezaCheckpointsH $PiezaCheckpointsHAsSucursal
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsSucursal
      * @property-read QQReverseReferenceNodeRuta $RutaAsSucursal
      * @property-read QQReverseReferenceNodeRutas $RutasAsSucursal
@@ -7350,6 +8158,10 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasdestino', 'reverse_reference', 'destino_id', 'GuiasAsDestino');
 				case 'GuiasAsOrigen':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasorigen', 'reverse_reference', 'origen_id', 'GuiasAsOrigen');
+				case 'GuiasHAsDestino':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasdestino', 'reverse_reference', 'destino_id', 'GuiasHAsDestino');
+				case 'GuiasHAsOrigen':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasorigen', 'reverse_reference', 'origen_id', 'GuiasHAsOrigen');
 				case 'HistoriaClienteAsSucursal':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteassucursal', 'reverse_reference', 'sucursal_id', 'HistoriaClienteAsSucursal');
 				case 'ManifiestoExpAsDestino':
@@ -7358,8 +8170,12 @@
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'NotaEntregaCkptAsSucursal':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackptassucursal', 'reverse_reference', 'sucursal_id', 'NotaEntregaCkptAsSucursal');
+				case 'NotaEntregaCkptHAsSucursal':
+					return new QQReverseReferenceNodeNotaEntregaCkptH($this, 'notaentregackpthassucursal', 'reverse_reference', 'sucursal_id', 'NotaEntregaCkptHAsSucursal');
 				case 'PiezaCheckpointsAsSucursal':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsassucursal', 'reverse_reference', 'sucursal_id', 'PiezaCheckpointsAsSucursal');
+				case 'PiezaCheckpointsHAsSucursal':
+					return new QQReverseReferenceNodePiezaCheckpointsH($this, 'piezacheckpointshassucursal', 'reverse_reference', 'sucursal_id', 'PiezaCheckpointsHAsSucursal');
 				case 'RegistroTrabajoAsSucursal':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajoassucursal', 'reverse_reference', 'sucursal_id', 'RegistroTrabajoAsSucursal');
 				case 'RutaAsSucursal':
@@ -7428,11 +8244,15 @@
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsSucursal
      * @property-read QQReverseReferenceNodeGuias $GuiasAsDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsOrigen
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsDestino
+     * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsOrigen
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsSucursal
+     * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsSucursal
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsSucursal
+     * @property-read QQReverseReferenceNodePiezaCheckpointsH $PiezaCheckpointsHAsSucursal
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsSucursal
      * @property-read QQReverseReferenceNodeRuta $RutaAsSucursal
      * @property-read QQReverseReferenceNodeRutas $RutasAsSucursal
@@ -7523,6 +8343,10 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasdestino', 'reverse_reference', 'destino_id', 'GuiasAsDestino');
 				case 'GuiasAsOrigen':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasorigen', 'reverse_reference', 'origen_id', 'GuiasAsOrigen');
+				case 'GuiasHAsDestino':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasdestino', 'reverse_reference', 'destino_id', 'GuiasHAsDestino');
+				case 'GuiasHAsOrigen':
+					return new QQReverseReferenceNodeGuiasH($this, 'guiashasorigen', 'reverse_reference', 'origen_id', 'GuiasHAsOrigen');
 				case 'HistoriaClienteAsSucursal':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteassucursal', 'reverse_reference', 'sucursal_id', 'HistoriaClienteAsSucursal');
 				case 'ManifiestoExpAsDestino':
@@ -7531,8 +8355,12 @@
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'NotaEntregaCkptAsSucursal':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackptassucursal', 'reverse_reference', 'sucursal_id', 'NotaEntregaCkptAsSucursal');
+				case 'NotaEntregaCkptHAsSucursal':
+					return new QQReverseReferenceNodeNotaEntregaCkptH($this, 'notaentregackpthassucursal', 'reverse_reference', 'sucursal_id', 'NotaEntregaCkptHAsSucursal');
 				case 'PiezaCheckpointsAsSucursal':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsassucursal', 'reverse_reference', 'sucursal_id', 'PiezaCheckpointsAsSucursal');
+				case 'PiezaCheckpointsHAsSucursal':
+					return new QQReverseReferenceNodePiezaCheckpointsH($this, 'piezacheckpointshassucursal', 'reverse_reference', 'sucursal_id', 'PiezaCheckpointsHAsSucursal');
 				case 'RegistroTrabajoAsSucursal':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajoassucursal', 'reverse_reference', 'sucursal_id', 'RegistroTrabajoAsSucursal');
 				case 'RutaAsSucursal':

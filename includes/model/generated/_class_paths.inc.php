@@ -657,6 +657,13 @@
 		QApplicationBase::$ClassFile['guiapiezasmetacontrol'] = __META_CONTROLS__ . '/GuiaPiezasMetaControl.class.php';
 		QApplicationBase::$ClassFile['guiapiezasdatagrid'] = __META_CONTROLS__ . '/GuiaPiezasDataGrid.class.php';
 
+	// ClassPaths for the GuiaPiezasH class
+		QApplicationBase::$ClassFile['guiapiezash'] = __MODEL__ . '/GuiaPiezasH.class.php';
+		QApplicationBase::$ClassFile['qqnodeguiapiezash'] = __MODEL__ . '/GuiaPiezasH.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeguiapiezash'] = __MODEL__ . '/GuiaPiezasH.class.php';
+		QApplicationBase::$ClassFile['guiapiezashmetacontrol'] = __META_CONTROLS__ . '/GuiaPiezasHMetaControl.class.php';
+		QApplicationBase::$ClassFile['guiapiezashdatagrid'] = __META_CONTROLS__ . '/GuiaPiezasHDataGrid.class.php';
+
 	// ClassPaths for the GuiaPod class
 		QApplicationBase::$ClassFile['guiapod'] = __MODEL__ . '/GuiaPod.class.php';
 		QApplicationBase::$ClassFile['qqnodeguiapod'] = __MODEL__ . '/GuiaPod.class.php';
@@ -677,6 +684,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodeguias'] = __MODEL__ . '/Guias.class.php';
 		QApplicationBase::$ClassFile['guiasmetacontrol'] = __META_CONTROLS__ . '/GuiasMetaControl.class.php';
 		QApplicationBase::$ClassFile['guiasdatagrid'] = __META_CONTROLS__ . '/GuiasDataGrid.class.php';
+
+	// ClassPaths for the GuiasH class
+		QApplicationBase::$ClassFile['guiash'] = __MODEL__ . '/GuiasH.class.php';
+		QApplicationBase::$ClassFile['qqnodeguiash'] = __MODEL__ . '/GuiasH.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeguiash'] = __MODEL__ . '/GuiasH.class.php';
+		QApplicationBase::$ClassFile['guiashmetacontrol'] = __META_CONTROLS__ . '/GuiasHMetaControl.class.php';
+		QApplicationBase::$ClassFile['guiashdatagrid'] = __META_CONTROLS__ . '/GuiasHDataGrid.class.php';
 
 	// ClassPaths for the HistoriaCliente class
 		QApplicationBase::$ClassFile['historiacliente'] = __MODEL__ . '/HistoriaCliente.class.php';
@@ -860,6 +874,20 @@
 		QApplicationBase::$ClassFile['notaentregackptmetacontrol'] = __META_CONTROLS__ . '/NotaEntregaCkptMetaControl.class.php';
 		QApplicationBase::$ClassFile['notaentregackptdatagrid'] = __META_CONTROLS__ . '/NotaEntregaCkptDataGrid.class.php';
 
+	// ClassPaths for the NotaEntregaCkptH class
+		QApplicationBase::$ClassFile['notaentregackpth'] = __MODEL__ . '/NotaEntregaCkptH.class.php';
+		QApplicationBase::$ClassFile['qqnodenotaentregackpth'] = __MODEL__ . '/NotaEntregaCkptH.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodenotaentregackpth'] = __MODEL__ . '/NotaEntregaCkptH.class.php';
+		QApplicationBase::$ClassFile['notaentregackpthmetacontrol'] = __META_CONTROLS__ . '/NotaEntregaCkptHMetaControl.class.php';
+		QApplicationBase::$ClassFile['notaentregackpthdatagrid'] = __META_CONTROLS__ . '/NotaEntregaCkptHDataGrid.class.php';
+
+	// ClassPaths for the NotaEntregaH class
+		QApplicationBase::$ClassFile['notaentregah'] = __MODEL__ . '/NotaEntregaH.class.php';
+		QApplicationBase::$ClassFile['qqnodenotaentregah'] = __MODEL__ . '/NotaEntregaH.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodenotaentregah'] = __MODEL__ . '/NotaEntregaH.class.php';
+		QApplicationBase::$ClassFile['notaentregahmetacontrol'] = __META_CONTROLS__ . '/NotaEntregaHMetaControl.class.php';
+		QApplicationBase::$ClassFile['notaentregahdatagrid'] = __META_CONTROLS__ . '/NotaEntregaHDataGrid.class.php';
+
 	// ClassPaths for the Notificacion class
 		QApplicationBase::$ClassFile['notificacion'] = __MODEL__ . '/Notificacion.class.php';
 		QApplicationBase::$ClassFile['qqnodenotificacion'] = __MODEL__ . '/Notificacion.class.php';
@@ -950,6 +978,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodepiezacheckpoints'] = __MODEL__ . '/PiezaCheckpoints.class.php';
 		QApplicationBase::$ClassFile['piezacheckpointsmetacontrol'] = __META_CONTROLS__ . '/PiezaCheckpointsMetaControl.class.php';
 		QApplicationBase::$ClassFile['piezacheckpointsdatagrid'] = __META_CONTROLS__ . '/PiezaCheckpointsDataGrid.class.php';
+
+	// ClassPaths for the PiezaCheckpointsH class
+		QApplicationBase::$ClassFile['piezacheckpointsh'] = __MODEL__ . '/PiezaCheckpointsH.class.php';
+		QApplicationBase::$ClassFile['qqnodepiezacheckpointsh'] = __MODEL__ . '/PiezaCheckpointsH.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodepiezacheckpointsh'] = __MODEL__ . '/PiezaCheckpointsH.class.php';
+		QApplicationBase::$ClassFile['piezacheckpointshmetacontrol'] = __META_CONTROLS__ . '/PiezaCheckpointsHMetaControl.class.php';
+		QApplicationBase::$ClassFile['piezacheckpointshdatagrid'] = __META_CONTROLS__ . '/PiezaCheckpointsHDataGrid.class.php';
 
 	// ClassPaths for the PiezasTemp class
 		QApplicationBase::$ClassFile['piezastemp'] = __MODEL__ . '/PiezasTemp.class.php';

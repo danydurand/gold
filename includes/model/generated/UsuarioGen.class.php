@@ -75,6 +75,10 @@
 	 * @property-read NotaEntrega[] $_NotaEntregaArray the value for the private _objNotaEntregaArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega.usuario_id reverse relationship
 	 * @property-read NotaEntregaCkpt $_NotaEntregaCkpt the value for the private _objNotaEntregaCkpt (Read-Only) if set due to an expansion on the nota_entrega_ckpt.usuario_id reverse relationship
 	 * @property-read NotaEntregaCkpt[] $_NotaEntregaCkptArray the value for the private _objNotaEntregaCkptArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_ckpt.usuario_id reverse relationship
+	 * @property-read NotaEntregaCkptH $_NotaEntregaCkptH the value for the private _objNotaEntregaCkptH (Read-Only) if set due to an expansion on the nota_entrega_ckpt_h.usuario_id reverse relationship
+	 * @property-read NotaEntregaCkptH[] $_NotaEntregaCkptHArray the value for the private _objNotaEntregaCkptHArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_ckpt_h.usuario_id reverse relationship
+	 * @property-read NotaEntregaH $_NotaEntregaH the value for the private _objNotaEntregaH (Read-Only) if set due to an expansion on the nota_entrega_h.usuario_id reverse relationship
+	 * @property-read NotaEntregaH[] $_NotaEntregaHArray the value for the private _objNotaEntregaHArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_h.usuario_id reverse relationship
 	 * @property-read PagoFacturaPmn $_PagoFacturaPmnAsCreadoPor the value for the private _objPagoFacturaPmnAsCreadoPor (Read-Only) if set due to an expansion on the pago_factura_pmn.creado_por reverse relationship
 	 * @property-read PagoFacturaPmn[] $_PagoFacturaPmnAsCreadoPorArray the value for the private _objPagoFacturaPmnAsCreadoPorArray (Read-Only) if set due to an ExpandAsArray on the pago_factura_pmn.creado_por reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajo the value for the private _objRegistroTrabajo (Read-Only) if set due to an expansion on the registro_trabajo.usuario_id reverse relationship
@@ -543,6 +547,38 @@
 		 * @var NotaEntregaCkpt[] _objNotaEntregaCkptArray;
 		 */
 		private $_objNotaEntregaCkptArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single NotaEntregaCkptH object
+		 * (of type NotaEntregaCkptH), if this Usuario object was restored with
+		 * an expansion on the nota_entrega_ckpt_h association table.
+		 * @var NotaEntregaCkptH _objNotaEntregaCkptH;
+		 */
+		private $_objNotaEntregaCkptH;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaEntregaCkptH objects
+		 * (of type NotaEntregaCkptH[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the nota_entrega_ckpt_h association table.
+		 * @var NotaEntregaCkptH[] _objNotaEntregaCkptHArray;
+		 */
+		private $_objNotaEntregaCkptHArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single NotaEntregaH object
+		 * (of type NotaEntregaH), if this Usuario object was restored with
+		 * an expansion on the nota_entrega_h association table.
+		 * @var NotaEntregaH _objNotaEntregaH;
+		 */
+		private $_objNotaEntregaH;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaEntregaH objects
+		 * (of type NotaEntregaH[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the nota_entrega_h association table.
+		 * @var NotaEntregaH[] _objNotaEntregaHArray;
+		 */
+		private $_objNotaEntregaHArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single PagoFacturaPmnAsCreadoPor object
@@ -1576,6 +1612,36 @@
 					$objToReturn->_objNotaEntregaCkptArray[] = NotaEntregaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpt__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objNotaEntregaCkpt)) {
 					$objToReturn->_objNotaEntregaCkpt = NotaEntregaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpt__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for NotaEntregaCkptH Virtual Binding
+			$strAlias = $strAliasPrefix . 'notaentregackpth__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notaentregackpth']) ? null : $objExpansionAliasArray['notaentregackpth']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaEntregaCkptHArray)
+				$objToReturn->_objNotaEntregaCkptHArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaEntregaCkptHArray[] = NotaEntregaCkptH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpth__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaEntregaCkptH)) {
+					$objToReturn->_objNotaEntregaCkptH = NotaEntregaCkptH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackpth__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for NotaEntregaH Virtual Binding
+			$strAlias = $strAliasPrefix . 'notaentregah__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notaentregah']) ? null : $objExpansionAliasArray['notaentregah']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaEntregaHArray)
+				$objToReturn->_objNotaEntregaHArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaEntregaHArray[] = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregah__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaEntregaH)) {
+					$objToReturn->_objNotaEntregaH = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregah__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2693,6 +2759,38 @@
 					 */
 					return $this->_objNotaEntregaCkptArray;
 
+				case '_NotaEntregaCkptH':
+					/**
+					 * Gets the value for the private _objNotaEntregaCkptH (Read-Only)
+					 * if set due to an expansion on the nota_entrega_ckpt_h.usuario_id reverse relationship
+					 * @return NotaEntregaCkptH
+					 */
+					return $this->_objNotaEntregaCkptH;
+
+				case '_NotaEntregaCkptHArray':
+					/**
+					 * Gets the value for the private _objNotaEntregaCkptHArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_entrega_ckpt_h.usuario_id reverse relationship
+					 * @return NotaEntregaCkptH[]
+					 */
+					return $this->_objNotaEntregaCkptHArray;
+
+				case '_NotaEntregaH':
+					/**
+					 * Gets the value for the private _objNotaEntregaH (Read-Only)
+					 * if set due to an expansion on the nota_entrega_h.usuario_id reverse relationship
+					 * @return NotaEntregaH
+					 */
+					return $this->_objNotaEntregaH;
+
+				case '_NotaEntregaHArray':
+					/**
+					 * Gets the value for the private _objNotaEntregaHArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_entrega_h.usuario_id reverse relationship
+					 * @return NotaEntregaH[]
+					 */
+					return $this->_objNotaEntregaHArray;
+
 				case '_PagoFacturaPmnAsCreadoPor':
 					/**
 					 * Gets the value for the private _objPagoFacturaPmnAsCreadoPor (Read-Only)
@@ -3217,6 +3315,12 @@
 			}
 			if ($this->CountNotaEntregaCkpts()) {
 				$arrTablRela[] = 'nota_entrega_ckpt';
+			}
+			if ($this->CountNotaEntregaCkptHs()) {
+				$arrTablRela[] = 'nota_entrega_ckpt_h';
+			}
+			if ($this->CountNotaEntregaHs()) {
+				$arrTablRela[] = 'nota_entrega_h';
 			}
 			if ($this->CountPagoFacturaPmnsAsCreadoPor()) {
 				$arrTablRela[] = 'pago_factura_pmn';
@@ -6080,6 +6184,304 @@
 		}
 
 
+		// Related Objects' Methods for NotaEntregaCkptH
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaEntregaCkptHs as an array of NotaEntregaCkptH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaEntregaCkptH[]
+		*/
+		public function GetNotaEntregaCkptHArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return NotaEntregaCkptH::LoadArrayByUsuarioId($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaEntregaCkptHs
+		 * @return int
+		*/
+		public function CountNotaEntregaCkptHs() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return NotaEntregaCkptH::CountByUsuarioId($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a NotaEntregaCkptH
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function AssociateNotaEntregaCkptH(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaCkptH on this unsaved Usuario.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaCkptH on this Usuario with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaEntregaCkptH
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function UnassociateNotaEntregaCkptH(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptH on this unsaved Usuario.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptH on this Usuario with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`usuario_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . ' AND
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaEntregaCkptHs
+		 * @return void
+		*/
+		public function UnassociateAllNotaEntregaCkptHs() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptH on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_ckpt_h`
+				SET
+					`usuario_id` = null
+				WHERE
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaEntregaCkptH
+		 * @param NotaEntregaCkptH $objNotaEntregaCkptH
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaEntregaCkptH(NotaEntregaCkptH $objNotaEntregaCkptH) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptH on this unsaved Usuario.');
+			if ((is_null($objNotaEntregaCkptH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptH on this Usuario with an unsaved NotaEntregaCkptH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_ckpt_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaCkptH->Id) . ' AND
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaEntregaCkptHs
+		 * @return void
+		*/
+		public function DeleteAllNotaEntregaCkptHs() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaCkptH on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_ckpt_h`
+				WHERE
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for NotaEntregaH
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaEntregaHs as an array of NotaEntregaH objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaEntregaH[]
+		*/
+		public function GetNotaEntregaHArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return NotaEntregaH::LoadArrayByUsuarioId($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaEntregaHs
+		 * @return int
+		*/
+		public function CountNotaEntregaHs() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return NotaEntregaH::CountByUsuarioId($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a NotaEntregaH
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function AssociateNotaEntregaH(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaH on this unsaved Usuario.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaH on this Usuario with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaEntregaH
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function UnassociateNotaEntregaH(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaH on this unsaved Usuario.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaH on this Usuario with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`usuario_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . ' AND
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaEntregaHs
+		 * @return void
+		*/
+		public function UnassociateAllNotaEntregaHs() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaH on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_h`
+				SET
+					`usuario_id` = null
+				WHERE
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaEntregaH
+		 * @param NotaEntregaH $objNotaEntregaH
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaEntregaH(NotaEntregaH $objNotaEntregaH) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaH on this unsaved Usuario.');
+			if ((is_null($objNotaEntregaH->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaH on this Usuario with an unsaved NotaEntregaH.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_h`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objNotaEntregaH->Id) . ' AND
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaEntregaHs
+		 * @return void
+		*/
+		public function DeleteAllNotaEntregaHs() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaH on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_h`
+				WHERE
+					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for PagoFacturaPmnAsCreadoPor
 		//-------------------------------------------------------------------
 
@@ -6807,6 +7209,8 @@
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsCreadaPor
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntrega
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkpt
+     * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptH
+     * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaH
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
@@ -6901,6 +7305,10 @@
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentrega', 'reverse_reference', 'usuario_id', 'NotaEntrega');
 				case 'NotaEntregaCkpt':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackpt', 'reverse_reference', 'usuario_id', 'NotaEntregaCkpt');
+				case 'NotaEntregaCkptH':
+					return new QQReverseReferenceNodeNotaEntregaCkptH($this, 'notaentregackpth', 'reverse_reference', 'usuario_id', 'NotaEntregaCkptH');
+				case 'NotaEntregaH':
+					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregah', 'reverse_reference', 'usuario_id', 'NotaEntregaH');
 				case 'PagoFacturaPmnAsCreadoPor':
 					return new QQReverseReferenceNodePagoFacturaPmn($this, 'pagofacturapmnascreadopor', 'reverse_reference', 'creado_por', 'PagoFacturaPmnAsCreadoPor');
 				case 'RegistroTrabajo':
@@ -6965,6 +7373,8 @@
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsCreadaPor
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntrega
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkpt
+     * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptH
+     * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaH
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
@@ -7059,6 +7469,10 @@
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentrega', 'reverse_reference', 'usuario_id', 'NotaEntrega');
 				case 'NotaEntregaCkpt':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackpt', 'reverse_reference', 'usuario_id', 'NotaEntregaCkpt');
+				case 'NotaEntregaCkptH':
+					return new QQReverseReferenceNodeNotaEntregaCkptH($this, 'notaentregackpth', 'reverse_reference', 'usuario_id', 'NotaEntregaCkptH');
+				case 'NotaEntregaH':
+					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregah', 'reverse_reference', 'usuario_id', 'NotaEntregaH');
 				case 'PagoFacturaPmnAsCreadoPor':
 					return new QQReverseReferenceNodePagoFacturaPmn($this, 'pagofacturapmnascreadopor', 'reverse_reference', 'creado_por', 'PagoFacturaPmnAsCreadoPor');
 				case 'RegistroTrabajo':

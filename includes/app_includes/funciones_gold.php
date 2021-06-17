@@ -108,8 +108,8 @@ function transformar($strNumeGuia) {
 function caso_stephy_atc($strNumeGuia) {
     $intPosiDiag = strpos($strNumeGuia,'/');
     $strGuiaReal = substr($strNumeGuia,0, $intPosiDiag-2);
-    $strIdxxPiez = '001';
-    return $strGuiaReal.'-'.$strIdxxPiez;
+    $strOrdiPiez = substr($strNumeGuia,$intPosiDiag+1,3);
+    return $strGuiaReal.'.'.(int)$strOrdiPiez.'-001';
 }
 
 function caso_stephy($strNumeGuia) {
