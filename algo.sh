@@ -16,4 +16,5 @@ find . -name "*.php" -exec chmod 666 {} \;
 find . -name "*.csv" -exec chmod 666 {} \;
 find . -name "*.log" -exec chmod 666 {} \;
 find . -name "*.txt" -exec chmod 666 {} \;
+find . -name "tmp??????" -exec chmod 666 {} \;
 find . -type d -exec chmod 777 {} \;

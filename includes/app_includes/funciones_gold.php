@@ -87,6 +87,10 @@ function transformar($strNumeGuia) {
                 return caso_stephy($strNumeGuia);
             }
         }
+        if ( ($intCantGuio == 2) && ($intCantDosp == 0) ) {
+            t('Caso Dos Guiones');
+            return caso_citrino($strNumeGuia);
+        }
         if ($intCantGuio == 0) {
             t('Caso Sin Pieza');
             return caso_sin_pieza($strNumeGuia);
@@ -103,6 +107,14 @@ function transformar($strNumeGuia) {
     } else {
         return '';
     }
+}
+
+function caso_citrino($strNumeGuia) {
+    $intUltiGuio = strrpos($strNumeGuia,'-');
+    $intOrdiPiez = substr($strNumeGuia,$intUltiGuio+1);
+    $strOrdiPiez = str_pad($intOrdiPiez,3,'0',STR_PAD_LEFT);
+    $strGuiaReal = substr($strNumeGuia,0, $intUltiGuio);
+    return $strGuiaReal.'-'.$strOrdiPiez;
 }
 
 function caso_stephy_atc($strNumeGuia) {
