@@ -2,11 +2,15 @@
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__ . '/funciones_kaizen.php');
 
+t('============');
+t('Grabando POD');
 $strTituPagi = "Grabar POD";
 $blnTodoOkey = true;
 
 if (isset($_POST['nomb'])) {
+    t('Hay datos en el POST del formulario');
     $_SESSION['idxx'] = $_POST['idxx'];
+    $_SESSION['midx'] = $_POST['midx'];
     $_SESSION['nomb'] = strtoupper($_POST['nomb']);
     $_SESSION['cedu'] = strtoupper($_POST['cedu']);
     $_SESSION['fent'] = $_POST['fent'];
@@ -17,23 +21,26 @@ if (isset($_POST['nomb'])) {
 $strMultPodx = '';
 $arrOtraProc = [];
 if (isset($_POST['mult_podx'])) {
-    t('Multi POD: '.$_POST['mult_podx']);
+    //t('Multi POD: '.$_POST['mult_podx']);
     $strMultPodx = $_POST['mult_podx'];
     if ($strMultPodx == 'S') {
-        t('Voy a grabar el POD a multiples piezas');
+        //t('Voy a grabar el POD a multiples piezas');
         $arrOtraProc = unserialize($_SESSION['OtraProc']);
     }
 }
 
 if ($blnTodoOkey) {
+    t('Todo bien hasta ahora');
     $intPiezIdxx = $_SESSION['idxx'];
-    t('Id: '.$intPiezIdxx);
+    $intManiIdxx = $_SESSION['midx'];
+    t('Id de la Pieza: '.$intPiezIdxx);
+    t('Id del Manifiesto '.$intManiIdxx);
     $strNombClie = $_SESSION['nomb'];
     $strCeduRifx = $_SESSION['cedu'];
     $strFechEntr = $_SESSION['fent'];
     $strHoraEntr = $_SESSION['hora'];
 
-    t("Fech: ".$strFechEntr);
+    //t("Fech: ".$strFechEntr);
 
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
     $strResuRegi = '';
@@ -41,46 +48,6 @@ if ($blnTodoOkey) {
     $objDatabase = GuiaPiezas::GetDatabase();
     $objDatabase->TransactionBegin();
     t('Grabando el POD desde Ruta-Mobile...');
-    //$objPiezPodx = GuiaPiezaPod::LoadByGuiaPiezaId($intPiezIdxx);
-    //if ($objPiezPodx) {
-    //    t('Ya tenía POD, lo voy a borrar...');
-    //    $objPiezPodx->Delete();
-    //}
-    //
-    //$strMensErro = '';
-    //$intCantPiez = 0;
-    //try {
-    //    t('Procesando POD para la pieza: '.$intPiezIdxx);
-    //    $objPiezPodx = new GuiaPiezaPod();
-    //    $objPiezPodx->GuiaPiezaId  = $intPiezIdxx;
-    //    $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
-    //    $objPiezPodx->FechaEntrega = $strFechEntr;
-    //    $objPiezPodx->HoraEntrega  = $strHoraEntr;
-    //    $objPiezPodx->Save();
-    //    $intCantPiez++;
-    //    //-----------------------------------------
-    //    // Mismo POD para multiples piezas
-    //    //-----------------------------------------
-    //    if ($strMultPodx == 'S') {
-    //        if (count($arrOtraProc) > 0) {
-    //            foreach ($arrOtraProc as $objOtraPiez) {
-    //                t('Procesando POD para la pieza: '.$objOtraPiez->Id);
-    //                $objPiezPodx = new GuiaPiezaPod();
-    //                $objPiezPodx->GuiaPiezaId  = $objOtraPiez->Id;
-    //                $objPiezPodx->EntregadoA   = trim($strNombClie).' | '.$strCeduRifx;
-    //                $objPiezPodx->FechaEntrega = $strFechEntr;
-    //                $objPiezPodx->HoraEntrega  = $strHoraEntr;
-    //                $objPiezPodx->Save();
-    //                $intCantPiez++;
-    //            }
-    //        }
-    //    }
-    //} catch (Exception $e) {
-    //    $strMensErro = $e->getMessage();
-    //    t('Error grabando POD desde Ruta-Mobile: '.$e->getMessage());
-    //    $blnTodoOkey = false;
-    //    $objDatabase->TransactionRollBack();
-    //}
 
     if ($blnTodoOkey) {
         $intCantCkpt = 0;
@@ -89,7 +56,7 @@ if ($blnTodoOkey) {
         //-------------------------------------------------
         // Se registra un Checkpoint "OK" para la pieza
         //-------------------------------------------------
-        $arrDatoCkpt             = array();
+        $arrDatoCkpt = array();
         $arrDatoCkpt['NumePiez'] = $objPiezSele->IdPieza;
         $arrDatoCkpt['GuiaAnul'] = $objPiezSele->Guia->Anulada();
         $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
@@ -109,7 +76,7 @@ if ($blnTodoOkey) {
             if ($strMultPodx == 'S') {
                 if (count($arrOtraProc) > 0) {
                     foreach ($arrOtraProc as $objOtraPiez) {
-                        t('Grabando el OK a otra pieza: '.$objOtraPiez->IdPieza);
+                        //t('Grabando el OK a otra pieza: '.$objOtraPiez->IdPieza);
                         $arrDatoCkpt             = array();
                         $arrDatoCkpt['NumePiez'] = $objOtraPiez->IdPieza;
                         $arrDatoCkpt['GuiaAnul'] = $objOtraPiez->Guia->Anulada();
@@ -138,7 +105,7 @@ if ($blnTodoOkey) {
         $strResuRegi = '
         <center class="mensaje">
             <span style="color:crimson">¡El Detalle de la Entrega ha sido Registrado!!!<hr> Piezas Procesadas '.$intCantCkpt.'</span>
-            <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+            <a href="lista_de_guias.php?id='.$intManiIdxx.'&tg=NO" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         </center>
         ';
     } else {
@@ -146,7 +113,7 @@ if ($blnTodoOkey) {
             <center class="mensaje">
                 <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>'.$strMensErro.' !!!</span>
             </center>
-            <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+            <a href="lista_manifiestos.php" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         ';
     }
 } else {
@@ -154,7 +121,7 @@ if ($blnTodoOkey) {
         <center class="mensaje">
             <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>Intente más tarde !!!</span>
         </center>
-        <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+        <a href="lista_manifiestos.php" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
     ';
 }
 ?>

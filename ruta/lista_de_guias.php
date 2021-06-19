@@ -5,6 +5,7 @@ $strTituPagi = "Guias del Manifiesto";
 /* @var $objPiezMani GuiaPiezas */
 
 $intIdxxMani = $_GET['id'];
+$strTipoGuia = $_GET['tg'];
 $objManiSele = Containers::Load($intIdxxMani);
 $blnSecuProp = $objManiSele->Transportista->SecuenciaPropia;
 $arrPiezMani = $objManiSele->GetGuiaPiezasAsContainerPiezaArray();
@@ -13,22 +14,28 @@ if ($arrPiezMani) {
     $strListGuia = '
     <ul class="ui-nodisc-icon" data-role="listview" data-inset="true" data-split-icon="eye" data-split-theme="d" 
         data-filter="true" data-filter-placeholder="Filtrar...">
-    <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+    <a href="guias_agrupadas.php?id='.$objManiSele->Id.'" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
     ';
     foreach ($arrPiezMani as $objPiezMani) {
-        //--------------------
-        // Ultimo Checkpoint
-        //--------------------
-        $strUltiCome = '';
-        $arrUltiCkpt = $objPiezMani->ultimoCheckpointTodo();
-        if (isset($arrUltiCkpt)) {
-            $strUltiCome = $arrUltiCkpt['comentario'];
+        $blnMostGuia = false;
+        $blnTienOkey = $objPiezMani->tieneCheckpoint('OK');
+        if ( ($strTipoGuia == 'OK') && ($blnTienOkey) ) {
+            $blnMostGuia = true;
         }
-        $strPiezMani = $objPiezMani->GuiaTransportista();
+        if ( ($strTipoGuia == 'NO') && (!$blnTienOkey) ) {
+            $blnMostGuia = true;
+        }
+        if ($blnMostGuia) {
+            $strUltiCome = '';
+            $arrUltiCkpt = $objPiezMani->ultimoCheckpointTodo();
+            if (isset($arrUltiCkpt)) {
+                $strUltiCome = $arrUltiCkpt['comentario'];
+            }
+            $strPiezMani = $objPiezMani->GuiaTransportista();
 
-        $strListGuia .= '
+            $strListGuia .= '
             <li>
-                <a href="detalle_de_pieza.php?id='.$objPiezMani->Id.'&mid='.$objManiSele->Id.'" data-rel="dialog">
+                <a href="detalle_de_pieza.bkp.php?id='.$objPiezMani->Id.'&mid='.$objManiSele->Id.'" data-rel="dialog">
                     <img src="images/list.png" class="extra">
                     <h6>'.$strPiezMani.'</h6>
                     <p><b>Destinatario:</b> '.$objPiezMani->Guia->NombreDestinatario.'</p>
@@ -37,6 +44,7 @@ if ($arrPiezMani) {
                 </a>
             </li>
         ';
+        }
     }
     $strListGuia .= '</ul>';
 } else {

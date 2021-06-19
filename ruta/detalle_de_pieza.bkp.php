@@ -1,21 +1,23 @@
 <?php
 require_once('qcubed.inc.php');
 
+
 /* @var $objOtraPiez GuiaPiezas */
-t('Entrando al Detalle de la Pieza...');
+//t('Entrando al Detalle de la Pieza...');
 
 $strTituPagi = "Detalle de Pieza";
 $strNumeGuia = '';
 $blnTeniPodx = false;
+$strDetaPiez = '';
 if (isset($_GET['id'])) {
     $intPiezIdxx = $_GET['id'];
     $intManiIdxx = $_GET['mid'];
 
-    t('El Id de la pieza es: '.$intPiezIdxx);
+    ////t('El Id de la pieza es: '.$intPiezIdxx);
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
     $strIdxxPiez = explode('-',$objPiezSele->IdPieza)[1];
 
-    t('El Id del manifiesto es: '.$intManiIdxx);
+    //t('El Id del manifiesto es: '.$intManiIdxx);
     $objManiSele = Containers::Load($intManiIdxx);
 
     //----------------------
@@ -25,11 +27,11 @@ if (isset($_GET['id'])) {
     $strCeduRifx = '';
     $strFechEntr = '';
     $strHoraEntr = '';
-    t('En el detalle de la pieza: '.$intPiezIdxx);
+    //t('En el detalle de la pieza: '.$intPiezIdxx);
     $objPodxPiez = $objPiezSele->POD();
     if ($objPodxPiez) {
         $blnTeniPodx = true;
-        t('Tiene POD.  Entregada a; '.$objPodxPiez->EntregadoA);
+        //t('Tiene POD.  Entregada a; '.$objPodxPiez->EntregadoA);
         $strQuieReci = explode(':',$objPodxPiez->EntregadoA)[1];
         $strCeduRifx = $objPodxPiez->Cedula;
         $strFechEntr = $objPodxPiez->Fecha;
@@ -42,29 +44,29 @@ if (isset($_GET['id'])) {
 
     $arrOtraProc = [];
     $arrOtraPiez = $objPiezSele->OtrasPiezasDeLaMismaGuia();
-    t('Otras piezas de la misma guia: '.count($arrOtraPiez));
+    //t('Otras piezas de la misma guia: '.count($arrOtraPiez));
     foreach ($arrOtraPiez as $objOtraPiez) {
         //--------------------------------------------------------------------------------------------
         // Si existen mas piezas de la misma guia, asociadas al Manifiesto y no han sido entregadas
         //--------------------------------------------------------------------------------------------
         if ($objManiSele->IsGuiaPiezasAsContainerPiezaAssociated($objOtraPiez)) {
-            t('Esta pieza esta asociada al manifiesto: '.$objOtraPiez->IdPieza);
+            //t('Esta pieza esta asociada al manifiesto: '.$objOtraPiez->IdPieza);
             if ($blnTeniPodx){
                 if ($objOtraPiez->ultimoCheckpoint() == 'OK') {
-                    t('La pieza tiene OK');
+                    //t('La pieza tiene OK');
                     $arrOtraProc[] = $objOtraPiez;
                 }
             } else {
                 if ($objOtraPiez->ultimoCheckpoint() != 'OK') {
-                    t('La pieza no tiene OK');
+                    //t('La pieza no tiene OK');
                     $arrOtraProc[] = $objOtraPiez;
                 }
             }
         }
     }
-    t('Otras piezas a procesar: '.count($arrOtraProc));
+    //t('Otras piezas a procesar: '.count($arrOtraProc));
     if (count($arrOtraProc) > 0) {
-        t('Lo puse en la sesion...');
+        //t('Lo puse en la sesion...');
         $_SESSION['OtraProc'] = serialize($arrOtraProc);
     }
 
@@ -141,7 +143,7 @@ if (isset($_GET['id'])) {
     $strMultPodx = '';
     if (count($arrOtraProc) > 0) {
         if (!$blnTeniPodx) {
-            $strMensUsua = 'Usted esta trasladando otras Piezas de esta misma Guía.  
+            $strMensUsua = 'Usted esta trasladando otras Piezas de esta misma Guía.
             Desea grabar la misma Información de Entrega a todas ellas !?';
         } else {
             $strMensUsua = 'Otras Piezas de esta misma Guía tienen Información de Entrega.
@@ -168,7 +170,7 @@ if (isset($_GET['id'])) {
     if ($strGuiaTran != $objPiezSele->IdPieza) {
         $strSecuTran = '
         <tr>
-            <td class="etiqueta">Guia-Transportista:</td>
+            <td class="etiqueta">Guia-Transp:</td>
             <td class="valor">'.$strGuiaTran.'</td>
         </tr>
         ';
@@ -276,8 +278,8 @@ if (isset($_GET['id'])) {
     </div>
     ';
 } else {
-    $strDetaPiez = '    
-    <a href="lista_manifiestos.php" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver
+    $strDetaPiez = '
+    <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver
     ';
 }
 ?>

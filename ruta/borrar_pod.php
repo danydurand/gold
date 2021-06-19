@@ -10,6 +10,7 @@ t('================');
 t('Borrando el POD');
 if (isset($_POST['idxx'])) {
     $_SESSION['idxx'] = $_POST['idxx'];
+    $_SESSION['midx'] = $_POST['midx'];
 } else {
     $blnTodoOkey = false;
 }
@@ -25,6 +26,7 @@ if (isset($_POST['mult_podx'])) {
 }
 
 $intPiezIdxx = $_SESSION['idxx'];
+$intManiIdxx = $_SESSION['midx'];
 t('Id: '.$intPiezIdxx);
 
 $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
@@ -99,7 +101,7 @@ if ($blnTodoOkey) {
         $strResuRegi = '
         <center class="mensaje">
             <span style="color:crimson">¡Detalle de la Entrega BORRADO!!!<hr> Piezas Procesadas '.$intCantPiez.'</span>
-            <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+            <a href="lista_de_guias.php?id="'.$intManiIdxx.'&tg=OK" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         </center>
         ';
     } else {
@@ -107,7 +109,7 @@ if ($blnTodoOkey) {
             <center class="mensaje">
                 <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>Intente más tarde !!!</span>
             </center>
-            <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+            <a href="lista_manifiestos.php" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         ';
     }
 } else {
@@ -115,7 +117,7 @@ if ($blnTodoOkey) {
         <center class="mensaje">
             <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>Intente más tarde !!!</span>
         </center>
-        <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+        <a href="lista_manifiestos.php" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
     ';
 }
 ?>

@@ -229,19 +229,23 @@ function t($strTextTraz) {
             $arrLogiTraz = $_SESSION['LogiTraz'];
         }
         $blnTodoOkey = false;
+        $strLogiUsua = 'N/A';
         if ( ($objUsuario instanceof Usuario) && (in_array($objUsuario->LogiUsua,$arrLogiTraz)) ) {
             $blnTodoOkey = true;
+            $strLogiUsua = $objUsuario->LogiUsua;
         } else {
             if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'scuevas') ) {
                 $blnTodoOkey = true;
+                $strLogiUsua = $objUsuario->Login;
             }
         }
+        $blnTodoOkey = true;
         if ($blnTodoOkey) {
             $mixManeArch = fopen(__LOG_DIRECTORY__.'/traza.log','a');
             $arrLineAudi = array();
             $arrLineAudi[] = date('Y-m-d');
             $arrLineAudi[] = date('H:i:s');
-            $arrLineAudi[] = $objUsuario->LogiUsua;
+            $arrLineAudi[] = $strLogiUsua;
             if (isset($_SESSION['NombProg'])) {
                 $arrLineAudi[] = str_replace('.php','',basename($_SESSION['NombProg']));
             }

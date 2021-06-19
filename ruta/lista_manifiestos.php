@@ -14,14 +14,22 @@ if ($arrManiChof) {
     ';
     $strNombImag = __RUTA_IMAGE__.'/manifest2.png';
     foreach ($arrManiChof as $objManiChof) {
+        $objResuEntr  = $objManiChof->ResumeDeEntrega();
+        $intCantPiez  = $objManiChof->Piezas;
+        $decPorcOkey  = $objResuEntr->PorcOkey;
+        $decPorcPend  = $objResuEntr->PorcPend;
+        $intCantOkey  = $objResuEntr->CantOkey;
+        $intCantPend  = $objResuEntr->CantPend;
         $strManiChof .= '
             <li>
                 <a href="detalle_de_manifiesto.php?id='.$objManiChof->Id.'" data-rel="dialog">
-                    <img src="'.$strNombImag.'" width="40px" height="40px" style="margin-top: 1em; margin-left: 1em">
-                    <p style="font-size:14px; margin-left: -2em"><b>Precinto</b>: '.$objManiChof->Numero.'</p>
-                    <p style="font-size:14px; margin-left: -2em"><b>Destinos</b>: '.$objManiChof->destinosCorto().'</p>
+                    <img src="'.$strNombImag.'" width="40px" height="40px" style="margin-top: 3em; margin-left: 1em">
+                    <p style="font-size:14px; margin-left: -2em"><b>PRECINTO</b>: '.$objManiChof->Numero.'</p>
+                    <p style="font-size:14px; margin-left: -2em"><b>PIEZAS</b>: '.$intCantPiez.'</p>
+                    <p style="font-size:14px; margin-left: -2em"><b>ENTREGADAS</b>: '.$intCantOkey.'</p>
+                    <p style="font-size:14px; margin-left: -2em"><b>EFECTIVIDAD</b>: '.$decPorcOkey.'%</p>
                 </a>
-                <a href="lista_de_guias.php?id='.$objManiChof->Id.'">Guías</a>
+                <a href="guias_agrupadas.php?id='.$objManiChof->Id.'">Guías</a>
             </li>
         ';
     }
