@@ -1,25 +1,43 @@
 <?php
 require_once('qcubed.inc.php');
 
+$_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
+// Caso Scanneo Eurolatino
 
-$strNumeGuia = '169695.1';
-echo quitarPuntoYPieza($strNumeGuia);
+$strCopiPiez = 'CIU5000114092-p9';
+echo transformar($strCopiPiez);
 
 
-function quitarPuntoYPieza($strNumeGuia) {
-    $intLongCade = strlen($strNumeGuia);
-    $intCantPnto = 0;
-    for ($i=0; $i < $intLongCade; $i++) {
-        if ($strNumeGuia[$i] == '.') {
-            $intCantPnto++;
-        }
-    }
-    if ($intCantPnto > 0) {
-        $intPosiPnto = strpos($strNumeGuia,'.');
-        $strNumeGuia = substr($strNumeGuia,0,$intPosiPnto);
-    }
-    return $strNumeGuia;
-}
+
+// Resumen de pieza entregadas de un manifiesto de Salida a Ruta
+
+//$arrManiRuta = Containers::LoadAll();
+//foreach ($arrManiRuta as $objManiRuta) {
+//    $objManiRuta->ActualizarEstadisticasDeEntrega();
+//    echo "Manifiesto: ".$objManiRuta->Numero."<br>";
+//    echo "Piezas: ".$objManiRuta->Piezas."<br>";
+//    echo "Entregadas: ".$objManiRuta->CantidadOk."<br>";
+//    echo "Estatus: ".$objManiRuta->Estatus."<br><br>";
+//
+//}
+
+
+//$strNumeGuia = '169695.1';
+//echo quitarPuntoYPieza($strNumeGuia);
+//function quitarPuntoYPieza($strNumeGuia) {
+//    $intLongCade = strlen($strNumeGuia);
+//    $intCantPnto = 0;
+//    for ($i=0; $i < $intLongCade; $i++) {
+//        if ($strNumeGuia[$i] == '.') {
+//            $intCantPnto++;
+//        }
+//    }
+//    if ($intCantPnto > 0) {
+//        $intPosiPnto = strpos($strNumeGuia,'.');
+//        $strNumeGuia = substr($strNumeGuia,0,$intPosiPnto);
+//    }
+//    return $strNumeGuia;
+//}
 
 //$objClauWher   = QQ::Clause();
 //$objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');
@@ -46,14 +64,15 @@ function quitarPuntoYPieza($strNumeGuia) {
 
 
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
-$arrManiSist = NotaEntrega::LoadAll();
-foreach ($arrManiSist as $objManiSist) {
-    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
-    $objManiSist->Save();
-    $objManiSist->ContarActualizarRecibidas();
-    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
-    echo "<br>";
-}
+
+//$arrManiSist = NotaEntrega::LoadAll();
+//foreach ($arrManiSist as $objManiSist) {
+//    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
+//    $objManiSist->Save();
+//    $objManiSist->ContarActualizarRecibidas();
+//    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
+//    echo "<br>";
+//}
 
 //-------------------
 // Buscar Parametro

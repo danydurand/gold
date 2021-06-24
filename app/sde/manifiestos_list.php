@@ -82,13 +82,16 @@ class ManifiestosList extends NotaEntregaListFormBase {
         $this->dtgNotaEntregas->AddColumn($this->colManiSele);
         $this->dtgNotaEntregas->AddAction(new QClickEvent(), new QAjaxAction('colManiSele_Click'));
 
-		$this->dtgNotaEntregas->MetaAddColumn('Id','FilterBoxSize=1');
+		$colIdxxMani = $this->dtgNotaEntregas->MetaAddColumn('Id','FilterBoxSize=1');
+		$colIdxxMani->FilterType = null;
 
-		$colNombClie = new QDataGridColumn('Cliente','<?= $_ITEM->ClienteCorp->NombClie ?>');
+		$colNombClie = $this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp->NombClie,'Name=Cliente');
+        $colNombClie->OrderByClause = QQ::OrderBy(QQN::NotaEntrega()->ClienteCorp->NombClie,false);
+        $colNombClie->ReverseOrderByClause = QQ::OrderBy(QQN::NotaEntrega()->ClienteCorp->NombClie);
         $colNombClie->Filter = QQ::Like(QQN::NotaEntrega()->ClienteCorp->NombClie,null);
         $colNombClie->FilterType = QFilterType::TextFilter;
         $colNombClie->FilterBoxSize = 12;
-        $this->dtgNotaEntregas->AddColumn($colNombClie);
+        //$this->dtgNotaEntregas->AddColumn($colNombClie);
 
         //$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp,'Name=Cliente');
 

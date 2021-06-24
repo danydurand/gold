@@ -151,24 +151,6 @@ class Incidencias extends FormularioBaseKaizen {
         }
     }
 
-    //protected function validarGuia(Guias $objGuiaEval, $strTipoInci='O', $strCodiCkpt) {
-    //    $objCkptProc = Checkpoints::LoadByCodigo($strCodiCkpt);
-    //    if ($objCkptProc) {
-    //        $strTextVali = '';
-    //        if ($strTipoInci == 'INCIDENCIA') {
-    //            if ($strCodiCkpt != 'CF') {  // El Cierre Forzado, no requiere validaciones
-    //                $arrSepuProc = $objGuiaEval->SePuedeProcesar();
-    //                if (!$arrSepuProc['TodoOkey']) {
-    //                    $strTextVali = $arrSepuProc['MensUsua'];
-    //                    return $strTextVali;
-    //                }
-    //            }
-    //        }
-    //    } else {
-    //        $strTextVali = 'El Checkpoint '.$strCodiCkpt.' no existe';
-    //    }
-    //    return $strTextVali;
-    //}
 
     protected function btnSave_Click() {
         $this->objDataBase = QApplication::$Database[1];
@@ -176,8 +158,14 @@ class Incidencias extends FormularioBaseKaizen {
         $this->arrGuiaSina = array();
 
         $strTipoInci = $this->rdbTipoInci->SelectedValue;
-        $arrGuiaOkey = explode(',',nl2br2($this->txtNumeSeri->Text));
-        $arrGuiaOkey = LimpiarArreglo($arrGuiaOkey,false);
+
+        $arrNumePiez = explode(',',nl2br2($this->txtNumeSeri->Text));
+        $arrNumePiez = array_unique($arrNumePiez);
+        $arrGuiaOkey = array_map('transformar',$arrNumePiez);
+
+        //$arrGuiaOkey = explode(',',nl2br2($this->txtNumeSeri->Text));
+        //$arrGuiaOkey = LimpiarArreglo($arrGuiaOkey,false);
+
         $this->txtNumeSeri->Text = '';
 
         $intCodiCkpt = null;
@@ -250,45 +238,6 @@ class Incidencias extends FormularioBaseKaizen {
             $strMensUsua = sprintf('Proceso con Errores. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
             $this->mensaje($strMensUsua,'i','d','l',__iHAND__);
         }
-    }
-
-
-    protected function cargarDatosDeCobro($strNumeGuia) {
-        $objGuia = Guia::Load($strNumeGuia);
-        $objUsuario = unserialize($_SESSION['User']);
-        //---------------------------------------------------------------------
-        // Si la guia tiene informacion del pago realizado por el Usuario,
-        // los datos del cobro cod, deben tomarse de ahi, en caso contrario
-        // se asignan valores por defecto
-        //---------------------------------------------------------------------
-        $arrDatoPago = DatosPago::LoadArrayByGuiaId($strNumeGuia);
-        if (count($arrDatoPago) > 0) {
-            $objDatoPago = $arrDatoPago[0];
-            if (in_array($objDatoPago->TipoTransaccionId, array(1,2))) {
-                $intTipoDocu = 3;
-            } else {
-                $intTipoDocu = 4;
-            }
-            $strNumeDocu = $objDatoPago->NumeReci;
-        } else {
-            $intTipoDocu = 1;
-            $strNumeDocu = '';
-        }
-        $dttFechPago = new QDateTime(QDateTime::Now);
-        //------------------------------------------
-        // Aqui se graban los datos en Cobros COD
-        //------------------------------------------
-        $objCobroCod = CobroCod::Load($strNumeGuia);
-        if (!$objCobroCod) {
-            $objCobroCod = new CobroCod();
-        }
-        $objCobroCod->NumeGuia = $strNumeGuia;
-        $objCobroCod->MontoCancelado = $objGuia->MontoTotal;
-        $objCobroCod->RecibioElPago = $objUsuario->LogiUsua;
-        $objCobroCod->TipoDocumento = $intTipoDocu;
-        $objCobroCod->NumeroDocumento = $strNumeDocu;
-        $objCobroCod->FechaPago = $dttFechPago;
-        $objCobroCod->Save();
     }
 
 }

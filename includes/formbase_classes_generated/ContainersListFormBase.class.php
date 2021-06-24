@@ -91,6 +91,7 @@ abstract class ContainersListFormBase extends QForm {
         $this->dtgContainerses->MetaAddColumn('Awb');
         $this->dtgContainerses->MetaAddColumn('PrecintoLateral');
         $this->dtgContainerses->MetaAddColumn('Piezas');
+        $this->dtgContainerses->MetaAddColumn('CantidadOk');
         $this->dtgContainerses->MetaAddColumn('Peso');
         $this->dtgContainerses->MetaAddColumn('Kilos');
         $this->dtgContainerses->MetaAddColumn('PiesCub');

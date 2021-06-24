@@ -27,6 +27,15 @@
 			return sprintf('%s',  $this->intId);
 		}
 
+        //public function Totales() {
+		 //   $objDatabase  = Facturas::GetDatabase();
+		 //   $strCadeSqlx  = "select * ";
+		 //   $strCadeSqlx .= "  from v_facturas ";
+		 //   $strCadeSqlx .= " where id = ".$this->Id;
+		 //   $objDbResult  = $objDatabase->Query($strCadeSqlx);
+		 //   $mixRegistro  = $objDbResult->FetchArray();
+        //}
+
 		public static function crearFactura($arrGuiaProc,$intIdxxUsua) {
 
 		    t('=====================');
@@ -134,7 +143,7 @@
             // "parametros" bajo la combinacion RefeFact-ProxRefe
             //------------------------------------------------------------------------------------
             if (Facturas::CountAll() == 0) {
-                $intRefeFact = Parametros::BuscarParametro('RefeFact','ProxRefe','Val1',1);
+                $intRefeFact = Parametros::BuscarParametro('REFEFACT','PROXREFE','Val1',1);
             } else {
                 $objAdicClau   = QQ::Clause();
                 $objAdicClau[] = QQ::OrderBy(QQN::Facturas()->Id,false);

@@ -36,7 +36,7 @@ $strMensaje .= "en los siguientes destinos: $strDestOper";
 </style>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
-        <?php include('partials/header.tpl.php'); ?>
+        <?php include('partials/header_simple.tpl.php'); ?>
         <!---------------------->
         <!--    Encabezado    -->
         <!---------------------->

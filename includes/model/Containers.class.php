@@ -27,6 +27,28 @@
 			return sprintf('%s',  $this->Numero);
 		}
 
+		public function ActualizarEstadisticasDeEntrega() {
+		    $objResuEntr = $this->ResumeDeEntrega();
+		    $this->CantidadOk = $objResuEntr->CantOkey;
+		    if ($this->CantidadOk == $this->Piezas) {
+		        $this->Estatus = 'CERRAD@';
+            } else {
+                $this->Estatus = 'ABIERT@';
+            }
+            $this->Save();
+        }
+
+		public function ContarPiezasEnRuta() {
+            $intCantRuta = 0;
+            $arrPiezMani = $this->GetGuiaPiezasAsContainerPiezaArray();
+            foreach ($arrPiezMani as $objPiezMani) {
+                if ($objPiezMani->ultimoCheckpoint() == 'TR') {
+                    $intCantRuta++;
+                }
+            }
+            return $intCantRuta;
+        }
+
         public function ResumeDeEntrega() {
 		    $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
 		    $intCantOkey = $this->ContarPiezasConCheckpoint('OK');
@@ -80,9 +102,6 @@
             // Devuelve un vector con los numeros de las piezas del contenedor que tengan
             // el checkpoint indicado
             //-----------------------------------------------------------------------------
-            //----------------------------------------------------------------------------
-            // Se llena un vector con todas las piezas asociadas al Contenedor/Precinto
-            //----------------------------------------------------------------------------
             $arrPiezCont = array();
             $arrValiCont = $this->GetContainersAsContainerContainerArray();
             foreach ($arrValiCont as $objValija) {

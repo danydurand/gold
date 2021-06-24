@@ -85,6 +85,8 @@ class ContainersPodListForm extends ContainersListFormBase {
         $this->dtgContainerses->AddColumn($colPiezEntr);
 
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Transportista->Nombre,'Name=Transportista');
+        $colNombChof = new QDataGridColumn('CHOFER','<?= $_ITEM->Chofer->__toString() ?>');
+        $this->dtgContainerses->AddColumn($colNombChof);
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
 		//$this->dtgContainerses->MetaAddColumn('Fecha');
 		$colFechMast = new QDataGridColumn('FECHA','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');

@@ -8,7 +8,9 @@ $strNumeMani = '';
 
 if (isset($_GET['id'])) {
     $intIdxxMani = $_GET['id'];
-    $objManiSele  = Containers::Load($intIdxxMani);
+    $objManiSele = Containers::Load($intIdxxMani);
+    $intCantOkey = $objManiSele->ResumeDeEntrega()->CantOkey;
+    $intCantRuta = $objManiSele->ContarPiezasEnRuta();
     $strNumeMani = $objManiSele->Numero;
     $strDetaMani = '
     <div data-role="collapsible-set" data-inset="true" data-theme="e">
@@ -33,6 +35,14 @@ if (isset($_GET['id'])) {
                         <td class="valor">'.$objManiSele->Piezas.'</td>
                     </tr>
                     <tr>
+                        <td class="etiqueta_verde">Entregadas:</td>
+                        <td class="valor etiqueta_verde">'.$intCantOkey.'</td>
+                    </tr>
+                    <tr>
+                        <td class="etiqueta_roja">Sin Gestionar:</td>
+                        <td class="valor etiqueta_roja">'.$intCantRuta.'</td>
+                    </tr>
+                    <tr>
                         <td class="etiqueta">Kilos:</td>
                         <td class="valor">'.$objManiSele->Kilos.'</td>
                     </tr>
@@ -47,7 +57,8 @@ if (isset($_GET['id'])) {
                 </tbody>
             </table>
         </div>
-    </div>';
+    </div>
+    ';
 } else {
     $strDetaMani = '    
     <center>
@@ -71,6 +82,22 @@ if (isset($_GET['id'])) {
                 text-decoration: none;
             }
             .etiqueta {
+                font-weight: bold;
+                padding: 2px;
+                text-align: right;
+                vertical-align: top;
+                width: 40%;
+            }
+            .etiqueta_verde {
+                color: green;
+                font-weight: bold;
+                padding: 2px;
+                text-align: right;
+                vertical-align: top;
+                width: 40%;
+            }
+            .etiqueta_roja {
+                color: red;
                 font-weight: bold;
                 padding: 2px;
                 text-align: right;

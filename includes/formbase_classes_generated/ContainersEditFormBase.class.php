@@ -66,6 +66,7 @@ abstract class ContainersEditFormBase extends QForm {
 	protected $txtAwb;
 	protected $txtPrecintoLateral;
 	protected $txtPiezas;
+	protected $txtCantidadOk;
 	protected $txtPeso;
 	protected $txtKilos;
 	protected $txtPiesCub;
@@ -160,6 +161,7 @@ abstract class ContainersEditFormBase extends QForm {
 		$this->txtAwb = $this->mctContainers->txtAwb_Create();
 		$this->txtPrecintoLateral = $this->mctContainers->txtPrecintoLateral_Create();
 		$this->txtPiezas = $this->mctContainers->txtPiezas_Create();
+		$this->txtCantidadOk = $this->mctContainers->txtCantidadOk_Create();
 		$this->txtPeso = $this->mctContainers->txtPeso_Create();
 		$this->txtKilos = $this->mctContainers->txtKilos_Create();
 		$this->txtPiesCub = $this->mctContainers->txtPiesCub_Create();

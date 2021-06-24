@@ -55,14 +55,12 @@ $strDetaCont = '
 
     <div data-role="page" id="resultado">
 
-        <div data-role="header">
-            <h5><span style="font-size:14px">Contacto Gold Coast</span></h5>
-        </div>
+        <?php include('layout/page_header.inc.php'); ?>
 
-        <div data-role="content" >
-            <a data-rel="back" data-role="button" data-theme="b">
-                <i class="fa fa-mail-reply fa-lg pull-left"></i>Volver
-            </a>
+        <div data-role="content" style="min-height: 400px">
+            <!--<a data-rel="back" data-role="button" data-theme="b">-->
+            <!--    <i class="fa fa-mail-reply fa-lg pull-left"></i>Volver-->
+            <!--</a>-->
             <?= $strDetaCont ?>
         </div>
 

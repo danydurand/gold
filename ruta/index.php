@@ -31,14 +31,15 @@ if (isset($_POST['login'])) {
     session_destroy();
     session_start();
 }
-include('layout/header.inc.php');
 ?>
 
-    <div data-role="page"> 
+<?php include('layout/header.inc.php'); ?>
+
+    <div data-role="page">
     
         <?php include('layout/header_simple.inc.php'); ?>
 
-        <div data-role="content">  
+        <div data-role="content" style="min-height: 400px">
             <form action="index.php" method="post">
                 <input type="text" name="login" id="login" value="" placeholder='Usuario' autofocus required />
                 <p />

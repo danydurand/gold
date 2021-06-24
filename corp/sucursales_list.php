@@ -48,6 +48,10 @@ class SucursalesListForm extends SucursalesListFormBase {
 		$this->dtgSucursaleses->CssClass = 'datagrid';
 		$this->dtgSucursaleses->AlternateRowStyle->CssClass = 'alternate';
 
+		$objClauWher   = QQ::Clause();
+		$objClauWher[] = QQ::Equal(QQN::Sucursales()->EsExport,SinoType::NO);
+		$this->dtgSucursaleses->AdditionalConditions = QQ::AndCondition($objClauWher);
+
 		// Add Pagination (if desired)
 		$this->dtgSucursaleses->Paginator = new QPaginator($this->dtgSucursaleses);
 		$this->dtgSucursaleses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
@@ -69,26 +73,8 @@ class SucursalesListForm extends SucursalesListFormBase {
 		$this->dtgSucursaleses->MetaAddColumn('Id');
 		$this->dtgSucursaleses->MetaAddColumn('Nombre');
 		$this->dtgSucursaleses->MetaAddColumn('Iata');
-		//$this->dtgSucursaleses->MetaAddColumn('Telefono');
 		$this->dtgSucursaleses->MetaAddColumn(QQN::Sucursales()->Estado);
-		//$this->dtgSucursaleses->MetaAddColumn('Zona');
-		//$this->dtgSucursaleses->MetaAddColumn('EsExport');
-		//$this->dtgSucursaleses->MetaAddColumn('EsExenta');
-		//$this->dtgSucursaleses->MetaAddColumn('EsPrincipal');
-		//$this->dtgSucursaleses->MetaAddColumn('EsAreaMetropolitana');
-		//$this->dtgSucursaleses->MetaAddColumn('EsAlmacen');
-		//$this->dtgSucursaleses->MetaAddColumn('EsTienda');
-		//$this->dtgSucursaleses->MetaAddColumn('EmailPrincipal');
-		//$this->dtgSucursaleses->MetaAddColumn('EmailAlmacen');
 		$this->dtgSucursaleses->MetaAddColumn('ZonaNc');
-		//$this->dtgSucursaleses->MetaAddColumn('ComisionVenta');
-		//$this->dtgSucursaleses->MetaAddColumn('ComisionEntrega');
-		//$this->dtgSucursaleses->MetaAddColumn('CreatedAt');
-		//$this->dtgSucursaleses->MetaAddColumn('UpdatedAt');
-		//$this->dtgSucursaleses->MetaAddColumn('DeletedAt');
-		//$this->dtgSucursaleses->MetaAddColumn('CreatedBy');
-		//$this->dtgSucursaleses->MetaAddColumn('UpdatedBy');
-		//$this->dtgSucursaleses->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
         $this->btnCancel_Create();

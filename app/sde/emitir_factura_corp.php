@@ -189,7 +189,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
     protected function chkSeleClie_Change() {
         if ($this->chkSeleClie->Checked) {
             $this->lstCodiClie = enableControl($this->lstCodiClie);
-            $strTextMens = 'Presione <b>CTRL</b> mientras hacer <b>CLICK</b> en los Clientes que desea facturar !!!';
+            $strTextMens = 'Presione <b>CTRL</b> mientras hace <b>CLICK</b> en los Clientes que desea facturar !!!';
             $this->info($strTextMens);
         } else {
             $this->lstCodiClie = disableControl($this->lstCodiClie);
@@ -200,7 +200,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
     protected function chkSeleConc_Change() {
         if ($this->chkSeleConc->Checked) {
             $this->lstConcFact = enableControl($this->lstConcFact);
-            $strTextMens = 'Presione <b>CTRL</b> mientras hacer <b>CLICK</b> en los Conceptos que desea facturar !!!';
+            $strTextMens = 'Presione <b>CTRL</b> mientras hace <b>CLICK</b> en los Conceptos que desea facturar !!!';
             $this->info($strTextMens);
         } else {
             $this->lstConcFact = disableControl($this->lstConcFact);

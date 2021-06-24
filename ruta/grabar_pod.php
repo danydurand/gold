@@ -62,6 +62,7 @@ if ($blnTodoOkey) {
         $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
         $arrDatoCkpt['TextCkpt'] = 'Entregado A: '.trim($strNombClie).' | '.trim($strCeduRifx).' | '.$strFechEntr.' | '.$strHoraEntr;
         $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+        $arrDatoCkpt['CodiSucu'] = $objPiezSele->Guia->DestinoId;
         $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
         if (!$arrResuGrab['TodoOkey']) {
             $strMensErro = $arrResuGrab['MotiNook'];
@@ -97,7 +98,8 @@ if ($blnTodoOkey) {
             }
             
         }
-
+        $objManiProc = Containers::Load($intManiIdxx);
+        $objManiProc->ActualizarEstadisticasDeEntrega();
     }
     $objDatabase->TransactionCommit();
 

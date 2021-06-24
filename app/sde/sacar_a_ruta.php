@@ -1262,11 +1262,14 @@ class SacarARuta extends FormularioBaseKaizen {
                                             //---------------------------------------------
                                             // Se registra el checkpoint correspondiente
                                             //---------------------------------------------
+                                            $strDescCkpt  = $objCheckpoint->Descripcion.' | Precinto: '.$objContenedor->Numero.' | ';
+                                            $strDescCkpt .= 'Transpor: '.$objContenedor->Transportista->Nombre.' | ';
+                                            $strDescCkpt .= 'Chofer: '.$objContenedor->Chofer->__toString();
                                             $arrDatoCkpt = array();
                                             $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
                                             $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
                                             $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                                            $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
+                                            $arrDatoCkpt['TextCkpt'] = $strDescCkpt;
                                             $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
                                             $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
                                             $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
@@ -1307,11 +1310,14 @@ class SacarARuta extends FormularioBaseKaizen {
                                 //-----------------------------------------------------------
                                 // Se registra en "guia_ckpt" el checkpoint correspondiente
                                 //-----------------------------------------------------------
+                                $strDescCkpt  = $objCheckpoint->Descripcion.' | Precinto: '.$objContenedor->Numero.' | ';
+                                $strDescCkpt .= 'Transpor: '.$objContenedor->Transportista->Nombre.' | ';
+                                $strDescCkpt .= 'Chofer: '.$objContenedor->Chofer->__toString();
                                 $arrDatoCkpt = array();
                                 $arrDatoCkpt['NumeGuia'] = $objGuiaPiez->Id;
                                 $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
                                 $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                                $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
+                                $arrDatoCkpt['TextCkpt'] = $strDescCkpt;
                                 $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
                                 $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
                                 $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
@@ -1353,6 +1359,9 @@ class SacarARuta extends FormularioBaseKaizen {
                                 }
                             }
                             $arrPiezVali = $objValija->GetGuiaPiezasAsContainerPiezaArray();
+                            $strDescCkpt  = $objCheckpoint->Descripcion.' | Precinto: '.$objContenedor->Numero.' | ';
+                            $strDescCkpt .= 'Transpor: '.$objContenedor->Transportista->Nombre.' | ';
+                            $strDescCkpt .= 'Chofer: '.$objContenedor->Chofer->__toString();
                             foreach ($arrPiezVali as $objPiezVali) {
                                 //----------------------------------------------------------
                                 // Se registra un checkpoint para cada pieza de la Valija
@@ -1361,7 +1370,7 @@ class SacarARuta extends FormularioBaseKaizen {
                                 $arrDatoCkpt['NumePiez'] = $objPiezVali->Id;
                                 $arrDatoCkpt['GuiaAnul'] = $objPiezVali->Guia->Anulada();
                                 $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-                                $arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion.' ('.$objContenedor->Numero.')';
+                                $arrDatoCkpt['TextCkpt'] = $strDescCkpt;
                                 $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
                                 $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
                                 $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);

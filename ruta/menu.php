@@ -1,8 +1,7 @@
 <?php 
 require_once('qcubed.inc.php');
-include('layout/header.inc.php');
 
-$strTituPagi = "GoldCoast";
+$strTituPagi = "GoldCoast Mobile";
 
 if (isset($_GET['m'])) {
    $_SESSION['menu'] = $_GET['m'];
@@ -10,6 +9,8 @@ if (isset($_GET['m'])) {
    $_SESSION['menu'] = 'h';
 }
 ?>
+
+<?php include('layout/header.inc.php'); ?>
 
     <div data-role="page" id="inicio">
 

@@ -146,7 +146,9 @@ function caso_con_guion_y_diagonal($strNumeGuia) {
 
 function caso_con_guion($strNumeGuia) {
     $strIdxxPiez = explode('-',$strNumeGuia)[1];
-    if (strlen($strIdxxPiez) == 3) {
+    $intLong2dpa = strlen($strIdxxPiez);
+    $blnTienUnap = stripos($strIdxxPiez,'p');
+    if ( ($intLong2dpa == 3) && ($blnTienUnap) ) {
         return $strNumeGuia;
     }
     return trim($strNumeGuia).'-001';

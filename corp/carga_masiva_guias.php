@@ -14,7 +14,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $objTarifa;
     /* @var $objCliente MasterCliente */
     protected $objCliente;
-    /* @var $objUsuario UsuarioConnect */
+    /* @var $objUsuario Usuario */
     protected $objUsuario;
     /* @var $objProducto Productos */
     protected $objProducto;
@@ -25,11 +25,15 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $intOperGuia;
     protected $strMensProc;
     protected $arrCliePPDx;
+    protected $blnAvisReci = false;
 
+    protected $lstClieCarg;
     protected $txtCargArch;
     protected $lstServImpo;
     protected $txtNumeRefe;
     protected $txtNombArch;
+    protected $chkEnxxKilo;
+    protected $chkManiFact;
 
     protected $lblNumeCarg;
     protected $lblNumePend;
@@ -37,6 +41,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $lblNumeProc;
     protected $lblNumeErro;
 
+    protected $lblCantPiez;
     protected $lblCantReci;
     protected $lblRelaSobr;
     protected $lblTotaLibr;
@@ -47,6 +52,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $lblUsuaNota;
     protected $lblEstaNota;
 
+    protected $btnExpoGuia;
+    protected $btnExpoPiez;
     protected $btnImpoGuia;
     protected $btnAjusGuia;
     protected $btnErroProc;
@@ -54,20 +61,23 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $btnBorrNota;
     protected $btnImprDesp;
 
-    protected $arrGuiaErro;
+    protected $arrGuiaErro = [];
     /* @var $objGuiaProc Guias */
     protected $objGuiaProc;
     protected $blnEditMode;
-    protected $dtgPiezNota;
+    protected $dtgPiezMani;
+    protected $dtgGuiaMani;
+    protected $intProcAnte;
+    protected $objProcAnte;
+    protected $intErroAnte;
 
-    /* @var $objUsuaConn Usuario */
-    protected $objUsuaConn;
+    protected $btnMasxAcci;
 
-    /* @var $objUsuaClie UsuarioConnect */
-    protected $objUsuaClie;
 
     protected function Form_Create() {
         parent::Form_Create();
+
+        $this->objDefaultWaitIcon = new QWaitIcon($this);
 
         $this->strMensProc = '';
 
@@ -75,6 +85,18 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         if (strlen(QApplication::PathInfo(0)) > 0) {
             $this->objNotaEntr = NotaEntrega::Load(QApplication::PathInfo(0));
             $this->blnEditMode = true;
+            if (isset($_SESSION['CantErro'])) {
+                $this->intErroAnte = $_SESSION['CantErro'];
+                t('Entrando al programa, la cantidad de errores anteriores es: '.$this->intErroAnte);
+                if ($this->intErroAnte > 0) {
+                    t('Como habia errores, voy a buscar el proceso anterior..');
+                    $this->intProcAnte = $_SESSION['ProcAnte'];
+                    $this->objProcAnte = ProcesoError::Load($this->intProcAnte);
+                    if ($this->objProcAnte) {
+                        t('Encontre el procesos y estoy en modo edicion');
+                    }
+                }
+            }
         }
         if ($this->blnEditMode) {
             $this->lblTituForm->Text = 'Consulta de Manifiesto';
@@ -82,17 +104,18 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->lblTituForm->Text = 'Carga de Manifiesto';
         }
 
-        $this->objUsuaClie = unserialize($_SESSION['User']);
-        $this->objUsuaConn = Usuario::LoadByLogiUsua('connect');
-        $this->objCliente  = unserialize($_SESSION['ClieMast']);
+        $this->objUsuario  = unserialize($_SESSION['User']);
         $this->objProducto = Productos::LoadByCodigo('IMP');
 
         //---- Información ----
 
+        $this->lstClieCarg_Create();
         $this->txtCargArch_Create();
         $this->lstServImpo_Create();
         $this->txtNumeRefe_Create();
         $this->txtNombArch_Create();
+        $this->chkEnxxKilo_Create();
+        $this->chkManiFact_Create();
 
         //---- Importación y procesamiento ----
 
@@ -102,6 +125,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->lblNumeAjus_Create();
         $this->lblNumeErro_Create();
 
+        $this->lblCantPiez_Create();
         $this->lblCantReci_Create();
         $this->lblRelaSobr_Create();
         $this->lblTotaLibr_Create();
@@ -134,101 +158,276 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
         if ($this->blnEditMode) {
             if ($this->objNotaEntr->Procesadas > 0) {
-                $this->dtgPiezNota_Create();
+                $this->dtgGuiaMani_Create();
+                $this->dtgPiezMani_Create();
+                $this->btnExpoGuia_Create();
+                $this->btnExpoPiez_Create();
             }
             $this->txtNombArch->Visible = true;
         }
 
-        if ((strlen($this->lblEstaNota->Text) > 0) and ($this->lblEstaNota->Text != 'CREAD@')) {
+        if ((strlen($this->lblEstaNota->Text) > 0) && ($this->lblEstaNota->Text != 'CREAD@')) {
             $this->txtCargArch->Visible = false;
             $this->btnImpoGuia->Visible = false;
-            $this->btnBorrNota->Visible = false;
+            //$this->btnBorrNota->Visible = false;
         }
+        $this->lstServImpo_Change();
+
+        if ($this->blnEditMode) {
+            $this->chkManiFact = disableControl($this->chkManiFact);
+        }
+
+        $this->btnMasxAcci_Create();
+
+
     }
 
     //-------------------------
     // Creación de objetos ...
     //-------------------------
 
-    protected function dtgPiezNota_Create() {
-        $this->dtgPiezNota = new QDataGrid($this);
-        $this->dtgPiezNota->FontSize = 12;
-        $this->dtgPiezNota->ShowFilter = false;
 
-        $this->dtgPiezNota->CssClass = 'datagrid';
-        $this->dtgPiezNota->AlternateRowStyle->CssClass = 'alternate';
+    protected function btnMasxAcci_Create() {
+        $this->btnMasxAcci = new QLabel($this);
+        $this->btnMasxAcci->HtmlEntities = false;
+        $this->btnMasxAcci->CssClass = '';
 
-        $this->dtgPiezNota->UseAjax = true;
+        $strTextBoto   = TextoIcono('plus','Acciones');
+        $arrOpciDrop   = array();
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/sucursales_list.php',
+            TextoIcono(__iOJOS__,'Sucursales')
+        );
+        if ($this->blnEditMode) {
+            $_SESSION['PagiBack'] = 'carga_masiva_guias.php/'.$this->objNotaEntr->Id;
+            $blnCambStat = false;
+            if ($this->objUsuario->Sucursal->Iata == 'MIA') {
+                if ( ($this->objNotaEntr->Procesadas > 0) && ($this->objNotaEntr->Recibidas == 0) ) {
+                    $blnCambStat = true;
+                }
+            }
+            $strUltiCkpt = '';
+            if ($this->objUsuario->Sucursal->Iata != 'MIA') {
+                $objUltiCkpt = $this->objNotaEntr->ultimoCheckpoint();
+                if ($objUltiCkpt instanceof NotaEntregaCkpt) {
+                    $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
+                }
+                if ( ($this->objNotaEntr->Recibidas == 0) && (in_array($strUltiCkpt,['TI','IC']) ) ) {
+                    $blnCambStat = true;
+                }
+                if ( ($this->objNotaEntr->Recibidas > 0) && (in_array($strUltiCkpt,['RA']) ) ) {
+                    $blnCambStat = true;
+                }
+            }
+            if ($blnCambStat) {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objNotaEntr->Id,
+                    TextoIcono(__iEDIT__,'Camb. Estatus')
+                );
+            } else {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objNotaEntr->Id.'/sc',
+                    TextoIcono('list','Hist. Estatus')
+                );
+            }
+            //if ( ($strUltiCkpt == 'OK') && ($this->objNotaEntr->Facturable == SinoType::NO) ) {
+            if ( ($this->objNotaEntr->Facturable == SinoType::NO) ) {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/transferir_historico.php/'.$this->objNotaEntr->Id,
+                    TextoIcono('folder-o','Trans. a Histórico')
+                );
+            }
+        }
 
-        $this->dtgPiezNota->SetDataBinder('dtgPiezNota_Bind');
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop);
 
-        $this->createDtgPiezNotaColumns();
     }
 
-    protected function dtgPiezNota_Bind() {
-        $this->dtgPiezNota->DataSource = $this->objNotaEntr->GetGuiasArray();
+    protected function dtgGuiaMani_Create() {
+        $this->dtgGuiaMani = new QDataGrid($this);
+        $this->dtgGuiaMani->FontSize = 12;
+        $this->dtgGuiaMani->ShowFilter = false;
+
+        $this->dtgGuiaMani->CssClass = 'datagrid';
+        $this->dtgGuiaMani->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgGuiaMani->Paginator = new QPaginator($this->dtgGuiaMani);
+        $this->dtgGuiaMani->ItemsPerPage = 20;
+
+        $this->dtgGuiaMani->UseAjax = true;
+
+        $this->dtgGuiaMani->SetDataBinder('dtgGuiaMani_Bind');
+
+        $this->createdtgGuiaManiColumns();
     }
 
-    protected function createDtgPiezNotaColumns() {
+    protected function dtgGuiaMani_Bind() {
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::In(QQN::Guias()->Id,$this->objNotaEntr->IdsDeLasGuias());
+        $arrGuiaMani   = Guias::QueryArray(QQ::AndCondition($objClauWher));
+        $this->dtgGuiaMani->TotalItemCount = count($arrGuiaMani);
+
+        // Bind the datasource to the datagrid
+        $this->dtgGuiaMani->DataSource = Guias::QueryArray(
+            QQ::AndCondition($objClauWher),
+            QQ::Clause($this->dtgGuiaMani->OrderByClause, $this->dtgGuiaMani->LimitClause)
+        );
+    }
+
+    protected function createdtgGuiaManiColumns() {
         $colNumeTrac = new QDataGridColumn($this);
         $colNumeTrac->Name = QApplication::Translate('Nro Guia');
         $colNumeTrac->Html = '<?= $_ITEM->Tracking ?>';
-        $this->dtgPiezNota->AddColumn($colNumeTrac);
+        $colNumeTrac->Width = 135;
+        $this->dtgGuiaMani->AddColumn($colNumeTrac);
 
+        $colSucuDest = new QDataGridColumn($this);
+        $colSucuDest->Name = QApplication::Translate('Dest');
+        $colSucuDest->Html = '<?= $_ITEM->Destino->Iata ?>';
+        $this->dtgGuiaMani->AddColumn($colSucuDest);
+
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = 'U.Ckpt';
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint(); ?>';
+        $this->dtgGuiaMani->AddColumn($colUltiCkpt);
+
+        $colCantPiez = new QDataGridColumn($this);
+        $colCantPiez->Name = QApplication::Translate('Pzas');
+        $colCantPiez->Html = '<?= $_ITEM->Piezas; ?>';
+        $this->dtgGuiaMani->AddColumn($colCantPiez);
+        
         $colNombDest = new QDataGridColumn($this);
-        $colNombDest->Name = QApplication::Translate('Destinatario');
-        $colNombDest->Html = '<?= $_ITEM->NombreDestinatario ?>';
-        $this->dtgPiezNota->AddColumn($colNombDest);
-
-        $colDescCont = new QDataGridColumn($this);
-        $colDescCont->Name = QApplication::Translate('Contenido');
-        $colDescCont->Html = '<?= $_ITEM->Contenido ?>';
-        $this->dtgPiezNota->AddColumn($colDescCont);
+        $colNombDest->Name = QApplication::Translate('Nombre del Destinatario');
+        $colNombDest->Html = '<?= substr($_ITEM->NombreDestinatario,0,40) ?>';
+        $this->dtgGuiaMani->AddColumn($colNombDest);
 
         if ($this->objNotaEntr->ServicioImportacion == 'AER') {
             $colKiloPiez = new QDataGridColumn($this);
             $colKiloPiez->Name = QApplication::Translate('Kilos');
             $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
-            $this->dtgPiezNota->AddColumn($colKiloPiez);
+            $this->dtgGuiaMani->AddColumn($colKiloPiez);
         } else {
             $colKiloPiez = new QDataGridColumn($this);
             $colKiloPiez->Name = QApplication::Translate('PiesCub');
             $colKiloPiez->Html = '<?= $_ITEM->PiesCub; ?>';
-            $this->dtgPiezNota->AddColumn($colKiloPiez);
+            $this->dtgGuiaMani->AddColumn($colKiloPiez);
         }
 
-        $colAltoGuia = new QDataGridColumn($this);
-        $colAltoGuia->Name = QApplication::Translate('Alto');
-        $colAltoGuia->Html = '<?= $_ITEM->Alto; ?>';
-        $this->dtgPiezNota->AddColumn($colAltoGuia);
-
-        $colAnchGuia = new QDataGridColumn($this);
-        $colAnchGuia->Name = QApplication::Translate('Ancho');
-        $colAnchGuia->Html = '<?= $_ITEM->Ancho; ?>';
-        $this->dtgPiezNota->AddColumn($colAnchGuia);
-
-        $colLargGuia = new QDataGridColumn($this);
-        $colLargGuia->Name = QApplication::Translate('Largo');
-        $colLargGuia->Html = '<?= $_ITEM->Largo; ?>';
-        $this->dtgPiezNota->AddColumn($colLargGuia);
-
-        $colCantPiez = new QDataGridColumn($this);
-        $colCantPiez->Name = QApplication::Translate('Piezas');
-        $colCantPiez->Html = '<?= $_ITEM->Piezas; ?>';
-        $this->dtgPiezNota->AddColumn($colCantPiez);
-
-        //$colDescPiez = new QDataGridColumn($this);
-        //$colDescPiez->Name = QApplication::Translate('Comentario');
-        /*$colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';*/
-        //$colDescPiez->Width = 350;
-        //$this->dtgPiezNota->AddColumn($colDescPiez);
     }
 
-    //public function dtgPiezNota_IdxxPiez_Render(GuiaPiezas $objGuiaPiez) {
-    //    $strIdxxPiez = explode('-',$objGuiaPiez->IdPieza)[1];
-    //    return utf8_encode($strIdxxPiez);
-    //}
+    protected function dtgPiezMani_Create() {
+        $this->dtgPiezMani = new QDataGrid($this);
+        $this->dtgPiezMani->FontSize = 12;
+        $this->dtgPiezMani->ShowFilter = false;
 
+        $this->dtgPiezMani->CssClass = 'datagrid';
+        $this->dtgPiezMani->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgPiezMani->Paginator = new QPaginator($this->dtgPiezMani);
+        $this->dtgPiezMani->ItemsPerPage = 20;
+
+        $this->dtgPiezMani->UseAjax = true;
+
+        $this->dtgPiezMani->SetDataBinder('dtgPiezMani_Bind');
+
+        $this->createdtgPiezManiColumns();
+    }
+
+    protected function dtgPiezMani_Bind() {
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::In(QQN::GuiaPiezas()->GuiaId,$this->objNotaEntr->IdsDeLasGuias());
+        $arrGuiaMani   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
+        $this->dtgPiezMani->TotalItemCount = count($arrGuiaMani);
+        // Bind the datasource to the datagrid
+        $this->dtgPiezMani->DataSource = GuiaPiezas::QueryArray(
+            QQ::AndCondition($objClauWher),
+            QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause)
+        );
+    }
+
+    protected function createdtgPiezManiColumns() {
+        $colPiezIdxx = new QDataGridColumn($this);
+        $colPiezIdxx->Name = QApplication::Translate('Id');
+        $colPiezIdxx->Html = '<?= $_ITEM->Id ?>';
+        $colPiezIdxx->Width = 60;
+        $this->dtgPiezMani->AddColumn($colPiezIdxx);
+
+        $colIdxxPiez = new QDataGridColumn($this);
+        $colIdxxPiez->Name = QApplication::Translate('IdPieza');
+        $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
+        $colIdxxPiez->Width = 140;
+        $this->dtgPiezMani->AddColumn($colIdxxPiez);
+
+        $colUbicPiez = new QDataGridColumn($this);
+        $colUbicPiez->Name = QApplication::Translate('Ubicacion');
+        $colUbicPiez->Html = '<?= $_ITEM->Ubicacion ?>';
+        $colUbicPiez->Width = 160;
+        $this->dtgPiezMani->AddColumn($colUbicPiez);
+
+        $colSucuDest = new QDataGridColumn($this);
+        $colSucuDest->Name = QApplication::Translate('Dest');
+        $colSucuDest->Html = '<?= $_ITEM->Guia->Destino->Iata ?>';
+        $this->dtgPiezMani->AddColumn($colSucuDest);
+
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+
+        if ($this->objNotaEntr->ServicioImportacion == 'AER') {
+            $colKiloPiez = new QDataGridColumn($this);
+            $colKiloPiez->Name = QApplication::Translate('Kilos');
+            $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
+            $this->dtgPiezMani->AddColumn($colKiloPiez);
+        } else {
+            $colKiloPiez = new QDataGridColumn($this);
+            $colKiloPiez->Name = QApplication::Translate('PiesCub');
+            $colKiloPiez->Html = '<?= $_ITEM->PiesCub; ?>';
+            $this->dtgPiezMani->AddColumn($colKiloPiez);
+        }
+
+    }
+
+    protected function btnExpoGuia_Create() {
+        $this->btnExpoGuia = new QDataGridExporterButton($this, $this->dtgGuiaMani);
+        $this->btnExpoGuia->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
+        $this->btnExpoGuia->Text = '<i class="fa fa-download fa-lg"></i> XLS';
+        $this->btnExpoGuia->HtmlEntities = false;
+        $this->btnExpoGuia->CssClass = 'btn btn-outline-danger btn-sm';
+        //$this->btnExpoGuia->Visible = $this->objUsuario->LogiUsua == 'ddurand';
+    }
+
+    protected function btnExpoPiez_Create() {
+        $this->btnExpoPiez = new QDataGridExporterButton($this, $this->dtgPiezMani);
+        $this->btnExpoPiez->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
+        $this->btnExpoPiez->Text = '<i class="fa fa-download fa-lg"></i> XLS';
+        $this->btnExpoPiez->HtmlEntities = false;
+        $this->btnExpoPiez->CssClass = 'btn btn-outline-danger btn-sm';
+        //$this->btnExpoPiez->Visible = $this->objUsuario->LogiUsua == 'ddurand';
+    }
+
+    protected function lstClieCarg_Create() {
+        $this->lstClieCarg = new QListBox($this);
+        $this->lstClieCarg->Required = true;
+        $this->lstClieCarg->Width = 180;
+        $this->lstClieCarg->Name = QApplication::Translate('Cliente a Cargar');
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::MasterCliente()->NombClie);
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CargaMasiva,SinoType::SI);
+        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CodiStat,SinoType::SI);
+        $arrClieCarg   = MasterCliente::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+        $intCantClie   = count($arrClieCarg);
+        $this->lstClieCarg->AddItem('- Seleccione Uno - ('.$intCantClie.')',null);
+        foreach ($arrClieCarg as $objClieCarg) {
+            $blnSeleRegi = false;
+            if ($this->blnEditMode) {
+                $blnSeleRegi = $this->objNotaEntr->ClienteCorpId == $objClieCarg->CodiClie;
+            }
+            $this->lstClieCarg->AddItem($objClieCarg->__toString(), $objClieCarg->CodiClie, $blnSeleRegi);
+        }
+        $this->lstClieCarg->AddAction(new QChangeEvent(), new QAjaxAction('lstClieCarg_Change'));
+    }
 
     protected function txtCargArch_Create() {
         $this->txtCargArch = new QFileControl($this);
@@ -256,8 +455,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function txtNumeRefe_Create() {
         $this->txtNumeRefe = new QTextBox($this);
-        $this->txtNumeRefe->Name = 'Referencia Manif.';
-        $this->txtNumeRefe->ToolTip = 'Nro de Nota de Entrega, Manifiesto o Contenedor';
+        $this->txtNumeRefe->Name = 'Ref. del Manifiesto';
+        $this->txtNumeRefe->ToolTip = 'Nro de Manifiesto o Contenedor';
         if ($this->blnEditMode) {
             $this->txtNumeRefe->Text = $this->objNotaEntr->Referencia;
         }
@@ -266,13 +465,29 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function txtNombArch_Create() {
         $this->txtNombArch = new QTextBox($this);
-        $this->txtNombArch->Name = 'Nombre del Archivo';
+        $this->txtNombArch->Name = 'Archivo';
         $this->txtNombArch->ToolTip = 'Nombre del archivo cargado...';
         if ($this->blnEditMode) {
             $this->txtNombArch->Text = $this->objNotaEntr->NombreArchivo;
         }
         $this->txtNombArch = disableControl($this->txtNombArch);
         $this->txtNombArch->Visible = false;
+    }
+
+    protected function chkEnxxKilo_Create() {
+        $this->chkEnxxKilo = new QCheckBox($this);
+        $this->chkEnxxKilo->Name = 'En Kilos ?';
+        if ($this->blnEditMode) {
+            $this->chkEnxxKilo->Checked = $this->objNotaEntr->EnKilos;
+        }
+    }
+
+    protected function chkManiFact_Create() {
+        $this->chkManiFact = new QCheckBox($this);
+        $this->chkManiFact->Name = 'Facturable ?';
+        if ($this->blnEditMode) {
+            $this->chkManiFact->Checked = $this->objNotaEntr->Facturable;
+        }
     }
 
     protected function lblNumeCarg_Create() {
@@ -308,11 +523,20 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function lblNumeProc_Create() {
         $this->lblNumeProc = new QLabel($this);
-        $this->lblNumeProc->Name = 'Procesadas';
+        $this->lblNumeProc->Name = 'Procsds';
         $this->lblNumeProc->Text = 0;
         $this->lblNumeProc->HtmlEntities = false;
         if ($this->blnEditMode) {
             $this->lblNumeProc->Text = $this->objNotaEntr->Procesadas;
+        }
+    }
+
+    protected function lblCantPiez_Create() {
+        $this->lblCantPiez = new QLabel($this);
+        $this->lblCantPiez->Name = 'Piezas';
+        $this->lblCantPiez->HtmlEntities = false;
+        if ($this->blnEditMode) {
+            $this->lblCantPiez->Text = $this->objNotaEntr->Piezas;
         }
     }
 
@@ -430,6 +654,13 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->btnErroProc->Text = TextoIcono('eye','Error(es)','F','lg');
         $this->btnErroProc->AddAction(new QClickEvent(), new QServerAction('btnErroProc_Click'));
         $this->btnErroProc->Visible = false;
+        if ($this->blnEditMode) {
+            t('Creando el boton, en modo edicion');
+            if (!is_null($this->objProcAnte)) {
+                t('El proceso existe, por lo tanto, había errores');
+                $this->btnErroProc->Visible = true;
+            }
+        }
     }
 
     protected function btnMostSucu_Create() {
@@ -460,26 +691,36 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     // Acciones asociadas a los objetos
     //----------------------------------
 
+    protected function lstClieCarg_Change() {
+        if (!is_null($this->lstClieCarg->SelectedValue) && (!$this->blnEditMode) ) {
+            $objClieCarg = MasterCliente::Load($this->lstClieCarg->SelectedValue);
+            $this->chkManiFact->Checked = $objClieCarg->Facturable;
+        }
+    }
+
     protected function lstServImpo_Change() {
         if ($this->lstServImpo->SelectedValue == 'AER') {
             if ($this->lblTotaPies->Text != 0) {
                 $this->lblTotaLibr->Text  = $this->lblTotaPies->Text;
                 $this->lblTotaPies->Text = 0;
             }
-        }
-        if ($this->lstServImpo->SelectedValue == 'MAR') {
+            enableControl($this->chkEnxxKilo);
+        } else {
             if ($this->lblTotaLibr->Text != 0) {
                 $this->lblTotaPies->Text = $this->lblTotaLibr->Text;
                 $this->lblTotaLibr->Text  = 0;
             }
+            $this->chkEnxxKilo->Checked = false;
+            disableControl($this->chkEnxxKilo);
         }
     }
 
     protected function btnBorrNota_Click($strFormId, $strControlId, $strParameter) {
         $blnTodoOkey = true;
-        if ($this->objNotaEntr->Estatus == 'RECIBID@') {
-            $this->mensaje('La NDE ya fue RECIBID@. No se puede borrar');
+        if ( ($this->objNotaEntr->Estatus == 'RECIBID@') && (!$this->blnAvisReci) ) {
+            $this->warning('Manifiesto RECIBID@. No se puede borrar !!!');
             $blnTodoOkey = false;
+            $this->blnAvisReci = true;
         }
         if ($blnTodoOkey) {
             $this->objNotaEntr->Delete();
@@ -488,7 +729,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $arrLogxCamb['strNombRegi'] = $this->objNotaEntr->Referencia;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
-            QApplication::Redirect(__SIST__.'/nota_entrega_list.php');
+            QApplication::Redirect(__SIST__.'/manifiestos_list.php');
         }
     }
 
@@ -498,40 +739,40 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function btnCancel_Click() {
         $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__SIST__."/nota_entrega_list.php");
+        QApplication::Redirect(__SIST__."/manifiestos_list.php");
     }
 
     protected function btnSave_Click() {
-        t('==================');
-        t('Creando Guias Gold');
-        //---------------------------------------------------------------------------
-        // Invocacion a rutina para crear el proceso. Obteniendo el ID para el mismo.
-        //---------------------------------------------------------------------------
+        t('==============================');
+        t('Creando Guias Gold en el SisCO');
+        $this->objCliente = MasterCliente::Load($this->lstClieCarg->SelectedValue);
+
         $strNombProc = 'Creando Guias Gold del Cliente: '.$this->objCliente->NombClie;
         $this->objProcEjec = CrearProceso($strNombProc);
         t('Proceso iniciado...');
+
         //-------------------------------------
         // Se suprimen los errores en pantalla
         //-------------------------------------
         $mixErroOrig = error_reporting();
         error_reporting(0);
         $this->mensaje();
-        t('Errores apagados');
-        //-----------------------------------
-        // Se identifican valores de trabajo
-        //-----------------------------------
+
         $intCantErro = 0;
         $blnTodoOkey = true;
-        $blnProcImpo = true;
-        $objCkptMasi = Checkpoints::LoadByCodigo('NR');
-        if (!$objCkptMasi) {
-            $this->danger('No existe el Checkpoint NR !!!');
+        if ($this->objNotaEntr->CargaRecibida) {
+            $strCodiCkpt = 'RA';
+        } else {
+            $strCodiCkpt = 'MC';
+        }
+        $objCkptMani = Checkpoints::LoadByCodigo($strCodiCkpt);
+        if (!$objCkptMani) {
+            $this->danger("No existe el Checkpoint $strCodiCkpt");
             return;
         }
-        t('Checkpoint NR, leido de la BD');
-        //----------------------------------------------------------
+        //-----------------------------------------------------------
         // Se identifican las Guias Masivas pendientes por procesar
-        //----------------------------------------------------------
+        //-----------------------------------------------------------
         $intCantGuia   = 0;
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->Procesada, SinoType::NO);
@@ -543,27 +784,24 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         t('Guias pendientes para procesar: '.$intCantPend);
         if ($intCantPend > 0) {
             foreach ($arrGuiaPend as $objGuiaMasi) {
-                t('Procesando la guia: '.$objGuiaMasi->GuiaExte);
                 //------------------------------------------------------------
                 // Se crea una Guia Interna correspondiente a la Guia Masiva
                 //------------------------------------------------------------
-                $this->crearGuiaMasiva($objGuiaMasi, $objCkptMasi);
-                //------------------------------------------------
-                // Se incrementa el contador de guías procesadas.
-                //------------------------------------------------
-                $intCantGuia++;
+                $blnTodoOkey = $this->crearGuiaMasiva($objGuiaMasi, $objCkptMani);
+                if ($blnTodoOkey) {
+                    // Se incrementa el contador de guías procesadas.
+                    $intCantGuia++;
+                    t('Procesando la guia: '.$objGuiaMasi->GuiaExte.' | Contador: '.$intCantGuia);
+                } else {
+                    $intCantErro++;
+                }
             }
         }
         //------------------------------------------------
         // Se levantan nuevamente los errores en pantalla
         //------------------------------------------------
         error_reporting($mixErroOrig);
-        //------------------------------------------------------
-        // Se inicializan los parámetros del mensaje al usuario
-        //------------------------------------------------------
         $strTextMens = 'El proceso culmino con '.$intCantErro.' error(es)';
-        $strTipoMens = 's';
-        $strIconMens = __iCHEC__;
         //---------------------------------------------
         // Se indica cuántas guías han sido procesadas
         //---------------------------------------------
@@ -571,33 +809,49 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->lblNumePend->Text = (int) $this->lblNumePend->Text - $intCantGuia;
         $this->objNotaEntr->Procesadas  = $intCantGuia;
         $this->objNotaEntr->PorProcesar = $this->lblNumePend->Text;
+        $this->objNotaEntr->Piezas      = $this->objNotaEntr->cantidadDePiezas();
+        t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
         $this->objNotaEntr->Save();
-        if (!$blnTodoOkey) {
-            //---------------------------------------------------------------------------------------------------
-            // Si no ha salido to-do bien, se coloca el mensaje construido como un alerta, se indica la cantidad
-            // de errores existentes y se visualiza el botón para acceder a los detalles de los mismos.
-            //---------------------------------------------------------------------------------------------------
-            $strTipoMens = 'd';
-            $strIconMens = __iHAND__;
-            $this->lblNumeErro->Text = $intCantErro;
-            $this->btnErroProc->Visible = true;
+        t('Manifiesto actualizado...');
+
+        //-----------------------------------------------
+        // Se graba el checkpoint al Manifiesto
+        //-----------------------------------------------
+        if ($intCantGuia > 0) {
+            $arrResuGrab = $this->objNotaEntr->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+            if (!$arrResuGrab['TodoOkey']) {
+                $intCantErro++;
+            }
         }
-        //-----------------------------------------
-        // Se construye el mensaje correspondiente
-        //-----------------------------------------
-        $this->mensaje($strTextMens,'m',$strTipoMens,'i',$strIconMens);
-        //-----------------------------------------------------------------------------------------------------------
-        // Se activan los procesamientos de validación para determinar el estatus de actividad de carga y registros.
-        //-----------------------------------------------------------------------------------------------------------
-        //$this->activarProcesamiento($blnProcImpo);
+        //if ($intCantGuia > 0) {
+            //try {
+            //    $strDescCkpt = $objCkptMani->Descripcion;
+            //    $arrDatoCkpt = array();
+            //    $arrDatoCkpt['NumeCont'] = $this->objNotaEntr->Id;
+            //    $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+            //    $arrDatoCkpt['TextObse'] = $strDescCkpt;
+            //    $arrResuGrab = GrabarCheckpointManifiesto($arrDatoCkpt);
+            //    if (!$arrResuGrab['TodoOkey']) {
+            //        throw new Exception($arrResuGrab['MotiNook']);
+            //    }
+            //} catch (Exception $e) {
+            //    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            //    $arrParaErro['NumeRefe'] = 'Referencia: '.$this->objNotaEntr->Referencia;
+            //    $arrParaErro['MensErro'] = $e->getMessage();
+            //    $arrParaErro['ComeErro'] = 'Grabando Ckpt al Manifiesto';
+            //    GrabarError($arrParaErro);
+            //    $intCantErro++;
+            //    $blnTodoOkey = false;
+            //}
+        //}
         //--------------------------------------
         // Se almacena el resultado del proceso
         //--------------------------------------
-        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
-        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->HoraFinal      = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario     = $strTextMens;
         $this->objProcEjec->NotificarAdmin = !$blnTodoOkey ? true : false;
         $this->objProcEjec->Save();
-        //TODO: Ver posibilidad de enviar notificación de error(es) a administradores del Sistema por correo.
+        t('Proceso actualizado');
         //----------------------------------------------
         // Se deja registro de la transacción realizada
         //----------------------------------------------
@@ -608,26 +862,31 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
 
+        $_SESSION['ProcAnte'] = $this->objProcEjec->Id;
+        $_SESSION['CantErro'] = $intCantErro;
+
         QApplication::Redirect(__SIST__.'/carga_masiva_guias.php/'.$this->objNotaEntr->Id);
     }
 
     protected function btnErroProc_Click() {
-        $_SESSION['PagiBack'] = __SIST__."/carga_masiva_guias.php";
-        QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
+        $_SESSION['PagiBack'] = __SIST__."/carga_masiva_guias.php/".$this->objNotaEntr->Id;
+        QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcAnte->Id);
     }
 
     protected function btnImpoGuia_Click() {
         $strNombArch = $this->txtCargArch->FileName;
-        $strPartNomb = explode('.',$strNombArch);
-        $arrExteVali = array('csv','txt','dat');
-        if (in_array($strPartNomb[1],$arrExteVali)) {
+        $arrNombArch = explode('.',$strNombArch);
+        $strExteArch = $arrNombArch[1];
+        $arrExteVali = ['xls','xlsx'];
+        if (in_array($strExteArch,$arrExteVali)) {
             $file = basename(tempnam(getcwd(),'tmp'));
-            $file = $file.'.'.$strPartNomb[1];
+            $file = $file.'.'.$strExteArch;
             $filedest = '/tmp/'.$file;
-            copy($_FILES['c6']['tmp_name'],$filedest);
-            $this->CargarArchivo($filedest);
+            copy($_FILES['c8']['tmp_name'],$filedest);
+            $this->CargarArchivo($filedest,$strExteArch);
         } else {
-            $strMensUsua = 'Archivo no corresponde a una extensión válida (.csv, .txt o .dat)';
+            $strExteVali = implode(',',$arrExteVali);
+            $strMensUsua = 'Archivo no corresponde a una extensión válida <b>'.$strExteVali.'</b>';
             $this->mensaje($strMensUsua,'','d','i',__iHAND__);
         }
     }
@@ -658,13 +917,27 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $this->lstServImpo = disableControl($this->lstServImpo);
                 $this->txtNumeRefe = disableControl($this->txtNumeRefe);
             }
-            if ($this->objNotaEntr->Estatus == 'RECIBID@') {
-                $this->btnBorrNota->Visible = false;
-            }
         }
     }
 
-    protected function verificarDatosMasivos($arrCampClie) {
+    protected function quitarPuntoYPieza($strNumeGuia) {
+        $intLongCade = strlen($strNumeGuia);
+        $intCantPnto = 0;
+        for ($i=0; $i < $intLongCade; $i++) {
+            if ($strNumeGuia[$i] == '.') {
+                $intCantPnto++;
+            }
+        }
+        if ($intCantPnto > 0) {
+            $intPosiPnto = strpos($strNumeGuia,'.');
+            $strNumeGuia = substr($strNumeGuia,0,$intPosiPnto);
+        }
+        return $strNumeGuia;
+    }
+
+    protected function verificarDatosMasivos($arrCampClie,$intNumeLine) {
+        t('Verificando datos de la linea: '.$intNumeLine);
+        $arrContVali = [];
         $blnTodoOkey = true;
         $blnDestOkey = true;
         $strTextErro = '';
@@ -674,14 +947,20 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         // Se verifica la existencia previa de la Guia en la tabla
         //--------------------------------------------------------
         $strGuiaClie = $arrCampClie[0];
-        $strIdxxPiez = $arrCampClie[1];
+
+        //--------------------------------------------------------------
+        // Caso Stephy de ATC.  Viene con un punto y luego la ordinal
+        // de la pieza, lo cual debe eliminarse
+        //--------------------------------------------------------------
+        //$strGuiaClie = $this->quitarPuntoYPieza($strGuiaClie);
+
         if (strlen($strGuiaClie) > 0) {
             //-------------------------------------------------------------------
             // Primero se verifica si existe una Guía con el Tracking indicado
             //-------------------------------------------------------------------
             $objGuiaMasi = Guias::LoadByTracking($strGuiaClie);
             if ($objGuiaMasi) {
-                $strTextErro = "El Tracking #$strGuiaClie ya existe";
+                $strTextErro = "La Guia #$strGuiaClie ya existe";
                 $blnTodoOkey = false;
             } else {
                 //-----------------------------------------------------------------------
@@ -689,115 +968,80 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 //-----------------------------------------------------------------------
                 $objClauWher   = QQ::Clause();
                 $objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->GuiaExte,$strGuiaClie);
-                $objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->IdPieza,$strIdxxPiez);
                 $objGuiaMasi   = GuiaCacesa::QuerySingle(QQ::AndCondition($objClauWher));
                 if ($objGuiaMasi) {
-                    $strTextErro = "El Tracking #$strGuiaClie-$strIdxxPiez ya existe. Esperando por ser Procesada";
+                    $strTextErro = "Guia #$strGuiaClie previamente cargada. Esperando por ser Procesada";
                     $blnTodoOkey = false;
                 }
             }
+        } else {
+            //---------------------------------------------------------------------------
+            // El nro de guia esta vacío, por lo tanto se asigna el consecutivo interno
+            //---------------------------------------------------------------------------
+            $strGuiaClie = Guias::proxNroDeGuia();
         }
+        $arrContVali['GuiaClie'] = $strGuiaClie;
+
+        $intCantPiez = (int)$arrCampClie[1];
+        $arrContVali['CantPiez'] = $intCantPiez;
         if ($blnTodoOkey) {
-            $strIdxxPiez = $arrCampClie[1];
-            if (strlen($strIdxxPiez) != 3 || !(is_numeric($strIdxxPiez))) {
-                $strTextErro = "La pieza debe tener 3 digitos Ej: 001, 002 (col 2)";
+            if ($intCantPiez <= 0) {
+                $strTextErro = "Linea $intNumeLine | Col 2 | Cantidad de Piezas debe ser un Número mayor a Cero";
                 $blnTodoOkey = false;
             }
         }
+        $strNombDest = trim(limpiarCadena($arrCampClie[2],';'));
+        $arrContVali['NombDest'] = $strNombDest;
         if ($blnTodoOkey) {
-            $strCeduDest = $arrCampClie[2];
-            if ( (strlen($strCeduDest) == 0) && ($strIdxxPiez == '001') ) {
-                $strTextErro = "La Cedula del Destinatario es Requerido (col 3)";
+            if (strlen($strNombDest) == 0) {
+                $strTextErro = "Linea $intNumeLine | Col 3 | El Nombre del Destinatario es Requerido";
                 $blnTodoOkey = false;
             }
         }
+        $strTeleDest = quitaCaracter(';',$arrCampClie[3]);
+        $arrContVali['TeleDest'] = $strTeleDest;
         if ($blnTodoOkey) {
-            $strNombDest = $arrCampClie[3];
-            if ( (strlen($strNombDest) == 0) && ($strIdxxPiez == '001') ) {
-                $strTextErro = "El Nombre del Destinatario es Requerido (col 4)";
+            if (strlen($strTeleDest) == 0) {
+                $strTextErro = "Linea $intNumeLine | Col 4 | El Telefono del Destinatario es Requerido";
                 $blnTodoOkey = false;
             }
         }
+        $strDireEntr = trim(limpiarCadena($arrCampClie[4],';'));
+        $arrContVali['DireEntr'] = $strDireEntr;
         if ($blnTodoOkey) {
-            $strTeleDest = $arrCampClie[4];
-            if ( (strlen($strTeleDest) == 0) && ($strIdxxPiez == '001') ) {
-                $strTextErro = "El Telefono del Destinatario es Requerido (col 5)";
+            if (strlen($strDireEntr) == 0) {
+                $strTextErro = "Linea $intNumeLine | Col 5 | La Direccion de Entrega es Requerida";
                 $blnTodoOkey = false;
             }
         }
+        $strSucuDest = strtoupper($arrCampClie[5]);
+        $arrContVali['SucuDest'] = $strSucuDest;
         if ($blnTodoOkey) {
-            $strDireDest = $arrCampClie[5];
-            if ( (strlen($strDireDest) == 0) && ($strIdxxPiez == '001') ) {
-                $strTextErro = "La Direccion de Entrega es Requerida (col 6)";
-                $blnTodoOkey = false;
-            }
-        }
-        $blnValiSucu = false;
-        if ($blnTodoOkey) {
-            $strSucuDest = strtoupper($arrCampClie[6]);
             if (strlen($strSucuDest) == 0) {
-                if ($strIdxxPiez == '001')  {
-                    $strTextErro = "La Sucursal Destino es Requerida (col 6)";
-                    $blnTodoOkey = false;
-                }
-            } else {
-                $blnValiSucu = true;
+                $strTextErro = "Linea $intNumeLine | Col 6 | La Sucursal Destino es Requerida";
+                $blnTodoOkey = false;
             }
         }
-        if ($blnTodoOkey && $blnValiSucu) {
+        if ($blnTodoOkey) {
             //-------------------------------------
             // Se verifica que el Destino exista
             //-------------------------------------
-            $strSucuDest = strtoupper($arrCampClie[6]);
-            t('Voy a verificar la sucursal: '.$strSucuDest);
             $objSucuDest = Sucursales::LoadByIata($strSucuDest);
             if (!$objSucuDest) {
-                $strTextErro = "La Sucursal Destino ".$strSucuDest." (col 7) no existe";
+                $strTextErro = "Linea $intNumeLine | Col 6 | La Sucursal Destino ".$strSucuDest." no existe";
                 $blnDestOkey = false;
                 $blnTodoOkey = false;
             } else {
                 $strSucuDest = $objSucuDest->Iata;
             }
+            $arrContVali['SucuDest'] = $strSucuDest;
         }
+        $decPesoEnvi = flotar($arrCampClie[6]);
+        //$decPesoEnvi = str_replace('.',',',$arrCampClie[6]);
+        $arrContVali['PesoEnvi'] = $decPesoEnvi;
         if ($blnTodoOkey) {
-            $strDescCont = $arrCampClie[8];
-            if (strlen($strDescCont) == 0) {
-                $strTextErro = "La Descripcion de Contenido es requerida (col 9)";
-                $blnTodoOkey = false;
-            }
-        }
-        if ($blnTodoOkey) {
-            $intPesoEnvi = $arrCampClie[10];
-            if (!(is_numeric($intPesoEnvi) && $intPesoEnvi > 0)) {
-                $strTextErro = "Peso debe ser mayor mayor a cero(0).  Libras si es AEREO o PiesCub si es MARITIMO (col 10)";
-                $blnTodoOkey = false;
-            }
-        }
-        if ($blnTodoOkey) {
-            $intAltoEnvi = $arrCampClie[11];
-            if (!(is_numeric($intAltoEnvi) && $intAltoEnvi > 0)) {
-                $strTextErro = "Alto debe ser mayor mayor a cero(0).  Expresado en cms";
-                $blnTodoOkey = false;
-            }
-        }
-        if ($blnTodoOkey) {
-            $intAnchEnvi = $arrCampClie[12];
-            if (!(is_numeric($intAnchEnvi) && $intAnchEnvi > 0)) {
-                $strTextErro = "Ancho debe ser mayor mayor a cero(0).  Expresado en cms";
-                $blnTodoOkey = false;
-            }
-        }
-        if ($blnTodoOkey) {
-            $intLargEnvi = $arrCampClie[12];
-            if (!(is_numeric($intLargEnvi) && $intLargEnvi > 0)) {
-                $strTextErro = "Largo debe ser mayor mayor a cero(0).  Expresado en cms";
-                $blnTodoOkey = false;
-            }
-        }
-        if ($blnTodoOkey) {
-            $decValoDecl = $arrCampClie[13];
-            if ( (strlen($decValoDecl) > 0) && (is_numeric($decValoDecl)) ) {
-                $strTextErro = "Valor Declarado debe ser mayor mayor a cero(0).  Expresado en USD";
+            if ($decPesoEnvi < 0) {
+                $strTextErro = "Linea $intNumeLine | Col 7 | Peso debe ser mayor mayor a cero.  Libras si es AEREO o PiesCub si es MARITIMO";
                 $blnTodoOkey = false;
             }
         }
@@ -805,44 +1049,50 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $arrResuVali['DestOkey'] = $blnDestOkey;
         $arrResuVali['SucuDest'] = $strSucuDest;
         $arrResuVali['TextErro'] = $strTextErro;
+        $arrResuVali['ContVali'] = $arrContVali;
+        //t('Termine la verificacion.  Errores: '.$strTextErro);
         return $arrResuVali;
     }
 
-    protected function CargarArchivo($strNombArch) {
+    protected function CargarArchivo($strNombArch,$strExteArch) {
+        t('');
         t('=====================');
         t('Rutina: CargarArchivo');
+        $this->objCliente = MasterCliente::Load($this->lstClieCarg->SelectedValue);
         $this->strMensProc = '';
+        $blnTodoOkey = true;
         //---------------------------------------------------------------------------
         // Invocacion a rutina para crear el proceso. Obteniendo el ID para el mismo.
         //---------------------------------------------------------------------------
-        $strNombProc = 'Carga Masiva Connect: '.$this->objCliente->NombClie;
+        $strNombProc = 'Carga Masiva SisCO: '.$this->objCliente->NombClie;
         $this->objProcEjec = CrearProceso($strNombProc);
-
         //-----------------------------------------------
         // Si no se especifico la Referencia, se asigna
         //-----------------------------------------------
         $strNumeRefe = $this->txtNumeRefe->Text;
         t('Nro de Referencia: '.$strNumeRefe);
         if (strlen($strNumeRefe) == 0) {
-            $strNumeRefe = trim($this->objUsuario->Cliente->CodigoInterno).'-'.date('YmdHi');
+            $strNumeRefe = trim($this->objCliente->CodigoInterno).'-'.date('YmdHi');
             $this->txtNumeRefe->Text = $strNumeRefe;
-            t('No habia Nro de Referencia, se creo: '.$strNumeRefe);
+            t('No se especifico Nro de Referencia, se creo: '.$strNumeRefe);
         }
-        $intCodiClie = $this->objUsuario->ClienteId;
-        t('El Cliente es: '.$intCodiClie);
+        $intCodiClie = $this->objCliente->CodiClie;
         $this->objNotaEntr = NotaEntrega::LoadByClienteCorpIdReferencia($intCodiClie,$strNumeRefe);
         if (!$this->objNotaEntr) {
-            t('Es una Nota de Entrega nueva...');
+            t('Es un Manifieto nuevo...');
             try {
                 //-----------------------------
                 // Se crea la Nota de Entrega
                 //-----------------------------
                 $this->objNotaEntr = new NotaEntrega();
-                $this->objNotaEntr->ClienteCorpId       = $this->objUsuario->ClienteId;
+                $this->objNotaEntr->ClienteCorpId       = $this->objCliente->CodiClie;
                 $this->objNotaEntr->Referencia          = $this->txtNumeRefe->Text;
                 $this->objNotaEntr->NombreArchivo       = utf8_decode($this->txtCargArch->FileName);
                 $this->objNotaEntr->Estatus             = 'CREAD@';
                 $this->objNotaEntr->ServicioImportacion = $this->lstServImpo->SelectedValue;
+                $this->objNotaEntr->Facturable          = $this->chkManiFact->Checked;
+                $this->objNotaEntr->EnKilos             = $this->chkEnxxKilo->Checked;
+                $this->objNotaEntr->CargaRecibida       = false;
                 $this->objNotaEntr->Cargadas            = 0;
                 $this->objNotaEntr->PorProcesar         = 0;
                 $this->objNotaEntr->PorCorregir         = 0;
@@ -850,30 +1100,29 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $this->objNotaEntr->Recibidas           = 0;
                 $this->objNotaEntr->Sobrantes           = 0;
                 $this->objNotaEntr->Libras              = 0;
+                $this->objNotaEntr->Kilos               = 0;
                 $this->objNotaEntr->PiesCub             = 0;
                 $this->objNotaEntr->Volumen             = 0;
                 $this->objNotaEntr->Piezas              = 0;
                 $this->objNotaEntr->Fecha               = new QDateTime(QDateTime::Now);
                 $this->objNotaEntr->Hora                = date('H:i');
-                $this->objNotaEntr->UsuarioId           = $this->objUsuaConn->CodiUsua;
-                $this->objNotaEntr->CreatedBy           = $this->objUsuaClie->Id;
+                $this->objNotaEntr->UsuarioId           = $this->objUsuario->CodiUsua;
+                $this->objNotaEntr->CreatedBy           = $this->objUsuario->CodiUsua;
                 $this->objNotaEntr->Save();
-                t('Id de la NDE creada: '.$this->objNotaEntr->Id);
+                t('Id del Manifiesto creado: '.$this->objNotaEntr->Id);
                 //-----------------------
                 // Log de Transacciones
                 //-----------------------
-                $arrLogxCamb['strNombTabl'] = 'NotaEntrega';
-                $arrLogxCamb['intRefeRegi'] = $this->objNotaEntr->Id;
-                $arrLogxCamb['strNombRegi'] = $this->objNotaEntr->Referencia;
-                $arrLogxCamb['strDescCamb'] = "Creado";
-                $arrLogxCamb['strEnlaEnti'] = __SIST__.'/nota_entrega_edit.php/'.$this->objNotaEntr->Id;
-                LogDeCambios($arrLogxCamb);
+                $this->objNotaEntr->logDeCambios("Creado");
             } catch (Exception $e) {
+                $blnTodoOkey = false;
+                t('Error creando el Manifiesto: '.$e->getMessage());
                 $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
                 $arrParaErro['NumeRefe'] = $strNombArch;
                 $arrParaErro['MensErro'] = $e->getMessage();
-                $arrParaErro['ComeErro'] = 'Falla al crear la NDE ('.$this->objCliente->CodigoInterno.')';
+                $arrParaErro['ComeErro'] = 'Falla al crear el Manifiesto ('.$this->objCliente->NombClie.')';
                 GrabarError($arrParaErro);
+                $this->danger($e->getMessage());
             }
         } else {
             $this->lblNumeCarg->Text = $this->objNotaEntr->Cargadas;
@@ -882,7 +1131,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->lblNumeProc->Text = $this->objNotaEntr->Procesadas;
         }
         if ($this->objNotaEntr->Estatus == 'RECIBID@') {
-            $this->mensaje('Nota de Entrega RECIBID@ en Gold Coast.  No admite cambios','m','d',__iHAND__);
+            $this->success('Manfiesto RECIBID@.  No admite cambios');
+            return;
+        }
+        if (!$blnTodoOkey) {
             return;
         }
         //-------------------------------------
@@ -890,102 +1142,107 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         //-------------------------------------
         $mixErroOrig = error_reporting();
         error_reporting(0);
-        //-------------------------
-        // Acumuladores de la NDE
-        //-------------------------
+        //------------------------------
+        // Acumuladores del Manifiesto
+        //------------------------------
         $decSumaLibr = 0;
+        $decSumaKilo = 0;
         $decSumaPies = 0;
-        $decSumaVolu = 0;
         $intCantAjus = 0;
         //-----------------------------------------------------------
         // Se inician los contadores y otras propiedades del archivo
         //-----------------------------------------------------------
         $intCantRegi = 0;
-        $intNumeLine = 1;
         $intCantErro = 0;
-        $strMensErro = '';
         $blnErroProc = false;
         try {
             //-------------------------------
             // Se abre el archivo a procesar
             //-------------------------------
-            $mixArchAgen = fopen($strNombArch,'r');
-            if (!$mixArchAgen) {
-                throw new Exception('No puede abrirse el archivo plano');
+            $strLibrExce = $strExteArch == 'xls' ? 'SimpleXLS' : 'SimpleXLSX';
+            if ( $xls = $strLibrExce::parseFile($strNombArch) ) {
+
+            } else {
+                $strMensErro = $strLibrExce::parseError();
+                t('Error leyendo el archivo: '.$strMensErro);
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNombArch;
+                $arrParaErro['MensErro'] = $strMensErro;
+                $arrParaErro['ComeErro'] = 'Error leyendo archivo excel: '.$strMensErro;
+                GrabarError($arrParaErro);
+                $this->danger($strMensErro);
+                return;
             }
             //----------------------------------
             // Se lee el archivo linea a linea
             //----------------------------------
-            $strLineArch = fgets($mixArchAgen);
-            while (!feof($mixArchAgen)) {
-                $blnTodoOkey = true;
-                if (strlen(trim($strLineArch)) > 0 && $intNumeLine > 1) {
-                    $arrCampClie = explode(';', $strLineArch);
-                    if ($arrCampClie === false) {
-                        throw new Exception('Delimitador de columnas invalido. Utilice punto y coma (";")');
-                    }
+            $intNumeLine = 1;
+            foreach ($xls->rows() as $arrCampClie) {
+                if ( (count($arrCampClie) > 0) && ($intNumeLine > 1) ) {
                     //----------------------------------------------------------
                     // Se verifica la existencia de los campos reglamentarios
                     //----------------------------------------------------------
-                    t('Nro Linea: '.$intNumeLine);
                     $intCantCamp = count($arrCampClie);
-                    t('Cantidad de campos: '.$intCantCamp);
-                    if ($intCantCamp != 14) {
-                        $strMensErro = "La linea $intNumeLine no tiene los 14 campos reglamentarios";
-                        $blnTodoOkey = false;
+                    if ($intCantCamp != 7) {
+                        $strMensErro = "La linea $intNumeLine no tiene los 7 campos requeridos";
+                        t($strMensErro);
+                        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                        $arrParaErro['NumeRefe'] = $strNombArch;
+                        $arrParaErro['MensErro'] = $strMensErro;
+                        $arrParaErro['ComeErro'] = 'Cargando Manifiesto del Cliente ('.$this->objCliente->NombClie.')';
+                        GrabarError($arrParaErro);
+                        $intCantErro ++;
+                        $blnErroProc = true;
+                        $intNumeLine++;
+                        continue;
                     }
                     //-----------------------------------------------------------------------
                     // Si to-do sale bien, se procede a verificar los datos de cada registro
                     //-----------------------------------------------------------------------
-                    if ($blnTodoOkey) {
-                        $arrResuVali = $this->verificarDatosMasivos($arrCampClie);
-                        $blnTodoOkey = $arrResuVali['TodoOkey'];
-                        $blnDestOkey = $arrResuVali['DestOkey'];
-                        $strMensObse = $arrResuVali['TextErro'];
-                        $strSucuDest = $arrResuVali['SucuDest'];
-                        //-----------------------------------------------
-                        // Variables contenidas en la linea del archivo
-                        //-----------------------------------------------
-                        $strNumeGuia = $arrCampClie[0];
-                        $strIdxxPiez = $arrCampClie[1];
-                        $strCeduDest = $arrCampClie[2];
-                        $strNombDest = $arrCampClie[3];
-                        $strTeleDest = $arrCampClie[4];
-                        $strDireEntr = $arrCampClie[5];
-                        $strSucuDest = $arrCampClie[6];
-                        $strCiudDest = $arrCampClie[7];
-                        $strDescCont = $arrCampClie[8];
-                        $strPesoEnvi = $arrCampClie[9];
-                        $strAltoEnvi = $arrCampClie[10];
-                        $strAnchEnvi = $arrCampClie[11];
-                        $strLargEnvi = $arrCampClie[12];
-                        $strValoDecl = $arrCampClie[13];
-                        //----------------------------------------------------------------
-                        // Se crea un registro en la tabla guia_cacesa para cada registro
-                        //----------------------------------------------------------------
+                    $arrResuVali = $this->verificarDatosMasivos($arrCampClie,$intNumeLine);
+                    t('Datos verificados');
+                    $blnTodoOkey = $arrResuVali['TodoOkey'];
+                    $blnDestOkey = $arrResuVali['DestOkey'];
+                    $strMensObse = $arrResuVali['TextErro'];
+                    $strSucuDest = $arrResuVali['SucuDest'];
+                    $arrContVali = $arrResuVali['ContVali'];
+                    //-----------------------------------------------
+                    // Variables contenidas en la linea del archivo
+                    //-----------------------------------------------
+                    $strNumeGuia = $arrContVali['GuiaClie'];
+                    $intCantPiez = $arrContVali['CantPiez'];
+                    $strNombDest = $arrContVali['NombDest'];
+                    $strTeleDest = $arrContVali['TeleDest'];
+                    $strDireEntr = $arrContVali['DireEntr'];
+                    $strSucuDest = $arrContVali['SucuDest'];
+                    $decPesoEnvi = $arrContVali['PesoEnvi'];
+                    //----------------------------------------------------------------
+                    // Se crea un registro en la tabla guia_cacesa para cada registro
+                    //----------------------------------------------------------------
+                    try {
                         $objGuiaMasi                      = new GuiaCacesa();
                         $objGuiaMasi->FechCarg            = new QDateTime(QDateTime::Now);
                         $objGuiaMasi->HoraCarg            = new QDateTime(QDateTime::Now);
                         $objGuiaMasi->Procesada           = SinoType::NO;
                         $objGuiaMasi->NumeGuia            = $strNumeGuia;
                         $objGuiaMasi->GuiaExte            = $strNumeGuia;
-                        $objGuiaMasi->IdPieza             = $strIdxxPiez;
-                        $objGuiaMasi->OrigGuia            = $this->objCliente->Sucursal->Iata;
+                        $objGuiaMasi->IdPieza             = $intCantPiez;
+                        $objGuiaMasi->OrigGuia            = $this->objUsuario->Sucursal->Iata;
                         $objGuiaMasi->NombRemi            = $this->objCliente->NombClie;
-                        $objGuiaMasi->DireRemi            = $this->objCliente->DirEntregaFactura;
+                        $objGuiaMasi->DireRemi            = $this->objCliente->DireFisc;
                         $objGuiaMasi->TeleRemi            = $this->objCliente->TeleCona;
                         $objGuiaMasi->NombDest            = utf8_decode(strtoupper($strNombDest));
-                        $objGuiaMasi->DireDest            = utf8_decode(strtoupper($strDireEntr).'.'.strtoupper($strCiudDest));
+                        $objGuiaMasi->DireDest            = utf8_decode(strtoupper($strDireEntr));
                         $objGuiaMasi->TeleDest            = $strTeleDest;
-                        $objGuiaMasi->CeluDest            = !is_null($strCeduDest) ? strtoupper($strCeduDest) : '.';
+                        $objGuiaMasi->CeluDest            = 'N/A';
                         $objGuiaMasi->DestGuia            = !$blnDestOkey ? '.' : $strSucuDest;
-                        $objGuiaMasi->DescCont            = utf8_decode(strtoupper($strDescCont));
-                        $objGuiaMasi->CantPiez            = 0;
-                        $objGuiaMasi->PesoGuia            = (float)$strPesoEnvi;
-                        $objGuiaMasi->Alto                = (float)$strAltoEnvi;
-                        $objGuiaMasi->Ancho               = (float)$strAnchEnvi;
-                        $objGuiaMasi->Largo               = (float)$strLargEnvi;
-                        $objGuiaMasi->Volumen             = ($objGuiaMasi->Alto * $objGuiaMasi->Ancho * $objGuiaMasi->Largo) / 166;
+                        $objGuiaMasi->DescCont            = 'N/A';
+                        $objGuiaMasi->CantPiez            = $intCantPiez;
+                        $objGuiaMasi->PesoGuia            = 0;
+                        $objGuiaMasi->Alto                = 0;
+                        $objGuiaMasi->Ancho               = 0;
+                        $objGuiaMasi->Largo               = 0;
+                        $objGuiaMasi->Volumen             = 0;
                         $objGuiaMasi->ServicioEntrega     = 'DOM';
                         $objGuiaMasi->ServicioImportacion = $this->objNotaEntr->ServicioImportacion;
                         $objGuiaMasi->RegistradoPor       = $this->objUsuario->LogiUsua;
@@ -993,52 +1250,52 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                         $objGuiaMasi->OtroDestino         = !$blnDestOkey ? $strSucuDest : null;
                         $objGuiaMasi->Observacion         = utf8_decode(strtoupper($strMensObse));
                         $objGuiaMasi->ClienteId           = $this->objCliente->CodiClie;
-                        $objGuiaMasi->TarifaId            = $this->objCliente->Tarifa->Id;
+                        $objGuiaMasi->TarifaId            = $this->objCliente->TarifaAgenteId;
                         $objGuiaMasi->ProcesoId           = $this->objProcEjec->Id;
-                        $objGuiaMasi->ValorDeclarado      = strlen($strValoDecl) > 0 ? (float)$strValoDecl : 0;
+                        $objGuiaMasi->ValorDeclarado      = 0;
                         $objGuiaMasi->NotaEntregaId       = $this->objNotaEntr->Id;
-                        try {
-                            $objGuiaMasi->Save();
-                            //-------------------------
-                            // Acumuladores de la NDE
-                            //-------------------------
-                            if ($this->objNotaEntr->ServicioImportacion == 'AER') {
-                                $decSumaLibr += $objGuiaMasi->PesoGuia;
+                        $objGuiaMasi->Kilos               = 0;
+                        $objGuiaMasi->PiesCub             = 0;
+                        if ($this->objNotaEntr->ServicioImportacion == 'AER') {
+                            if ($this->objNotaEntr->EnKilos) {
+                                $objGuiaMasi->Kilos = (float)$decPesoEnvi;
                             } else {
-                                $decSumaPies += $objGuiaMasi->PesoGuia;
+                                $objGuiaMasi->Kilos = (float)($decPesoEnvi * 0.45359237);
                             }
-                            $decSumaVolu += $objGuiaMasi->Volumen;
-                            if ($objGuiaMasi->Ajustar == SinoType::SI) {
-                                $intCantAjus += 1;
-                            }
-                            $intCantRegi++;
-                        } catch (Exception $e) {
-                            $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-                            $arrParaErro['NumeRefe'] = 'Guia: '.$objGuiaMasi->GuiaExte.'| NDE: '.$this->objNotaEntr->Referencia;
-                            $arrParaErro['MensErro'] = $e->getMessage();
-                            $arrParaErro['ComeErro'] = 'Falló la Guia del Cliente ('.$this->objCliente->CodigoInterno.') durante Carga Masiva';
-                            GrabarError($arrParaErro);
-                            $intCantErro ++;
-                            $blnErroProc = true;
+                            $objGuiaMasi->PesoGuia = $objGuiaMasi->Kilos;
+                        } else {
+                            $objGuiaMasi->PiesCub = (float)$decPesoEnvi;
+                            $objGuiaMasi->PesoGuia = $objGuiaMasi->PiesCub;
                         }
-                    } else {
+                        $decSumaKilo += $objGuiaMasi->Kilos;
+                        $decSumaPies += $objGuiaMasi->PiesCub;
+                        $objGuiaMasi->Save();
+                        //------------------------------
+                        // Acumuladores del Manifiesto
+                        //------------------------------
+                        if ($objGuiaMasi->Ajustar == SinoType::SI) {
+                            $intCantAjus += 1;
+                        }
+                        $intCantRegi++;
+                    } catch (Exception $e) {
+                        t('Error cargando el archivo: '.$e->getMessage());
                         $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-                        $arrParaErro['NumeRefe'] = 'Linea Nro: '.$intNumeLine.'| NDE: '.$this->objNotaEntr->Referencia;
-                        $arrParaErro['MensErro'] = $strMensErro;
-                        $arrParaErro['ComeErro'] = 'Fallo la importacion de los datos ';
+                        $arrParaErro['NumeRefe'] = $strNombArch;
+                        $arrParaErro['MensErro'] = $e->getMessage();
+                        $arrParaErro['ComeErro'] = 'Creando Guia Masiva ('.$strNumeGuia.')';
                         GrabarError($arrParaErro);
                         $intCantErro ++;
                         $blnErroProc = true;
                     }
                 }
                 $intNumeLine++;
-                $strLineArch = fgets($mixArchAgen);
             }
         } catch (Exception $e) {
+            t('Error cargando el archivo: '.$e->getMessage());
             $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
             $arrParaErro['NumeRefe'] = $strNombArch;
             $arrParaErro['MensErro'] = $e->getMessage();
-            $arrParaErro['ComeErro'] = 'Falla al procesar el archivo de Guias del Cliente ('.$this->objCliente->CodigoInterno.')';
+            $arrParaErro['ComeErro'] = 'Falla cargando Manifiesto del Cliente ('.$this->objCliente->NombClie.')';
             GrabarError($arrParaErro);
             $intCantErro ++;
             $blnErroProc = true;
@@ -1053,27 +1310,35 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $strTextMens = 'El proceso culmino con '.$intCantErro.' error(es)';
         $strTipoMens = 's';
         $strIconMens = 'check';
-        //--------------------------------------
-        // Se actualiza la NDE con los totales
-        //--------------------------------------
-        $this->objNotaEntr->Libras      = $decSumaLibr;
-        $this->objNotaEntr->PiesCub     = $decSumaPies;
-        $this->objNotaEntr->Volumen     = $decSumaVolu;
-        $this->objNotaEntr->Cargadas    = $intCantRegi;
-        $this->objNotaEntr->PorCorregir = $intCantAjus;
-        $this->objNotaEntr->PorProcesar = $intCantRegi - $intCantAjus;
-        $this->objNotaEntr->Piezas      = $intCantRegi;
-        $this->objNotaEntr->Save();
+        //---------------------------------------------
+        // Se actualiza el Manifiesto con los totales
+        //---------------------------------------------
+        try {
+            $this->objNotaEntr->Libras      = $decSumaLibr;
+            $this->objNotaEntr->Kilos       = $decSumaKilo;
+            $this->objNotaEntr->PiesCub     = $decSumaPies;
+            $this->objNotaEntr->Cargadas    = $intCantRegi;
+            $this->objNotaEntr->PorCorregir = $intCantAjus;
+            $this->objNotaEntr->PorProcesar = $intCantRegi - $intCantAjus;
+            $this->objNotaEntr->Save();
+        } catch (Exception $e) {
+            t('Error actualizando el manifiesto: '.$e->getMessage());
+            $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = $strNombArch;
+            $arrParaErro['MensErro'] = $e->getMessage();
+            $arrParaErro['ComeErro'] = 'Error actualizando el manifiesto ('.$this->objNotaEntr->Referencia.')';
+            GrabarError($arrParaErro);
+            $intCantErro ++;
+            $blnErroProc = true;
+        }
         if ($intCantRegi > 0) {
             //-------------------------------------------------------------------------------------------------
             // Si se ha importado uno o más registros, se manifiesta al usuario la posibilidad de procesar y/o
             // corregir datos, se indica la cantidad de registros cargados y se activan los procesamientos de
             // validación para determinar el estatus de actividad y/o registro.
             //-------------------------------------------------------------------------------------------------
-            $strTextMens .= ' - Puede proceder a <strong>Corregir y/ Procesar los Datos</strong>';
+            $strTextMens .= ' - Puede proceder a Corregir y/ Procesar los Datos';
             $this->lblNumeCarg->Text = $intCantRegi;
-            //$blnProcImpo = true;
-            //$this->activarProcesamiento($blnProcImpo);
         }
         if ($blnErroProc) {
             //----------------------------------------------------------------------------------------------------
@@ -1107,20 +1372,20 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
 
+        t('El Id del Proceso es: '.$this->objProcEjec->Id);
+        t('La cantidad de errores: '.$intCantErro);
+        $_SESSION['ProcAnte'] = $this->objProcEjec->Id;
+        $_SESSION['CantErro'] = $intCantErro;
         QApplication::Redirect(__SIST__.'/carga_masiva_guias.php/'.$this->objNotaEntr->Id);
     }
 
 
     protected function crearGuiaMasiva(GuiaCacesa $objGuiaMasi, $objCkptProc) {
-        t('Rutina: crearGuiaMasiva');
-        t('=======================');
-        t('Procesando el Tracking Nro: '.$objGuiaMasi->GuiaExte);
+        $blnTodoOkey = true;
+
+        t('Procesando la Guia-Cliente Nro: '.$objGuiaMasi->GuiaExte);
         $objSucuDest = Sucursales::LoadByIata($objGuiaMasi->DestGuia);
-        if ($objGuiaMasi->IdPieza == '001') {
-            t('Procesando la guia y 1era pieza');
-            //-------------------------------------------------------------
-            // Se trata de la primera pieza, por lo tanto se crea la Guia
-            //-------------------------------------------------------------
+        try {
             $objGuia                        = new Guias();
             $objGuia->Numero                = Guias::proxNroDeGuia();
             $objGuia->Tracking              = $objGuiaMasi->GuiaExte;
@@ -1139,71 +1404,62 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objGuia->DireccionDestinatario = $objGuiaMasi->DireDest;
             $objGuia->TelefonoDestinatario  = $objGuiaMasi->TeleDest;
             $objGuia->Contenido             = $objGuiaMasi->DescCont;
-            $objGuia->Piezas                = 1;
+            $objGuia->Piezas                = $objGuiaMasi->CantPiez;
             $objGuia->ValorDeclarado        = $objGuiaMasi->ValorDeclarado;
             $objGuia->Asegurado             = 0;
             $objGuia->Total                 = 0;
-            $objGuia->CreatedBy             = $this->objUsuaConn->CodiUsua;
+            $objGuia->CreatedBy             = $this->objUsuario->CodiUsua;
             $objGuia->VendedorId            = $this->objCliente->VendedorId;
-            $objGuia->TarifaId              = $objGuiaMasi->TarifaId;
+            $objGuia->TarifaAgenteId        = $objGuiaMasi->TarifaId;
             $objGuia->Alto                  = $objGuiaMasi->Alto;
             $objGuia->Ancho                 = $objGuiaMasi->Ancho;
             $objGuia->Largo                 = $objGuiaMasi->Largo;
             $objGuia->Volumen               = $objGuiaMasi->Volumen;
-            if ($objGuiaMasi->ServicioImportacion == 'AER') {
-                $objGuia->Libras            = $objGuiaMasi->PesoGuia;
-            } else {
-                $objGuia->PiesCub           = $objGuiaMasi->PesoGuia;
-            }
-            $objGuia->Kilos                 = $objGuia->Libras * 0.45359237;
+            $objGuia->Kilos                 = $objGuiaMasi->Kilos;
+            $objGuia->PiesCub               = $objGuiaMasi->PiesCub;
             $objGuia->NotaEntregaId         = $objGuiaMasi->NotaEntregaId;
-            try {
-                t('Voy a guardar la guia en la BD');
-                $objGuia->Save();
-                t('Guia creada '.$objGuia->Numero.'en la BD');
-                //---------------------------------------------------
-                // Una vez creada la guia, se crea la primera pieza
-                //---------------------------------------------------
-                $objGuia->crearPieza($objGuiaMasi, $this->objProcEjec, $objCkptProc);
-                //------------------------------------------------------------------------------
-                // Una vez creadas y registradas la Guía y la Pieza, se elimina la Guía Masiva
-                //------------------------------------------------------------------------------
-                $objGuiaMasi->Delete();
-                t('Pieza creada y guia masiva borrada');
-                $this->objGuiaProc = $objGuia;
-                //----------------------------------
-                // Se actualiza la Nota de Entrega
-                //----------------------------------
-                $objGuia->NotaEntrega->Procesadas  += 1;
-                $objGuia->NotaEntrega->PorProcesar -= 1;
-                $objGuia->NotaEntrega->Save();
-            } catch (Exception $e) {
-                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-                $arrParaErro['NumeRefe'] = 'Guia: '.$objGuia->Numero;
-                $arrParaErro['MensErro'] = $e->getMessage();
-                $arrParaErro['ComeErro'] = 'Fallo la creacion de la Guia y su Checkpoint';
-                GrabarError($arrParaErro);
-                $this->arrGuiaErro[] = $objGuia->Tracking;
+            $objGuia->Save();
+            //t('Guia: '.$objGuia->Numero.' creada en la BD');
+            //------------------------------------------------------------------
+            // Una vez creada la guia, se crean las piezas con pesos promedios
+            //------------------------------------------------------------------
+            $decKiloProm = round($objGuia->Kilos / $objGuia->Piezas, 2);
+            $decPiesProm = round($objGuia->PiesCub / $objGuia->Piezas, 2);
+            //-----------------------------------------------------------------------
+            // Se crea un objeto para enviar parametros a la creación de las piezas
+            //-----------------------------------------------------------------------
+            $objParaPiez = new stdClass();
+            $objParaPiez->ProcEjec = $this->objProcEjec;
+            $objParaPiez->CkptProc = $objCkptProc;
+            $objParaPiez->KiloProm = $decKiloProm;
+            $objParaPiez->PiesProm = $decPiesProm;
+            for ($i = 1; $i <= $objGuia->Piezas; $i++) {
+                $objParaPiez->IdxxPiez = $i;
+                $objGuia->crearPieza($objParaPiez);
             }
-        } else {
-            //--------------------------------------------------------------------------------------
-            // Si la guia en cuestion no presento errores, aquí se procesan el resto de las piezas
-            //--------------------------------------------------------------------------------------
-            t('Procesando la pieza: '.$objGuiaMasi->IdPieza.' del Tracking: '.$objGuiaMasi->GuiaExte);
-            if (!(in_array($objGuiaMasi->GuiaExte,$this->arrGuiaErro))) {
-                $this->objGuiaProc->crearPieza($objGuiaMasi, $this->objProcEjec, $objCkptProc);
-                //----------------------------------
-                // Se actualiza la Nota de Entrega
-                //----------------------------------
-                $this->objGuiaProc->NotaEntrega->Procesadas  += 1;
-                $this->objGuiaProc->NotaEntrega->PorProcesar -= 1;
-                $this->objGuiaProc->NotaEntrega->Save();
-                //------------------------------------------------------------------------------
-                // Una vez creadas y registradas la Guía y la Pieza, se elimina la Guía Masiva
-                //------------------------------------------------------------------------------
-                $objGuiaMasi->Delete();
-            }
+            //------------------------------------------------------------------------------
+            // Una vez creadas y registradas la Guía y la Pieza, se elimina la Guía Masiva
+            //------------------------------------------------------------------------------
+            $objGuiaMasi->Delete();
+            t('Piezas creada y guia masiva borrada');
+            //----------------------------------
+            // Se actualiza la Nota de Entrega
+            //----------------------------------
+            $objGuia->NotaEntrega->Procesadas  += 1;
+            $objGuia->NotaEntrega->PorProcesar -= 1;
+            $objGuia->NotaEntrega->Save();
+            //$objDatabase->TransactionCommit();
+        } catch (Exception $e) {
+            $blnTodoOkey = false;
+            t('Error creando la guia: '.$e->getMessage());
+            $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = 'Guia: '.$objGuiaMasi->NumeGuia;
+            $arrParaErro['MensErro'] = $e->getMessage();
+            $arrParaErro['ComeErro'] = 'Fallo la creacion de la Guia y su Checkpoint';
+            GrabarError($arrParaErro);
+            //$objDatabase->TransactionRollBack();
         }
+        return $blnTodoOkey;
     }
 }
 

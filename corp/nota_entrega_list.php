@@ -74,50 +74,30 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
 		// Create the Other Columns (note that you can use strings for nota_entrega's properties, or you
 		// can traverse down QQN::nota_entrega() to display fields that are down the hierarchy)
 		$this->dtgNotaEntregas->MetaAddColumn('Id');
-		//$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp);
 		$this->dtgNotaEntregas->MetaAddColumn('Referencia');
 		$this->dtgNotaEntregas->MetaAddColumn('Estatus');
 		$this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion','Name=S.Import');
 		$colCantCarg = $this->dtgNotaEntregas->MetaAddColumn('Cargadas');
 		$colCantCarg->HorizontalAlign = QHorizontalAlign::Center;
-		$colCantXPro = $this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=Por/Proc');
-		$colCantXPro->HorizontalAlign = QHorizontalAlign::Center;
-		$colCantPcor = $this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=Por/Corr');
-		$colCantPcor->HorizontalAlign = QHorizontalAlign::Center;
-		$colCantProc = $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Prcdas');
-		$colCantProc->HorizontalAlign = QHorizontalAlign::Center;
 		$colCantReci = $this->dtgNotaEntregas->MetaAddColumn('Recibidas','Name=Rec');
 		$colCantReci->ForeColor = 'green';
-		$colCantReci->HorizontalAlign = QHorizontalAlign::Center;
         $colCantSobr = $this->dtgNotaEntregas->MetaAddColumn('Sobrantes','Name=Sob');
         $colCantSobr->ForeColor = 'red';
-        $colCantSobr->HorizontalAlign = QHorizontalAlign::Center;
-        $colLibrNota = $this->dtgNotaEntregas->MetaAddColumn('Libras');
-        $colLibrNota->HorizontalAlign = QHorizontalAlign::Right;
-		$colPiesNota = $this->dtgNotaEntregas->MetaAddColumn('PiesCub');
-		$colPiesNota->HorizontalAlign = QHorizontalAlign::Right;
-		$colVoluNota = $this->dtgNotaEntregas->MetaAddColumn('Volumen');
-		$colVoluNota->HorizontalAlign = QHorizontalAlign::Right;
-		$colCantPiez = $this->dtgNotaEntregas->MetaAddColumn('Piezas');
-		$colCantPiez->HorizontalAlign = QHorizontalAlign::Center;
-		$this->dtgNotaEntregas->MetaAddColumn('Fecha');
-		//$this->dtgNotaEntregas->MetaAddColumn('Hora');
-		//$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->Usuario);
-		//$this->dtgNotaEntregas->MetaAddColumn('ValorDeclarado');
-		//$this->dtgNotaEntregas->MetaAddColumn('Observacion');
-		//$this->dtgNotaEntregas->MetaAddColumn('CreatedAt');
-		//$this->dtgNotaEntregas->MetaAddColumn('UpdatedAt');
-		//$this->dtgNotaEntregas->MetaAddColumn('DeletedAt');
-		//$this->dtgNotaEntregas->MetaAddColumn('CreatedBy');
-		//$this->dtgNotaEntregas->MetaAddColumn('UpdatedBy');
-		//$this->dtgNotaEntregas->MetaAddColumn('DeletedBy');
+        $this->dtgNotaEntregas->MetaAddColumn('Kilos');
+		$this->dtgNotaEntregas->MetaAddColumn('PiesCub');
+		$this->dtgNotaEntregas->MetaAddColumn('Piezas');
+		$colFechMani = new QDataGridColumn('Fecha','<?= $_FORM->dtgFecha_Render($_ITEM) ?>');
+		$this->dtgNotaEntregas->AddColumn($colFechMani);
 
         $this->btnExpoExce_Create();
 
     }
 
-    public function btnNuevRegi_Click()
-    {
+    public function dtgFecha_Render(NotaEntrega $objManiCarg) {
+		return $objManiCarg->Fecha->__toString('DD/MM/YYYY');
+	}
+
+    public function btnNuevRegi_Click() {
         QApplication::Redirect("carga_masiva_guias.php");
     }
 

@@ -1152,7 +1152,8 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $strCodiCkpt = $objPiezCkpt->Checkpoint->Codigo;
         $strTextObse = $objPiezCkpt->Comentario;
         if (strlen($strTextObse) > 0) {
-            $strTextObse = '('.$strCodiCkpt.') '.limpiarCadena($strTextObse);
+            //$strTextObse = '('.$strCodiCkpt.') '.limpiarCadena($strTextObse);
+            $strTextObse = '('.$strCodiCkpt.') '.trim($strTextObse);
         }
         return utf8_encode($strTextObse);
     }

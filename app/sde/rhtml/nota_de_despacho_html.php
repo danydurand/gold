@@ -41,7 +41,7 @@ $strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportis
 </style>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
-        <?php include('partials/header_local.tpl.php'); ?>
+        <?php include('partials/header_simple.tpl.php'); ?>
         <!---------------------->
         <!--    Encabezado    -->
         <!---------------------->

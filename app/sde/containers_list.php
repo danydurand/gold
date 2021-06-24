@@ -21,6 +21,9 @@ require_once(__FORMBASE_CLASSES__ . '/ContainersListFormBase.class.php');
  * @subpackage Drafts
  */
 class ContainersListForm extends ContainersListFormBase {
+	protected $strFiltEsta;
+	protected $btnFiltEsta;
+
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -32,10 +35,19 @@ class ContainersListForm extends ContainersListFormBase {
 
 //		protected function Form_Load() {}
 
+	protected function SetupParametro() {
+		$strFiltPara = strtoupper(QApplication::PathInfo(0));
+		$this->strFiltEsta = 'ABIERT@';
+		if (strlen($strFiltPara)) {
+			$this->strFiltEsta = $strFiltPara == 'C' ? 'CERRAD@' : 'ABIERT@';
+		}
+	}
+
 	protected function Form_Create() {
 		parent::Form_Create();
 
-		$this->lblTituForm->Text = 'Masters';
+        $this->SetupParametro();
+        $this->lblTituForm->Text = 'Masters ('.$this->strFiltEsta.')';
 
 		// Instantiate the Meta DataGrid
 		$this->dtgContainerses = new ContainersDataGrid($this);
@@ -52,6 +64,7 @@ class ContainersListForm extends ContainersListFormBase {
 
 		$objClauWher   = QQ::Clause();
 		$objClauWher[] = QQ::Equal(QQN::Containers()->Tipo,'MASTER');
+		$objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,$this->strFiltEsta);
 		$this->dtgContainerses->AdditionalConditions = QQ::AndCondition($objClauWher);
 
 		$objClauOrde   = QQ::Clause();
@@ -75,12 +88,19 @@ class ContainersListForm extends ContainersListFormBase {
 		$this->dtgContainerses->MetaAddColumn('Id');
 		$this->dtgContainerses->MetaAddColumn('Numero','Name=Precinto');
 
-        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Transportista->Nombre,'Name=Transportista');
+        $colNombTran = $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Transportista->Nombre,'Name=Transportista');
+        $colNombTran->FilterType = QFilterType::TextFilter;
+        $colNombTran->Filter = QQ::Like(QQN::Containers()->Transportista->Nombre,null);
 
         $colNombChof = new QDataGridColumn('Chofer','<?= $_FORM->NombChof_Render($_ITEM); ?>');
         $this->dtgContainerses->AddColumn($colNombChof);
 
         $this->dtgContainerses->MetaAddColumn('Piezas');
+        $this->dtgContainerses->MetaAddColumn('CantidadOk','Name=OKs');
+
+        /*$colCantEntr = new QDataGridColumn('OKs','<?= $_FORM->CantEntr_Render($_ITEM); ?>');*/
+        //$this->dtgContainerses->AddColumn($colCantEntr);
+
         $this->dtgContainerses->MetaAddColumn('Kilos');
         $this->dtgContainerses->MetaAddColumn('PiesCub');
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
@@ -90,6 +110,27 @@ class ContainersListForm extends ContainersListFormBase {
 		$this->dtgContainerses->MetaAddColumn('Estatus');
 
         $this->btnExpoExce_Create();
+        $this->btnFiltEsta_Create();
+
+    }
+
+    protected function btnFiltEsta_Create() {
+        $this->btnFiltEsta = new QLabel($this);
+        $this->btnFiltEsta->HtmlEntities = false;
+        $this->btnFiltEsta->CssClass = '';
+
+        $strTextBoto   = TextoIcono('filter','Estatus','F','lg');
+        $arrOpciDrop   = array();
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/containers_list.php/c',
+            TextoIcono('lock','CERRAD@')
+        );
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/containers_list.php',
+            TextoIcono(__iOJOS__,'ABIERT@')
+        );
+
+        $this->btnFiltEsta->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop);
 
     }
 
@@ -99,6 +140,10 @@ class ContainersListForm extends ContainersListFormBase {
 
     public function CantPiez_ColumnRender(Containers $objManifiesto) {
         return $objManifiesto->CountGuiaPiezasesAsContainerPieza();
+    }
+
+    public function CantEntr_Render(Containers $objManifiesto) {
+        return $objManifiesto->ResumeDeEntrega()->CantOkey;
     }
 
     public function NombChof_Render(Containers $objManifiesto) {

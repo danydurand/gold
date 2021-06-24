@@ -72,11 +72,19 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
 
 		// Create the Other Columns (note that you can use strings for nota_entrega's properties, or you
 		// can traverse down QQN::nota_entrega() to display fields that are down the hierarchy)
-		$this->dtgNotaEntregas->MetaAddColumn('Id');
-		$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp,'Name=Cliente');
+		$colIdxxMani = $this->dtgNotaEntregas->MetaAddColumn('Id');
+		$colIdxxMani->FilterType = null;
+
+		$colNombClie = $this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp->NombClie,'Name=Cliente');
+        $colNombClie->OrderByClause = QQ::OrderBy(QQN::NotaEntrega()->ClienteCorp->NombClie);
+        $colNombClie->ReverseOrderByClause = QQ::OrderBy(QQN::NotaEntrega()->ClienteCorp->NombClie,false);
+        $colNombClie->Filter = QQ::Like(QQN::NotaEntrega()->ClienteCorp->NombClie,null);
+        $colNombClie->FilterType = QFilterType::TextFilter;
+
 		$this->dtgNotaEntregas->MetaAddColumn('Referencia','Name=Ref.');
         $colFechMani = new QDataGridColumn('Fecha','<?= $_FORM->FechMani($_ITEM) ?>');
         $this->dtgNotaEntregas->AddColumn($colFechMani);
+        $this->dtgNotaEntregas->MetaAddColumn('Facturable');
         $this->dtgNotaEntregas->MetaAddColumn('Estatus');
         $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion','Name=S.Impor');
         $this->dtgNotaEntregas->MetaAddColumn('Cargadas');

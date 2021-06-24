@@ -30,6 +30,7 @@
 	 * @property string $Awb the value for strAwb 
 	 * @property string $PrecintoLateral the value for strPrecintoLateral 
 	 * @property integer $Piezas the value for intPiezas 
+	 * @property integer $CantidadOk the value for intCantidadOk 
 	 * @property double $Peso the value for fltPeso (Not Null)
 	 * @property double $Kilos the value for fltKilos (Not Null)
 	 * @property double $PiesCub the value for fltPiesCub (Not Null)
@@ -185,6 +186,14 @@
 		 */
 		protected $intPiezas;
 		const PiezasDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.cantidad_ok
+		 * @var integer intCantidadOk
+		 */
+		protected $intCantidadOk;
+		const CantidadOkDefault = null;
 
 
 		/**
@@ -425,6 +434,7 @@
 			$this->strAwb = Containers::AwbDefault;
 			$this->strPrecintoLateral = Containers::PrecintoLateralDefault;
 			$this->intPiezas = Containers::PiezasDefault;
+			$this->intCantidadOk = Containers::CantidadOkDefault;
 			$this->fltPeso = Containers::PesoDefault;
 			$this->fltKilos = Containers::KilosDefault;
 			$this->fltPiesCub = Containers::PiesCubDefault;
@@ -792,6 +802,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'awb', $strAliasPrefix . 'awb');
 			    $objBuilder->AddSelectItem($strTableName, 'precinto_lateral', $strAliasPrefix . 'precinto_lateral');
 			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
+			    $objBuilder->AddSelectItem($strTableName, 'cantidad_ok', $strAliasPrefix . 'cantidad_ok');
 			    $objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
@@ -973,6 +984,9 @@
 			$strAlias = $strAliasPrefix . 'piezas';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intPiezas = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'cantidad_ok';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intCantidadOk = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'peso';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltPeso = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1585,6 +1599,7 @@
 							`awb`,
 							`precinto_lateral`,
 							`piezas`,
+							`cantidad_ok`,
 							`peso`,
 							`kilos`,
 							`pies_cub`,
@@ -1608,6 +1623,7 @@
 							' . $objDatabase->SqlVariable($this->strAwb) . ',
 							' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
 							' . $objDatabase->SqlVariable($this->intPiezas) . ',
+							' . $objDatabase->SqlVariable($this->intCantidadOk) . ',
 							' . $objDatabase->SqlVariable($this->fltPeso) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
@@ -1690,6 +1706,7 @@
 							`awb` = ' . $objDatabase->SqlVariable($this->strAwb) . ',
 							`precinto_lateral` = ' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
 							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
+							`cantidad_ok` = ' . $objDatabase->SqlVariable($this->intCantidadOk) . ',
 							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
@@ -1852,6 +1869,7 @@
 			$this->strAwb = $objReloaded->strAwb;
 			$this->strPrecintoLateral = $objReloaded->strPrecintoLateral;
 			$this->intPiezas = $objReloaded->intPiezas;
+			$this->intCantidadOk = $objReloaded->intCantidadOk;
 			$this->fltPeso = $objReloaded->fltPeso;
 			$this->fltKilos = $objReloaded->fltKilos;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
@@ -1987,6 +2005,13 @@
 					 * @return integer
 					 */
 					return $this->intPiezas;
+
+				case 'CantidadOk':
+					/**
+					 * Gets the value for intCantidadOk 
+					 * @return integer
+					 */
+					return $this->intCantidadOk;
 
 				case 'Peso':
 					/**
@@ -2403,6 +2428,19 @@
 					 */
 					try {
 						return ($this->intPiezas = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'CantidadOk':
+					/**
+					 * Sets the value for intCantidadOk 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intCantidadOk = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3255,6 +3293,7 @@
 			$strToReturn .= '<element name="Awb" type="xsd:string"/>';
 			$strToReturn .= '<element name="PrecintoLateral" type="xsd:string"/>';
 			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
+			$strToReturn .= '<element name="CantidadOk" type="xsd:int"/>';
 			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
@@ -3326,6 +3365,8 @@
 				$objToReturn->strPrecintoLateral = $objSoapObject->PrecintoLateral;
 			if (property_exists($objSoapObject, 'Piezas'))
 				$objToReturn->intPiezas = $objSoapObject->Piezas;
+			if (property_exists($objSoapObject, 'CantidadOk'))
+				$objToReturn->intCantidadOk = $objSoapObject->CantidadOk;
 			if (property_exists($objSoapObject, 'Peso'))
 				$objToReturn->fltPeso = $objSoapObject->Peso;
 			if (property_exists($objSoapObject, 'Kilos'))
@@ -3413,6 +3454,7 @@
 			$iArray['Awb'] = $this->strAwb;
 			$iArray['PrecintoLateral'] = $this->strPrecintoLateral;
 			$iArray['Piezas'] = $this->intPiezas;
+			$iArray['CantidadOk'] = $this->intCantidadOk;
 			$iArray['Peso'] = $this->fltPeso;
 			$iArray['Kilos'] = $this->fltKilos;
 			$iArray['PiesCub'] = $this->fltPiesCub;
@@ -3588,6 +3630,7 @@
      * @property-read QQNode $Awb
      * @property-read QQNode $PrecintoLateral
      * @property-read QQNode $Piezas
+     * @property-read QQNode $CantidadOk
      * @property-read QQNode $Peso
      * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
@@ -3652,6 +3695,8 @@
 					return new QQNode('precinto_lateral', 'PrecintoLateral', 'VarChar', $this);
 				case 'Piezas':
 					return new QQNode('piezas', 'Piezas', 'Integer', $this);
+				case 'CantidadOk':
+					return new QQNode('cantidad_ok', 'CantidadOk', 'Integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'Float', $this);
 				case 'Kilos':
@@ -3716,6 +3761,7 @@
      * @property-read QQNode $Awb
      * @property-read QQNode $PrecintoLateral
      * @property-read QQNode $Piezas
+     * @property-read QQNode $CantidadOk
      * @property-read QQNode $Peso
      * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
@@ -3780,6 +3826,8 @@
 					return new QQNode('precinto_lateral', 'PrecintoLateral', 'string', $this);
 				case 'Piezas':
 					return new QQNode('piezas', 'Piezas', 'integer', $this);
+				case 'CantidadOk':
+					return new QQNode('cantidad_ok', 'CantidadOk', 'integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'double', $this);
 				case 'Kilos':

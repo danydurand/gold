@@ -27,6 +27,34 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
+		public function ResumenDeEntrega() {
+            $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
+            $intCantOkey = $this->ContarPiezasConCheckpoint('OK');
+            $intCantPend = $intTotaPiez - $intCantOkey;
+            $decPorcPend = nf0($intCantPend * 100 / $intTotaPiez);
+            $decPorcOkey = nf0($intCantOkey * 100 / $intTotaPiez);
+
+            $objResuEntr = new stdClass();
+            $objResuEntr->TotaPiez = $intTotaPiez;
+            $objResuEntr->CantOkey = $intCantOkey;
+            $objResuEntr->CantPend = $intCantPend;
+            $objResuEntr->PorcOkey = $decPorcOkey;
+            $objResuEntr->PorcPend = $decPorcPend;
+            return $objResuEntr;
+
+        }
+
+        public function ContarPiezasConCheckpoint($strCodiCkpt) {
+            $intCantPiez = 0;
+            $arrPiezMani = $this->GetGuiaPiezasAsGuiaArray();
+            foreach ($arrPiezMani as $objPiezMani) {
+                if ($objPiezMani->tieneCheckpoint($strCodiCkpt)) {
+                    $intCantPiez++;
+                }
+            }
+            return $intCantPiez;
+        }
+
         public function TransferirHistorico($intManiIdxx, ProcesoError $objProcEjec) {
 		    //t('Transfiriendo Guia Nro: '.$this->Tracking);
 		    $strTranInte = '';
