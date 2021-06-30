@@ -54,8 +54,8 @@ abstract class TasasEditFormBase extends QForm {
 	protected $lblId;
 	protected $lstDivisa;
 	protected $txtTasa;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -128,8 +128,8 @@ abstract class TasasEditFormBase extends QForm {
 		$this->lblId = $this->mctTasas->lblId_Create();
 		$this->lstDivisa = $this->mctTasas->lstDivisa_Create();
 		$this->txtTasa = $this->mctTasas->txtTasa_Create();
-		$this->lblCreatedAt = $this->mctTasas->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctTasas->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctTasas->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctTasas->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctTasas->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctTasas->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctTasas->txtUpdatedBy_Create();

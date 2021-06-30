@@ -16,6 +16,11 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
     protected $blnEditMode = false;
     protected $objUbicUsua;
 
+    protected $objTasaDola;
+    protected $txtTasaDola;
+    protected $objTasaEuro;
+    protected $txtTasaEuro;
+
     protected function Form_Create() {
         parent::Form_Create();
 
@@ -41,6 +46,8 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
         $this->lstSucuDisp_Create();
         $this->lstReceSucu_Create();
         $this->lstCajaRece_Create();
+        $this->txtTasaDola_Create();
+        $this->txtTasaEuro_Create();
 
         if ($this->blnEditMode) {
             $this->lstSucuDisp_Change();
@@ -85,6 +92,30 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
         $this->lstCajaRece->Width = 250;
         $this->lstCajaRece->Required = true;
         $this->lstCajaRece->AddItem('- Seleccione Una - ',null);
+    }
+
+    protected function txtTasaDola_Create() {
+        $this->txtTasaDola = new QFloatTextBox($this);
+        $this->txtTasaDola->Name = 'Tasa Dolar';
+        $this->txtTasaDola->Width = 100;
+        $this->txtTasaDola->Required = true;
+        $this->objTasaDola = Tasas::UltimaTasa('USD');
+        if ($this->objTasaDola) {
+            $this->txtTasaDola->Text = $this->objTasaDola->Tasa;
+            $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$this->objTasaDola->Fecha->__toString("DD/MM/YYYY").')</span>';
+        }
+    }
+
+    protected function txtTasaEuro_Create() {
+        $this->txtTasaEuro = new QFloatTextBox($this);
+        $this->txtTasaEuro->Name = 'Tasa Euro';
+        $this->txtTasaEuro->Width = 100;
+        $this->txtTasaEuro->Required = true;
+        $this->objTasaEuro = Tasas::UltimaTasa('EUR');
+        if ($this->objTasaEuro) {
+            $this->txtTasaEuro->Text = $this->objTasaEuro->Tasa;
+            $this->txtTasaEuro->HtmlAfter = '<span class="texto"> (del '.$this->objTasaEuro->Fecha->__toString("DD/MM/YYYY").')</span>';
+        }
     }
 
     //---------------------------------------
@@ -156,10 +187,56 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
             t('Error Estableciendo la Ubicacion del Usuario: '.$e->getMessage());
             $this->danger($e->getMessage());
         }
-        $this->success('Ubicacion Establecida !!!');
+        //------------------------------------
+        // Las Tasas de Cambio se actualizan
+        //------------------------------------
+        if ($this->objTasaDola->Tasa != $this->txtTasaDola->Text) {
+            $objMoneDola = Divisas::LoadByCodigo('USD');
+            try {
+                $objNuevDola = new Tasas();
+                $objNuevDola->DivisaId  = $objMoneDola->Id;
+                $objNuevDola->Tasa      = $this->txtTasaDola->Text;
+                $objNuevDola->CreatedAt = new QDateTime(QDateTime::Now());
+                $objNuevDola->CreatedBy = $this->objUsuario->CodiUsua;
+                $objNuevDola->Save();
+                $objNuevDola->logDeCambios('Cread@');
+                $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$objNuevDola->CreatedAt->__toString("DD/MM/YYYY").')</span>';
+            } catch (Exception $e) {
+                $this->danger('Error Dolar: '.$e->getMessage());
+            }
+        }
+        if ($this->objTasaEuro->Tasa != $this->txtTasaEuro->Text) {
+            $objMoneEuro = Divisas::LoadByCodigo('EUR');
+            try {
+                $objNuevEuro = new Tasas();
+                $objNuevEuro->DivisaId  = $objMoneEuro->Id;
+                $objNuevEuro->Tasa      = $this->txtTasaEuro->Text;
+                $objNuevEuro->CreatedAt = new QDateTime(QDateTime::Now());
+                $objNuevEuro->CreatedBy = $this->objUsuario->CodiUsua;
+                $objNuevEuro->Save();
+                $objNuevEuro->logDeCambios('Cread@');
+                $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$objNuevEuro->CreatedAt->__toString("DD/MM/YYYY").')</span>';
+            } catch (Exception $e) {
+                $this->danger('Error Euro: '.$e->getMessage());
+            }
+        }
+        $_SESSION['TasaDola'] = $this->txtTasaDola->Text;
+        $_SESSION['TasaEuro'] = $this->txtTasaEuro->Text;
+
+        $this->success('Ubicacion y Tasas de Cambio Establecidas !!!');
     }
 
-
+    protected function Form_Validate() {
+        if (!is_numeric($this->txtTasaDola->Text)) {
+            $this->danger('La Tasa de Cambio del Dolar, debe ser un número');
+            return false;
+        }
+        if (!is_numeric($this->txtTasaEuro->Text)) {
+            $this->danger('La Tasa de Cambio del Euro, debe ser un número');
+            return false;
+        }
+        return true;
+    }
 
 }
 

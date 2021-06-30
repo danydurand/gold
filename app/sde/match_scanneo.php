@@ -366,26 +366,6 @@ class MatchScanneo extends FormularioBaseKaizen {
                     $blnHayxErro = true;
                 }
             }
-            //if ($objManiPend->Recibidas > 0) {
-            //    try {
-            //        $strDescCkpt = $objCkptMani->Descripcion;
-            //        $arrDatoCkpt = array();
-            //        $arrDatoCkpt['NumeCont'] = $objManiPend->Id;
-            //        $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
-            //        $arrDatoCkpt['TextObse'] = $strDescCkpt;
-            //        $arrResuGrab = GrabarCheckpointManifiesto($arrDatoCkpt);
-            //        if (!$arrResuGrab['TodoOkey']) {
-            //            throw new Exception($arrResuGrab['MotiNook']);
-            //        }
-            //    } catch (Exception $e) {
-            //        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-            //        $arrParaErro['NumeRefe'] = 'Referencia: '.$objManiPend->Referencia;
-            //        $arrParaErro['MensErro'] = $e->getMessage();
-            //        $arrParaErro['ComeErro'] = 'Grabando Ckpt al Manifiesto';
-            //        GrabarError($arrParaErro);
-            //        $blnHayxErro = true;
-            //    }
-            //}
         }
         //--------------------------------------
         // Se almacena el resultado del proceso

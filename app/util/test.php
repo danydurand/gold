@@ -2,11 +2,21 @@
 require_once('qcubed.inc.php');
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
+
+
+// Ultima Tasa de Cambio USD
+
+$objTasaDola = Tasas::UltimaTasa('USD');
+echo 'Tasa Dolar: '.$objTasaDola->Tasa;
+echo 'Fecha Dolar: '.$objTasaDola->Fecha;
+echo "<br>";
+$objTasaEuro = Tasas::UltimaTasa('EUR');
+echo 'Tasa Euro: '.$objTasaEuro->Tasa;
+echo 'Fecha Euro: '.$objTasaEuro->Fecha;
+
 // Caso Scanneo Eurolatino
-
-$strCopiPiez = 'CIU5000114092-p9';
-echo transformar($strCopiPiez);
-
+//$strCopiPiez = 'CIU5000114092-p9';
+//echo transformar($strCopiPiez);
 
 
 // Resumen de pieza entregadas de un manifiesto de Salida a Ruta

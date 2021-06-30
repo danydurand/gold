@@ -1,34 +1,30 @@
 <?php 
 require_once('qcubed.inc.php');
 
+$strTituPagi = 'Rastreo';
 $blnTodoOkey = true;
 $strMensErro = '';
 if (isset($_POST['nroguia'])) {
     $strNumeGuia = trim($_POST['nroguia']);
-    t("La Guia es: $strNumeGuia");
     $objGuiaSele = Guias::LoadByTracking($strNumeGuia);
     if (!$objGuiaSele) {
         $blnTodoOkey = false;
         $strMensErro = 'La Guia No Existe';
     } else {
-        $_SESSION['User'] = serialize(Usuario::Load('ddurand'));
         $_SESSION['GuiaSele'] = serialize($objGuiaSele);
-        QApplication::Redirect('detalle_de_guia.php');
+        QApplication::Redirect('detalle_de_guia_rastreo.php');
     }
-}  else {
-    session_destroy();
-    session_start();
 }
 ?>
 
 <?php include('layout/header.inc.php'); ?>
 
     <div data-role="page">
-    
-        <?php include('layout/header_simple.inc.php'); ?>
+
+        <?php include('layout/page_header.inc.php'); ?>
 
         <div data-role="content" style="min-height: 400px">
-            <form action="index.php" method="post">
+            <form action="rastreo.php" method="post">
                 <input type="text" name="nroguia" id="nroguia" value="" placeholder='Nro de Guia' autofocus required />
                 <p />
                 <span class="alert alert-danger">

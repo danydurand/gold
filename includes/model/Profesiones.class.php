@@ -27,6 +27,14 @@
 			return sprintf('%s',  $this->Nombre);
 		}
 
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'Profesiones';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->Nombre;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/profesiones_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
+        }
 
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...

@@ -74,12 +74,14 @@ class FacturasListForm extends FacturasListFormBase {
 		// can traverse down QQN::facturas() to display fields that are down the hierarchy)
 		$this->dtgFacturases->MetaAddColumn('Id');
 		$this->dtgFacturases->MetaAddColumn('Referencia');
-		$this->dtgFacturases->MetaAddColumn(QQN::Facturas()->ClienteCorp);
+
+		$colNombClie = $this->dtgFacturases->MetaAddColumn(QQN::Facturas()->ClienteCorp->NombClie,'Name=CLIENTE');
+        $colNombClie->OrderByClause = QQ::OrderBy(QQN::Facturas()->ClienteCorp->NombClie);
+        $colNombClie->ReverseOrderByClause = QQ::OrderBy(QQN::Facturas()->ClienteCorp->NombClie,false);
+        $colNombClie->Filter = QQ::Like(QQN::Facturas()->ClienteCorp->NombClie,null);
+        $colNombClie->FilterType = QFilterType::TextFilter;
+
 		$this->dtgFacturases->MetaAddColumn('CedulaRif');
-		//$this->dtgFacturases->MetaAddColumn('RazonSocial');
-		//$this->dtgFacturases->MetaAddColumn('DireccionFiscal');
-		//$this->dtgFacturases->MetaAddColumn('Telefono');
-		//$this->dtgFacturases->MetaAddColumn(QQN::Facturas()->Sucursal);
 		$this->dtgFacturases->MetaAddColumn('Estatus');
 		$this->dtgFacturases->MetaAddColumn('EstatusPago');
 
@@ -89,21 +91,6 @@ class FacturasListForm extends FacturasListFormBase {
 
 		$colTotaFact = new QDataGridColumn('TOTAL','<?= nf($_ITEM->Total) ?>');
 		$this->dtgFacturases->AddColumn($colTotaFact);
-
-		//$this->dtgFacturases->MetaAddColumn('MontoDscto');
-		//$this->dtgFacturases->MetaAddColumn('MontoCobrado');
-		//$this->dtgFacturases->MetaAddColumn('Numero');
-		//$this->dtgFacturases->MetaAddColumn('MaquinaFiscal');
-		//$this->dtgFacturases->MetaAddColumn('FechaImpresion');
-		//$this->dtgFacturases->MetaAddColumn('HoraImpresion');
-		//$this->dtgFacturases->MetaAddColumn('TieneRetencion');
-		//$this->dtgFacturases->MetaAddColumn('NotaCreditoId');
-		//$this->dtgFacturases->MetaAddColumn('CreatedAt');
-		//$this->dtgFacturases->MetaAddColumn('UpdatedAt');
-		//$this->dtgFacturases->MetaAddColumn('DeletedAt');
-		//$this->dtgFacturases->MetaAddColumn('CreatedBy');
-		//$this->dtgFacturases->MetaAddColumn('UpdatedBy');
-		//$this->dtgFacturases->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
 

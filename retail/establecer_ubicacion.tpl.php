@@ -26,10 +26,18 @@ require('inc/header.inc.php');
                 <?php $this->lstSucuDisp->RenderWithName(); ?>
                 <?php $this->lstReceSucu->RenderWithName(); ?>
                 <?php $this->lstCajaRece->RenderWithName(); ?>
+                <br><br>
+                <?php $this->txtTasaDola->RenderWithName(); ?>
+                <?php $this->txtTasaEuro->RenderWithName(); ?>
             </div>
         </div>
     </div>
 </div>
+<style>
+    .texto {
+        color: #0d6aad;
+    }
+</style>
 <?php require('inc/footer.inc.php'); ?>
 
 

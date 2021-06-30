@@ -20,9 +20,9 @@
     <p class="user_p">Bienvenido <?= $strLogiUsua ?><br>
     <!--<small>Ultimo Acceso: --><?//= $strAcceMobi ?><!--</small></p>-->
     <nav>
-        <div class="ui-block-b"><a href="menu.php?m=i" type="button" data-role="button" id="pbtn" data-theme="b"><i class="fa fa-lg fa-pie-chart pull-left"></i>Indicadores</a></div>
-        <div class="ui-block-a"><a href="menu.php?m=h" type="button" data-role="button" id="pbtn" data-theme="a"><i class="fa fa-wrench pull-left"></i>Herramientas</a></div>
-        <div class="ui-block-a"><a href="menu.php?m=o" type="button" data-role="button" id="pbtn" data-theme="d"><i class="fa fa-lg fa-list pull-left"></i>Opciones Extra</a></div>
+        <!--<div class="ui-block-b"><a href="menu.php?m=i" type="button" data-role="button" id="pbtn" data-theme="b"><i class="fa fa-lg fa-pie-chart pull-left"></i>Indicadores</a></div>-->
+        <!--<div class="ui-block-a"><a href="menu.php?m=h" type="button" data-role="button" id="pbtn" data-theme="a"><i class="fa fa-wrench pull-left"></i>Herramientas</a></div>-->
+        <div class="ui-block-a"><a href="menu.php?m=o" type="button" data-role="button" id="pbtn" data-theme="d"><i class="fa fa-lg fa-list pull-left"></i>Indicadores</a></div>
         <div class="ui-block-a"><a href="acerca.php" type="button" data-role="button" id="pbtn" data-theme="e"><i class="fa fa-lg fa-briefcase pull-left"></i>Acerca</a></div>
         <div class="ui-block-a" style="position:bottom;"><a href="logout.php" type="button" data-role="button" id="pbtn" data-theme="c"><i class="fa fa-lg fa-sign-out pull-left"></i>Salir</a></div>
     </nav>

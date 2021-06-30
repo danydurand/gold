@@ -1443,7 +1443,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
     protected function btnEditGuia_Click() {
-        QApplication::Redirect(__SIST__.'/crear_guia_nac.php/'.$this->objGuia->Id);
+        if ($this->objGuia->Producto->Codigo == 'NAC') {
+            $strNombProg = 'crear_guia_nac.php';
+        } else {
+            $strNombProg = 'crear_guia_exp.php';
+        }
+        QApplication::Redirect(__SIST__.'/'.$strNombProg.'/'.$this->objGuia->Id);
     }
 
     protected function btnImprGuia_Click() {
@@ -1451,8 +1456,8 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
     protected function btnCancel_Click() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
+        //$objUltiAcce = PilaAcceso::Pop('D');
+        QApplication::Redirect(__SIST__."/guias_list.php");
     }
 
     //-------------------------------

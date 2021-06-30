@@ -17,14 +17,16 @@
             </div>
         </div>
         <div class="row" style="margin-top: 1em;">
-            <div class="col-md-12">
-            <?php $this->lblId->RenderWithName(); ?>
-				<?php $this->txtCedulaRif->RenderWithName(); ?>
-				<?php $this->txtNombre->RenderWithName(); ?>
-				<?php $this->txtSexo->RenderWithName(); ?>
-				<?php $this->lstSucursal->RenderWithName(); ?>
-				<?php $this->txtEmail->RenderWithName(); ?>
-				<?php $this->txtTelefonoFijo->RenderWithName(); ?>
+            <div class="col-md-5">
+                <?php $this->lblId->RenderWithName(); ?>
+                <?php $this->txtCedulaRif->RenderWithName(); ?>
+                <?php $this->txtNombre->RenderWithName(); ?>
+                <?php $this->txtSexo->RenderWithName(); ?>
+                <?php $this->lstSucursal->RenderWithName(); ?>
+                <?php $this->txtEmail->RenderWithName(); ?>
+                <?php $this->txtTelefonoFijo->RenderWithName(); ?>
+            </div>
+            <div class="col-md-5">
 				<?php $this->txtTelefonoMovil->RenderWithName(); ?>
 				<?php $this->txtDireccion->RenderWithName(); ?>
 				<?php $this->txtEstado->RenderWithName(); ?>
@@ -32,12 +34,6 @@
 				<?php $this->txtCodigoPostal->RenderWithName(); ?>
 				<?php $this->calFechaNacimiento->RenderWithName(); ?>
 				<?php $this->lstProfesion->RenderWithName(); ?>
-				<?php //$this->lblCreatedAt->RenderWithName(); ?>
-				<?php //$this->lblUpdatedAt->RenderWithName(); ?>
-				<?php //$this->lblDeletedAt->RenderWithName(); ?>
-				<?php //$this->txtCreatedBy->RenderWithName(); ?>
-				<?php //$this->txtUpdatedBy->RenderWithName(); ?>
-				<?php //$this->txtDeletedBy->RenderWithName(); ?>
 	        </div>
         </div>
     </div>

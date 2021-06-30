@@ -174,6 +174,13 @@
                 }
             }
             $this->Recibidas = $intCantReci;
+            if ($this->Recibidas > 0) {
+                if ($this->Estatus == 'CREAD@') {
+                    $this->Estatus = 'RECIBID@';
+                    $strMensTran = 'Manifiesto RECIBID@';
+                    $this->logDeCambios($strMensTran);
+                }
+            }
             $this->Save();
         }
 

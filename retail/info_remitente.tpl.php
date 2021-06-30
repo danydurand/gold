@@ -66,8 +66,19 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="">Profesión</label><br>
+            <b><?php $this->lblNewxProf->Render(); ?></b><br>
             <?php $this->lstProfClie->Render(); ?>
         </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-group">
+            <b><?php $this->lblNuevProf->Render(); ?></b><br>
+            <?php $this->txtNuevProf->Render(); ?>
+        </div>
+    </div>
+    <div class="col-md-4" style="margin-top: 1.5em">
+        <?php $this->btnSaveProf->Render(); ?>
     </div>
 </div>

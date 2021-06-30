@@ -276,7 +276,7 @@ class ContainersEditForm extends ContainersEditFormBase {
             $strTablRela = implode(',',$arrTablRela);
 
             //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            //$this->
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
@@ -284,7 +284,7 @@ class ContainersEditForm extends ContainersEditFormBase {
             $this->mctContainers->DeleteContainers();
             $arrLogxCamb['strNombTabl'] = 'Containers';
             $arrLogxCamb['intRefeRegi'] = $this->mctContainers->Containers->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctContainers->Containers->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->mctContainers->Containers->Numero;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

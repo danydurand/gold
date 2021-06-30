@@ -7,16 +7,16 @@ if (!isset($_SESSION['menu'])) {
     <nav data-role="navbar" name="otro" id="otro">
         <ul>
             <li><a href="kpis_operativos.php" data-theme="d" data-transition="flip"><i class="fa fa-lg fa-ticket"></i>
-                    <div class="sp"></div>KPI's Operativos</a>
+                    <div class="sp"></div>KPI's OPS</a>
             </li>
-            <li><a href="kpis_sistemas.php" data-theme="d"><i class="fa fa-lg fa-tv"></i>
-                    <div class="sp"></div>Sistema</a>
+            <li><a href="kpis_otros.php" data-theme="d"><i class="fa fa-lg fa-tv"></i>
+                    <div class="sp"></div>OTR KPI's</a>
             </li>
-            <li><a href="lista_de_gastos.php" data-theme="d"><i class="fa fa-lg fa-money"></i>
-                    <div class="sp"></div>Gastos</a>
+            <li><a href="kpis_kgft.php" data-theme="d"><i class="fa fa-lg fa-balance-scale"></i>
+                    <div class="sp"></div>KG/FT</a>
             </li>
-            <li><a href="buscar_extravio.php" data-theme="d"><i class="fa fa-lg fa-question"></i>
-                    <div class="sp"></div>Extravío</a>
+            <li><a href="rastreo.php" data-theme="d"><i class="fa fa-lg fa-search"></i>
+                    <div class="sp"></div>RASTREO</a>
             </li>
         </ul>
     </nav>

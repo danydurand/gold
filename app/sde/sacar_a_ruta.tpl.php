@@ -13,6 +13,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <?php $this->btnRepoErro->Render() ?>
             <?php $this->btnGestChve->Render() ?>
             <?php $this->btnExpoExce->Render() ?>
+            <?php $this->btnBorrMani->Render() ?>
         </div>
     </div>
     <div class="form-controls">

@@ -6,7 +6,7 @@ $strMensErro = '';
 $objUsuario  = null;
 if (isset($_POST['login'])) {
     $strLogiUsua = strtolower(trim($_POST['login']));
-    if (!in_array($strLogiUsua,['ddurand','mperez'])) {
+    if (!in_array($strLogiUsua,['ddurand','mperez','slopez','mtovar','gfattal'])) {
         $blnTodoOkey = false;
         $strMensErro = 'Usuario NO AUTORIZADO !!';
     }
@@ -49,7 +49,7 @@ if (isset($_POST['login'])) {
 
     <?php include('layout/header_simple.inc.php'); ?>
 
-    <div data-role="content">
+    <div data-role="content" style="min-height: 400px">
         <form action="index.php" method="post">
             <input type="text" name="login" id="login" value="" placeholder='Usuario' autofocus required />
             <p />

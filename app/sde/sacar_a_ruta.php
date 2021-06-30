@@ -58,6 +58,9 @@ class SacarARuta extends FormularioBaseKaizen {
     protected $strDescCont;
     protected $calFechDesp;
 
+    protected $btnBorrMani;
+
+
     protected function SetupValores() {
         $this->blnEditMode = false;
         $intIdxxCont = QApplication::PathInfo(0);
@@ -112,6 +115,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnRepoErro_Create();
         $this->btnGestChve_Create();
         $this->btnExpoExce_Create();
+        $this->btnBorrMani_Create();
 
         if ($this->blnEditMode) {
             $this->lstTipoOper_Change();
@@ -125,11 +129,50 @@ class SacarARuta extends FormularioBaseKaizen {
                 $this->txtDescCont->Text = 'ARTICULOS VARIOS';
             }
         }
+
     }
 
     //-----------------------------
     // Aqui se crean los objetos
     //-----------------------------
+
+    protected function btnBorrMani_Create() {
+        $this->btnBorrMani = new QButtonD($this);
+        $this->btnBorrMani->Text = TextoIcono('trash-o','Borrar','F','lg');
+        $this->btnBorrMani->AddAction(new QClickEvent(), new QConfirmAction('Esta segur@ que desea borrar este Manifiesto?'));
+        $this->btnBorrMani->AddAction(new QClickEvent(), new QServerAction('btnBorrMani_Click'));
+        if (!$this->blnEditMode) {
+            $this->btnBorrMani->Visible = false;
+        }
+    }
+
+    protected function btnBorrMani_Click() {
+        //t('Borrando el Manifiesto');
+        $objCkptRuta  = Checkpoints::LoadByCodigo('TR');
+        if ($objCkptRuta instanceof Checkpoints) {
+            $intCkptRuta  = $objCkptRuta->Id;
+            $arrPiezRuta  = $this->objContaine->GetPiezasConCheckpoint('TR','Id');
+            $strIdxxRuta  = implode(',',$arrPiezRuta);
+            //t('Las piezas de la ruta son: '.$strIdxxRuta);
+            $objDatabase  = Containers::GetDatabase();
+            $strCadeSqlx  = 'delete ';
+            $strCadeSqlx .= '  from pieza_checkpoints ';
+            $strCadeSqlx .= ' where pieza_id in ('.$strIdxxRuta.')';
+            $strCadeSqlx .= '   and checkpoint_id = '.$intCkptRuta;
+            //t('SQL: '.$strCadeSqlx);
+            try {
+                $objDatabase->NonQuery($strCadeSqlx);
+                //t('Checkpoints de Ruta eliminado');
+                $this->objContaine->Delete();
+                $this->objContaine->logDeCambios('Borrado');
+                QApplication::Redirect(__SIST__.'/containers_list.php');
+            } catch (Exception $e) {
+                $this->danger($e->getMessage());
+            }
+        } else {
+            $this->danger('No existe el Checkpoint de Ruta | Comuniquese con el Administrador del Sistema');
+        }
+    }
 
     protected function btnExpoExce_Create() {
         $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgPiezMani);
@@ -138,7 +181,6 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnExpoExce->HtmlEntities = false;
         $this->btnExpoExce->CssClass = 'btn btn-outline-danger btn-sm';
         $this->btnExpoExce->ToolTip = 'Exportar las Piezas del Manifiesto';
-        //$this->btnExpoExce->Visible = false;
     }
 
 
@@ -553,8 +595,8 @@ class SacarARuta extends FormularioBaseKaizen {
     protected function dtgPiezApta_Bind() {
         $intCodiOper = $this->lstOperAbie->SelectedValue;
         if (!is_null($intCodiOper)) {
-            $objOperSele = SdeOperacion::Load($intCodiOper);
-            $strDestIdxx = $objOperSele->GetDestinosIds('string');
+            $objOperSele  = SdeOperacion::Load($intCodiOper);
+            $strDestIdxx  = $objOperSele->GetDestinosIds('string');
             $strCadeSqlx  = "select id ";
             $strCadeSqlx .= "  from v_aptas_para_trasladar ";
             $strCadeSqlx .= " where destino_id in (".$strDestIdxx.")";
@@ -660,11 +702,11 @@ class SacarARuta extends FormularioBaseKaizen {
         $colServImpo->Width = 30;
         $this->dtgPiezMani->AddColumn($colServImpo);
 
-        $colDescCont = new QDataGridColumn($this);
-        $colDescCont->Name = QApplication::Translate('Descripcion');
-        $colDescCont->Html = '<?= substr($_ITEM->Descripcion,0,25) ?>';
-        $colDescCont->Width = 130;
-        $this->dtgPiezMani->AddColumn($colDescCont);
+        //$colDescCont = new QDataGridColumn($this);
+        //$colDescCont->Name = QApplication::Translate('Descripcion');
+        /*$colDescCont->Html = '<?= substr($_ITEM->Descripcion,0,25) ?>';*/
+        //$colDescCont->Width = 130;
+        //$this->dtgPiezMani->AddColumn($colDescCont);
 
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = QApplication::Translate('Kilos');

@@ -1,22 +1,22 @@
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="form-group">
             <label for="">Destino</label><br>
             <?php $this->lstSucuDest->Render(); ?>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-6">
         <div class="form-group">
             <label for="">Servicio</label><br>
             <?php $this->lstReceDomi->Render(); ?>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label for="">Receptoría</label><br>
-            <?php $this->lstReceDest->Render(); ?>
-        </div>
-    </div>
+    <!--<div class="col-md-4">-->
+    <!--    <div class="form-group">-->
+    <!--        <label for="">Receptoría</label><br>-->
+    <!--        --><?php //$this->lstReceDest->Render(); ?>
+    <!--    </div>-->
+    <!--</div>-->
 </div>
 <div class="row" style="line-height: 0.5em; margin-bottom: .3em">
     <div class="col-md-12" style="border-radius: 3px; padding: 0.1em">

@@ -1,7 +1,7 @@
 <?php 
 require_once('qcubed.inc.php');
 
-$strTituPagi = "LS-Mobile";
+$strTituPagi = "Gerencia Mobile";
 
 if (isset($_GET['m'])) {
    $_SESSION['menu'] = $_GET['m'];
@@ -16,8 +16,8 @@ if (isset($_GET['m'])) {
 
     <?php include('layout/page_header.inc.php'); ?>
 
-    <div data-role="content" style="text-align: center; min-height: 200px; padding-top: 10%">
-        <img src="images/LogoLS_MED.png" alt="" style="opacity:0.5;">
+    <div data-role="content" style="text-align: center; min-height: 400px; padding-top: 10%">
+        <img src="images/LogoGold_MED.png" alt="" style="margin-top: 2em; opacity:0.5;">
     </div>
 
     <?php include('layout/page_footer.inc.php'); ?>

@@ -27,7 +27,16 @@
 			return sprintf('%s',  $this->Numero);
 		}
 
-		public function ActualizarEstadisticasDeEntrega() {
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'Containers';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->Numero;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/containers_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
+        }
+
+        public function ActualizarEstadisticasDeEntrega() {
 		    $objResuEntr = $this->ResumeDeEntrega();
 		    $this->CantidadOk = $objResuEntr->CantOkey;
 		    if ($this->CantidadOk == $this->Piezas) {
@@ -96,7 +105,7 @@
             $this->Save();
         }
 
-        public function GetPiezasConCheckpoint($strCodiCkpt) {
+        public function GetPiezasConCheckpoint($strCodiCkpt, $strTipoDato='IdPieza') {
 		    t('Obteniedo piezas del contenedor que tengan: '.$strCodiCkpt);
             //-----------------------------------------------------------------------------
             // Devuelve un vector con los numeros de las piezas del contenedor que tengan
@@ -109,7 +118,7 @@
                 $arrPiezVali = $objValija->GetGuiaPiezasAsContainerPiezaArray();
                 foreach ($arrPiezVali as $objGuiaPiez) {
                     if ($objGuiaPiez->tieneCheckpoint($strCodiCkpt)) {
-                        $arrPiezCont[] = $objGuiaPiez->IdPieza;
+                        $arrPiezCont[] = $objGuiaPiez->$strTipoDato;
                     }
                 }
             }
@@ -118,7 +127,7 @@
                 t('Procesando la pieza: '.$objGuiaPiez->IdPieza);
                 if ($objGuiaPiez->tieneCheckpoint($strCodiCkpt)) {
                     t('La pieza si tiene el checkpoint');
-                    $arrPiezCont[] = $objGuiaPiez->IdPieza;
+                    $arrPiezCont[] = $objGuiaPiez->$strTipoDato;
                 } else {
                     t('La pieza no tiene el checkpoint: '.$strCodiCkpt);
                 }

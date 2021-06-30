@@ -24,9 +24,47 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('Tasas Object %s',  $this->intId);
+			return sprintf('%s: %s',  $this->Tasa);
 		}
 
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'Tasas';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->Divisa->Codigo;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/tases_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
+        }
+
+        public static function UltimaTasa($strCodiDivi='USD', $dttFechTasa=null) {
+		    $objTasaCamb = new stdClass();
+		    $objTasaCamb->Tasa       = 1;
+		    $objTasaCamb->Fecha      = null;
+		    $objTasaCamb->TodoOkey   = false;
+		    $objTasaCamb->Comentario = '';
+
+		    $objMoneSoli = Divisas::LoadByCodigo($strCodiDivi);
+		    if ($objMoneSoli instanceof Divisas) {
+		        $objClauWher   = QQ::Clause();
+		        $objClauWher[] = QQ::Equal(QQN::Tasas()->DivisaId,$objMoneSoli->Id);
+		        if (!is_null($dttFechTasa)) {
+                    $objClauWher[] = QQ::Equal(QQN::Tasas()->CreatedAt,$dttFechTasa);
+                }
+                $objClauOrde   = QQ::Clause();
+                $objClauOrde[] = QQ::OrderBy(QQN::Tasas()->CreatedAt,false);
+                $objClauOrde[] = QQ::LimitInfo(1);
+                $objUltiTasa   = Tasas::QuerySingle(QQ::AndCondition($objClauWher),$objClauOrde);
+                if ($objUltiTasa instanceof Tasas) {
+                    $objTasaCamb->Tasa     = $objUltiTasa->Tasa;
+                    $objTasaCamb->Fecha    = $objUltiTasa->CreatedAt;
+                    $objTasaCamb->TodoOkey = true;
+                } else {
+                    $objTasaCamb->TodoOkey   = false;
+                    $objTasaCamb->Comentario = 'No se encontro la Tasa de Cambio de '.$strCodiDivi;
+                }
+            }
+		    return $objTasaCamb;
+        }
 
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...

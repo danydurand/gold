@@ -88,8 +88,8 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
         $this->dtgNotaEntregas->MetaAddColumn('Estatus');
         $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion','Name=S.Impor');
         $this->dtgNotaEntregas->MetaAddColumn('Cargadas');
-        $this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=xProc');
-        $this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=xCorr');
+        //$this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=xProc');
+        //$this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=xCorr');
         $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Proc');
         $this->dtgNotaEntregas->MetaAddColumn('Libras','Name=Lbs');
         $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=Pies3');

@@ -47,6 +47,7 @@ class GuiasListForm extends GuiasListFormBase {
     protected $btnImprLote;
     protected $btnCancel;
     protected $objProdNaci;
+    protected $objProdExpo;
 
     protected $btnFactGuia;
     protected $colRegiSele;
@@ -67,6 +68,7 @@ class GuiasListForm extends GuiasListFormBase {
         $this->lblTituForm->Text = 'Guias';
         $this->objUsuario  = unserialize($_SESSION['User']);
         $this->objProdNaci = unserialize($_SESSION['ProdNaci']);
+        $this->objProdExpo = unserialize($_SESSION['ProdExpo']);
 
 		// Instantiate the Meta DataGrid
 		$this->dtgGuiases = new GuiasDataGrid($this);
@@ -112,10 +114,11 @@ class GuiasListForm extends GuiasListFormBase {
         $colFechGuia->ReverseOrderByClause = QQ::OrderBy(QQN::Guias()->Fecha);
         $this->dtgGuiases->AddColumn($colFechGuia);
 
+        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Producto->Codigo,'Name=Prod');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaOrigen->Siglas,'Name=R.Orig');
+        //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaOrigen->Siglas,'Name=R.Orig');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
+        //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->FormaPago,'Name=F.Pag');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
         $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');
@@ -226,7 +229,7 @@ class GuiasListForm extends GuiasListFormBase {
                 t('Fecha de Hoy: '.$dttFechDhoy->__toString("YYYY-MM-DD"));
 
                 $this->objClauWher   = QQ::Clause();
-                $this->objClauWher[] = QQ::Equal(QQN::Guias()->ProductoId,$this->objProdNaci->Id);
+                $this->objClauWher[] = QQ::In(QQN::Guias()->ProductoId,[$this->objProdNaci->Id,$this->objProdExpo->Id]);
                 $this->objClauWher[] = QQ::Equal(QQN::Guias()->CreatedBy,$this->objUsuario->CodiUsua);
                 //$this->objClauWher[] = QQ::Equal(QQN::Guias()->Fecha,$dttFechDhoy->__toString("YYYY-MM-DD"));
             }

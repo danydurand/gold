@@ -56,7 +56,7 @@ require('inc/header.inc.php');
             </div>
             <div class="row">
                 <div class="col-md-6" style="margin-top: 0.5em;">
-                    <?php include('info_envio.tpl.php') ?>
+                    <?php include('info_envio_exp.tpl.php') ?>
                 </div>
                 <div class="col-md-3" style="margin-top: 0.5em;">
                     <?php include('info_servicio.tpl.php') ?>

@@ -380,7 +380,12 @@
 
         public function borrarPiezas() {
             $this->DeleteAllGuiaPiezasesAsGuia();
-            $this->Piezas = 0;
+            $this->Kilos   = 0;
+            $this->Piezas  = 0;
+            $this->Alto    = 0;
+            $this->Ancho   = 0;
+            $this->Largo   = 0;
+            $this->Volumen = 0;
             $this->Save();
             t('Las piezas de la guia han sido borradas');
         }

@@ -144,6 +144,12 @@ class Index extends QForm {
         $objProdNaci = Productos::LoadByCodigo('NAC');
         $_SESSION['ProdNaci'] = serialize($objProdNaci);
 
+        //-----------------------
+        // Producto Exportacion
+        //-----------------------
+        $objProdExpo = Productos::LoadByCodigo('EXP');
+        $_SESSION['ProdExpo'] = serialize($objProdExpo);
+
         //------------------------------
         // Cliente con Tarifa Nacional
         //------------------------------

@@ -386,11 +386,13 @@ class RecepcionNde extends FormularioBaseKaizen {
             $strRelaSobr = implode(',',$arrRelaSobr);
             t('Hay sobrantes: '.$strRelaSobr);
         }
-        //------------------------------------------------------------------------
+        //-----------------------------------------------------------
         // Se actualiza el estatus y los contadores del Manifiesto
-        //------------------------------------------------------------------------
+        //-----------------------------------------------------------
         try {
-            $objNotaEntr->Estatus           = 'RECIBID@';
+            if ($objNotaEntr->Estatus == 'CREAD@') {
+                $objNotaEntr->Estatus       = 'RECIBID@';
+            }
             $objNotaEntr->Recibidas         = $intCantPick;
             $objNotaEntr->Sobrantes         = $intCantSobr;
             $objNotaEntr->RelacionSobrantes = $strRelaSobr;
