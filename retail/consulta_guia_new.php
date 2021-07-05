@@ -384,28 +384,27 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             }
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/'.$strCodiAcci,
-                TextoIcono('print',
-                    'Imprimir Guía')
+                TextoIcono('print', 'Imprimir Guía')
             );
             if (is_null($this->objGuia->FacturaId)) {
                 $arrOpciDrop[] = OpcionDropDown(
                     __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/fg',
-                    TextoIcono('gg',
-                        'Facturar la Guía'));
+                    TextoIcono('gg', 'Facturar la Guía')
+                );
             } else {
                 $arrOpciDrop[] = OpcionDropDown(
                     __SIST__.'/facturas_edit.php/'.$this->objGuia->FacturaId,
-                    TextoIcono('gg',
-                        'Ver la Factura'));
+                    TextoIcono('gg', 'Ver la Factura')
+                );
             }
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/lr',
-                TextoIcono('chain-broken',
-                    'Acuerdo L.R.'));
+                TextoIcono('chain-broken', 'Acuerdo L.R.')
+            );
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ca',
-                TextoIcono('thumbs-o-up',
-                    'Carta AntiDroga'));
+                TextoIcono('thumbs-o-up', 'Carta AntiDroga')
+            );
         }
 
         $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'i');

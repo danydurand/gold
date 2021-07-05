@@ -27,14 +27,27 @@
 			return sprintf('%s',  $this->intId);
 		}
 
-        //public function Totales() {
-		 //   $objDatabase  = Facturas::GetDatabase();
-		 //   $strCadeSqlx  = "select * ";
-		 //   $strCadeSqlx .= "  from v_facturas ";
-		 //   $strCadeSqlx .= " where id = ".$this->Id;
-		 //   $objDbResult  = $objDatabase->Query($strCadeSqlx);
-		 //   $mixRegistro  = $objDbResult->FetchArray();
-        //}
+        public function ActualizarMontos() {
+            $arrPagoFact = $this->GetFacturaPagosAsFacturaArray();
+            $decTotaUsdx = 0;
+            $decTotaBoli = 0;
+            foreach ($arrPagoFact as $objPagoFact) {
+                if (($decTotaBoli + $objPagoFact->MontoBs) > $this->Total) {
+                    $objPagoFact->MontoBs  = $this->Total;
+                    $objPagoFact->MontoUsd = $objPagoFact->MontoBs / $this->Tasa;
+                    $objPagoFact->Save();
+                }
+                $decTotaBoli += $objPagoFact->MontoBs;
+                $decTotaUsdx += $objPagoFact->MontoUsd;
+            }
+            $this->MontoCobrado   = $decTotaBoli;
+            $decMontPend          = $this->Total - $this->MontoCobrado;
+            if ($decMontPend < 0) {
+                $decMontPend = 0;
+            }
+            $this->MontoPendiente = $decMontPend;
+            $this->Save();
+		}
 
 		public static function crearFactura($arrGuiaProc,$intIdxxUsua) {
 
@@ -107,6 +120,7 @@
                     }
                 }
                 if ($blnTodoOkey) {
+                    $objNuevFact->MontoPendiente = $objNuevFact->Total;
                     $objNuevFact->Save();
                     t('Factura actualizada');
                 }

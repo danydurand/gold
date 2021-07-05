@@ -25,7 +25,6 @@
 	 * @property double $MontoUsd the value for fltMontoUsd (Not Null)
 	 * @property double $MontoBs the value for fltMontoBs (Not Null)
 	 * @property integer $CajaId the value for intCajaId (Not Null)
-	 * @property integer $CajeroId the value for intCajeroId (Not Null)
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
 	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
@@ -37,7 +36,6 @@
 	 * @property Divisas $Divisa the value for the Divisas object referenced by intDivisaId (Not Null)
 	 * @property Banco $Banco the value for the Banco object referenced by intBancoId 
 	 * @property Caja $Caja the value for the Caja object referenced by intCajaId (Not Null)
-	 * @property Users $Cajero the value for the Users object referenced by intCajeroId (Not Null)
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class FacturaPagosGen extends QBaseClass implements IteratorAggregate {
@@ -125,14 +123,6 @@
 		 */
 		protected $intCajaId;
 		const CajaIdDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column factura_pagos.cajero_id
-		 * @var integer intCajeroId
-		 */
-		protected $intCajeroId;
-		const CajeroIdDefault = null;
 
 
 		/**
@@ -255,16 +245,6 @@
 		 */
 		protected $objCaja;
 
-		/**
-		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column factura_pagos.cajero_id.
-		 *
-		 * NOTE: Always use the Cajero property getter to correctly retrieve this Users object.
-		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var Users objCajero
-		 */
-		protected $objCajero;
-
 
 
 		/**
@@ -282,7 +262,6 @@
 			$this->fltMontoUsd = FacturaPagos::MontoUsdDefault;
 			$this->fltMontoBs = FacturaPagos::MontoBsDefault;
 			$this->intCajaId = FacturaPagos::CajaIdDefault;
-			$this->intCajeroId = FacturaPagos::CajeroIdDefault;
 			$this->strCreatedAt = FacturaPagos::CreatedAtDefault;
 			$this->strUpdatedAt = FacturaPagos::UpdatedAtDefault;
 			$this->strDeletedAt = FacturaPagos::DeletedAtDefault;
@@ -640,7 +619,6 @@
 			    $objBuilder->AddSelectItem($strTableName, 'monto_usd', $strAliasPrefix . 'monto_usd');
 			    $objBuilder->AddSelectItem($strTableName, 'monto_bs', $strAliasPrefix . 'monto_bs');
 			    $objBuilder->AddSelectItem($strTableName, 'caja_id', $strAliasPrefix . 'caja_id');
-			    $objBuilder->AddSelectItem($strTableName, 'cajero_id', $strAliasPrefix . 'cajero_id');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'deleted_at', $strAliasPrefix . 'deleted_at');
@@ -802,9 +780,6 @@
 			$strAlias = $strAliasPrefix . 'caja_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCajaId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'cajero_id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intCajeroId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -887,13 +862,6 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['caja_id']) ? null : $objExpansionAliasArray['caja_id']);
 				$objToReturn->objCaja = Caja::InstantiateDbRow($objDbRow, $strAliasPrefix . 'caja_id__', $objExpansionNode, null, $strColumnAliasArray);
-			}
-			// Check for Cajero Early Binding
-			$strAlias = $strAliasPrefix . 'cajero_id__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				$objExpansionNode = (empty($objExpansionAliasArray['cajero_id']) ? null : $objExpansionAliasArray['cajero_id']);
-				$objToReturn->objCajero = Users::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cajero_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -1151,38 +1119,6 @@
 			);
 		}
 
-		/**
-		 * Load an array of FacturaPagos objects,
-		 * by CajeroId Index(es)
-		 * @param integer $intCajeroId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return FacturaPagos[]
-		*/
-		public static function LoadArrayByCajeroId($intCajeroId, $objOptionalClauses = null) {
-			// Call FacturaPagos::QueryArray to perform the LoadArrayByCajeroId query
-			try {
-				return FacturaPagos::QueryArray(
-					QQ::Equal(QQN::FacturaPagos()->CajeroId, $intCajeroId),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count FacturaPagoses
-		 * by CajeroId Index(es)
-		 * @param integer $intCajeroId
-		 * @return int
-		*/
-		public static function CountByCajeroId($intCajeroId) {
-			// Call FacturaPagos::QueryCount to perform the CountByCajeroId query
-			return FacturaPagos::QueryCount(
-				QQ::Equal(QQN::FacturaPagos()->CajeroId, $intCajeroId)
-			);
-		}
-
 
 
 		////////////////////////////////////////////////////
@@ -1223,7 +1159,6 @@
 							`monto_usd`,
 							`monto_bs`,
 							`caja_id`,
-							`cajero_id`,
 							`created_by`,
 							`updated_by`,
 							`deleted_by`
@@ -1237,7 +1172,6 @@
 							' . $objDatabase->SqlVariable($this->fltMontoUsd) . ',
 							' . $objDatabase->SqlVariable($this->fltMontoBs) . ',
 							' . $objDatabase->SqlVariable($this->intCajaId) . ',
-							' . $objDatabase->SqlVariable($this->intCajeroId) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -1310,7 +1244,6 @@
 							`monto_usd` = ' . $objDatabase->SqlVariable($this->fltMontoUsd) . ',
 							`monto_bs` = ' . $objDatabase->SqlVariable($this->fltMontoBs) . ',
 							`caja_id` = ' . $objDatabase->SqlVariable($this->intCajaId) . ',
-							`cajero_id` = ' . $objDatabase->SqlVariable($this->intCajeroId) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							`deleted_by` = ' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -1463,7 +1396,6 @@
 			$this->fltMontoUsd = $objReloaded->fltMontoUsd;
 			$this->fltMontoBs = $objReloaded->fltMontoBs;
 			$this->CajaId = $objReloaded->CajaId;
-			$this->CajeroId = $objReloaded->CajeroId;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
 			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
 			$this->strDeletedAt = $objReloaded->strDeletedAt;
@@ -1559,13 +1491,6 @@
 					 * @return integer
 					 */
 					return $this->intCajaId;
-
-				case 'CajeroId':
-					/**
-					 * Gets the value for intCajeroId (Not Null)
-					 * @return integer
-					 */
-					return $this->intCajeroId;
 
 				case 'CreatedAt':
 					/**
@@ -1678,20 +1603,6 @@
 						if ((!$this->objCaja) && (!is_null($this->intCajaId)))
 							$this->objCaja = Caja::Load($this->intCajaId);
 						return $this->objCaja;
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Cajero':
-					/**
-					 * Gets the value for the Users object referenced by intCajeroId (Not Null)
-					 * @return Users
-					 */
-					try {
-						if ((!$this->objCajero) && (!is_null($this->intCajeroId)))
-							$this->objCajero = Users::Load($this->intCajeroId);
-						return $this->objCajero;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1847,20 +1758,6 @@
 					try {
 						$this->objCaja = null;
 						return ($this->intCajaId = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CajeroId':
-					/**
-					 * Sets the value for intCajeroId (Not Null)
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						$this->objCajero = null;
-						return ($this->intCajeroId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2069,38 +1966,6 @@
 					}
 					break;
 
-				case 'Cajero':
-					/**
-					 * Sets the value for the Users object referenced by intCajeroId (Not Null)
-					 * @param Users $mixValue
-					 * @return Users
-					 */
-					if (is_null($mixValue)) {
-						$this->intCajeroId = null;
-						$this->objCajero = null;
-						return null;
-					} else {
-						// Make sure $mixValue actually is a Users object
-						try {
-							$mixValue = QType::Cast($mixValue, 'Users');
-						} catch (QInvalidCastException $objExc) {
-							$objExc->IncrementOffset();
-							throw $objExc;
-						}
-
-						// Make sure $mixValue is a SAVED Users object
-						if (is_null($mixValue->Id))
-							throw new QCallerException('Unable to set an unsaved Cajero for this FacturaPagos');
-
-						// Update Local Member Variables
-						$this->objCajero = $mixValue;
-						$this->intCajeroId = $mixValue->Id;
-
-						// Return $mixValue
-						return $mixValue;
-					}
-					break;
-
 				default:
 					try {
 						return parent::__set($strName, $mixValue);
@@ -2189,7 +2054,6 @@
 			$strToReturn .= '<element name="MontoUsd" type="xsd:float"/>';
 			$strToReturn .= '<element name="MontoBs" type="xsd:float"/>';
 			$strToReturn .= '<element name="Caja" type="xsd1:Caja"/>';
-			$strToReturn .= '<element name="Cajero" type="xsd1:Users"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
@@ -2209,7 +2073,6 @@
 				Divisas::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Banco::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Caja::AlterSoapComplexTypeArray($strComplexTypeArray);
-				Users::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -2249,9 +2112,6 @@
 			if ((property_exists($objSoapObject, 'Caja')) &&
 				($objSoapObject->Caja))
 				$objToReturn->Caja = Caja::GetObjectFromSoapObject($objSoapObject->Caja);
-			if ((property_exists($objSoapObject, 'Cajero')) &&
-				($objSoapObject->Cajero))
-				$objToReturn->Cajero = Users::GetObjectFromSoapObject($objSoapObject->Cajero);
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
 			if (property_exists($objSoapObject, 'UpdatedAt'))
@@ -2302,10 +2162,6 @@
 				$objObject->objCaja = Caja::GetSoapObjectFromObject($objObject->objCaja, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intCajaId = null;
-			if ($objObject->objCajero)
-				$objObject->objCajero = Users::GetSoapObjectFromObject($objObject->objCajero, false);
-			else if (!$blnBindRelatedObjects)
-				$objObject->intCajeroId = null;
 			return $objObject;
 		}
 
@@ -2330,7 +2186,6 @@
 			$iArray['MontoUsd'] = $this->fltMontoUsd;
 			$iArray['MontoBs'] = $this->fltMontoBs;
 			$iArray['CajaId'] = $this->intCajaId;
-			$iArray['CajeroId'] = $this->intCajeroId;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
 			$iArray['UpdatedAt'] = $this->strUpdatedAt;
 			$iArray['DeletedAt'] = $this->strDeletedAt;
@@ -2389,8 +2244,6 @@
      * @property-read QQNode $MontoBs
      * @property-read QQNode $CajaId
      * @property-read QQNodeCaja $Caja
-     * @property-read QQNode $CajeroId
-     * @property-read QQNodeUsers $Cajero
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -2438,10 +2291,6 @@
 					return new QQNode('caja_id', 'CajaId', 'Integer', $this);
 				case 'Caja':
 					return new QQNodeCaja('caja_id', 'Caja', 'Integer', $this);
-				case 'CajeroId':
-					return new QQNode('cajero_id', 'CajeroId', 'Integer', $this);
-				case 'Cajero':
-					return new QQNodeUsers('cajero_id', 'Cajero', 'Integer', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
 				case 'UpdatedAt':
@@ -2484,8 +2333,6 @@
      * @property-read QQNode $MontoBs
      * @property-read QQNode $CajaId
      * @property-read QQNodeCaja $Caja
-     * @property-read QQNode $CajeroId
-     * @property-read QQNodeUsers $Cajero
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -2533,10 +2380,6 @@
 					return new QQNode('caja_id', 'CajaId', 'integer', $this);
 				case 'Caja':
 					return new QQNodeCaja('caja_id', 'Caja', 'integer', $this);
-				case 'CajeroId':
-					return new QQNode('cajero_id', 'CajeroId', 'integer', $this);
-				case 'Cajero':
-					return new QQNodeUsers('cajero_id', 'Cajero', 'integer', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'string', $this);
 				case 'UpdatedAt':

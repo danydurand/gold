@@ -169,6 +169,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lblVoluPiez;
     protected $lblKiloPiez;
 
+    protected $decTasaDola;
+    protected $decTasaEuro;
+
     
     protected function SetupGuia() {
         $intIdxxGuia = QApplication::PathInfo(0);
@@ -226,7 +229,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->intReceOrig = $_SESSION['ReceptoriaId'];
         $this->objClieNaci = unserialize($_SESSION['ClieNaci']);
         $this->objProdExpo = unserialize($_SESSION['ProdExpo']);
-
+        $this->decTasaDola = $_SESSION['TasaDola'];
+        $this->decTasaEuro = $_SESSION['TasaEuro'];
     }
 
 
@@ -785,7 +789,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTasaDola = new QFloatTextBox($this);
         $this->txtTasaDola->Width = 100;
         if ($this->blnEditMode) {
-            $this->txtTasaDola->Text = $this->objGuia->Tasa;
+            $this->txtTasaDola->Text = nf($this->objGuia->Tasa);
+        } else {
+            $this->txtTasaDola->Text = nf($this->decTasaDola);
         }
     }
 
@@ -983,6 +989,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $objNuevProf->logDeCambios('Creada');
             $this->success('Profesión creada !!!');
             $this->cargarProfesiones($objNuevProf->Id);
+            $this->lblNuevProf->Visible = false;
+            $this->txtNuevProf->Visible = false;
+            $this->btnSaveProf->Visible = false;
         } catch (Exception $e) {
             t('Error creado la profesion: '.$e->getMessage());
             $this->danger($e->getMessage());
@@ -1023,7 +1032,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtLargPiez->Text = '';
         $this->txtVoluPiez->Text = '';
 
-        $this->success('Transaccion Exitosa.  Pieza guardada !!!');
+        //$this->success('Transaccion Exitosa.  Pieza guardada !!!');
     }
 
     protected function btnDelePiez_Click() {
@@ -1155,7 +1164,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
         $strTextBoto   = TextoIcono('plus','Acciones');
         $arrOpciDrop   = array();
-        $arrOpciDrop[] = OpcionDropDown(__SIST__.'/guia_pdf.php?strNumeGuia='.$this->txtNumeGuia->Text,TextoIcono('print','Imprimir'));
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/guia_pdf.php?strNumeGuia='.$this->txtNumeGuia->Text,
+            TextoIcono('print','Imprimir')
+        );
 
         if ($this->blnGuiaFact) {
             if (!is_null($this->objGuia->FacturaId)) {
@@ -1164,7 +1176,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $mixParaFact = 'strNumeGuia='.$this->txtNumeGuia->Text;
             }
 
-            $arrOpciDrop[] = OpcionDropDown(__SIST__.'/crear_factura.php?'.$mixParaFact,TextoIcono('credit-card','Facturar'));
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/crear_factura.php?'.$mixParaFact,
+                TextoIcono('credit-card','Facturar')
+            );
         }
 
         $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop);
@@ -1975,10 +1990,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //error_reporting(0);
 
         try {
-            $this->objGuia->Numero          = $this->txtNumeGuia->Text;
-            $this->objGuia->Tracking        = $this->txtNumeGuia->Text;
             $this->objGuia->ClienteRetailId = $this->objClieReta->Id;
-            $this->objGuia->Fecha           = new QDateTime($this->calFechGuia->Text);
 
             if (!$this->blnEditSupe || !$this->blnEditMode) {
                 $this->objGuia->OrigenId           = $this->intSucuOrig;
@@ -2016,10 +2028,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 //------------------------------------------------------------------------
                 // En caso de Insercion, se asignan valores por defecto ciertos campos
                 //------------------------------------------------------------------------
+                $this->objGuia->Numero        = $this->txtNumeGuia->Text;
+                $this->objGuia->Tracking      = $this->txtNumeGuia->Text;
                 $this->objGuia->Fecha         = new QDateTime(QDateTime::Now());
                 $this->objGuia->ClienteCorpId = $this->objClieNaci->CodiClie;
                 $this->objGuia->ProductoId    = $this->objProdExpo->Id;
-                $this->objGuia->Tasa          = null;
+                $this->objGuia->Tasa          = $this->decTasaDola;
                 $this->objGuia->Alto          = 0;
                 $this->objGuia->Ancho         = 0;
                 $this->objGuia->Largo         = 0;

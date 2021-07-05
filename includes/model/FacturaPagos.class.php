@@ -27,8 +27,17 @@
 			return sprintf('FacturaPagos Object %s',  $this->intId);
 		}
 
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'FacturaPagos';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = 'Factura: '.$this->Factura->Id.' | Pago: '.$this->Referencia;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/factura_pagos_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
+        }
 
-		// Override or Create New Load/Count methods
+
+        // Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...
 		// but feel free to use these as a starting point)
 /*

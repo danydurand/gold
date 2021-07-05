@@ -86,7 +86,6 @@ abstract class FacturaPagosListFormBase extends QForm {
         $this->dtgFacturaPagoses->MetaAddColumn('MontoUsd');
         $this->dtgFacturaPagoses->MetaAddColumn('MontoBs');
         $this->dtgFacturaPagoses->MetaAddColumn(QQN::FacturaPagos()->Caja);
-        $this->dtgFacturaPagoses->MetaAddColumn(QQN::FacturaPagos()->Cajero);
         $this->dtgFacturaPagoses->MetaAddColumn('CreatedAt');
         $this->dtgFacturaPagoses->MetaAddColumn('UpdatedAt');
         $this->dtgFacturaPagoses->MetaAddColumn('DeletedAt');

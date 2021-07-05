@@ -22,8 +22,6 @@
 	 * @property string $RememberToken the value for strRememberToken 
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
-	 * @property-read FacturaPagos $_FacturaPagosAsCajero the value for the private _objFacturaPagosAsCajero (Read-Only) if set due to an expansion on the factura_pagos.cajero_id reverse relationship
-	 * @property-read FacturaPagos[] $_FacturaPagosAsCajeroArray the value for the private _objFacturaPagosAsCajeroArray (Read-Only) if set due to an ExpandAsArray on the factura_pagos.cajero_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class UsersGen extends QBaseClass implements IteratorAggregate {
@@ -91,22 +89,6 @@
 		protected $strUpdatedAt;
 		const UpdatedAtDefault = null;
 
-
-		/**
-		 * Private member variable that stores a reference to a single FacturaPagosAsCajero object
-		 * (of type FacturaPagos), if this Users object was restored with
-		 * an expansion on the factura_pagos association table.
-		 * @var FacturaPagos _objFacturaPagosAsCajero;
-		 */
-		private $_objFacturaPagosAsCajero;
-
-		/**
-		 * Private member variable that stores a reference to an array of FacturaPagosAsCajero objects
-		 * (of type FacturaPagos[]), if this Users object was restored with
-		 * an ExpandAsArray on the factura_pagos association table.
-		 * @var FacturaPagos[] _objFacturaPagosAsCajeroArray;
-		 */
-		private $_objFacturaPagosAsCajeroArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -603,15 +585,6 @@
 			}
 			
 			
-			// See if we're doing an array expansion on the previous item
-			if ($objExpandAsArrayNode && 
-					is_array($objPreviousItemArray) && 
-					count($objPreviousItemArray)) {
-
-				if (Users::ExpandArray ($objDbRow, $strAliasPrefix, $objExpandAsArrayNode, $objPreviousItemArray, $strColumnAliasArray)) {
-					return false; // db row was used but no new object was created
-				}
-			}
 
 			// Create a new instance of the Users object
 			$objToReturn = new Users();
@@ -670,21 +643,6 @@
 
 
 				
-
-			// Check for FacturaPagosAsCajero Virtual Binding
-			$strAlias = $strAliasPrefix . 'facturapagosascajero__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objExpansionNode = (empty($objExpansionAliasArray['facturapagosascajero']) ? null : $objExpansionAliasArray['facturapagosascajero']);
-			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
-			if ($blnExpanded && null === $objToReturn->_objFacturaPagosAsCajeroArray)
-				$objToReturn->_objFacturaPagosAsCajeroArray = array();
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if ($blnExpanded) {
-					$objToReturn->_objFacturaPagosAsCajeroArray[] = FacturaPagos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturapagosascajero__', $objExpansionNode, null, $strColumnAliasArray);
-				} elseif (is_null($objToReturn->_objFacturaPagosAsCajero)) {
-					$objToReturn->_objFacturaPagosAsCajero = FacturaPagos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturapagosascajero__', $objExpansionNode, null, $strColumnAliasArray);
-				}
-			}
 
 			return $objToReturn;
 		}
@@ -1097,22 +1055,6 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
-				case '_FacturaPagosAsCajero':
-					/**
-					 * Gets the value for the private _objFacturaPagosAsCajero (Read-Only)
-					 * if set due to an expansion on the factura_pagos.cajero_id reverse relationship
-					 * @return FacturaPagos
-					 */
-					return $this->_objFacturaPagosAsCajero;
-
-				case '_FacturaPagosAsCajeroArray':
-					/**
-					 * Gets the value for the private _objFacturaPagosAsCajeroArray (Read-Only)
-					 * if set due to an ExpandAsArray on the factura_pagos.cajero_id reverse relationship
-					 * @return FacturaPagos[]
-					 */
-					return $this->_objFacturaPagosAsCajeroArray;
-
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1226,9 +1168,6 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
-			if ($this->CountFacturaPagosesAsCajero()) {
-				$arrTablRela[] = 'factura_pagos';
-			}
 			
 			return $arrTablRela;
 		}
@@ -1237,155 +1176,6 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
-
-
-		// Related Objects' Methods for FacturaPagosAsCajero
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated FacturaPagosesAsCajero as an array of FacturaPagos objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return FacturaPagos[]
-		*/
-		public function GetFacturaPagosAsCajeroArray($objOptionalClauses = null) {
-			if ((is_null($this->intId)))
-				return array();
-
-			try {
-				return FacturaPagos::LoadArrayByCajeroId($this->intId, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated FacturaPagosesAsCajero
-		 * @return int
-		*/
-		public function CountFacturaPagosesAsCajero() {
-			if ((is_null($this->intId)))
-				return 0;
-
-			return FacturaPagos::CountByCajeroId($this->intId);
-		}
-
-		/**
-		 * Associates a FacturaPagosAsCajero
-		 * @param FacturaPagos $objFacturaPagos
-		 * @return void
-		*/
-		public function AssociateFacturaPagosAsCajero(FacturaPagos $objFacturaPagos) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFacturaPagosAsCajero on this unsaved Users.');
-			if ((is_null($objFacturaPagos->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFacturaPagosAsCajero on this Users with an unsaved FacturaPagos.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Users::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`factura_pagos`
-				SET
-					`cajero_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objFacturaPagos->Id) . '
-			');
-		}
-
-		/**
-		 * Unassociates a FacturaPagosAsCajero
-		 * @param FacturaPagos $objFacturaPagos
-		 * @return void
-		*/
-		public function UnassociateFacturaPagosAsCajero(FacturaPagos $objFacturaPagos) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturaPagosAsCajero on this unsaved Users.');
-			if ((is_null($objFacturaPagos->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturaPagosAsCajero on this Users with an unsaved FacturaPagos.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Users::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`factura_pagos`
-				SET
-					`cajero_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objFacturaPagos->Id) . ' AND
-					`cajero_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Unassociates all FacturaPagosesAsCajero
-		 * @return void
-		*/
-		public function UnassociateAllFacturaPagosesAsCajero() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturaPagosAsCajero on this unsaved Users.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Users::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`factura_pagos`
-				SET
-					`cajero_id` = null
-				WHERE
-					`cajero_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated FacturaPagosAsCajero
-		 * @param FacturaPagos $objFacturaPagos
-		 * @return void
-		*/
-		public function DeleteAssociatedFacturaPagosAsCajero(FacturaPagos $objFacturaPagos) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturaPagosAsCajero on this unsaved Users.');
-			if ((is_null($objFacturaPagos->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturaPagosAsCajero on this Users with an unsaved FacturaPagos.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Users::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`factura_pagos`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objFacturaPagos->Id) . ' AND
-					`cajero_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes all associated FacturaPagosesAsCajero
-		 * @return void
-		*/
-		public function DeleteAllFacturaPagosesAsCajero() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturaPagosAsCajero on this unsaved Users.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Users::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`factura_pagos`
-				WHERE
-					`cajero_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
 
 
 		
@@ -1554,7 +1344,6 @@
      * @property-read QQNode $UpdatedAt
      *
      *
-     * @property-read QQReverseReferenceNodeFacturaPagos $FacturaPagosAsCajero
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1578,8 +1367,6 @@
 					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
 				case 'UpdatedAt':
 					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
-				case 'FacturaPagosAsCajero':
-					return new QQReverseReferenceNodeFacturaPagos($this, 'facturapagosascajero', 'reverse_reference', 'cajero_id', 'FacturaPagosAsCajero');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -1604,7 +1391,6 @@
      * @property-read QQNode $UpdatedAt
      *
      *
-     * @property-read QQReverseReferenceNodeFacturaPagos $FacturaPagosAsCajero
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1628,8 +1414,6 @@
 					return new QQNode('created_at', 'CreatedAt', 'string', $this);
 				case 'UpdatedAt':
 					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
-				case 'FacturaPagosAsCajero':
-					return new QQReverseReferenceNodeFacturaPagos($this, 'facturapagosascajero', 'reverse_reference', 'cajero_id', 'FacturaPagosAsCajero');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

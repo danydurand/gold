@@ -14,6 +14,13 @@ if (isset($_SESSION['ReceptoriaId'])) {
     $objReceUsua  = Counter::Load($_SESSION['ReceptoriaId']);
     $strUbicUsua .= ' | '.$objReceUsua->Siglas;
 }
+$strTasaCamb = '';
+if (isset($_SESSION['TasaDola'])) {
+    $strTasaCamb .= ' | USD: '.nf($_SESSION['TasaDola'],2);
+}
+if (isset($_SESSION['TasaEuro'])) {
+    $strTasaCamb .= ' | EUR: '.nf($_SESSION['TasaEuro'],2);
+}
 ?>
 
 <head>
@@ -74,7 +81,7 @@ if (isset($_SESSION['ReceptoriaId'])) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" style="color: white; text-decoration: none" href="<?= __RET__.'/mg.php'?>">GoldCoast | Sistema Retail <?= $strUbicUsua ?></a>
+                <a class="navbar-brand" style="color: white; text-decoration: none" href="<?= __RET__.'/mg.php'?>">GoldCoast | Retail <?= $strUbicUsua ?>&nbsp;<?= $strTasaCamb ?> </a>
             </div>
             <!-- /.navbar-header -->
             

@@ -123,10 +123,14 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
     //---------------------------------------
 
     protected function btnCancel_Click() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        $strPagiReto = $objUltiAcce->__toString();
-        $strPagiReto = str_replace('../','',$strPagiReto);
-        //t('Pagina de Retorno: '.$strPagiReto);
+        if (isset($_SESSION['PagiBack'])) {
+            $strPagiReto = $_SESSION['PagiBack'];
+        } else {
+            $objUltiAcce = PilaAcceso::Pop('D');
+            $strPagiReto = $objUltiAcce->__toString();
+            $strPagiReto = str_replace('../','',$strPagiReto);
+            //t('Pagina de Retorno: '.$strPagiReto);
+        }
         QApplication::Redirect(__SIST__.'/'.$strPagiReto);
     }
 

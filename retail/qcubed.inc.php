@@ -18,6 +18,7 @@ if ($strNombProg != 'index.php') {
         'guias_list.php',
     ];
     if ( ($strNombProg != 'establecer_ubicacion.php') && (in_array($strNombProg,$arrNeceUbic)) ) {
+        $_SESSION['PagiBack'] = $strNombProg;
         if (!isset($_SESSION['SucursalId'])) {
             QApplication::Redirect(__SIST__.'/establecer_ubicacion.php');
         }
