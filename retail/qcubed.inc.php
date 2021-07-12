@@ -16,6 +16,7 @@ if ($strNombProg != 'index.php') {
         'crear_guia_nac.php',
         'crear_guia_exp.php',
         'guias_list.php',
+        'containers_list.php',
     ];
     if ( ($strNombProg != 'establecer_ubicacion.php') && (in_array($strNombProg,$arrNeceUbic)) ) {
         $_SESSION['PagiBack'] = $strNombProg;

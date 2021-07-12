@@ -98,6 +98,12 @@ class FacturasEditForm extends FacturasEditFormBase {
 	// Aqui se crean los objetos 
 	//----------------------------
 
+    protected function btnVolvList_Click() {
+        $objUltiAcce = PilaAcceso::Pop('D');
+        $strPagiReto = __SIST__.'/'.$objUltiAcce->__toString();
+        QApplication::Redirect($strPagiReto);
+    }
+
     protected function btnNuevRegi_Click() {
         QApplication::Redirect(__SIST__.'/emitir_factura_corp.php');
     }

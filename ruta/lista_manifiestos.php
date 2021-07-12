@@ -5,6 +5,9 @@ $strTituPagi = "Manifiestos";
 $strManiChof = '';
 /* @var $objUsuario Chofer */
 $objUsuario    = unserialize($_SESSION['User']);
+
+$objUsuario->ActualizarManifiestosDelChofer();
+
 $objClauOrde   = QQ::OrderBy(QQN::Containers()->Id,false);
 $objClauWher   = QQ::Clause();
 $objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
@@ -16,12 +19,12 @@ if ($arrManiChof) {
     ';
     $strNombImag = __RUTA_IMAGE__.'/manifest2.png';
     foreach ($arrManiChof as $objManiChof) {
-        $objResuEntr  = $objManiChof->ResumeDeEntrega();
-        $intCantPiez  = $objManiChof->Piezas;
-        $decPorcOkey  = $objResuEntr->PorcOkey;
-        $decPorcPend  = $objResuEntr->PorcPend;
-        $intCantOkey  = $objResuEntr->CantOkey;
-        $intCantPend  = $objResuEntr->CantPend;
+        $intCantPiez = $objManiChof->Piezas;
+        $intCantOkey = $objManiChof->CantidadOk;
+        $intCantPend = $intCantPiez - $intCantOkey;
+        $decPorcPend = nf0($intCantPend * 100 / $intCantPiez);
+        $decPorcOkey = nf0($intCantOkey * 100 / $intCantPiez);
+
         $strManiChof .= '
             <li>
                 <a href="detalle_de_manifiesto.php?id='.$objManiChof->Id.'" data-rel="dialog">
@@ -38,9 +41,7 @@ if ($arrManiChof) {
     $strManiChof .= '</ul>';
 } else {
     $strManiChof = '
-    <center>
         <a data-rel="back" data-role="button" data-theme="b" data-icon="back" data-iconpos="top">No tiene Manifiestos</a>
-    </center>
     ';
 }
 ?>

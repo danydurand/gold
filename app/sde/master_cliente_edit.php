@@ -4,6 +4,10 @@ require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__APP_INCLUDES__ . '/FormularioBaseKaizen.class.php');
 
+use Spipu\Html2Pdf\Html2Pdf;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+
 class MasterClienteEditForm extends FormularioBaseKaizen {
     // Objetos del Formulario //
     /* @var $objUsuaSist Usuario */
@@ -67,7 +71,10 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected $chkManeApix;
     protected $txtUsuaApix;
     protected $txtPassApix;
-    protected $dtgFactClie;
+    protected $dtgFactPend;
+    protected $arrFactPend;
+    protected $dtgFactPgda;
+    protected $dtgNotaCred;
     protected $intCantFact;
 
     protected $txtDctoVolu;
@@ -162,7 +169,9 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
             $this->intCantFact = Facturas::QueryCount(QQ::AndCondition($objClauWher));
 
-            $this->dtgFactClie_Create();
+            $this->dtgFactPend_Create();
+            $this->dtgFactPgda_Create();
+            $this->dtgNotaCred_Create();
         }
 
         $this->chkVendClie_Create();
@@ -359,6 +368,9 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 case 'calcularSaldo':
                     $this->obtenerSaldoDelCliente();
                     break;
+                case 'enviarEdoCta':
+                    $this->enviarEdoCta();
+                    break;
                 default:
                     $this->danger("Accion: ".$this->strAcciClie." no especificada");
             }
@@ -368,6 +380,95 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     //----------------------------------
     // Acciones relativas al Cliente
     //----------------------------------
+
+    protected function enviarEdoCta() {
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+        $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
+        $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
+
+        $this->RedactarCorreoEdoCta($arrFactPend);
+        //$this->ImprimirEdoCta($arrFactPend);
+        $this->success("El Edo de Cta ha sido enviado al Cliente !!!");
+    }
+
+    protected function ImprimirEdoCta($arrFactPend) {
+        t('Imprimiendo Edo de Cta...');
+        $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+        try {
+            t('voy por aqui');
+            $strNombArch = 'EdoCta'.$this->objMasterCliente->NombClie.'.pdf';
+            $strNombForm = 'estado_de_cuenta.php';
+
+            $_SESSION['FactPend'] = serialize($arrFactPend);
+            t('llegando por aqui');
+
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/estado_de_cuenta.php';
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+        t('Saliendo de la impresion del edo de cuenta');
+    }
+
+    protected function RedactarCorreoEdoCta($arrFactPend) {
+        $objMessage = new QEmailMessage();
+        $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
+        $objMessage->To = $this->objMasterCliente->DireMail;
+        $objMessage->Subject = 'Estado de Cuenta ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
+
+        $_SESSION['FactPend'] = serialize($arrFactPend);
+        ob_start();
+        include dirname(__FILE__) . '/rhtml/estado_de_cuenta.php';
+        $strHtmlFact = ob_get_clean();
+
+        // Also setup HTML message (optional)
+        $strBody  = 'Estimado Cliente,<p><br>';
+        $strBody .= 'Anexo le hacemos llegar su Estado de Cuenta actualizado a la fecha, por Servicio de Entregas Nacionales.<br><br>';
+        $strBody .= 'Por favor revisar y enviar soporte de pago<br><br>';
+        $strBody .= '<b>Datos Bancarios:</b>.<br>';
+        $strBody .= 'Banco: <b>BANK OF AMERICA</b><br>';
+        $strBody .= 'Beneficiario o Titular de la Cuenta: <b>GOLD COAST CUSTOM EXPRESS CORP</b><br>';
+        $strBody .= 'Tipo de Cuenta: <b>Business Fundamentals Chk</b><br>';
+        $strBody .= 'Número de Cuenta: <b>898111123004</b><br>';
+        $strBody .= 'SWIFT: <b>026009593</b><br>';
+        $strBody .= 'ABA: <b>063100277</b><br><br>';
+        $objMessage->HtmlBody  = $strBody;
+
+        $objMessage->HtmlBody .= $strHtmlFact;
+
+        // Add random/custom email headers
+        $objMessage->SetHeader('x-application', 'Sistema SisCO');
+
+        //-------------------------------------
+        // Se suprimen los errores en pantalla
+        //-------------------------------------
+        $mixErroOrig = error_reporting();
+        error_reporting(0);
+        try {
+            QEmailServer::Send($objMessage);
+        } catch (Exception $e) {
+            $strNombProc = 'Envio de Edo de Cuenta al Cliente: '.$this->objMasterCliente->NombClie;
+            $objProcEjec = CrearProceso($strNombProc,true);
+            $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = $this->LogiUsua;
+            $arrParaErro['MensErro'] = $e->getMessage();
+            $arrParaErro['ComeErro'] = "Fallo el envio del Edo de Cuenta";
+            GrabarError($arrParaErro);
+        }
+        //------------------------------------------------
+        // Se levantan nuevamente los errores en pantalla
+        //------------------------------------------------
+        error_reporting($mixErroOrig);
+    }
 
     protected function obtenerSaldoDelCliente() {
         $decSaldExce = $this->objMasterCliente->calcularSaldoExcedente();
@@ -622,46 +723,149 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         );
     }
 
-    protected function dtgFactClie_Create() {
-        $this->dtgFactClie = new FacturasDataGrid($this);
-        $this->dtgFactClie->FontSize = 13;
-        $this->dtgFactClie->ShowFilter = false;
+    protected function dtgFactPend_Create() {
+        $this->dtgFactPend = new FacturasDataGrid($this);
+        $this->dtgFactPend->FontSize = 11;
+        $this->dtgFactPend->ShowFilter = false;
 
-        $this->dtgFactClie->CssClass = 'datagrid';
-        $this->dtgFactClie->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgFactPend->CssClass = 'datagrid';
+        $this->dtgFactPend->AlternateRowStyle->CssClass = 'alternate';
 
-        $this->dtgFactClie->Paginator = new QPaginator($this->dtgFactClie);
-        $this->dtgFactClie->ItemsPerPage = 10; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgFactPend->Paginator = new QPaginator($this->dtgFactPend);
+        $this->dtgFactPend->ItemsPerPage = 10; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-        $this->dtgFactClie->SortColumnIndex = 0;
+        $this->dtgFactPend->SortColumnIndex = 0;
 
-        $this->dtgFactClie->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgFactClie->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgFactPend->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgFactPend->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
-        /*$this->dtgFactClie->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
-        //$this->dtgFactClie->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
+        $this->dtgFactPend->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgFactPend->AddRowAction(new QClickEvent(), new QAjaxAction('dtgFactPendRow_Click'));
 
-        $this->dtgFactClie->MetaAddColumn('Referencia');
-        $this->dtgFactClie->MetaAddColumn('Fecha');
-        $this->dtgFactClie->MetaAddColumn('Total');
-        $this->dtgFactClie->MetaAddColumn('EstatusPago');
+        $this->dtgFactPend->MetaAddColumn('Referencia');
 
-        $this->dtgFactClie->SetDataBinder('dtgFactClie_Binder');
+        $colFechFact = new QDataGridColumn('Fecha','<?= $_FORM->dtgFactPend_FechaRender($_ITEM); ?>');
+        $colFechFact->OrderByClause = QQ::OrderBy(QQN::Facturas()->Fecha);
+        $colFechFact->ReverseOrderByClause = QQ::OrderBy(QQN::Facturas()->Fecha,false);
+        $this->dtgFactPend->AddColumn($colFechFact);
+
+        $this->dtgFactPend->MetaAddColumn('Total');
+        $this->dtgFactPend->MetaAddColumn('EstatusPago');
+
+        $this->dtgFactPend->SetDataBinder('dtgFactPend_Binder');
 
     }
 
-    protected function dtgFactClie_Binder(){
+    public function dtgFactPend_FechaRender(Facturas $objFactPend) {
+        return $objFactPend->Fecha->__toString('DD/MM/YYYY');
+    }
+
+    public function dtgFactPendRow_Click($strFormId, $strControlId, $strParameter) {
+        $intIdxxFact = intval($strParameter);
+        QApplication::Redirect(__SIST__."/facturas_edit.php/$intIdxxFact");
+    }
+
+    protected function dtgFactPend_Binder(){
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+        $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
+        $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
+        $intCantFact   = count($this->arrFactPend);
+        if ($intCantFact > 10) {
+            $this->dtgFactPend->TotalItemCount = count($arrFactPend);
+        }
+        // Bind the datasource to the datagrid
+        $this->dtgFactPend->DataSource = Facturas::QueryArray(
+            QQ::AndCondition($objClauWher),
+            QQ::Clause($this->dtgFactPend->OrderByClause, $this->dtgFactPend->LimitClause)
+        );
+    }
+
+    protected function dtgFactPgda_Create() {
+        $this->dtgFactPgda = new FacturasDataGrid($this);
+        $this->dtgFactPgda->FontSize = 11;
+        $this->dtgFactPgda->ShowFilter = false;
+
+        $this->dtgFactPgda->CssClass = 'datagrid';
+        $this->dtgFactPgda->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgFactPgda->Paginator = new QPaginator($this->dtgFactPgda);
+        $this->dtgFactPgda->ItemsPerPage = 10; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+
+        $this->dtgFactPgda->SortColumnIndex = 0;
+
+        $this->dtgFactPgda->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgFactPgda->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        /*$this->dtgFactPgda->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
+        //$this->dtgFactPgda->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
+
+        $this->dtgFactPgda->MetaAddColumn('Referencia');
+        $this->dtgFactPgda->MetaAddColumn('Fecha');
+        $this->dtgFactPgda->MetaAddColumn('Total');
+        $this->dtgFactPgda->MetaAddColumn('EstatusPago');
+
+        $this->dtgFactPgda->SetDataBinder('dtgFactPgda_Binder');
+
+    }
+
+    protected function dtgFactPgda_Binder(){
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+        $objClauWher[] = QQ::Equal(QQN::Facturas()->EstatusPago,'CONCILIADO');
         $arrFactClie   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
         $intCantFact   = count($arrFactClie);
         if ($intCantFact > 10) {
-            $this->dtgFactClie->TotalItemCount = count($arrFactClie);
+            $this->dtgFactPgda->TotalItemCount = count($arrFactClie);
         }
         // Bind the datasource to the datagrid
-        $this->dtgFactClie->DataSource = Facturas::QueryArray(
+        $this->dtgFactPgda->DataSource = Facturas::QueryArray(
             QQ::AndCondition($objClauWher),
-            QQ::Clause($this->dtgFactClie->OrderByClause, $this->dtgFactClie->LimitClause)
+            QQ::Clause($this->dtgFactPgda->OrderByClause, $this->dtgFactPgda->LimitClause)
+        );
+    }
+
+    protected function dtgNotaCred_Create() {
+        $this->dtgNotaCred = new NotaCreditoCorpDataGrid($this);
+        $this->dtgNotaCred->FontSize = 11;
+        $this->dtgNotaCred->ShowFilter = false;
+
+        $this->dtgNotaCred->CssClass = 'datagrid';
+        $this->dtgNotaCred->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgNotaCred->Paginator = new QPaginator($this->dtgNotaCred);
+        $this->dtgNotaCred->ItemsPerPage = 10; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+
+        $this->dtgNotaCred->SortColumnIndex = 0;
+
+        $this->dtgNotaCred->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgNotaCred->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        /*$this->dtgNotaCred->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
+        //$this->dtgNotaCred->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
+
+        $this->dtgNotaCred->MetaAddColumn('Referencia');
+        $this->dtgNotaCred->MetaAddColumn('Tipo');
+        $this->dtgNotaCred->MetaAddColumn('Factura');
+        $this->dtgNotaCred->MetaAddColumn('Fecha');
+        $this->dtgNotaCred->MetaAddColumn('Monto');
+
+        $this->dtgNotaCred->SetDataBinder('dtgNotaCred_Binder');
+
+    }
+
+    protected function dtgNotaCred_Binder(){
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+        $arrNotaClie   = NotaCreditoCorp::QueryArray(QQ::AndCondition($objClauWher));
+        $intCantNota   = count($arrNotaClie);
+        if ($intCantNota > 10) {
+            $this->dtgNotaCred->TotalItemCount = count($arrNotaClie);
+        }
+        // Bind the datasource to the datagrid
+        $this->dtgNotaCred->DataSource = NotaCreditoCorp::QueryArray(
+            QQ::AndCondition($objClauWher),
+            QQ::Clause($this->dtgNotaCred->OrderByClause, $this->dtgNotaCred->LimitClause)
         );
     }
 
@@ -1715,6 +1919,10 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/calcularSaldo',
                 TextoIcono('bank','Calcular Saldo')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCta',
+                TextoIcono('paper-plane','Enviar Edo Cta')
             );
         }
 

@@ -327,6 +327,65 @@
             return array($monto, $texto);
         }
 
+        public function flete_exp(Conceptos $concepto)
+        {
+            t('Rutina: flete_exp');
+            $monto = 0;
+            $texto = '';
+            $objTariClie = $this->ClienteCorp->Tarifa;
+            $decPesoTari = $this->Kilos;
+            t('El peso usado para calcular la Tarifa sera: '.$decPesoTari);
+            if (is_null($this->TarifaId)) {
+                t('La guia no tenia tarifa, se la acabo de asignar');
+                $this->TarifaId = $objTariClie->Id;
+                $this->Save();
+            }
+            //-------------------------------------------------------------------------
+            // Si el peso de la nde excede el valor final de definicion de la Tarifa
+            //-------------------------------------------------------------------------
+            $peso_excedente = round($decPesoTari - $objTariClie->PesoInicial,0);
+            if ($peso_excedente > 0) {
+                t('Las libras de la guia exceden el limite de la tarifa en: '.$peso_excedente.' lbs');
+                //---------------------------------------------------------------------------
+                // La cantidad excedente de kilos, se multiplica por el valor de incremento
+                //---------------------------------------------------------------------------
+                $monto  = $peso_excedente * $objTariClie->ValorIncremento;
+                $objClauWher   = QQ::Clause();
+                $objClauWher[] = QQ::Equal(QQN::TarifaPeso()->TarifaId,$this->TarifaId);
+                $objClauOrde   = QQ::Clause();
+                $objClauOrde[] = QQ::OrderBy(QQN::TarifaPeso()->PesoFinal,false);
+                $arrTariPeso   = TarifaPeso::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+                $intCantRegi   = count($arrTariPeso);
+                $ultimo        = $arrTariPeso[$intCantRegi-1]->MontoTarifa;
+                t('El ultimo monto de la tarifa por rangos es de: '.$ultimo);
+                //----------------------------------------------------------
+                // Al monto se le suma la tarifa del ultimo rango de kilos
+                //----------------------------------------------------------
+                $monto += $ultimo;
+                t('Se suman los valores y se obtiene: '.$monto);
+                $texto = "Libras excendentes: $peso_excedente * incremento: $objTariClie->ValorIncremento + tarifa del ultimo rango: $ultimo totaliza: $monto";
+            } else {
+                t('El peso esta en el rango de kilos');
+                //---------------------------------------------------
+                // El monto de la tarifa esta definido en la banda
+                //---------------------------------------------------
+                $objClauWher   = QQ::Clause();
+                $objClauWher[] = QQ::Equal(QQN::TarifaPeso()->TarifaId,$this->TarifaId);
+                $objClauWher[] = QQ::LessOrEqual(QQN::TarifaPeso()->PesoInicial,$this->Kilos);
+                $objClauWher[] = QQ::GreaterOrEqual(QQN::TarifaPeso()->PesoFinal,$this->Kilos);
+                $arrTariPeso   = TarifaPeso::QueryArray(QQ::AndCondition($objClauWher));
+                if (count($arrTariPeso) > 0) {
+                    $monto = $arrTariPeso[0]->MontoTarifa;
+                    t('El monto es: '.$monto);
+                    $texto = "El monto de la tarifa esta en el rango de peso de la tarifa y arroja: $monto";
+                } else {
+                    $texto = "No se encontro el rango para la TarifaId: ".$this->TarifaId." y el peso: ".$this->Kilos;
+                    t($texto);
+                }
+            }
+            return array($monto, $texto);
+        }
+
         public function calcularTodoLosConceptos($arrConcCalc) {
             t('');
             t('================================');

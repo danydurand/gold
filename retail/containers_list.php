@@ -82,7 +82,7 @@ class ContainersListForm extends ContainersListFormBase {
 
         $this->dtgContainerses->MetaAddColumn('Piezas');
         $this->dtgContainerses->MetaAddColumn('Kilos');
-        $this->dtgContainerses->MetaAddColumn('PiesCub');
+        //$this->dtgContainerses->MetaAddColumn('PiesCub');
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
 		$colFechMast = new QDataGridColumn('FECHA','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
 		$this->dtgContainerses->AddColumn($colFechMast);

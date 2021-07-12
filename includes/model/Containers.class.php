@@ -27,6 +27,101 @@
 			return sprintf('%s',  $this->Numero);
 		}
 
+        public function GetGuiaPiezasDelContainerPorTipo($objClauses = null, $strTipoGuia) {
+		    t('Cargando Piezas del tipo: '.$strTipoGuia);
+            if ((is_null($this->Id)))
+                return array();
+            try {
+                $arrPiezTipo = [];
+                $arrPiezCont = GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
+                foreach ($arrPiezCont as $objPiezCont) {
+                    $strUltiCkpt = $objPiezCont->ultimoCheckpoint();
+                    if ($objPiezCont->IdPieza == '338482-001') {
+                        t('Ulti Ckpt de la Pieza: '.$strUltiCkpt);
+                    }
+                    if ($strTipoGuia == 'NO') {
+                        if ($strUltiCkpt != 'OK') {
+                            t('Tipo NO y la Pieza no esta entregada');
+                            $arrPiezTipo[] = $objPiezCont;
+                        }
+                    } else {
+                        if ($strUltiCkpt == 'OK') {
+                            $arrPiezTipo[] = $objPiezCont;
+                        }
+                    }
+                }
+                t('El vector de piezas tiene: '.count($arrPiezTipo).' elementos');
+                return $arrPiezTipo;
+                //return GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
+            } catch (QCallerException $objExc) {
+                $objExc->IncrementOffset();
+                throw $objExc;
+            }
+        }
+
+
+        public function GrabarCheckpoint(Checkpoints $objCkptMani, ProcesoError $objProcEjec, $strComeAdic=null) {
+            $arrResuGrab['TodoOkey'] = true;
+            $arrResuGrab['MotiNook'] = '';
+            $arrResuGrab['CkptMani'] = null;
+            try {
+                $strComeAdic = strlen($strComeAdic) > 0 ? ' ('.$strComeAdic.')' : '';
+                $strDescCkpt = $objCkptMani->Descripcion.$strComeAdic;
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumeCont'] = $this->Id;
+                $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+                $arrDatoCkpt['TextObse'] = $strDescCkpt;
+                $arrResuGrab = GrabarCheckpointContenedorNew($arrDatoCkpt);
+                if ($arrResuGrab['TodoOkey']) {
+                    //$this->RedactarEmailCkptMani($objCkptMani,$arrResuGrab['CkptMani']);
+                } else {
+                    throw new Exception($arrResuGrab['MotiNook']);
+                }
+            } catch (Exception $e) {
+                $strComeErro = 'Grabando Ckpt '.$objCkptMani->Codigo.' al Manifiesto';
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = 'Referencia: '.$this->Numero;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = $strComeErro;
+                GrabarError($arrParaErro);
+                $arrResuGrab['TodoOkey'] = false;
+                $arrResuGrab['MotiNook'] = $strComeErro;
+            }
+            return $arrResuGrab;
+        }
+
+        protected function RedactarEmailCkptMani(Checkpoints $objCkptGrab, NotaEntregaCkpt $objCkptMani) {
+            $blnNotiCkpt = false;
+            $strDireMail = '';
+            if (in_array($objCkptGrab->Codigo,['TI','CR'])) {
+                $blnNotiCkpt = true;
+                $strDireMail = Parametros::BuscarParametro('ESTAMANI',$objCkptGrab->Codigo,'Txt1','soporte@lufemansoftwware.com');
+            }
+            if ($blnNotiCkpt) {
+                $strRefeMani = $objCkptMani->Container->Referencia;
+                $objMessage = new QEmailMessage();
+                $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
+                $objMessage->To = $strDireMail;
+                $objMessage->Bcc = 'danydurand@gmail.com';
+                $objMessage->Subject = 'Manif.: ' . $strRefeMani.' | Estatus: '.trim($objCkptGrab->Descripcion);
+
+                // Also setup HTML message (optional)
+                $strBody  = 'Estimado Usuario,<p><br>';
+                $strBody .= 'Se ha registrado un cambio en el Estatus del Manifiesto Ref.: '.$strRefeMani.'<br><br>';
+                $strBody .= 'Descripcion: <b>'.$objCkptMani->Observacion.'</b><br><br>';
+                $strBody .= 'Fecha: <b>'.$objCkptMani->Fecha->__toString("DD/MM/YYYY").'</b><br>';
+                $strBody .= 'Hora: <b>'.$objCkptMani->Hora.'</b><br>';
+                $strBody .= 'Usuario: <b>'.$objCkptMani->Usuario->LogiUsua.'</b><br>';
+                $objMessage->HtmlBody = $strBody;
+
+                // Add random/custom email headers
+                $objMessage->SetHeader('x-application', 'Sistema SisCO');
+
+                // Send the Message (Commented out for obvious reasons)
+                QEmailServer::Send($objMessage);
+            }
+        }
+
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'Containers';
             $arrLogxCamb['intRefeRegi'] = $this->Id;

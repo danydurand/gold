@@ -27,6 +27,7 @@
 			return sprintf('%s',  $this->intId);
 		}
 
+
         public function ActualizarMontos() {
             $arrPagoFact = $this->GetFacturaPagosAsFacturaArray();
             $decTotaUsdx = 0;

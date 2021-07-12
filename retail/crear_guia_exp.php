@@ -1759,6 +1759,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
             $this->objDestPmnx->Email         = substr(strtolower($this->txtEmaiDest->Text),0,191);
             $this->objDestPmnx->Direccion     = substr(limpiarCadena($this->txtDireDest->Text),0,250);
+            $this->objDestPmnx->Estado        = $this->txtEstaDest->Text;
+            $this->objDestPmnx->Ciudad        = $this->txtCiudDest->Text;
+            $this->objDestPmnx->CodigoPostal  = $this->txtPostDest->Text;
             if (!$this->blnEditDest) {
                 $this->objDestPmnx->SucursalId   = $this->objUsuario->SucursalId;
                 $this->objDestPmnx->CreatedBy    = $this->objUsuario->CodiUsua;
@@ -1867,7 +1870,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 t('Se grabo el checkpoint a la pieza');
                 $intContCkpt ++;
             } else {
-                t('Hubo algun error: '.$arrResuGrab['MotiNook']);
+                t('Error grabando PickUp a la pieza: '.$arrResuGrab['MotiNook']);
                 //$this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
             }
 
@@ -2023,6 +2026,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->VendedorId            = $this->objClieNaci->VendedorId;
             $this->objGuia->Contenido             = '';
             $this->objGuia->Kilos                 = 0;
+            $this->objGuia->Estado                = $this->txtEstaDest->Text;
+            $this->objGuia->Ciudad                = $this->txtCiudDest->Text;
+            $this->objGuia->CodigoPostal          = $this->txtPostDest->Text;
 
             if (!$this->blnEditMode) {
                 //------------------------------------------------------------------------
@@ -2065,7 +2071,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function Form_Validate() {
         $this->mensaje();
-        t('1');
+        //t('1');
         $this->txtNumeCedu->Text = DejarNumerosVJGuion($this->txtNumeCedu->Text);
         if (strlen($this->txtNumeCedu->Text) == 0) {
             $strTextMens = 'Cédula/RIF del Remitente <b>Requerida</b>';
@@ -2188,7 +2194,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->danger($strTextMens);
             return false;
         }
-        t('19');
+        //t('19');
         if ($this->txtCantPiez->Text <= 0) {
             $strTextMens = 'Cantidad de Piezas <b>Debe ser Mayor a Cero (0)</b>';
             $this->danger($strTextMens);

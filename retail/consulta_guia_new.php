@@ -973,22 +973,24 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function ImprimirGuiaExportacion()
     {
-        t('Imprimiendo guia nacional...');
+        //t('Imprimiendo guia exportacion...');
         $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
+        $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
             t('voy por aqui');
-            $strNombArch = 'GuiaNac' . $this->objGuia->Numero . '.pdf';
-            $strNombForm = 'guia_nacional.php';
-            $strPosiHoja = 'P';
+            $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
+            $strNombForm = 'guia_exportacion.php';
 
             $_SESSION['GuiaImpr'] = serialize($this->objGuia);
             $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
-            t('llegando por aqui');
 
-            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
             $html2pdf->pdf->SetDisplayMode('fullpage');
+            $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
             ob_start();
-            include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            foreach ($arrPiezGuia as $objPiezGuia) {
+                $_SESSION['PiezGuia'] = serialize($objPiezGuia);
+                include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            }
             $content = ob_get_clean();
 
             $html2pdf->writeHTML($content);
@@ -999,7 +1001,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
         }
-        t('Saliendo de la impresion de la guia nacional');
+        //t('Saliendo de la impresion de la guia exportacion');
     }
 
     protected function ImprimirAcuerdoDeLiberacion()

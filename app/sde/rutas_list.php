@@ -35,6 +35,8 @@ class RutasListForm extends RutasListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->lblTituForm->Text = 'Rutas';
+
 		// Instantiate the Meta DataGrid
 		$this->dtgRutases = new RutasDataGrid($this);
 		$this->dtgRutases->FontSize = 13;

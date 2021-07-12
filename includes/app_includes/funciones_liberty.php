@@ -2194,10 +2194,6 @@ function GrabarCheckpointContenedorNew($arrDatoCkpt) {
     /**
      * @var $objUsuario Usuario
      */
-    //--------------------------------------------------------
-    // Esta rutina controla lo concerniente al ingresos de
-    // informacion de la tabla de checkpoints del contenedor
-    //--------------------------------------------------------
     $arrResuGrab = array();
     $arrResuGrab['TodoOkey'] = true;
     $arrResuGrab['MotiNook'] = '';
@@ -2230,33 +2226,6 @@ function GrabarCheckpointManifiesto($arrDatoCkpt) {
     $arrResuGrab['CkptManu'] = null;
     $objUsuario = unserialize($_SESSION['User']);
 
-    /*
-    $dttFechDhoy = new QDateTime(QDateTime::Now());
-    $dttFechDhoy = $dttFechDhoy->__toString("YYYY-MM-DD");
-    if (isset($_SESSION['ValiRepe'])) {
-        $blnValiRepe = $_SESSION['ValiRepe'];
-        if ($blnValiRepe) {
-            t('Validando checkpoint repetido en el Manifiesto');
-            $intCodiCkpt = $arrDatoCkpt['CodiCkpt'];
-            $intCodiSucu = $objUsuario->SucursalId;
-            $objManiCkpt = NotaEntrega::Load($arrDatoCkpt['NumeCont']);
-            $objUltiCkpt = $objManiCkpt->ultimoCheckpoint();
-            if ($objUltiCkpt instanceof NotaEntregaCkpt) {
-                $intUltiCkpt = $objUltiCkpt->CheckpointId;
-                $intUltiSucu = $objUltiCkpt->SucursalId;
-                $dttUltiFech = $objUltiCkpt->Fecha;
-                if (($intUltiCkpt == $intCodiCkpt) &&
-                    ($intUltiSucu == $intCodiSucu) &&
-                    ($dttUltiFech == $dttFechDhoy)) {
-                    t('Checkpoint de Manifiesto repetido');
-                    $arrResuGrab['MotiNook'] = "Ckpt Repetido";
-                    $arrResuGrab['TodoOkey'] = false;
-                    return $arrResuGrab;
-                }
-            }
-        }
-    }
-    */
 
     try {
         $objContCkpt               = new NotaEntregaCkpt();

@@ -64,28 +64,27 @@ class ConceptosListForm extends ConceptosListFormBase {
 
 		// Create the Other Columns (note that you can use strings for conceptos's properties, or you
 		// can traverse down QQN::conceptos() to display fields that are down the hierarchy)
-		$this->dtgConceptoses->MetaAddColumn('Id');
+		$colIdxxConc = $this->dtgConceptoses->MetaAddColumn('Id');
+		$colIdxxConc->FilterBoxSize = 1;
 		$this->dtgConceptoses->MetaAddColumn('Nombre');
-		$this->dtgConceptoses->MetaAddColumn('Orden');
-		$this->dtgConceptoses->MetaAddColumn('Productos');
-		$this->dtgConceptoses->MetaAddColumn('MostrarComo');
+		$colOrdeConc = $this->dtgConceptoses->MetaAddColumn('Orden');
+		$colOrdeConc->FilterBoxSize = 1;
+		$colProdConc = $this->dtgConceptoses->MetaAddColumn('Productos');
+		$colProdConc->FilterBoxSize = 4;
+		$colMostComo = $this->dtgConceptoses->MetaAddColumn('MostrarComo');
+		$colMostComo->FilterBoxSize = 4;
 		$this->dtgConceptoses->MetaAddColumn('Activo');
 		$this->dtgConceptoses->MetaAddColumn('FechaInicial','Name=F.Inic');
 		$this->dtgConceptoses->MetaAddColumn('FechaFinal','Name=F.Final');
-		$this->dtgConceptoses->MetaAddColumn('Operacion');
-		$this->dtgConceptoses->MetaAddColumn('AplicaComo');
+		$colOperConc = $this->dtgConceptoses->MetaAddColumn('Operacion');
+		$colOperConc->FilterBoxSize = 4;
+		$colApliComo = $this->dtgConceptoses->MetaAddColumn('AplicaComo');
+		$colApliComo->FilterBoxSize = 4;
 		$this->dtgConceptoses->MetaAddColumn('Tipo');
 		$this->dtgConceptoses->MetaAddColumn('ActuaSobre');
 		$this->dtgConceptoses->MetaAddColumn('Valor');
-		//$this->dtgConceptoses->MetaAddColumn('Dbquery');
 		$this->dtgConceptoses->MetaAddColumn('BaseImponible','Name=B.Imp');
 		$this->dtgConceptoses->MetaAddColumn('Metodo');
-		//$this->dtgConceptoses->MetaAddColumn('CreatedAt');
-		//$this->dtgConceptoses->MetaAddColumn('UpdatedAt');
-		//$this->dtgConceptoses->MetaAddColumn('DeletedAt');
-		//$this->dtgConceptoses->MetaAddColumn('CreatedBy');
-		//$this->dtgConceptoses->MetaAddColumn('UpdatedBy');
-		//$this->dtgConceptoses->MetaAddColumn('DeletedBy');
 
         $this->btnExpoExce_Create();
 

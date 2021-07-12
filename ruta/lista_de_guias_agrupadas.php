@@ -1,16 +1,16 @@
 <?php 
 require_once('qcubed.inc.php');
+$strTituPagi = "Piezas Agrupadas";
 
 /* @var $objPiezMani GuiaPiezas */
 
 $intIdxxMani = $_GET['id'];
 $objManiSele = Containers::Load($intIdxxMani);
 $strNumeMani = $objManiSele->Numero;
-$strTituPagi = "Manif. $strNumeMani";
 $strImagOkey = __RUTA_IMAGE__.'/icons-svg/check-white.svg';
 $strImagPend = __RUTA_IMAGE__.'/icons-svg/clock-white.svg';
-$intCantOkey = $objManiSele->CantidadOk;
-$intCantTota = $objManiSele->Piezas;
+$intCantOkey = $objManiSele->ContarPiezasConCheckpoint('OK');
+$intCantTota = $objManiSele->CountGuiaPiezasesAsContainerPieza();
 $intCantPend = $intCantTota - $intCantOkey;
 $decPorcPend = nf0($intCantPend * 100 / $intCantTota);
 $decPorcEntr = nf0($intCantOkey * 100 / $intCantTota);

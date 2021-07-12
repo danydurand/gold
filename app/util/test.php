@@ -3,33 +3,82 @@ require_once('qcubed.inc.php');
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
+//----------------------------
+// Paginacion en Ruta-Mobile
+//----------------------------
 
+//$objManiSele = Containers::Load(10);
+//$intGrupGuia = 0;
+//$objClauAdic = QQ::LimitInfo(5,$intGrupGuia*5);
+//$arrPiezMani = $objManiSele->GetGuiaPiezasAsContainerPiezaArray(null,$objClauAdic);
+//echo "Gupo Nro: $intGrupGuia<br><br>";
+//foreach ($arrPiezMani as $objPiezMani) {
+//    echo $objPiezMani->IdPieza."<br>";
+//}
+//$intGrupGuia = 1;
+//$objClauAdic = QQ::LimitInfo(5,$intGrupGuia*5);
+//$arrPiezMani = $objManiSele->GetGuiaPiezasAsContainerPiezaArray(null,$objClauAdic);
+//echo "Gupo Nro: $intGrupGuia<br><br>";
+//foreach ($arrPiezMani as $objPiezMani) {
+//    echo $objPiezMani->IdPieza."<br>";
+//}
+
+//-------------------
+// Interpretaciones
+//-------------------
+
+//$strNumeGuia = '339438';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
+
+//$strNumeGuia = '';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
+
+//$strNumeGuia = '';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
+
+//$strNumeGuia = '';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
+
+//-----------------------------
 // Ultima Tasa de Cambio USD
+//-----------------------------
 
-$objTasaDola = Tasas::UltimaTasa('USD');
-echo 'Tasa Dolar: '.$objTasaDola->Tasa;
-echo 'Fecha Dolar: '.$objTasaDola->Fecha;
-echo "<br>";
-$objTasaEuro = Tasas::UltimaTasa('EUR');
-echo 'Tasa Euro: '.$objTasaEuro->Tasa;
-echo 'Fecha Euro: '.$objTasaEuro->Fecha;
+//$objTasaDola = Tasas::UltimaTasa('USD');
+//echo 'Tasa Dolar: '.$objTasaDola->Tasa;
+//echo 'Fecha Dolar: '.$objTasaDola->Fecha;
+//echo "<br>";
+//$objTasaEuro = Tasas::UltimaTasa('EUR');
+//echo 'Tasa Euro: '.$objTasaEuro->Tasa;
+//echo 'Fecha Euro: '.$objTasaEuro->Fecha;
 
 // Caso Scanneo Eurolatino
 //$strCopiPiez = 'CIU5000114092-p9';
 //echo transformar($strCopiPiez);
 
 
+//-----------------------------------------------------------------
 // Resumen de pieza entregadas de un manifiesto de Salida a Ruta
+//-----------------------------------------------------------------
 
-//$arrManiRuta = Containers::LoadAll();
-//foreach ($arrManiRuta as $objManiRuta) {
-//    $objManiRuta->ActualizarEstadisticasDeEntrega();
-//    echo "Manifiesto: ".$objManiRuta->Numero."<br>";
-//    echo "Piezas: ".$objManiRuta->Piezas."<br>";
-//    echo "Entregadas: ".$objManiRuta->CantidadOk."<br>";
-//    echo "Estatus: ".$objManiRuta->Estatus."<br><br>";
-//
-//}
+$objClauWher = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
+$arrManiRuta = Containers::QueryArray(QQ::AndCondition($objClauWher));
+foreach ($arrManiRuta as $objManiRuta) {
+    echo "Estatus Antes: ".$objManiRuta->Estatus."<br>";
+    $objManiRuta->ActualizarEstadisticasDeEntrega();
+    echo "Manifiesto: ".$objManiRuta->Numero."<br>";
+    echo "Piezas: ".$objManiRuta->Piezas."<br>";
+    echo "Entregadas: ".$objManiRuta->CantidadOk."<br>";
+    echo "Estatus Despues: ".$objManiRuta->Estatus."<br><br>";
+
+}
 
 
 //$strNumeGuia = '169695.1';

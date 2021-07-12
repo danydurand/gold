@@ -57,12 +57,6 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 								  Información Adicional
                             </a>
 						</li>
-						<!--<li class="tabs-guias" role="presentation">-->
-						<!--	<a href="#seccion3" aria-controls="seccion3" data-toggle="tab" role="tab">-->
-						<!--		<i class="fa fa-bookmark fa-lg"></i>-->
-						<!--		  Estadísticas/Dsctos-->
-                         <!--   </a>-->
-						<!--</li>-->
 						<li class="tabs-guias" role="presentation">
 							<a href="#seccion4" aria-controls="seccion4" data-toggle="tab" role="tab">
 								<i class="fa fa-cogs fa-lg"></i>
@@ -72,7 +66,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 						<li class="tabs-guias" role="presentation">
 							<a href="#seccion5" aria-controls="seccion5" data-toggle="tab" role="tab">
 								<i class="fa fa-book fa-lg"></i>
-								  Facturas (<?= $this->intCantFact ?>)
+								  Edo de Cta
                             </a>
 						</li>
 						<li class="tabs-guias" role="presentation">
@@ -142,25 +136,6 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 								</div>
 							</div>
 						</div>
-						<!--<div class="tab-pane" role="tabpanel" id="seccion3">-->
-						<!--	<div class="media">-->
-						<!--		<div class="media-body">-->
-                         <!--           <div class="row" style="margin-top: 2em;">-->
-                         <!--               <div class="col-md-5">-->
-                         <!--                   --><?php //$this->dtePrimGuia->RenderWithName(); ?>
-                         <!--                   --><?php //$this->dteUltiGuia->RenderWithName(); ?>
-                         <!--                   --><?php //$this->txtTiemEmpr->RenderWithName(); ?>
-                         <!--                   --><?php //$this->txtCantGuia->RenderWithName(); ?>
-                         <!--                   --><?php //$this->txtPesoTota->RenderWithName(); ?>
-                         <!--                   --><?php //$this->txtVentTota->RenderWithName(); ?>
-                         <!--               </div>-->
-                         <!--               <div class="col-md-6">-->
-                         <!--                   --><?php //$this->dtgDctoClie->RenderWithName(); ?>
-                         <!--               </div>-->
-                         <!--           </div>-->
-						<!--		</div>-->
-						<!--	</div>-->
-						<!--</div>-->
 						<div class="tab-pane" role="tabpanel" id="seccion4">
 							<div class="media">
 								<div class="media-body">
@@ -171,13 +146,11 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 										<div class="row" style="margin-top: .5em;">
 											<?php $this->chkGuiaYama->RenderWithName(); ?>
 											<?php $this->txtGuiaXcar->RenderWithName(); ?>
-											<?php //$this->chkDestFrec->RenderWithName(); ?>
 											<?php $this->txtDestXcar->RenderWithName(); ?>
 											<?php $this->txtDestXdia->RenderWithName(); ?>
 											<?php $this->chkPagoPpdx->RenderWithName(); ?>
 											<?php $this->chkPagoCrdx->RenderWithName(); ?>
 											<?php $this->chkPagoCodx->RenderWithName(); ?>
-											<?php //$this->chkGuiaReto->RenderWithName(); ?>
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -204,12 +177,31 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 						</div>
                         <div class="tab-pane" role="tabpanel" id="seccion5">
                             <div class="media">
-                                <div class="media-body"><br>
-                                    <div class="col-md-12">
-                                        <?php if ($this->blnEditMode) { ?>
-                                        <?php $this->dtgFactClie->Render(); ?>
-                                        <?php } ?>
+                                <div class="media-body">
+                                    <?php if ($this->blnEditMode) { ?>
+                                    <div class="row" style="margin-top: .5em">
+                                        <div class="col-md-4">
+                                            <div class="titulo">Facts. Pendientes (click p/info detallada)</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="titulo">Facts. Pagadas (click p/info detallada)</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="titulo">Notas de Crédito (click p/info detallada)</div>
+                                        </div>
                                     </div>
+                                    <div class="row" style="margin-top: .5em">
+                                        <div class="col-md-4">
+                                            <?php $this->dtgFactPend->Render(); ?>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <?php $this->dtgFactPgda->Render(); ?>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <?php $this->dtgNotaCred->Render(); ?>
+                                        </div>
+                                    </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>

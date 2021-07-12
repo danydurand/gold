@@ -27,6 +27,17 @@
 			return sprintf('%s %s',$this->strNombChof,$this->strApelChof);
 		}
 
+        public function ActualizarManifiestosDelChofer(){
+            $objClauOrde   = QQ::OrderBy(QQN::Containers()->Id,false);
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
+            $objClauWher[] = QQ::Equal(QQN::Containers()->ChoferId,$this->CodiChof);
+            $arrManiChof   = Containers::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+            foreach ($arrManiChof as $objManiChof) {
+                $objManiChof->ActualizarEstadisticasDeEntrega();
+            }
+		}
+
         public static function LoginPropuesto($strCadeNomb, $strCadeApel) {
             $strLogiProp = '';
             if (strlen($strCadeNomb) && strlen($strCadeApel)) {
