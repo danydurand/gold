@@ -167,6 +167,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         if ($this->blnEditMode) {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+            $objClauWher[] = QQ::Equal(QQN::Facturas()->EstatusPago,'PENDIENTE');
             $this->intCantFact = Facturas::QueryCount(QQ::AndCondition($objClauWher));
 
             $this->dtgFactPend_Create();
@@ -387,21 +388,17 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
         $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
 
-        $this->RedactarCorreoEdoCta($arrFactPend);
+        $this->RedactarCorreoEdoCta($arrFactPend,true);
         //$this->ImprimirEdoCta($arrFactPend);
         $this->success("El Edo de Cta ha sido enviado al Cliente !!!");
     }
 
     protected function ImprimirEdoCta($arrFactPend) {
-        t('Imprimiendo Edo de Cta...');
-        $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
-            t('voy por aqui');
             $strNombArch = 'EdoCta'.$this->objMasterCliente->NombClie.'.pdf';
-            $strNombForm = 'estado_de_cuenta.php';
 
             $_SESSION['FactPend'] = serialize($arrFactPend);
-            t('llegando por aqui');
 
             $html2pdf->pdf->SetDisplayMode('fullpage');
             ob_start();
@@ -416,34 +413,54 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
         }
-        t('Saliendo de la impresion del edo de cuenta');
     }
 
-    protected function RedactarCorreoEdoCta($arrFactPend) {
+    protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=false) {
         $objMessage = new QEmailMessage();
-        $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
-        $objMessage->To = $this->objMasterCliente->DireMail;
-        $objMessage->Subject = 'Estado de Cuenta ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
+        $objMessage->From = 'GoldCoast - CxC <cobranza@goldcoastus.com>';
+        //$objMessage->To = $this->objMasterCliente->DireMail;
+        if ($this->objUsuario->LogiUsua == 'ddurand') {
+            $objMessage->To = 'danydurand@gmail.com';
+            $objMessage->Bcc = 'danydurand@lufemansoftware.com';
+        } else {
+            $objMessage->To = 'm.tovar@goldcoastus.com';
+            $objMessage->Bcc = 'danydurand@gmail.com';
+        }
+        $objMessage->Subject = 'Estado de Cuenta al ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
 
+        //------------------------------------------------------------------------------------
+        // El programa /rhtml/estado_de_cuenta.php utiliza el vector de Facturas Pendientes
+        // para generar el Estado de Cuenta
+        //------------------------------------------------------------------------------------
         $_SESSION['FactPend'] = serialize($arrFactPend);
         ob_start();
         include dirname(__FILE__) . '/rhtml/estado_de_cuenta.php';
         $strHtmlFact = ob_get_clean();
-
-        // Also setup HTML message (optional)
-        $strBody  = 'Estimado Cliente,<p><br>';
-        $strBody .= 'Anexo le hacemos llegar su Estado de Cuenta actualizado a la fecha, por Servicio de Entregas Nacionales.<br><br>';
-        $strBody .= 'Por favor revisar y enviar soporte de pago<br><br>';
-        $strBody .= '<b>Datos Bancarios:</b>.<br>';
-        $strBody .= 'Banco: <b>BANK OF AMERICA</b><br>';
-        $strBody .= 'Beneficiario o Titular de la Cuenta: <b>GOLD COAST CUSTOM EXPRESS CORP</b><br>';
-        $strBody .= 'Tipo de Cuenta: <b>Business Fundamentals Chk</b><br>';
-        $strBody .= 'Número de Cuenta: <b>898111123004</b><br>';
-        $strBody .= 'SWIFT: <b>026009593</b><br>';
-        $strBody .= 'ABA: <b>063100277</b><br><br>';
-        $objMessage->HtmlBody  = $strBody;
-
         $objMessage->HtmlBody .= $strHtmlFact;
+
+        //--------------------------
+        // Se agrega la coletilla
+        //--------------------------
+        //$strHtmlCole  = '<br><br>';
+        //$strHtmlCole .= 'COLD COAST - Dpto de Cuenta por Cobrar';
+        $strHtmlCole  = '<br><br><br>';
+        $strHtmlCole .= '<small>SISPAQ - SisCO. Desarrollado por Lufeman Software. http://lufemansoftware.com</small>';
+        $objMessage->HtmlBody .= $strHtmlCole;
+
+        //-------------------------------------
+        // Se anexan los PDFs de las Facturas
+        //-------------------------------------
+        if ($blnAgreFact) {
+            foreach ($arrFactPend as $objFactPend) {
+                //----------------------------------------------------------------------------------
+                // La rutina EmitirFactura, genera un PDF por cada Factura y cada archivo generado
+                // se anexa al correo
+                //----------------------------------------------------------------------------------
+                $strOutxFile = $this->EmitirFactura($objFactPend);
+                $objAttachment = new QEmailAttachment('/tmp/'.$strOutxFile, QMimeType::Pdf);
+                $objMessage->AddAttachment($objAttachment);
+            }
+        }
 
         // Add random/custom email headers
         $objMessage->SetHeader('x-application', 'Sistema SisCO');
@@ -463,11 +480,44 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $arrParaErro['MensErro'] = $e->getMessage();
             $arrParaErro['ComeErro'] = "Fallo el envio del Edo de Cuenta";
             GrabarError($arrParaErro);
+            $this->danger($e->getMessage());
         }
         //------------------------------------------------
         // Se levantan nuevamente los errores en pantalla
         //------------------------------------------------
         error_reporting($mixErroOrig);
+    }
+
+    protected function EmitirFactura(Facturas $objFactClie) {
+        $strNombArch = 'FACT_'.$objFactClie->Referencia.'.pdf';
+        $strOutxFile = '/tmp/'.$strNombArch;
+
+        $content = '';
+        //-------------------
+        // Factura como tal
+        //-------------------
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("15", "10", "20", "30"));
+        $html2pdf->pdf->SetDisplayMode('fullpage');
+        $_SESSION['FactIdxx'] = $objFactClie->Id;
+        ob_start();
+        include dirname(__FILE__).'/rhtml/factura.php';
+        $content .= ob_get_clean();
+        //-----------------------------------------
+        // Relación de Manifiestos de la Factura
+        //-----------------------------------------
+        $html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "30"));
+        $html2pdf->pdf->SetDisplayMode('fullpage');
+        $_SESSION['FactMani'] = serialize($objFactClie);
+        ob_start();
+        include dirname(__FILE__).'/rhtml/relacion_de_manifiestos_html.php';
+        $content .= ob_get_clean();
+
+        //------------------------------------------------
+        // El contenido HTML generado, se exporta a PDF
+        //------------------------------------------------
+        $html2pdf->writeHTML($content);
+        $html2pdf->output($strOutxFile, 'F');
+        return $strNombArch;
     }
 
     protected function obtenerSaldoDelCliente() {
@@ -743,21 +793,13 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->dtgFactPend->AddRowAction(new QClickEvent(), new QAjaxAction('dtgFactPendRow_Click'));
 
         $this->dtgFactPend->MetaAddColumn('Referencia');
-
-        $colFechFact = new QDataGridColumn('Fecha','<?= $_FORM->dtgFactPend_FechaRender($_ITEM); ?>');
-        $colFechFact->OrderByClause = QQ::OrderBy(QQN::Facturas()->Fecha);
-        $colFechFact->ReverseOrderByClause = QQ::OrderBy(QQN::Facturas()->Fecha,false);
-        $this->dtgFactPend->AddColumn($colFechFact);
+        $this->dtgFactPend->MetaAddColumn('Fecha');
 
         $this->dtgFactPend->MetaAddColumn('Total');
         $this->dtgFactPend->MetaAddColumn('EstatusPago');
 
         $this->dtgFactPend->SetDataBinder('dtgFactPend_Binder');
 
-    }
-
-    public function dtgFactPend_FechaRender(Facturas $objFactPend) {
-        return $objFactPend->Fecha->__toString('DD/MM/YYYY');
     }
 
     public function dtgFactPendRow_Click($strFormId, $strControlId, $strParameter) {

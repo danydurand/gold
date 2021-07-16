@@ -66,7 +66,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 						<li class="tabs-guias" role="presentation">
 							<a href="#seccion5" aria-controls="seccion5" data-toggle="tab" role="tab">
 								<i class="fa fa-book fa-lg"></i>
-								  Edo de Cta
+								  Edo de Cta (<?= $this->intCantFact ?>)
                             </a>
 						</li>
 						<li class="tabs-guias" role="presentation">

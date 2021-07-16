@@ -1,6 +1,10 @@
 <?php
 require_once('qcubed.inc.php');
 $intFactIdxx = $_GET['intIdxxFact'];
+$strTipoAcci = 'I';  // Imprimir PDF
+if (isset($_SESSION['TipoAcci'])) {
+    $strTipoAcci = $_SESSION['TipoAcci'];
+}
 $objFactClie = Facturas::Load($intFactIdxx);
 
 use Spipu\Html2Pdf\Html2Pdf;
@@ -34,7 +38,11 @@ try {
     // El contenido HTML generado, se exporta a PDF
     //------------------------------------------------
     $html2pdf->writeHTML($content);
-    $html2pdf->output($strNombArch);
+    if ($strTipoAcci == 'I') {
+        $html2pdf->output($strNombArch);
+    } else {
+        $html2pdf->output('/tmp/'.$strNombArch, 'F');
+    }
 } catch (Html2PdfException $e) {
     $html2pdf->clean();
 
