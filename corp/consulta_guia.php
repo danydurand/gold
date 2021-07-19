@@ -422,7 +422,7 @@ class ConsultaGuia extends FormularioBaseKaizen {
 
     protected function lblTipoTari_Create() {
         $this->lblTipoTari = new QLabel($this);
-        $this->lblTipoTari->Text = $this->objGuia->ClienteCorp->Tarifa->Descripcion;
+        $this->lblTipoTari->Text = $this->objGuia->ClienteCorp->TarifaAgente->Nombre;
     }
 
     protected function lblSeguGuia_Create() {

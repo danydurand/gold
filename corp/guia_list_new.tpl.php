@@ -15,7 +15,7 @@ require(__YAMAGUCHI__APP_INCLUDES__ . '/header.inc.php');
             <?php //$this->btnImprLote->Render(); ?>
             <?php //$this->btnExpoExce->Render(); ?>
             <?php $this->btnFiltDhoy->Render(); ?>
-            <?php $this->btnFiltPend->Render(); ?>
+            <?php //$this->btnFiltPend->Render(); ?>
             <?php $this->btnFiltTran->Render(); ?>
             <?php $this->btnFiltEntr->Render(); ?>
             <?php $this->btnFiltToda->Render(); ?>

@@ -151,7 +151,20 @@ function caso_con_guion($strNumeGuia) {
     if ( ($intLong2dpa == 3) && ($blnTienUnap) ) {
         return $strNumeGuia;
     }
+    $blnTodoNume = todos_son_numericos($strIdxxPiez);
+    if ( ($intLong2dpa == 3) && ($blnTodoNume) ) {
+        return $strNumeGuia;
+    }
     return trim($strNumeGuia).'-001';
+}
+
+function todos_son_numericos($strCadeComp) {
+    for ($i = 0; $i < strlen($strCadeComp); $i++) {
+        if (!is_numeric($strCadeComp[$i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function enviarCorreoAlCliente($strTipoCorr, $objCliente) {

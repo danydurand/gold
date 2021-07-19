@@ -27,25 +27,25 @@ $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 // Interpretaciones
 //-------------------
 
-//$strNumeGuia = '339438';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
+$strNumeGuia = '9170122-001';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
 
-//$strNumeGuia = '';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
+$strNumeGuia = '';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
 
-//$strNumeGuia = '';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
+$strNumeGuia = '';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
 
-//$strNumeGuia = '';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
+$strNumeGuia = '';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
 
 //-----------------------------
 // Ultima Tasa de Cambio USD
@@ -68,17 +68,17 @@ $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 // Resumen de pieza entregadas de un manifiesto de Salida a Ruta
 //-----------------------------------------------------------------
 
-$objClauWher = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
-$arrManiRuta = Containers::QueryArray(QQ::AndCondition($objClauWher));
-foreach ($arrManiRuta as $objManiRuta) {
-    echo "Estatus Antes: ".$objManiRuta->Estatus."<br>";
-    $objManiRuta->ActualizarEstadisticasDeEntrega();
-    echo "Manifiesto: ".$objManiRuta->Numero."<br>";
-    echo "Piezas: ".$objManiRuta->Piezas."<br>";
-    echo "Entregadas: ".$objManiRuta->CantidadOk."<br>";
-    echo "Estatus Despues: ".$objManiRuta->Estatus."<br><br>";
-
-}
+//$objClauWher = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
+//$arrManiRuta = Containers::QueryArray(QQ::AndCondition($objClauWher));
+//foreach ($arrManiRuta as $objManiRuta) {
+//    echo "Estatus Antes: ".$objManiRuta->Estatus."<br>";
+//    $objManiRuta->ActualizarEstadisticasDeEntrega();
+//    echo "Manifiesto: ".$objManiRuta->Numero."<br>";
+//    echo "Piezas: ".$objManiRuta->Piezas."<br>";
+//    echo "Entregadas: ".$objManiRuta->CantidadOk."<br>";
+//    echo "Estatus Despues: ".$objManiRuta->Estatus."<br><br>";
+//
+//}
 
 
 //$strNumeGuia = '169695.1';

@@ -13,15 +13,12 @@ require_once(__CONFIGURATION__.'/prepend.inc.php');
 //-----------------------------------------------
 if (!isset($_SESSION['User'])) {
     QApplication::Redirect('/index.php');
-    //QApplication::Redirect(__SUBDIRECTORY__.'/index.php');
 }
 $objUser = unserialize($_SESSION['User']);
 if (!($objUser instanceof Usuario)) {
     QApplication::Redirect('/index.php');
-    //QApplication::Redirect(__SUBDIRECTORY__.'/index.php');
 }
 if (!defined('__SIST__')) {
-    //define ('__SIST__', '/gold/app/'.$_SESSION['Sistema']);
     define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 }
 //---------------------------------------------------------------------------------

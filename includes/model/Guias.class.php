@@ -680,7 +680,7 @@
             $strCadeSqlx  = 'select * ';
             $strCadeSqlx .= '  from v_last_checkpoint_guia'.$strTipoCkpt;
             $strCadeSqlx .= ' where guia_id = '.$this->Id;
-            t('SQL: '.$strCadeSqlx);
+            //t('SQL: '.$strCadeSqlx);
             $objResulSet  = $objDatabase->Query($strCadeSqlx);
             $arrUltiCkpt  = [];
             while ($mixRegistro  = $objResulSet->FetchArray()) {
@@ -689,25 +689,25 @@
                 //--------------------------------------------------------------------
                 $objUltiCkpt = new stdClass();
                 $objUltiCkpt->GuiaId       = $mixRegistro[0];
-                $objUltiCkpt->PiezaId      = $mixRegistro[1];
-                $objUltiCkpt->IdPieza      = $mixRegistro[2];
-                $objUltiCkpt->Descripcion  = $mixRegistro[3];
-                $objUltiCkpt->Ubicacion    = $mixRegistro[4];
-                $objUltiCkpt->CheckpointId = $mixRegistro[5];
-                $objUltiCkpt->CodigoCkpt   = $mixRegistro[6];
-                $objUltiCkpt->SucursalId   = $mixRegistro[7];
-                $objUltiCkpt->Iata         = $mixRegistro[8];
-                $objUltiCkpt->Fecha        = $mixRegistro[9];
-                $objUltiCkpt->Hora         = $mixRegistro[10];
-                $objUltiCkpt->Comentario   = $mixRegistro[11];
-                $objUltiCkpt->RutaId       = $mixRegistro[12];
-                $objUltiCkpt->CodigoRuta   = $mixRegistro[13];
-                $objUltiCkpt->CreatedBy    = $mixRegistro[14];
-                $objUltiCkpt->LogiUsua     = $mixRegistro[15];
+                //$objUltiCkpt->PiezaId      = $mixRegistro[1];
+                $objUltiCkpt->IdPieza      = $mixRegistro[1];
+                $objUltiCkpt->Descripcion  = $mixRegistro[2];
+                $objUltiCkpt->Ubicacion    = $mixRegistro[3];
+                $objUltiCkpt->CheckpointId = $mixRegistro[4];
+                $objUltiCkpt->CodigoCkpt   = $mixRegistro[5];
+                $objUltiCkpt->SucursalId   = $mixRegistro[6];
+                $objUltiCkpt->Iata         = $mixRegistro[7];
+                $objUltiCkpt->Fecha        = $mixRegistro[8];
+                $objUltiCkpt->Hora         = $mixRegistro[9];
+                $objUltiCkpt->Comentario   = $mixRegistro[10];
+                $objUltiCkpt->RutaId       = $mixRegistro[11];
+                $objUltiCkpt->CodigoRuta   = $mixRegistro[12];
+                $objUltiCkpt->CreatedBy    = $mixRegistro[13];
+                $objUltiCkpt->LogiUsua     = isset($mixRegistro[14]) ? $mixRegistro[14] : null;
                 $arrUltiCkpt[]             = $objUltiCkpt;
             }
             $intCantCkpt = count($arrUltiCkpt);
-            t('La cantidad de checkpoint es: '.$intCantCkpt);
+            //t('La cantidad de checkpoint es: '.$intCantCkpt);
             if ($intCantCkpt == 0) {
                 t('No tiene checkpoints, se retorna 00');
                 //--------------------------------------------------------

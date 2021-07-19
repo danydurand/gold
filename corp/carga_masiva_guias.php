@@ -729,7 +729,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $arrLogxCamb['strNombRegi'] = $this->objNotaEntr->Referencia;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
-            QApplication::Redirect(__SIST__.'/manifiestos_list.php');
+            QApplication::Redirect(__SIST__.'/nota_entrega_list.php');
         }
     }
 
@@ -738,8 +738,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function btnCancel_Click() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__SIST__."/manifiestos_list.php");
+        //$objUltiAcce = PilaAcceso::Pop('D');
+        QApplication::Redirect(__SIST__."/nota_entrega_list.php");
     }
 
     protected function btnSave_Click() {

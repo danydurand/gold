@@ -140,33 +140,33 @@ class MatchScanneo extends FormularioBaseKaizen {
         $this->dtgManiPend->AddColumn($colIdxxMani);
 
         $colNumeRefe = new QDataGridColumn($this);
-        $colNumeRefe->Name = QApplication::Translate('Referencia');
+        $colNumeRefe->Name = 'Ref. Manif.';
         $colNumeRefe->Html = '<?= $_ITEM->Referencia ?>';
         $colNumeRefe->Width = 160;
         $this->dtgManiPend->AddColumn($colNumeRefe);
 
         $colClieMani = new QDataGridColumn($this);
-        $colClieMani->Name = QApplication::Translate('Cliente');
+        $colClieMani->Name = 'Cliente';
         $colClieMani->Html = '<?= $_ITEM->ClienteCorp->NombClie ?>';
-        $colClieMani->Width = 160;
+        $colClieMani->Width = 180;
         $this->dtgManiPend->AddColumn($colClieMani);
 
         $colServImpo = new QDataGridColumn($this);
         $colServImpo->Name = QApplication::Translate('S.Impor');
         $colServImpo->Html = '<?= $_ITEM->ServicioImportacion ?>';
-        $colServImpo->Width = 80;
+        $colServImpo->Width = 70;
         $this->dtgManiPend->AddColumn($colServImpo);
 
         $colCantCarg = new QDataGridColumn($this);
-        $colCantCarg->Name = QApplication::Translate('PorRecibir');
+        $colCantCarg->Name = 'xRecibir';
         $colCantCarg->Html = '<?= $_ITEM->Piezas ?>';
-        $colCantCarg->Width = 80;
+        $colCantCarg->Width = 70;
         $this->dtgManiPend->AddColumn($colCantCarg);
 
         $colCantReci = new QDataGridColumn($this);
-        $colCantReci->Name = QApplication::Translate('Recibidas');
+        $colCantReci->Name = 'Recbdas';
         $colCantReci->Html = '<?= $_ITEM->Recibidas ?>';
-        $colCantReci->Width = 80;
+        $colCantReci->Width = 70;
         $this->dtgManiPend->AddColumn($colCantReci);
 
     }

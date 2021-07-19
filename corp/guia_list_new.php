@@ -33,17 +33,25 @@ class GuiaListNew extends FormularioBaseKaizen {
     protected $lstCodiOrig;
     protected $lstCodiDest;
 
+    protected $strTipoFilt = '';
+
+    protected function SetupParametros() {
+        $this->strTipoFilt = QApplication::PathInfo(0);
+    }
+
     protected function Form_Create() {
         parent::Form_Create();
+
+        $this->SetupParametros();
 
         $this->objUsuario  = unserialize($_SESSION['User']);
         $this->objWaitIcon = new QWaitIcon($this);
 
         $this->lblTituForm->Text = 'Lista de Guias';
 
-        if (!isset($_SESSION['FiltGuia'])) {
-            $_SESSION['FiltGuia'] = '';
-        }
+        //if (!isset($_SESSION['FiltGuia'])) {
+        //    $_SESSION['FiltGuia'] = '';
+        //}
 
         $this->btnMostFilt_Create();
         $this->btnFiltDhoy_Create();
@@ -77,7 +85,7 @@ class GuiaListNew extends FormularioBaseKaizen {
 
     protected function btnFiltAvan_Create() {
         $this->btnFiltAvan = new QButtonD($this);
-        $this->btnFiltAvan->Text = TextoIcono('filter','Opciones de Filtro Avanzado');
+        $this->btnFiltAvan->Text = TextoIcono('filter','Filtro Avanzado');
         $this->btnFiltAvan->AddAction(new QClickEvent(), new QServerAction('btnFiltAvan_Click'));
         $this->btnFiltAvan->HtmlEntities = 'false';
         $this->btnFiltAvan->Visible = true;
@@ -179,7 +187,7 @@ class GuiaListNew extends FormularioBaseKaizen {
         $this->btnFiltTran = new QButtonP($this);
         $this->btnFiltTran->Text = TextoIcono('truck','En Tránsito','F','lg');
         $this->btnFiltTran->ActionParameter = 'T';
-        $this->btnFiltTran->AddAction(new QClickEvent(), new QAjaxAction('btnFiltGuia_Click'));
+        $this->btnFiltTran->AddAction(new QClickEvent(), new QServerAction('btnFiltGuia_Click'));
         $this->btnFiltTran->Visible = false;
     }
 
@@ -187,7 +195,7 @@ class GuiaListNew extends FormularioBaseKaizen {
         $this->btnFiltEntr = new QButtonW($this);
         $this->btnFiltEntr->Text = TextoIcono('check','Entregadas','F','lg');
         $this->btnFiltEntr->ActionParameter = 'E';
-        $this->btnFiltEntr->AddAction(new QClickEvent(), new QAjaxAction('btnFiltGuia_Click'));
+        $this->btnFiltEntr->AddAction(new QClickEvent(), new QServerAction('btnFiltGuia_Click'));
         $this->btnFiltEntr->Visible = false;
     }
 
@@ -195,7 +203,7 @@ class GuiaListNew extends FormularioBaseKaizen {
         $this->btnFiltToda = new QButtonI($this);
         $this->btnFiltToda->Text = TextoIcono('align-justify','Todas','F','lg');
         $this->btnFiltToda->ActionParameter = 'A';
-        $this->btnFiltToda->AddAction(new QClickEvent(), new QAjaxAction('btnFiltGuia_Click'));
+        $this->btnFiltToda->AddAction(new QClickEvent(), new QServerAction('btnFiltGuia_Click'));
         $this->btnFiltToda->Visible = false;
     }
 
@@ -229,7 +237,7 @@ class GuiaListNew extends FormularioBaseKaizen {
 
     protected function dtgGuiaClie_Create() {
         $this->dtgGuiaClie = new GuiasDataGrid($this);
-        $this->dtgGuiaClie->FontSize = 12;
+        $this->dtgGuiaClie->FontSize = 11;
         $this->dtgGuiaClie->ShowFilter = false;
         $this->dtgGuiaClie->SortColumnIndex = 1;
         $this->dtgGuiaClie->SortDirection = 1;
@@ -240,45 +248,50 @@ class GuiaListNew extends FormularioBaseKaizen {
         $this->dtgGuiaClie->Paginator = new QPaginator($this->dtgGuiaClie);
         $this->dtgGuiaClie->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
-        //$objClauOrde   = QQ::Clause();
-        //$objClauOrde[] = QQ::OrderBy(QQN::Guias()->Id,false);
-        //$this->dtgGuiaClie->AdditionalClauses = $objClauOrde;
-
         $this->dtgGuiaClie->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
         $this->dtgGuiaClie->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         $this->dtgGuiaClie->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
         $this->dtgGuiaClie->AddRowAction(new QClickEvent(), new QAjaxAction('dtgGuiaRowx_Click'));
 
-        $this->dtgGuiaClie->MetaAddColumn('Tracking','Name=Nro Guia');
+        $colTracGuia = $this->dtgGuiaClie->MetaAddColumn('Tracking','Name=Nro Guia');
+        $colTracGuia->Width = 120;
 
-        $colFechGuia = new QDataGridColumn('F. Guia','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
-        $colFechGuia->OrderByClause = QQ::OrderBy(QQN::Guias()->Fecha, false);
-        $colFechGuia->ReverseOrderByClause = QQ::OrderBy(QQN::Guias()->Fecha);
-        $this->dtgGuiaClie->AddColumn($colFechGuia);
+        $colFechGuia = $this->dtgGuiaClie->MetaAddColumn('Fecha');
+        $colFechGuia->Width = 80;
 
-        $this->dtgGuiaClie->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
+        $colOrigGuia = $this->dtgGuiaClie->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
+        $colOrigGuia->Width = 40;
 
-        $this->dtgGuiaClie->MetaAddColumn(QQN::Guias()->Destino->Iata,'Name=Dest');
+        $colDestGuia = $this->dtgGuiaClie->MetaAddColumn(QQN::Guias()->Destino->Iata,'Name=Dest');
+        $colDestGuia->Width = 40;
 
         $colNombDest = new QDataGridColumn('DESTINATARIO','<?= $_FORM->dtgNombDest_Render($_ITEM) ?>');
+        $colNombDest->Width = 200;
         $this->dtgGuiaClie->AddColumn($colNombDest);
 
-        $this->dtgGuiaClie->MetaAddColumn(QQN::Guias()->Piezas);
+        $colPiezGuia = $this->dtgGuiaClie->MetaAddColumn(QQN::Guias()->Piezas,'Name=Pzas');
+        $colPiezGuia->Width = 40;
 
-        $colStatGuia = new QDataGridColumn('ULT. ESTATUS','<?= $_ITEM->ultimoCheckpoint("CodigoCkpt",true) ?>');
-        $colStatGuia->HorizontalAlign = QHorizontalAlign::Center;
+        $colStatGuia = new QDataGridColumn('ULT.STAT','<?= $_ITEM->ultimoCheckpoint("CodigoCkpt",true) ?>');
+        $colStatGuia->Width = 45;
         $this->dtgGuiaClie->AddColumn($colStatGuia);
 
         $colSucuCkpt = new QDataGridColumn('SUC','<?= $_ITEM->ultimoCheckpoint("Iata",true); ?>');
-        $colSucuCkpt->HorizontalAlign = QHorizontalAlign::Center;
+        $colSucuCkpt->Width = 45;
         $this->dtgGuiaClie->AddColumn($colSucuCkpt);
 
         $colFechGuia = new QDataGridColumn('FECHA','<?= $_ITEM->ultimoCheckpoint("Fecha",true); ?>');
+        $colFechGuia->Width = 80;
         $this->dtgGuiaClie->AddColumn($colFechGuia);
 
         $colHoraCkpt = new QDataGridColumn('HORA','<?= $_ITEM->ultimoCheckpoint("Hora",true); ?>');
+        $colHoraCkpt->Width = 60;
         $this->dtgGuiaClie->AddColumn($colHoraCkpt);
+
+        $colComeCkpt = new QDataGridColumn('COMENTARIO','<?= $_ITEM->ultimoCheckpoint("Comentario",true); ?>');
+        $colComeCkpt->Width = 230;
+        $this->dtgGuiaClie->AddColumn($colComeCkpt);
 
         $this->dtgGuiaClie->MetaAddColumn(QQN::Guias()->NotaEntrega->Referencia,'Name=Manif.');
 
@@ -286,7 +299,7 @@ class GuiaListNew extends FormularioBaseKaizen {
     }
 
     protected function dtgGuiaClie_Bind() {
-        $dttFechLimi   = SumaRestaDiasAFecha(FechaDeHoy(),180,'-');
+        $dttFechLimi   = SumaRestaDiasAFecha(FechaDeHoy(),90,'-');
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$this->objUsuario->Cliente->CodiClie);
         $objClauWher[] = QQ::IsNull(QQN::Guias()->DeletedBy);
@@ -294,8 +307,8 @@ class GuiaListNew extends FormularioBaseKaizen {
 
         $this->lblTituForm->Text = 'Guías';
         $strTituFilt = '';
-        if (isset($_SESSION['FiltGuia'])) {
-            switch ($_SESSION['FiltGuia']) {
+        if (strlen($this->strTipoFilt) > 0) {
+            switch ($this->strTipoFilt) {
                 case 'H':   // De Hoy
                     $objClauWher[] = QQ::Equal(QQN::Guias()->Fecha,date("Y-m-d"));
                     $strTituFilt = ' (DE HOY)';
@@ -366,7 +379,7 @@ class GuiaListNew extends FormularioBaseKaizen {
 
     public function dtgNombDest_Render(Guias $objGuiaList) {
         if ($objGuiaList) {
-            return substr(limpiarCadena($objGuiaList->NombreDestinatario),0,40).'...';
+            return substr(limpiarCadena($objGuiaList->NombreDestinatario),0,35).'...';
         } else {
             return null;
         }
@@ -446,8 +459,10 @@ class GuiaListNew extends FormularioBaseKaizen {
     }
 
     protected function btnFiltGuia_Click($strFormId, $strControlId, $strParameter) {
-        $_SESSION['FiltGuia'] = $strParameter;
-        $this->dtgGuiaClie->Refresh();
+        //$_SESSION['FiltGuia'] = $strParameter;
+        //$this->dtgGuiaClie->Refresh();
+        QApplication::Redirect(__SIST__.'/guia_list_new.php/'.$strParameter);
+        //$this->dtgGuiaClie->Refresh();
     }
 
     protected function mostrarOpcionesDeImpresion($blnMostImpr) {
