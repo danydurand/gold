@@ -73,7 +73,6 @@ class Incidencias extends FormularioBaseKaizen {
     protected function lstListCkpt_Create() {
         $this->lstListCkpt = new QListBox($this);
         $this->lstListCkpt->Name = QApplication::Translate("Checkpoint");
-        //$this->lstListCkpt->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
         $this->lstListCkpt->Width = 250;
         $arrCkptTipo = Checkpoints::LoadArrayByTipo('INCIDENCIA');
         $intCantCkpt = count($arrCkptTipo);
@@ -104,7 +103,7 @@ class Incidencias extends FormularioBaseKaizen {
             $objClauWher[] = QQ::In(QQN::GuiaPiezas()->Id,$this->arrPiezInci);
             $arrPiezInci   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
             foreach ($arrPiezInci as $objPiezMani) {
-                $this->txtNumeSeri->Text = $objPiezMani->IdPieza.chr(13);
+                $this->txtNumeSeri->Text .= $objPiezMani->IdPieza.chr(13);
             }
         }
     }
@@ -183,6 +182,9 @@ class Incidencias extends FormularioBaseKaizen {
         // Se procesan una a una las Guias proporcionadas por el Usuario
         //-----------------------------------------------------------------------
         foreach ($arrGuiaOkey as $strNumeSeri) {
+            if (strlen($strNumeSeri) == 0) {
+                continue;
+            }
             $intContGuia++;
             $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
             if (!$objGuiaPiez) {

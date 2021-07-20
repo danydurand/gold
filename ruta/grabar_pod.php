@@ -5,10 +5,13 @@ require_once(__APP_INCLUDES__ . '/funciones_kaizen.php');
 t('============');
 t('Grabando POD');
 $strTituPagi = "Grabar POD";
+$strTipoGuia = 'PE';
+$intGrupGuia = 1;
 $blnTodoOkey = true;
-
 if (isset($_POST['nomb'])) {
     t('Hay datos en el POST del formulario');
+    $_SESSION['tipo'] = $_POST['tipo'];
+    $_SESSION['grup'] = $_POST['grup'];
     $_SESSION['idxx'] = $_POST['idxx'];
     $_SESSION['midx'] = $_POST['midx'];
     $_SESSION['nomb'] = strtoupper($_POST['nomb']);
@@ -21,16 +24,16 @@ if (isset($_POST['nomb'])) {
 $strMultPodx = '';
 $arrOtraProc = [];
 if (isset($_POST['mult_podx'])) {
-    //t('Multi POD: '.$_POST['mult_podx']);
     $strMultPodx = $_POST['mult_podx'];
     if ($strMultPodx == 'S') {
-        //t('Voy a grabar el POD a multiples piezas');
         $arrOtraProc = unserialize($_SESSION['OtraProc']);
     }
 }
-
+$strMensErro = '';
 if ($blnTodoOkey) {
     t('Todo bien hasta ahora');
+    $strTipoGuia = $_SESSION['tipo'];
+    $intGrupGuia = $_SESSION['grup'];
     $intPiezIdxx = $_SESSION['idxx'];
     $intManiIdxx = $_SESSION['midx'];
     t('Id de la Pieza: '.$intPiezIdxx);
@@ -39,8 +42,6 @@ if ($blnTodoOkey) {
     $strCeduRifx = $_SESSION['cedu'];
     $strFechEntr = $_SESSION['fent'];
     $strHoraEntr = $_SESSION['hora'];
-
-    //t("Fech: ".$strFechEntr);
 
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
     $strResuRegi = '';
@@ -102,12 +103,13 @@ if ($blnTodoOkey) {
         $objManiProc->ActualizarEstadisticasDeEntrega();
     }
     $objDatabase->TransactionCommit();
+    $strLinkReto = 'lista_de_guias.php?id='.$intManiIdxx.'&tg='.$strTipoGuia.'&gg='.$intGrupGuia;
 
     if ($blnTodoOkey) {
         $strResuRegi = '
         <center class="mensaje">
             <span style="color:crimson">¡El Detalle de la Entrega ha sido Registrado!!!<hr> Piezas Procesadas '.$intCantCkpt.'</span>
-            <a href="lista_de_guias.php?id='.$intManiIdxx.'&tg=NO" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+            <a href="'.$strLinkReto.'" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         </center>
         ';
     } else {

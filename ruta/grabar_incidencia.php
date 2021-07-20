@@ -10,9 +10,15 @@ t('Llegando a grabar incidencia');
 $blnTodoOkey = true;
 $intCodiCkpt = '';
 $intPiezIdxx = '';
+$strTipoGuia = 'PE';
+$intGrupGuia = 1;
+$intManiIdxx = null;
 if (isset($_POST['idxx'])) {
     $intPiezIdxx = $_POST['idxx'];
     $intCodiCkpt = $_POST['inci'];
+    $strTipoGuia = $_POST['tipo'];
+    $intGrupGuia = $_POST['grup'];
+    $intManiIdxx = $_POST['midx'];
 } else {
     $blnTodoOkey = false;
 }
@@ -25,6 +31,9 @@ if (isset($_POST['mult_inci'])) {
     }
 }
 t('Voy por aqui.. Pieza: '.$intPiezIdxx.' Ckpt: '.$intCodiCkpt);
+
+$strLinkReto = 'lista_de_guias.php?id='.$intManiIdxx.'&tg='.$strTipoGuia.'&gg='.$intGrupGuia;
+
 if ($blnTodoOkey) {
     t('Id: '.$intPiezIdxx);
     t('Inci: '.$intCodiCkpt);
@@ -82,7 +91,7 @@ if ($blnTodoOkey) {
         $strResuRegi = '
         <center class="mensaje">
             <span style="color:crimson">¡ Incidencia Registrada !<hr> Piezas Procesadas '.$intCantPiez.'</span>
-            <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+            <a href="'.$strLinkReto.'" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         </center>
         ';
     } else {
@@ -90,7 +99,7 @@ if ($blnTodoOkey) {
             <center class="mensaje">
                 <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>'.$arrResuGrab['MotiNook'].' !!!</span>
             </center>
-            <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+            <a href="'.$strLinkReto.'" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
         ';
     }
 } else {
@@ -98,7 +107,7 @@ if ($blnTodoOkey) {
         <center class="mensaje">
             <span style="color:crimson"><p>¡Ha ocurrido un error!<hr>Intente más tarde !!!</span>
         </center>
-        <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
+        <a href="'.$strLinkReto.'" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver </a>
     ';
 }
 //include('layout/header.inc.php');

@@ -31,6 +31,8 @@
 	 * @property string $PrecintoLateral the value for strPrecintoLateral 
 	 * @property integer $Piezas the value for intPiezas 
 	 * @property integer $CantidadOk the value for intCantidadOk 
+	 * @property integer $Devueltas the value for intDevueltas (Not Null)
+	 * @property integer $SinGestionar the value for intSinGestionar (Not Null)
 	 * @property double $Peso the value for fltPeso (Not Null)
 	 * @property double $Kilos the value for fltKilos (Not Null)
 	 * @property double $PiesCub the value for fltPiesCub (Not Null)
@@ -194,6 +196,22 @@
 		 */
 		protected $intCantidadOk;
 		const CantidadOkDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.devueltas
+		 * @var integer intDevueltas
+		 */
+		protected $intDevueltas;
+		const DevueltasDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.sin_gestionar
+		 * @var integer intSinGestionar
+		 */
+		protected $intSinGestionar;
+		const SinGestionarDefault = null;
 
 
 		/**
@@ -435,6 +453,8 @@
 			$this->strPrecintoLateral = Containers::PrecintoLateralDefault;
 			$this->intPiezas = Containers::PiezasDefault;
 			$this->intCantidadOk = Containers::CantidadOkDefault;
+			$this->intDevueltas = Containers::DevueltasDefault;
+			$this->intSinGestionar = Containers::SinGestionarDefault;
 			$this->fltPeso = Containers::PesoDefault;
 			$this->fltKilos = Containers::KilosDefault;
 			$this->fltPiesCub = Containers::PiesCubDefault;
@@ -803,6 +823,8 @@
 			    $objBuilder->AddSelectItem($strTableName, 'precinto_lateral', $strAliasPrefix . 'precinto_lateral');
 			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
 			    $objBuilder->AddSelectItem($strTableName, 'cantidad_ok', $strAliasPrefix . 'cantidad_ok');
+			    $objBuilder->AddSelectItem($strTableName, 'devueltas', $strAliasPrefix . 'devueltas');
+			    $objBuilder->AddSelectItem($strTableName, 'sin_gestionar', $strAliasPrefix . 'sin_gestionar');
 			    $objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
@@ -987,6 +1009,12 @@
 			$strAlias = $strAliasPrefix . 'cantidad_ok';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCantidadOk = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'devueltas';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intDevueltas = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'sin_gestionar';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intSinGestionar = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'peso';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltPeso = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1399,38 +1427,6 @@
 
 		/**
 		 * Load an array of Containers objects,
-		 * by ChoferId Index(es)
-		 * @param integer $intChoferId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Containers[]
-		*/
-		public static function LoadArrayByChoferId($intChoferId, $objOptionalClauses = null) {
-			// Call Containers::QueryArray to perform the LoadArrayByChoferId query
-			try {
-				return Containers::QueryArray(
-					QQ::Equal(QQN::Containers()->ChoferId, $intChoferId),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Containerses
-		 * by ChoferId Index(es)
-		 * @param integer $intChoferId
-		 * @return int
-		*/
-		public static function CountByChoferId($intChoferId) {
-			// Call Containers::QueryCount to perform the CountByChoferId query
-			return Containers::QueryCount(
-				QQ::Equal(QQN::Containers()->ChoferId, $intChoferId)
-			);
-		}
-
-		/**
-		 * Load an array of Containers objects,
 		 * by OperacionId Index(es)
 		 * @param integer $intOperacionId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -1458,6 +1454,110 @@
 			// Call Containers::QueryCount to perform the CountByOperacionId query
 			return Containers::QueryCount(
 				QQ::Equal(QQN::Containers()->OperacionId, $intOperacionId)
+			);
+		}
+
+		/**
+		 * Load an array of Containers objects,
+		 * by ChoferId, Estatus Index(es)
+		 * @param integer $intChoferId
+		 * @param string $strEstatus
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public static function LoadArrayByChoferIdEstatus($intChoferId, $strEstatus, $objOptionalClauses = null) {
+			// Call Containers::QueryArray to perform the LoadArrayByChoferIdEstatus query
+			try {
+				return Containers::QueryArray(
+					QQ::AndCondition(
+					QQ::Equal(QQN::Containers()->ChoferId, $intChoferId),
+					QQ::Equal(QQN::Containers()->Estatus, $strEstatus)					)
+,
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Containerses
+		 * by ChoferId, Estatus Index(es)
+		 * @param integer $intChoferId
+		 * @param string $strEstatus
+		 * @return int
+		*/
+		public static function CountByChoferIdEstatus($intChoferId, $strEstatus) {
+			// Call Containers::QueryCount to perform the CountByChoferIdEstatus query
+			return Containers::QueryCount(
+				QQ::AndCondition(
+				QQ::Equal(QQN::Containers()->ChoferId, $intChoferId),
+				QQ::Equal(QQN::Containers()->Estatus, $strEstatus)				)
+
+			);
+		}
+
+		/**
+		 * Load an array of Containers objects,
+		 * by Estatus Index(es)
+		 * @param string $strEstatus
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public static function LoadArrayByEstatus($strEstatus, $objOptionalClauses = null) {
+			// Call Containers::QueryArray to perform the LoadArrayByEstatus query
+			try {
+				return Containers::QueryArray(
+					QQ::Equal(QQN::Containers()->Estatus, $strEstatus),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Containerses
+		 * by Estatus Index(es)
+		 * @param string $strEstatus
+		 * @return int
+		*/
+		public static function CountByEstatus($strEstatus) {
+			// Call Containers::QueryCount to perform the CountByEstatus query
+			return Containers::QueryCount(
+				QQ::Equal(QQN::Containers()->Estatus, $strEstatus)
+			);
+		}
+
+		/**
+		 * Load an array of Containers objects,
+		 * by ChoferId Index(es)
+		 * @param integer $intChoferId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public static function LoadArrayByChoferId($intChoferId, $objOptionalClauses = null) {
+			// Call Containers::QueryArray to perform the LoadArrayByChoferId query
+			try {
+				return Containers::QueryArray(
+					QQ::Equal(QQN::Containers()->ChoferId, $intChoferId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Containerses
+		 * by ChoferId Index(es)
+		 * @param integer $intChoferId
+		 * @return int
+		*/
+		public static function CountByChoferId($intChoferId) {
+			// Call Containers::QueryCount to perform the CountByChoferId query
+			return Containers::QueryCount(
+				QQ::Equal(QQN::Containers()->ChoferId, $intChoferId)
 			);
 		}
 
@@ -1600,6 +1700,8 @@
 							`precinto_lateral`,
 							`piezas`,
 							`cantidad_ok`,
+							`devueltas`,
+							`sin_gestionar`,
 							`peso`,
 							`kilos`,
 							`pies_cub`,
@@ -1624,6 +1726,8 @@
 							' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
 							' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							' . $objDatabase->SqlVariable($this->intCantidadOk) . ',
+							' . $objDatabase->SqlVariable($this->intDevueltas) . ',
+							' . $objDatabase->SqlVariable($this->intSinGestionar) . ',
 							' . $objDatabase->SqlVariable($this->fltPeso) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
@@ -1707,6 +1811,8 @@
 							`precinto_lateral` = ' . $objDatabase->SqlVariable($this->strPrecintoLateral) . ',
 							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							`cantidad_ok` = ' . $objDatabase->SqlVariable($this->intCantidadOk) . ',
+							`devueltas` = ' . $objDatabase->SqlVariable($this->intDevueltas) . ',
+							`sin_gestionar` = ' . $objDatabase->SqlVariable($this->intSinGestionar) . ',
 							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
@@ -1870,6 +1976,8 @@
 			$this->strPrecintoLateral = $objReloaded->strPrecintoLateral;
 			$this->intPiezas = $objReloaded->intPiezas;
 			$this->intCantidadOk = $objReloaded->intCantidadOk;
+			$this->intDevueltas = $objReloaded->intDevueltas;
+			$this->intSinGestionar = $objReloaded->intSinGestionar;
 			$this->fltPeso = $objReloaded->fltPeso;
 			$this->fltKilos = $objReloaded->fltKilos;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
@@ -2012,6 +2120,20 @@
 					 * @return integer
 					 */
 					return $this->intCantidadOk;
+
+				case 'Devueltas':
+					/**
+					 * Gets the value for intDevueltas (Not Null)
+					 * @return integer
+					 */
+					return $this->intDevueltas;
+
+				case 'SinGestionar':
+					/**
+					 * Gets the value for intSinGestionar (Not Null)
+					 * @return integer
+					 */
+					return $this->intSinGestionar;
 
 				case 'Peso':
 					/**
@@ -2441,6 +2563,32 @@
 					 */
 					try {
 						return ($this->intCantidadOk = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Devueltas':
+					/**
+					 * Sets the value for intDevueltas (Not Null)
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intDevueltas = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'SinGestionar':
+					/**
+					 * Sets the value for intSinGestionar (Not Null)
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intSinGestionar = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3294,6 +3442,8 @@
 			$strToReturn .= '<element name="PrecintoLateral" type="xsd:string"/>';
 			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
 			$strToReturn .= '<element name="CantidadOk" type="xsd:int"/>';
+			$strToReturn .= '<element name="Devueltas" type="xsd:int"/>';
+			$strToReturn .= '<element name="SinGestionar" type="xsd:int"/>';
 			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
@@ -3367,6 +3517,10 @@
 				$objToReturn->intPiezas = $objSoapObject->Piezas;
 			if (property_exists($objSoapObject, 'CantidadOk'))
 				$objToReturn->intCantidadOk = $objSoapObject->CantidadOk;
+			if (property_exists($objSoapObject, 'Devueltas'))
+				$objToReturn->intDevueltas = $objSoapObject->Devueltas;
+			if (property_exists($objSoapObject, 'SinGestionar'))
+				$objToReturn->intSinGestionar = $objSoapObject->SinGestionar;
 			if (property_exists($objSoapObject, 'Peso'))
 				$objToReturn->fltPeso = $objSoapObject->Peso;
 			if (property_exists($objSoapObject, 'Kilos'))
@@ -3455,6 +3609,8 @@
 			$iArray['PrecintoLateral'] = $this->strPrecintoLateral;
 			$iArray['Piezas'] = $this->intPiezas;
 			$iArray['CantidadOk'] = $this->intCantidadOk;
+			$iArray['Devueltas'] = $this->intDevueltas;
+			$iArray['SinGestionar'] = $this->intSinGestionar;
 			$iArray['Peso'] = $this->fltPeso;
 			$iArray['Kilos'] = $this->fltKilos;
 			$iArray['PiesCub'] = $this->fltPiesCub;
@@ -3631,6 +3787,8 @@
      * @property-read QQNode $PrecintoLateral
      * @property-read QQNode $Piezas
      * @property-read QQNode $CantidadOk
+     * @property-read QQNode $Devueltas
+     * @property-read QQNode $SinGestionar
      * @property-read QQNode $Peso
      * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
@@ -3697,6 +3855,10 @@
 					return new QQNode('piezas', 'Piezas', 'Integer', $this);
 				case 'CantidadOk':
 					return new QQNode('cantidad_ok', 'CantidadOk', 'Integer', $this);
+				case 'Devueltas':
+					return new QQNode('devueltas', 'Devueltas', 'Integer', $this);
+				case 'SinGestionar':
+					return new QQNode('sin_gestionar', 'SinGestionar', 'Integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'Float', $this);
 				case 'Kilos':
@@ -3762,6 +3924,8 @@
      * @property-read QQNode $PrecintoLateral
      * @property-read QQNode $Piezas
      * @property-read QQNode $CantidadOk
+     * @property-read QQNode $Devueltas
+     * @property-read QQNode $SinGestionar
      * @property-read QQNode $Peso
      * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
@@ -3828,6 +3992,10 @@
 					return new QQNode('piezas', 'Piezas', 'integer', $this);
 				case 'CantidadOk':
 					return new QQNode('cantidad_ok', 'CantidadOk', 'integer', $this);
+				case 'Devueltas':
+					return new QQNode('devueltas', 'Devueltas', 'integer', $this);
+				case 'SinGestionar':
+					return new QQNode('sin_gestionar', 'SinGestionar', 'integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'double', $this);
 				case 'Kilos':

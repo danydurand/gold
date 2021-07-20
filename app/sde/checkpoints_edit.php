@@ -51,11 +51,13 @@ class CheckpointsEditForm extends CheckpointsEditFormBase {
 		$this->txtDescripcionRastreo = $this->mctCheckpoints->txtDescripcionRastreo_Create();
 		$this->txtDescripcionRastreo->Width = 400;
 		$this->chkTerminal = $this->mctCheckpoints->chkTerminal_Create();
+		$this->chkTerminal->Name = 'Terminal el Ciclo del Envío ?';
         $this->txtVisibilidad = $this->mctCheckpoints->txtVisibilidad_Create();
         $this->lstVisibilidad = $this->lstVisibilidad_Create($this->txtVisibilidad->Text);
         $this->txtTipo = $this->mctCheckpoints->txtTipo_Create();
         $this->lstTipo = $this->lstTipo_Create($this->txtTipo->Text);
         $this->chkNotificar = $this->mctCheckpoints->chkNotificar_Create();
+        $this->chkNotificar->Name = 'Se debe notificar al Cliente por correo ?';
 		$this->txtImagen = $this->mctCheckpoints->txtImagen_Create();
 		$this->txtColor = $this->mctCheckpoints->txtColor_Create();
 		$this->txtObservacion = $this->mctCheckpoints->txtObservacion_Create();

@@ -1,29 +1,31 @@
 <?php
 require_once('qcubed.inc.php');
 
+/* @var $objUsuario Chofer */
+
 $strTituPagi = "Manifiestos";
 $strManiChof = '';
-/* @var $objUsuario Chofer */
-$objUsuario    = unserialize($_SESSION['User']);
-
-$objUsuario->ActualizarManifiestosDelChofer();
-
-$objClauOrde   = QQ::OrderBy(QQN::Containers()->Id,false);
-$objClauWher   = QQ::Clause();
-$objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
-$objClauWher[] = QQ::Equal(QQN::Containers()->ChoferId,$objUsuario->CodiChof);
-$arrManiChof   = Containers::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+$objUsuario  = unserialize($_SESSION['User']);
+$objClauOrde = QQ::OrderBy(QQN::Containers()->Id,false);
+$objClauWher = QQ::Clause();
+$arrManiChof = Containers::LoadArrayByChoferIdEstatus($objUsuario->CodiChof,'ABIERT@',$objClauOrde);
 if ($arrManiChof) {
     $strManiChof = '
     <ul class="ui-nodisc-icon" data-role="listview" data-inset="true" data-split-icon="bullets" data-split-theme="d" data-filter="true" data-filter-placeholder="Buscar...">
     ';
     $strNombImag = __RUTA_IMAGE__.'/manifest2.png';
     foreach ($arrManiChof as $objManiChof) {
+        $objResuMani = $objManiChof->ResumeDeEntrega();
+
         $intCantPiez = $objManiChof->Piezas;
-        $intCantOkey = $objManiChof->CantidadOk;
-        $intCantPend = $intCantPiez - $intCantOkey;
-        $decPorcPend = nf0($intCantPend * 100 / $intCantPiez);
-        $decPorcOkey = nf0($intCantOkey * 100 / $intCantPiez);
+        $intCantOkey = $objResuMani->CantOkey;
+        $intCantPend = $objResuMani->CantPend;
+        $intCantDevu = $objResuMani->CantDevu;
+        $intCantSing = $objResuMani->CantSing;
+        $decPorcOkey = $objResuMani->PorcOkey;
+        $decPorcPend = $objResuMani->PorcPend;
+        $decPorcDevu = $objResuMani->PorcDevu;
+        $decPorcSing = $objResuMani->PorcSing;
 
         $strManiChof .= '
             <li>
@@ -32,6 +34,8 @@ if ($arrManiChof) {
                     <p style="font-size:14px; margin-left: -2em"><b>PRECINTO</b>: '.$objManiChof->Numero.'</p>
                     <p style="font-size:14px; margin-left: -2em"><b>PIEZAS</b>: '.$intCantPiez.'</p>
                     <p style="font-size:14px; margin-left: -2em"><b>ENTREGADAS</b>: <span class="valor etiqueta_amarilla">'.$intCantOkey.'</span></p>
+                    <p style="font-size:14px; margin-left: -2em"><b>DEVUELTAS</b>: <span class="valor etiqueta_amarilla">'.$intCantDevu.'</span></p>
+                    <p style="font-size:14px; margin-left: -2em"><b>SIN GESTIONAR</b>: <span class="valor etiqueta_amarilla">'.$intCantSing.'</span></p>
                     <p style="font-size:14px; margin-left: -2em"><b>EFECTIVIDAD</b>: <span class="valor etiqueta_amarilla">'.$decPorcOkey.'%</span></p>
                 </a>
                 <a href="guias_agrupadas.php?id='.$objManiChof->Id.'">Guías</a>

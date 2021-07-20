@@ -369,8 +369,14 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 case 'calcularSaldo':
                     $this->obtenerSaldoDelCliente();
                     break;
+                case 'mostrarEdoCta':
+                    $this->enviarEdoCta('M');
+                    break;
+                case 'enviarmeEdoCta':
+                    $this->enviarEdoCta('E');
+                    break;
                 case 'enviarEdoCta':
-                    $this->enviarEdoCta();
+                    $this->enviarEdoCta('E','C');
                     break;
                 default:
                     $this->danger("Accion: ".$this->strAcciClie." no especificada");
@@ -382,14 +388,21 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     // Acciones relativas al Cliente
     //----------------------------------
 
-    protected function enviarEdoCta() {
+    protected function enviarEdoCta($strTipoAcci='E', $strDestCorr='U') {
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
         $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
 
-        $this->RedactarCorreoEdoCta($arrFactPend,true);
-        //$this->ImprimirEdoCta($arrFactPend);
+        if (count($arrFactPend) == 0) {
+            $this->danger('No hay Facturas Pendientes.  No se puede enviar el Edo de Cta');
+            return;
+        }
+        if ($strTipoAcci == 'E') {
+            $this->RedactarCorreoEdoCta($arrFactPend,false, $strDestCorr);
+        } else {
+            $this->ImprimirEdoCta($arrFactPend);
+        }
         $this->success("El Edo de Cta ha sido enviado al Cliente !!!");
     }
 
@@ -415,19 +428,18 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         }
     }
 
-    protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=false) {
+    protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=false, $strDestCorr='U') {
         $objMessage = new QEmailMessage();
         $objMessage->From = 'GoldCoast - CxC <cobranza@goldcoastus.com>';
-        //$objMessage->To = $this->objMasterCliente->DireMail;
-        if ($this->objUsuario->LogiUsua == 'ddurand') {
-            $objMessage->To = 'danydurand@gmail.com';
-            $objMessage->Bcc = 'danydurand@lufemansoftware.com';
+        if ($strDestCorr == 'U') {
+            $objMessage->To = $this->objUsuario->MailUsua;
+            $objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
         } else {
-            $objMessage->To = 'm.tovar@goldcoastus.com';
-            $objMessage->Bcc = 'danydurand@gmail.com';
+            $objMessage->To = $this->objMasterCliente->DireMail;
+            $objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
         }
         $objMessage->Subject = 'Estado de Cuenta al ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
-
+        t('El correo sera enviado a: '.$objMessage->To);
         //------------------------------------------------------------------------------------
         // El programa /rhtml/estado_de_cuenta.php utiliza el vector de Facturas Pendientes
         // para generar el Estado de Cuenta
@@ -441,8 +453,6 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         //--------------------------
         // Se agrega la coletilla
         //--------------------------
-        //$strHtmlCole  = '<br><br>';
-        //$strHtmlCole .= 'COLD COAST - Dpto de Cuenta por Cobrar';
         $strHtmlCole  = '<br><br><br>';
         $strHtmlCole .= '<small>SISPAQ - SisCO. Desarrollado por Lufeman Software. http://lufemansoftware.com</small>';
         $objMessage->HtmlBody .= $strHtmlCole;
@@ -1963,8 +1973,16 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 TextoIcono('bank','Calcular Saldo')
             );
             $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCta',
+                TextoIcono('eye','Mostrar Edo Cta')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCta',
+                TextoIcono('paper-plane-o','Enviarme el Edo Cta')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCta',
-                TextoIcono('paper-plane','Enviar Edo Cta')
+                TextoIcono('paper-plane','Enviar Edo Cta al Cliente')
             );
         }
 

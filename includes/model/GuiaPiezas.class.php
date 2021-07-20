@@ -27,6 +27,7 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+
         public function TransferirHistorico($intGuiaIdxx, ProcesoError $objProcEjec) {
 		    //t('Transfiriendo pieza: '.$this->IdPieza);
 		    $strTranInte = '';

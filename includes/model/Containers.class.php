@@ -27,37 +27,74 @@
 			return sprintf('%s',  $this->Numero);
 		}
 
-        public function GetGuiaPiezasDelContainerPorTipo($objClauses = null, $strTipoGuia) {
-		    t('Cargando Piezas del tipo: '.$strTipoGuia);
-            if ((is_null($this->Id)))
+        public function GetGuiaPiezasDelContainerPorTipo($strTipoGuia,$intCantRegi=10,$intOffxSetx=0) {
+            if (is_null($this->Id)) {
                 return array();
+            }
             try {
-                $arrPiezTipo = [];
-                $arrPiezCont = GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
-                foreach ($arrPiezCont as $objPiezCont) {
-                    $strUltiCkpt = $objPiezCont->ultimoCheckpoint();
-                    if ($objPiezCont->IdPieza == '338482-001') {
-                        t('Ulti Ckpt de la Pieza: '.$strUltiCkpt);
-                    }
-                    if ($strTipoGuia == 'NO') {
-                        if ($strUltiCkpt != 'OK') {
-                            t('Tipo NO y la Pieza no esta entregada');
-                            $arrPiezTipo[] = $objPiezCont;
-                        }
-                    } else {
-                        if ($strUltiCkpt == 'OK') {
-                            $arrPiezTipo[] = $objPiezCont;
-                        }
-                    }
+                $strNombVist = 'v_sin_gestionar_del_manifiesto';
+                switch ($strTipoGuia) {
+                    case 'PE':
+                        $strNombVist = 'v_pendientes_del_manifiesto';
+                        break;
+                    case 'OK':
+                        $strNombVist = 'v_entregadas_del_manifiesto';
+                        break;
+                    case 'DV':
+                        $strNombVist = 'v_devueltas_del_manifiesto';
+                        break;
+                    case 'SG':
+                        $strNombVist = 'v_sin_gestionar_del_manifiesto';
+                        break;
                 }
-                t('El vector de piezas tiene: '.count($arrPiezTipo).' elementos');
+                $arrIdxxPiez  = [];
+                $strCadeSqlx  = "select pieza_id ";
+                $strCadeSqlx .= "  from $strNombVist";
+                $strCadeSqlx .= " where id = ".$this->Id;
+                $strCadeSqlx .= " limit $intOffxSetx, $intCantRegi";
+                $objDatabase  = Containers::GetDatabase();
+                $objDbResult  = $objDatabase->Query($strCadeSqlx);
+                while ($mixRegistro = $objDbResult->FetchArray()) {
+                    $arrIdxxPiez[] = $mixRegistro['pieza_id'];
+                }
+                $objClauWher = QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxPiez);
+                $arrPiezTipo = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
                 return $arrPiezTipo;
-                //return GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
             } catch (QCallerException $objExc) {
                 $objExc->IncrementOffset();
                 throw $objExc;
             }
         }
+
+        //public function GetGuiaPiezasDelContainerPorTipo($objClauses = null, $strTipoGuia) {
+		 //   t('Cargando Piezas del tipo: '.$strTipoGuia);
+        //    if (is_null($this->Id)) {
+        //        return array();
+        //    }
+        //    try {
+        //        $arrPiezTipo = [];
+        //        $arrPiezCont = GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
+        //        foreach ($arrPiezCont as $objPiezCont) {
+        //            $strUltiCkpt = $objPiezCont->ultimoCheckpoint();
+        //            if ($strTipoGuia == 'NO') {
+        //                if ($strUltiCkpt != 'OK') {
+        //                    t('Tipo NO y la Pieza no esta entregada');
+        //                    $arrPiezTipo[] = $objPiezCont;
+        //                }
+        //            } else {
+        //                if ($strUltiCkpt == 'OK') {
+        //                    $arrPiezTipo[] = $objPiezCont;
+        //                }
+        //            }
+        //        }
+        //        t('El vector de piezas tiene: '.count($arrPiezTipo).' elementos');
+        //        return $arrPiezTipo;
+        //        //return GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
+        //    } catch (QCallerException $objExc) {
+        //        $objExc->IncrementOffset();
+        //        throw $objExc;
+        //    }
+        //}
 
 
         public function GrabarCheckpoint(Checkpoints $objCkptMani, ProcesoError $objProcEjec, $strComeAdic=null) {
@@ -143,6 +180,7 @@
         }
 
 		public function ContarPiezasEnRuta() {
+		    /* @var $objPiezMani GuiaPiezas */
             $intCantRuta = 0;
             $arrPiezMani = $this->GetGuiaPiezasAsContainerPiezaArray();
             foreach ($arrPiezMani as $objPiezMani) {
@@ -154,20 +192,51 @@
         }
 
         public function ResumeDeEntrega() {
-		    $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
-		    $intCantOkey = $this->ContarPiezasConCheckpoint('OK');
-		    $intCantPend = $intTotaPiez - $intCantOkey;
-		    $decPorcPend = nf0($intCantPend * 100 / $intTotaPiez);
-		    $decPorcOkey = nf0($intCantOkey * 100 / $intTotaPiez);
+		    $intTotaPiez  = $this->Piezas != 0 ? $this->Piezas : 1;
+            $strCadeSqlx  = "select * ";
+            $strCadeSqlx .= "  from v_resumen_del_manifiesto ";
+            $strCadeSqlx .= " where id = ".$this->Id;
+            $objDatabase  = Containers::GetDatabase();
+            $objDbResult  = $objDatabase->Query($strCadeSqlx);
+            $mixRegistro  = $objDbResult->FetchArray();
+
+		    $intCantOkey  = $mixRegistro['entregadas'];
+            $intCantPend  = $mixRegistro['pendientes'];
+            $intCantDevu  = $mixRegistro['devueltas'];
+            $intCantSing  = $mixRegistro['sin_gestionar'];
+            $decPorcOkey  = nf0($intCantOkey * 100 / $intTotaPiez);
+            $decPorcPend  = nf0($intCantPend * 100 / $intTotaPiez);
+            $decPorcDevu  = nf0($intCantDevu * 100 / $intTotaPiez);
+            $decPorcSing  = nf0($intCantSing * 100 / $intTotaPiez);
 
 		    $objResuEntr = new stdClass();
 		    $objResuEntr->TotaPiez = $intTotaPiez;
 		    $objResuEntr->CantOkey = $intCantOkey;
 		    $objResuEntr->CantPend = $intCantPend;
+		    $objResuEntr->CantDevu = $intCantDevu;
+		    $objResuEntr->CantSing = $intCantSing;
 		    $objResuEntr->PorcOkey = $decPorcOkey;
 		    $objResuEntr->PorcPend = $decPorcPend;
+		    $objResuEntr->PorcDevu = $decPorcDevu;
+		    $objResuEntr->PorcSing = $decPorcSing;
 		    return $objResuEntr;
         }
+
+        //public function ResumeDeEntrega() {
+		 //   $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
+		 //   $intCantOkey = $this->ContarPiezasConCheckpoint('OK');
+		 //   $intCantPend = $intTotaPiez - $intCantOkey;
+		 //   $decPorcPend = nf0($intCantPend * 100 / $intTotaPiez);
+		 //   $decPorcOkey = nf0($intCantOkey * 100 / $intTotaPiez);
+        //
+		 //   $objResuEntr = new stdClass();
+		 //   $objResuEntr->TotaPiez = $intTotaPiez;
+		 //   $objResuEntr->CantOkey = $intCantOkey;
+		 //   $objResuEntr->CantPend = $intCantPend;
+		 //   $objResuEntr->PorcOkey = $decPorcOkey;
+		 //   $objResuEntr->PorcPend = $decPorcPend;
+		 //   return $objResuEntr;
+        //}
 
 		public function ContarPiezasConCheckpoint($strCodiCkpt) {
 		    $intCantPiez = 0;

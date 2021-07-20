@@ -111,6 +111,8 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 		// Create the Other Columns (note that you can use strings for master_cliente's properties, or you
 		// can traverse down QQN::master_cliente() to display fields that are down the hierarchy)
 
+		$this->dtgMasterClientes->MetaAddColumn('CodiClie','Name=Id');
+
 		$colCodiClie = $this->dtgMasterClientes->MetaAddColumn('CodigoInterno');
 		$colCodiClie->Name = 'Codigo';
 		$colCodiClie->Width = 85;

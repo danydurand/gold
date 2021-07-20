@@ -15,16 +15,46 @@ if ($intGrupAntr <= 0) {
     $intGrupAntr = 1;
 }
 $intRegiMost = Parametros::BuscarParametro('RUTAMOBI','GUIAPAGI','Val1',10);
-$strTituPagi = "Guias Pag. ".$intGrupGuia;
 $intOffxSetx = ($intGrupGuia-1)*$intRegiMost;
+
 $objManiSele = Containers::Load($intIdxxMani);
+$objResuMani = $objManiSele->ResumeDeEntrega();
+$intCantOkey = $objResuMani->CantOkey;
+$intCantPend = $objResuMani->CantPend;
+$intCantDevu = $objResuMani->CantDevu;
+$intCantSing = $objResuMani->CantSing;
+$decPorcOkey = $objResuMani->PorcOkey;
+$decPorcPend = $objResuMani->PorcPend;
+$decPorcDevu = $objResuMani->PorcDevu;
+$decPorcSing = $objResuMani->PorcSing;
+
 $blnSecuProp = $objManiSele->Transportista->SecuenciaPropia;
-$intCantPiez = count($objManiSele->GetGuiaPiezasDelContainerPorTipo(null,$strTipoGuia));
+$intCantPiez = $intCantPend;
+$strTituGuia = 'PENDIENTES';
+switch ($strTipoGuia) {
+    case 'PE':
+        $intCantPiez = $intCantPend;
+        $strTituGuia = 'PENDIENTES';
+        break;
+    case 'OK':
+        $intCantPiez = $intCantOkey;
+        $strTituGuia = 'ENTREGADAS';
+        break;
+    case 'DV':
+        $intCantPiez = $intCantDevu;
+        $strTituGuia = 'DEVUELTAS';
+        break;
+    case 'SG':
+        $intCantPiez = $intCantSing;
+        $strTituGuia = 'SIN GESTIONAR';
+        break;
+}
+$strTituPagi = "Pag. ".$intGrupGuia.'<br>('.$strTituGuia.')';
 $objClauAdic = QQ::LimitInfo($intRegiMost,$intOffxSetx);
 if ($intCantPiez <= $intRegiMost) {
-    $objClauAdic = null; //QQ::LimitInfo($intRegiMost);
+    $objClauAdic = null;
 }
-$arrPiezMani = $objManiSele->GetGuiaPiezasDelContainerPorTipo($objClauAdic,$strTipoGuia);
+$arrPiezMani = $objManiSele->GetGuiaPiezasDelContainerPorTipo($strTipoGuia,$intRegiMost,$intOffxSetx);
 $blnMostProx = ($intCantPiez > ($intGrupGuia * $intRegiMost));
 $strLinkProx = "lista_de_guias.php?id=$intIdxxMani&tg=$strTipoGuia&gg=".$intProxGrup;
 $strLinkAnte = "lista_de_guias.php?id=$intIdxxMani&tg=$strTipoGuia&gg=".$intGrupAntr;
@@ -66,7 +96,7 @@ if ($arrPiezMani) {
 
         $strListGuia .= '
         <li>
-            <a href="detalle_de_pieza.bkp.php?id='.$objPiezMani->Id.'&mid='.$objManiSele->Id.'" data-rel="dialog">
+            <a href="detalle_de_pieza.php?id='.$objPiezMani->Id.'&mid='.$objManiSele->Id.'&tg='.$strTipoGuia.'&gg='.$intGrupGuia.'" data-rel="dialog">
                 <img src="images/list.png" class="extra">
                 <h6>'.$strPiezMani.'</h6>
                 <p><b>Destinatario:</b> '.$objPiezMani->Guia->NombreDestinatario.'</p>

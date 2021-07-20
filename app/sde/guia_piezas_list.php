@@ -112,11 +112,6 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
         $this->dtgGuiaPiezases->MetaAddColumn('Descripcion');
         $this->dtgGuiaPiezases->MetaAddColumn('Kilos');
 		$this->dtgGuiaPiezases->MetaAddColumn('PiesCub');
-		//$this->dtgGuiaPiezases->MetaAddColumn('MetrosCub');
-		//$this->dtgGuiaPiezases->MetaAddColumn('HojaEntrega');
-		//$this->dtgGuiaPiezases->MetaAddColumn('Ubicacion');
-		//$this->dtgGuiaPiezases->MetaAddColumn('CreatedAt');
-		//$this->dtgGuiaPiezases->MetaAddColumn('UpdatedAt');
 
         $this->btnExpoExce_Create();
         $this->btnCancel_Create();
@@ -128,14 +123,14 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
 
     protected function btnGrabPodx_Create() {
         $this->btnGrabPodx = new QButtonP($this);
-        $this->btnGrabPodx->Text = '<i class="fa fa-check-circle fa-lg"></i> Grabar POD';
+        $this->btnGrabPodx->Text = TextoIcono('check-circle','Grabar POD','F','lg');//'<i class="fa fa-check-circle fa-lg"></i> Grabar POD';
         $this->btnGrabPodx->Visible = false;
         $this->btnGrabPodx->AddAction(new QClickEvent(), new QAjaxAction('btnGrabPodx_Click'));
     }
 
     protected function btnGrabInci_Create() {
         $this->btnGrabInci = new QButtonL($this);
-        $this->btnGrabInci->Text = '<i class="fa fa-cogs fa-lg"></i> Incidencias';
+        $this->btnGrabInci->Text = TextoIcono('cogs','Incidencias','F','lg'); //'<i class="fa fa-cogs fa-lg"></i> Incidencias';
         $this->btnGrabInci->Visible = false;
         $this->btnGrabInci->AddAction(new QClickEvent(), new QAjaxAction('btnGrabInci_Click'));
     }

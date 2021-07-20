@@ -9,8 +9,17 @@ $strNumeMani = '';
 if (isset($_GET['id'])) {
     $intIdxxMani = $_GET['id'];
     $objManiSele = Containers::Load($intIdxxMani);
-    $intCantOkey = $objManiSele->ResumeDeEntrega()->CantOkey;
-    $intCantRuta = $objManiSele->ContarPiezasEnRuta();
+    $objResuMani = $objManiSele->ResumeDeEntrega();
+    $intCantTota = $objManiSele->Piezas;
+    $intCantOkey = $objResuMani->CantOkey;
+    $intCantPend = $objResuMani->CantPend;
+    $intCantDevu = $objResuMani->CantDevu;
+    $intCantSing = $objResuMani->CantSing;
+    $decPorcOkey = $objResuMani->PorcOkey;
+    $decPorcPend = $objResuMani->PorcPend;
+    $decPorcDevu = $objResuMani->PorcDevu;
+    $decPorcSing = $objResuMani->PorcSing;
+
     $strNumeMani = $objManiSele->Numero;
     $strDetaMani = '
     <div data-role="collapsible-set" data-inset="true" data-theme="e">
@@ -40,7 +49,7 @@ if (isset($_GET['id'])) {
                     </tr>
                     <tr>
                         <td class="etiqueta_roja">Sin Gestionar:</td>
-                        <td class="valor etiqueta_roja">'.$intCantRuta.'</td>
+                        <td class="valor etiqueta_roja">'.$intCantSing.'</td>
                     </tr>
                     <tr>
                         <td class="etiqueta">Kilos:</td>
@@ -49,10 +58,6 @@ if (isset($_GET['id'])) {
                     <tr>
                         <td class="etiqueta">Pies Cúbicos:</td>
                         <td class="valor">'.$objManiSele->PiesCub.'</td>
-                    </tr>
-                    <tr>
-                        <td class="etiqueta">Destino:</td>
-                        <td class="valor">'.$objManiSele->Direccion.'</td>
                     </tr>
                 </tbody>
             </table>

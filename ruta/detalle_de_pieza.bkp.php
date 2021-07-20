@@ -9,6 +9,14 @@ $strTituPagi = "Detalle de Pieza";
 $strNumeGuia = '';
 $blnTeniPodx = false;
 $strDetaPiez = '';
+$strTipoGuia = 'PE';
+if (isset($_GET['tg'])) {
+    $strTipoGuia = $_GET['tg'];
+}
+$intGrupGuia = 1;
+if (isset($_GET['gg'])) {
+    $intGrupGuia = $_GET['gg'];
+}
 if (isset($_GET['id'])) {
     $intPiezIdxx = $_GET['id'];
     $intManiIdxx = $_GET['mid'];
@@ -197,6 +205,8 @@ if (isset($_GET['id'])) {
         <div class="ui-nodisc-icon" data-role="collapsible" data-collapsed="true" style="font-size:14px;">
             <h3>Detalles de Entrega</h3>
             <form action="'.$strAcciForm.'" method="post">
+                <input type="hidden" name="tipo" value="'.$strTipoGuia.'">
+                <input type="hidden" name="grup" value="'.$intGrupGuia.'">
                 <input type="hidden" name="idxx" value="'.$objPiezSele->Id.'">
                 <input type="hidden" name="midx" value="'.$objManiSele->Id.'">
                 <div class="ui-field-contain">

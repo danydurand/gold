@@ -115,7 +115,7 @@ class CambiarClave extends FormularioBaseKaizen {
             // Send the Message (Commented out for obvious reasons)
             QEmailServer::Send($objMessage);
         }
-        $this->mensaje($strMensUsua,'m','s','','check');
+        $this->success($strMensUsua);
     }
     
     protected function btnCancel_Click() {
