@@ -95,17 +95,14 @@ class ContainersListForm extends ContainersListFormBase {
         $colNombChof = new QDataGridColumn('Chofer','<?= $_FORM->NombChof_Render($_ITEM); ?>');
         $this->dtgContainerses->AddColumn($colNombChof);
 
-        $this->dtgContainerses->MetaAddColumn('Piezas');
-        $this->dtgContainerses->MetaAddColumn('CantidadOk','Name=OKs');
-
-        /*$colCantEntr = new QDataGridColumn('OKs','<?= $_FORM->CantEntr_Render($_ITEM); ?>');*/
-        //$this->dtgContainerses->AddColumn($colCantEntr);
-
+        $this->dtgContainerses->MetaAddColumn('Piezas','Name=Pzas');
+        $this->dtgContainerses->MetaAddColumn('CantidadOk','Name=OK');
+        $this->dtgContainerses->MetaAddColumn('Devueltas','Name=Dev');
+        $this->dtgContainerses->MetaAddColumn('SinGestionar','Name=Sin-G');
         $this->dtgContainerses->MetaAddColumn('Kilos');
-        $this->dtgContainerses->MetaAddColumn('PiesCub');
+        $this->dtgContainerses->MetaAddColumn('PiesCub','Name=P-Cub');
         $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Operacion);
-		$colFechMast = new QDataGridColumn('FECHA','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
-		$this->dtgContainerses->AddColumn($colFechMast);
+        $this->dtgContainerses->MetaAddColumn('Fecha');
 		$this->dtgContainerses->MetaAddColumn('Hora');
 		$this->dtgContainerses->MetaAddColumn('Estatus');
 

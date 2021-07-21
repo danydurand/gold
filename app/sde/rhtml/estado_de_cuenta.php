@@ -6,6 +6,7 @@ if (!isset($_SESSION['FactPend'])) {
 }
 $arrFactPend = unserialize($_SESSION['FactPend']);
 $decSaldExce = $arrFactPend[0]->ClienteCorp->SaldoExcedente;
+$strNombClie = $arrFactPend[0]->ClienteCorp->NombClie;
 
 /* @var $objFactPend Facturas */
 ?>
@@ -18,7 +19,7 @@ $decSaldExce = $arrFactPend[0]->ClienteCorp->SaldoExcedente;
         <table>
             <tr>
                 <td style="width: 350px">
-                    <img src=<?= __VIRTUAL_DIRECTORY__.__APP_IMAGE_ASSETS__."/LogoGold.png" ?> alt="LogoGold" width="310px" height="100px">
+                    <img src="<?= __VIRTUAL_DIRECTORY__.__APP_IMAGE_ASSETS__."/LogoGold.png" ?>" alt="LogoGold" width="310px" height="100px">
                     <br>
                 </td>
                 <td style="width: 315px; text-align: right">
@@ -28,7 +29,7 @@ $decSaldExce = $arrFactPend[0]->ClienteCorp->SaldoExcedente;
 
         <table style="margin-top: 24px;">
             <tr>
-                <td colspan="2">Estimado Cliente,<br><br></td>
+                <td colspan="2">Sres., <?= $strNombClie ?><br><br></td>
             </tr>
             <tr>
                 <td colspan="2">Anexo le hacemos llegar su Estado de Cuenta actualizado a la fecha, por Servicio de Entregas Nacionales.</td>
@@ -114,7 +115,7 @@ $decSaldExce = $arrFactPend[0]->ClienteCorp->SaldoExcedente;
         <table>
             <tr>
                 <td style="width: 100%">
-                    <img src=<?= __VIRTUAL_DIRECTORY__.__APP_IMAGE_ASSETS__."/banner_mtovar.jpg" ?> alt="Banner" width="615px" height="166px">
+                    <img src="<?= __VIRTUAL_DIRECTORY__.__APP_IMAGE_ASSETS__."/banner_mtovar.jpg" ?>" alt="Banner" width="615px" height="166px">
                 </td>
             </tr>
         </table>

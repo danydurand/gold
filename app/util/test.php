@@ -3,6 +3,18 @@ require_once('qcubed.inc.php');
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
+
+//-------------------------------------------------------
+// Actualizacion de Estadísticas de Entrega por Chofer
+//-------------------------------------------------------
+
+$objChofSele = Chofer::LoadByLogin('scuevas');
+$arrManiChof = Containers::LoadArrayByChoferId($objChofSele->CodiChof);
+foreach ($arrManiChof as $objManiChof) {
+    echo "Procesando: $objManiChof->Numero<br>";
+    $objManiChof->ActualizarEstadisticasDeEntrega();
+}
+
 //----------------------------
 // Paginacion en Ruta-Mobile
 //----------------------------
@@ -27,25 +39,25 @@ $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 // Interpretaciones
 //-------------------
 
-$strNumeGuia = '9170122-001';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
-
-$strNumeGuia = '';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
-
-$strNumeGuia = '';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
-
-$strNumeGuia = '';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
+//$strNumeGuia = '9170122-001';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
+//
+//$strNumeGuia = '';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
+//
+//$strNumeGuia = '';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
+//
+//$strNumeGuia = '';
+//echo 'Guia Original: '.$strNumeGuia."<br>";
+//echo 'Se interpreta así: '.transformar($strNumeGuia);
+//echo "<br><br>";
 
 //-----------------------------
 // Ultima Tasa de Cambio USD

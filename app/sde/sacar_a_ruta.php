@@ -59,6 +59,7 @@ class SacarARuta extends FormularioBaseKaizen {
     protected $calFechDesp;
 
     protected $btnBorrMani;
+    protected $lblResuEntr;
 
 
     protected function SetupValores() {
@@ -121,6 +122,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $this->objContaine->ActualizarEstadisticasDeEntrega();
             $this->lstTipoOper_Change();
         }
+        $this->lblResuEntr_Create();
 
         if (!$this->blnEditMode) {
             $objDescCont = Parametros::LoadByIndiceCodigo('DESCCONT','MANIRUTA');
@@ -131,13 +133,21 @@ class SacarARuta extends FormularioBaseKaizen {
             }
         }
 
-
-
     }
 
     //-----------------------------
     // Aqui se crean los objetos
     //-----------------------------
+
+    protected function lblResuEntr_Create() {
+        $this->lblResuEntr = new QLabel($this);
+        $strResuEntr = 'Piezas Manifestadas';
+        if ($this->blnEditMode) {
+            $strResuEntr .= $this->objContaine->__resumenEntrega();
+        }
+        $this->lblResuEntr->Text = $strResuEntr;
+        $this->lblResuEntr->HtmlEntities = false;
+    }
 
     protected function btnCancel_Create() {
         $this->btnCancel = new QButtonW($this);
@@ -150,6 +160,7 @@ class SacarARuta extends FormularioBaseKaizen {
     protected function btnBorrMani_Create() {
         $this->btnBorrMani = new QButtonD($this);
         $this->btnBorrMani->Text = TextoIcono('trash-o','Borrar','F','lg');
+        $this->btnBorrMani->ToolTip = 'Borrar el Manifiesto';
         $this->btnBorrMani->AddAction(new QClickEvent(), new QConfirmAction('Esta segur@ que desea borrar este Manifiesto?'));
         $this->btnBorrMani->AddAction(new QClickEvent(), new QServerAction('btnBorrMani_Click'));
         if (!$this->blnEditMode) {
@@ -215,7 +226,7 @@ class SacarARuta extends FormularioBaseKaizen {
                 TextoIcono('bank','Nota de Despacho')
             );
         }
-        $strTextBoto = TextoIcono('cog fa-fw','Impr','F','lg');
+        $strTextBoto = TextoIcono('print','Impr','F','lg');
         $this->btnRepoMani->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
         return $arrOpciDrop;
     }
@@ -813,7 +824,7 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected function btnGestChve_Create() {
         $this->btnGestChve = new QButtonP($this);
-        $this->btnGestChve->Text = TextoIcono('truck','Gestion C/V','F','lg');
+        $this->btnGestChve->Text = TextoIcono('truck','Chof/Vehi','F','lg');
         $this->btnGestChve->AddAction(new QClickEvent(), new QServerAction('btnGestChve_Click'));
         $this->btnGestChve->ToolTip = 'Gestionar Choferes y Vehiculos';
     }

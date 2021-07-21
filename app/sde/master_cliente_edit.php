@@ -2,7 +2,7 @@
 // Load the QCubed Development Framework
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__.'/protected.inc.php');
-require_once(__APP_INCLUDES__ . '/FormularioBaseKaizen.class.php');
+require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 
 use Spipu\Html2Pdf\Html2Pdf;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
@@ -398,10 +398,12 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $this->danger('No hay Facturas Pendientes.  No se puede enviar el Edo de Cta');
             return;
         }
-        if ($strTipoAcci == 'E') {
-            $this->RedactarCorreoEdoCta($arrFactPend,false, $strDestCorr);
-        } else {
-            $this->ImprimirEdoCta($arrFactPend);
+        switch ($strTipoAcci) {
+            case 'E':
+                $this->RedactarCorreoEdoCta($arrFactPend,true, $strDestCorr);
+                break;
+            default;
+                $this->ImprimirEdoCta($arrFactPend);
         }
         $this->success("El Edo de Cta ha sido enviado al Cliente !!!");
     }
@@ -428,15 +430,16 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         }
     }
 
+
     protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=false, $strDestCorr='U') {
         $objMessage = new QEmailMessage();
-        $objMessage->From = 'GoldCoast - CxC <cobranza@goldcoastus.com>';
+        $objMessage->From = 'GoldCoast - CxC <cobranza@goldsist.com>';
         if ($strDestCorr == 'U') {
             $objMessage->To = $this->objUsuario->MailUsua;
-            $objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
+            //$objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
         } else {
             $objMessage->To = $this->objMasterCliente->DireMail;
-            $objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
+            //$objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
         }
         $objMessage->Subject = 'Estado de Cuenta al ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
         t('El correo sera enviado a: '.$objMessage->To);

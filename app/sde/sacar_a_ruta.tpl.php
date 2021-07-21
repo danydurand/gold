@@ -88,7 +88,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="title">Piezas Manifestadas</div>
+                                <div class="title"><?php $this->lblResuEntr->Render() ?></div>
                                 <?php $this->dtgPiezMani->Render(); ?>
                             </div>
                         </div>

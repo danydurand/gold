@@ -27,6 +27,10 @@
 			return sprintf('%s',  $this->Numero);
 		}
 
+		public function __resumenEntrega() {
+		    return sprintf('&nbsp;&nbsp;(Entregadas: %s | Devueltas: %s | Sin-Gestionar: %s)',$this->CantidadOk,$this->Devueltas,$this->SinGestionar);
+        }
+
         public function GetGuiaPiezasDelContainerPorTipo($strTipoGuia,$intCantRegi=10,$intOffxSetx=0) {
             if (is_null($this->Id)) {
                 return array();
@@ -199,7 +203,6 @@
         }
 
         public function ResumeDeEntrega() {
-		    //$intTotaPiez  = $this->Piezas != 0 ? $this->Piezas : 1;
             $strCadeSqlx  = "select * ";
             $strCadeSqlx .= "  from v_resumen_del_manifiesto ";
             $strCadeSqlx .= " where id = ".$this->Id;
@@ -229,22 +232,6 @@
 		    $objResuEntr->PorcSing = $decPorcSing;
 		    return $objResuEntr;
         }
-
-        //public function ResumeDeEntrega() {
-		 //   $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
-		 //   $intCantOkey = $this->ContarPiezasConCheckpoint('OK');
-		 //   $intCantPend = $intTotaPiez - $intCantOkey;
-		 //   $decPorcPend = nf0($intCantPend * 100 / $intTotaPiez);
-		 //   $decPorcOkey = nf0($intCantOkey * 100 / $intTotaPiez);
-        //
-		 //   $objResuEntr = new stdClass();
-		 //   $objResuEntr->TotaPiez = $intTotaPiez;
-		 //   $objResuEntr->CantOkey = $intCantOkey;
-		 //   $objResuEntr->CantPend = $intCantPend;
-		 //   $objResuEntr->PorcOkey = $decPorcOkey;
-		 //   $objResuEntr->PorcPend = $decPorcPend;
-		 //   return $objResuEntr;
-        //}
 
 		public function ContarPiezasConCheckpoint($strCodiCkpt) {
 		    $intCantPiez = 0;
