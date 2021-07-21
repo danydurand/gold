@@ -6,6 +6,9 @@ require_once('qcubed.inc.php');
 $strTituPagi = "Manifiestos";
 $strManiChof = '';
 $objUsuario  = unserialize($_SESSION['User']);
+
+$objUsuario->ActualizarManifiestosDelChofer();
+
 $objClauOrde = QQ::OrderBy(QQN::Containers()->Id,false);
 $objClauWher = QQ::Clause();
 $arrManiChof = Containers::LoadArrayByChoferIdEstatus($objUsuario->CodiChof,'ABIERT@',$objClauOrde);

@@ -169,10 +169,17 @@
         }
 
         public function ActualizarEstadisticasDeEntrega() {
-		    $objResuEntr = $this->ResumeDeEntrega();
-		    $this->CantidadOk = $objResuEntr->CantOkey;
-		    if ($this->CantidadOk == $this->Piezas) {
-		        $this->Estatus = 'CERRAD@';
+		    $objResuEntr        = $this->ResumeDeEntrega();
+		    $this->Piezas       = $objResuEntr->TotaPiez;
+		    $this->CantidadOk   = $objResuEntr->CantOkey;
+		    $this->SinGestionar = $objResuEntr->CantSing;
+		    $this->Devueltas    = $objResuEntr->CantDevu;
+		    if ($this->CantidadOk > 0) {
+                if ( ($this->CantidadOk + $this->Devueltas) == $this->Piezas) {
+                    $this->Estatus = 'CERRAD@';
+                } else {
+                    $this->Estatus = 'ABIERT@';
+                }
             } else {
                 $this->Estatus = 'ABIERT@';
             }
@@ -192,7 +199,7 @@
         }
 
         public function ResumeDeEntrega() {
-		    $intTotaPiez  = $this->Piezas != 0 ? $this->Piezas : 1;
+		    //$intTotaPiez  = $this->Piezas != 0 ? $this->Piezas : 1;
             $strCadeSqlx  = "select * ";
             $strCadeSqlx .= "  from v_resumen_del_manifiesto ";
             $strCadeSqlx .= " where id = ".$this->Id;
@@ -200,6 +207,7 @@
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $mixRegistro  = $objDbResult->FetchArray();
 
+		    $intTotaPiez  = $mixRegistro['cant_piezas'];
 		    $intCantOkey  = $mixRegistro['entregadas'];
             $intCantPend  = $mixRegistro['pendientes'];
             $intCantDevu  = $mixRegistro['devueltas'];
