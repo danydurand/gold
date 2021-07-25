@@ -18,7 +18,7 @@
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property integer $ClienteCorpId the value for intClienteCorpId (Not Null)
 	 * @property integer $FormaPagoId the value for intFormaPagoId (Not Null)
-	 * @property string $Referencia the value for strReferencia (Not Null)
+	 * @property string $Referencia the value for strReferencia 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
 	 * @property double $Monto the value for fltMonto (Not Null)
 	 * @property string $Estatus the value for strEstatus (Not Null)
@@ -946,24 +946,6 @@
 		}
 
 		/**
-		 * Load a single PagosCorp object,
-		 * by ClienteCorpId, Referencia Index(es)
-		 * @param integer $intClienteCorpId
-		 * @param string $strReferencia
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return PagosCorp
-		*/
-		public static function LoadByClienteCorpIdReferencia($intClienteCorpId, $strReferencia, $objOptionalClauses = null) {
-			return PagosCorp::QuerySingle(
-				QQ::AndCondition(
-					QQ::Equal(QQN::PagosCorp()->ClienteCorpId, $intClienteCorpId),
-					QQ::Equal(QQN::PagosCorp()->Referencia, $strReferencia)
-				),
-				$objOptionalClauses
-			);
-		}
-
-		/**
 		 * Load an array of PagosCorp objects,
 		 * by FormaPagoId Index(es)
 		 * @param integer $intFormaPagoId
@@ -1376,7 +1358,7 @@
 
 				case 'Referencia':
 					/**
-					 * Gets the value for strReferencia (Not Null)
+					 * Gets the value for strReferencia 
 					 * @return string
 					 */
 					return $this->strReferencia;
@@ -1578,7 +1560,7 @@
 
 				case 'Referencia':
 					/**
-					 * Sets the value for strReferencia (Not Null)
+					 * Sets the value for strReferencia 
 					 * @param string $mixValue
 					 * @return string
 					 */

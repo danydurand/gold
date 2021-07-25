@@ -55,29 +55,32 @@
             </div>
         </div>
         <div class="row" style="margin-top: 1em;">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <?php $this->lblId->RenderWithName(); ?>
-                <?php //$this->lstClienteRetail->RenderWithName(); ?>
                 <?php $this->lstClienteCorp->RenderWithName(); ?>
                 <?php $this->txtCedulaRif->RenderWithName(); ?>
                 <?php $this->txtRazonSocial->RenderWithName(); ?>
                 <?php $this->txtDireccionFiscal->RenderWithName(); ?>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <?php $this->txtTelefono->RenderWithName(); ?>
                 <?php $this->lstSucursal->RenderWithName(); ?>
                 <?php $this->txtEstatus->RenderWithName(); ?>
                 <?php $this->txtReferencia->RenderWithName(); ?>
-				<?php $this->txtTotal->RenderWithName(); ?>
+	        </div>
+            <div class="col-md-4">
+                <?php $this->txtTotal->RenderWithName(); ?>
+                <?php //$this->txtEstatusPago->RenderWithName(); ?>
+                <?php $this->lstEstaPago->RenderWithName(); ?>
 				<?php //$this->txtMontoDscto->RenderWithName(); ?>
-				<?php //$this->txtMontoCobrado->RenderWithName(); ?>
+				<?php $this->txtMontoCobrado->RenderWithName(); ?>
+				<?php $this->txtMontoPendiente->RenderWithName(); ?>
 				<?php //$this->txtNumero->RenderWithName(); ?>
 				<?php //$this->txtMaquinaFiscal->RenderWithName(); ?>
 				<?php //$this->txtFechaImpresion->RenderWithName(); ?>
 				<?php //$this->txtHoraImpresion->RenderWithName(); ?>
 				<?php //$this->chkTieneRetencion->RenderWithName(); ?>
 				<?php //$this->txtNotaCreditoId->RenderWithName(); ?>
-				<?php $this->txtEstatusPago->RenderWithName(); ?>
 	        </div>
         </div>
         <?php if ($this->mctFacturas->Facturas->CountNotaEntregasAsFactura() > 0) { ?>
@@ -88,11 +91,29 @@
                 <div class="col-md-6">
                     <div class="titulo">Pagos (click p/info detallada)</div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-6">
                     <?php $this->dtgNotaFact->Render(); ?>
                 </div>
                 <div class="col-md-6">
                     <?php $this->dtgPagoFact->Render(); ?>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if ($this->mctFacturas->Facturas->CountNotaCreditoCorpsAsFactura() > 0) { ?>
+            <div class="row" style="margin-top: 1em">
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-6">
+                    <div class="titulo">Notas de Crédito (click p/info detallada)</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-6">
+                    <?php $this->dtgNotaCred->Render(); ?>
                 </div>
             </div>
         <?php } ?>

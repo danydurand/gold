@@ -97,7 +97,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         $this->btnConcPago_Create();
         $this->btnIncoPago_Create();
         $this->btnPagoPend_Create();
-        $this->btnNuevRegi->Visible = false;
+        //$this->btnNuevRegi->Visible = false;
 
         $this->info('Utlice Doble-Click para acceder al detalle del Pago');
     }
@@ -133,6 +133,10 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         } else {
             return null;
         }
+    }
+
+    protected function btnNuevRegi_Click() {
+        QApplication::Redirect(__SIST__.'/registrar_pago.php');
     }
 
 

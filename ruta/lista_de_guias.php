@@ -14,7 +14,7 @@ $intGrupAntr = $intGrupGuia - 1;
 if ($intGrupAntr <= 0) {
     $intGrupAntr = 1;
 }
-$intRegiMost = Parametros::BuscarParametro('RUTAMOBI','GUIAPAGI','Val1',10);
+$intRegiMost = Parametros::BuscarParametro('RUTAMOBI','GUIAPAGI','Val1',20);
 $intOffxSetx = ($intGrupGuia-1)*$intRegiMost;
 
 $objManiSele = Containers::Load($intIdxxMani);

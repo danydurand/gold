@@ -28,7 +28,7 @@ class MasterCliente extends MasterClienteGen {
     }
 
     public function __saldoExcedente() {
-        return nf($this->SaldoExcedente);
+        return str_replace(',','.',nf($this->SaldoExcedente));
     }
 
     public function __toStringConCodigoInterno() {
@@ -48,7 +48,7 @@ class MasterCliente extends MasterClienteGen {
         foreach ($arrTodoNota as $objNotaClie) {
             $decCredTota += $objNotaClie->Monto;
         }
-        $decDeudTota = $decCredTota + $decDeudTota;
+        $decDeudTota = $decCredTota - $decDeudTota;
         //------------------------------------
         // Se actualiza el saldo del Cliente
         //------------------------------------

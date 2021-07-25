@@ -24,11 +24,13 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('%s',  $this->intId);
+			return sprintf('%s',  $this->Referencia);
 		}
 
 
         public function ActualizarMontos() {
+		    t('========================================');
+		    t('Rutina: ActualizarMontos (en la Factura)');
             $arrPagoFact = $this->GetFacturaPagosAsFacturaArray();
             $decTotaUsdx = 0;
             $decTotaBoli = 0;
@@ -47,6 +49,10 @@
                 $decMontPend = 0;
             }
             $this->MontoPendiente = $decMontPend;
+            if ($this->MontoPendiente == $this->Total) {
+                t('MontoPendiente y Total son iguales, el Estatus del Pago cambia a Pendiente');
+                $this->EstatusPago = 'PENDIENTE';
+            }
             $this->Save();
 		}
 
@@ -169,11 +175,8 @@
                 $objUltiFact   = $arrUltiFact[0];
                 $intRefeFact   = (int)explode('-',$objUltiFact->Referencia)[0];
             }
-		    //$objClauWher   = QQ::Clause();
-		    //$objClauWher[] = QQ::IsNotNull(QQN::Facturas()->ClienteCorpId);
-		    //$intCantFact   = Facturas::QueryCount(QQ::AndCondition($objClauWher));
-		    $strYearDhoy   = date('Y');
-		    $strNumeRefe   = str_pad($intRefeFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
+		    $strYearDhoy = date('Y');
+		    $strNumeRefe = str_pad($intRefeFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
 		    return $strNumeRefe;
         }
 

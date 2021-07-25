@@ -71,6 +71,22 @@ abstract class FormularioBaseKaizen extends QForm {
         $this->btnCancel->CausesValidation = false;
     }
 
+    protected function ninfo($strTextMens) {
+        $this->mensaje($strTextMens,'n','i',null,__iINFO__);
+    }
+
+    protected function ndanger($strTextMens) {
+        $this->mensaje($strTextMens,'n','d',null,__iHAND__);
+    }
+
+    protected function nwarning($strTextMens) {
+        $this->mensaje($strTextMens,'n','w',null,__iEXCL__);
+    }
+
+    protected function nsuccess($strTextMens) {
+        $this->mensaje($strTextMens,'n','s',null,__iCHEC__);
+    }
+
     protected function info($strTextMens) {
         $this->mensaje($strTextMens,'m','i',null,__iINFO__);
     }

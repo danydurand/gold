@@ -82,27 +82,29 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
         $colNombClie->FilterType = QFilterType::TextFilter;
 
 		$this->dtgNotaEntregas->MetaAddColumn('Referencia','Name=Ref.');
-        $colFechMani = new QDataGridColumn('Fecha','<?= $_FORM->FechMani($_ITEM) ?>');
-        $this->dtgNotaEntregas->AddColumn($colFechMani);
-        $this->dtgNotaEntregas->MetaAddColumn('Facturable');
+        $this->dtgNotaEntregas->MetaAddColumn('Fecha');
+        $this->dtgNotaEntregas->MetaAddColumn('Facturable','Name=FCTBLE');
         $this->dtgNotaEntregas->MetaAddColumn('Estatus');
         $this->dtgNotaEntregas->MetaAddColumn('ServicioImportacion','Name=S.Impor');
-        $this->dtgNotaEntregas->MetaAddColumn('Cargadas');
-        //$this->dtgNotaEntregas->MetaAddColumn('PorProcesar','Name=xProc');
-        //$this->dtgNotaEntregas->MetaAddColumn('PorCorregir','Name=xCorr');
-        $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Proc');
+        //$this->dtgNotaEntregas->MetaAddColumn('Cargadas');
+        $this->dtgNotaEntregas->MetaAddColumn('Procesadas','Name=Pzas');
         $this->dtgNotaEntregas->MetaAddColumn('Libras','Name=Lbs');
-        $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=Pies3');
-        $this->dtgNotaEntregas->MetaAddColumn('Volumen','Name=Vol.');
+        $this->dtgNotaEntregas->MetaAddColumn('PiesCub','Name=P-CUB');
         $this->dtgNotaEntregas->MetaAddColumn('Total');
-        $this->dtgNotaEntregas->MetaAddColumn('FacturaId','Name=Fact');
+        //$this->dtgNotaEntregas->MetaAddColumn('FacturaId','Name=Fact');
+        $colFactAsoc = new QDataGridColumn('FACT','<?= $_FORM->Factura_Render($_ITEM) ?>');
+        $this->dtgNotaEntregas->AddColumn($colFactAsoc);
 
         $this->btnExpoExce_Create();
 
     }
 
-    public function FechMani(NotaEntrega $objManiClie) {
-        return $objManiClie->Fecha->__toString("DD/MM/YYYY");
+    public function Factura_Render(NotaEntrega $objNotaEntr) {
+	    if (!is_null($objNotaEntr->FacturaId)) {
+            return $objNotaEntr->Factura->Referencia;
+        } else {
+            return null;
+        }
     }
 
     public function dtgNotaEntregasRow_Click($strFormId, $strControlId, $strParameter) {

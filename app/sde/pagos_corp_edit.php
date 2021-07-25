@@ -46,6 +46,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		$this->lstClienteCorp = $this->mctPagosCorp->lstClienteCorp_Create();
 		$this->lstClienteCorp->Name = $this->enlaceCliente();
 		$this->lstFormaPago = $this->mctPagosCorp->lstFormaPago_Create();
+		$this->lstFormaPago->AddAction(new QChangeEvent(), new QAjaxAction('lstFormaPago_Change'));
 		$this->txtReferencia = $this->mctPagosCorp->txtReferencia_Create();
 		$this->calFecha = $this->mctPagosCorp->calFecha_Create();
 		$this->txtMonto = $this->mctPagosCorp->txtMonto_Create();
@@ -64,7 +65,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 
         $this->dtgFactClie_Create();
 
-        $this->btnDelete->Visible = false;
+        //$this->btnDelete->Visible = false;
         $this->btnNuevRegi->Visible = false;
         $this->lstClienteCorp = disableControl($this->lstClienteCorp);
         $this->lstFormaPago   = disableControl($this->lstFormaPago);
@@ -88,7 +89,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 
     protected function btnCancel_Create() {
         $this->btnCancel = new QButton($this);
-        $this->btnCancel->Text = '<i class="fa fa-mail-reply fa-lg"></i> Cancelar';
+        $this->btnCancel->Text = '<i class="fa fa-mail-reply fa-lg"></i> Volver';
         $this->btnCancel->CssClass = 'btn btn-warning btn-sm';
         $this->btnCancel->HtmlEntities = false;
         $this->btnCancel->AddAction(new QClickEvent(), new QAjaxAction('btnCancel_Click'));
@@ -195,6 +196,20 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
     //-----------------------------------
 	// Acciones relativas a los objetos 
 	//-----------------------------------
+
+    protected function lstFormaPago_Change() {
+        $intFormPago = $this->lstFormaPago->SelectedValue;
+        if (!is_null($intFormPago)) {
+            $objFormPago = FormaPago::Load($intFormPago);
+            if ($objFormPago->RequiereDocumento) {
+                $this->txtReferencia = enableControl($this->txtReferencia);
+                $this->txtReferencia->Required = true;
+            } else {
+                $this->txtReferencia = disableControl($this->txtReferencia);
+                $this->txtReferencia->Required = false;
+            }
+        }
+    }
 
     protected function mostrarSaldoCliente(MasterCliente $objCliePago) {
         $decSaldClie = $objCliePago->__saldoExcedente();
@@ -309,14 +324,31 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
-            // Delegate "Delete" processing to the ArancelMetaControl
-            //$this->mctPagosCorp->DeletePagosCorp();
-            $arrLogxCamb['strNombTabl'] = 'PagosCorp';
-            $arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctPagosCorp->PagosCorp->Referencia;
-            $arrLogxCamb['strDescCamb'] = "Borrado";
-            LogDeCambios($arrLogxCamb);
+            //--------------------------------------------
+            // Se obtiene las Facturas asociadas al Pago
+            //--------------------------------------------
+            $arrFactAsoc = $this->mctPagosCorp->PagosCorp->GetFacturasAsFacturaPagoCorpArray();
+            //---------------------
+            // Se elimina el Pago
+            //---------------------
+            $this->mctPagosCorp->DeletePagosCorp();
+            $this->mctPagosCorp->PagosCorp->logDeCambios("Borrado");
+            //---------------------------------------------------------------------
+            // Se actualiza el monto cobrado de la facturas asociadas
+            //---------------------------------------------------------------------
+            foreach ($arrFactAsoc as $objFactAsoc) {
+                t('Actualizando factura: '.$objFactAsoc->Referencia);
+                $objFactAsoc->ActualizarMontos();
+            }
+            //-----------------------------------------
+            // Se actaliza ahora el saldo del Cliente
+            //-----------------------------------------
+            t('Voy a actalizar el saldo excedente del Cliente');
+            $objClieFact = MasterCliente::Load($this->lstClienteCorp->SelectedValue);
+            $objClieFact->calcularSaldoExcedente();
+
             $this->RedirectToListPage();
+
         }
     }
 }

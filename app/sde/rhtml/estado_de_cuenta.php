@@ -5,7 +5,7 @@ if (!isset($_SESSION['FactPend'])) {
     return;
 }
 $arrFactPend = unserialize($_SESSION['FactPend']);
-$decSaldExce = $arrFactPend[0]->ClienteCorp->SaldoExcedente;
+$decSaldExce = $arrFactPend[0]->ClienteCorp->SaldoExcedente > 0 ? $arrFactPend[0]->ClienteCorp->SaldoExcedente : 0;
 $strNombClie = $arrFactPend[0]->ClienteCorp->NombClie;
 
 /* @var $objFactPend Facturas */

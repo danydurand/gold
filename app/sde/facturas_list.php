@@ -83,14 +83,29 @@ class FacturasListForm extends FacturasListFormBase {
 
 		$this->dtgFacturases->MetaAddColumn('CedulaRif');
 		$this->dtgFacturases->MetaAddColumn('Estatus');
-		$this->dtgFacturases->MetaAddColumn('EstatusPago');
 
-		$colCantMani = new QDataGridColumn('Cant. Manif','<?= $_FORM->CantMani($_ITEM) ?>');
-		$colCantMani->HorizontalAlign = QHorizontalAlign::Center;
-		$this->dtgFacturases->AddColumn($colCantMani);
+        $colCantMani = new QDataGridColumn('Cant. Manif','<?= $_FORM->CantMani($_ITEM) ?>');
+        $colCantMani->HorizontalAlign = QHorizontalAlign::Center;
+        $this->dtgFacturases->AddColumn($colCantMani);
 
-		$colTotaFact = new QDataGridColumn('TOTAL','<?= nf($_ITEM->Total) ?>');
-		$this->dtgFacturases->AddColumn($colTotaFact);
+        $colTotaFact = new QDataGridColumn('TOTAL','<?= nf($_ITEM->Total) ?>');
+        $this->dtgFacturases->AddColumn($colTotaFact);
+
+        $colCantMani = new QDataGridColumn('Cant. Pagos','<?= $_FORM->CantPago($_ITEM) ?>');
+        $colCantMani->HorizontalAlign = QHorizontalAlign::Center;
+        $this->dtgFacturases->AddColumn($colCantMani);
+
+        $colMontCobr = $this->dtgFacturases->MetaAddColumn('MontoCobrado','Name=MTO COBRADO');
+        $colMontCobr->HorizontalAlign = QHorizontalAlign::Right;
+        $colMontCobr->Width = 100;
+
+        $colMontPend = $this->dtgFacturases->MetaAddColumn('MontoPendiente','Name=MONTO PEND');
+        $colMontPend->HorizontalAlign = QHorizontalAlign::Right;
+        $colMontPend->Width = 100;
+
+        $colEstaPago = $this->dtgFacturases->MetaAddColumn('EstatusPago');
+        $colEstaPago->HorizontalAlign = QHorizontalAlign::Center;
+        $colEstaPago->Width = 120;
 
         $this->btnExpoExce_Create();
 
@@ -98,6 +113,10 @@ class FacturasListForm extends FacturasListFormBase {
 
     public function CantMani(Facturas $objFactClie) {
 		return $objFactClie->CountNotaEntregasAsFactura();
+	}
+
+    public function CantPago(Facturas $objFactClie) {
+		return $objFactClie->CountFacturaPagosesAsFactura();
 	}
 
     public function btnNuevRegi_Click()

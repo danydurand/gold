@@ -52,7 +52,6 @@
             $arrFactPago = $this->GetFacturasAsFacturaPagoCorpArray();
             t('El pago de referencia: '.$this->Referencia.' tiene: '.count($arrFactPago).' facturas relacionadas');
             $decMontPago = $this->Monto;
-            //t('El monto del pago es: '.nf($decMontPago));
             foreach ($arrFactPago as $objFactPago) {
                 t('Procesando la factura: '.$objFactPago->Referencia.' con un Monto Pendiente de: '.nf($objFactPago->MontoPendiente));
                 t('El saldo actual del pago es: '.nf($decMontPago));
@@ -110,7 +109,7 @@
                         $objNotaCorp->PagoCorpId    = $this->Id;
                         $objNotaCorp->Fecha         = new QDateTime(QDateTime::Now());
                         $objNotaCorp->Monto         = $decMontPago;
-                        $objNotaCorp->Observacion   = 'Saldo Excedente por el Pago Referencia: '.$objFactPago->Referencia;
+                        $objNotaCorp->Observacion   = strtoupper('Saldo Excedente por Pago a la Factura con Referencia: '.$objFactPago->Referencia);
                         $objNotaCorp->CreatedBy     = $objUsuario->CodiUsua;
                         $objNotaCorp->Save();
                         t('Se creo una ndc por un monto de: '.$decMontPago);

@@ -336,7 +336,6 @@ foreach ($arrSucuSele as $objSucursal) {
             // Se Envía el Reporte por E-mail
             //---------------------------------
             $to = array($objSucursal->DireMail);
-            //$to = array('eredior@gmail.com');
             $attach = $strNombArch;
             $mimemail = new MIMEMAIL('plain/text');
             $mimemail->senderName = 'GoldCoast';

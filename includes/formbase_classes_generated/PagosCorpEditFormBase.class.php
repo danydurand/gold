@@ -383,13 +383,7 @@ abstract class PagosCorpEditFormBase extends QForm {
 
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
-		// Check for records that may violate Unique Clauses
-			if (($objPagosCorp = PagosCorp::LoadByClienteCorpIdReferencia($this->lstClienteCorp->SelectedValue,$this->txtReferencia->Text)) && ($objPagosCorp->Id != $this->mctPagosCorp->PagosCorp->Id )){
-				$blnToReturn = false;
-				$this->lstClienteCorp->Warning = QApplication::Translate("Already in Use");
-				$this->txtReferencia->Warning = QApplication::Translate("Already in Use");
-			}
-
+		
 		$blnFocused = false;
 		foreach ($this->GetErrorControls() as $objControl) {
 			// Set Focus to the top-most invalid control
