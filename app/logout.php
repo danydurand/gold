@@ -6,6 +6,7 @@ class LogoutForm extends QForm {
    protected $lblTituForm;
    protected $lblMensUsua;
    protected $lblNotiUsua;
+   protected $lblOtraNoti;
    protected $btnLogout;
    protected $btnMenu;
 
@@ -14,6 +15,7 @@ class LogoutForm extends QForm {
       $this->lblTituForm_Create();
       $this->lblMensUsua_Create();
       $this->lblNotiUsua_Create();
+      $this->lblOtraNoti_Create();
 
       $this->btnLogout_Create();
       $this->btnMenu_Create();
@@ -35,6 +37,10 @@ class LogoutForm extends QForm {
 
    protected function lblNotiUsua_Create() {
       $this->lblNotiUsua = new QLabel($this);
+   }
+
+   protected function lblOtraNoti_Create() {
+      $this->lblOtraNoti = new QLabel($this);
    }
 
    protected function btnLogout_Create() {
