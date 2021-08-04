@@ -29,8 +29,11 @@ class RegistrarPago extends PagosCorpEditFormBase {
     protected $arrFactPaga;
     protected $arrFactIdxx = [];
     protected $objClieSele;
+    protected $lstNotaCred;
+    protected $arrNotaClie = [];
 
-	// Override Form Event Handlers as Needed
+
+    // Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
 
@@ -79,6 +82,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
 		$this->txtUpdatedBy = $this->mctPagosCorp->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctPagosCorp->txtDeletedBy_Create();
 
+        $this->lstNotaCred_Create();
         $this->dtgFactClie_Create();
         $this->dtgFactPaga_Create();
 
@@ -88,32 +92,115 @@ class RegistrarPago extends PagosCorpEditFormBase {
 	// Aqui se crean los objetos 
 	//----------------------------
 
+    protected function lstNotaCred_Create() {
+        $this->lstNotaCred = new QListBox($this);
+        $this->lstNotaCred->Name = 'Nota de Crédito';
+        $this->lstNotaCred->Visible = false;
+        $this->lstNotaCred->AddItem('- Seleccione Uno -',null);
+        $this->lstNotaCred->AddAction(new QChangeEvent(), new QAjaxAction('lstNotaCred_Change'));
+    }
+
+    protected function lstNotaCred_Change() {
+        t('Se disparo el change de la NDC');
+        $intIdxxNota = $this->lstNotaCred->SelectedValue;
+        if (!is_null($intIdxxNota)) {
+            t('Hay una ndc');
+            $objNotaCred = NotaCreditoCorp::Load($intIdxxNota);
+            if ($objNotaCred instanceof NotaCreditoCorp) {
+                $this->txtReferencia->Text = $objNotaCred->Referencia;
+                $this->txtMonto->Text      = $objNotaCred->Monto;
+                $this->txtMonto = disableControl($this->txtMonto);
+            } else {
+                t('La ndc no existe');
+                $this->danger('No existe la Nota de Crédito');
+                $this->txtReferencia->Text = '';
+                $this->txtMonto->Text      = '';
+                $this->txtMonto = enableControl($this->txtMonto);
+            }
+        } else {
+            t('No hay ndc seleccionada');
+            $this->txtReferencia->Text = '';
+            $this->txtMonto->Text      = '';
+        }
+    }
+
+    protected function cargarNotasDeCredito() {
+        /* @var $objNotaCred NotaCreditoCorp */
+        $this->lstNotaCred->RemoveAllItems();
+        $blnSeleRegi = count($this->arrNotaClie) == 1;
+        $this->lstNotaCred->AddItem('- Seleccione Uno - ', null);
+        foreach ($this->arrNotaClie as $objNotaCred) {
+            $this->lstNotaCred->AddItem($objNotaCred->__toStringConMonto(), $objNotaCred->Id, $blnSeleRegi);
+            if ($blnSeleRegi) {
+                t('Registro seleccinado por defecto');
+                $this->txtReferencia->Text = $objNotaCred->Referencia;
+                t('Referencia: '.$this->txtReferencia->Text);
+                $this->txtMonto->Text = $objNotaCred->__Monto();
+                $this->txtMonto = disableControl($this->txtMonto);
+                $this->txtReferencia = disableControl($this->txtReferencia);
+            }
+        }
+        $this->lstNotaCred->Visible = true;
+    }
+
     protected function lstFormaPago_Change() {
         $intFormPago = $this->lstFormaPago->SelectedValue;
         if (!is_null($intFormPago)) {
             $objFormPago = FormaPago::Load($intFormPago);
+            if ($objFormPago->Abreviado == 'NDC') {
+                $this->cargarNotasDeCredito();
+            } else {
+                $this->txtReferencia = enableControl($this->txtReferencia);
+                $this->lstNotaCred->Visible = false;
+                //$this->txtMonto->Text = '';
+            }
             if ($objFormPago->RequiereDocumento) {
                 $this->txtReferencia = enableControl($this->txtReferencia);
-                $this->txtReferencia->Required = true;
-                $this->txtReferencia->Placeholder = 'Nro de Documento';
+                $this->txtReferencia->Placeholder = $objFormPago->TextoDocumento;
             } else {
                 $this->txtReferencia = disableControl($this->txtReferencia);
-                $this->txtReferencia->Required = false;
                 $this->txtReferencia->Placeholder = 'Sin Referencia';
             }
         }
     }
 
+    protected function btnNuevRegi_Click() {
+        QApplication::Redirect(__SIST__.'/registrar_pago.php');
+    }
+
 
     public function lstClienteCorp_Change() {
-	    if (!is_null($this->lstClienteCorp->SelectedValue)) {
+        if (!is_null($this->lstClienteCorp->SelectedValue)) {
             $this->dtgFactClie->Refresh();
             $this->dtgFactPaga->Refresh();
             $this->objClieSele = MasterCliente::Load($this->lstClienteCorp->SelectedValue);
             $decSaldClie = $this->objClieSele->calcularSaldoExcedente();
             $this->mostrarSaldoCliente($this->objClieSele);
-            //$strTextMens = 'Saldo del Cliente: '.$decSaldClie;
-            //$this->ninfo($strTextMens);
+            //----------------------------------------
+            // Se re-crea la lista de formas de pago
+            //----------------------------------------
+            $this->lstFormaPago->RemoveAllItems();
+            $objClauWher[] = QQ::Like(QQN::FormaPago()->ParaPagoEn,'%CONNECT%');
+            $objClauWher[] = QQ::Like(QQN::FormaPago()->StatusId,SinoType::SI);
+            $arrFormPago   = FormaPago::QueryArray(QQ::AndCondition($objClauWher));
+            $this->lstFormaPago->AddItem('- Seleccione Uno -',null);
+            foreach ($arrFormPago as $objFormPago) {
+                $this->lstFormaPago->AddItem($objFormPago->Descripcion,$objFormPago->Id);
+            }
+            //------------------------------------------------------------------------------------------
+            // Si el Cliente tiene NDCs a su favor, se agrega una opción a la lista de formas de pago
+            //------------------------------------------------------------------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->ClienteCorpId,$this->objClieSele->CodiClie);
+            $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->Estatus,'DISPONIBLE');
+            $this->arrNotaClie = NotaCreditoCorp::QueryArray(QQ::AndCondition($objClauWher));
+            if (count($this->arrNotaClie) > 0) {
+                $objClauWher = QQ::Equal(QQN::FormaPago()->Abreviado,'NDC');
+                $objFormPago = FormaPago::QuerySingle(QQ::AndCondition($objClauWher));
+                if ($objFormPago instanceof FormaPago) {
+                    $this->lstFormaPago->AddItem($objFormPago->Descripcion,$objFormPago->Id);
+                }
+            }
         }
     }
 
@@ -227,6 +314,12 @@ class RegistrarPago extends PagosCorpEditFormBase {
         $colMontCobr->Html = '<?= nf($_ITEM->MontoCobrado) ?>';
         $colMontCobr->Width = 70;
         $this->dtgFactPaga->AddColumn($colMontCobr);
+
+        $colMontPend = new QDataGridColumn($this);
+        $colMontPend->Name = QApplication::Translate('Pendiente');
+        $colMontPend->Html = '<?= nf($_ITEM->MontoPendiente) ?>';
+        $colMontPend->Width = 70;
+        $this->dtgFactPaga->AddColumn($colMontPend);
 
     }
 
@@ -451,13 +544,27 @@ class RegistrarPago extends PagosCorpEditFormBase {
 			t('k7');
             $this->success('Transacción Exitosa !!');
 		}
+        //--------------------------------------------------------------------------------
+        // Si la forma de pago fue una Nota de Crédito, se cambia el estatus de la misma
+        //--------------------------------------------------------------------------------
+        $intFormPago = $this->lstFormaPago->SelectedValue;
+        $objFormPago = FormaPago::Load($intFormPago);
+        if ($objFormPago->Abreviado == 'NDC') {
+            $objNotaCred = NotaCreditoCorp::Load($this->lstNotaCred->SelectedValue);
+            if ($objNotaCred instanceof NotaCreditoCorp) {
+                $objNotaCred->Estatus = 'APLICADA';
+                $objNotaCred->AplicadaEnPagoId = $this->mctPagosCorp->PagosCorp->Id;
+                $objNotaCred->Save();
+                $strTextMens = 'APLICADA EN PAGO ID: '.$this->mctPagosCorp->PagosCorp->Id;
+                $objNotaCred->logDeCambios($strTextMens);
+            }
+        }
 
 		$decSaldClie = $this->objClieSele->calcularSaldoExcedente();
 		$this->mostrarSaldoCliente($this->objClieSele);
-		//$strTextMens = 'Saldo del Cliente: '.$decSaldClie;
-		//$this->ninfo($strTextMens);
 
 		$this->dtgFactPaga->Refresh();
+		$this->btnNuevRegi->Visible = true;
 	}
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {

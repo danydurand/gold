@@ -1,8 +1,8 @@
             <div class="form-messages">
-                <div class="col-sm-6" style="text-align: left">
+                <div class="col-sm-8" style="text-align: left">
                     <?php $this->lblNotiUsua->Render(); ?>
                 </div>
-                <div class="col-sm-6" style="text-align: right">
+                <div class="col-sm-4" style="text-align: right">
                     <?php $this->lblOtraNoti->Render(); ?>
                 </div>
             </div>

@@ -48,8 +48,6 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->lstClienteCorp->AddAction(new QChangeEvent(), new QAjaxAction('lstClienteCorp_Change'));
         $this->lstClienteCorp->Name = $this->enlaceCliente();
 
-
-        //$this->lstPagoCorp = $this->mctNotaCreditoCorp->lstPagoCorp_Create();
         $this->lstPagoCorp = $this->lstPagoCorp_Create();
 		$this->lstPagoCorp->Name = 'Ref. Pago';
 
@@ -61,25 +59,27 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->txtObservacion->TextMode = QTextMode::MultiLine;
 		$this->txtObservacion->Rows = 3;
 		$this->txtObservacion->Width = 200;
-		$this->txtNumero = $this->mctNotaCreditoCorp->txtNumero_Create();
-		$this->txtMaquinaFiscal = $this->mctNotaCreditoCorp->txtMaquinaFiscal_Create();
+		$this->txtNumero         = $this->mctNotaCreditoCorp->txtNumero_Create();
+		$this->txtMaquinaFiscal  = $this->mctNotaCreditoCorp->txtMaquinaFiscal_Create();
 		$this->txtFechaImpresion = $this->mctNotaCreditoCorp->txtFechaImpresion_Create();
-		$this->txtHoraImpresion = $this->mctNotaCreditoCorp->txtHoraImpresion_Create();
-		$this->lblCreatedAt = $this->mctNotaCreditoCorp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaCreditoCorp->lblUpdatedAt_Create();
-		$this->txtCreatedBy = $this->mctNotaCreditoCorp->txtCreatedBy_Create();
-		$this->txtUpdatedBy = $this->mctNotaCreditoCorp->txtUpdatedBy_Create();
+		$this->txtHoraImpresion  = $this->mctNotaCreditoCorp->txtHoraImpresion_Create();
+		$this->lblCreatedAt      = $this->mctNotaCreditoCorp->lblCreatedAt_Create();
+		$this->lblUpdatedAt      = $this->mctNotaCreditoCorp->lblUpdatedAt_Create();
+		$this->txtCreatedBy      = $this->mctNotaCreditoCorp->txtCreatedBy_Create();
+		$this->txtUpdatedBy      = $this->mctNotaCreditoCorp->txtUpdatedBy_Create();
 
 		if ($this->txtTipo->Text == 'AUTOMATICA') {
 		    //$this->btnDelete->Visible = false;
-		    $this->txtReferencia  = disableControl($this->txtReferencia);
-		    $this->txtTipo        = disableControl($this->txtTipo);
-		    $this->lstClienteCorp = disableControl($this->lstClienteCorp);
-		    $this->lstPagoCorp    = disableControl($this->lstPagoCorp);
-		    $this->lstFactura     = disableControl($this->lstFactura);
-		    $this->calFecha       = disableControl($this->calFecha);
-		    $this->txtMonto       = disableControl($this->txtMonto);
-		    $this->txtObservacion = disableControl($this->txtObservacion);
+		    $this->txtReferencia     = disableControl($this->txtReferencia);
+		    $this->txtTipo           = disableControl($this->txtTipo);
+		    $this->lstClienteCorp    = disableControl($this->lstClienteCorp);
+		    $this->lstPagoCorp       = disableControl($this->lstPagoCorp);
+		    $this->lstFactura        = disableControl($this->lstFactura);
+		    $this->calFecha          = disableControl($this->calFecha);
+		    $this->txtMonto          = disableControl($this->txtMonto);
+		    $this->txtObservacion    = disableControl($this->txtObservacion);
+		    $this->txtEstatus        = disableControl($this->txtEstatus);
+		    $this->lstAplicadaEnPago = disableControl($this->lstAplicadaEnPago);
 		    if (is_null($this->mctNotaCreditoCorp->NotaCreditoCorp->FacturaId)) {
 		        $this->lstFactura->Visible = false;
             }
@@ -87,11 +87,11 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 
         if (!$this->mctNotaCreditoCorp->EditMode) {
 		    $this->txtReferencia->Text = NotaCreditoCorp::proxReferencia();
-		    $this->txtTipo->Text = 'MANUAL';
-		    $this->calFecha->DateTime = new QDateTime(QDateTime::Now());
-		    $this->txtReferencia = disableControl($this->txtReferencia);
-		    $this->txtTipo = disableControl($this->txtTipo);
-		    $this->calFecha = disableControl($this->calFecha);
+		    $this->txtTipo->Text       = 'MANUAL';
+		    $this->calFecha->DateTime  = new QDateTime(QDateTime::Now());
+		    $this->txtReferencia       = disableControl($this->txtReferencia);
+		    $this->txtTipo             = disableControl($this->txtTipo);
+		    $this->calFecha            = disableControl($this->calFecha);
 		    $this->lstFactura_Change();
         }
 

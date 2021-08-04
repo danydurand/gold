@@ -23,13 +23,14 @@
                 <?php $this->txtTipo->RenderWithName(); ?>
                 <?php $this->lstClienteCorp->RenderWithName(); ?>
                 <?php $this->lstPagoCorp->RenderWithName(); ?>
-            </div>
-            <div class="col-md-5">
                 <?php $this->lstFactura->RenderWithName(); ?>
                 <?php $this->calFecha->RenderWithName(); ?>
+            </div>
+            <div class="col-md-5">
 				<?php $this->txtMonto->RenderWithName(); ?>
 				<?php $this->txtObservacion->RenderWithName(); ?>
-				<?php //$this->txtNumero->RenderWithName(); ?>
+				<?php $this->txtEstatus->RenderWithName(); ?>
+                <?php $this->lstAplicadaEnPago->RenderWithName(); ?>
 				<?php //$this->txtMaquinaFiscal->RenderWithName(); ?>
 				<?php //$this->txtFechaImpresion->RenderWithName(); ?>
 				<?php //$this->txtHoraImpresion->RenderWithName(); ?>

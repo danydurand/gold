@@ -21,6 +21,7 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
                 <?php //$this->lblId->RenderWithName(); ?>
                 <?php $this->lstClienteCorp->RenderWithName(); ?>
                 <?php $this->lstFormaPago->RenderWithName(); ?>
+                <?php $this->lstNotaCred->RenderWithName(); ?>
                 <?php $this->txtReferencia->RenderWithName(); ?>
                 <?php $this->calFecha->RenderWithName(); ?>
                 <?php $this->txtMonto->RenderWithName(); ?>

@@ -43,8 +43,10 @@ class MasterCliente extends MasterClienteGen {
         foreach ($arrTodoFact as $objFactClie) {
             $decDeudTota += $objFactClie->MontoPendiente;
         }
-        $arrTodoNota = $this->GetNotaCreditoCorpAsClienteCorpArray();
-        $decCredTota = 0;
+        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->ClienteCorpId,$this->CodiClie);
+        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->Estatus,'DISPONIBLE');
+        $arrTodoNota   = NotaCreditoCorp::QueryArray(QQ::AndCondition($objClauWher));
+        $decCredTota   = 0;
         foreach ($arrTodoNota as $objNotaClie) {
             $decCredTota += $objNotaClie->Monto;
         }

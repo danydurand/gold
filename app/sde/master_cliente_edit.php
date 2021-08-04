@@ -167,7 +167,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         if ($this->blnEditMode) {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
-            $objClauWher[] = QQ::Equal(QQN::Facturas()->EstatusPago,'PENDIENTE');
+            $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
             $this->intCantFact = Facturas::QueryCount(QQ::AndCondition($objClauWher));
 
             $this->dtgFactPend_Create();
@@ -339,7 +339,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         }
         $this->permisosDeDescuentos();
 
-        $strTextMens = 'Evite el uso de caracteres especiales (Ej: \\~°#^*+) en <b>los nombres, las direcciones y los teléfonos</b>';
+        $strTextMens = 'No use de caracteres especiales (Ej: \\~°#^*+) en <b>los nombres, las direcciones y los teléfonos</b>';
         $this->mensaje($strTextMens,'n','i','',__iINFO__);
 
         $blnUsuaAuto = BuscarParametro("ElimClie", $this->objUsuario->LogiUsua, "Val1", 0);
