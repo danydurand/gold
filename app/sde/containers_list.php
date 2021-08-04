@@ -92,8 +92,9 @@ class ContainersListForm extends ContainersListFormBase {
         $colNombTran->FilterType = QFilterType::TextFilter;
         $colNombTran->Filter = QQ::Like(QQN::Containers()->Transportista->Nombre,null);
 
-        $colNombChof = new QDataGridColumn('Chofer','<?= $_FORM->NombChof_Render($_ITEM); ?>');
-        $this->dtgContainerses->AddColumn($colNombChof);
+        $colNombChof = $this->dtgContainerses->MetaAddColumn(QQN::Containers()->Chofer->Nombre,'Name=Chofer');
+        $colNombChof->FilterType = QFilterType::TextFilter;
+        $colNombChof->Filter = QQ::Like(QQN::Containers()->Chofer->Nombre,null);
 
         $this->dtgContainerses->MetaAddColumn('Piezas','Name=Pzas');
         $this->dtgContainerses->MetaAddColumn('CantidadOk','Name=OK');
@@ -141,10 +142,6 @@ class ContainersListForm extends ContainersListFormBase {
 
     public function CantEntr_Render(Containers $objManifiesto) {
         return $objManifiesto->ResumeDeEntrega()->CantOkey;
-    }
-
-    public function NombChof_Render(Containers $objManifiesto) {
-        return $objManifiesto->Chofer->__toString();
     }
 
     public function dtgContainersesRow_Click($strFormId, $strControlId, $strParameter) {

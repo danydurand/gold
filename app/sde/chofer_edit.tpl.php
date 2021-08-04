@@ -18,8 +18,8 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
 			<div class="row">
 				<div class="col-md-5" style="margin-top: 1em;">
 					<?php $this->lblCodiChof->RenderWithName(); ?>
-					<?php $this->txtNombChof->RenderWithName(); ?>
-					<?php $this->txtApelChof->RenderWithName(); ?>
+					<?php $this->txtNombre->RenderWithName(); ?>
+					<?php //$this->txtApelChof->RenderWithName(); ?>
 					<?php $this->txtNumeCedu->RenderWithName(); ?>
 					<?php $this->txtTeleChof->RenderWithName(); ?>
 					<?php $this->txtTextObse->RenderWithName(); ?>

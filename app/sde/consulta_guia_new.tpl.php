@@ -22,7 +22,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <?php $this->btnEditGuia->Render(); ?>
             <?php $this->btnImprGuia->Render(); ?>
             <?php $this->btnInfoPodx->Render(); ?>
-            <?php $this->btnGuiaOrig->Render(); ?>
+            <?php //$this->btnGuiaOrig->Render(); ?>
             <?php $this->btnMasxAcci->Render(); ?>
             <?php $this->lblBotoPopu->Render(); ?>
         </div>

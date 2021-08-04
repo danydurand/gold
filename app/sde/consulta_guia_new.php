@@ -267,17 +267,25 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             }
         }
 
+        //-------------------------------------------------------------------------
+        // Si el usuario no tiene permiso para editar la guia, se oculta el botón
+        //-------------------------------------------------------------------------
+        $this->btnEditGuia->Visible = false;
+        $objEditGuia = Parametro::LoadByIndiParaCodiPara('EditGuia',$this->objUsuario->LogiUsua);
+        if ($objEditGuia) {
+            $this->btnEditGuia->Visible = $objEditGuia->ParaVal1;
+        }
         //-------------------------------------------------------
         // Si se trata de una Guia Retorno, se muestra un boton
         // que permite consultar la Guia Original relacionada
         //-------------------------------------------------------
-        $this->btnGuiaOrig_Create();
-        $intPosiCade = strpos($this->objGuia->Observacion,'RETORNO DE LA GUIA: ');
-        if ($intPosiCade !== false) {
-            $strGuiaOrig = substr($this->objGuia->Observacion,20);
-            $this->btnGuiaOrig->ActionParameter = $strGuiaOrig;
-            $this->btnGuiaOrig->Visible = true;
-        }
+        //$this->btnGuiaOrig_Create();
+        //$intPosiCade = strpos($this->objGuia->Observacion,'RETORNO DE LA GUIA: ');
+        //if ($intPosiCade !== false) {
+        //    $strGuiaOrig = substr($this->objGuia->Observacion,20);
+        //    $this->btnGuiaOrig->ActionParameter = $strGuiaOrig;
+        //    $this->btnGuiaOrig->Visible = true;
+        //}
 
     }
 

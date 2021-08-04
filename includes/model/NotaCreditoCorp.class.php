@@ -27,6 +27,14 @@
 			return sprintf('%s',  $this->Referencia);
 		}
 
+		public function __toStringConMonto() {
+			return sprintf('%s (%s)',  $this->Referencia, $this->Monto);
+		}
+
+		public function __Monto() {
+		    return str_replace(',','.',nf($this->Monto));
+        }
+
         public static function proxReferencia() {
             $intCantRegi = NotaCreditoCorp::CountAll();
             $strYearDhoy = date('Y');

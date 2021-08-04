@@ -74,6 +74,7 @@ class NotaCreditoCorpListForm extends NotaCreditoCorpListFormBase {
         $this->dtgNotaCreditoCorps->AddColumn($colFechNota);
         $colMontNota = new QDataGridColumn('MONTO','<?= nf($_ITEM->Monto); ?>');
         $this->dtgNotaCreditoCorps->AddColumn($colMontNota);
+		$this->dtgNotaCreditoCorps->MetaAddColumn('Estatus');
 		$this->dtgNotaCreditoCorps->MetaAddColumn('Observacion');
 		//$this->dtgNotaCreditoCorps->MetaAddColumn('Numero');
 		//$this->dtgNotaCreditoCorps->MetaAddColumn('MaquinaFiscal');

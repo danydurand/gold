@@ -203,6 +203,7 @@
         }
 
         public function ResumeDeEntrega() {
+		    //t('Obteniendo el resumen de entrega de: '.$this->Id);
             $strCadeSqlx  = "select * ";
             $strCadeSqlx .= "  from v_resumen_del_manifiesto ";
             $strCadeSqlx .= " where id = ".$this->Id;
@@ -210,7 +211,7 @@
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $mixRegistro  = $objDbResult->FetchArray();
 
-		    $intTotaPiez  = $mixRegistro['cant_piezas'];
+		    $intTotaPiez  = $mixRegistro['cant_piezas'] > 0 ? $mixRegistro['cant_piezas'] : 1;
 		    $intCantOkey  = $mixRegistro['entregadas'];
             $intCantPend  = $mixRegistro['pendientes'];
             $intCantDevu  = $mixRegistro['devueltas'];

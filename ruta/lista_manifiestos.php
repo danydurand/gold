@@ -6,18 +6,22 @@ require_once('qcubed.inc.php');
 $strTituPagi = "Manifiestos";
 $strManiChof = '';
 $objUsuario  = unserialize($_SESSION['User']);
+//t('Entrando a Manifiestos del Chofer: '.$objUsuario->NombChof.' ('.$objUsuario->CodiChof.')');
 
 $objUsuario->ActualizarManifiestosDelChofer();
+//t('Manifiestos actualizados');
 
 $objClauOrde = QQ::OrderBy(QQN::Containers()->Id,false);
 $objClauWher = QQ::Clause();
 $arrManiChof = Containers::LoadArrayByChoferIdEstatus($objUsuario->CodiChof,'ABIERT@',$objClauOrde);
+//t('Hay '.count($arrManiChof).' manifiestos abiertos...');
 if ($arrManiChof) {
     $strManiChof = '
     <ul class="ui-nodisc-icon" data-role="listview" data-inset="true" data-split-icon="bullets" data-split-theme="d" data-filter="true" data-filter-placeholder="Buscar...">
     ';
     $strNombImag = __RUTA_IMAGE__.'/manifest2.png';
     foreach ($arrManiChof as $objManiChof) {
+        //t('Procesando: '.$objManiChof->Numero);
         $objResuMani = $objManiChof->ResumeDeEntrega();
 
         $intCantPiez = $objManiChof->Piezas;

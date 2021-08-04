@@ -14,7 +14,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected $objTarifa;
     /* @var $objCliente MasterCliente */
     protected $objCliente;
-    /* @var $objUsuario Usuario */
+    /* @var $objUsuario UsuarioConnect */
     protected $objUsuario;
     /* @var $objProducto Productos */
     protected $objProducto;
@@ -106,10 +106,11 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
         $this->objUsuario  = unserialize($_SESSION['User']);
         $this->objProducto = Productos::LoadByCodigo('IMP');
+        $this->objCliente  = $this->objUsuario->Cliente;
 
         //---- Información ----
 
-        $this->lstClieCarg_Create();
+        //$this->lstClieCarg_Create();
         $this->txtCargArch_Create();
         $this->lstServImpo_Create();
         $this->txtNumeRefe_Create();
@@ -882,7 +883,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $file = basename(tempnam(getcwd(),'tmp'));
             $file = $file.'.'.$strExteArch;
             $filedest = '/tmp/'.$file;
-            copy($_FILES['c8']['tmp_name'],$filedest);
+            copy($_FILES['c7']['tmp_name'],$filedest);
             $this->CargarArchivo($filedest,$strExteArch);
         } else {
             $strExteVali = implode(',',$arrExteVali);
@@ -1058,7 +1059,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         t('');
         t('=====================');
         t('Rutina: CargarArchivo');
-        $this->objCliente = MasterCliente::Load($this->lstClieCarg->SelectedValue);
+        //$this->objCliente = MasterCliente::Load($this->lstClieCarg->SelectedValue);
         $this->strMensProc = '';
         $blnTodoOkey = true;
         //---------------------------------------------------------------------------
@@ -1106,8 +1107,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $this->objNotaEntr->Piezas              = 0;
                 $this->objNotaEntr->Fecha               = new QDateTime(QDateTime::Now);
                 $this->objNotaEntr->Hora                = date('H:i');
-                $this->objNotaEntr->UsuarioId           = $this->objUsuario->CodiUsua;
-                $this->objNotaEntr->CreatedBy           = $this->objUsuario->CodiUsua;
+                $this->objNotaEntr->UsuarioId           = $this->objUsuario->Id;
+                $this->objNotaEntr->CreatedBy           = $this->objUsuario->Id;
                 $this->objNotaEntr->Save();
                 t('Id del Manifiesto creado: '.$this->objNotaEntr->Id);
                 //-----------------------

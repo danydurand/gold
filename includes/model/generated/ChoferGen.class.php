@@ -16,8 +16,9 @@
 	 * @package My QCubed Application
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $CodiChof the value for intCodiChof (Read-Only PK)
-	 * @property string $NombChof the value for strNombChof (Not Null)
-	 * @property string $ApelChof the value for strApelChof (Not Null)
+	 * @property string $Nombre the value for strNombre 
+	 * @property string $NombChof the value for strNombChof 
+	 * @property string $ApelChof the value for strApelChof 
 	 * @property string $NumeCedu the value for strNumeCedu 
 	 * @property string $TeleChof the value for strTeleChof 
 	 * @property string $TextObse the value for strTextObse 
@@ -48,6 +49,15 @@
 		 */
 		protected $intCodiChof;
 		const CodiChofDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column chofer.nombre
+		 * @var string strNombre
+		 */
+		protected $strNombre;
+		const NombreMaxLength = 100;
+		const NombreDefault = null;
 
 
 		/**
@@ -234,6 +244,7 @@
 		public function Initialize()
 		{
 			$this->intCodiChof = Chofer::CodiChofDefault;
+			$this->strNombre = Chofer::NombreDefault;
 			$this->strNombChof = Chofer::NombChofDefault;
 			$this->strApelChof = Chofer::ApelChofDefault;
 			$this->strNumeCedu = Chofer::NumeCeduDefault;
@@ -589,6 +600,7 @@
                 $objSelect->AddSelectItems($objBuilder, $strTableName, $strAliasPrefix);
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'codi_chof', $strAliasPrefix . 'codi_chof');
+			    $objBuilder->AddSelectItem($strTableName, 'nombre', $strAliasPrefix . 'nombre');
 			    $objBuilder->AddSelectItem($strTableName, 'nomb_chof', $strAliasPrefix . 'nomb_chof');
 			    $objBuilder->AddSelectItem($strTableName, 'apel_chof', $strAliasPrefix . 'apel_chof');
 			    $objBuilder->AddSelectItem($strTableName, 'nume_cedu', $strAliasPrefix . 'nume_cedu');
@@ -730,6 +742,9 @@
 			$strAlias = $strAliasPrefix . 'codi_chof';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCodiChof = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'nombre';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strNombre = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'nomb_chof';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strNombChof = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1139,6 +1154,7 @@
 					// Perform an INSERT query
 					$objDatabase->NonQuery('
 						INSERT INTO `chofer` (
+							`nombre`,
 							`nomb_chof`,
 							`apel_chof`,
 							`nume_cedu`,
@@ -1153,6 +1169,7 @@
 							`password`,
 							`acceso_mobile`
 						) VALUES (
+							' . $objDatabase->SqlVariable($this->strNombre) . ',
 							' . $objDatabase->SqlVariable($this->strNombChof) . ',
 							' . $objDatabase->SqlVariable($this->strApelChof) . ',
 							' . $objDatabase->SqlVariable($this->strNumeCedu) . ',
@@ -1181,6 +1198,7 @@
 						UPDATE
 							`chofer`
 						SET
+							`nombre` = ' . $objDatabase->SqlVariable($this->strNombre) . ',
 							`nomb_chof` = ' . $objDatabase->SqlVariable($this->strNombChof) . ',
 							`apel_chof` = ' . $objDatabase->SqlVariable($this->strApelChof) . ',
 							`nume_cedu` = ' . $objDatabase->SqlVariable($this->strNumeCedu) . ',
@@ -1298,6 +1316,7 @@
 			$objReloaded = Chofer::Load($this->intCodiChof);
 
 			// Update $this's local variables to match
+			$this->strNombre = $objReloaded->strNombre;
 			$this->strNombChof = $objReloaded->strNombChof;
 			$this->strApelChof = $objReloaded->strApelChof;
 			$this->strNumeCedu = $objReloaded->strNumeCedu;
@@ -1338,16 +1357,23 @@
 					 */
 					return $this->intCodiChof;
 
+				case 'Nombre':
+					/**
+					 * Gets the value for strNombre 
+					 * @return string
+					 */
+					return $this->strNombre;
+
 				case 'NombChof':
 					/**
-					 * Gets the value for strNombChof (Not Null)
+					 * Gets the value for strNombChof 
 					 * @return string
 					 */
 					return $this->strNombChof;
 
 				case 'ApelChof':
 					/**
-					 * Gets the value for strApelChof (Not Null)
+					 * Gets the value for strApelChof 
 					 * @return string
 					 */
 					return $this->strApelChof;
@@ -1512,9 +1538,22 @@
 				///////////////////
 				// Member Variables
 				///////////////////
+				case 'Nombre':
+					/**
+					 * Sets the value for strNombre 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strNombre = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'NombChof':
 					/**
-					 * Sets the value for strNombChof (Not Null)
+					 * Sets the value for strNombChof 
 					 * @param string $mixValue
 					 * @return string
 					 */
@@ -1527,7 +1566,7 @@
 
 				case 'ApelChof':
 					/**
-					 * Sets the value for strApelChof (Not Null)
+					 * Sets the value for strApelChof 
 					 * @param string $mixValue
 					 * @return string
 					 */
@@ -2101,6 +2140,7 @@
 		public static function GetSoapComplexTypeXml() {
 			$strToReturn = '<complexType name="Chofer"><sequence>';
 			$strToReturn .= '<element name="CodiChof" type="xsd:int"/>';
+			$strToReturn .= '<element name="Nombre" type="xsd:string"/>';
 			$strToReturn .= '<element name="NombChof" type="xsd:string"/>';
 			$strToReturn .= '<element name="ApelChof" type="xsd:string"/>';
 			$strToReturn .= '<element name="NumeCedu" type="xsd:string"/>';
@@ -2139,6 +2179,8 @@
 			$objToReturn = new Chofer();
 			if (property_exists($objSoapObject, 'CodiChof'))
 				$objToReturn->intCodiChof = $objSoapObject->CodiChof;
+			if (property_exists($objSoapObject, 'Nombre'))
+				$objToReturn->strNombre = $objSoapObject->Nombre;
 			if (property_exists($objSoapObject, 'NombChof'))
 				$objToReturn->strNombChof = $objSoapObject->NombChof;
 			if (property_exists($objSoapObject, 'ApelChof'))
@@ -2205,6 +2247,7 @@
 			// Member Variables
 			///////////////////
 			$iArray['CodiChof'] = $this->intCodiChof;
+			$iArray['Nombre'] = $this->strNombre;
 			$iArray['NombChof'] = $this->strNombChof;
 			$iArray['ApelChof'] = $this->strApelChof;
 			$iArray['NumeCedu'] = $this->strNumeCedu;
@@ -2256,6 +2299,7 @@
      * @uses QQNode
      *
      * @property-read QQNode $CodiChof
+     * @property-read QQNode $Nombre
      * @property-read QQNode $NombChof
      * @property-read QQNode $ApelChof
      * @property-read QQNode $NumeCedu
@@ -2285,6 +2329,8 @@
 			switch ($strName) {
 				case 'CodiChof':
 					return new QQNode('codi_chof', 'CodiChof', 'Integer', $this);
+				case 'Nombre':
+					return new QQNode('nombre', 'Nombre', 'VarChar', $this);
 				case 'NombChof':
 					return new QQNode('nomb_chof', 'NombChof', 'VarChar', $this);
 				case 'ApelChof':
@@ -2333,6 +2379,7 @@
 
     /**
      * @property-read QQNode $CodiChof
+     * @property-read QQNode $Nombre
      * @property-read QQNode $NombChof
      * @property-read QQNode $ApelChof
      * @property-read QQNode $NumeCedu
@@ -2362,6 +2409,8 @@
 			switch ($strName) {
 				case 'CodiChof':
 					return new QQNode('codi_chof', 'CodiChof', 'integer', $this);
+				case 'Nombre':
+					return new QQNode('nombre', 'Nombre', 'string', $this);
 				case 'NombChof':
 					return new QQNode('nomb_chof', 'NombChof', 'string', $this);
 				case 'ApelChof':

@@ -22,6 +22,7 @@ abstract class ChoferListFormBase extends QForm {
     protected $btnNuevRegi;
     protected $btnFiltAvan;
     protected $btnExpoExce;
+    protected $lblOtraNoti;
 
     // Local instance of the Meta DataGrid to list Chofers
     /**
@@ -46,6 +47,7 @@ abstract class ChoferListFormBase extends QForm {
         $this->lblMensUsua_Create();
         $this->lblNotiUsua_Create();
         $this->lblTituForm_Create();
+        $this->lblOtraNoti_Create();
         $this->btnNuevRegi_Create();
         $this->btnFiltAvan_Create();
 
@@ -77,6 +79,7 @@ abstract class ChoferListFormBase extends QForm {
         // Create the Other Columns (note that you can use strings for chofer's properties, or you
         // can traverse down QQN::chofer() to display fields that are down the hierarchy)
         $this->dtgChofers->MetaAddColumn('CodiChof');
+        $this->dtgChofers->MetaAddColumn('Nombre');
         $this->dtgChofers->MetaAddColumn('NombChof');
         $this->dtgChofers->MetaAddColumn('ApelChof');
         $this->dtgChofers->MetaAddColumn('NumeCedu');
@@ -110,6 +113,12 @@ abstract class ChoferListFormBase extends QForm {
         $this->lblNotiUsua = new QLabel($this);
         $this->lblNotiUsua->Text = '';
         $this->lblNotiUsua->HtmlEntities = false;
+    }
+
+    protected function lblOtraNoti_Create() {
+        $this->lblOtraNoti = new QLabel($this);
+        $this->lblOtraNoti->Text = '';
+        $this->lblOtraNoti->HtmlEntities = false;
     }
 
     protected function btnNuevRegi_Create() {
@@ -148,6 +157,23 @@ abstract class ChoferListFormBase extends QForm {
     public function dtgChofersRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
       QApplication::Redirect("chofer_edit.php/$intId");
+    }
+
+
+    protected function oinfo($strTextMens) {
+        $this->mensaje($strTextMens,'o','i',null,__iINFO__);
+    }
+
+    protected function odanger($strTextMens) {
+        $this->mensaje($strTextMens,'o','d',null,__iHAND__);
+    }
+
+    protected function owarning($strTextMens) {
+        $this->mensaje($strTextMens,'o','w',null,__iEXCL__);
+    }
+
+    protected function osuccess($strTextMens) {
+        $this->mensaje($strTextMens,'o','s',null,__iCHEC__);
     }
 
 

@@ -372,6 +372,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
+	    t('Salvando el pago de la BD');
         /* @var $objFactPaga Facturas */
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
@@ -383,7 +384,9 @@ class RegistrarPago extends PagosCorpEditFormBase {
         } else {
             $this->txtUpdatedBy->Text = $this->objUsuario->CodiUsua;
         }
+        t('k1');
 		$this->mctPagosCorp->SavePagosCorp();
+		t('k2');
 		if ($this->mctPagosCorp->EditMode) {
 			//---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
@@ -421,11 +424,12 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $this->success('Transacción Exitosa');
 			}
 		} else {
+		    t('k3');
             //-----------------------------------
             // Se asocian las facturas, al pago
             //-----------------------------------
             foreach ($this->arrFactPaga as $objFactPaga) {
-
+                t('k4');
                 $this->mctPagosCorp->PagosCorp->AssociateFacturasAsFacturaPagoCorp($objFactPaga);
                 $objFactPaga->EstatusPago = 'CONCILIADO';
                 $objFactPaga->Save();
@@ -434,15 +438,17 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $arrLogxCamb['strNombRegi'] = $objFactPaga->Referencia;
                 $arrLogxCamb['strDescCamb'] = 'Pago '.$this->txtReferencia->Text.' registrado';
                 LogDeCambios($arrLogxCamb);
-
+                t('k5');
                 $this->mctPagosCorp->PagosCorp->conciliarPago();
             }
+            t('k6');
 			$arrLogxCamb['strNombTabl'] = 'PagosCorp';
 			$arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->Id;
 			$arrLogxCamb['strNombRegi'] = $this->mctPagosCorp->PagosCorp->Referencia;
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$this->mctPagosCorp->PagosCorp->Id;
 			LogDeCambios($arrLogxCamb);
+			t('k7');
             $this->success('Transacción Exitosa !!');
 		}
 

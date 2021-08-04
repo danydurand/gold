@@ -12,15 +12,24 @@ $intCodiCkpt = '';
 $intPiezIdxx = '';
 $strTipoGuia = 'PE';
 $intGrupGuia = 1;
+$blnOpciTrad = true;
 $intManiIdxx = null;
 if (isset($_POST['idxx'])) {
     $intPiezIdxx = $_POST['idxx'];
     $intCodiCkpt = $_POST['inci'];
-    $strTipoGuia = $_POST['tipo'];
-    $intGrupGuia = $_POST['grup'];
     $intManiIdxx = $_POST['midx'];
 } else {
     $blnTodoOkey = false;
+}
+if (isset($_POST['tipo'])) {
+    $strTipoGuia = $_POST['tipo'];
+} else {
+    $blnOpciTrad = false;
+}
+if (isset($_POST['grup'])) {
+    $intGrupGuia = $_POST['grup'];
+} else {
+    $blnOpciTrad = false;
 }
 $strMultInci = '';
 $arrOtraProc = [];
@@ -30,9 +39,13 @@ if (isset($_POST['mult_inci'])) {
         $arrOtraProc = unserialize($_SESSION['OtraProc']);
     }
 }
-t('Voy por aqui.. Pieza: '.$intPiezIdxx.' Ckpt: '.$intCodiCkpt);
+t('Voy por aqui.. Pieza: '.$intPiezIdxx.' Ckpt: '.$intCodiCkpt.' Camino Tradicional: '.$blnOpciTrad);
 
-$strLinkReto = 'lista_de_guias.php?id='.$intManiIdxx.'&tg='.$strTipoGuia.'&gg='.$intGrupGuia;
+if ($blnOpciTrad) {
+    $strLinkReto = 'lista_de_guias.php?id='.$intManiIdxx.'&tg='.$strTipoGuia.'&gg='.$intGrupGuia;
+} else {
+    $strLinkReto = 'detalle_de_guia_rastreo.php';
+}
 
 if ($blnTodoOkey) {
     t('Id: '.$intPiezIdxx);

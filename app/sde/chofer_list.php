@@ -67,11 +67,13 @@ class ChoferListForm extends ChoferListFormBase {
 		$colCodiChof = $this->dtgChofers->MetaAddColumn('CodiChof');
 		$colCodiChof->Name = 'Chofer';
 
-		$colNombChof = $this->dtgChofers->MetaAddColumn('NombChof');
-		$colNombChof->Name = 'Nombres';
+        $this->dtgChofers->MetaAddColumn('Nombre');
 
-		$colApelChof = $this->dtgChofers->MetaAddColumn('ApelChof');
-		$colApelChof->Name = 'Apellidos';
+		//$colNombChof = $this->dtgChofers->MetaAddColumn('NombChof');
+		//$colNombChof->Name = 'Nombres';
+        //
+		//$colApelChof = $this->dtgChofers->MetaAddColumn('ApelChof');
+		//$colApelChof->Name = 'Apellidos';
 
 		$colNumeCedu = $this->dtgChofers->MetaAddColumn('NumeCedu');
 		$colNumeCedu->Name = 'Cédula';

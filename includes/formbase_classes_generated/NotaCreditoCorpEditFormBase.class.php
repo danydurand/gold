@@ -49,6 +49,8 @@ abstract class NotaCreditoCorpEditFormBase extends QForm {
     protected $btnAnteSmal;
     protected $btnProxSmal;
     protected $btnUltiSmal;
+    protected $lblOtraNoti;
+
 
 	// Controls for NotaCreditoCorp's Data Fields
 	protected $lblId;
@@ -59,6 +61,8 @@ abstract class NotaCreditoCorpEditFormBase extends QForm {
 	protected $lstFactura;
 	protected $calFecha;
 	protected $txtMonto;
+	protected $txtEstatus;
+	protected $lstAplicadaEnPago;
 	protected $txtObservacion;
 	protected $txtNumero;
 	protected $txtMaquinaFiscal;
@@ -109,6 +113,7 @@ abstract class NotaCreditoCorpEditFormBase extends QForm {
 		$this->lblMensUsua_Create();
 		$this->lblNotiUsua_Create();
 		$this->lblTituForm_Create();
+        $this->lblOtraNoti_Create();
 
         $this->btnNuevRegi_Create();
         $this->btnProxRegi_Create();
@@ -141,6 +146,8 @@ abstract class NotaCreditoCorpEditFormBase extends QForm {
 		$this->lstFactura = $this->mctNotaCreditoCorp->lstFactura_Create();
 		$this->calFecha = $this->mctNotaCreditoCorp->calFecha_Create();
 		$this->txtMonto = $this->mctNotaCreditoCorp->txtMonto_Create();
+		$this->txtEstatus = $this->mctNotaCreditoCorp->txtEstatus_Create();
+		$this->lstAplicadaEnPago = $this->mctNotaCreditoCorp->lstAplicadaEnPago_Create();
 		$this->txtObservacion = $this->mctNotaCreditoCorp->txtObservacion_Create();
 		$this->txtNumero = $this->mctNotaCreditoCorp->txtNumero_Create();
 		$this->txtMaquinaFiscal = $this->mctNotaCreditoCorp->txtMaquinaFiscal_Create();
@@ -198,6 +205,12 @@ abstract class NotaCreditoCorpEditFormBase extends QForm {
 		$this->lblNotiUsua->Text = '';
 		$this->lblNotiUsua->HtmlEntities = false;
 	}
+
+    protected function lblOtraNoti_Create() {
+        $this->lblOtraNoti = new QLabel($this);
+        $this->lblOtraNoti->Text = '';
+        $this->lblOtraNoti->HtmlEntities = false;
+    }
 
     //-------------------------
     // Botónes del Formulario 
@@ -387,12 +400,7 @@ abstract class NotaCreditoCorpEditFormBase extends QForm {
 
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
-		// Check for records that may violate Unique Clauses
-			if (($objNotaCreditoCorp = NotaCreditoCorp::LoadByReferencia($this->txtReferencia->Text)) && ($objNotaCreditoCorp->Id != $this->mctNotaCreditoCorp->NotaCreditoCorp->Id )){
-				$blnToReturn = false;
-				$this->txtReferencia->Warning = QApplication::Translate("Already in Use");
-			}
-
+		
 		$blnFocused = false;
 		foreach ($this->GetErrorControls() as $objControl) {
 			// Set Focus to the top-most invalid control
@@ -507,6 +515,23 @@ abstract class NotaCreditoCorpEditFormBase extends QForm {
 		$objUltiAcce = PilaAcceso::Pop('D');
 		QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
 	}
+
+    protected function oinfo($strTextMens) {
+        $this->mensaje($strTextMens,'o','i',null,__iINFO__);
+    }
+
+    protected function odanger($strTextMens) {
+        $this->mensaje($strTextMens,'o','d',null,__iHAND__);
+    }
+
+    protected function owarning($strTextMens) {
+        $this->mensaje($strTextMens,'o','w',null,__iEXCL__);
+    }
+
+    protected function osuccess($strTextMens) {
+        $this->mensaje($strTextMens,'o','s',null,__iCHEC__);
+    }
+
 
     protected function ninfo($strTextMens) {
         $this->mensaje($strTextMens,'n','i',null,__iINFO__);

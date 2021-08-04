@@ -338,7 +338,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->dtgChofSucu->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
         $this->dtgChofSucu->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
-        $this->dtgChofSucu->RowActionParameterHtml = '<?= $_ITEM->NombChof ?>|<?= $_ITEM->NumeCedu ?>|<?= $_ITEM->CodiChof ?>';
+        $this->dtgChofSucu->RowActionParameterHtml = '<?= $_ITEM->Nombre ?>|<?= $_ITEM->NumeCedu ?>|<?= $_ITEM->CodiChof ?>';
         $this->dtgChofSucu->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
         $this->dtgChofSucu->AddRowAction(new QDoubleClickEvent(), new QAjaxAction('dtgChofSucuRow_DoubleClick'));
 
@@ -353,12 +353,12 @@ class SacarARuta extends FormularioBaseKaizen {
     }
 
     public function dtgChofSucu_NombChof_Render(Chofer $objChofList) {
-        return trim($objChofList->NombChof).' '.trim($objChofList->ApelChof);
+        return trim($objChofList->Nombre);
     }
 
     protected function dtgChofSucu_Binder(){
         $objClauOrde   = QQ::Clause();
-        $objClauOrde[] = QQ::OrderBy(QQN::Chofer()->NombChof);
+        $objClauOrde[] = QQ::OrderBy(QQN::Chofer()->Nombre);
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::Chofer()->CodiStat,StatusType::ACTIVO);
         $objClauWher[] = QQ::Equal(QQN::Chofer()->CodiDisp,SinoType::SI);
@@ -992,9 +992,9 @@ class SacarARuta extends FormularioBaseKaizen {
             //----------------------------------------------
             // Se crea el nuevo chofer en la base de datos
             //----------------------------------------------
+
             $objNuevChof             = new Chofer();
-            $objNuevChof->NombChof   = $strNombChof;
-            $objNuevChof->ApelChof   = $strApelChof;
+            $objNuevChof->Nombre     = $strNuevChof;
             $objNuevChof->NumeCedu   = $strNuevCedu;
             $objNuevChof->SucursalId = $this->objUsuario->SucursalId;
             $objNuevChof->CodiDisp   = SinoType::SI;
@@ -1010,7 +1010,7 @@ class SacarARuta extends FormularioBaseKaizen {
             //---------------------------------------------
             $arrLogxCamb['strNombTabl'] = 'Chofer';
             $arrLogxCamb['intRefeRegi'] = $objNuevChof->CodiChof;
-            $arrLogxCamb['strNombRegi'] = $objNuevChof->NombChof.' '.$objNuevChof->ApelChof;
+            $arrLogxCamb['strNombRegi'] = $objNuevChof->Nombre;
             $arrLogxCamb['strDescCamb'] = 'Creado dinamicamente, desde Sacar a Ruta';
             LogDeCambios($arrLogxCamb);
             $this->success('Chofer creado Exitosamente !!! | Login Mobile: <b>'.$objNuevChof->Login.'</b> | Clave: <b>muyfacil</b>');
@@ -1141,7 +1141,7 @@ class SacarARuta extends FormularioBaseKaizen {
                 //---------------------------------------------
                 $arrLogxCamb['strNombTabl'] = 'Chofer';
                 $arrLogxCamb['intRefeRegi'] = $objChofSele->CodiChof;
-                $arrLogxCamb['strNombRegi'] = $objChofSele->NombChof;
+                $arrLogxCamb['strNombRegi'] = $objChofSele->Nombre;
                 $arrLogxCamb['strDescCamb'] = 'Nueva Cedula: '.$this->txtCeduChof->Text;
                 LogDeCambios($arrLogxCamb);
                 $this->txtCeduChof->Enabled = false;
@@ -1212,7 +1212,6 @@ class SacarARuta extends FormularioBaseKaizen {
         t('Comenzando el Sacar a Ruta');
         $this->objDataBase = QApplication::$Database[1];
         $strTipoRuta = $this->lstTipoOper->SelectedValue == 0 ? "URBANA" : "EXTRA-URBANA";
-        t('Tipo de Ruta: '.$strTipoRuta);
         //------------------------------------------------------
         // Se graba o actualiza el contenedor en la tabla guia
         //------------------------------------------------------
@@ -1223,7 +1222,6 @@ class SacarARuta extends FormularioBaseKaizen {
             //---------------------------------------------------------------
             $this->txtNumeCont->Text = date('YmdHis');
         }
-        t('Voy a buscar el contenedor');
         if (!$this->blnEditMode) {
             $objContenedor = Containers::LoadByNumero($this->txtNumeCont->Text);
         } else {
@@ -1231,15 +1229,16 @@ class SacarARuta extends FormularioBaseKaizen {
         }
         try {
             if (!$objContenedor) {
-                t('No existia, lo voy a crear');
                 $objContenedor = new Containers();
-                $objContenedor->Hora        = date("H:i");
-                $objContenedor->CreatedBy   = $this->objUsuario->CodiUsua;
-                $objContenedor->Estatus     = 'ABIERT@';
-                $objContenedor->Tipo        = 'MASTER';
-                $objContenedor->Kilos       = 0;
-                $objContenedor->PiesCub     = 0;
-                $objContenedor->Peso        = 0;
+                $objContenedor->Hora         = date("H:i");
+                $objContenedor->CreatedBy    = $this->objUsuario->CodiUsua;
+                $objContenedor->Estatus      = 'ABIERT@';
+                $objContenedor->Tipo         = 'MASTER';
+                $objContenedor->Kilos        = 0;
+                $objContenedor->PiesCub      = 0;
+                $objContenedor->Peso         = 0;
+                $objContenedor->Devueltas    = 0;
+                $objContenedor->SinGestionar = 0;
             }
             $objContenedor->Fecha           = new QDateTime($this->calFechDesp->DateTime);
             $objContenedor->Numero          = $this->txtNumeCont->Text;

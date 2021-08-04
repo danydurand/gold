@@ -19,7 +19,6 @@ if (!($objUser instanceof UsuarioConnect)) {
     QApplication::Redirect(__CORP__.'/index.php');
 }
 if (!defined('__SIST__')) {
-    //define ('__SIST__', '/newliberty/'.$_SESSION['NombDire']);
     define ('__SIST__', '/'.$_SESSION['NombDire']);
 }
 //---------------------------------------------------------------------------------

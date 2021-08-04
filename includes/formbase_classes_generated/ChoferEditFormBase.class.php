@@ -49,9 +49,12 @@ abstract class ChoferEditFormBase extends QForm {
     protected $btnAnteSmal;
     protected $btnProxSmal;
     protected $btnUltiSmal;
+    protected $lblOtraNoti;
+
 
 	// Controls for Chofer's Data Fields
 	protected $lblCodiChof;
+	protected $txtNombre;
 	protected $txtNombChof;
 	protected $txtApelChof;
 	protected $txtNumeCedu;
@@ -106,6 +109,7 @@ abstract class ChoferEditFormBase extends QForm {
 		$this->lblMensUsua_Create();
 		$this->lblNotiUsua_Create();
 		$this->lblTituForm_Create();
+        $this->lblOtraNoti_Create();
 
         $this->btnNuevRegi_Create();
         $this->btnProxRegi_Create();
@@ -131,6 +135,7 @@ abstract class ChoferEditFormBase extends QForm {
 
 		// Call MetaControl's methods to create qcontrols based on Chofer's data fields
 		$this->lblCodiChof = $this->mctChofer->lblCodiChof_Create();
+		$this->txtNombre = $this->mctChofer->txtNombre_Create();
 		$this->txtNombChof = $this->mctChofer->txtNombChof_Create();
 		$this->txtApelChof = $this->mctChofer->txtApelChof_Create();
 		$this->txtNumeCedu = $this->mctChofer->txtNumeCedu_Create();
@@ -192,6 +197,12 @@ abstract class ChoferEditFormBase extends QForm {
 		$this->lblNotiUsua->Text = '';
 		$this->lblNotiUsua->HtmlEntities = false;
 	}
+
+    protected function lblOtraNoti_Create() {
+        $this->lblOtraNoti = new QLabel($this);
+        $this->lblOtraNoti->Text = '';
+        $this->lblOtraNoti->HtmlEntities = false;
+    }
 
     //-------------------------
     // Botónes del Formulario 
@@ -501,6 +512,23 @@ abstract class ChoferEditFormBase extends QForm {
 		$objUltiAcce = PilaAcceso::Pop('D');
 		QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
 	}
+
+    protected function oinfo($strTextMens) {
+        $this->mensaje($strTextMens,'o','i',null,__iINFO__);
+    }
+
+    protected function odanger($strTextMens) {
+        $this->mensaje($strTextMens,'o','d',null,__iHAND__);
+    }
+
+    protected function owarning($strTextMens) {
+        $this->mensaje($strTextMens,'o','w',null,__iEXCL__);
+    }
+
+    protected function osuccess($strTextMens) {
+        $this->mensaje($strTextMens,'o','s',null,__iCHEC__);
+    }
+
 
     protected function ninfo($strTextMens) {
         $this->mensaje($strTextMens,'n','i',null,__iINFO__);

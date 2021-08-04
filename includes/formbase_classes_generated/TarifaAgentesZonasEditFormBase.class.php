@@ -49,6 +49,8 @@ abstract class TarifaAgentesZonasEditFormBase extends QForm {
     protected $btnAnteSmal;
     protected $btnProxSmal;
     protected $btnUltiSmal;
+    protected $lblOtraNoti;
+
 
 	// Controls for TarifaAgentesZonas's Data Fields
 	protected $lblId;
@@ -103,6 +105,7 @@ abstract class TarifaAgentesZonasEditFormBase extends QForm {
 		$this->lblMensUsua_Create();
 		$this->lblNotiUsua_Create();
 		$this->lblTituForm_Create();
+        $this->lblOtraNoti_Create();
 
         $this->btnNuevRegi_Create();
         $this->btnProxRegi_Create();
@@ -186,6 +189,12 @@ abstract class TarifaAgentesZonasEditFormBase extends QForm {
 		$this->lblNotiUsua->Text = '';
 		$this->lblNotiUsua->HtmlEntities = false;
 	}
+
+    protected function lblOtraNoti_Create() {
+        $this->lblOtraNoti = new QLabel($this);
+        $this->lblOtraNoti->Text = '';
+        $this->lblOtraNoti->HtmlEntities = false;
+    }
 
     //-------------------------
     // Botónes del Formulario 
@@ -497,6 +506,23 @@ abstract class TarifaAgentesZonasEditFormBase extends QForm {
 		$objUltiAcce = PilaAcceso::Pop('D');
 		QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
 	}
+
+    protected function oinfo($strTextMens) {
+        $this->mensaje($strTextMens,'o','i',null,__iINFO__);
+    }
+
+    protected function odanger($strTextMens) {
+        $this->mensaje($strTextMens,'o','d',null,__iHAND__);
+    }
+
+    protected function owarning($strTextMens) {
+        $this->mensaje($strTextMens,'o','w',null,__iEXCL__);
+    }
+
+    protected function osuccess($strTextMens) {
+        $this->mensaje($strTextMens,'o','s',null,__iCHEC__);
+    }
+
 
     protected function ninfo($strTextMens) {
         $this->mensaje($strTextMens,'n','i',null,__iINFO__);

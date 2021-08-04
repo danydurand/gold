@@ -1,18 +1,34 @@
 <?php 
 require_once('qcubed.inc.php');
 
-$strTituPagi = 'Rastreo';
+$strTituPagi = 'Buscar';
 $blnTodoOkey = true;
 $strMensErro = '';
 if (isset($_POST['nroguia'])) {
-    $strNumeGuia = trim($_POST['nroguia']);
-    $objGuiaSele = Guias::LoadByTracking($strNumeGuia);
-    if (!$objGuiaSele) {
+    /* @var $objUsuario Chofer */
+    $objUsuario   = unserialize($_SESSION['User']);
+    $strNumeGuia  = trim($_POST['nroguia']);
+    $strCadeSqlx  = "select guia_id ";
+    $strCadeSqlx .= "  from v_guias_del_chofer ";
+    $strCadeSqlx .= " where chofer_id = ".$objUsuario->CodiChof;
+    $strCadeSqlx .= "   and tracking = '".$strNumeGuia."'";
+    $objDatabase  = Guias::GetDatabase();
+    $objDbResult  = $objDatabase->Query($strCadeSqlx);
+    $mixRegistro  = $objDbResult->FetchArray();
+    if (!isset($mixRegistro['guia_id'])) {
+        $strMensErro = 'La guia no existe o no le pertenece !!';
         $blnTodoOkey = false;
-        $strMensErro = 'La Guia No Existe';
-    } else {
-        $_SESSION['GuiaSele'] = serialize($objGuiaSele);
-        QApplication::Redirect('detalle_de_guia_rastreo.php');
+    }
+    $intIdxxGuia = $mixRegistro['guia_id'];
+    if ($blnTodoOkey) {
+        $objGuiaSele = Guias::Load($intIdxxGuia);
+        if (!$objGuiaSele) {
+            $blnTodoOkey = false;
+            $strMensErro = 'La guia no existe !!';
+        } else {
+            $_SESSION['GuiaSele'] = serialize($objGuiaSele);
+            QApplication::Redirect('detalle_de_guia_rastreo.php');
+        }
     }
 }
 ?>

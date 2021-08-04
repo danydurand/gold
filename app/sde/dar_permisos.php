@@ -214,15 +214,15 @@ class DarPermisos extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-        $blnTodoOkey = true;
+        //$blnTodoOkey = true;
         $arrListLogi = explode(',',nl2br2($this->txtLogiUsua->Text));
         //-----------------------------------------------------------------------------
         // Con array_unique se eliminan los logines repetidos en caso de que los haya
         //-----------------------------------------------------------------------------
         $arrListLogi = LimpiarArreglo($arrListLogi,false);
         $this->txtLogiUsua->Text = '';
-        $strPermProc = $this->lstPermProc->SelectedValue->CodiPara;
-        $strNombBase = $this->lstPermProc->SelectedValue->ParaTxt2;
+        $strPermProc = explode('|',$this->lstPermProc->SelectedValue)[1];
+        //$strNombBase = $this->lstPermProc->SelectedValue->ParaTxt2;
         //--------------------------------------------------------
         // Se procesan uno a uno los logines proporcionados
         //--------------------------------------------------------
@@ -230,7 +230,7 @@ class DarPermisos extends FormularioBaseKaizen {
         $intUsuaProc = 0;
         foreach ($arrListLogi as $strLogiUsua) {
             $strLogiUsua = strtolower($strLogiUsua);
-            if (!in_array($strLogiUsua,array('cliente','liberty'))) {
+            if (!in_array($strLogiUsua,array('cliente','gold'))) {
                 $objUsuario = Usuario::LoadByLogiUsua($strLogiUsua);
                 if ($objUsuario) {
                     $objPermProc = Parametro::Load($strPermProc, $strLogiUsua);
@@ -261,6 +261,7 @@ class DarPermisos extends FormularioBaseKaizen {
                     $arrLogxCamb['strDescCamb'] = $strTextCamb;
                     LogDeCambios($arrLogxCamb);
                     $intUsuaProc++;
+                    $this->dtgUsuaPerm->Refresh();
                 } else {
                     $this->txtLogiUsua->Text = $strLogiUsua." (NO EXISTE)".chr(13);
                 }
@@ -269,53 +270,53 @@ class DarPermisos extends FormularioBaseKaizen {
                 $this->txtLogiUsua->Text = $strLogiUsua." (NO PUEDE SER PROCESADO)".chr(13);
             }
         }
-        $this->mensaje('Registros procesados: '.$intUsuaProc."/".$intCantRegi,'','','',__iCHEC__);
+        $strTextMens = 'Registros procesados: '.$intUsuaProc."/".$intCantRegi;
+        $this->success($strTextMens);
     }
 
     protected function btnQuitar_Click($strFormId, $strControlId, $strParameter) {
-        $blnTodoOkey = true;
+        //$blnTodoOkey = true;
         $arrListLogi = explode(',',nl2br2($this->txtLogiUsua->Text));
         //-----------------------------------------------------------------------------
         // Con array_unique se eliminan los logines repetidos en caso de que los haya
         //-----------------------------------------------------------------------------
         $arrListLogi = LimpiarArreglo($arrListLogi,false);
         $this->txtLogiUsua->Text = '';
-        $strPermProc = $this->lstPermProc->SelectedValue->CodiPara;
+        $strPermProc = explode('|',$this->lstPermProc->SelectedValue)[1];
         //--------------------------------------------------------
         // Se procesan uno a uno los logines proporcionados
         //--------------------------------------------------------
         $intCantRegi = 0;
         $intUsuaProc = 0;
         foreach ($arrListLogi as $strLogiUsua) {
-            if (!in_array($strLogiUsua,array('cliente','liberty'))) {
-                $objUsuario = Usuario::LoadByLogiUsua($strLogiUsua);
+            if (!in_array($strLogiUsua,array('cliente','gold'))) {
+                $objUsuario  = Usuario::LoadByLogiUsua($strLogiUsua);
+                $objPermProc = Parametro::Load($strPermProc, $strLogiUsua);
+                if ($objPermProc) {
+                    //-------------------------------------------------------------------------------------
+                    // Si el registro existe, se elimina, con lo cual automaticamente se niega el permiso
+                    //-------------------------------------------------------------------------------------
+                    $objPermProc->Delete();
+                }
+                //------------------------
+                // Log de Transacciones
+                //------------------------
                 if ($objUsuario) {
-                    $objPermProc = Parametro::Load($strPermProc, $strLogiUsua);
-                    if ($objPermProc) {
-                        //-------------------------------------------------------------------------------------
-                        // Si el registro existe, se elimina, con lo cual automaticamente se niega el permiso
-                        //-------------------------------------------------------------------------------------
-                        $objPermProc->Delete();
-                    }
-                    //------------------------
-                    // Log de Transacciones
-                    //------------------------
                     $strTextCamb = 'Se quito permiso para: '.$this->lstPermProc->SelectedName;
                     $arrLogxCamb['strNombTabl'] = 'Permisos';
                     $arrLogxCamb['intRefeRegi'] = $objUsuario->CodiUsua;
                     $arrLogxCamb['strNombRegi'] = $objUsuario->LogiUsua;
                     $arrLogxCamb['strDescCamb'] = $strTextCamb;
                     LogDeCambios($arrLogxCamb);
-                    $intUsuaProc++;
-                } else {
-                    $this->txtLogiUsua->Text = $strLogiUsua." (NO EXISTE)".chr(13);
                 }
+                $intUsuaProc++;
                 $intCantRegi++;
             } else {
                 $this->txtLogiUsua->Text = $strLogiUsua." (NO PUEDE SER PROCESADO)".chr(13);
             }
         }
-        $this->mensaje('Registros procesados: '.$intUsuaProc."/".$intCantRegi,'','','',__iCHEC__);
+        $strTextMens = 'Registros procesados: '.$intUsuaProc."/".$intCantRegi;
+        $this->success($strTextMens);
     }
 }
 

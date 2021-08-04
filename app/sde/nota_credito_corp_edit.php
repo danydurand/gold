@@ -71,7 +71,7 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->txtUpdatedBy = $this->mctNotaCreditoCorp->txtUpdatedBy_Create();
 
 		if ($this->txtTipo->Text == 'AUTOMATICA') {
-		    $this->btnDelete->Visible = false;
+		    //$this->btnDelete->Visible = false;
 		    $this->txtReferencia  = disableControl($this->txtReferencia);
 		    $this->txtTipo        = disableControl($this->txtTipo);
 		    $this->lstClienteCorp = disableControl($this->lstClienteCorp);

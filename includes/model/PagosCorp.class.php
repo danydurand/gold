@@ -109,6 +109,7 @@
                         $objNotaCorp->PagoCorpId    = $this->Id;
                         $objNotaCorp->Fecha         = new QDateTime(QDateTime::Now());
                         $objNotaCorp->Monto         = $decMontPago;
+                        $objNotaCorp->Estatus       = 'DISPONIBLE';
                         $objNotaCorp->Observacion   = strtoupper('Saldo Excedente por Pago a la Factura con Referencia: '.$objFactPago->Referencia);
                         $objNotaCorp->CreatedBy     = $objUsuario->CodiUsua;
                         $objNotaCorp->Save();

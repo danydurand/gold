@@ -44,13 +44,8 @@ class ChoferEditForm extends ChoferEditFormBase {
 		$this->lblCodiChof = $this->mctChofer->lblCodiChof_Create();
 		$this->lblCodiChof->Name = 'Código';
 
-		$this->txtNombChof = $this->mctChofer->txtNombChof_Create();
-		$this->txtNombChof->Name = 'Nombres';
-        $this->txtNombChof->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
-
-		$this->txtApelChof = $this->mctChofer->txtApelChof_Create();
-		$this->txtApelChof->Name = 'Apellidos';
-		$this->txtApelChof->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
+		$this->txtNombre = $this->mctChofer->txtNombre_Create();
+        $this->txtNombre->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
 
 		$this->txtNumeCedu = $this->mctChofer->txtNumeCedu_Create();
 		$this->txtNumeCedu->Name = 'Cédula';
@@ -135,11 +130,25 @@ class ChoferEditForm extends ChoferEditFormBase {
 	// Acciones Asociadas a los Objetos
 	//-----------------------------------
 
+    protected function nombreValido($strNombChof) {
+        $arrNombChof = explode(' ',$strNombChof);
+        if (count($arrNombChof) != 2) {
+            $strTextMens = 'Coloque un Nombre y un Apellido separado por un espacio (Ej: Carlos Garcia)';
+            $this->danger($strTextMens);
+            return false;
+        }
+        return true;
+    }
+
     public function crearLogin() {
-	    $strNombChof = $this->txtNombChof->Text;
-	    $strApelChof = $this->txtApelChof->Text;
-	    //$this->txtLogin->Text = Chofer::LoginPropuesto($strNombChof,$strApelChof);
-	    $this->txtLogin->Text = LoginPropuesto($strNombChof,$strApelChof);
+	    $strNombDigi = trim($this->txtNombre->Text);
+	    if (!$this->nombreValido($strNombDigi)) {
+            return;
+        }
+        $arrNombChof = explode(' ',$strNombDigi);
+        $strNombChof = $arrNombChof[0];
+        $strApelChof = $arrNombChof[1];
+        $this->txtLogin->Text = LoginPropuesto($strNombChof,$strApelChof);
     }
 
     protected function btnProxRegi_Click() {
@@ -163,6 +172,9 @@ class ChoferEditForm extends ChoferEditFormBase {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
+	    if (!$this->nombreValido($this->txtNombre->Text)) {
+	        return;
+        }
         if (strlen(trim($this->txtPassword->Text)) == 0) {
             $this->txtPassword->Text = 'sencillo';
         }
@@ -186,7 +198,7 @@ class ChoferEditForm extends ChoferEditFormBase {
 				//------------------------------------------
 				$arrLogxCamb['strNombTabl'] = 'Chofer';
 				$arrLogxCamb['intRefeRegi'] = $this->mctChofer->Chofer->CodiChof;
-				$arrLogxCamb['strNombRegi'] = $this->mctChofer->Chofer->NombChof . ' - ' . $this->mctChofer->Chofer->ApelChof;
+				$arrLogxCamb['strNombRegi'] = $this->mctChofer->Chofer->Nombre;
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/chofer_edit.php/'.$this->mctChofer->Chofer->CodiChof;
 				LogDeCambios($arrLogxCamb);
@@ -195,7 +207,7 @@ class ChoferEditForm extends ChoferEditFormBase {
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Chofer';
 			$arrLogxCamb['intRefeRegi'] = $this->mctChofer->Chofer->CodiChof;
-			$arrLogxCamb['strNombRegi'] = $this->mctChofer->Chofer->NombChof . ' - ' . $this->mctChofer->Chofer->ApelChof;
+			$arrLogxCamb['strNombRegi'] = $this->mctChofer->Chofer->Nombre;
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/chofer_edit.php/'.$this->mctChofer->Chofer->CodiChof;
 			LogDeCambios($arrLogxCamb);
@@ -219,7 +231,7 @@ class ChoferEditForm extends ChoferEditFormBase {
             $this->mctChofer->DeleteChofer();
             $arrLogxCamb['strNombTabl'] = 'Chofer';
             $arrLogxCamb['intRefeRegi'] = $this->mctChofer->Chofer->CodiChof;
-            $arrLogxCamb['strNombRegi'] = $this->mctChofer->Chofer->NombChof . ' - ' . $this->mctChofer->Chofer->ApelChof;
+            $arrLogxCamb['strNombRegi'] = $this->mctChofer->Chofer->Nombre;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

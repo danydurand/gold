@@ -106,8 +106,6 @@ class Index extends QForm {
                     $_SESSION['NombSist']      = 'CORP';
                     $_SESSION['NombDire']      = 'corp';
                     $_SESSION['Empresa']       = 'gold';
-                    //define ('__SIST__', '/newliberty/'.$_SESSION['NombDire']);
-                    //define ('__SIST__', '/'.$_SESSION['NombDire']);
                     define ('__SIST__', '/');
 
                     $objCliente = MasterCliente::Load($objUsuario->ClienteId);

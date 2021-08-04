@@ -312,44 +312,36 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		}
 	}
 
+
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-        //----------------------------------------
-        // Se verifica la integridad referencial
-        //----------------------------------------
-        $blnTodoOkey = true;
-        $arrTablRela = $this->mctPagosCorp->TablasRelacionadasPagosCorp();
-        if (count($arrTablRela)) {
-            $strTablRela = implode(',',$arrTablRela);
-            $this->warning(sprintf('Existen registros relacionados en %s',$strTablRela));
-            $blnTodoOkey = false;
+        //--------------------------------------------
+        // Se obtiene las Facturas asociadas al Pago
+        //--------------------------------------------
+        $arrFactAsoc = $this->mctPagosCorp->PagosCorp->GetFacturasAsFacturaPagoCorpArray();
+        //------------------------------------------------------
+        // Se borra cualquier nota de credito asociada al pago
+        //------------------------------------------------------
+        $arrNotaCred = $this->mctPagosCorp->PagosCorp->GetNotaCreditoCorpAsPagoCorpArray();
+        foreach ($arrNotaCred as $objNotaCred) {
+            $objNotaCred->Delete();
         }
-        if ($blnTodoOkey) {
-            //--------------------------------------------
-            // Se obtiene las Facturas asociadas al Pago
-            //--------------------------------------------
-            $arrFactAsoc = $this->mctPagosCorp->PagosCorp->GetFacturasAsFacturaPagoCorpArray();
-            //---------------------
-            // Se elimina el Pago
-            //---------------------
-            $this->mctPagosCorp->DeletePagosCorp();
-            $this->mctPagosCorp->PagosCorp->logDeCambios("Borrado");
-            //---------------------------------------------------------------------
-            // Se actualiza el monto cobrado de la facturas asociadas
-            //---------------------------------------------------------------------
-            foreach ($arrFactAsoc as $objFactAsoc) {
-                t('Actualizando factura: '.$objFactAsoc->Referencia);
-                $objFactAsoc->ActualizarMontos();
-            }
-            //-----------------------------------------
-            // Se actaliza ahora el saldo del Cliente
-            //-----------------------------------------
-            t('Voy a actalizar el saldo excedente del Cliente');
-            $objClieFact = MasterCliente::Load($this->lstClienteCorp->SelectedValue);
-            $objClieFact->calcularSaldoExcedente();
-
-            $this->RedirectToListPage();
-
+        //---------------------
+        // Se elimina el Pago
+        //---------------------
+        $this->mctPagosCorp->DeletePagosCorp();
+        $this->mctPagosCorp->PagosCorp->logDeCambios("Borrado");
+        //---------------------------------------------------------------------
+        // Se actualiza el monto cobrado de la facturas asociadas
+        //---------------------------------------------------------------------
+        foreach ($arrFactAsoc as $objFactAsoc) {
+            $objFactAsoc->ActualizarMontos();
         }
+        //-----------------------------------------
+        // Se actaliza ahora el saldo del Cliente
+        //-----------------------------------------
+        $objClieFact = MasterCliente::Load($this->lstClienteCorp->SelectedValue);
+        $objClieFact->calcularSaldoExcedente();
+        $this->RedirectToListPage();
     }
 }
 

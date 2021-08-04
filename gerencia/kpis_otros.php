@@ -2,6 +2,7 @@
 require_once('qcubed.inc.php');
 $strTituPagi = "Otros KPIs";
 
+t('1');
 $objDatabase   = Parametro::GetDatabase();
 $objClauOrde   = QQ::Clause();
 $objClauOrde[] = QQ::OrderBy(QQN::Parametros()->Valor1);
@@ -10,6 +11,7 @@ $strTituDest   = trim($objQuerMobi->Descripcion);
 $strCadeSqlx   = trim($objQuerMobi->Texto1);
 $objDbResult   = $objDatabase->Query($strCadeSqlx);
 $strHtmlDest   = '';
+t('2');
 while ($mixRegistro = $objDbResult->FetchArray()) {
     $strHtmlDest .= '
     <li>
@@ -18,11 +20,13 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
     </li>
     ';
 }
+t('3');
 $objQuerMobi   = Parametros::LoadByIndiceCodigo('QRYRANK','MAINCUST',$objClauOrde);
 $strTituCust   = trim($objQuerMobi->Descripcion);
 $strCadeSqlx   = trim($objQuerMobi->Texto1);
 $objDbResult   = $objDatabase->Query($strCadeSqlx);
 $strHtmlCust   = '';
+t('4');
 while ($mixRegistro = $objDbResult->FetchArray()) {
     $strHtmlCust .= '
     <li>
@@ -31,11 +35,13 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
     </li>
     ';
 }
+t('5');
 $objQuerMobi   = Parametros::LoadByIndiceCodigo('QRYRANK','MAINTRAN',$objClauOrde);
 $strTituTran   = trim($objQuerMobi->Descripcion);
 $strCadeSqlx   = trim($objQuerMobi->Texto1);
 $objDbResult   = $objDatabase->Query($strCadeSqlx);
 $strHtmlTran   = '';
+t('6');
 while ($mixRegistro = $objDbResult->FetchArray()) {
     $strHtmlTran .= '
     <li>
@@ -44,6 +50,7 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
     </li>
     ';
 }
+t('7');
 ?>
 <?php include('layout/header.inc.php') ?>
 
@@ -51,7 +58,7 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
 
     <?php include('layout/page_header.inc.php') ?>
 
-    <div data-role="content">
+    <div data-role="content" style="min-height: 380px;">
         <div class="ui-nodisc-icon" data-role="collapsible-set" data-inset="true" data-theme="a" style="font-size:14px">
             <div data-role="collapsible" data-collapsed="false" data-theme="a">
                 <h3><?= $strTituDest ?></h3>

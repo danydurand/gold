@@ -57,7 +57,7 @@ foreach ($arrQuerMobi as $objQuerMobi) {
 
     <?php include('layout/page_header.inc.php') ?>
 
-    <div data-role="content">
+    <div data-role="content" style="min-height: 380px;">
         <div class="ui-nodisc-icon" data-role="collapsible-set" data-inset="true" data-theme="a" style="font-size:14px">
             <div data-role="collapsible" data-collapsed="false" data-theme="a">
                 <h3>KPIs DE HOY</h3>

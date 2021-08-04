@@ -13,6 +13,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
     protected $lstConcFact;
     protected $dtgNotaFact;
     protected $arrNotaEntr = [];
+    protected $colNotaSele;
 
 
     protected function Form_Create() {
@@ -53,6 +54,10 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
 
         $this->dtgNotaFact->SetDataBinder('dtgNotaFact_Bind');
 
+        $this->colNotaSele = new QCheckBoxColumn('', $this->dtgNotaFact);
+        $this->colNotaSele->PrimaryKey = 'Id';
+        $this->dtgNotaFact->AddColumn($this->colNotaSele);
+
         $this->dtgNotaFactColumns();
     }
 
@@ -64,13 +69,13 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         $colNombClie = new QDataGridColumn($this);
         $colNombClie->Name = QApplication::Translate('Cliente');
         $colNombClie->Html = '<?= $_ITEM->ClienteCorp->NombClie ?>';
-        $colNombClie->Width = 150;
+        $colNombClie->Width = 200;
         $this->dtgNotaFact->AddColumn($colNombClie);
 
         $colNumeRefe = new QDataGridColumn($this);
         $colNumeRefe->Name = QApplication::Translate('Referencia');
         $colNumeRefe->Html = '<?= $_ITEM->Referencia ?>';
-        $colNumeRefe->Width = 160;
+        $colNumeRefe->Width = 200;
         $this->dtgNotaFact->AddColumn($colNumeRefe);
 
         $colFechNota = new QDataGridColumn($this);
@@ -82,25 +87,25 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         $colEstaNota = new QDataGridColumn($this);
         $colEstaNota->Name = QApplication::Translate('Estatus');
         $colEstaNota->Html = '<?= $_ITEM->Estatus ?>';
-        $colEstaNota->Width = 100;
+        $colEstaNota->Width = 75;
         $this->dtgNotaFact->AddColumn($colEstaNota);
 
         $colServImpo = new QDataGridColumn($this);
         $colServImpo->Name = QApplication::Translate('S.Imp.');
         $colServImpo->Html = '<?= $_ITEM->ServicioImportacion ?>';
-        $colServImpo->Width = 80;
+        $colServImpo->Width = 55;
         $this->dtgNotaFact->AddColumn($colServImpo);
 
         $colPiezCarg = new QDataGridColumn($this);
         $colPiezCarg->Name = QApplication::Translate('Crgds');
         $colPiezCarg->Html = '<?= $_ITEM->Cargadas ?>';
-        $colPiezCarg->Width = 80;
+        $colPiezCarg->Width = 55;
         $this->dtgNotaFact->AddColumn($colPiezCarg);
 
         $colPiezReci = new QDataGridColumn($this);
         $colPiezReci->Name = QApplication::Translate('Recib.');
         $colPiezReci->Html = '<?= $_ITEM->Recibidas ?>';
-        $colPiezReci->Width = 80;
+        $colPiezReci->Width = 55;
         $this->dtgNotaFact->AddColumn($colPiezReci);
 
     }
@@ -115,7 +120,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
     protected function lstCodiClie_Create() {
         $this->lstCodiClie = new QListBox($this);
         $this->lstCodiClie->Name = QApplication::Translate('Clientes(s) Facturable(s)');
-        $this->lstCodiClie->Width = 180;
+        $this->lstCodiClie->Width = 200;
         $this->lstCodiClie->SelectionMode = QSelectionMode::Multiple;
         $this->lstCodiClie->Rows = 5;
     }
@@ -144,7 +149,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
     protected function lstConcFact_Create() {
         $this->lstConcFact = new QListBox($this);
         $this->lstConcFact->Name = QApplication::Translate('Conceptos Facturables');
-        $this->lstConcFact->Width = 180;
+        $this->lstConcFact->Width = 200;
         $this->lstConcFact->SelectionMode = QSelectionMode::Multiple;
         $this->lstConcFact->Rows = 5;
     }
@@ -235,14 +240,17 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         // que adicionalmente coinciden con el rango de fechas especificado por el Usuario
         //----------------------------------------------------------------------------------------
         t('Cantidad de Manifiestos aptos para facturar es: '.count($this->arrNotaEntr));
+        $arrIdxxSele = $this->colNotaSele->GetChangedIds();
         $arrManiIdxx = [];
         foreach ($this->arrNotaEntr as $objManiFact) {
-            //----------------------------------------------------------------------------------------
-            // Estos Ids de Manifiestos se utilizan luego para filtrar los registros de cada Cliente
-            // El Cliente pudiera tener más manifiestos facturables, pero solo deben facturase los
-            // que aparezcan en este vector.
-            //----------------------------------------------------------------------------------------
-            $arrManiIdxx[] = $objManiFact->Id;
+            if (in_array($objManiFact->Id, array_keys($arrIdxxSele))) {
+                //----------------------------------------------------------------------------------------
+                // Estos Ids de Manifiestos se utilizan luego para filtrar los registros de cada Cliente
+                // El Cliente pudiera tener más manifiestos facturables, pero solo deben facturase los
+                // que aparezcan en este vector.
+                //----------------------------------------------------------------------------------------
+                $arrManiIdxx[] = $objManiFact->Id;
+            }
         }
 
         $intCantMani = 0;

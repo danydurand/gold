@@ -16,7 +16,7 @@ if (isset($_GET['m'])) {
 
     <?php include('layout/page_header.inc.php'); ?>
 
-    <div data-role="content" style="text-align: center; min-height: 400px; padding-top: 10%">
+    <div data-role="content" style="text-align: center; min-height: 380px; padding-top: 10%">
         <img src="images/LogoGold_MED.png" alt="" style="margin-top: 2em; opacity:0.5;">
     </div>
 

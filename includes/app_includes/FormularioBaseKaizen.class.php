@@ -5,6 +5,7 @@ abstract class FormularioBaseKaizen extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $blnTodoOkey = true;
+    protected $lblOtraNoti;
 
     /**
      * @var $objUsuario Usuario
@@ -21,6 +22,7 @@ abstract class FormularioBaseKaizen extends QForm {
         $this->lblTituForm_Create();
         $this->lblMensUsua_Create();
         $this->lblNotiUsua_Create();
+        $this->lblOtraNoti_Create();
 
         $this->btnSave_Create();
         $this->btnCancel_Create();
@@ -48,6 +50,13 @@ abstract class FormularioBaseKaizen extends QForm {
         $this->lblNotiUsua->HtmlEntities = false;
     }
 
+    protected function lblOtraNoti_Create() {
+        $this->lblOtraNoti = new QLabel($this);
+        $this->lblOtraNoti->Text = '';
+        $this->lblOtraNoti->HtmlEntities = false;
+    }
+
+
     //----------------------------------
     // Botónes Clásicos del Formulario
     //----------------------------------
@@ -69,6 +78,22 @@ abstract class FormularioBaseKaizen extends QForm {
         $this->btnCancel->CssClass = 'btn btn-warning btn-sm';
         $this->btnCancel->HtmlEntities = 'false';
         $this->btnCancel->CausesValidation = false;
+    }
+
+    protected function oinfo($strTextMens) {
+        $this->mensaje($strTextMens,'o','i',null,__iINFO__);
+    }
+
+    protected function odanger($strTextMens) {
+        $this->mensaje($strTextMens,'o','d',null,__iHAND__);
+    }
+
+    protected function owarning($strTextMens) {
+        $this->mensaje($strTextMens,'o','w',null,__iEXCL__);
+    }
+
+    protected function osuccess($strTextMens) {
+        $this->mensaje($strTextMens,'o','s',null,__iCHEC__);
     }
 
     protected function ninfo($strTextMens) {

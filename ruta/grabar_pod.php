@@ -7,13 +7,12 @@ t('Grabando POD');
 $strTituPagi = "Grabar POD";
 $strTipoGuia = 'PE';
 $intGrupGuia = 1;
+$intManiIdxx = null;
 $blnTodoOkey = true;
+$blnOpciTrad = true;
 if (isset($_POST['nomb'])) {
     t('Hay datos en el POST del formulario');
-    $_SESSION['tipo'] = $_POST['tipo'];
-    $_SESSION['grup'] = $_POST['grup'];
     $_SESSION['idxx'] = $_POST['idxx'];
-    $_SESSION['midx'] = $_POST['midx'];
     $_SESSION['nomb'] = strtoupper($_POST['nomb']);
     $_SESSION['cedu'] = strtoupper($_POST['cedu']);
     $_SESSION['fent'] = $_POST['fent'];
@@ -21,6 +20,22 @@ if (isset($_POST['nomb'])) {
 } else {
     $blnTodoOkey = false;
 }
+if (isset($_POST['midx'])) {
+    $_SESSION['midx'] = $_POST['midx'];
+} else {
+    $blnOpciTrad = false;
+}
+if (isset($_POST['tipo'])) {
+    $_SESSION['tipo'] = $_POST['tipo'];
+} else {
+    $blnOpciTrad = false;
+}
+if (isset($_POST['grup'])) {
+    $_SESSION['grup'] = $_POST['grup'];
+} else {
+    $blnOpciTrad = false;
+}
+t('Opcion Tradicional: '.$blnOpciTrad);
 $strMultPodx = '';
 $arrOtraProc = [];
 if (isset($_POST['mult_podx'])) {
@@ -32,12 +47,14 @@ if (isset($_POST['mult_podx'])) {
 $strMensErro = '';
 if ($blnTodoOkey) {
     t('Todo bien hasta ahora');
-    $strTipoGuia = $_SESSION['tipo'];
-    $intGrupGuia = $_SESSION['grup'];
+    if ($blnOpciTrad) {
+        $strTipoGuia = $_SESSION['tipo'];
+        $intGrupGuia = $_SESSION['grup'];
+        $intManiIdxx = $_SESSION['midx'];
+        t('Id del Manifiesto '.$intManiIdxx);
+    }
     $intPiezIdxx = $_SESSION['idxx'];
-    $intManiIdxx = $_SESSION['midx'];
     t('Id de la Pieza: '.$intPiezIdxx);
-    t('Id del Manifiesto '.$intManiIdxx);
     $strNombClie = $_SESSION['nomb'];
     $strCeduRifx = $_SESSION['cedu'];
     $strFechEntr = $_SESSION['fent'];
@@ -99,11 +116,17 @@ if ($blnTodoOkey) {
             }
             
         }
-        $objManiProc = Containers::Load($intManiIdxx);
-        $objManiProc->ActualizarEstadisticasDeEntrega();
+        if ($blnOpciTrad) {
+            $objManiProc = Containers::Load($intManiIdxx);
+            $objManiProc->ActualizarEstadisticasDeEntrega();
+        }
     }
     $objDatabase->TransactionCommit();
-    $strLinkReto = 'lista_de_guias.php?id='.$intManiIdxx.'&tg='.$strTipoGuia.'&gg='.$intGrupGuia;
+    if ($blnOpciTrad) {
+        $strLinkReto = 'lista_de_guias.php?id='.$intManiIdxx.'&tg='.$strTipoGuia.'&gg='.$intGrupGuia;
+    } else {
+        $strLinkReto = 'detalle_de_guia_rastreo.php';
+    }
 
     if ($blnTodoOkey) {
         $strResuRegi = '

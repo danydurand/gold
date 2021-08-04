@@ -22,6 +22,7 @@ abstract class AuditsListFormBase extends QForm {
     protected $btnNuevRegi;
     protected $btnFiltAvan;
     protected $btnExpoExce;
+    protected $lblOtraNoti;
 
     // Local instance of the Meta DataGrid to list Auditses
     /**
@@ -46,6 +47,7 @@ abstract class AuditsListFormBase extends QForm {
         $this->lblMensUsua_Create();
         $this->lblNotiUsua_Create();
         $this->lblTituForm_Create();
+        $this->lblOtraNoti_Create();
         $this->btnNuevRegi_Create();
         $this->btnFiltAvan_Create();
 
@@ -112,6 +114,12 @@ abstract class AuditsListFormBase extends QForm {
         $this->lblNotiUsua->HtmlEntities = false;
     }
 
+    protected function lblOtraNoti_Create() {
+        $this->lblOtraNoti = new QLabel($this);
+        $this->lblOtraNoti->Text = '';
+        $this->lblOtraNoti->HtmlEntities = false;
+    }
+
     protected function btnNuevRegi_Create() {
         $this->btnNuevRegi = new QButton($this);
         $this->btnNuevRegi->Text = '<i class="fa fa-plus-circle fa-lg"></i> Crear';
@@ -148,6 +156,23 @@ abstract class AuditsListFormBase extends QForm {
     public function dtgAuditsesRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
       QApplication::Redirect("audits_edit.php/$intId");
+    }
+
+
+    protected function oinfo($strTextMens) {
+        $this->mensaje($strTextMens,'o','i',null,__iINFO__);
+    }
+
+    protected function odanger($strTextMens) {
+        $this->mensaje($strTextMens,'o','d',null,__iHAND__);
+    }
+
+    protected function owarning($strTextMens) {
+        $this->mensaje($strTextMens,'o','w',null,__iEXCL__);
+    }
+
+    protected function osuccess($strTextMens) {
+        $this->mensaje($strTextMens,'o','s',null,__iCHEC__);
     }
 
 

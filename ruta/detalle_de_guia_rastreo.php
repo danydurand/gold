@@ -32,11 +32,17 @@ if ($arrPiezGuia) {
             }
 
         }
+        t('Id de la Pieza: '.$objPiezGuia->Id);
+        $strLinkPiez = 'detalle_de_pieza_rastreo.php?id='.$objPiezGuia->Id;
         $strListPiez .= '
             <li>
-                <h6>'.$strPiezGuia.'</h6>
-                '.$strEtiqEsta.'
-                <p '.$strClasPara.'>'.$strUltiCome.'</p>
+                <a href="'.$strLinkPiez.'">
+                    <img src="images/list.png" class="extra">
+                    <h6>'.$strPiezGuia.'</h6>
+                    <p><b>Destinatario:</b> '.$objPiezGuia->Guia->NombreDestinatario.'</p>
+                    <p><b>Destino:</b> '.$objPiezGuia->Guia->Destino->Iata.'</p>
+                    <p><b>Status:</b> '.$strUltiCome.'</p>
+                </a>
             </li>
         ';
     }
@@ -82,8 +88,8 @@ $strDetaGuia = '
                     <td class="valor">'.$objGuiaSele->Piezas.'</td>
                 </tr>
                 <tr>
-                    <td class="etiqueta_verde">Entregadas:</td>
-                    <td class="valor etiqueta_verde">'.$objResuEntr->CantOkey.'</td>
+                    <td class="etiqueta_verde">Pzas Entreg:</td>
+                    <td class="valor etiqueta_verde">'.$objResuEntr->CantOkey.'/'.$objGuiaSele->Piezas.'</td>
                 </tr>
                 <tr>
                     <td class="etiqueta">Kilos:</td>

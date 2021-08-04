@@ -24,13 +24,14 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('%s %s',$this->strNombChof,$this->strApelChof);
+			return sprintf('%s',$this->Nombre);
 		}
 
         public function ActualizarManifiestosDelChofer(){
             $objClauOrde = QQ::OrderBy(QQN::Containers()->Id,false);
             $arrManiChof = Containers::LoadArrayByChoferIdEstatus($this->CodiChof,'ABIERT@',$objClauOrde);
             foreach ($arrManiChof as $objManiChof) {
+                //t('Voy a actualizar la estadisticas de entrega de: '.$objManiChof->Numero.' ('.$objManiChof->Id.')');
                 $objManiChof->ActualizarEstadisticasDeEntrega();
             }
 		}
@@ -64,7 +65,7 @@
 
         public static function ChoferesActivosDeLaSucursal($strCodiSucu) {
             $objClauOrde   = QQ::Clause();
-            $objClauOrde[] = QQ::OrderBy(QQN::Chofer()->NombChof);
+            $objClauOrde[] = QQ::OrderBy(QQN::Chofer()->Nombre);
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::Chofer()->CodiStat,StatusType::ACTIVO);
             $objClauWher[] = QQ::Equal(QQN::Chofer()->CodiDisp,SinoType::SI);

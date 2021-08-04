@@ -3,7 +3,7 @@ require_once('qcubed.inc.php');
 
 include('layout/header.inc.php');
 
-$strTituPagi = "Detalle de Pieza";
+$strTituPagi = "Detalle de Guia";
 $strNumeGuia = '';
 if (isset($_GET['id'])) {
     $intNumeGuia = $_GET['id'];
@@ -11,7 +11,7 @@ if (isset($_GET['id'])) {
 
     $strListInci  = '<select name="inci" id="inci" data-native-menu="false">';
     $strListInci .= '<option value="-1" selected>- Seleccione Uno -</option>';
-    $arrInciDisp = Checkpoints::LoadArrayByTipo('INCIDENCIA');
+    $arrInciDisp  = Checkpoints::LoadArrayByTipo('INCIDENCIA');
     foreach ($arrInciDisp as $objInciDisp) {
         $strListInci .= '<option value="'.$objInciDisp->Id.'">'.$objInciDisp->Descripcion.'</option>';
     }

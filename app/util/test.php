@@ -3,17 +3,29 @@ require_once('qcubed.inc.php');
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
+//----------------------------------------------
+// Rellenar el campo nombre en la tabla Chofer
+//----------------------------------------------
+
+echo "Actualizando nombres de los Choferes<br>";
+echo "====================================<br><br>";
+$arrChofSist = Chofer::LoadAll();
+foreach ($arrChofSist as $objChofSist) {
+    $objChofSist->Nombre = trim($objChofSist->NombChof).' '.trim($objChofSist->ApelChof);
+    $objChofSist->Save();
+    echo $objChofSist->Nombre.'<br>';
+}
 
 //-------------------------------------------------------
 // Actualizacion de Estadísticas de Entrega por Chofer
 //-------------------------------------------------------
 
-$objChofSele = Chofer::LoadByLogin('scuevas');
-$arrManiChof = Containers::LoadArrayByChoferId($objChofSele->CodiChof);
-foreach ($arrManiChof as $objManiChof) {
-    echo "Procesando: $objManiChof->Numero<br>";
-    $objManiChof->ActualizarEstadisticasDeEntrega();
-}
+//$objChofSele = Chofer::LoadByLogin('scuevas');
+//$arrManiChof = Containers::LoadArrayByChoferId($objChofSele->CodiChof);
+//foreach ($arrManiChof as $objManiChof) {
+//    echo "Procesando: $objManiChof->Numero<br>";
+//    $objManiChof->ActualizarEstadisticasDeEntrega();
+//}
 
 //----------------------------
 // Paginacion en Ruta-Mobile

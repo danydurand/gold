@@ -896,14 +896,18 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->dtgNotaCred->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
         $this->dtgNotaCred->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
-        /*$this->dtgNotaCred->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
-        //$this->dtgNotaCred->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
+        $this->dtgNotaCred->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgNotaCred->AddRowAction(new QClickEvent(), new QAjaxAction('dtgNotaCredRow_Click'));
 
-        $this->dtgNotaCred->MetaAddColumn('Referencia');
-        $this->dtgNotaCred->MetaAddColumn('Tipo');
-        $this->dtgNotaCred->MetaAddColumn('Factura');
+        $colRefeNota = $this->dtgNotaCred->MetaAddColumn('Referencia','Name=REF');
+        $colRefeNota->Width = 80;
+        $colTipoNota = new QDataGridColumn('TIPO','<?= substr($_ITEM->Tipo,0,3) ?>');
+        $this->dtgNotaCred->AddColumn($colTipoNota);
+        $this->dtgNotaCred->MetaAddColumn('Factura','Name=FACT');
         $this->dtgNotaCred->MetaAddColumn('Fecha');
         $this->dtgNotaCred->MetaAddColumn('Monto');
+        $colEstaNota = new QDataGridColumn('ESTATUS','<?= substr($_ITEM->Estatus,0,5) ?>');
+        $this->dtgNotaCred->AddColumn($colEstaNota);
 
         $this->dtgNotaCred->SetDataBinder('dtgNotaCred_Binder');
 
@@ -922,6 +926,11 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             QQ::AndCondition($objClauWher),
             QQ::Clause($this->dtgNotaCred->OrderByClause, $this->dtgNotaCred->LimitClause)
         );
+    }
+
+    public function dtgNotaCredRow_Click($strFormId, $strControlId, $strParameter) {
+        $intIdxxFact = intval($strParameter);
+        QApplication::Redirect(__SIST__."/nota_credito_corp_edit.php/$intIdxxFact");
     }
 
 
