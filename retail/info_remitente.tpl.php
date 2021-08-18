@@ -58,7 +58,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top: 4px">
         <div class="form-group">
             <label for="">E-mail</label><br>
             <?php $this->txtEmaiRemi->Render(); ?>

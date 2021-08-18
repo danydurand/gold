@@ -41,6 +41,7 @@ $strCodiPost = $objGuiaImpr->CodigoPostal;
 $strPiezGuia = $objPiezGuia->IdPieza;
 $intNumePiez = (int)explode('-',$strPiezGuia)[1];
 $strCantPiez = $intNumePiez.' / '.$objGuiaImpr->Piezas;
+$strTamaLetr = '6px';
 ?>
 <style type="text/css">
     .titulo {

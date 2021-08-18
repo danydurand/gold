@@ -94,6 +94,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->lstClienteCorp = $this->mctFacturas->lstClienteCorp_Create();
 		$this->calFecha = $this->mctFacturas->calFecha_Create();
 		$this->calFecha->Width = 170;
+		$this->calFecha = disableControl($this->calFecha);
 		$this->txtCedulaRif = $this->mctFacturas->txtCedulaRif_Create();
 		$this->txtCedulaRif->Width = 130;
 		$this->txtRazonSocial = $this->mctFacturas->txtRazonSocial_Create();
@@ -104,6 +105,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->txtDireccionFiscal->Placeholder = 'Dirección Fiscal';
 		$this->txtTelefono = $this->mctFacturas->txtTelefono_Create();
 		$this->txtTelefono->Width = 130;
+
 		$this->lstSucursal = $this->mctFacturas->lstSucursal_Create();
 		$this->lstSucursal->Width = 130;
 		$this->lstReceptoria = $this->mctFacturas->lstReceptoria_Create();
@@ -113,7 +115,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->txtTasa = $this->mctFacturas->txtTasa_Create();
 		$this->txtTotal = $this->mctFacturas->txtTotal_Create();
 		$this->txtTotal->Width = 120;
-		$this->txtTotal->Text = nf($this->mctFacturas->Facturas->Total,2);
+		$this->txtTotal->Text = $this->mctFacturas->Facturas->Total;
 		$this->txtMontoDscto = $this->mctFacturas->txtMontoDscto_Create();
 		$this->txtMontoCobrado = $this->mctFacturas->txtMontoCobrado_Create();
 		$this->txtMontoCobrado->Width = 120;
@@ -175,6 +177,9 @@ class FacturasEditForm extends FacturasEditFormBase {
 
         if (strlen($this->strOpciAdic) > 0) {
             switch ($this->strOpciAdic) {
+                case 'I':
+                    $this->btnImprFact_Click();
+                    break;
                 case 'P':
                     // Ver la seccion de pagos
                     $this->pagos();
@@ -434,8 +439,8 @@ class FacturasEditForm extends FacturasEditFormBase {
     protected function ActualizarCamposEnPantalla() {
         $this->txtCobrDola->Text       = nf($this->mctFacturas->Facturas->MontoCobrado / $this->decTasaDola);
         $this->txtPendDola->Text       = nf($this->mctFacturas->Facturas->MontoPendiente / $this->decTasaDola);
-        $this->txtMontoCobrado->Text   = nf($this->mctFacturas->Facturas->MontoCobrado);
-        $this->txtMontoPendiente->Text = nf($this->mctFacturas->Facturas->MontoPendiente);
+        $this->txtMontoCobrado->Text   = $this->mctFacturas->Facturas->MontoCobrado;
+        $this->txtMontoPendiente->Text = $this->mctFacturas->Facturas->MontoPendiente;
         if ($this->txtMontoPendiente->Text == 0) {
             $this->btnSavePago->Visible = false;
             $this->btnCancPago_Click();
@@ -613,7 +618,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         }
         if ($this->mctFacturas->Facturas->MontoPendiente == 0) {
             $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/imprimir.php/'.$this->mctFacturas->Facturas->Id.'/I',
+                __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id.'/I',
                 TextoIcono('print','Imprimir')
             );
         }
@@ -659,7 +664,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgImpoFact->ShowFilter = false;
 
         $this->dtgImpoFact->CssClass = 'datagrid';
-        $this->dtgImpoFact->AlternateRowStyle->CssClass = 'alternate';
+        //$this->dtgImpoFact->AlternateRowStyle->CssClass = 'alternate';
 
         /*$this->dtgImpoFact->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
         //$this->dtgImpoFact->AddRowAction(new QClickEvent(), new QAjaxAction('dtgImpoFactRow_Click'));
@@ -780,6 +785,21 @@ class FacturasEditForm extends FacturasEditFormBase {
 	// Acciones relativas a los objetos 
 	//-----------------------------------
 
+    public function btnImprFact_Click() {
+        t('i1');
+        $this->mctFacturas->Facturas->Estatus = 'IMPRESA';
+        $this->mctFacturas->Facturas->Save();
+        t('i2');
+        //$arrLogxCamb['strNombTabl'] = 'Facturas';
+        //$arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
+        //$arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Referencia;
+        //$arrLogxCamb['strDescCamb'] = 'Impresa';
+        //$arrLogxCamb['strEnlaEnti'] = __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id;
+        //LogDeCambios($arrLogxCamb);
+        t('i3');
+        QApplication::Redirect(__SIST__.'/factura_html2pdf.php?intIdxxFact=' . $this->mctFacturas->Facturas->Id);
+    }
+
     protected function btnVolvList_Click() {
         $objUltiAcce = PilaAcceso::Pop('D');
         $strPagiReto = $objUltiAcce->__toString();
@@ -814,9 +834,14 @@ class FacturasEditForm extends FacturasEditFormBase {
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
+        t('====================');
+        t('Guardando la Factura');
 		$objRegiViej = clone $this->mctFacturas->Facturas;
+		t('k1');
 		$this->mctFacturas->SaveFacturas();
+		t('k2');
 		if ($this->mctFacturas->EditMode) {
+		    t('k3');
 			//---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
 			// de algun cambio en algun dato 
@@ -824,25 +849,28 @@ class FacturasEditForm extends FacturasEditFormBase {
 			$objRegiNuev = $this->mctFacturas->Facturas;
 			$objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
 			if ($objResuComp->FriendlyComparisonStatus == 'different') {
+			    t('k4');
 				//------------------------------------------
 				// En caso de que el objeto haya cambiado 
 				//------------------------------------------
 				$arrLogxCamb['strNombTabl'] = 'Facturas';
 				$arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
-				$arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Nombre;
+				$arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Referencia;
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id;
 				LogDeCambios($arrLogxCamb);
                 $this->success('Transacción Exitosa !!!');
 			}
+			t('k5');
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Facturas';
 			$arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
-			$arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Nombre;
+			$arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Referencia;
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id;
 			LogDeCambios($arrLogxCamb);
             $this->success('Transacción Exitosa !!!');
+            t('k6');
 		}
 	}
 
@@ -870,6 +898,7 @@ class FacturasEditForm extends FacturasEditFormBase {
             $this->RedirectToListPage();
         }
     }
+
 }
 
 // Go ahead and run this form object to render the page and its event handlers, implicitly using

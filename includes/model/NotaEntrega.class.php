@@ -313,7 +313,7 @@
             //-----------------------------------
             $this->Total = $decTotaNdex;
             $this->Save();
-            t('El total de la nde fue actualizada con: '.$decTotaNdex);
+            t('El total de la nde fue actualizado con: '.$decTotaNdex);
         }
 
         /**

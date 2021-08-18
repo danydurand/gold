@@ -34,7 +34,7 @@ require('inc/header.inc.php');
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6" style="margin-top: 0.5em;">
+                <div class="col-md-6" id="info-remi" style="margin-top: 0.5em;">
                     <?php include('info_remitente.tpl.php') ?>
                 </div>
                 <div class="col-md-6" style="margin-top: 0.5em;">
@@ -68,6 +68,42 @@ require('inc/header.inc.php');
             <?php } ?>
         </div>
     </div>
+
+    <script type="text/javascript">
+        function startIntro(){
+            var intro = introJs();
+            intro.setOptions({
+                nextLabel: "Next",
+                prevLabel: "Prev",
+                skipLabel: "Skip",
+                doneLabel: "Done",
+                steps: [
+                    {
+                        intro: "Aquí podrá elaborar una guia para el Servicio de Exportacion. " +
+                        "El formulario se divide en dos pantallas; comience llenando todos " +
+                        "los campos aquí presentes y luego presione el boton <b>Siguiente</b>"
+                    },
+                    {
+                        element: '#info-remi',
+                        intro: "Especifique aquí los datos del Remitente"
+                        // position: 'up'
+                    },
+                    {
+                        element: '#info-serv',
+                        intro: "Especifique aquí el Servicio deseado por el Cliente"
+                        // position: 'up'
+                    },
+                    {
+                        element: '#info-dest',
+                        intro: "Especifique aquí la información de Destinatario"
+                        // position: 'up'
+                    }
+                ]
+            });
+
+            intro.start();
+        }
+    </script>
 
     <style type="text/css" media="all">
         .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {

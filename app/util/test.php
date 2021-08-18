@@ -3,18 +3,25 @@ require_once('qcubed.inc.php');
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
+
+// Validando fechas
+
+var_dump(validateDate('2012-02-28','d/m/Y'));
+var_dump(validateDate('28/02/2012','d/m/Y'));
+
+
 //----------------------------------------------
 // Rellenar el campo nombre en la tabla Chofer
 //----------------------------------------------
 
-echo "Actualizando nombres de los Choferes<br>";
-echo "====================================<br><br>";
-$arrChofSist = Chofer::LoadAll();
-foreach ($arrChofSist as $objChofSist) {
-    $objChofSist->Nombre = trim($objChofSist->NombChof).' '.trim($objChofSist->ApelChof);
-    $objChofSist->Save();
-    echo $objChofSist->Nombre.'<br>';
-}
+//echo "Actualizando nombres de los Choferes<br>";
+//echo "====================================<br><br>";
+//$arrChofSist = Chofer::LoadAll();
+//foreach ($arrChofSist as $objChofSist) {
+//    $objChofSist->Nombre = trim($objChofSist->NombChof).' '.trim($objChofSist->ApelChof);
+//    $objChofSist->Save();
+//    echo $objChofSist->Nombre.'<br>';
+//}
 
 //-------------------------------------------------------
 // Actualizacion de Estadísticas de Entrega por Chofer

@@ -29,7 +29,7 @@
                 <?php $this->lblMensUsua->Render(); ?>
             </div>
         </div>
-        <div class="row">
+        <div class="row" data-aos="fade-in" data-aos-duration="2000">
             <div class="table-responsive">
                 <?php $this->dtgNotaEntregas->Render(); ?>
             </div>

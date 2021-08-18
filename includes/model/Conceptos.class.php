@@ -37,7 +37,7 @@
         }
 
         public static function CamposValues() {
-		    return array('kilos','valor_declarado','volumen');
+		    return array('kilos','valor_declarado','volumen','pies_cub');
         }
 
 		// Override or Create New Load/Count methods

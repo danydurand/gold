@@ -38,6 +38,10 @@ if (isset($_SESSION['TasaEuro'])) {
 	<style type="text/css">@import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles.css");</style>
 	<style type="text/css">@import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles_plus.css");</style>
 
+    <!-- Intro JS -->
+    <link rel="stylesheet" href="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ .'/introjs/introjs.min.css' ?>">
+    <script src="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ .'/introjs/intro.min.js' ?>"></script>
+
     <!-- Bootstrap Core CSS -->
     <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/bootstrap/dist/css/bootstrap.css"?> rel="stylesheet">
 
@@ -51,6 +55,9 @@ if (isset($_SESSION['TasaEuro'])) {
     <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/font-awesome/css/font-awesome.min.css"?> rel="stylesheet" type="text/css">
     <link href=<?= __APP_CSS_ASSETS__ ."/bootstrap4.css"?> rel="stylesheet" type="text/css">
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -86,6 +93,15 @@ if (isset($_SESSION['TasaEuro'])) {
             <!-- /.navbar-header -->
             
             <ul class="nav navbar-top-links navbar-right">
+
+                <a class="btn btn-sm btn-success"
+                   style="margin-left:.5em"
+                   href="javascript:void(0);"
+                   title="Ayuda"
+                   onclick="javascript:introJs().start();startIntro()">
+                    <i class="fa fa-question-circle fa-lg"></i>
+                </a>
+
                 <li><span style="color: white"><i class="fa fa-user fa-fw"></i> <?= $strDatoUsua ?></span></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">

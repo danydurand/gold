@@ -6,11 +6,11 @@
 	// code re-generations do not overwrite your changes.
 
 	$strPageTitle = 'Conceptos' . ' - ' . $this->mctConceptos->TitleVerb;
-	require(__APP_INCLUDES__ . '/header.inc.php');
+    require('inc/header.inc.php');
 	require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
 ?>
 <div class="form-controls">
-    <div class="container-fluid" data-aos="zoom-in-up" data-aos-duration="2000">
+    <div class="container-fluid" data-aos="fade-in">
         <div class="row">
             <div class="col-sm-12" style="min-height: 1.4em; text-align: left; margin-top: 0.5em; margin-left: -1em;">
                 <?php $this->lblMensUsua->Render(); ?>
@@ -80,4 +80,4 @@
     }
 </style>
 
-<?php require(__APP_INCLUDES__ . '/footer.inc.php'); ?>
+<?php require('inc/footer.inc.php'); ?>

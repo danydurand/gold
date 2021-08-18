@@ -21,7 +21,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         </div>
     </div>
     <div class="form-controls">
-        <div class="container-fluid">
+        <div class="container-fluid" data-aos="fade-in" data-aos-duration="2000">
             <div class="row">
                 <div class="col-sm-12" style="min-height: 1.4em; text-align: left; margin-top: 0.8em; margin-left: -1em;">
                     <?php $this->lblMensUsua->Render(); ?>

@@ -882,7 +882,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $file = basename(tempnam(getcwd(),'tmp'));
             $file = $file.'.'.$strExteArch;
             $filedest = '/tmp/'.$file;
-            copy($_FILES['c8']['tmp_name'],$filedest);
+            copy($_FILES['c9']['tmp_name'],$filedest);
             $this->CargarArchivo($filedest,$strExteArch);
         } else {
             $strExteVali = implode(',',$arrExteVali);

@@ -53,7 +53,8 @@ class ClientesRetailEditForm extends ClientesRetailEditFormBase {
 		$this->txtCiudad = $this->mctClientesRetail->txtCiudad_Create();
 		$this->txtCodigoPostal = $this->mctClientesRetail->txtCodigoPostal_Create();
 		$this->calFechaNacimiento = $this->mctClientesRetail->calFechaNacimiento_Create();
-		$this->lstProfesion = $this->mctClientesRetail->lstProfesion_Create();
+		$objClauOrde = QQ::OrderBy(QQN::Profesiones()->Nombre);
+		$this->lstProfesion = $this->mctClientesRetail->lstProfesion_Create(null,null,$objClauOrde);
 		//$this->lblCreatedAt = $this->mctClientesRetail->lblCreatedAt_Create();
 		//$this->lblUpdatedAt = $this->mctClientesRetail->lblUpdatedAt_Create();
 		//$this->lblDeletedAt = $this->mctClientesRetail->lblDeletedAt_Create();

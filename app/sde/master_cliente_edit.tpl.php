@@ -35,7 +35,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         </div>
 	</div>
 	<div class="form-controls">
-		<div class="container-fluid">
+		<div class="container-fluid" data-aos="flip-up" data-aos-duration="2000">
 			<div class="row">
 				<div class="col-sm-12" style="min-height: 1.4em; text-align: left; margin-top: 0.5em; margin-left: -1em;">
 					<?php $this->lblMensUsua->Render(); ?>
@@ -44,11 +44,10 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 			<div class="row" style="margin-top: 0.5em;" >
 				<div class="" role="tabpanel">
 					<ul class="nav nav-tabs tab-l nav-justified" role="tablist">
-						<li class="active" role="presentation">
+						<li class="active" role="presentation" data-aos="fade-in">
 							<a href="#seccion1" aria-controls="seccion1" data-toggle="tab" role="tab">
 								<i class="fa fa-user fa-lg"></i>
 								  Cliente <?php echo $this->intRankClie ?>
-
                             </a>
 						</li>
 						<li class="tabs-guias" role="presentation">

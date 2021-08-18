@@ -33,6 +33,7 @@
 	 * @property integer $CantidadOk the value for intCantidadOk 
 	 * @property integer $Devueltas the value for intDevueltas (Not Null)
 	 * @property integer $SinGestionar the value for intSinGestionar (Not Null)
+	 * @property integer $Pendientes the value for intPendientes 
 	 * @property double $Peso the value for fltPeso (Not Null)
 	 * @property double $Kilos the value for fltKilos (Not Null)
 	 * @property double $PiesCub the value for fltPiesCub (Not Null)
@@ -212,6 +213,14 @@
 		 */
 		protected $intSinGestionar;
 		const SinGestionarDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column containers.pendientes
+		 * @var integer intPendientes
+		 */
+		protected $intPendientes;
+		const PendientesDefault = null;
 
 
 		/**
@@ -455,6 +464,7 @@
 			$this->intCantidadOk = Containers::CantidadOkDefault;
 			$this->intDevueltas = Containers::DevueltasDefault;
 			$this->intSinGestionar = Containers::SinGestionarDefault;
+			$this->intPendientes = Containers::PendientesDefault;
 			$this->fltPeso = Containers::PesoDefault;
 			$this->fltKilos = Containers::KilosDefault;
 			$this->fltPiesCub = Containers::PiesCubDefault;
@@ -825,6 +835,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'cantidad_ok', $strAliasPrefix . 'cantidad_ok');
 			    $objBuilder->AddSelectItem($strTableName, 'devueltas', $strAliasPrefix . 'devueltas');
 			    $objBuilder->AddSelectItem($strTableName, 'sin_gestionar', $strAliasPrefix . 'sin_gestionar');
+			    $objBuilder->AddSelectItem($strTableName, 'pendientes', $strAliasPrefix . 'pendientes');
 			    $objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
@@ -1015,6 +1026,9 @@
 			$strAlias = $strAliasPrefix . 'sin_gestionar';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intSinGestionar = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'pendientes';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intPendientes = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'peso';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltPeso = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1702,6 +1716,7 @@
 							`cantidad_ok`,
 							`devueltas`,
 							`sin_gestionar`,
+							`pendientes`,
 							`peso`,
 							`kilos`,
 							`pies_cub`,
@@ -1728,6 +1743,7 @@
 							' . $objDatabase->SqlVariable($this->intCantidadOk) . ',
 							' . $objDatabase->SqlVariable($this->intDevueltas) . ',
 							' . $objDatabase->SqlVariable($this->intSinGestionar) . ',
+							' . $objDatabase->SqlVariable($this->intPendientes) . ',
 							' . $objDatabase->SqlVariable($this->fltPeso) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
@@ -1813,6 +1829,7 @@
 							`cantidad_ok` = ' . $objDatabase->SqlVariable($this->intCantidadOk) . ',
 							`devueltas` = ' . $objDatabase->SqlVariable($this->intDevueltas) . ',
 							`sin_gestionar` = ' . $objDatabase->SqlVariable($this->intSinGestionar) . ',
+							`pendientes` = ' . $objDatabase->SqlVariable($this->intPendientes) . ',
 							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
@@ -1978,6 +1995,7 @@
 			$this->intCantidadOk = $objReloaded->intCantidadOk;
 			$this->intDevueltas = $objReloaded->intDevueltas;
 			$this->intSinGestionar = $objReloaded->intSinGestionar;
+			$this->intPendientes = $objReloaded->intPendientes;
 			$this->fltPeso = $objReloaded->fltPeso;
 			$this->fltKilos = $objReloaded->fltKilos;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
@@ -2134,6 +2152,13 @@
 					 * @return integer
 					 */
 					return $this->intSinGestionar;
+
+				case 'Pendientes':
+					/**
+					 * Gets the value for intPendientes 
+					 * @return integer
+					 */
+					return $this->intPendientes;
 
 				case 'Peso':
 					/**
@@ -2589,6 +2614,19 @@
 					 */
 					try {
 						return ($this->intSinGestionar = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Pendientes':
+					/**
+					 * Sets the value for intPendientes 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intPendientes = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3444,6 +3482,7 @@
 			$strToReturn .= '<element name="CantidadOk" type="xsd:int"/>';
 			$strToReturn .= '<element name="Devueltas" type="xsd:int"/>';
 			$strToReturn .= '<element name="SinGestionar" type="xsd:int"/>';
+			$strToReturn .= '<element name="Pendientes" type="xsd:int"/>';
 			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
@@ -3521,6 +3560,8 @@
 				$objToReturn->intDevueltas = $objSoapObject->Devueltas;
 			if (property_exists($objSoapObject, 'SinGestionar'))
 				$objToReturn->intSinGestionar = $objSoapObject->SinGestionar;
+			if (property_exists($objSoapObject, 'Pendientes'))
+				$objToReturn->intPendientes = $objSoapObject->Pendientes;
 			if (property_exists($objSoapObject, 'Peso'))
 				$objToReturn->fltPeso = $objSoapObject->Peso;
 			if (property_exists($objSoapObject, 'Kilos'))
@@ -3611,6 +3652,7 @@
 			$iArray['CantidadOk'] = $this->intCantidadOk;
 			$iArray['Devueltas'] = $this->intDevueltas;
 			$iArray['SinGestionar'] = $this->intSinGestionar;
+			$iArray['Pendientes'] = $this->intPendientes;
 			$iArray['Peso'] = $this->fltPeso;
 			$iArray['Kilos'] = $this->fltKilos;
 			$iArray['PiesCub'] = $this->fltPiesCub;
@@ -3789,6 +3831,7 @@
      * @property-read QQNode $CantidadOk
      * @property-read QQNode $Devueltas
      * @property-read QQNode $SinGestionar
+     * @property-read QQNode $Pendientes
      * @property-read QQNode $Peso
      * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
@@ -3859,6 +3902,8 @@
 					return new QQNode('devueltas', 'Devueltas', 'Integer', $this);
 				case 'SinGestionar':
 					return new QQNode('sin_gestionar', 'SinGestionar', 'Integer', $this);
+				case 'Pendientes':
+					return new QQNode('pendientes', 'Pendientes', 'Integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'Float', $this);
 				case 'Kilos':
@@ -3926,6 +3971,7 @@
      * @property-read QQNode $CantidadOk
      * @property-read QQNode $Devueltas
      * @property-read QQNode $SinGestionar
+     * @property-read QQNode $Pendientes
      * @property-read QQNode $Peso
      * @property-read QQNode $Kilos
      * @property-read QQNode $PiesCub
@@ -3996,6 +4042,8 @@
 					return new QQNode('devueltas', 'Devueltas', 'integer', $this);
 				case 'SinGestionar':
 					return new QQNode('sin_gestionar', 'SinGestionar', 'integer', $this);
+				case 'Pendientes':
+					return new QQNode('pendientes', 'Pendientes', 'integer', $this);
 				case 'Peso':
 					return new QQNode('peso', 'Peso', 'double', $this);
 				case 'Kilos':

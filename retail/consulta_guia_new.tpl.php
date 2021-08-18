@@ -41,7 +41,7 @@ require('inc/header.inc.php');
     </div>
     <!-- Contenido del Body -->
     <div class="form-controls">
-        <div class="container-fluid">
+        <div class="container-fluid" data-aos="fade-in">
             <div class="row">
                 <div class="col-sm-12" style="min-height: 1.3em; text-align: left; margin-top: 0.6em; margin-left: -1em;">
                     <?php $this->lblMensUsua->Render(); ?>

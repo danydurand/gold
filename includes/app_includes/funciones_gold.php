@@ -5,6 +5,10 @@
 // Descripcion : Aqui se registran funciones de uso general del Sistema GoldCoast
 //------------------------------------------------------------------------------------
 
+function validateDate($date, $format = 'Y-m-d H:i:s') {
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
 
 function LoginPropuesto($strCadeNomb, $strCadeApel) {
     t('Entrando a login propuesto');

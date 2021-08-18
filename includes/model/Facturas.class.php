@@ -70,6 +70,7 @@
                 $objNuevFact = new Facturas();
                 $objNuevFact->ClienteRetailId = $objPrimGuia->ClienteRetailId;
                 $objNuevFact->Fecha           = new QDateTime(QDateTime::Now());
+                $objNuevFact->Referencia      = Facturas::proxReferencia();
                 $objNuevFact->CedulaRif       = $objPrimGuia->ClienteRetail->CedulaRif;
                 $objNuevFact->RazonSocial     = $objPrimGuia->NombreRemitente;
                 $objNuevFact->DireccionFiscal = $objPrimGuia->DireccionRemitente;

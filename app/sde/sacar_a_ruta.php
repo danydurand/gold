@@ -1298,15 +1298,21 @@ class SacarARuta extends FormularioBaseKaizen {
                             t('La guia se puede procesar');
                             if ($strTipoRuta == 'EXTRA-URBANA') {
                                 $blnTienPeso = true;
-                                if ($objGuiaPiez->Guia->ServicioImportacion == 'MAR') {
-                                    if ($objGuiaPiez->PiesCub == 0) {
-                                        $blnTienPeso = false;
-                                    }
-                                } else {
-                                    if ($objGuiaPiez->Kilos == 0) {
-                                        $blnTienPeso = false;
-                                    }
-                                }
+                                //----------------------------------------------------------------
+                                // A solicitud de Jhoan Martinez se quita del sistema la
+                                // validacion del peso.  Caso expresado por la mercancia que
+                                // transporta ATC que no se le debe cobrar
+                                // (ddurand 11/08/2021)
+                                //----------------------------------------------------------------
+                                //if ($objGuiaPiez->Guia->ServicioImportacion == 'MAR') {
+                                //    if ($objGuiaPiez->PiesCub == 0) {
+                                //        $blnTienPeso = false;
+                                //    }
+                                //} else {
+                                //    if ($objGuiaPiez->Kilos == 0) {
+                                //        $blnTienPeso = false;
+                                //    }
+                                //}
                                 if ($blnTienPeso) {
                                     t('La pieza tiene peso');
                                     //--------------------------------------------------------------------------------

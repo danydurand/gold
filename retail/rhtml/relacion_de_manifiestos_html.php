@@ -5,18 +5,18 @@ if (!isset($_SESSION['FactIdxx'])) {
     echo "Se requiere el Nro de Factura cuya relación de Manifiestos se desea imprimir...";
     return;
 }
-/* @var $objFactImpr Facturas */
+/* @var $objFactOrig Facturas */
 /* @var $objFactImpr NotaEntrega */
-$objFactImpr  = unserialize($_SESSION['FactMani']);
-$arrTariAgen  = TarifaAgentes::Load($objFactImpr->ClienteCorp->TarifaAgenteId);
+$objFactOrig  = unserialize($_SESSION['FactMani']);
+$arrTariAgen  = TarifaAgentes::Load($objFactOrig->ClienteCorp->TarifaAgenteId);
 $strCadeSqlx  = "select * ";
 $strCadeSqlx .= "  from v_factura_zona ";
-$strCadeSqlx .= " where factura_id = ".$objFactImpr->Id;
+$strCadeSqlx .= " where factura_id = ".$objFactOrig->Id;
 $strCadeSqlx .= " order by zona";
 $objDatabase  = Facturas::GetDatabase();
 $objDbResult  = $objDatabase->Query($strCadeSqlx);
 $arrFactImpr  = [];
-$decTotaFact  = 0;
+//$decTotaFact  = 0;
 while ($mixRegistro = $objDbResult->FetchArray()) {
     $strServComp   = $mixRegistro['servicio_importacion'] == 'AER' ? 'AEREO' : 'MARITIMO';
     $decPesoPiez   = $strServComp == 'AEREO' ? $mixRegistro['kilos'] : $mixRegistro['pies_cub'];
@@ -27,8 +27,8 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
     $arrTariServ   = TarifaAgentesZonas::QueryArray(QQ::AndCondition($objClauWher));
     $objTariServ   = $arrTariServ[0];
     $mixRegistro['tarifa'] = $objTariServ->Precio;
-    $mixRegistro['total']  = $objTariServ->Precio * $decPesoPiez;
-    $decTotaFact  += $mixRegistro['total'];
+    $mixRegistro['total']  = nf($objTariServ->Precio * $decPesoPiez);
+    //$decTotaFact  += $mixRegistro['total'];
     $arrFactImpr[] = $mixRegistro;
 }
 
@@ -51,7 +51,7 @@ $strLimiDere = '350px';
                             <td style="width: 300px">BILL TO:</td>
                         </tr>
                         <tr>
-                            <td style="width: 300px"><?= $objFactImpr->RazonSocial ?></td>
+                            <td style="width: 300px"><?= $objFactOrig->RazonSocial ?></td>
                         </tr>
                     </table>
                 </td>
@@ -61,11 +61,11 @@ $strLimiDere = '350px';
                     <table style=" border: solid .5mm">
                         <tr>
                             <td style="width: 130px; background-color: #CCC; font-weight: bold">INVOICE:</td>
-                            <td style="width: 100px; text-align: right"><?= $objFactImpr->Referencia ?></td>
+                            <td style="width: 100px; text-align: right"><?= $objFactOrig->Referencia ?></td>
                         </tr>
                         <tr>
                             <td style="width: 130px; background-color: #CCC; font-weight: bold">DATE:</td>
-                            <td style="width: 100px; text-align: right"><?= $objFactImpr->Fecha->__toString("DD/MM/YYYY") ?></td>
+                            <td style="width: 100px; text-align: right"><?= $objFactOrig->Fecha->__toString("DD/MM/YYYY") ?></td>
                         </tr>
                     </table>
                 </td>
@@ -109,7 +109,7 @@ $strLimiDere = '350px';
                 <td style="text-align: center"></td>
                 <td style="text-align: center"></td>
                 <td style="text-align: center"></td>
-                <td style="text-align: right"><?= nf($decTotaFact) ?></td>
+                <td style="text-align: right"><?= nf($objFactOrig->Total) ?></td>
             </tr>
         </table>
     </page_header>

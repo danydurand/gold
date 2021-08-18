@@ -53,6 +53,9 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
     <script src="http://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
     <script src="http://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
 
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
     <style>
         .navbar-default {
             background: #4682B4;

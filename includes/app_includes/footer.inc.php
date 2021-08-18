@@ -38,5 +38,11 @@
         <script src=<?= __VIRTUAL_DIRECTORY__ .__APP_JS_ASSETS__ ."/dist/js/sb-admin-2.js" ?>></script>
 
         <?php $this->RenderEnd() ?>
-    </body>
+
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+
+        </body>
 </html>

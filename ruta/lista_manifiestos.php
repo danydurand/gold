@@ -22,17 +22,27 @@ if ($arrManiChof) {
     $strNombImag = __RUTA_IMAGE__.'/manifest2.png';
     foreach ($arrManiChof as $objManiChof) {
         //t('Procesando: '.$objManiChof->Numero);
-        $objResuMani = $objManiChof->ResumeDeEntrega();
+        //$objResuMani = $objManiChof->ResumeDeEntrega();
 
-        $intCantPiez = $objManiChof->Piezas;
-        $intCantOkey = $objResuMani->CantOkey;
-        $intCantPend = $objResuMani->CantPend;
-        $intCantDevu = $objResuMani->CantDevu;
-        $intCantSing = $objResuMani->CantSing;
-        $decPorcOkey = $objResuMani->PorcOkey;
-        $decPorcPend = $objResuMani->PorcPend;
-        $decPorcDevu = $objResuMani->PorcDevu;
-        $decPorcSing = $objResuMani->PorcSing;
+        $intTotaPiez = $objManiChof->Piezas;
+        //$this->CantidadOk   = $objResuEntr->CantOkey;
+        //$this->SinGestionar = $objResuEntr->CantSing;
+        //$this->Devueltas    = $objResuEntr->CantDevu;
+
+        $intCantOkey = $objManiChof->CantidadOk;
+        $intCantPend = $objManiChof->Pendientes;
+        $intCantDevu = $objManiChof->Devueltas;
+        $intCantSing = $objManiChof->SinGestionar;
+
+        $decPorcOkey  = nf0($intCantOkey * 100 / $intTotaPiez);
+        $decPorcPend  = nf0($intCantPend * 100 / $intTotaPiez);
+        $decPorcDevu  = nf0($intCantDevu * 100 / $intTotaPiez);
+        $decPorcSing  = nf0($intCantSing * 100 / $intTotaPiez);
+
+        //$decPorcOkey = $objResuMani->PorcOkey;
+        //$decPorcPend = $objResuMani->PorcPend;
+        //$decPorcDevu = $objResuMani->PorcDevu;
+        //$decPorcSing = $objResuMani->PorcSing;
 
         $strManiChof .= '
             <li>

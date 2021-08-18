@@ -5,4 +5,5 @@ if ($_SERVER['SCRIPT_NAME'] != '/ruta/index.php') {
         QApplication::Redirect(__RUTA_MOBILE__.'/index.php');
     }
 }
+
 ?>
