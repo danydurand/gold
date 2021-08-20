@@ -2,7 +2,7 @@
     <div class="col-md-4">
         <div class="form-group" style="text-align: center">
             <label for="">Desea Seguro ?</label><br>
-            <?php $this->chkEnviSgro->Render(); ?>
+            <?php $this->lstEnviSgro->Render(); ?>
         </div>
     </div>
     <div class="col-md-4">
@@ -14,7 +14,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="">Forma Pago</label><br>
-            <?php $this->rdbFormPago->Render(); ?>
+            <?php $this->lstFormPago->Render(); ?>
         </div>
     </div>
 </div>

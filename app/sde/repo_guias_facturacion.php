@@ -15,7 +15,7 @@ if (isset($_SESSION['SepaColu'])) {
 }
 $objCondWher = unserialize($_SESSION['CondWher']);
 $strCadeSqlx = unserialize($_SESSION['CritSqlx']);
-$objUser = unserialize($_SESSION['User']);
+$objUser     = unserialize($_SESSION['User']);
 //----------------------------------------------------------------------
 // Se determina el nombre del archivo que sera generado
 //----------------------------------------------------------------------
@@ -43,62 +43,46 @@ $arrEnca2XLS = array(
 //----------------------------------------------------------------------
 $strCadeAudi = implode($strSepaColu,$arrEnca2XLS);
 fputs($mixManeArch,$strCadeAudi.$strSepaColu."\n");
-//-----------------------
-// Chunk de registros
-//-----------------------
-$intCantRegi = Guias::QueryCount(QQ::AndCondition($objCondWher));
-$intCantChun = 500;
-if ($intCantRegi > $intCantChun) {
-    $intCantCicl = round($intCantRegi/$intCantChun,0);
-} else {
-    $intCantCicl = 1;
-}
-$intCantRepe = 0;
-$objClauLimi = QQ::Clause();
-while ($intCantRepe <= $intCantCicl) {
-    $objClauLimi = QQ::LimitInfo($intCantChun,$intCantRepe*$intCantChun);
-    $arrDatoRepo = Guias::QueryArray(QQ::AndCondition($objCondWher),QQ::Clause($objClauLimi));
-    //--------------------------------------------------------------
-    // Recorro la lista de registros, armando el vector de datos
-    //--------------------------------------------------------------
-    foreach ($arrDatoRepo as $objTabla) {
-        $strNombClie = quitaCaracter($strSepaColu,$objTabla->NombreCliente('reporte'));
-        $strNumeGuia = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->Tracking)));
-        $strServImpo = $objTabla->ServicioImportacion;
-        $strFechGuia = $objTabla->Fecha->__toString('DD/MM/YYYY');
-        $strEstaDest = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$objTabla->Destino->Iata)));
-        $objZonaFact = Parametros::LoadByIndiceCodigo('ZONA',$objTabla->Destino->Zona);
-        $strNombZona = $objZonaFact ? $objZonaFact->Descripcion : 'N/A';
-        $strKiloGuia = nf($objTabla->Kilos);
-        $strPiesGuia = nf($objTabla->PiesCub);
-        $strCantPiez = nf0($objTabla->Piezas);
-        $strRefeMani = (!is_null($objTabla->NotaEntregaId)) ? $objTabla->NotaEntrega->Referencia : null;
-        $strFactGuia = $objTabla->NroFactura();
-        $strMontTota = nf($objTabla->Total);
+$objDatabase = Guias::GetDatabase();
+$objDbResult = $objDatabase->Query($strCadeSqlx);
+$intCantRegi = 0;
+while ($mixRegistro = $objDbResult->FetchArray()) {
+    $strNombClie = quitaCaracter($strSepaColu,$mixRegistro['cliente_corp']);
+    $strNumeGuia = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$mixRegistro['tracking'])));
+    $strServImpo = $mixRegistro['servicio_importacion'];
+    $strFechGuia = $mixRegistro['fecha_guia'];
+    $strEstaDest = QuitarCaracteresEspeciales2(utf8_decode(quitaCaracter($strSepaColu,$mixRegistro['destino'])));
+    $objZonaFact = Parametros::LoadByIndiceCodigo('ZONA',$mixRegistro['zona']);
+    $strNombZona = $objZonaFact ? $objZonaFact->Descripcion : 'N/A';
+    $strKiloGuia = nf($mixRegistro['kilos']);
+    $strPiesGuia = nf($mixRegistro['pies_cub']);
+    $strCantPiez = nf0($mixRegistro['piezas']);
+    $strRefeMani = $mixRegistro['referencia'];
+    $strFactGuia = $mixRegistro['factura'];
+    $strMontTota = nf($mixRegistro['total']);
 
-        $arrLineArch = array(
-            $strNombClie,
-            $strNumeGuia,
-            $strServImpo,
-            $strFechGuia,
-            $strEstaDest,
-            $strNombZona,
-            $strKiloGuia,
-            $strPiesGuia,
-            $strCantPiez,
-            $strRefeMani,
-            $strFactGuia,
-            $strMontTota,
-        );
-        //----------------------------------------------------------------------
-        // El vector generado, se lleva al archivo plano
-        //----------------------------------------------------------------------
-        $strCadeAudi = implode($strSepaColu,$arrLineArch);
-        fputs($mixManeArch,$strCadeAudi.$strSepaColu."\n");
-    }
-    $intCantRepe ++;
+    $arrLineArch = array(
+        $strNombClie,
+        $strNumeGuia,
+        $strServImpo,
+        $strFechGuia,
+        $strEstaDest,
+        $strNombZona,
+        $strKiloGuia,
+        $strPiesGuia,
+        $strCantPiez,
+        $strRefeMani,
+        $strFactGuia,
+        $strMontTota,
+    );
+    //----------------------------------------------------------------------
+    // El vector generado, se lleva al archivo plano
+    //----------------------------------------------------------------------
+    $strCadeAudi = implode($strSepaColu,$arrLineArch);
+    fputs($mixManeArch,$strCadeAudi.$strSepaColu."\n");
+    $intCantRegi ++;
 }
-if ($intCantRepe > 0) {
+if ($intCantRegi > 0) {
     QApplication::Redirect(__UTIL__.'/descargar_archivo.php?f='.$strNombArch);
 } else {
     echo '<h2>No hay registros que satisfagan las condiciones</h2>';

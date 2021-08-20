@@ -575,14 +575,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $blnSeleAere = false;
         $blnSeleMari = false;
         if (!$this->blnEditMode) {
-            $blnSeleAere = true;
+            $blnSeleMari = true;
         } else {
             $blnSeleAere = $this->objGuia->ServicioImportacion == 'AER';
             $blnSeleMari = $this->objGuia->ServicioImportacion == 'MAR';
         }
         $this->lstServExpo->AddItem('MARITIMO','MAR', $blnSeleAere);
         $this->lstServExpo->AddItem('AEREO','AER', $blnSeleMari);
-        //$this->lstServExpo->AddAction(new QClickEvent(), new QAjaxAction('lstServExpo_Click'));
     }
 
     protected function lstReceDest_Create() {
@@ -688,7 +687,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtEstaDest->Width = 180;
         $this->txtEstaDest->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtEstaDest->Text = $this->objGuia->ClienteRetail->Estado;
+            $this->txtEstaDest->Text = $this->objGuia->Estado;
         }
     }
 
@@ -698,7 +697,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtCiudDest->Width = 180;
         $this->txtCiudDest->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtCiudDest->Text = $this->objGuia->ClienteRetail->Ciudad;
+            $this->txtCiudDest->Text = $this->objGuia->Ciudad;
         }
     }
 
@@ -708,7 +707,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtPostDest->Width = 120;
         $this->txtPostDest->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
-            $this->txtPostDest->Text = $this->objGuia->ClienteRetail->CodigoPostal;
+            $this->txtPostDest->Text = $this->objGuia->CodigoPostal;
         }
     }
 
@@ -1425,13 +1424,17 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             if (strlen($strNumeCedu) > 0) {
                 $this->objClieReta = ClientesRetail::LoadByCedulaRif($strNumeCedu);
                 if ($this->objClieReta) {
+                    $strFechNaci = null;
+                    if (!is_null($this->objClieReta->FechaNacimiento)) {
+                        $strFechNaci = $this->objClieReta->FechaNacimiento->__toString("DD/MM/YYYY");
+                    }
                     $this->blnEditClie = true;
                     $this->txtNombClie->Text = $this->objClieReta->Nombre;
                     $this->txtTeleFijo->Text = $this->objClieReta->TelefonoFijo;
                     $this->txtTeleMovi->Text = $this->objClieReta->TelefonoMovil;
                     $this->txtDireClie->Text = $this->objClieReta->Direccion;
                     $this->txtEmaiRemi->Text = $this->objClieReta->Email;
-                    $this->calFechNaci->Text = $this->objClieReta->FechaNacimiento->__toString("DD/MM/YYYY");
+                    $this->calFechNaci->Text = $strFechNaci;
                     $this->lstSexoClie->SelectedIndex = $this->objClieReta->Sexo == 'M' ? 1 : 2;
                     $this->lstSucuDest->SetFocus();
                 } else {
@@ -1782,9 +1785,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //QApplication::Redirect('cargar_pod.php/'.$this->objGuia->NumeGuia);
     }
 
-    protected function btnSave_Click() {
-        t('=================');
-        t('Guardando la Guia');
+    protected function GestionarClientes() {
         //------------------------------------------------------------------------------------------------
         // Si los datos del Remitente no existen, se almacenan en la base de datos, para futuros envios.
         // En caso de que exista, se actualizan sus datos.
@@ -1845,6 +1846,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             return;
         }
         t('Destinatario almacenado');
+
+    }
+
+    protected function btnSave_Click() {
+        t('=================');
+        t('Guardando la Guia');
+        $this->GestionarClientes();
         //---------------------------------------------------
         // Se guarda la guia en la base de datos
         //---------------------------------------------------
@@ -1912,7 +1920,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $arrLogxCamb['strDescCamb'] = 'Ejecutado';
         LogDeCambios($arrLogxCamb);
         if ($blnTodoOkey) {
-            $this->success('Transaccion Exitosa !!!');
+            QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id);
+            //$this->success('Transaccion Exitosa !!!');
         }
     }
 
@@ -2067,6 +2076,15 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $arrResuUpda['TodoOkey'] = true;
         $arrResuUpda['MensErro'] = '';
         //-------------------------------------
+        // El servicio determina el producto
+        //-------------------------------------
+        $strServExpo = $this->lstServExpo->SelectedValue;
+        t('Servicio de Exportacion: '.$strServExpo);
+        $strCodiExpo = $strServExpo == 'AER' ? 'EXA' : 'EXM';
+        t('Producto de Exportacion: '.$strCodiExpo);
+        $objProdExpo = Productos::LoadByCodigo($strCodiExpo);
+        t('Id del Producto: '.$objProdExpo->Id);
+        //-------------------------------------
         // Se suprimen los errores en pantalla
         //-------------------------------------
         //$mixErroOrig = error_reporting();
@@ -2082,12 +2100,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             //-----------------------------------------------------------------------------------------
             // Si el Valor Declarado es mayor a cero, entonces se entiende que la Guia esta asegurada
             //-----------------------------------------------------------------------------------------
-            $blnEnviAseg = false;
-            if (strlen($this->txtValoDecl->Text) > 0) {
-                if ($this->txtValoDecl->Text > 0) {
-                    $blnEnviAseg = true;
-                }
-            }
+            //$blnEnviAseg = false;
+            //if (strlen($this->txtValoDecl->Text) > 0) {
+            //    if ($this->txtValoDecl->Text > 0) {
+            //        $blnEnviAseg = true;
+            //    }
+            //}
             $this->objGuia->ServicioEntrega       = 'DOM';
             $this->objGuia->DestinoId             = $this->lstSucuDest->SelectedValue;
             $this->objGuia->ReceptoriaDestinoId   = !is_null($this->lstReceDest->SelectedValue) ? $this->lstReceDest->SelectedValue : null;
@@ -2101,7 +2119,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->Piezas                = $this->txtCantPiez->Text;
             $this->objGuia->FormaPago             = $this->lstFormPago->SelectedValue;
             $this->objGuia->ValorDeclarado        = str_replace(",", '', $this->txtValoDecl->Text);
-            $this->objGuia->Asegurado             = $blnEnviAseg;
+            $this->objGuia->Asegurado             = $this->lstEnviSgro->SelectedValue;
             $this->objGuia->Observacion           = '';
             $this->objGuia->VendedorId            = $this->objClieNaci->VendedorId;
             $this->objGuia->Contenido             = '';
@@ -2118,12 +2136,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->objGuia->Tracking      = $this->txtNumeGuia->Text;
                 $this->objGuia->Fecha         = new QDateTime(QDateTime::Now());
                 $this->objGuia->ClienteCorpId = $this->objClieNaci->CodiClie;
-                $this->objGuia->ProductoId    = $this->objProdExpo->Id;
+                $this->objGuia->ProductoId    = $objProdExpo->Id;
                 $this->objGuia->Tasa          = $this->decTasaDola;
                 $this->objGuia->Alto          = 0;
                 $this->objGuia->Ancho         = 0;
                 $this->objGuia->Largo         = 0;
                 $this->objGuia->Volumen       = 0;
+                $this->objGuia->PiesCub       = 0;
                 $this->objGuia->Total         = 0;
                 $this->objGuia->CreatedBy     = $this->objUsuario->CodiUsua;
                 $this->objGuia->TarifaId      = $this->objClieNaci->TarifaId;

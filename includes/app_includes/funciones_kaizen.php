@@ -44,7 +44,7 @@ function buscarCadenas($strCadeOrig,$strNombTabl) {
  * sobre un registro de una tabla en particular
  */
 function LogDeCambios($arrLogxCamb) {
-    $objUsuario = unserialize($_SESSION['User']);
+    $objUsuario  = unserialize($_SESSION['User']);
     $strLogiUsua = $objUsuario->LogiUsua;
     //-----------------------------------------------------------------------
     // Si no se especifica nada diferente, se asume que el Sistema

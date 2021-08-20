@@ -5,6 +5,7 @@ require_once('qcubed.inc.php');
 $objGuiaImpr  = unserialize($_SESSION['GuiaImpr']);
 $intAnchPagi  = "680px";
 $intMediPagi  = "340px";
+$strLimiDere  = '350px';
 $strTextMens  = "ACUERDO DE LIBERACION DE RESPONSABILIDAD";
 $strFechDhoy  = date('d/m/Y');
 $strNumeGuia  = $objGuiaImpr->Numero;
@@ -13,7 +14,7 @@ $strCeduRifx  = $objGuiaImpr->ClienteRetail->CedulaRif;
 $intCantPiez  = $objGuiaImpr->Piezas;
 $strNombDest  = $objGuiaImpr->Destino->Nombre;
 $strDescCont  = $objGuiaImpr->Contenido;
-$strLogoEmpr  = $_SESSION['LogoEmpr'];
+//$strLogoEmpr  = $_SESSION['LogoEmpr'];
 $strNombEmpr  = 'Gold Coast';
 $strDireEmpr  = 'Calle Angulo Sur Oeste de la manzana "E", Edificio Gold Coast Custom Express, C.A.';
 $strDireEmpr .= 'Piso S/N, local S/N, sector Pariata. Maiquetia. Edo Vargas';
@@ -41,13 +42,15 @@ $strDireEmpr .= 'Piso S/N, local S/N, sector Pariata. Maiquetia. Edo Vargas';
 </style>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
-        <table>
-            <tr>
-                <td class="parrafo">
-                    <img src="<?= $strLogoEmpr ?>" alt="LogoGold" width="150px" height="50px">
-                </td>
-            </tr>
-        </table>
+        <?php include('partials/header_local.tpl.php'); ?>
+
+        <!--<table>-->
+        <!--    <tr>-->
+        <!--        <td class="parrafo">-->
+        <!--            <img src="--><?//= $strLogoEmpr ?><!--" alt="LogoGold" width="150px" height="50px">-->
+        <!--        </td>-->
+        <!--    </tr>-->
+        <!--</table>-->
 
         <table style="margin-top: 12px;">
             <tr>

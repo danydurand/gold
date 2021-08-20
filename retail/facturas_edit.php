@@ -123,6 +123,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->txtMontoPendiente->Width = 120;
 		$this->txtEstatusPago = $this->mctFacturas->txtEstatusPago_Create();
 		$this->txtReferencia = $this->mctFacturas->txtReferencia_Create();
+		$this->txtReferencia->Width = 130;
 		$this->txtNumero = $this->mctFacturas->txtNumero_Create();
 		$this->txtNumero->Width = 130;
 		$this->txtMaquinaFiscal = $this->mctFacturas->txtMaquinaFiscal_Create();
@@ -136,6 +137,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->lstSucursal       = disableControl($this->lstSucursal);
         $this->lstReceptoria     = disableControl($this->lstReceptoria);
         $this->txtNumero         = disableControl($this->txtNumero);
+        $this->txtReferencia     = disableControl($this->txtReferencia);
         $this->txtFechaImpresion = disableControl($this->txtFechaImpresion);
         $this->txtHoraImpresion  = disableControl($this->txtHoraImpresion);
         $this->txtTotal          = disableControl($this->txtTotal);
@@ -490,13 +492,13 @@ class FacturasEditForm extends FacturasEditFormBase {
     protected function mostrarCampos($strAction='add') {
         $this->mensaje();
         if ($strAction == 'add') {
-            $this->intEditPago = false;
+            $this->intEditPago = null;
             $this->blnMostCamp = !$this->blnMostCamp;
             $this->btnBorrPago->Visible = false;
             $this->resetearCamposDelPago();
         }
         if ($strAction == 'edit') {
-            $this->intEditPago = true;
+            //$this->intEditPago = true;
             $this->blnMostCamp = true;
             $this->btnBorrPago->Visible = true;
         }
@@ -801,10 +803,12 @@ class FacturasEditForm extends FacturasEditFormBase {
     }
 
     protected function btnVolvList_Click() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        $strPagiReto = $objUltiAcce->__toString();
-        //$strPagiReto = str_replace('../','',$strPagiReto);
-        //t('Pagina de Retorno: '.$strPagiReto);
+        if ($this->mctFacturas->Facturas->CountFacturaGuiasesAsFactura() == 1) {
+            $objGuiaFact = $this->mctFacturas->Facturas->GetFacturaGuiasAsFacturaArray()[0];
+            $strPagiReto = 'consulta_guia_new.php/'.$objGuiaFact->GuiaId;
+        } else {
+            $strPagiReto = 'guias_list.php';
+        }
         QApplication::Redirect(__SIST__.'/'.$strPagiReto);
     }
 
@@ -892,7 +896,7 @@ class FacturasEditForm extends FacturasEditFormBase {
             $this->mctFacturas->DeleteFacturas();
             $arrLogxCamb['strNombTabl'] = 'Facturas';
             $arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Numero;
+            $arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Referencia;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

@@ -47,7 +47,9 @@ class GuiasListForm extends GuiasListFormBase {
     protected $btnImprLote;
     protected $btnCancel;
     protected $objProdNaci;
-    protected $objProdExpo;
+    protected $objProdExpa;
+    protected $objProdExpm;
+    protected $arrCodiProd;
 
     protected $btnFactGuia;
     protected $colRegiSele;
@@ -68,7 +70,9 @@ class GuiasListForm extends GuiasListFormBase {
         $this->lblTituForm->Text = 'Guias';
         $this->objUsuario  = unserialize($_SESSION['User']);
         $this->objProdNaci = unserialize($_SESSION['ProdNaci']);
-        $this->objProdExpo = unserialize($_SESSION['ProdExpo']);
+        $this->objProdExpa = unserialize($_SESSION['ProdExpa']);
+        $this->objProdExpm = unserialize($_SESSION['ProdExpm']);
+        $this->arrCodiProd = [$this->objProdNaci->Id, $this->objProdExpa->Id, $this->objProdExpm->Id];
 
 		// Instantiate the Meta DataGrid
 		$this->dtgGuiases = new GuiasDataGrid($this);
@@ -229,7 +233,7 @@ class GuiasListForm extends GuiasListFormBase {
                 t('Fecha de Hoy: '.$dttFechDhoy->__toString("YYYY-MM-DD"));
 
                 $this->objClauWher   = QQ::Clause();
-                $this->objClauWher[] = QQ::In(QQN::Guias()->ProductoId,[$this->objProdNaci->Id,$this->objProdExpo->Id]);
+                $this->objClauWher[] = QQ::In(QQN::Guias()->ProductoId,$this->arrCodiProd);
                 $this->objClauWher[] = QQ::Equal(QQN::Guias()->CreatedBy,$this->objUsuario->CodiUsua);
                 //$this->objClauWher[] = QQ::Equal(QQN::Guias()->Fecha,$dttFechDhoy->__toString("YYYY-MM-DD"));
             }

@@ -20,11 +20,10 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
 
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
-        <?php include('partials/header_local.tpl.php'); ?>
         <!---------------------->
         <!--     RECUADROS    -->
         <!---------------------->
-        <table style="margin-top: 24px; margin-left: -3px;">
+        <table style="margin-top: 100px; margin-left: -3px;">
             <tr>
                 <td style="width: 300px">
                     <table style=" border: solid .5mm">
@@ -53,6 +52,14 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                         <tr>
                             <td style="width: 130px; background-color: #CCC; font-weight: bold">FECHA:</td>
                             <td style="width: 100px; text-align: right"><?= $objFactImpr->Fecha->__toString("DD/MM/YYYY") ?></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 130px; background-color: #CCC; font-weight: bold">CED/RIF:</td>
+                            <td style="width: 100px; text-align: right"><?= $objFactImpr->CedulaRif ?></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 130px; background-color: #CCC; font-weight: bold">TELEFONO:</td>
+                            <td style="width: 100px; text-align: right"><?= $objFactImpr->Telefono ?></td>
                         </tr>
                     </table>
                 </td>
@@ -126,13 +133,4 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
         </table>
     </page_header>
 
-    <page_footer>
-        <table style="border: solid .5mm; font-size: 10px;">
-            <tr>
-                <td class="titulo" style="width: 150px;">PLEASE MAKE CHECK TO:</td>
-                <td style="text-align: left">GOLD COAST CUSTOM EXPRESS CORP.</td>
-            </tr>
-        </table>
-
-    </page_footer>
 </page>

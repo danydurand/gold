@@ -53,7 +53,7 @@
                         <span class="etiqueta">Doc. Fiscal</span>
                     </div>
                     <div class="col-md-3">
-                        <?php $this->txtNumero->Render(); ?>
+                        <?php $this->txtReferencia->Render(); ?>
                     </div>
                     <div class="col-md-3" style="text-align: right">
                         <span class="etiqueta">Fech/Hr</span>

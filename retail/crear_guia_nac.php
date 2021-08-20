@@ -70,7 +70,7 @@ class CrearGuiaNac extends FormularioBaseKaizen {
 
 
     protected $lstReceDomi;
-    protected $rdbFormPago;
+    protected $lstFormPago;
 
     protected $txtNumeGuia;
 
@@ -98,7 +98,7 @@ class CrearGuiaNac extends FormularioBaseKaizen {
     protected $txtCantKilo;
     protected $txtDescCont;
     protected $txtValoDecl;
-    protected $chkEnviSgro;
+    protected $lstEnviSgro;
 
     protected $dtgPiezTemp;
 
@@ -395,8 +395,8 @@ class CrearGuiaNac extends FormularioBaseKaizen {
         //-----------------
         $this->txtDescCont_Create();
         $this->txtValoDecl_Create();
-        $this->chkEnviSgro_Create();
-        $this->rdbFormPago_Create();
+        $this->lstEnviSgro_Create();
+        $this->lstFormPago_Create();
         $this->txtCantPiez_Create();
         $this->txtCantKilo_Create();
 
@@ -751,12 +751,20 @@ class CrearGuiaNac extends FormularioBaseKaizen {
         }
     }
 
-    protected function chkEnviSgro_Create() {
-        $this->chkEnviSgro = new QCheckBox($this);
-        $this->chkEnviSgro->Name = 'Asegurado ?';
+    protected function lstEnviSgro_Create() {
+        $this->lstEnviSgro = new QListBox($this);
+        $this->lstEnviSgro->Width = 100;
         if ($this->blnEditMode) {
-            $this->chkEnviSgro->Checked = $this->objGuia->Asegurado;
+            $this->cargarModalidadesDeSgro($this->objGuia->Asegurado);
+        } else {
+            $this->cargarModalidadesDeSgro();
         }
+    }
+
+    protected function cargarModalidadesDeSgro($intEnviSgro=null) {
+        $this->lstEnviSgro->RemoveAllItems();
+        $this->lstEnviSgro->AddItem('SI',1,$intEnviSgro==1);
+        $this->lstEnviSgro->AddItem('NO',0,$intEnviSgro==0);
     }
 
     protected function txtValoDecl_Create() {
@@ -771,16 +779,14 @@ class CrearGuiaNac extends FormularioBaseKaizen {
         }
     }
 
-    protected function rdbFormPago_Create() {
-        $this->rdbFormPago = new QRadioButtonList($this);
-        $this->rdbFormPago->Name = 'F. Pago';
-        $this->rdbFormPago->HtmlEntities = false;
+    protected function lstFormPago_Create() {
+        $this->lstFormPago = new QListBox($this);
+        $this->lstFormPago->Name = 'F. Pago';
         if (!$this->blnEditMode) {
             $this->cargarModalidadesDePago();
         } else {
             $this->cargarModalidadesDePago($this->objGuia->FormaPago);
         }
-        $this->rdbFormPago->RepeatColumns = 2;
     }
 
     protected function txtCantPiez_Create() {
@@ -1585,9 +1591,9 @@ class CrearGuiaNac extends FormularioBaseKaizen {
     }
 
     protected function cargarModalidadesDePago($strFormPago=null) {
-        $this->rdbFormPago->RemoveAllItems();
-        $this->rdbFormPago->AddItem('&nbsp;PPD&nbsp;','PPD',$strFormPago=='PPD');
-        $this->rdbFormPago->AddItem('&nbsp;COD','COD',$strFormPago=='COD');
+        $this->lstFormPago->RemoveAllItems();
+        $this->lstFormPago->AddItem('PRE-PAGADA','PPD',$strFormPago=='PPD');
+        $this->lstFormPago->AddItem('COBRO DESTINO','COD',$strFormPago=='COD');
     }
 
     //------------------------------------------------------------
@@ -1645,6 +1651,9 @@ class CrearGuiaNac extends FormularioBaseKaizen {
             $this->objClieReta->Direccion       = substr(limpiarCadena($this->txtDireClie->Text),0,250);
             $this->objClieReta->Email           = substr(strtolower($this->txtEmaiRemi->Text),0,191);
             $this->objClieReta->FechaNacimiento = new QDateTime($this->calFechNaci->DateTime);
+            if (!is_null($this->lstProfClie->SelectedValue)) {
+                $this->objClieReta->ProfesionId = $this->lstProfClie->SelectedValue;
+            }
             //----------------------------------------------------------------------------------
             // Si el Cliente Remitente no existe aún, se graba Usuario y la fecha de creación.
             //----------------------------------------------------------------------------------
@@ -1669,14 +1678,14 @@ class CrearGuiaNac extends FormularioBaseKaizen {
                 $this->objDestPmnx->CedulaRif = DejarNumerosVJGuion($this->txtCeduDest->Text);
             }
             $this->objDestPmnx->Nombre        = substr(limpiarCadena($this->txtNombDest->Text),0,100);
-            $this->objDestPmnx->TelefonoFijo = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
+            $this->objDestPmnx->TelefonoFijo  = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
             $this->objDestPmnx->TelefonoMovil = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
             $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
             $this->objDestPmnx->Email         = substr(strtolower($this->txtEmaiDest->Text),0,191);
             $this->objDestPmnx->Direccion     = substr(limpiarCadena($this->txtDireDest->Text),0,250);
             if (!$this->blnEditDest) {
-                $this->objDestPmnx->SucursalId   = $this->objUsuario->SucursalId;
-                $this->objDestPmnx->CreatedBy    = $this->objUsuario->CodiUsua;
+                $this->objDestPmnx->SucursalId = $this->objUsuario->SucursalId;
+                $this->objDestPmnx->CreatedBy  = $this->objUsuario->CodiUsua;
             }
             $this->objDestPmnx->Save();
         } catch (Exception $e) {
@@ -1855,12 +1864,12 @@ class CrearGuiaNac extends FormularioBaseKaizen {
             //-----------------------------------------------------------------------------------------
             // Si el Valor Declarado es mayor a cero, entonces se entiende que la Guia esta asegurada
             //-----------------------------------------------------------------------------------------
-            $blnEnviAseg = false;
-            if (strlen($this->txtValoDecl->Text) > 0) {
-                if ($this->txtValoDecl->Text > 0) {
-                    $blnEnviAseg = true;
-                }
-            }
+            //$blnEnviAseg = false;
+            //if (strlen($this->txtValoDecl->Text) > 0) {
+            //    if ($this->txtValoDecl->Text > 0) {
+            //        $blnEnviAseg = true;
+            //    }
+            //}
             $this->objGuia->ServicioEntrega       = $this->lstReceDomi->SelectedValue;
             $this->objGuia->DestinoId             = $this->lstSucuDest->SelectedValue;
             $this->objGuia->ReceptoriaDestinoId   = !is_null($this->lstReceDest->SelectedValue) ? $this->lstReceDest->SelectedValue : null;
@@ -1872,9 +1881,9 @@ class CrearGuiaNac extends FormularioBaseKaizen {
             $this->objGuia->CedulaDestinatario    = DejarNumerosVJGuion($this->txtCeduDest->Text);
             $this->objGuia->TelefonoDestinatario  = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
             $this->objGuia->Piezas                = $this->txtCantPiez->Text;
-            $this->objGuia->FormaPago             = $this->rdbFormPago->SelectedValue;
+            $this->objGuia->FormaPago             = $this->lstFormPago->SelectedValue;
             $this->objGuia->ValorDeclarado        = str_replace(",", '', $this->txtValoDecl->Text);
-            $this->objGuia->Asegurado             = $blnEnviAseg;
+            $this->objGuia->Asegurado             = $this->lstEnviSgro->SelectedValue;
             $this->objGuia->Observacion           = '';
             $this->objGuia->VendedorId            = $this->objClieNaci->VendedorId;
             $this->objGuia->Contenido             = ''; //$this->txtDescCont->Text;
@@ -2033,7 +2042,7 @@ class CrearGuiaNac extends FormularioBaseKaizen {
             return false;
         }
         //t('18');
-        if (is_null($this->rdbFormPago->SelectedValue)) {
+        if (is_null($this->lstFormPago->SelectedValue)) {
             $strTextMens = 'Modalidad de Pago <b>Requerida</b>';
             $this->danger($strTextMens);
             return false;

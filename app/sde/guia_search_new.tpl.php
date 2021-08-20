@@ -10,6 +10,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <?php $this->btnSave->Render(); ?>
         <?php $this->btnExceReta->Render(); ?>
         <?php $this->btnExceFact->Render(); ?>
+        <?php $this->btnExceNorm->Render(); ?>
     </div>
     <div class="hidden-sm col-md-3 col-lg-4"></div>
 </div>

@@ -27,11 +27,6 @@ class GuiasListForm extends GuiasListFormBase {
     protected $blnHayxCond;
     protected $arrGuiaLote;
 
-    //-------------------------------------------------------------
-    // Parámetros de Información (Criterios de Búsqueda de Guías)
-    //-------------------------------------------------------------
-
-    // Lado Izquierdo //
     protected $txtNumeGuia;
     protected $txtBuscCodi;
     protected $txtBuscNomb;
@@ -39,7 +34,7 @@ class GuiasListForm extends GuiasListFormBase {
     protected $calFechInic;
     protected $calFechFina;
     protected $txtNumePrec;
-    // Lado Derecho //
+
     protected $lstTipoPago;
     protected $lstCodiOrig;
     protected $lstCodiDest;
@@ -47,10 +42,8 @@ class GuiasListForm extends GuiasListFormBase {
     protected $lstCodiCkpt;
     protected $chkGuiaAnul;
 
-    // Botónes del Filtro de Búsqueda //
     protected $btnBuscRegi;
 
-    // Botónes del Formulario //
     protected $btnImprLote;
     protected $btnCancel;
 
@@ -107,8 +100,14 @@ class GuiasListForm extends GuiasListFormBase {
         $colFechGuia->ReverseOrderByClause = QQ::OrderBy(QQN::Guias()->Fecha);
         $this->dtgGuiases->AddColumn($colFechGuia);
 
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
+        $colOrigGuia = $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen->Iata,'Name=Orig');
+        $colOrigGuia->FilterType = QFilterType::TextFilter;
+        $colOrigGuia->Filter = QQ::Like(QQN::Guias()->Origen->Iata,null);
+
+        $colDestGuia = $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
+        $colDestGuia->FilterType = QFilterType::TextFilter;
+        $colDestGuia->Filter = QQ::Like(QQN::Guias()->Destino->Iata,null);
+
         $this->dtgGuiases->MetaAddColumn('ServicioImportacion','Name=S.Impor');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
         $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');

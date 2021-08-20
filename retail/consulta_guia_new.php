@@ -185,6 +185,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 $this->ImprimirCartaAntiDroga();
             }
         }
+        if ($strAcciPlus == 'co') {
+            if ($this->objGuia) {
+                $this->ImprimirCombo();
+            }
+        }
     }
 
     protected function Form_Create() {
@@ -347,7 +352,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colKiloPiez->Html = '<?= nf($_ITEM->Kilos); ?>';
         $this->dtgPiezGuia->AddColumn($colKiloPiez);
 
-        if ($this->objGuia->Producto->Codigo == 'EXP') {
+        if (in_array($this->objGuia->Producto->Codigo,['EXA','EXM'])) {
             $colLibrPiez = new QDataGridColumn($this);
             $colLibrPiez->Name = QApplication::Translate('Libras');
             $colLibrPiez->Html = '<?= $_ITEM->Libras; ?>';
@@ -376,27 +381,20 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         $strTextBoto   = TextoIcono('plus','Acciones');
         $arrOpciDrop   = array();
-        if ($this->objGuia->sistema() == 'RET') {
-            if ($this->objGuia->Producto->Codigo == 'NAC') {
-                $strCodiAcci = 'in';
-            } else {
-                $strCodiAcci = 'ie';
-            }
+        if ($this->objGuia->Producto->Codigo == 'NAC') {
+            $strCodiAcci = 'in';
+        } else {
+            $strCodiAcci = 'ie';
+        }
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/'.$strCodiAcci,
+            TextoIcono('print', 'Imprimir Guía')
+        );
+        if (in_array($this->objGuia->Producto->Codigo,['EXA','EXM'])) {
             $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/'.$strCodiAcci,
-                TextoIcono('print', 'Imprimir Guía')
+                __SIST__ . '/consulta_guia_new.php/' . $this->objGuia->Id . '/co',
+                TextoIcono('print', 'Acuerdo L.R. y Carta A.D.')
             );
-            if (is_null($this->objGuia->FacturaId)) {
-                $arrOpciDrop[] = OpcionDropDown(
-                    __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/fg',
-                    TextoIcono('gg', 'Facturar la Guía')
-                );
-            } else {
-                $arrOpciDrop[] = OpcionDropDown(
-                    __SIST__.'/facturas_edit.php/'.$this->objGuia->FacturaId,
-                    TextoIcono('gg', 'Ver la Factura')
-                );
-            }
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/lr',
                 TextoIcono('chain-broken', 'Acuerdo L.R.')
@@ -404,6 +402,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ca',
                 TextoIcono('thumbs-o-up', 'Carta AntiDroga')
+            );
+        }
+        if (is_null($this->objGuia->FacturaId)) {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/fg',
+                TextoIcono('gg', 'Facturar la Guía')
+            );
+        } else {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/facturas_edit.php/'.$this->objGuia->FacturaId,
+                TextoIcono('gg', 'Ver la Factura')
             );
         }
 
@@ -657,7 +666,8 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                     $this->lblTipoTari->Text = 'N/A';
                 }
                 break;
-            case 'EXP':
+            case 'EXA':
+            case 'EXM':
                 $this->lblTipoTari->Text = 'N/A';
                 break;
             default:
@@ -942,17 +952,14 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function ImprimirGuiaNacional()
     {
-        t('Imprimiendo guia nacional...');
         $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
         try {
-            t('voy por aqui');
             $strNombArch = 'GuiaNac' . $this->objGuia->Numero . '.pdf';
             $strNombForm = 'guia_nacional.php';
             $strPosiHoja = 'P';
 
             $_SESSION['GuiaImpr'] = serialize($this->objGuia);
             $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
-            t('llegando por aqui');
 
             $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
             $html2pdf->pdf->SetDisplayMode('fullpage');
@@ -968,16 +975,13 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
         }
-        t('Saliendo de la impresion de la guia nacional');
     }
 
     protected function ImprimirGuiaExportacion()
     {
-        //t('Imprimiendo guia exportacion...');
         $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
         $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
-            t('voy por aqui');
             $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
             $strNombForm = 'guia_exportacion.php';
 
@@ -1001,7 +1005,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
         }
-        //t('Saliendo de la impresion de la guia exportacion');
     }
 
     protected function ImprimirAcuerdoDeLiberacion()
@@ -1012,7 +1015,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $strPosiHoja = 'P';
 
             $_SESSION['GuiaImpr'] = serialize($this->objGuia);
-            t('llegando por aqui');
 
             $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
             $html2pdf->pdf->SetDisplayMode('fullpage');
@@ -1054,6 +1056,36 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             echo $formatter->getHtmlMessage();
         }
     }
+
+    protected function ImprimirCombo() {
+        try {
+            $strNombArch = 'Docs' . $this->objGuia->Numero . '.pdf';
+
+            $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__).'/rhtml/acuerdo_lr.php';
+            $content = ob_get_clean();
+
+            $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__).'/rhtml/carta_ad.php';
+            $content .= ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+
+
+
+    }
+
 
     protected function btnInfoPodx_Click($strFormId, $strControlId, $strParameter) {
         $this->mensaje();

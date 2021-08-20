@@ -608,6 +608,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $strCadeSqlx .= " where receptoria_origen_id = ".$_SESSION['ReceptoriaId'];
             $strCadeSqlx .= "   and created_by = ".$this->objUsuario->CodiUsua;
             //$strCadeSqlx .= "   and fecha = ".date('Y-m-d');
+            t('SQL: '.$strCadeSqlx);
             $objDatabase  = GuiaPiezas::GetDatabase();
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $arrIdxxPiez  = [];
@@ -1216,13 +1217,17 @@ class SacarARuta extends FormularioBaseKaizen {
             if (!$objContenedor) {
                 t('No existia, lo voy a crear');
                 $objContenedor = new Containers();
-                $objContenedor->Hora        = date("H:i");
-                $objContenedor->CreatedBy   = $this->objUsuario->CodiUsua;
-                $objContenedor->Estatus     = 'ABIERT@';
-                $objContenedor->Tipo        = 'MASTER';
-                $objContenedor->Kilos       = 0;
-                $objContenedor->PiesCub     = 0;
-                $objContenedor->Peso        = 0;
+                $objContenedor->Hora         = date("H:i");
+                $objContenedor->CreatedBy    = $this->objUsuario->CodiUsua;
+                $objContenedor->Estatus      = 'ABIERT@';
+                $objContenedor->Tipo         = 'MASTER';
+                $objContenedor->Kilos        = 0;
+                $objContenedor->PiesCub      = 0;
+                $objContenedor->Peso         = 0;
+                $objContenedor->CantidadOk   = 0;
+                $objContenedor->Devueltas    = 0;
+                $objContenedor->SinGestionar = 0;
+                $objContenedor->Pendientes   = 0;
             }
             $objContenedor->Fecha           = new QDateTime($this->calFechDesp->DateTime);
             $objContenedor->Numero          = $this->txtNumeCont->Text;
