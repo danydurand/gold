@@ -108,6 +108,7 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                 </td>
             </tr>
         </table>
+        <?php if (count($arrPagoFact)) { ?>
         <table style="margin-top: 24px; width: 100%; border: solid .5mm; font-size: small">
             <tr style="background-color: #CCC; font-weight: bold">
                 <td style="width: 120px; text-align: left">FORMA PAGO</td>
@@ -131,6 +132,7 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                 </tr>
             <?php } ?>
         </table>
+        <?php } ?>
     </page_header>
 
 </page>

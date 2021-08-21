@@ -17,7 +17,7 @@ require('inc/header.inc.php');
         </div>
     </div>
     <div class="form-controls">
-        <div class="container-fluid">
+        <div class="container-fluid" data-aos="fade-in">
             <div class="row">
                 <div class="col-sm-12" style="min-height: 1.3em; text-align: left; margin-top: 0.5em; margin-left: -1em;">
                     <?php $this->lblMensUsua->Render(); ?>
@@ -27,11 +27,11 @@ require('inc/header.inc.php');
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-md-6 title">Tipo de Operación</div>
-                        <div class="col-md-6 title">BL o AWB</div>
+                        <!--<div class="col-md-6 title">BL o AWB</div>-->
                     </div>
                     <div class="row">
                         <div class="col-md-6"><?php $this->lstTipoOper->Render(); ?></div>
-                        <div class="col-md-6"><?php $this->txtNumeAwbx->Render(); ?></div>
+                        <!--<div class="col-md-6">--><?php //$this->txtNumeAwbx->Render(); ?><!--</div>-->
                     </div>
                     <div class="title">Operaciones</div>
                     <?php $this->lstOperAbie->Render(); ?>

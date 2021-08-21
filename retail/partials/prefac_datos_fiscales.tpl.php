@@ -65,3 +65,19 @@
                         <?php $this->txtHoraImpresion->Render(); ?>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-2" style="text-align: right">
+                        <span class="etiqueta">Estatus</span>
+                    </div>
+                    <div class="col-md-3">
+                        <?php $this->txtEstatus->Render(); ?>
+                    </div>
+                    <div class="col-md-3" style="text-align: right">
+                        <span class="etiqueta">Tasa USD</span>
+                    </div>
+                    <div class="col-md-2">
+                        <?php $this->txtTasa->Render(); ?>
+                    </div>
+                    <div class="col-md-2" style="text-align: right">
+                    </div>
+                </div>

@@ -1736,7 +1736,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function cargarModalidadesDePago($strFormPago=null) {
         $this->lstFormPago->RemoveAllItems();
         $this->lstFormPago->AddItem('PRE-PAGADA','PPD',$strFormPago=='PPD');
-        $this->lstFormPago->AddItem('COBRO DESTINO','COD',$strFormPago=='COD');
+        $this->lstFormPago->AddItem('CREDITO','CRD',$strFormPago=='CRD');
     }
 
     protected function cargarModalidadesDeSgro($intEnviSgro=null) {
@@ -2097,15 +2097,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->objGuia->OrigenId           = $this->intSucuOrig;
                 $this->objGuia->ReceptoriaOrigenId = $this->intReceOrig;
             }
-            //-----------------------------------------------------------------------------------------
-            // Si el Valor Declarado es mayor a cero, entonces se entiende que la Guia esta asegurada
-            //-----------------------------------------------------------------------------------------
-            //$blnEnviAseg = false;
-            //if (strlen($this->txtValoDecl->Text) > 0) {
-            //    if ($this->txtValoDecl->Text > 0) {
-            //        $blnEnviAseg = true;
-            //    }
-            //}
             $this->objGuia->ServicioEntrega       = 'DOM';
             $this->objGuia->DestinoId             = $this->lstSucuDest->SelectedValue;
             $this->objGuia->ReceptoriaDestinoId   = !is_null($this->lstReceDest->SelectedValue) ? $this->lstReceDest->SelectedValue : null;

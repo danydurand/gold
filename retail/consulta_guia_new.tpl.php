@@ -88,6 +88,20 @@ require('inc/header.inc.php');
                             <?php $this->lblDireRemi->Render(); ?>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="titulo-c">E-mail</div>
+                        </div>
+                        <div class="col-md-3">
+                            <?php $this->lblEmaiRemi->Render(); ?>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="titulo-c">Profesión</div>
+                        </div>
+                        <div class="col-md-4">
+                            <?php $this->lblProfRemi->Render(); ?>
+                        </div>
+                    </div>
                 </div>
                 <!-- Lado derecho del formulario -->
                 <div class="col-md-6">
@@ -121,6 +135,27 @@ require('inc/header.inc.php');
                             <?php $this->lblDireDest->Render(); ?>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="titulo-c">Estado</div>
+                        </div>
+                        <div class="col-md-2">
+                            <?php $this->lblEstaDest->Render(); ?>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="titulo-c">Ciudad</div>
+                        </div>
+                        <div class="col-md-2">
+                            <?php $this->lblCiudDest->Render(); ?>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="titulo-c">C.Postal</div>
+                        </div>
+                        <div class="col-md-2">
+                            <?php $this->lblCodiPost->Render(); ?>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="row" style="margin-top: 0.3em">
@@ -142,7 +177,7 @@ require('inc/header.inc.php');
                             <?php $this->lblNumeGuia->Render(); ?>
                         </div>
                         <div class="col-md-3">
-                            <div class="titulo-c">Fecha</div>
+                            <div class="titulo-c">Fecha Guía</div>
                         </div>
                         <div class="col-md-3">
                             <?php $this->lblFechGuia->Render(); ?>
@@ -156,7 +191,7 @@ require('inc/header.inc.php');
                             <?php $this->lblDescCont->Render(); ?>
                         </div>
                         <div class="col-md-3">
-                            <div class="titulo-c">F. Pago</div>
+                            <div class="titulo-c">Forma Pago</div>
                         </div>
                         <div class="col-md-3">
                             <?php $this->lblFormPago->Render(); ?>
@@ -164,7 +199,7 @@ require('inc/header.inc.php');
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="titulo-c">Piezas/Peso</div>
+                            <div class="titulo-c">Pzas / Kgs <?= $this->strPesoAlte ?></div>
                         </div>
                         <div class="col-md-3">
                             <?php $this->lblPiezPeso->Render(); ?>
@@ -178,7 +213,7 @@ require('inc/header.inc.php');
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="titulo-c">Valor D.</div>
+                            <div class="titulo-c">Valor Decl.</div>
                         </div>
                         <div class="col-md-3">
                             <?php $this->lblValoDecl->Render(); ?>
@@ -192,10 +227,10 @@ require('inc/header.inc.php');
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <div class="titulo-c">Observación</div>
+                            <div class="titulo-c">Alt / Anc / Lar</div>
                         </div>
                         <div class="col-md-3">
-                            <?php $this->lblTextObse->Render(); ?>
+                            <?php $this->lblMediEnvi->Render(); ?>
                         </div>
                         <div class="col-md-3">
                             <div class="titulo-c">Fecha Entrega</div>

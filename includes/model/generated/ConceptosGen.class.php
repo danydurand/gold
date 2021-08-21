@@ -31,6 +31,7 @@
 	 * @property string $Dbquery the value for strDbquery 
 	 * @property integer $BaseImponible the value for intBaseImponible 
 	 * @property string $Metodo the value for strMetodo 
+	 * @property boolean $AplicarTasa the value for blnAplicarTasa 
 	 * @property string $Condicion the value for strCondicion 
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
@@ -188,6 +189,14 @@
 		protected $strMetodo;
 		const MetodoMaxLength = 50;
 		const MetodoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column conceptos.aplicar_tasa
+		 * @var boolean blnAplicarTasa
+		 */
+		protected $blnAplicarTasa;
+		const AplicarTasaDefault = null;
 
 
 		/**
@@ -372,6 +381,7 @@
 			$this->strDbquery = Conceptos::DbqueryDefault;
 			$this->intBaseImponible = Conceptos::BaseImponibleDefault;
 			$this->strMetodo = Conceptos::MetodoDefault;
+			$this->blnAplicarTasa = Conceptos::AplicarTasaDefault;
 			$this->strCondicion = Conceptos::CondicionDefault;
 			$this->strCreatedAt = Conceptos::CreatedAtDefault;
 			$this->strUpdatedAt = Conceptos::UpdatedAtDefault;
@@ -736,6 +746,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'dbquery', $strAliasPrefix . 'dbquery');
 			    $objBuilder->AddSelectItem($strTableName, 'base_imponible', $strAliasPrefix . 'base_imponible');
 			    $objBuilder->AddSelectItem($strTableName, 'metodo', $strAliasPrefix . 'metodo');
+			    $objBuilder->AddSelectItem($strTableName, 'aplicar_tasa', $strAliasPrefix . 'aplicar_tasa');
 			    $objBuilder->AddSelectItem($strTableName, 'condicion', $strAliasPrefix . 'condicion');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -916,6 +927,9 @@
 			$strAlias = $strAliasPrefix . 'metodo';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strMetodo = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'aplicar_tasa';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnAplicarTasa = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'condicion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strCondicion = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1220,6 +1234,7 @@
 							`dbquery`,
 							`base_imponible`,
 							`metodo`,
+							`aplicar_tasa`,
 							`condicion`,
 							`created_by`,
 							`updated_by`,
@@ -1240,6 +1255,7 @@
 							' . $objDatabase->SqlVariable($this->strDbquery) . ',
 							' . $objDatabase->SqlVariable($this->intBaseImponible) . ',
 							' . $objDatabase->SqlVariable($this->strMetodo) . ',
+							' . $objDatabase->SqlVariable($this->blnAplicarTasa) . ',
 							' . $objDatabase->SqlVariable($this->strCondicion) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
@@ -1319,6 +1335,7 @@
 							`dbquery` = ' . $objDatabase->SqlVariable($this->strDbquery) . ',
 							`base_imponible` = ' . $objDatabase->SqlVariable($this->intBaseImponible) . ',
 							`metodo` = ' . $objDatabase->SqlVariable($this->strMetodo) . ',
+							`aplicar_tasa` = ' . $objDatabase->SqlVariable($this->blnAplicarTasa) . ',
 							`condicion` = ' . $objDatabase->SqlVariable($this->strCondicion) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
@@ -1478,6 +1495,7 @@
 			$this->strDbquery = $objReloaded->strDbquery;
 			$this->intBaseImponible = $objReloaded->intBaseImponible;
 			$this->strMetodo = $objReloaded->strMetodo;
+			$this->blnAplicarTasa = $objReloaded->blnAplicarTasa;
 			$this->strCondicion = $objReloaded->strCondicion;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
 			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
@@ -1616,6 +1634,13 @@
 					 * @return string
 					 */
 					return $this->strMetodo;
+
+				case 'AplicarTasa':
+					/**
+					 * Gets the value for blnAplicarTasa 
+					 * @return boolean
+					 */
+					return $this->blnAplicarTasa;
 
 				case 'Condicion':
 					/**
@@ -1973,6 +1998,19 @@
 					 */
 					try {
 						return ($this->strMetodo = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'AplicarTasa':
+					/**
+					 * Sets the value for blnAplicarTasa 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnAplicarTasa = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2888,6 +2926,7 @@
 			$strToReturn .= '<element name="Dbquery" type="xsd:string"/>';
 			$strToReturn .= '<element name="BaseImponible" type="xsd:int"/>';
 			$strToReturn .= '<element name="Metodo" type="xsd:string"/>';
+			$strToReturn .= '<element name="AplicarTasa" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Condicion" type="xsd:string"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
@@ -2949,6 +2988,8 @@
 				$objToReturn->intBaseImponible = $objSoapObject->BaseImponible;
 			if (property_exists($objSoapObject, 'Metodo'))
 				$objToReturn->strMetodo = $objSoapObject->Metodo;
+			if (property_exists($objSoapObject, 'AplicarTasa'))
+				$objToReturn->blnAplicarTasa = $objSoapObject->AplicarTasa;
 			if (property_exists($objSoapObject, 'Condicion'))
 				$objToReturn->strCondicion = $objSoapObject->Condicion;
 			if (property_exists($objSoapObject, 'CreatedAt'))
@@ -3015,6 +3056,7 @@
 			$iArray['Dbquery'] = $this->strDbquery;
 			$iArray['BaseImponible'] = $this->intBaseImponible;
 			$iArray['Metodo'] = $this->strMetodo;
+			$iArray['AplicarTasa'] = $this->blnAplicarTasa;
 			$iArray['Condicion'] = $this->strCondicion;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
 			$iArray['UpdatedAt'] = $this->strUpdatedAt;
@@ -3075,6 +3117,7 @@
      * @property-read QQNode $Dbquery
      * @property-read QQNode $BaseImponible
      * @property-read QQNode $Metodo
+     * @property-read QQNode $AplicarTasa
      * @property-read QQNode $Condicion
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -3130,6 +3173,8 @@
 					return new QQNode('base_imponible', 'BaseImponible', 'Integer', $this);
 				case 'Metodo':
 					return new QQNode('metodo', 'Metodo', 'VarChar', $this);
+				case 'AplicarTasa':
+					return new QQNode('aplicar_tasa', 'AplicarTasa', 'Bit', $this);
 				case 'Condicion':
 					return new QQNode('condicion', 'Condicion', 'VarChar', $this);
 				case 'CreatedAt':
@@ -3185,6 +3230,7 @@
      * @property-read QQNode $Dbquery
      * @property-read QQNode $BaseImponible
      * @property-read QQNode $Metodo
+     * @property-read QQNode $AplicarTasa
      * @property-read QQNode $Condicion
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -3240,6 +3286,8 @@
 					return new QQNode('base_imponible', 'BaseImponible', 'integer', $this);
 				case 'Metodo':
 					return new QQNode('metodo', 'Metodo', 'string', $this);
+				case 'AplicarTasa':
+					return new QQNode('aplicar_tasa', 'AplicarTasa', 'boolean', $this);
 				case 'Condicion':
 					return new QQNode('condicion', 'Condicion', 'string', $this);
 				case 'CreatedAt':

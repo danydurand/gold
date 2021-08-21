@@ -1033,6 +1033,12 @@
 			return new QQNodeTarifaAgentesZonas('tarifa_agentes_zonas', null, null);
 		}
 		/**
+		 * @return QQNodeTarifaExp
+		 */
+		static public function TarifaExp() {
+			return new QQNodeTarifaExp('tarifa_exp', null, null);
+		}
+		/**
 		 * @return QQNodeTarifaI
 		 */
 		static public function TarifaI() {

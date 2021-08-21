@@ -94,6 +94,7 @@ abstract class ConceptosListFormBase extends QForm {
         $this->dtgConceptoses->MetaAddColumn('Dbquery');
         $this->dtgConceptoses->MetaAddColumn('BaseImponible');
         $this->dtgConceptoses->MetaAddColumn('Metodo');
+        $this->dtgConceptoses->MetaAddColumn('AplicarTasa');
         $this->dtgConceptoses->MetaAddColumn('Condicion');
         $this->dtgConceptoses->MetaAddColumn('CreatedAt');
         $this->dtgConceptoses->MetaAddColumn('UpdatedAt');

@@ -24,16 +24,6 @@ try {
     ob_start();
     include dirname(__FILE__).'/rhtml/factura.php';
     $content .= ob_get_clean();
-    ////-----------------------------------------
-    //// Relación de Manifiestos de la Factura
-    ////-----------------------------------------
-    //$html2pdf = new Html2Pdf('P', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "30"));
-    //$html2pdf->pdf->SetDisplayMode('fullpage');
-    //$_SESSION['FactMani'] = serialize($objFactClie);
-    //ob_start();
-    //include dirname(__FILE__).'/rhtml/relacion_de_manifiestos_html.php';
-    //$content .= ob_get_clean();
-
     //------------------------------------------------
     // El contenido HTML generado, se exporta a PDF
     //------------------------------------------------

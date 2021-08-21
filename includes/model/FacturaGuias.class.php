@@ -42,7 +42,8 @@
              * @var $objConcGuia GuiaConceptos
              */
             t('Procesando la Guia: '.$this->Guia->Numero);
-            $arrConcGuia = $this->Guia->GetGuiaConceptosAsGuiaArray();
+            $objClauOrde = QQ::OrderBy(QQN::GuiaConceptos()->Concepto->Orden);
+            $arrConcGuia = $this->Guia->GetGuiaConceptosAsGuiaArray($objClauOrde);
             t('La guia tiene: '.count($arrConcGuia).' conceptos');
             foreach($arrConcGuia as $objConcGuia) {
                 t('Procesando el concepto: ' . $objConcGuia->Concepto->Nombre);

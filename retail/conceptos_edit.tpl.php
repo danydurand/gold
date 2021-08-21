@@ -37,6 +37,7 @@
 				<?php //$this->txtDbquery->RenderWithName(); ?>
 				<?php $this->txtBaseImponible->RenderWithName(); ?>
 				<?php $this->txtMetodo->RenderWithName(); ?>
+				<?php $this->chkAplicarTasa->RenderWithName(); ?>
 				<?php //$this->lblCreatedAt->RenderWithName(); ?>
 				<?php //$this->lblUpdatedAt->RenderWithName(); ?>
 				<?php //$this->lblDeletedAt->RenderWithName(); ?>

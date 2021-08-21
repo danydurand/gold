@@ -27,6 +27,28 @@
 			return sprintf('%s',  $this->Referencia);
 		}
 
+		public function _Imprimible() {
+		    $blnSepuImpr = true;
+		    if ($this->MontoPendiente > 0) {
+		        $blnSepuImpr = false;
+            }
+            if (!$blnSepuImpr) {
+                $intGuiaCred = 0;
+                $intCantGuia = 0;
+                $objClauWher = QQ::Equal(QQN::Guias()->FacturaId,$this->Id);
+                $arrGuiaFact = Guias::QueryArray(QQ::AndCondition($objClauWher));
+                foreach ($arrGuiaFact as $objGuiaFact) {
+                    if ($objGuiaFact->FormaPago == 'CRD') {
+                        $intGuiaCred++;
+                    }
+                    $intCantGuia++;
+                }
+                if ( ($intCantGuia == $intGuiaCred) && ($intCantGuia > 0) ) {
+                    $blnSepuImpr = true;
+                }
+            }
+            return $blnSepuImpr;
+        }
 
         public function ActualizarMontos() {
 		    t('========================================');

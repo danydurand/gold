@@ -98,6 +98,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->txtBaseImponible = $this->mctConceptos->txtBaseImponible_Create();
 		$this->txtBaseImponible->Width = 50;
 		$this->txtMetodo = $this->mctConceptos->txtMetodo_Create();
+		$this->chkAplicarTasa = $this->mctConceptos->chkAplicarTasa_Create();
 		$this->lblCreatedAt = $this->mctConceptos->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctConceptos->lblUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctConceptos->lblDeletedAt_Create();

@@ -30,14 +30,22 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $strNumeDocu;
     protected $lblSistGuia;
 
+    protected $strPesoAlte;
     protected $lblSucuOrig;
     protected $lblNombRemi;
     protected $lblDireRemi;
     protected $lblTeleRemi;
+    protected $lblEmaiRemi;
+    protected $lblProfRemi;
+
     protected $lblSucuDest;
     protected $lblNombDest;
     protected $lblDireDest;
     protected $lblTeleDest;
+    protected $lblEstaDest;
+    protected $lblCiudDest;
+    protected $lblCodiPost;
+
     protected $lblTipoTari;
     protected $lblSeguGuia;
     protected $lblPorcDcto;
@@ -63,6 +71,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblPersEntr;
     protected $lblFechEntr;
     protected $lblTextObse;
+    protected $lblMediEnvi;
     protected $lblPersReci;
     protected $lblFechPago;
     protected $lblCreaPorx;
@@ -208,12 +217,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblNombRemi_Create();
         $this->lblDireRemi_Create();
         $this->lblTeleRemi_Create();
+        $this->lblEmaiRemi_Create();
+        $this->lblProfRemi_Create();
 
         // ---- Destinatario ---- //
         $this->lblSucuDest_Create();
         $this->lblNombDest_Create();
         $this->lblDireDest_Create();
         $this->lblTeleDest_Create();
+        $this->lblEstaDest_Create();
+        $this->lblCiudDest_Create();
+        $this->lblCodiPost_Create();
 
         // - Costos del Servicio - //
         $this->lblTipoTari_Create();
@@ -231,12 +245,14 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblPersEntr_Create();
         $this->lblFechEntr_Create();
         $this->lblTextObse_Create();
+        $this->lblMediEnvi_Create();
         $this->lblCreaPorx_Create();
         $this->lblFechHora_Create();
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
         $this->lblServEntr_Create();
         $this->lblNumeFact_Create();
+        $this->lblPesoAlte_Create();
 
         // Para cargar el POD
         $this->lblQuieReci_Create();
@@ -336,11 +352,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colIdxxPiez->Width = 80;
         $this->dtgPiezGuia->AddColumn($colIdxxPiez);
 
-        //$colUbicFisi = new QDataGridColumn($this);
-        //$colUbicFisi->Name = QApplication::Translate('Ubicacion');
-        /*$colUbicFisi->Html = '<?= $_ITEM->Ubicacion; ?>';*/
-        //$this->dtgPiezGuia->AddColumn($colUbicFisi);
-
         $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = QApplication::Translate('Contenido');
         $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
@@ -354,8 +365,8 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         if (in_array($this->objGuia->Producto->Codigo,['EXA','EXM'])) {
             $colLibrPiez = new QDataGridColumn($this);
-            $colLibrPiez->Name = QApplication::Translate('Libras');
-            $colLibrPiez->Html = '<?= $_ITEM->Libras; ?>';
+            $colLibrPiez->Name = QApplication::Translate('PiesCub');
+            $colLibrPiez->Html = '<?= $_ITEM->PiesCub; ?>';
             $this->dtgPiezGuia->AddColumn($colLibrPiez);
 
             $colVoluPiez = new QDataGridColumn($this);
@@ -614,6 +625,32 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblTeleRemi->ToolTip = $this->objGuia->TelefonoRemitente;
     }
 
+    protected function lblEmaiRemi_Create() {
+        $this->lblEmaiRemi = new QLabel($this);
+        $this->lblEmaiRemi->Text = $this->objGuia->ClienteRetail->Email;
+    }
+
+    protected function lblProfRemi_Create() {
+        $this->lblProfRemi = new QLabel($this);
+        $this->lblProfRemi->Text = $this->objGuia->ClienteRetail->Profesion->Nombre;
+    }
+
+    protected function lblEstaDest_Create() {
+        $this->lblEstaDest = new QLabel($this);
+        $this->lblEstaDest->Text = $this->objGuia->Estado;
+    }
+
+    protected function lblCiudDest_Create() {
+        $this->lblCiudDest = new QLabel($this);
+        $this->lblCiudDest->Text = $this->objGuia->Ciudad;
+    }
+
+    protected function lblCodiPost_Create() {
+        $this->lblCodiPost = new QLabel($this);
+        $this->lblCodiPost->Text = $this->objGuia->CodigoPostal;
+    }
+
+
     // ---- Información del Destinatario ---- //
     protected function lblSucuDest_Create() {
         $this->lblSucuDest = new QLabel($this);
@@ -725,13 +762,22 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblPiezPeso->Name = 'Piezas/Peso';
         $strPiezGuia = $this->objGuia->Piezas;
         $strPesoGuia = $this->objGuia->Kilos;
-        $this->lblPiezPeso->Text = $strPiezGuia.' / '.$strPesoGuia.' (Kg)';
+        $strPesoAlte = '';
+        switch ($this->objGuia->Producto->Codigo) {
+            case 'EXM':
+                $strPesoAlte = ' / '.$this->objGuia->PiesCub;
+                break;
+            case 'EXA':
+                $strPesoAlte = ' / '.$this->objGuia->Volumen;
+                break;
+        }
+        $this->lblPiezPeso->Text = $strPiezGuia.' / '.$strPesoGuia.$strPesoAlte;
     }
 
     protected function lblValoDecl_Create() {
         $this->lblValoDecl = new QLabel($this);
         $this->lblValoDecl->Name = 'V. Declarado';
-        $this->lblValoDecl->Text = $this->objGuia->ValorDeclarado." Bs";
+        $this->lblValoDecl->Text = $this->objGuia->ValorDeclarado;
     }
 
     protected function lblPersEntr_Create() {
@@ -757,6 +803,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblTextObse = new QLabel($this);
         $this->lblTextObse->Text = substr($this->objGuia->Observacion, 0,10);
         $this->lblTextObse->ToolTip = $this->objGuia->Observacion;
+    }
+
+    protected function lblMediEnvi_Create() {
+        $strMediEnvi = $this->objGuia->Alto.' / '.$this->objGuia->Ancho.' / '.$this->objGuia->Largo;
+        $this->lblMediEnvi = new QLabel($this);
+        $this->lblMediEnvi->Text = $strMediEnvi;
     }
 
     protected function lblCreaPorx_Create() {
@@ -796,6 +848,18 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblNumeFact_Create() {
         $this->lblNumeFact = new QLabel($this);
         $this->lblNumeFact->Text = $this->objGuia->NroFactura();
+    }
+
+    protected function lblPesoAlte_Create() {
+        $this->strPesoAlte = '';
+        switch ($this->objGuia->Producto->Codigo) {
+            case 'EXM':
+                $this->strPesoAlte = ' / P3s';
+                break;
+            case 'EXA':
+                $this->strPesoAlte = ' / Vol';
+                break;
+        }
     }
 
     // ------- Información de Estatus ------- //

@@ -17,7 +17,7 @@ $strLimiDere = '350px';
 $strDireEntr = $objManiImpr->Direccion;
 $strNumeCont = $objManiImpr->Numero;
 $strPrecLate = $objManiImpr->PrecintoLateral;
-$strNumeAwbx = $objManiImpr->Awb;
+//$strNumeAwbx = $objManiImpr->Awb;
 $intCantPiez = $objManiImpr->Piezas;
 $strPesoTota = $objManiImpr->Kilos.' Kgs / '.$objManiImpr->PiesCub.' PiesCub';
 $strDescCont = $objManiImpr->Contenido;
@@ -77,7 +77,7 @@ $strEmprTran = !is_null($objManiImpr->Transportista) ? $objManiImpr->Transportis
             <?php if (strlen($strPrecLate) > 0) { ?>
             <li><span class="linea"><b>PRECINTO LATERAL:</b> <?= $strPrecLate ?></span></li>
             <?php } ?>
-            <li><span class="linea"><b>BL o AWB:</b> <?= $strNumeAwbx ?></span></li>
+            <!--<li><span class="linea"><b>BL o AWB:</b> --><?//= $strNumeAwbx ?><!--</span></li>-->
             <li><span class="linea"><b>BULTOS:</b> <?= $intCantPiez ?> PIEZAS</span></li>
             <li><span class="linea"><b>PESO:</b> <?= $strPesoTota ?> </span></li>
             <li><span class="linea"><b>EMPRESA TRANSPORTE:</b> <?= $strEmprTran ?></span></li>

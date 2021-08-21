@@ -1203,6 +1203,13 @@
 		QApplicationBase::$ClassFile['tarifaagenteszonasmetacontrol'] = __META_CONTROLS__ . '/TarifaAgentesZonasMetaControl.class.php';
 		QApplicationBase::$ClassFile['tarifaagenteszonasdatagrid'] = __META_CONTROLS__ . '/TarifaAgentesZonasDataGrid.class.php';
 
+	// ClassPaths for the TarifaExp class
+		QApplicationBase::$ClassFile['tarifaexp'] = __MODEL__ . '/TarifaExp.class.php';
+		QApplicationBase::$ClassFile['qqnodetarifaexp'] = __MODEL__ . '/TarifaExp.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodetarifaexp'] = __MODEL__ . '/TarifaExp.class.php';
+		QApplicationBase::$ClassFile['tarifaexpmetacontrol'] = __META_CONTROLS__ . '/TarifaExpMetaControl.class.php';
+		QApplicationBase::$ClassFile['tarifaexpdatagrid'] = __META_CONTROLS__ . '/TarifaExpDataGrid.class.php';
+
 	// ClassPaths for the TarifaI class
 		QApplicationBase::$ClassFile['tarifai'] = __MODEL__ . '/TarifaI.class.php';
 		QApplicationBase::$ClassFile['qqnodetarifai'] = __MODEL__ . '/TarifaI.class.php';

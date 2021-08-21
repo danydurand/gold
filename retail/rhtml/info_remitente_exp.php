@@ -6,18 +6,18 @@
     </tr>
     <tr>
         <td class="etiqueta">Name:</td>
-        <td class="contenido" colspan="3"><?= 'Remitente mucho mas amplio de lo estimado inicialmente ' ?></td>
+        <td class="contenido" colspan="3"><?= $strNombRemi ?></td>
     </tr>
     <tr>
-        <td class="etiqueta">Address:</td>
-        <td colspan="3"><?= $strDireRemi ?></td>
+        <td class="etiqueta" style="width: 5%">Address:</td>
+        <td colspan="3" style="width: 80%; word-wrap: normal"><?= $strDireRemi ?></td>
     </tr>
     <tr>
-        <td class="etiqueta">E-mail:</td>
+        <td class="etiqueta" style="width: 5%">E-mail:</td>
         <td colspan="3"><?= $strEmaiRemi ?></td>
     </tr>
     <tr>
-        <td class="etiqueta">Phone:</td>
+        <td class="etiqueta" style="width: 5%">Phone:</td>
         <td><?= $strTeleRemi ?></td>
         <td class="etiqueta" style="text-align: right; vertical-align: middle">Origin:</td>
         <td class="destacado" style="text-align: center;"><?= $strSucuOrig ?></td>

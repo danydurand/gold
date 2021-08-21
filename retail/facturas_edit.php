@@ -112,7 +112,9 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->lstReceptoria->Width = 170;
 		$this->lstCaja = $this->mctFacturas->lstCaja_Create();
 		$this->txtEstatus = $this->mctFacturas->txtEstatus_Create();
+		$this->txtEstatus->Width = 130;
 		$this->txtTasa = $this->mctFacturas->txtTasa_Create();
+		$this->txtTasa->Width = 170;
 		$this->txtTotal = $this->mctFacturas->txtTotal_Create();
 		$this->txtTotal->Width = 120;
 		$this->txtTotal->Text = $this->mctFacturas->Facturas->Total;
@@ -143,6 +145,8 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->txtTotal          = disableControl($this->txtTotal);
         $this->txtMontoCobrado   = disableControl($this->txtMontoCobrado);
         $this->txtMontoPendiente = disableControl($this->txtMontoPendiente);
+        $this->txtEstatus        = disableControl($this->txtEstatus);
+        $this->txtTasa           = disableControl($this->txtTasa);
 
         $this->txtTotaDola_Create();
         $this->txtTotaDola = disableControl($this->txtTotaDola);
@@ -177,6 +181,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->txtMontDola = disableControl($this->txtMontDola);
         $this->txtMontBoli = disableControl($this->txtMontBoli);
 
+
         if (strlen($this->strOpciAdic) > 0) {
             switch ($this->strOpciAdic) {
                 case 'I':
@@ -196,6 +201,16 @@ class FacturasEditForm extends FacturasEditFormBase {
         }
 
         $this->ActualizarCamposEnPantalla();
+
+        //----------------------------------------------------
+        // Una factura impresa, no podra eliminarse de la BD
+        //----------------------------------------------------
+        if ($this->mctFacturas->Facturas->Estatus == 'IMPRESA') {
+            $this->btnDelete->Visible = false;
+        }
+        if ($this->objUsuario->LogiUsua == 'ddurand') {
+            $this->btnDelete->Visible = true;
+        }
 	}
 
 	//----------------------------
@@ -618,7 +633,8 @@ class FacturasEditForm extends FacturasEditFormBase {
                 TextoIcono('eye-slash','OCULTAR PAGOS')
             );
         }
-        if ($this->mctFacturas->Facturas->MontoPendiente == 0) {
+        //if ($this->mctFacturas->Facturas->MontoPendiente == 0) {
+        if ($this->mctFacturas->Facturas->_Imprimible()) {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id.'/I',
                 TextoIcono('print','Imprimir')
@@ -679,7 +695,8 @@ class FacturasEditForm extends FacturasEditFormBase {
     }
 
     protected function dtgImpoFact_Bind() {
-        $this->dtgImpoFact->DataSource = $this->mctFacturas->Facturas->GetFacturaItemsAsFacturaArray();
+        $objClauOrde = QQ::OrderBy(QQN::FacturaItems()->Concepto->Orden);
+        $this->dtgImpoFact->DataSource = $this->mctFacturas->Facturas->GetFacturaItemsAsFacturaArray($objClauOrde);
     }
 
     protected function dtgImpoFactColumns() {
@@ -788,17 +805,9 @@ class FacturasEditForm extends FacturasEditFormBase {
 	//-----------------------------------
 
     public function btnImprFact_Click() {
-        t('i1');
         $this->mctFacturas->Facturas->Estatus = 'IMPRESA';
         $this->mctFacturas->Facturas->Save();
-        t('i2');
-        //$arrLogxCamb['strNombTabl'] = 'Facturas';
-        //$arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
-        //$arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Referencia;
-        //$arrLogxCamb['strDescCamb'] = 'Impresa';
-        //$arrLogxCamb['strEnlaEnti'] = __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id;
-        //LogDeCambios($arrLogxCamb);
-        t('i3');
+        $this->btnDelete->Visible = false;
         QApplication::Redirect(__SIST__.'/factura_html2pdf.php?intIdxxFact=' . $this->mctFacturas->Facturas->Id);
     }
 

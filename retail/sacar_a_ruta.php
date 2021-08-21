@@ -1160,10 +1160,10 @@ class SacarARuta extends FormularioBaseKaizen {
             $this->danger('Debe seleccionar un Tipo de Ruta/Operacion');
             return false;
         }
-        if (strlen($this->txtNumeAwbx->Text) == 0) {
-            $this->danger('Debe especificar un Nro de BL o AWB');
-            return false;
-        }
+        //if (strlen($this->txtNumeAwbx->Text) == 0) {
+        //    $this->danger('Debe especificar un Nro de BL o AWB');
+        //    return false;
+        //}
         if (is_null($this->lstOperAbie->SelectedValue)) {
             $this->danger('Debe especificar una Operacion');
             return false;

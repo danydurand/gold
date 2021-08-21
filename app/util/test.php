@@ -4,10 +4,29 @@ require_once('qcubed.inc.php');
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
 
+// Buscando Tarifas Vigentes de Exportacion
+
+$objExpoMari = Productos::LoadByCodigo('EXM');
+$strFechGuia = date('Y-m-d');
+
+echo 'Producto: '.$objExpoMari->Codigo;
+echo "<br>";
+echo 'Fecha: '.$strFechGuia;
+echo "<br>";
+echo "<br>";
+
+$arrTariProd = TarifaExp::TarifaVigente($$objExpoMari->Id,$strFechGuia);
+$decMontTari = $arrTariProd['monto'];
+$decPesoMini = $arrTariProd['minimo'];
+
+echo "El monto de la tarifa es: ".$decMontTari;
+echo "<br>";
+echo "El minimo es: ".$decPesoMini;
+
 // Validando fechas
 
-var_dump(validateDate('2012-02-28','d/m/Y'));
-var_dump(validateDate('28/02/2012','d/m/Y'));
+//var_dump(validateDate('2012-02-28','d/m/Y'));
+//var_dump(validateDate('28/02/2012','d/m/Y'));
 
 
 //----------------------------------------------

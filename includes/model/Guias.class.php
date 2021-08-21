@@ -207,7 +207,7 @@
                         if (strlen($objFactGuia->Numero) > 0) {
                             $strFactGuia = $objFactGuia->Numero;
                         } else {
-                            $strFactGuia = $objFactGuia->Id;
+                            $strFactGuia = $objFactGuia->Referencia;
                         }
                     } else {
                         $strFactGuia = $objFactGuia->Referencia;
@@ -327,18 +327,41 @@
             return array($monto, $texto);
         }
 
-        public function flete_exm(Conceptos $concepto)
+        public function flete_exp(Conceptos $concepto)
         {
-            t('Rutina: flete_exm');
+            t('Rutina: flete_exp');
             $monto = 0;
             $texto = '';
-            $decTariExpm = 25;
-            $decPesoTari = $this->PiesCub;
+
+            $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
+            $decMontTari = $arrTariProd['monto'];
+            $decPesoMini = $arrTariProd['minimo'];
+            switch ($concepto->ActuaSobre) {
+                case 'kilos':
+                    $decPesoTari = $this->Kilos;
+                    break;
+                case 'pies_cub':
+                    $decPesoTari = $this->PiesCub;
+                    break;
+                case 'volumen':
+                    $decPesoTari = $this->Volumen;
+                    break;
+                case 'mayor_kg_vol':
+                    $decPesoTari = $this->Kilos >= $this->Volumen ? $this->Kilos : $this->Volumen;
+                    break;
+                case 'mayor_p3_vol';
+                    $decPesoTari = $this->PiesCub >= $this->Volumen ? $this->PiesCub : $this->Volumen;
+                    break;
+                default:
+                    $decPesoTari = $this->Kilos;
+            }
+            $decPesoTari = $decPesoTari >= $decPesoMini ? $decPesoTari : $decPesoMini;
             t('El peso usado para calcular la Tarifa sera: '.$decPesoTari);
-            $monto = $decPesoTari * $decTariExpm * $this->Tasa;
+            $monto = $decPesoTari * $decMontTari;
             t('Monto de la Tarifa: '.$monto);
             return array($monto, $texto);
         }
+
 
         public function seguro_exp(Conceptos $concepto)
         {
@@ -585,6 +608,10 @@
                     $monto = 0;
                     $explicacion = "Metodo $metodo... no declarado en el concepto";
                 }
+            }
+            if ($concepto->AplicarTasa) {
+                t('Se debe aplicar la tasa: '.$this->Tasa.' de cambio para llevar a Bs');
+                $monto *= $this->Tasa;
             }
             t('Saliendo de la Guia, despues de hacer calculado el concepto...');
             return array($monto, $explicacion);
