@@ -466,41 +466,14 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $objUsuaPodx  = null;
         $objUsuaCrea  = null;
         $strMensMost  = '';
+
+        //-----------------------------------------------------------------------
+        // En esta vista residen las guias y sus piezas con informacion general
+        //-----------------------------------------------------------------------
         $strCadeSqlx  = "select * ";
         $strCadeSqlx .= "  from v_info_guia_y_piezas ";
         $strCadeSqlx .= " where 1 = 1 ";
-        //$strCadeSqlx = "
-        //    select g.numero,
-        //           g.tracking,
-        //           g.cliente_retail_id,
-        //           m.codigo_interno,
-        //           date_format(g.created_at, '%Y-%m-%d') fech_guia,
-        //           g.origen_id,
-        //           g.receptoria_origen_id,
-        //           g.destino_id,
-        //           g.receptoria_destino_id,
-        //           g.forma_pago,
-        //           g.nombre_remitente remitente,
-        //           g.nombre_destinatario,
-        //           g.kilos,
-        //           g.volumen,
-        //           g.piezas,
-        //           g.valor_declarado,
-        //           ne.referencia,
-        //           g.contenido,
-        //           ta.descripcion
-        //      from guias g left join clientes_retail c
-        //        on g.cliente_retail_id = c.id
-        //           left join master_cliente m
-        //        on m.codi_clie = g.cliente_corp_id
-        //           left join usuario u
-        //        on g.created_by = u.codi_usua
-        //           left join fac_tarifa ta
-        //        on g.tarifa_id = ta.id
-        //           left join nota_entrega ne
-        //        on g.nota_entrega_id = ne.id
-        //     where 1 = 1
-        //";
+
         $objClausula = QQ::Clause();
         //------------------------------------------------------------------------------
         // Antes de armar el SQL, se verifica si se ha seteado un usuario en particular

@@ -14,8 +14,8 @@ $strCeduRifx  = $objGuiaImpr->ClienteRetail->CedulaRif;
 $intCantPiez  = $objGuiaImpr->Piezas;
 $strNombDest  = $objGuiaImpr->Destino->Nombre;
 $strDescCont  = $objGuiaImpr->Contenido;
-//$strLogoEmpr  = $_SESSION['LogoEmpr'];
-$strNombEmpr  = 'Gold Coast';
+$strNombEmpr  = 'Gold Coast Custom Express';
+$strNombCort  = 'Gold Coast';
 $strDireEmpr  = 'Calle Angulo Sur Oeste de la manzana "E", Edificio Gold Coast Custom Express, C.A.';
 $strDireEmpr .= 'Piso S/N, local S/N, sector Pariata. Maiquetia. Edo Vargas';
 ?>
@@ -29,8 +29,9 @@ $strDireEmpr .= 'Piso S/N, local S/N, sector Pariata. Maiquetia. Edo Vargas';
     .parrafo {
         width: <?= $intAnchPagi ?>;
         text-align: justify;
-        font-size: 16px;
+        font-size: 15px;
         line-height: 20px;
+        word-wrap: normal;
     }
     .medio_parrafo {
         width: <?= $intMediPagi ?>;
@@ -42,16 +43,7 @@ $strDireEmpr .= 'Piso S/N, local S/N, sector Pariata. Maiquetia. Edo Vargas';
 </style>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
-        <?php include('partials/header_local.tpl.php'); ?>
-
-        <!--<table>-->
-        <!--    <tr>-->
-        <!--        <td class="parrafo">-->
-        <!--            <img src="--><?//= $strLogoEmpr ?><!--" alt="LogoGold" width="150px" height="50px">-->
-        <!--        </td>-->
-        <!--    </tr>-->
-        <!--</table>-->
-
+        <?php include('partials/header_logolocal.tpl.php'); ?>
         <table style="margin-top: 12px;">
             <tr>
                 <td class="parrafo" style="text-align: center;">
@@ -108,7 +100,7 @@ $strDireEmpr .= 'Piso S/N, local S/N, sector Pariata. Maiquetia. Edo Vargas';
             <tr>
                 <td class="parrafo">
                     Nosotros liberamos a <?= $strNombEmpr ?> de cualquier responsabilidad hacia cualquier 
-                    persona que pueda tener interés en el envío mencionado, y nosotros liberamos a <?= $strNombEmpr ?> 
+                    persona que pueda tener interés en el envío mencionado, y nosotros liberamos a <?= $strNombEmpr ?>
                     de cualquier responsabilidad de cualquier persona, en excedente del monto que surja de 
                     circunstancias exógenas a aquellas por las cuales <?= $strNombEmpr ?> aceptar responsabilidad 
                     bajo sus términos y condiciones y bajo los de esta carta.
@@ -119,7 +111,7 @@ $strDireEmpr .= 'Piso S/N, local S/N, sector Pariata. Maiquetia. Edo Vargas';
         <table>
             <tr>
                 <td class="medio_parrafo">
-                    Por <?= $strNombEmpr ?> ________________________
+                    Por <?= $strNombCort ?> ________________________
                 </td>
                 <td class="medio_parrafo">
                     Por el Remitente ________________________

@@ -627,12 +627,23 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function lblEmaiRemi_Create() {
         $this->lblEmaiRemi = new QLabel($this);
-        $this->lblEmaiRemi->Text = $this->objGuia->ClienteRetail->Email;
+        $intLogiMost = 30;
+        $strPuntSusp = strlen($this->objGuia->ClienteRetail->Email) > $intLogiMost
+            ? '...'
+            : '';
+        $strDireMail = strlen($this->objGuia->ClienteRetail->Email) > $intLogiMost
+            ? substr($this->objGuia->ClienteRetail->Email,0,$intLogiMost)
+            : $this->objGuia->ClienteRetail->Email;
+        $this->lblEmaiRemi->Text    = $strDireMail.$strPuntSusp;
+        $this->lblEmaiRemi->ToolTip = $this->objGuia->ClienteRetail->Email;
     }
 
     protected function lblProfRemi_Create() {
         $this->lblProfRemi = new QLabel($this);
-        $this->lblProfRemi->Text = $this->objGuia->ClienteRetail->Profesion->Nombre;
+        $strProfRemi = !is_null($this->objGuia->ClienteRetail->ProfesionId)
+            ? $this->objGuia->ClienteRetail->Profesion->Nombre
+            : 'S/P';
+        $this->lblProfRemi->Text = $strProfRemi;
     }
 
     protected function lblEstaDest_Create() {
@@ -1122,20 +1133,15 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
     protected function ImprimirCombo() {
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
             $strNombArch = 'Docs' . $this->objGuia->Numero . '.pdf';
+            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
 
-            $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
             $html2pdf->pdf->SetDisplayMode('fullpage');
             ob_start();
-            include dirname(__FILE__).'/rhtml/acuerdo_lr.php';
+            include dirname(__FILE__).'/rhtml/combo.php';
             $content = ob_get_clean();
-
-            $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
-            $html2pdf->pdf->SetDisplayMode('fullpage');
-            ob_start();
-            include dirname(__FILE__).'/rhtml/carta_ad.php';
-            $content .= ob_get_clean();
 
             $html2pdf->writeHTML($content);
             $html2pdf->output($strNombArch);
@@ -1145,8 +1151,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
         }
-
-
 
     }
 

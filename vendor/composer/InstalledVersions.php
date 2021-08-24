@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'f8e143b23bad0a95d5e1ab83d4f431314af04c9e',
+    'reference' => '1ce39d646d987c6eece4b3656e000f18abbc36aa',
     'name' => '__root__',
   ),
   'versions' => 
@@ -44,7 +44,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'f8e143b23bad0a95d5e1ab83d4f431314af04c9e',
+      'reference' => '1ce39d646d987c6eece4b3656e000f18abbc36aa',
     ),
     'monolog/monolog' => 
     array (
@@ -57,21 +57,21 @@ private static $installed = array (
     ),
     'php-console/php-console' => 
     array (
-      'pretty_version' => '3.1.7',
-      'version' => '3.1.7.0',
+      'pretty_version' => '3.1.8',
+      'version' => '3.1.8.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c171ec62669d5c616cfa62de7a30df3c6237e831',
+      'reference' => 'aa1d71d4ea3dc91e126edc9aa4f3c10eb8559cff',
     ),
     'phpmailer/phpmailer' => 
     array (
-      'pretty_version' => 'v6.0.5',
-      'version' => '6.0.5.0',
+      'pretty_version' => 'v6.5.1',
+      'version' => '6.5.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'cb3ea134d4d3729e7857737d5f320cce9caf4d32',
+      'reference' => 'dd803df5ad7492e1b40637f7ebd258fee5ca7355',
     ),
     'shuchkin/simplexls' => 
     array (
@@ -84,12 +84,12 @@ private static $installed = array (
     ),
     'shuchkin/simplexlsx' => 
     array (
-      'pretty_version' => '0.8.24',
-      'version' => '0.8.24.0',
+      'pretty_version' => '0.8.25',
+      'version' => '0.8.25.0',
       'aliases' => 
       array (
       ),
-      'reference' => '1581dbed25a846f8fee4303849ab58a14f528518',
+      'reference' => '7dfacfbe51137ad08e047cd5ac57eef26158d120',
     ),
     'spipu/html2pdf' => 
     array (
@@ -102,12 +102,12 @@ private static $installed = array (
     ),
     'tecnickcom/tcpdf' => 
     array (
-      'pretty_version' => '6.4.1',
-      'version' => '6.4.1.0',
+      'pretty_version' => '6.4.2',
+      'version' => '6.4.2.0',
       'aliases' => 
       array (
       ),
-      'reference' => '5ba838befdb37ef06a16d9f716f35eb03cb1b329',
+      'reference' => '172540dcbfdf8dc983bc2fe78feff48ff7ec1c76',
     ),
   ),
 );

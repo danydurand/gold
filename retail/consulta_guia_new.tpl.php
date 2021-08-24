@@ -92,13 +92,13 @@ require('inc/header.inc.php');
                         <div class="col-md-2">
                             <div class="titulo-c">E-mail</div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-5">
                             <?php $this->lblEmaiRemi->Render(); ?>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="titulo-c">Profesión</div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <?php $this->lblProfRemi->Render(); ?>
                         </div>
                     </div>

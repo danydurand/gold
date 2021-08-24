@@ -63,8 +63,8 @@ $strNombDest = $objGuiaImpr->Destino->Nombre;
                 <td class="parrafo">
                     <b>BAJO FE DE JURAMENTO</b>, declaro que en el embarque en referencia no se transporta ningún tipo de
                     substancia estupefaciente o psicotrópica de las señaladas o especificadas en la <b>LEY ORGANICA DE DROGA</b>,
-                    asumiendo toda responsabilidad y rigor que pueda derivarse de la tramitación y egenciamiento de la mercancía,
-                    biene y los útiles contenidos en este embarque.
+                    asumiendo toda responsabilidad y rigor que pueda derivarse de la tramitación y agenciamiento de la mercancía,
+                    bienes y los útiles contenidos en este embarque.
                 </td>
             </tr>
             <tr>

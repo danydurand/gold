@@ -1799,9 +1799,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objClieReta->Email           = substr(strtolower($this->txtEmaiRemi->Text),0,191);
             $this->objClieReta->Sexo            = $this->lstSexoClie->SelectedValue;
             $this->objClieReta->FechaNacimiento = new QDateTime($this->calFechNaci->Text);
-            if (!is_null($this->lstProfClie->SelectedValue)) {
-                $this->objClieReta->ProfesionId = $this->lstProfClie->SelectedValue;
-            }
+            $this->objClieReta->ProfesionId     = $this->lstProfClie->SelectedValue;
+            //if (!is_null($this->lstProfClie->SelectedValue)) {
+            //    $this->objClieReta->ProfesionId = $this->lstProfClie->SelectedValue;
+            //} else {
+            //    $this->objClieReta->ProfesionId = null;
+            //}
             //----------------------------------------------------------------------------------
             // Si el Cliente Remitente no existe aún, se graba Usuario y la fecha de creación.
             //----------------------------------------------------------------------------------

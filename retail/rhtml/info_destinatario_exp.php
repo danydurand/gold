@@ -6,15 +6,21 @@
     </tr>
     <tr>
         <td class="etiqueta">Name:</td>
-        <td><?= 'Destinatario' ?></td>
-    </tr>
-    <tr>
-        <td class="etiqueta">Id Number:</td>
-        <td><?= $strCeduDest ?></td>
+        <td><?= $strNombDest ?></td>
     </tr>
     <tr>
         <td class="etiqueta">Address:</td>
-        <td class="contenido" colspan="3"><?= $strDireDest ?></td>
+        <td colspan="3"><?= $strDireDes1 ?></td>
+    </tr>
+    <?php if (strlen($strDireDes2) > 0) { ?>
+    <tr>
+        <td class="etiqueta"></td>
+        <td colspan="3"><?= $strDireDes2 ?></td>
+    </tr>
+    <?php } ?>
+    <tr>
+        <td class="etiqueta">Id Num:</td>
+        <td colspan="3"><?= trim($strCeduDest) ?></td>
     </tr>
     <tr>
         <td class="etiqueta">Phone:</td>

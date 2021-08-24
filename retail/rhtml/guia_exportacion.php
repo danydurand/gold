@@ -15,13 +15,37 @@ $strNumeGuia = $objGuiaImpr->Numero;
 $strFechGuia = $objGuiaImpr->Fecha->__toString("DD/MM/YYYY");
 $strNombRemi = $objGuiaImpr->NombreRemitente;
 $strCeduRifx = $objGuiaImpr->ClienteRetail->CedulaRif;
+
+$intMaxiTama = 48;
 $strDireRemi = $objGuiaImpr->DireccionRemitente;
+$strDireRem1 = $objGuiaImpr->DireccionRemitente;
+$strDireRem2 = '';
+$intTamaRemi = strlen($strDireRemi);
+if ($intTamaRemi > $intMaxiTama) {
+    $strDireRem1 = substr($strDireRemi,0,$intMaxiTama);
+    $strDireRem2 = substr($strDireRemi,$intMaxiTama,$intMaxiTama);
+}
+
 $strTeleRemi = $objGuiaImpr->TelefonoRemitente;
 $strEmaiRemi = $objGuiaImpr->ClienteRetail->Email;
 $intCantPiez = $objGuiaImpr->Piezas;
 $strSucuOrig = $objGuiaImpr->Origen->Iata;
 $strNombDest = $objGuiaImpr->NombreDestinatario;
+
+$intMaxiTama = 48;
 $strDireDest = $objGuiaImpr->DireccionDestinatario;
+t('La direccion de destino es: '.$strDireDest);
+$strDireDes1 = $objGuiaImpr->DireccionDestinatario;
+$strDireDes2 = '';
+$strTamaDest = strlen($strDireDest);
+if ($strTamaDest > $intMaxiTama) {
+    t('Es mas grande que el maximo');
+    $strDireDes1 = substr($strDireDest,0,$intMaxiTama);
+    t('1era parte: '.$strDireDes1);
+    $strDireDes2 = substr($strDireDest,$intMaxiTama,$intMaxiTama);
+    t('2da parte; '.$strDireDes2);
+}
+
 $strTeleDest = $objGuiaImpr->TelefonoDestinatario;
 $strCeduDest = $objGuiaImpr->CedulaDestinatario;
 $strSucuDest = $objGuiaImpr->Destino->Iata;
@@ -57,7 +81,7 @@ $strTamaLetr = '6px';
     }
     .etiqueta {
         font-weight: bold;
-        width: 10%;
+        width: 12%;
     }
     .contenido {
         font-size: 12px;
@@ -72,7 +96,7 @@ $strTamaLetr = '6px';
 </style>
 <page backtop="10mm" backbottom="10mm" backleft="8mm" backright="8mm">
     <page_header>
-        <table style="margin-top: 24px; width: 100%" border="0">
+        <table style="margin-top: 12px; width: 100%" border="0">
             <tr>
                 <td style="width: 50%; vertical-align: top;">
                     <?php include('logo_gold_exp.php') ?>

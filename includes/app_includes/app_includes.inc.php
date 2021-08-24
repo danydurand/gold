@@ -7,6 +7,7 @@
     require_once(__LOG_DIRECTORY__.'/vendor/autoload.php');
 
 	QApplicationBase::$ClassFile['exportardatos'] = __APP_INCLUDES__ . '/classes/ExportarDatos.class.php';
+	//QApplicationBase::$ClassFile['phpreport']     = __APP_INCLUDES__ . '/classes/PHPReport.php';
 	/*
 	 * =============================================
 	 * AVAILING YOUR CUSTOM CLASSES FOR AUTOLOADING
