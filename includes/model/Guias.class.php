@@ -868,13 +868,13 @@
             $intCodiErro = 0;
             $blnTodoOkey = true;
             if (!is_null($this->DeletedBy)) {
-                $strMensUsua = QApplication::Translate('Guia Eliminada');
+                $strMensUsua = 'Guia Eliminada';
                 $intCodiErro = 2;
                 $blnTodoOkey = false;
             }
             if ($blnTodoOkey) {
                 if (!is_null($this->GuiaPodId)) {
-                    $strMensUsua = QApplication::Translate('Guia Entregada');
+                    $strMensUsua = 'Guia Entregada';
                     $intCodiErro = 3;
                     $blnTodoOkey = false;
                 }

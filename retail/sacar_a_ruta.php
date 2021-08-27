@@ -650,6 +650,12 @@ class SacarARuta extends FormularioBaseKaizen {
         $colDestGuia->Width = 50;
         $this->dtgPiezApta->AddColumn($colDestGuia);
 
+        $colProdGuia = new QDataGridColumn($this);
+        $colProdGuia->Name = QApplication::Translate('Prod');
+        $colProdGuia->Html = '<?= $_ITEM->Guia->Producto->Codigo ?>';
+        $colProdGuia->Width = 50;
+        $this->dtgPiezApta->AddColumn($colProdGuia);
+
         $colUltiCkpt = new QDataGridColumn($this);
         $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
         $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
@@ -1220,7 +1226,7 @@ class SacarARuta extends FormularioBaseKaizen {
                 $objContenedor->Hora         = date("H:i");
                 $objContenedor->CreatedBy    = $this->objUsuario->CodiUsua;
                 $objContenedor->Estatus      = 'ABIERT@';
-                $objContenedor->Tipo         = 'MASTER';
+                $objContenedor->Tipo         = 'MANIF';
                 $objContenedor->Kilos        = 0;
                 $objContenedor->PiesCub      = 0;
                 $objContenedor->Peso         = 0;

@@ -21,6 +21,8 @@ require_once(__FORMBASE_CLASSES__ . '/ManifiestoExpListFormBase.class.php');
  * @subpackage Drafts
  */
 class ManifiestoExpListForm extends ManifiestoExpListFormBase {
+	protected $btnNuevExpm;
+
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -34,6 +36,8 @@ class ManifiestoExpListForm extends ManifiestoExpListFormBase {
 
 	protected function Form_Create() {
 		parent::Form_Create();
+
+		$this->lblTituForm->Text = 'Manifiestos de EXP';
 
 		// Instantiate the Meta DataGrid
 		$this->dtgManifiestoExps = new ManifiestoExpDataGrid($this);
@@ -64,28 +68,51 @@ class ManifiestoExpListForm extends ManifiestoExpListFormBase {
 		// can traverse down QQN::manifiesto_exp() to display fields that are down the hierarchy)
 		$this->dtgManifiestoExps->MetaAddColumn('Id');
 		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Destino);
-		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->LineaAerea);
-		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->MasterAwb);
-		$this->dtgManifiestoExps->MetaAddColumn('FechaCreacion');
-		$this->dtgManifiestoExps->MetaAddColumn('FechaDespacho');
-		$this->dtgManifiestoExps->MetaAddColumn('Vuelo');
+		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->NroBl);
+		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Booking);
+        $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->LineaAerea);
+        $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->MasterAwb);
+        $this->dtgManifiestoExps->MetaAddColumn('Vuelo');
+        $this->dtgManifiestoExps->MetaAddColumn('FechaCreacion');
+        $this->dtgManifiestoExps->MetaAddColumn('FechaDespacho');
 		$this->dtgManifiestoExps->MetaAddColumn('Piezas');
-		$this->dtgManifiestoExps->MetaAddColumn('Libras');
+		$this->dtgManifiestoExps->MetaAddColumn('Kilos');
 		$this->dtgManifiestoExps->MetaAddColumn('Volumen');
-		$this->dtgManifiestoExps->MetaAddColumn('Valor');
-		//$this->dtgManifiestoExps->MetaAddColumn('CreatedAt');
-		//$this->dtgManifiestoExps->MetaAddColumn('UpdatedAt');
-		//$this->dtgManifiestoExps->MetaAddColumn('CreatedBy');
-		//$this->dtgManifiestoExps->MetaAddColumn('UpdatedBy');
+		//$this->dtgManifiestoExps->MetaAddColumn('Valor');
 
+        $this->btnNuevExpm_Create();
         $this->btnExpoExce_Create();
+        $this->btnNuevRegi->Text = TextoIcono('plus-circle','Crear AER','F','lg');
 
     }
 
-	public function dtgManifiestoExpsRow_Click($strFormId, $strControlId, $strParameter) {
+    protected function btnNuevExpm_Create() {
+        $this->btnNuevExpm = new QButtonP($this);
+        $this->btnNuevExpm->Text = TextoIcono('plus-circle','Crear MAR','F','lg');
+        $this->btnNuevExpm->HtmlEntities = false;
+        $this->btnNuevExpm->AddAction(new QClickEvent(), new QServerAction('btnNuevExpm_Click'));
+    }
+
+
+    public function btnNuevRegi_Click() {
+        QApplication::Redirect(__SIST__."/armar_manif_exp_aer.php");
+    }
+
+    public function btnNuevExpm_Click() {
+        QApplication::Redirect(__SIST__."/armar_manif_exp_mar.php");
+    }
+
+    public function dtgManifiestoExpsRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
-        QApplication::Redirect("manifiesto_exp_edit.php/$intId");
-	}		
+        $objManifies = ManifiestoExp::Load($intId);
+        if (strlen($objManifies->Booking) > 0) {
+        	// Manifieesto Maritimo
+            QApplication::Redirect("armar_manif_exp_mar.php/$intId");
+        } else {
+            // Manifieesto Aereos
+            QApplication::Redirect("armar_manif_exp_aer.php/$intId");
+        }
+	}
 
 }
 

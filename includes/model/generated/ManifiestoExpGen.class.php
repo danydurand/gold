@@ -17,24 +17,30 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property integer $DestinoId the value for intDestinoId (Not Null)
-	 * @property integer $LineaAereaId the value for intLineaAereaId (Not Null)
-	 * @property integer $MasterAwbId the value for intMasterAwbId (Not Null)
+	 * @property integer $LineaAereaId the value for intLineaAereaId 
+	 * @property integer $MasterAwbId the value for intMasterAwbId 
+	 * @property string $NroBl the value for strNroBl 
 	 * @property QDateTime $FechaCreacion the value for dttFechaCreacion (Not Null)
 	 * @property QDateTime $FechaDespacho the value for dttFechaDespacho (Not Null)
-	 * @property string $Vuelo the value for strVuelo (Not Null)
+	 * @property string $Vuelo the value for strVuelo 
+	 * @property string $Booking the value for strBooking 
 	 * @property integer $Piezas the value for intPiezas (Not Null)
 	 * @property double $Libras the value for fltLibras (Not Null)
 	 * @property double $Volumen the value for fltVolumen (Not Null)
+	 * @property double $Kilos the value for fltKilos 
+	 * @property double $PiesCub the value for fltPiesCub 
 	 * @property double $Valor the value for fltValor (Not Null)
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property Sucursales $Destino the value for the Sucursales object referenced by intDestinoId (Not Null)
-	 * @property LineaAerea $LineaAerea the value for the LineaAerea object referenced by intLineaAereaId (Not Null)
-	 * @property MasterAwb $MasterAwb the value for the MasterAwb object referenced by intMasterAwbId (Not Null)
+	 * @property LineaAerea $LineaAerea the value for the LineaAerea object referenced by intLineaAereaId 
+	 * @property MasterAwb $MasterAwb the value for the MasterAwb object referenced by intMasterAwbId 
 	 * @property-read Bag $_Bag the value for the private _objBag (Read-Only) if set due to an expansion on the manifiesto_exp_bag_assn association table
 	 * @property-read Bag[] $_BagArray the value for the private _objBagArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_bag_assn association table
+	 * @property-read GuiaPiezas $_GuiaPiezasAsPieza the value for the private _objGuiaPiezasAsPieza (Read-Only) if set due to an expansion on the manifiesto_exp_pieza_assn association table
+	 * @property-read GuiaPiezas[] $_GuiaPiezasAsPiezaArray the value for the private _objGuiaPiezasAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_pieza_assn association table
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ManifiestoExpGen extends QBaseClass implements IteratorAggregate {
@@ -76,6 +82,15 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column manifiesto_exp.nro_bl
+		 * @var string strNroBl
+		 */
+		protected $strNroBl;
+		const NroBlMaxLength = 20;
+		const NroBlDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column manifiesto_exp.fecha_creacion
 		 * @var QDateTime dttFechaCreacion
 		 */
@@ -101,6 +116,15 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column manifiesto_exp.booking
+		 * @var string strBooking
+		 */
+		protected $strBooking;
+		const BookingMaxLength = 20;
+		const BookingDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column manifiesto_exp.piezas
 		 * @var integer intPiezas
 		 */
@@ -122,6 +146,22 @@
 		 */
 		protected $fltVolumen;
 		const VolumenDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column manifiesto_exp.kilos
+		 * @var double fltKilos
+		 */
+		protected $fltKilos;
+		const KilosDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column manifiesto_exp.pies_cub
+		 * @var double fltPiesCub
+		 */
+		protected $fltPiesCub;
+		const PiesCubDefault = null;
 
 
 		/**
@@ -179,6 +219,22 @@
 		 * @var Bag[] _objBagArray;
 		 */
 		private $_objBagArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaPiezasAsPieza object
+		 * (of type GuiaPiezas), if this ManifiestoExp object was restored with
+		 * an expansion on the manifiesto_exp_pieza_assn association table.
+		 * @var GuiaPiezas _objGuiaPiezasAsPieza;
+		 */
+		private $_objGuiaPiezasAsPieza;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaPiezasAsPieza objects
+		 * (of type GuiaPiezas[]), if this ManifiestoExp object was restored with
+		 * an ExpandAsArray on the manifiesto_exp_pieza_assn association table.
+		 * @var GuiaPiezas[] _objGuiaPiezasAsPiezaArray;
+		 */
+		private $_objGuiaPiezasAsPiezaArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -243,12 +299,16 @@
 			$this->intDestinoId = ManifiestoExp::DestinoIdDefault;
 			$this->intLineaAereaId = ManifiestoExp::LineaAereaIdDefault;
 			$this->intMasterAwbId = ManifiestoExp::MasterAwbIdDefault;
+			$this->strNroBl = ManifiestoExp::NroBlDefault;
 			$this->dttFechaCreacion = (ManifiestoExp::FechaCreacionDefault === null)?null:new QDateTime(ManifiestoExp::FechaCreacionDefault);
 			$this->dttFechaDespacho = (ManifiestoExp::FechaDespachoDefault === null)?null:new QDateTime(ManifiestoExp::FechaDespachoDefault);
 			$this->strVuelo = ManifiestoExp::VueloDefault;
+			$this->strBooking = ManifiestoExp::BookingDefault;
 			$this->intPiezas = ManifiestoExp::PiezasDefault;
 			$this->fltLibras = ManifiestoExp::LibrasDefault;
 			$this->fltVolumen = ManifiestoExp::VolumenDefault;
+			$this->fltKilos = ManifiestoExp::KilosDefault;
+			$this->fltPiesCub = ManifiestoExp::PiesCubDefault;
 			$this->fltValor = ManifiestoExp::ValorDefault;
 			$this->strCreatedAt = ManifiestoExp::CreatedAtDefault;
 			$this->strUpdatedAt = ManifiestoExp::UpdatedAtDefault;
@@ -599,12 +659,16 @@
 			    $objBuilder->AddSelectItem($strTableName, 'destino_id', $strAliasPrefix . 'destino_id');
 			    $objBuilder->AddSelectItem($strTableName, 'linea_aerea_id', $strAliasPrefix . 'linea_aerea_id');
 			    $objBuilder->AddSelectItem($strTableName, 'master_awb_id', $strAliasPrefix . 'master_awb_id');
+			    $objBuilder->AddSelectItem($strTableName, 'nro_bl', $strAliasPrefix . 'nro_bl');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha_creacion', $strAliasPrefix . 'fecha_creacion');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha_despacho', $strAliasPrefix . 'fecha_despacho');
 			    $objBuilder->AddSelectItem($strTableName, 'vuelo', $strAliasPrefix . 'vuelo');
+			    $objBuilder->AddSelectItem($strTableName, 'booking', $strAliasPrefix . 'booking');
 			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
 			    $objBuilder->AddSelectItem($strTableName, 'libras', $strAliasPrefix . 'libras');
 			    $objBuilder->AddSelectItem($strTableName, 'volumen', $strAliasPrefix . 'volumen');
+			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
+			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
 			    $objBuilder->AddSelectItem($strTableName, 'valor', $strAliasPrefix . 'valor');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -747,6 +811,9 @@
 			$strAlias = $strAliasPrefix . 'master_awb_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intMasterAwbId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'nro_bl';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strNroBl = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'fecha_creacion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttFechaCreacion = $objDbRow->GetColumn($strAliasName, 'Date');
@@ -756,6 +823,9 @@
 			$strAlias = $strAliasPrefix . 'vuelo';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strVuelo = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'booking';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strBooking = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'piezas';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intPiezas = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -765,6 +835,12 @@
 			$strAlias = $strAliasPrefix . 'volumen';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltVolumen = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'kilos';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltKilos = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'pies_cub';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltPiesCub = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'valor';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltValor = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -846,6 +922,22 @@
 					$objToReturn->_objBagArray[] = Bag::InstantiateDbRow($objDbRow, $strAliasPrefix . 'bag__bag_id__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objBag)) {
 					$objToReturn->_objBag = Bag::InstantiateDbRow($objDbRow, $strAliasPrefix . 'bag__bag_id__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiaPiezasAsPieza Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiapiezasaspieza__guia_pieza_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiapiezasaspieza']) ? null : $objExpansionAliasArray['guiapiezasaspieza']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaPiezasAsPiezaArray) {
+				$objToReturn->_objGuiaPiezasAsPiezaArray = array();
+			}
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaPiezasAsPiezaArray[] = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasaspieza__guia_pieza_id__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaPiezasAsPieza)) {
+					$objToReturn->_objGuiaPiezasAsPieza = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasaspieza__guia_pieza_id__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -1075,6 +1167,37 @@
 				QQ::Equal(QQN::ManifiestoExp()->Bag->BagId, $intBagId)
 			);
 		}
+			/**
+		 * Load an array of GuiaPiezas objects for a given GuiaPiezasAsPieza
+		 * via the manifiesto_exp_pieza_assn table
+		 * @param integer $intGuiaPiezaId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExp[]
+		*/
+		public static function LoadArrayByGuiaPiezasAsPieza($intGuiaPiezaId, $objOptionalClauses = null, $objClauses = null) {
+			// Call ManifiestoExp::QueryArray to perform the LoadArrayByGuiaPiezasAsPieza query
+			try {
+				return ManifiestoExp::QueryArray(
+					QQ::Equal(QQN::ManifiestoExp()->GuiaPiezasAsPieza->GuiaPiezaId, $intGuiaPiezaId),
+					$objOptionalClauses, $objClauses 
+				);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count ManifiestoExps for a given GuiaPiezasAsPieza
+		 * via the manifiesto_exp_pieza_assn table
+		 * @param integer $intGuiaPiezaId
+		 * @return int
+		*/
+		public static function CountByGuiaPiezasAsPieza($intGuiaPiezaId) {
+			return ManifiestoExp::QueryCount(
+				QQ::Equal(QQN::ManifiestoExp()->GuiaPiezasAsPieza->GuiaPiezaId, $intGuiaPiezaId)
+			);
+		}
 
 
 
@@ -1104,12 +1227,16 @@
 							`destino_id`,
 							`linea_aerea_id`,
 							`master_awb_id`,
+							`nro_bl`,
 							`fecha_creacion`,
 							`fecha_despacho`,
 							`vuelo`,
+							`booking`,
 							`piezas`,
 							`libras`,
 							`volumen`,
+							`kilos`,
+							`pies_cub`,
 							`valor`,
 							`created_by`,
 							`updated_by`
@@ -1117,12 +1244,16 @@
 							' . $objDatabase->SqlVariable($this->intDestinoId) . ',
 							' . $objDatabase->SqlVariable($this->intLineaAereaId) . ',
 							' . $objDatabase->SqlVariable($this->intMasterAwbId) . ',
+							' . $objDatabase->SqlVariable($this->strNroBl) . ',
 							' . $objDatabase->SqlVariable($this->dttFechaCreacion) . ',
 							' . $objDatabase->SqlVariable($this->dttFechaDespacho) . ',
 							' . $objDatabase->SqlVariable($this->strVuelo) . ',
+							' . $objDatabase->SqlVariable($this->strBooking) . ',
 							' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							' . $objDatabase->SqlVariable($this->fltVolumen) . ',
+							' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							' . $objDatabase->SqlVariable($this->fltValor) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
@@ -1174,12 +1305,16 @@
 							`destino_id` = ' . $objDatabase->SqlVariable($this->intDestinoId) . ',
 							`linea_aerea_id` = ' . $objDatabase->SqlVariable($this->intLineaAereaId) . ',
 							`master_awb_id` = ' . $objDatabase->SqlVariable($this->intMasterAwbId) . ',
+							`nro_bl` = ' . $objDatabase->SqlVariable($this->strNroBl) . ',
 							`fecha_creacion` = ' . $objDatabase->SqlVariable($this->dttFechaCreacion) . ',
 							`fecha_despacho` = ' . $objDatabase->SqlVariable($this->dttFechaDespacho) . ',
 							`vuelo` = ' . $objDatabase->SqlVariable($this->strVuelo) . ',
+							`booking` = ' . $objDatabase->SqlVariable($this->strBooking) . ',
 							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							`libras` = ' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							`volumen` = ' . $objDatabase->SqlVariable($this->fltVolumen) . ',
+							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							`valor` = ' . $objDatabase->SqlVariable($this->fltValor) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
@@ -1314,12 +1449,16 @@
 			$this->DestinoId = $objReloaded->DestinoId;
 			$this->LineaAereaId = $objReloaded->LineaAereaId;
 			$this->MasterAwbId = $objReloaded->MasterAwbId;
+			$this->strNroBl = $objReloaded->strNroBl;
 			$this->dttFechaCreacion = $objReloaded->dttFechaCreacion;
 			$this->dttFechaDespacho = $objReloaded->dttFechaDespacho;
 			$this->strVuelo = $objReloaded->strVuelo;
+			$this->strBooking = $objReloaded->strBooking;
 			$this->intPiezas = $objReloaded->intPiezas;
 			$this->fltLibras = $objReloaded->fltLibras;
 			$this->fltVolumen = $objReloaded->fltVolumen;
+			$this->fltKilos = $objReloaded->fltKilos;
+			$this->fltPiesCub = $objReloaded->fltPiesCub;
 			$this->fltValor = $objReloaded->fltValor;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
 			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
@@ -1361,17 +1500,24 @@
 
 				case 'LineaAereaId':
 					/**
-					 * Gets the value for intLineaAereaId (Not Null)
+					 * Gets the value for intLineaAereaId 
 					 * @return integer
 					 */
 					return $this->intLineaAereaId;
 
 				case 'MasterAwbId':
 					/**
-					 * Gets the value for intMasterAwbId (Not Null)
+					 * Gets the value for intMasterAwbId 
 					 * @return integer
 					 */
 					return $this->intMasterAwbId;
+
+				case 'NroBl':
+					/**
+					 * Gets the value for strNroBl 
+					 * @return string
+					 */
+					return $this->strNroBl;
 
 				case 'FechaCreacion':
 					/**
@@ -1389,10 +1535,17 @@
 
 				case 'Vuelo':
 					/**
-					 * Gets the value for strVuelo (Not Null)
+					 * Gets the value for strVuelo 
 					 * @return string
 					 */
 					return $this->strVuelo;
+
+				case 'Booking':
+					/**
+					 * Gets the value for strBooking 
+					 * @return string
+					 */
+					return $this->strBooking;
 
 				case 'Piezas':
 					/**
@@ -1414,6 +1567,20 @@
 					 * @return double
 					 */
 					return $this->fltVolumen;
+
+				case 'Kilos':
+					/**
+					 * Gets the value for fltKilos 
+					 * @return double
+					 */
+					return $this->fltKilos;
+
+				case 'PiesCub':
+					/**
+					 * Gets the value for fltPiesCub 
+					 * @return double
+					 */
+					return $this->fltPiesCub;
 
 				case 'Valor':
 					/**
@@ -1470,7 +1637,7 @@
 
 				case 'LineaAerea':
 					/**
-					 * Gets the value for the LineaAerea object referenced by intLineaAereaId (Not Null)
+					 * Gets the value for the LineaAerea object referenced by intLineaAereaId 
 					 * @return LineaAerea
 					 */
 					try {
@@ -1484,7 +1651,7 @@
 
 				case 'MasterAwb':
 					/**
-					 * Gets the value for the MasterAwb object referenced by intMasterAwbId (Not Null)
+					 * Gets the value for the MasterAwb object referenced by intMasterAwbId 
 					 * @return MasterAwb
 					 */
 					try {
@@ -1517,6 +1684,22 @@
 					 * @return Bag[]
 					 */
 					return $this->_objBagArray;
+
+				case '_GuiaPiezasAsPieza':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsPieza (Read-Only)
+					 * if set due to an expansion on the manifiesto_exp_pieza_assn association table
+					 * @return GuiaPiezas
+					 */
+					return $this->_objGuiaPiezasAsPieza;
+
+				case '_GuiaPiezasAsPiezaArray':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsPiezaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the manifiesto_exp_pieza_assn association table
+					 * @return GuiaPiezas[]
+					 */
+					return $this->_objGuiaPiezasAsPiezaArray;
 
 
 				case '__Restored':
@@ -1561,7 +1744,7 @@
 
 				case 'LineaAereaId':
 					/**
-					 * Sets the value for intLineaAereaId (Not Null)
+					 * Sets the value for intLineaAereaId 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
@@ -1575,13 +1758,26 @@
 
 				case 'MasterAwbId':
 					/**
-					 * Sets the value for intMasterAwbId (Not Null)
+					 * Sets the value for intMasterAwbId 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
 					try {
 						$this->objMasterAwb = null;
 						return ($this->intMasterAwbId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'NroBl':
+					/**
+					 * Sets the value for strNroBl 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strNroBl = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1615,12 +1811,25 @@
 
 				case 'Vuelo':
 					/**
-					 * Sets the value for strVuelo (Not Null)
+					 * Sets the value for strVuelo 
 					 * @param string $mixValue
 					 * @return string
 					 */
 					try {
 						return ($this->strVuelo = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Booking':
+					/**
+					 * Sets the value for strBooking 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strBooking = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1660,6 +1869,32 @@
 					 */
 					try {
 						return ($this->fltVolumen = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Kilos':
+					/**
+					 * Sets the value for fltKilos 
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltKilos = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'PiesCub':
+					/**
+					 * Sets the value for fltPiesCub 
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltPiesCub = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1742,7 +1977,7 @@
 
 				case 'LineaAerea':
 					/**
-					 * Sets the value for the LineaAerea object referenced by intLineaAereaId (Not Null)
+					 * Sets the value for the LineaAerea object referenced by intLineaAereaId 
 					 * @param LineaAerea $mixValue
 					 * @return LineaAerea
 					 */
@@ -1774,7 +2009,7 @@
 
 				case 'MasterAwb':
 					/**
-					 * Sets the value for the MasterAwb object referenced by intMasterAwbId (Not Null)
+					 * Sets the value for the MasterAwb object referenced by intMasterAwbId 
 					 * @param MasterAwb $mixValue
 					 * @return MasterAwb
 					 */
@@ -1966,6 +2201,128 @@
 			');
 		}
 
+		// Related Many-to-Many Objects' Methods for GuiaPiezasAsPieza
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all many-to-many associated GuiaPiezasesAsPieza as an array of GuiaPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public function GetGuiaPiezasAsPiezaArray($objOptionalClauses = null, $objClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiaPiezas::LoadArrayByManifiestoExpAsPieza($this->intId, $objClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all many-to-many associated GuiaPiezasesAsPieza
+		 * @return int
+		*/
+		public function CountGuiaPiezasesAsPieza() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiaPiezas::CountByManifiestoExpAsPieza($this->intId);
+		}
+
+		/**
+		 * Checks to see if an association exists with a specific GuiaPiezasAsPieza
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return bool
+		*/
+		public function IsGuiaPiezasAsPiezaAssociated(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsGuiaPiezasAsPiezaAssociated on this unsaved ManifiestoExp.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsGuiaPiezasAsPiezaAssociated on this ManifiestoExp with an unsaved GuiaPiezas.');
+
+			$intRowCount = ManifiestoExp::QueryCount(
+				QQ::AndCondition(
+					QQ::Equal(QQN::ManifiestoExp()->Id, $this->intId),
+					QQ::Equal(QQN::ManifiestoExp()->GuiaPiezasAsPieza->GuiaPiezaId, $objGuiaPiezas->Id)
+				)
+			);
+
+			return ($intRowCount > 0);
+		}
+
+		/**
+		 * Associates a GuiaPiezasAsPieza
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function AssociateGuiaPiezasAsPieza(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsPieza on this unsaved ManifiestoExp.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsPieza on this ManifiestoExp with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				INSERT INTO `manifiesto_exp_pieza_assn` (
+					`manifiesto_exp_id`,
+					`guia_pieza_id`
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . '
+				)
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaPiezasAsPieza
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function UnassociateGuiaPiezasAsPieza(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsPieza on this unsaved ManifiestoExp.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsPieza on this ManifiestoExp with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_pieza_assn`
+				WHERE
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . ' AND
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaPiezasesAsPieza
+		 * @return void
+		*/
+		public function UnassociateAllGuiaPiezasesAsPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAllGuiaPiezasAsPiezaArray on this unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_pieza_assn`
+				WHERE
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -2008,12 +2365,16 @@
 			$strToReturn .= '<element name="Destino" type="xsd1:Sucursales"/>';
 			$strToReturn .= '<element name="LineaAerea" type="xsd1:LineaAerea"/>';
 			$strToReturn .= '<element name="MasterAwb" type="xsd1:MasterAwb"/>';
+			$strToReturn .= '<element name="NroBl" type="xsd:string"/>';
 			$strToReturn .= '<element name="FechaCreacion" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="FechaDespacho" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="Vuelo" type="xsd:string"/>';
+			$strToReturn .= '<element name="Booking" type="xsd:string"/>';
 			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
 			$strToReturn .= '<element name="Libras" type="xsd:float"/>';
 			$strToReturn .= '<element name="Volumen" type="xsd:float"/>';
+			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
+			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
 			$strToReturn .= '<element name="Valor" type="xsd:float"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
@@ -2055,18 +2416,26 @@
 			if ((property_exists($objSoapObject, 'MasterAwb')) &&
 				($objSoapObject->MasterAwb))
 				$objToReturn->MasterAwb = MasterAwb::GetObjectFromSoapObject($objSoapObject->MasterAwb);
+			if (property_exists($objSoapObject, 'NroBl'))
+				$objToReturn->strNroBl = $objSoapObject->NroBl;
 			if (property_exists($objSoapObject, 'FechaCreacion'))
 				$objToReturn->dttFechaCreacion = new QDateTime($objSoapObject->FechaCreacion);
 			if (property_exists($objSoapObject, 'FechaDespacho'))
 				$objToReturn->dttFechaDespacho = new QDateTime($objSoapObject->FechaDespacho);
 			if (property_exists($objSoapObject, 'Vuelo'))
 				$objToReturn->strVuelo = $objSoapObject->Vuelo;
+			if (property_exists($objSoapObject, 'Booking'))
+				$objToReturn->strBooking = $objSoapObject->Booking;
 			if (property_exists($objSoapObject, 'Piezas'))
 				$objToReturn->intPiezas = $objSoapObject->Piezas;
 			if (property_exists($objSoapObject, 'Libras'))
 				$objToReturn->fltLibras = $objSoapObject->Libras;
 			if (property_exists($objSoapObject, 'Volumen'))
 				$objToReturn->fltVolumen = $objSoapObject->Volumen;
+			if (property_exists($objSoapObject, 'Kilos'))
+				$objToReturn->fltKilos = $objSoapObject->Kilos;
+			if (property_exists($objSoapObject, 'PiesCub'))
+				$objToReturn->fltPiesCub = $objSoapObject->PiesCub;
 			if (property_exists($objSoapObject, 'Valor'))
 				$objToReturn->fltValor = $objSoapObject->Valor;
 			if (property_exists($objSoapObject, 'CreatedAt'))
@@ -2129,12 +2498,16 @@
 			$iArray['DestinoId'] = $this->intDestinoId;
 			$iArray['LineaAereaId'] = $this->intLineaAereaId;
 			$iArray['MasterAwbId'] = $this->intMasterAwbId;
+			$iArray['NroBl'] = $this->strNroBl;
 			$iArray['FechaCreacion'] = $this->dttFechaCreacion;
 			$iArray['FechaDespacho'] = $this->dttFechaDespacho;
 			$iArray['Vuelo'] = $this->strVuelo;
+			$iArray['Booking'] = $this->strBooking;
 			$iArray['Piezas'] = $this->intPiezas;
 			$iArray['Libras'] = $this->fltLibras;
 			$iArray['Volumen'] = $this->fltVolumen;
+			$iArray['Kilos'] = $this->fltKilos;
+			$iArray['PiesCub'] = $this->fltPiesCub;
 			$iArray['Valor'] = $this->fltValor;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
 			$iArray['UpdatedAt'] = $this->strUpdatedAt;
@@ -2211,6 +2584,42 @@
 	}
 
     /**
+     * @uses QQAssociationNode
+     *
+     * @property-read QQNode $GuiaPiezaId
+     * @property-read QQNodeGuiaPiezas $GuiaPiezas
+     * @property-read QQNodeGuiaPiezas $_ChildTableNode
+     **/
+	class QQNodeManifiestoExpGuiaPiezasAsPieza extends QQAssociationNode {
+		protected $strType = 'association';
+		protected $strName = 'guiapiezasaspieza';
+
+		protected $strTableName = 'manifiesto_exp_pieza_assn';
+		protected $strPrimaryKey = 'manifiesto_exp_id';
+		protected $strClassName = 'GuiaPiezas';
+		protected $strPropertyName = 'GuiaPiezasAsPieza';
+		protected $strAlias = 'guiapiezasaspieza';
+
+		public function __get($strName) {
+			switch ($strName) {
+				case 'GuiaPiezaId':
+					return new QQNode('guia_pieza_id', 'GuiaPiezaId', 'integer', $this);
+				case 'GuiaPiezas':
+					return new QQNodeGuiaPiezas('guia_pieza_id', 'GuiaPiezaId', 'integer', $this);
+				case '_ChildTableNode':
+					return new QQNodeGuiaPiezas('guia_pieza_id', 'GuiaPiezaId', 'integer', $this);
+				default:
+					try {
+						return parent::__get($strName);
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+			}
+		}
+	}
+
+    /**
      * @uses QQNode
      *
      * @property-read QQNode $Id
@@ -2220,12 +2629,16 @@
      * @property-read QQNodeLineaAerea $LineaAerea
      * @property-read QQNode $MasterAwbId
      * @property-read QQNodeMasterAwb $MasterAwb
+     * @property-read QQNode $NroBl
      * @property-read QQNode $FechaCreacion
      * @property-read QQNode $FechaDespacho
      * @property-read QQNode $Vuelo
+     * @property-read QQNode $Booking
      * @property-read QQNode $Piezas
      * @property-read QQNode $Libras
      * @property-read QQNode $Volumen
+     * @property-read QQNode $Kilos
+     * @property-read QQNode $PiesCub
      * @property-read QQNode $Valor
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -2233,6 +2646,7 @@
      * @property-read QQNode $UpdatedBy
      *
      * @property-read QQNodeManifiestoExpBag $Bag
+     * @property-read QQNodeManifiestoExpGuiaPiezasAsPieza $GuiaPiezasAsPieza
      *
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2257,18 +2671,26 @@
 					return new QQNode('master_awb_id', 'MasterAwbId', 'Integer', $this);
 				case 'MasterAwb':
 					return new QQNodeMasterAwb('master_awb_id', 'MasterAwb', 'Integer', $this);
+				case 'NroBl':
+					return new QQNode('nro_bl', 'NroBl', 'VarChar', $this);
 				case 'FechaCreacion':
 					return new QQNode('fecha_creacion', 'FechaCreacion', 'Date', $this);
 				case 'FechaDespacho':
 					return new QQNode('fecha_despacho', 'FechaDespacho', 'Date', $this);
 				case 'Vuelo':
 					return new QQNode('vuelo', 'Vuelo', 'VarChar', $this);
+				case 'Booking':
+					return new QQNode('booking', 'Booking', 'VarChar', $this);
 				case 'Piezas':
 					return new QQNode('piezas', 'Piezas', 'Integer', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'Float', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'Float', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'Float', $this);
+				case 'PiesCub':
+					return new QQNode('pies_cub', 'PiesCub', 'Float', $this);
 				case 'Valor':
 					return new QQNode('valor', 'Valor', 'Float', $this);
 				case 'CreatedAt':
@@ -2281,6 +2703,8 @@
 					return new QQNode('updated_by', 'UpdatedBy', 'Integer', $this);
 				case 'Bag':
 					return new QQNodeManifiestoExpBag($this);
+				case 'GuiaPiezasAsPieza':
+					return new QQNodeManifiestoExpGuiaPiezasAsPieza($this);
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2303,12 +2727,16 @@
      * @property-read QQNodeLineaAerea $LineaAerea
      * @property-read QQNode $MasterAwbId
      * @property-read QQNodeMasterAwb $MasterAwb
+     * @property-read QQNode $NroBl
      * @property-read QQNode $FechaCreacion
      * @property-read QQNode $FechaDespacho
      * @property-read QQNode $Vuelo
+     * @property-read QQNode $Booking
      * @property-read QQNode $Piezas
      * @property-read QQNode $Libras
      * @property-read QQNode $Volumen
+     * @property-read QQNode $Kilos
+     * @property-read QQNode $PiesCub
      * @property-read QQNode $Valor
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -2316,6 +2744,7 @@
      * @property-read QQNode $UpdatedBy
      *
      * @property-read QQNodeManifiestoExpBag $Bag
+     * @property-read QQNodeManifiestoExpGuiaPiezasAsPieza $GuiaPiezasAsPieza
      *
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2340,18 +2769,26 @@
 					return new QQNode('master_awb_id', 'MasterAwbId', 'integer', $this);
 				case 'MasterAwb':
 					return new QQNodeMasterAwb('master_awb_id', 'MasterAwb', 'integer', $this);
+				case 'NroBl':
+					return new QQNode('nro_bl', 'NroBl', 'string', $this);
 				case 'FechaCreacion':
 					return new QQNode('fecha_creacion', 'FechaCreacion', 'QDateTime', $this);
 				case 'FechaDespacho':
 					return new QQNode('fecha_despacho', 'FechaDespacho', 'QDateTime', $this);
 				case 'Vuelo':
 					return new QQNode('vuelo', 'Vuelo', 'string', $this);
+				case 'Booking':
+					return new QQNode('booking', 'Booking', 'string', $this);
 				case 'Piezas':
 					return new QQNode('piezas', 'Piezas', 'integer', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'double', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'double', $this);
+				case 'Kilos':
+					return new QQNode('kilos', 'Kilos', 'double', $this);
+				case 'PiesCub':
+					return new QQNode('pies_cub', 'PiesCub', 'double', $this);
 				case 'Valor':
 					return new QQNode('valor', 'Valor', 'double', $this);
 				case 'CreatedAt':
@@ -2364,6 +2801,8 @@
 					return new QQNode('updated_by', 'UpdatedBy', 'integer', $this);
 				case 'Bag':
 					return new QQNodeManifiestoExpBag($this);
+				case 'GuiaPiezasAsPieza':
+					return new QQNodeManifiestoExpGuiaPiezasAsPieza($this);
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

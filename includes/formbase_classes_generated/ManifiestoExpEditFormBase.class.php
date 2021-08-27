@@ -57,12 +57,16 @@ abstract class ManifiestoExpEditFormBase extends QForm {
 	protected $lstDestino;
 	protected $lstLineaAerea;
 	protected $lstMasterAwb;
+	protected $txtNroBl;
 	protected $calFechaCreacion;
 	protected $calFechaDespacho;
 	protected $txtVuelo;
+	protected $txtBooking;
 	protected $txtPiezas;
 	protected $txtLibras;
 	protected $txtVolumen;
+	protected $txtKilos;
+	protected $txtPiesCub;
 	protected $txtValor;
 	protected $lblCreatedAt;
 	protected $lblUpdatedAt;
@@ -71,6 +75,7 @@ abstract class ManifiestoExpEditFormBase extends QForm {
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 	protected $dtgBags;
+	protected $dtgGuiaPiezasesAsPieza;
 
 	// Other Controls
 	/**
@@ -139,18 +144,23 @@ abstract class ManifiestoExpEditFormBase extends QForm {
 		$this->lstDestino = $this->mctManifiestoExp->lstDestino_Create();
 		$this->lstLineaAerea = $this->mctManifiestoExp->lstLineaAerea_Create();
 		$this->lstMasterAwb = $this->mctManifiestoExp->lstMasterAwb_Create();
+		$this->txtNroBl = $this->mctManifiestoExp->txtNroBl_Create();
 		$this->calFechaCreacion = $this->mctManifiestoExp->calFechaCreacion_Create();
 		$this->calFechaDespacho = $this->mctManifiestoExp->calFechaDespacho_Create();
 		$this->txtVuelo = $this->mctManifiestoExp->txtVuelo_Create();
+		$this->txtBooking = $this->mctManifiestoExp->txtBooking_Create();
 		$this->txtPiezas = $this->mctManifiestoExp->txtPiezas_Create();
 		$this->txtLibras = $this->mctManifiestoExp->txtLibras_Create();
 		$this->txtVolumen = $this->mctManifiestoExp->txtVolumen_Create();
+		$this->txtKilos = $this->mctManifiestoExp->txtKilos_Create();
+		$this->txtPiesCub = $this->mctManifiestoExp->txtPiesCub_Create();
 		$this->txtValor = $this->mctManifiestoExp->txtValor_Create();
 		$this->lblCreatedAt = $this->mctManifiestoExp->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctManifiestoExp->lblUpdatedAt_Create();
 		$this->txtCreatedBy = $this->mctManifiestoExp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctManifiestoExp->txtUpdatedBy_Create();
 			$this->dtgBags = $this->mctManifiestoExp->dtgBags_Create();
+			$this->dtgGuiaPiezasesAsPieza = $this->mctManifiestoExp->dtgGuiaPiezasesAsPieza_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();

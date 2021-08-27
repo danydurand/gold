@@ -75,6 +75,7 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 	protected $lstGuiaTransportistaAsGuiaPieza;
 	protected $dtgBagsAsPieza;
 	protected $dtgContainersesAsContainerPieza;
+	protected $dtgManifiestoExpsAsPieza;
 	protected $dtgSdeContenedorsAsGuia;
 
 	// Other Controls
@@ -160,6 +161,7 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 			$this->lstGuiaTransportistaAsGuiaPieza = $this->mctGuiaPiezas->lstGuiaTransportistaAsGuiaPieza_Create();
 			$this->dtgBagsAsPieza = $this->mctGuiaPiezas->dtgBagsAsPieza_Create();
 			$this->dtgContainersesAsContainerPieza = $this->mctGuiaPiezas->dtgContainersesAsContainerPieza_Create();
+			$this->dtgManifiestoExpsAsPieza = $this->mctGuiaPiezas->dtgManifiestoExpsAsPieza_Create();
 			$this->dtgSdeContenedorsAsGuia = $this->mctGuiaPiezas->dtgSdeContenedorsAsGuia_Create();
 
 		$this->btnSave_Create();

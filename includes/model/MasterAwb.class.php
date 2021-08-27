@@ -24,17 +24,17 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('MasterAwb Object %s',  $this->intId);
+			return sprintf('%s',  $this->Numero);
 		}
 
-                /**
+        /**
         * Esta runtina deja registro de la operacion indicada en
         * el log de transacciones
         */
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'MasterAwb';
             $arrLogxCamb['intRefeRegi'] = $this->Id;
-            $arrLogxCamb['strNombRegi'] = $this->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->Numero;
             $arrLogxCamb['strDescCamb'] = $strMensTran;
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_awb_edit.php/'.$this->Id;
             LogDeCambios($arrLogxCamb);

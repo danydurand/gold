@@ -2121,6 +2121,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->Estado                = $this->txtEstaDest->Text;
             $this->objGuia->Ciudad                = $this->txtCiudDest->Text;
             $this->objGuia->CodigoPostal          = $this->txtPostDest->Text;
+            $this->objGuia->TipoExport            = $strCodiExpo;
 
             if (!$this->blnEditMode) {
                 //------------------------------------------------------------------------

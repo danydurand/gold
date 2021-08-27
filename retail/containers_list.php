@@ -51,7 +51,7 @@ class ContainersListForm extends ContainersListFormBase {
 		$this->dtgContainerses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
 		$objClauWher   = QQ::Clause();
-		$objClauWher[] = QQ::Equal(QQN::Containers()->Tipo,'MASTER');
+		$objClauWher[] = QQ::Equal(QQN::Containers()->Tipo,'MANIF');
 		$this->dtgContainerses->AdditionalConditions = QQ::AndCondition($objClauWher);
 
 		$objClauOrde   = QQ::Clause();

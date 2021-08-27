@@ -1545,6 +1545,50 @@
 
 		/**
 		 * Load an array of Containers objects,
+		 * by OperacionId, Estatus, Tipo Index(es)
+		 * @param integer $intOperacionId
+		 * @param string $strEstatus
+		 * @param string $strTipo
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Containers[]
+		*/
+		public static function LoadArrayByOperacionIdEstatusTipo($intOperacionId, $strEstatus, $strTipo, $objOptionalClauses = null) {
+			// Call Containers::QueryArray to perform the LoadArrayByOperacionIdEstatusTipo query
+			try {
+				return Containers::QueryArray(
+					QQ::AndCondition(
+					QQ::Equal(QQN::Containers()->OperacionId, $intOperacionId),
+					QQ::Equal(QQN::Containers()->Estatus, $strEstatus),
+					QQ::Equal(QQN::Containers()->Tipo, $strTipo)					)
+,
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Containerses
+		 * by OperacionId, Estatus, Tipo Index(es)
+		 * @param integer $intOperacionId
+		 * @param string $strEstatus
+		 * @param string $strTipo
+		 * @return int
+		*/
+		public static function CountByOperacionIdEstatusTipo($intOperacionId, $strEstatus, $strTipo) {
+			// Call Containers::QueryCount to perform the CountByOperacionIdEstatusTipo query
+			return Containers::QueryCount(
+				QQ::AndCondition(
+				QQ::Equal(QQN::Containers()->OperacionId, $intOperacionId),
+				QQ::Equal(QQN::Containers()->Estatus, $strEstatus),
+				QQ::Equal(QQN::Containers()->Tipo, $strTipo)				)
+
+			);
+		}
+
+		/**
+		 * Load an array of Containers objects,
 		 * by ChoferId Index(es)
 		 * @param integer $intChoferId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query

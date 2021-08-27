@@ -27,14 +27,67 @@
 			return sprintf('ManifiestoExp Object %s',  $this->intId);
 		}
 
-                /**
+        public function actualizarTotales() {
+            $intCantPiez = 0;
+            $decSumaLibr = 0;
+            $decSumaVolu = 0;
+            $decSumaKilo = 0;
+            $decSumaPies = 0;
+            $arrPiezCont = GuiaPiezas::LoadArrayByManifiestoExpAsPieza($this->Id);
+            foreach ($arrPiezCont as $objPiezCont) {
+                $intCantPiez ++;
+                $decSumaLibr += (double)$objPiezCont->Libras;
+                $decSumaVolu += (double)$objPiezCont->Volumen;
+                $decSumaKilo += (double)$objPiezCont->Kilos;
+                $decSumaPies += (double)$objPiezCont->PiesCub;
+            }
+            $this->Piezas  = $intCantPiez;
+            $this->Libras  = $decSumaLibr;
+            $this->Volumen = $decSumaVolu;
+            $this->Kilos   = $decSumaKilo;
+            $this->PiesCub = $decSumaPies;
+            $this->Piezas  = $intCantPiez;
+            $this->Save();
+        }
+
+        public function GetPiezasConCheckpoint($strCodiCkpt, $strTipoDato='IdPieza') {
+            t('Obteniedo piezas del manifiesto que tengan: '.$strCodiCkpt);
+            //-----------------------------------------------------------------------------
+            // Devuelve un vector con los numeros de las piezas del contenedor que tengan
+            // el checkpoint indicado
+            //-----------------------------------------------------------------------------
+            $arrPiezCont = array();
+            //$arrValiCont = $this->GetContainersAsContainerContainerArray();
+            //foreach ($arrValiCont as $objValija) {
+            //    t('Procesando la Valija: '.$objValija->Numero);
+            //    $arrPiezVali = $objValija->GetGuiaPiezasAsContainerPiezaArray();
+            //    foreach ($arrPiezVali as $objGuiaPiez) {
+            //        if ($objGuiaPiez->tieneCheckpoint($strCodiCkpt)) {
+            //            $arrPiezCont[] = $objGuiaPiez->$strTipoDato;
+            //        }
+            //    }
+            //}
+            $arrPiezVali = $this->GetGuiaPiezasAsPiezaArray();
+            foreach ($arrPiezVali as $objGuiaPiez) {
+                t('Procesando la pieza: '.$objGuiaPiez->IdPieza);
+                if ($objGuiaPiez->tieneCheckpoint($strCodiCkpt)) {
+                    t('La pieza si tiene el checkpoint');
+                    $arrPiezCont[] = $objGuiaPiez->$strTipoDato;
+                } else {
+                    t('La pieza no tiene el checkpoint: '.$strCodiCkpt);
+                }
+            }
+            return $arrPiezCont;
+        }
+
+        /**
         * Esta runtina deja registro de la operacion indicada en
         * el log de transacciones
         */
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'ManifiestoExp';
             $arrLogxCamb['intRefeRegi'] = $this->Id;
-            $arrLogxCamb['strNombRegi'] = $this->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->Booking;
             $arrLogxCamb['strDescCamb'] = $strMensTran;
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/manifiesto_exp_edit.php/'.$this->Id;
             LogDeCambios($arrLogxCamb);

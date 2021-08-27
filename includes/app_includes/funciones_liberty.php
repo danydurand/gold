@@ -353,8 +353,8 @@ function GrabarError($arrParaErro) {
     $objProcErro = new DetalleError();
     $objProcErro->ProcesoId    = $arrParaErro['ProcIdxx'];
     $objProcErro->Referencia   = $arrParaErro['NumeRefe'];
-    $objProcErro->MensajeError = $arrParaErro['MensErro'];
-    $objProcErro->Comentario   = $arrParaErro['ComeErro'];
+    $objProcErro->MensajeError = strtoupper($arrParaErro['MensErro']);
+    $objProcErro->Comentario   = strtoupper($arrParaErro['ComeErro']);
     $objProcErro->Save();
 }
 

@@ -133,7 +133,7 @@ class MasterAwbEditForm extends MasterAwbEditFormBase {
 				//------------------------------------------
 				$arrLogxCamb['strNombTabl'] = 'MasterAwb';
 				$arrLogxCamb['intRefeRegi'] = $this->mctMasterAwb->MasterAwb->Id;
-				$arrLogxCamb['strNombRegi'] = $this->mctMasterAwb->MasterAwb->Nombre;
+				$arrLogxCamb['strNombRegi'] = $this->mctMasterAwb->MasterAwb->Numero;
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_awb_edit.php/'.$this->mctMasterAwb->MasterAwb->Id;
 				LogDeCambios($arrLogxCamb);
@@ -142,7 +142,7 @@ class MasterAwbEditForm extends MasterAwbEditFormBase {
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'MasterAwb';
 			$arrLogxCamb['intRefeRegi'] = $this->mctMasterAwb->MasterAwb->Id;
-			$arrLogxCamb['strNombRegi'] = $this->mctMasterAwb->MasterAwb->Nombre;
+			$arrLogxCamb['strNombRegi'] = $this->mctMasterAwb->MasterAwb->Numero;
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_awb_edit.php/'.$this->mctMasterAwb->MasterAwb->Id;
 			LogDeCambios($arrLogxCamb);
@@ -166,7 +166,7 @@ class MasterAwbEditForm extends MasterAwbEditFormBase {
             $this->mctMasterAwb->DeleteMasterAwb();
             $arrLogxCamb['strNombTabl'] = 'MasterAwb';
             $arrLogxCamb['intRefeRegi'] = $this->mctMasterAwb->MasterAwb->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctMasterAwb->MasterAwb->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->mctMasterAwb->MasterAwb->Numero;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

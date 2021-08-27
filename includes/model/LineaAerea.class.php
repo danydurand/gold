@@ -24,9 +24,21 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('LineaAerea Object %s',  $this->intId);
+			return sprintf('%s',  $this->Nombre);
 		}
 
+        /**
+         * Esta runtina deja registro de la operacion indicada en
+         * el log de transacciones
+         */
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'LineaAerea';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->Nombre;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/linea_aerea_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
+        }
 
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...

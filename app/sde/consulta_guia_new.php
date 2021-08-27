@@ -339,10 +339,10 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
         $this->dtgPiezGuia->AddColumn($colKiloPiez);
 
-        $colLibrPiez = new QDataGridColumn($this);
-        $colLibrPiez->Name = QApplication::Translate('Libras');
-        $colLibrPiez->Html = '<?= $_ITEM->Libras; ?>';
-        $this->dtgPiezGuia->AddColumn($colLibrPiez);
+        //$colLibrPiez = new QDataGridColumn($this);
+        //$colLibrPiez->Name = QApplication::Translate('Libras');
+        /*$colLibrPiez->Html = '<?= $_ITEM->Libras; ?>';*/
+        //$this->dtgPiezGuia->AddColumn($colLibrPiez);
 
         $colPiesPiez = new QDataGridColumn($this);
         $colPiesPiez->Name = QApplication::Translate('PiesCub');

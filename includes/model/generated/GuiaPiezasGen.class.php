@@ -38,6 +38,8 @@
 	 * @property-read Bag[] $_BagAsPiezaArray the value for the private _objBagAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the bag_pieza_assn association table
 	 * @property-read Containers $_ContainersAsContainerPieza the value for the private _objContainersAsContainerPieza (Read-Only) if set due to an expansion on the container_pieza_assn association table
 	 * @property-read Containers[] $_ContainersAsContainerPiezaArray the value for the private _objContainersAsContainerPiezaArray (Read-Only) if set due to an ExpandAsArray on the container_pieza_assn association table
+	 * @property-read ManifiestoExp $_ManifiestoExpAsPieza the value for the private _objManifiestoExpAsPieza (Read-Only) if set due to an expansion on the manifiesto_exp_pieza_assn association table
+	 * @property-read ManifiestoExp[] $_ManifiestoExpAsPiezaArray the value for the private _objManifiestoExpAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_pieza_assn association table
 	 * @property-read SdeContenedor $_SdeContenedorAsGuia the value for the private _objSdeContenedorAsGuia (Read-Only) if set due to an expansion on the sde_contenedor_guia_assn association table
 	 * @property-read SdeContenedor[] $_SdeContenedorAsGuiaArray the value for the private _objSdeContenedorAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the sde_contenedor_guia_assn association table
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsPieza the value for the private _objPiezaCheckpointsAsPieza (Read-Only) if set due to an expansion on the pieza_checkpoints.pieza_id reverse relationship
@@ -213,6 +215,22 @@
 		 * @var Containers[] _objContainersAsContainerPiezaArray;
 		 */
 		private $_objContainersAsContainerPiezaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ManifiestoExpAsPieza object
+		 * (of type ManifiestoExp), if this GuiaPiezas object was restored with
+		 * an expansion on the manifiesto_exp_pieza_assn association table.
+		 * @var ManifiestoExp _objManifiestoExpAsPieza;
+		 */
+		private $_objManifiestoExpAsPieza;
+
+		/**
+		 * Private member variable that stores a reference to an array of ManifiestoExpAsPieza objects
+		 * (of type ManifiestoExp[]), if this GuiaPiezas object was restored with
+		 * an ExpandAsArray on the manifiesto_exp_pieza_assn association table.
+		 * @var ManifiestoExp[] _objManifiestoExpAsPiezaArray;
+		 */
+		private $_objManifiestoExpAsPiezaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single SdeContenedorAsGuia object
@@ -968,6 +986,22 @@
 				}
 			}
 
+			// Check for ManifiestoExpAsPieza Virtual Binding
+			$strAlias = $strAliasPrefix . 'manifiestoexpaspieza__manifiesto_exp_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['manifiestoexpaspieza']) ? null : $objExpansionAliasArray['manifiestoexpaspieza']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objManifiestoExpAsPiezaArray) {
+				$objToReturn->_objManifiestoExpAsPiezaArray = array();
+			}
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objManifiestoExpAsPiezaArray[] = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpaspieza__manifiesto_exp_id__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objManifiestoExpAsPieza)) {
+					$objToReturn->_objManifiestoExpAsPieza = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpaspieza__manifiesto_exp_id__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for SdeContenedorAsGuia Virtual Binding
 			$strAlias = $strAliasPrefix . 'sdecontenedorasguia__nume_cont__nume_cont';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1206,6 +1240,37 @@
 		public static function CountByContainersAsContainerPieza($intContainerId) {
 			return GuiaPiezas::QueryCount(
 				QQ::Equal(QQN::GuiaPiezas()->ContainersAsContainerPieza->ContainerId, $intContainerId)
+			);
+		}
+			/**
+		 * Load an array of ManifiestoExp objects for a given ManifiestoExpAsPieza
+		 * via the manifiesto_exp_pieza_assn table
+		 * @param integer $intManifiestoExpId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByManifiestoExpAsPieza($intManifiestoExpId, $objOptionalClauses = null, $objClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByManifiestoExpAsPieza query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->ManifiestoExpAsPieza->ManifiestoExpId, $intManifiestoExpId),
+					$objOptionalClauses, $objClauses 
+				);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases for a given ManifiestoExpAsPieza
+		 * via the manifiesto_exp_pieza_assn table
+		 * @param integer $intManifiestoExpId
+		 * @return int
+		*/
+		public static function CountByManifiestoExpAsPieza($intManifiestoExpId) {
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->ManifiestoExpAsPieza->ManifiestoExpId, $intManifiestoExpId)
 			);
 		}
 			/**
@@ -1774,6 +1839,22 @@
 					 * @return Containers[]
 					 */
 					return $this->_objContainersAsContainerPiezaArray;
+
+				case '_ManifiestoExpAsPieza':
+					/**
+					 * Gets the value for the private _objManifiestoExpAsPieza (Read-Only)
+					 * if set due to an expansion on the manifiesto_exp_pieza_assn association table
+					 * @return ManifiestoExp
+					 */
+					return $this->_objManifiestoExpAsPieza;
+
+				case '_ManifiestoExpAsPiezaArray':
+					/**
+					 * Gets the value for the private _objManifiestoExpAsPiezaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the manifiesto_exp_pieza_assn association table
+					 * @return ManifiestoExp[]
+					 */
+					return $this->_objManifiestoExpAsPiezaArray;
 
 				case '_SdeContenedorAsGuia':
 					/**
@@ -2554,6 +2635,128 @@
 			');
 		}
 
+		// Related Many-to-Many Objects' Methods for ManifiestoExpAsPieza
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all many-to-many associated ManifiestoExpsAsPieza as an array of ManifiestoExp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExp[]
+		*/
+		public function GetManifiestoExpAsPiezaArray($objOptionalClauses = null, $objClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ManifiestoExp::LoadArrayByGuiaPiezasAsPieza($this->intId, $objClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all many-to-many associated ManifiestoExpsAsPieza
+		 * @return int
+		*/
+		public function CountManifiestoExpsAsPieza() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ManifiestoExp::CountByGuiaPiezasAsPieza($this->intId);
+		}
+
+		/**
+		 * Checks to see if an association exists with a specific ManifiestoExpAsPieza
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return bool
+		*/
+		public function IsManifiestoExpAsPiezaAssociated(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsManifiestoExpAsPiezaAssociated on this unsaved GuiaPiezas.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call IsManifiestoExpAsPiezaAssociated on this GuiaPiezas with an unsaved ManifiestoExp.');
+
+			$intRowCount = GuiaPiezas::QueryCount(
+				QQ::AndCondition(
+					QQ::Equal(QQN::GuiaPiezas()->Id, $this->intId),
+					QQ::Equal(QQN::GuiaPiezas()->ManifiestoExpAsPieza->ManifiestoExpId, $objManifiestoExp->Id)
+				)
+			);
+
+			return ($intRowCount > 0);
+		}
+
+		/**
+		 * Associates a ManifiestoExpAsPieza
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function AssociateManifiestoExpAsPieza(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpAsPieza on this GuiaPiezas with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				INSERT INTO `manifiesto_exp_pieza_assn` (
+					`guia_pieza_id`,
+					`manifiesto_exp_id`
+				) VALUES (
+					' . $objDatabase->SqlVariable($this->intId) . ',
+					' . $objDatabase->SqlVariable($objManifiestoExp->Id) . '
+				)
+			');
+		}
+
+		/**
+		 * Unassociates a ManifiestoExpAsPieza
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function UnassociateManifiestoExpAsPieza(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsPieza on this GuiaPiezas with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_pieza_assn`
+				WHERE
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . ' AND
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ManifiestoExpsAsPieza
+		 * @return void
+		*/
+		public function UnassociateAllManifiestoExpsAsPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAllManifiestoExpAsPiezaArray on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_pieza_assn`
+				WHERE
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
 		// Related Many-to-Many Objects' Methods for SdeContenedorAsGuia
 		//-------------------------------------------------------------------
 
@@ -2947,6 +3150,42 @@
     /**
      * @uses QQAssociationNode
      *
+     * @property-read QQNode $ManifiestoExpId
+     * @property-read QQNodeManifiestoExp $ManifiestoExp
+     * @property-read QQNodeManifiestoExp $_ChildTableNode
+     **/
+	class QQNodeGuiaPiezasManifiestoExpAsPieza extends QQAssociationNode {
+		protected $strType = 'association';
+		protected $strName = 'manifiestoexpaspieza';
+
+		protected $strTableName = 'manifiesto_exp_pieza_assn';
+		protected $strPrimaryKey = 'guia_pieza_id';
+		protected $strClassName = 'ManifiestoExp';
+		protected $strPropertyName = 'ManifiestoExpAsPieza';
+		protected $strAlias = 'manifiestoexpaspieza';
+
+		public function __get($strName) {
+			switch ($strName) {
+				case 'ManifiestoExpId':
+					return new QQNode('manifiesto_exp_id', 'ManifiestoExpId', 'integer', $this);
+				case 'ManifiestoExp':
+					return new QQNodeManifiestoExp('manifiesto_exp_id', 'ManifiestoExpId', 'integer', $this);
+				case '_ChildTableNode':
+					return new QQNodeManifiestoExp('manifiesto_exp_id', 'ManifiestoExpId', 'integer', $this);
+				default:
+					try {
+						return parent::__get($strName);
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+			}
+		}
+	}
+
+    /**
+     * @uses QQAssociationNode
+     *
      * @property-read QQNode $NumeCont
      * @property-read QQNodeSdeContenedor $SdeContenedor
      * @property-read QQNodeSdeContenedor $_ChildTableNode
@@ -3003,6 +3242,7 @@
      *
      * @property-read QQNodeGuiaPiezasBagAsPieza $BagAsPieza
      * @property-read QQNodeGuiaPiezasContainersAsContainerPieza $ContainersAsContainerPieza
+     * @property-read QQNodeGuiaPiezasManifiestoExpAsPieza $ManifiestoExpAsPieza
      * @property-read QQNodeGuiaPiezasSdeContenedorAsGuia $SdeContenedorAsGuia
      *
      * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
@@ -3055,6 +3295,8 @@
 					return new QQNodeGuiaPiezasBagAsPieza($this);
 				case 'ContainersAsContainerPieza':
 					return new QQNodeGuiaPiezasContainersAsContainerPieza($this);
+				case 'ManifiestoExpAsPieza':
+					return new QQNodeGuiaPiezasManifiestoExpAsPieza($this);
 				case 'SdeContenedorAsGuia':
 					return new QQNodeGuiaPiezasSdeContenedorAsGuia($this);
 				case 'GuiaPiezaPodAsGuiaPieza':
@@ -3098,6 +3340,7 @@
      *
      * @property-read QQNodeGuiaPiezasBagAsPieza $BagAsPieza
      * @property-read QQNodeGuiaPiezasContainersAsContainerPieza $ContainersAsContainerPieza
+     * @property-read QQNodeGuiaPiezasManifiestoExpAsPieza $ManifiestoExpAsPieza
      * @property-read QQNodeGuiaPiezasSdeContenedorAsGuia $SdeContenedorAsGuia
      *
      * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
@@ -3150,6 +3393,8 @@
 					return new QQNodeGuiaPiezasBagAsPieza($this);
 				case 'ContainersAsContainerPieza':
 					return new QQNodeGuiaPiezasContainersAsContainerPieza($this);
+				case 'ManifiestoExpAsPieza':
+					return new QQNodeGuiaPiezasManifiestoExpAsPieza($this);
 				case 'SdeContenedorAsGuia':
 					return new QQNodeGuiaPiezasSdeContenedorAsGuia($this);
 				case 'GuiaPiezaPodAsGuiaPieza':

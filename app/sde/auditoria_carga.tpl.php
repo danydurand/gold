@@ -3,13 +3,13 @@ $strPageTitle = QApplication::Translate('Auditoría de Carga Recibida');
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
     <div class="titulo-formulario">
-        <div class="col-xs-4 col-md-3 col-lg-3 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
+        <div class="col-xs-2 col-md-2 col-lg-2 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
             <?php $this->lblTituForm->Render(); ?>
         </div>
         <div class="hidden-xs hidden-sm col-md-6 col-lg-5" style="text-align: right; margin-top: -0.25em;">
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnSave->Render(); ?>
-            <?php $this->btnRepoDisc->Render() ?>
+            <?php $this->btnErroProc->Render() ?>
         </div>
         <div class="hidden-sm col-md-3 col-lg-4"></div>
     </div>
@@ -21,10 +21,13 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12" style="margin-top: 0.7em;">
-                    <?php $this->lstOperAbie->RenderWithName(); ?>
+                <div class="col-md-6" style="margin-top: 0.7em;">
+                    <?php $this->lstOperSist->RenderWithName(); ?>
                     <?php $this->lstNumeCont->RenderWithName(); ?>
                     <?php $this->txtListNume->RenderWithName(); ?>
+                </div>
+                <div class="col-md-6">
+                    <?php $this->dtgPiezMani->Render(); ?>
                 </div>
             </div>
         </div>

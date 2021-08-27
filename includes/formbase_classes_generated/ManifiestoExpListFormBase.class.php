@@ -82,12 +82,16 @@ abstract class ManifiestoExpListFormBase extends QForm {
         $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Destino);
         $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->LineaAerea);
         $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->MasterAwb);
+        $this->dtgManifiestoExps->MetaAddColumn('NroBl');
         $this->dtgManifiestoExps->MetaAddColumn('FechaCreacion');
         $this->dtgManifiestoExps->MetaAddColumn('FechaDespacho');
         $this->dtgManifiestoExps->MetaAddColumn('Vuelo');
+        $this->dtgManifiestoExps->MetaAddColumn('Booking');
         $this->dtgManifiestoExps->MetaAddColumn('Piezas');
         $this->dtgManifiestoExps->MetaAddColumn('Libras');
         $this->dtgManifiestoExps->MetaAddColumn('Volumen');
+        $this->dtgManifiestoExps->MetaAddColumn('Kilos');
+        $this->dtgManifiestoExps->MetaAddColumn('PiesCub');
         $this->dtgManifiestoExps->MetaAddColumn('Valor');
         $this->dtgManifiestoExps->MetaAddColumn('CreatedAt');
         $this->dtgManifiestoExps->MetaAddColumn('UpdatedAt');

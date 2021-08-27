@@ -13,91 +13,186 @@ require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 class AuditoriaCarga extends FormularioBaseKaizen {
     protected $objDataBase;
 
-    protected $lstOperAbie;  // Combo de Operaciones Abiertas
+    protected $lstOperSist;  // Combo de Operaciones Abiertas
     protected $lstNumeCont;  // Lista de Contenedores
     protected $txtListNume;  // Lista de Guías
 
     protected $arrListNume;  // Arreglo que contiene los números de la lista
     protected $arrColuQury;
     protected $arrValoQury;
-    protected $arrGuiaDisc;
     protected $arrGuiaSina;
+    protected $dtgPiezMani;
 
     protected $strCadeSqlx;
     protected $lstTipoOper;
     protected $blnExisCont;
     protected $btnRepoDisc;
+    /* @var $objContaine Containers */
+    protected $objContaine;
+    protected $btnErroProc;
+    protected $objProcEjec;
+
 
     protected function Form_Create() {
         parent::Form_Create();
-        //$this->validarCampos();
+
         $this->lblTituForm->Text = QApplication::Translate('Auditoría de Carga');
 
-        $this->lstOperAbier_Create();
+        $_SESSION['ValiRepe'] = Parametros::BuscarParametro('VALIREPE','CKPTREPE','Val1',1);
+        if ($_SESSION['ValiRepe']) {
+            t('Voy a validar Ckpt repetidos');
+        }
+
+        $this->lstOperSist_Create();
         $this->lstNumeCont_Create();
         $this->txtListNume_Create();
+        $this->dtgPiezMani_Create();
+        $this->btnErroProc_Create();
 
-        $this->btnRepoDisc_Create();
     }
 
     //----------------------------
     // Aquí se Crean los Objetos
     //----------------------------
 
-    // Operaciones //
-    protected function lstOperAbier_Create() {
-        $this->lstOperAbie = new QListBox($this);
-        $this->lstOperAbie->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
-        $this->lstOperAbie->Name = QApplication::Translate('Operación/Ruta');
-        $this->lstOperAbie->Width = 300;
-        $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('lstOperAbie_Change'));
-        $objClausula   = QQ::Clause();
-        $objClausula[] = QQ::OrderBy(QQN::SdeOperacion()->RutaId);
-        foreach (SdeOperacion::LoadArrayByCodiTipo(1,$objClausula) as $objOperacion) {
-            $this->lstOperAbie->AddItem($objOperacion->__toString(),$objOperacion->CodiOper);
+    protected function btnErroProc_Create() {
+        $this->btnErroProc = new QButtonD($this);
+        $this->btnErroProc->Text = TextoIcono('eye','Error(es)','F','lg');
+        $this->btnErroProc->AddAction(new QClickEvent(), new QServerAction('btnErroProc_Click'));
+        $this->btnErroProc->Visible = false;
+    }
+
+    protected function dtgPiezMani_Create() {
+        $this->dtgPiezMani = new QDataGrid($this);
+        $this->dtgPiezMani->FontSize = 12;
+        $this->dtgPiezMani->ShowFilter = false;
+
+        $this->dtgPiezMani->CssClass = 'datagrid';
+        $this->dtgPiezMani->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgPiezMani->Paginator = new QPaginator($this->dtgPiezMani);
+        $this->dtgPiezMani->ItemsPerPage = 5;
+
+        $this->dtgPiezMani->UseAjax = true;
+
+        $this->dtgPiezMani->SetDataBinder('dtgPiezMani_Bind');
+
+        $this->dtgPiezManiColumns();
+
+    }
+
+    protected function dtgPiezMani_Bind() {
+
+        if (!is_null($this->objContaine)) {
+            $arrPiezMani = $this->objContaine->GetPiezasConCheckpoint('TR','Id');
+            foreach ($arrPiezMani as $objPiezMani) {
+                t($objPiezMani);
+            }
+            $this->dtgPiezMani->TotalItemCount = count($arrPiezMani);
+            $this->dtgPiezMani->DataSource     = GuiaPiezas::QueryArray(
+                QQ::AndCondition(QQ::In(QQN::GuiaPiezas()->Id,$arrPiezMani)),
+                QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause)
+            );
         }
     }
 
-    // Nro de Contenedor //
+    protected function dtgPiezManiColumns() {
+        $colIdxxPiez = new QDataGridColumn($this);
+        $colIdxxPiez->Name = QApplication::Translate('IdPieza');
+        $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
+        $colIdxxPiez->Width = 70;
+        $this->dtgPiezMani->AddColumn($colIdxxPiez);
+
+        $colServImpo = new QDataGridColumn($this);
+        $colServImpo->Name = QApplication::Translate('Prod');
+        $colServImpo->Html = '<?= $_ITEM->Guia->Producto->Codigo ?>';
+        $colServImpo->Width = 30;
+        $this->dtgPiezMani->AddColumn($colServImpo);
+
+        $colKiloPiez = new QDataGridColumn($this);
+        $colKiloPiez->Name = QApplication::Translate('Kilos');
+        $colKiloPiez->Html = '<?= $_ITEM->Kilos ?>';
+        $colKiloPiez->Width = 30;
+        $this->dtgPiezMani->AddColumn($colKiloPiez);
+
+        $colVoluPiez = new QDataGridColumn($this);
+        $colVoluPiez->Name = QApplication::Translate('PiesCub');
+        $colVoluPiez->Html = '<?= $_ITEM->PiesCub ?>';
+        $colVoluPiez->Width = 30;
+        $this->dtgPiezMani->AddColumn($colVoluPiez);
+
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $colUltiCkpt->Width = 30;
+        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+
+    }
+
+    protected function lstOperSist_Create() {
+        $this->lstOperSist = new QListBox($this);
+        $this->lstOperSist->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
+        $this->lstOperSist->Name = QApplication::Translate('Operación/Ruta');
+        $this->lstOperSist->Width = 280;
+        $this->lstOperSist->AddAction(new QChangeEvent(), new QAjaxAction('lstOperSist_Change'));
+        $objClausula   = QQ::Clause();
+        $objClausula[] = QQ::OrderBy(QQN::SdeOperacion()->RutaId);
+        foreach (SdeOperacion::LoadArrayByCodiTipo(1,$objClausula) as $objOperacion) {
+            $this->lstOperSist->AddItem($objOperacion->__toString(),$objOperacion->CodiOper);
+        }
+    }
+
     protected function lstNumeCont_Create() {
         $this->lstNumeCont = new QListBox($this);
         $this->lstNumeCont->Name = QApplication::Translate('Precinto/Contenedor');
-        $this->lstNumeCont->Width = 300;
+        $this->lstNumeCont->Width = 280;
+        $this->lstNumeCont->AddAction(new QChangeEvent(), new QAjaxAction('lstNumeCont_Change'));
     }
 
-    // Lista de Seriales o Items asociados a una Guía //
     protected function txtListNume_Create() {
         $this->txtListNume = new QTextBox($this);
-        $this->txtListNume->Name = QApplication::Translate('Guías');
+        $this->txtListNume->Name = QApplication::Translate('Piezas');
         $this->txtListNume->TextMode = QTextMode::MultiLine;
         $this->txtListNume->Rows = 20;
-        $this->txtListNume->Width = 300;
+        $this->txtListNume->Width = 280;
         $this->txtListNume->Height = 240;
     }
 
-    protected function btnRepoDisc_Create() {
-        $this->btnRepoDisc = new QButtonI($this);
-        $this->btnRepoDisc->Text = TextoIcono('wpforms','Ver Discrepancia','F','fa-lg');
-        $this->btnRepoDisc->AddAction(new QClickEvent(), new QServerAction('reporteDeDiscrepancias'));
-        $this->btnRepoDisc->Enabled = false;
-    }
 
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
 
-    protected function lstOperAbie_Change() {
+    protected function btnErroProc_Click() {
+        $_SESSION['PagiBack'] = "/auditoria_carga.php/";
+        QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
+    }
+
+
+    protected function lstOperSist_Change() {
         $this->lstNumeCont->RemoveAllItems();
-        //$arrContPend = SdeContenedor::LoadArrayByCodiOperStatCont($this->lstOperAbie->SelectedValue,'R',QQ::Clause(QQ::OrderBy(QQN::SdeContenedor()->Fecha,false),QQ::LimitInfo(1000)));
-        $arrContPend = Containers::LoadArrayByOperacionIdEstatus($this->lstOperAbie->SelectedValue,'RECIBID@',QQ::Clause(QQ::OrderBy(QQN::Containers()->Id,false),QQ::LimitInfo(50)));
+        $arrContPend = Containers::LoadArrayByOperacionIdEstatusTipo(
+            $this->lstOperSist->SelectedValue,
+            'RECIBID@',
+            'MANIF',
+            QQ::Clause(QQ::OrderBy(QQN::Containers()->Id,false),
+            QQ::LimitInfo(50))
+        );
         $intContPend = count($arrContPend);
         $this->lstNumeCont->AddItem(QApplication::Translate('- Seleccione Uno - ('.$intContPend.')'),null);
         foreach ($arrContPend as $objContenedor) {
             $this->lstNumeCont->AddItem($objContenedor->Numero,$objContenedor->Id);
         }
-        $this->lstNumeCont->Width = 300;
+        $this->lstNumeCont->Width = 280;
     }
 
+    protected function lstNumeCont_Change() {
+        $intIdxxMani = $this->lstNumeCont->SelectedValue;
+        $this->objContaine = !is_null($intIdxxMani)
+            ? Containers::Load($intIdxxMani)
+            : null;
+        $this->dtgPiezMani->Refresh();
+    }
 
     protected function Form_Validate() {
         $strTextMens = 'Los siguientes campos son requeridos: <b>';
@@ -107,7 +202,7 @@ class AuditoriaCarga extends FormularioBaseKaizen {
         //------------------------------------
         // Validando campo de Operación/Ruta.
         //------------------------------------
-        if (is_null($this->lstOperAbie->SelectedValue)){
+        if (is_null($this->lstOperSist->SelectedValue)){
             $blnTodoOkey = false;
             $strMensErro .= 'Operación/Ruta';
         }
@@ -142,83 +237,73 @@ class AuditoriaCarga extends FormularioBaseKaizen {
         return $blnTodoOkey;
     }
 
-
-    protected function reporteDeDiscrepancias() {
-        $arrEnca2PDF = array('Nro de Guia','Destinatario','Origen','Destino','Peso','Piezas','Discrepancia');
-        $arrAnch2PDF = array(25,90,20,20,15,15,20);
-        $arrJust2PDF = array('C','L','C','C','R','R','C');
-        $_SESSION['Dato'] = serialize($this->arrGuiaDisc);
-        $_SESSION['Enca'] = serialize($arrEnca2PDF);
-        $_SESSION['Anch'] = serialize($arrAnch2PDF);
-        $_SESSION['Just'] = serialize($arrJust2PDF);
-        QApplication::Redirect('../util/tabla2pdf2.php?nomb_repo=Discrepancias');
-    }
-
     protected function btnSave_Click() {
-        $this->objDataBase = QApplication::$Database[1];
-        t('Proceso: Auditoria de Carga');
+        $blnHayxErro = false;
+        $strNombProc = 'Auditoria del Manif: '.$this->lstNumeCont->SelectedName;
+        $this->objProcEjec = CrearProceso($strNombProc);
+
         t('===========================');
+        t('Proceso: Auditoria de Carga');
         $objContenedor = Containers::Load($this->lstNumeCont->SelectedValue);
         $intCodiRuta = $objContenedor->Operacion->RutaId;
         $intContGuia = 0;
         $intContCkpt = 0;
         $intContSobr = 0;
         $intContFalt = 0;
+        $arrPiezAudi = [];
 
         $strCkptAudi = 'AV';  // Auditoria de Valija
         $strCkptRece = 'AR';  // LLegada a la Sucursal
-        t('Checkpoints establecidos');
-        //---------------------------------------------------------------------------------------------------------
-        // Se registra un checkpoint "Uno" para cada Guía digitada en la pantalla. Esto se hace siempre y cuando
-        // no tenga dicho checkpoint previamente registrado en la Sucursal
-        //---------------------------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------
+        // Se registra un checkpoint de Auditoria para cada pieza digitada en la pantalla.
+        //----------------------------------------------------------------------------------
         $this->arrListNume = array();
         $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
-        //---------------------------------------------------------------------------------------
-        // Con la función "DejarSoloLosNumeros1" se eliminan los caractéres especiales y letras
-        //---------------------------------------------------------------------------------------
-        //array_walk($this->arrListNume,'DejarSoloLosNumeros1');
-        //-----------------------------------------------------------------------------
-        // Con "array_unique" se eliminan las guías repetidas en caso de que las haya
-        //-----------------------------------------------------------------------------
-        $this->arrListNume = array_unique($this->arrListNume);
+        //--------------------------------------------
+        // Se eliminan lineas repetidas y en blanco
+        //--------------------------------------------
+        $this->arrListNume = LimpiarArreglo($this->arrListNume,false);
         $this->arrGuiaSina = array();
         $this->txtListNume->Text = '';
         t('Voy a grabar el checkpoint '.$strCkptAudi.' para cada pieza ');
         $objCkptAudi = Checkpoints::LoadByCodigo($strCkptAudi);
         foreach ($this->arrListNume as $strPiezArri) {
             t("Procesando: ".$strPiezArri);
-            if (strlen($strPiezArri) > 0) {
-                $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strPiezArri);
-                if ($objGuiaPiez) {
-                    t("Voy a evaluar la pieza: ".$objGuiaPiez->IdPieza);
-                    if ($objGuiaPiez->ultimoCheckpointEnSucursal($this->objUsuario->SucursalId) != $strCkptAudi) {
-                        t("Esa pieza no tiene ".$strCkptAudi." en ".$this->objUsuario->Sucursal->Iata);
-                        //----------------------------------------------------------
-                        // Se registra el checkpoint correspondiente para la pieza
-                        //----------------------------------------------------------
-                        $arrDatoCkpt = array();
-                        $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-                        $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
-                        $arrDatoCkpt['CodiCkpt'] = $objCkptAudi->Id;
-                        $arrDatoCkpt['TextCkpt'] = $objCkptAudi->Descripcion." (".$objContenedor->Numero.")";
-                        $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-                        $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                        if ($arrResuGrab['TodoOkey']) {
-                            $intContCkpt ++;
-                            t("Ya grabe el checkpoint para la pieza. Van: ".$intContCkpt." checkpoints grabados");
-                        } else {
-                            $blnTodoOkey = false;
-                            t("Error al registrar checkpoint a la pieza: ".$objGuiaPiez->IdPieza." ".$arrResuGrab['MotiNook']);
-                            $strMensUsua  = QApplication::Translate("Error al registrar checkpoint a la pieza: ".$objGuiaPiez->IdPieza);
-                            $strMensUsua .= " - ".$arrResuGrab['MotiNook'];
-                            $this->mensaje($strMensUsua,'','d','i','hand-stop-o');
-                            $this->btnSave->Enabled = false;
-                        }
-                    }
-                    $intContGuia++;
-                }
+            $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strPiezArri);
+            if (!$objGuiaPiez) {
+                t('La pieza no existe en la base de datos: '.$strPiezArri);
+                $blnHayxErro = true;
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strPiezArri;
+                $arrParaErro['MensErro'] = 'LA PIEZA NO EXISTE';
+                $arrParaErro['ComeErro'] = 'GRABANDO CHECKPOINT AV';
+                GrabarError($arrParaErro);
+                continue;
             }
+            //----------------------------------------------------------
+            // Se registra el checkpoint correspondiente para la pieza
+            //----------------------------------------------------------
+            $arrDatoCkpt = array();
+            $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+            $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+            $arrDatoCkpt['CodiCkpt'] = $objCkptAudi->Id;
+            $arrDatoCkpt['TextCkpt'] = $objCkptAudi->Descripcion." (".$objContenedor->Numero.")";
+            $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
+            $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+            if ($arrResuGrab['TodoOkey']) {
+                $intContCkpt ++;
+                $arrPiezAudi[] = $objGuiaPiez->IdPieza;
+                t("Ya grabe el checkpoint para la pieza. Van: ".$intContCkpt." checkpoints grabados");
+            } else {
+                t("Error al registrar checkpoint a la pieza: ".$objGuiaPiez->IdPieza." ".$arrResuGrab['MotiNook']);
+                $blnHayxErro = true;
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $objGuiaPiez->IdPieza;
+                $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
+                $arrParaErro['ComeErro'] = 'GRABANDO CHECKPOINT AV';
+                GrabarError($arrParaErro);
+            }
+            $intContGuia++;
         }
         sleep(1);
         //---------------------------------------------------------------------------------------------------
@@ -231,97 +316,79 @@ class AuditoriaCarga extends FormularioBaseKaizen {
             t($strIdxxPiez);
         }
 
-
-        $arrPiezAudi = $this->arrListNume;
+        //$arrPiezAudi = $this->arrListNume;
         t('Piezas Auditadas:');
         foreach ($arrPiezAudi as $strIdxxPiez) {
             t($strIdxxPiez);
         }
 
-        $this->arrGuiaDisc = array();  // Arreglo de Discrepancias
         //-------------------------
         // Detección de Sobrantes
         //-------------------------
         t('Deteccion de Sobrantes');
         $objCkptRece = Checkpoints::LoadByCodigo($strCkptRece);
         foreach ($arrPiezAudi as $strPiezAudi) {
-            if (strlen($strPiezAudi) > 0) {
-                //---------------------------------------------------
-                // Se Chequean las piezas recibidas vs las auditadas
-                //---------------------------------------------------
-                t("Voy a verificar si la guia ".$strPiezAudi." llego a la Sucursal/Almacen");
-                if (!in_array($strPiezAudi,$arrPiezReci)) {
-                    $objPiezDisc = GuiaPiezas::LoadByIdPieza($strPiezAudi);
-                    if ($objPiezDisc) {
-                        t("Verificando que la Guia ".$objPiezDisc->Guia->Numero." este Anulada/Borrada ");
-                        if ($objPiezDisc->Guia->Anulada()) {
-                            //------------------------
-                            // La guía está eliminada
-                            //------------------------
-                            t('Guia Eliminada');
-                            $this->arrGuiaDisc[] = array($strPiezAudi,QApplication::Translate('La Guia fue Eliminada'),'','','','','FUE ELIMINADA');
-                            $this->txtListNume->Text .= $strPiezAudi." (ELIMINADA)".chr(13);
-                        } else {
-                            t("La guia ".$strPiezAudi." no aparece como Recibida, por lo tanto se considera un Sobrante");
-                            $this->arrGuiaDisc[] = array(
-                                $strPiezAudi,
-                                $objPiezDisc->Guia->NombreDestinatario,
-                                $objPiezDisc->Guia->Origen->Iata,
-                                $objPiezDisc->Guia->Destino->Iata,
-                                $objPiezDisc->Kilos,
-                                $objPiezDisc->Guia->Piezas,
-                                'SOBRANTE'
-                            );
-                            t('Pieza Sobrante: '.$strPiezAudi);
-                            $this->txtListNume->Text .= $strPiezAudi." (SOBRANTE)".chr(13);
-                            $intContSobr++;
+            //---------------------------------------------------
+            // Se Chequean las piezas recibidas vs las auditadas
+            //---------------------------------------------------
+            t("Voy a verificar si la pieza ".$strPiezAudi." llego a la Sucursal/Almacen");
+            if (!in_array($strPiezAudi,$arrPiezReci)) {
+                $objPiezDisc = GuiaPiezas::LoadByIdPieza($strPiezAudi);
+                if (!$objPiezDisc) {
+                    t('La Pieza no Existe');
+                    $intContSobr++;
 
-                            if ($strPiezAudi) {
-                                //---------------------------------------------------------------
-                                // Se Registra el Checkpoint de Recepción para la Guía Sobrante
-                                //---------------------------------------------------------------
-                                $arrDatoCkpt = array();
-                                $arrDatoCkpt['NumePiez'] = $strPiezAudi;
-                                $arrDatoCkpt['GuiaAnul'] = $objPiezDisc->Guia->Anulada();
-                                $arrDatoCkpt['CodiCkpt'] = $objCkptRece->Id;
-                                $arrDatoCkpt['TextCkpt'] = $objCkptRece->Descripcion." (".$objContenedor->Numero.")";
-                                $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-                                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                                sleep(1);
-                                //------------------------------------------------------------------
-                                // Se Registra el Checkpoint de Confirmación para la Guía Sobrante
-                                //------------------------------------------------------------------
-                                $arrDatoCkpt = array();
-                                $arrDatoCkpt['NumePiez'] = $strPiezAudi;
-                                $arrDatoCkpt['GuiaAnul'] = $objPiezDisc->Guia->Anulada();
-                                $arrDatoCkpt['CodiCkpt'] = $objCkptAudi->Id;
-                                $arrDatoCkpt['TextCkpt'] = $objCkptAudi->Descripcion." (".$objContenedor->Numero.")";
-                                $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-                                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                                //----------------------------------
-                                // Se Asocia la Guia al Contenedor
-                                //----------------------------------
-                                $objContenedor->AssociateGuiaPiezasAsContainerPieza($objPiezDisc);
-                                t('Pieza ha sido asociada al contenedor');
-                            } else {
-                                t('La pieza no existe');
-                                $this->txtListNume->Text .= $strPiezAudi." (NO EXISTE)".chr(13);
-                            }
-                        }
-                    } else {
-                        t('La Pieza no Existe');
-                        $intContSobr++;
-                        $this->arrGuiaDisc[] = array($strPiezAudi,QApplication::Translate('La Pieza NO EXISTE'),'','','','','NO EXISTE');
-                        $this->txtListNume->Text .= $strPiezAudi." (NO EXISTE)".chr(13);
-                    }
+                    $blnHayxErro = true;
+                    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $strPiezAudi;
+                    $arrParaErro['MensErro'] = 'SOBRANTE';
+                    $arrParaErro['ComeErro'] = 'LA PIEZA NO EXISTE';
+                    GrabarError($arrParaErro);
+                    continue;
                 }
+                t("La guia ".$strPiezAudi." no aparece como Recibida, por lo tanto se considera un Sobrante");
+                $intContSobr++;
+
+                $blnHayxErro = true;
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strPiezAudi;
+                $arrParaErro['MensErro'] = 'SOBRANTE';
+                $arrParaErro['ComeErro'] = 'LA PIEZA NO APARECE COMO RECIBIDA';
+                GrabarError($arrParaErro);
+
+                //---------------------------------------------------------------
+                // Se Registra el Checkpoint de Recepción para la Guía Sobrante
+                //---------------------------------------------------------------
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumePiez'] = $strPiezAudi;
+                $arrDatoCkpt['GuiaAnul'] = $objPiezDisc->Guia->Anulada();
+                $arrDatoCkpt['CodiCkpt'] = $objCkptRece->Id;
+                $arrDatoCkpt['TextCkpt'] = $objCkptRece->Descripcion." (".$objContenedor->Numero.")";
+                $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
+                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                sleep(1);
+                //------------------------------------------------------------------
+                // Se Registra el Checkpoint de Confirmación para la Guía Sobrante
+                //------------------------------------------------------------------
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumePiez'] = $strPiezAudi;
+                $arrDatoCkpt['GuiaAnul'] = $objPiezDisc->Guia->Anulada();
+                $arrDatoCkpt['CodiCkpt'] = $objCkptAudi->Id;
+                $arrDatoCkpt['TextCkpt'] = $objCkptAudi->Descripcion." (".$objContenedor->Numero.")";
+                $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
+                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                //----------------------------------
+                // Se Asocia la Guia al Contenedor
+                //----------------------------------
+                $objContenedor->AssociateGuiaPiezasAsContainerPieza($objPiezDisc);
+                t('Pieza ha sido asociada al contenedor');
             }
         }
+
         //-------------------------
         // Detección de Faltantes
         //-------------------------
         t('Deteccion de Faltantes');
-        $objCkptFalt = Checkpoints::LoadByCodigo('MF');
         foreach ($arrPiezReci as $strPiezReci) {
             //------------------------------------------------
             // Piezas manifestadas vs las piezas scanneadas
@@ -329,48 +396,58 @@ class AuditoriaCarga extends FormularioBaseKaizen {
             t("Voy a verificar si la pieza ".$strPiezReci." fue Auditada");
             if (!in_array($strPiezReci,$arrPiezAudi)) {
                 $objPiezDisc = GuiaPiezas::LoadByIdPieza($strPiezReci);
-                if ($objPiezDisc) {
-                    if ($objPiezDisc->Guia->Anulada()) {
-                        t('La guia de la pieza: '.$strPiezReci.' fue eliminada');
-                        $this->arrGuiaDisc[] = array($strPiezReci,QApplication::Translate('La Guia FUE ELIMINADA'),'','','','','FUE ELIMINADA');
-                        $this->txtListNume->Text .= $strPiezReci." (ELIMINADA)".chr(13);
-                    } else {
-                        t("La pieza ".$strPiezReci." esta manifestada pero no se confirmo su Recepcion, se trata de un Faltante");
-                        $this->arrGuiaDisc[] = array(
-                            $strPiezReci,
-                            $objPiezDisc->Guia->NombreDestinatario,
-                            $objPiezDisc->Guia->Origen->Iata,
-                            $objPiezDisc->Guia->Destino->Iata,
-                            $objPiezDisc->Kilos,
-                            $objPiezDisc->Guia->Piezas,
-                            'FALTANTE'
-                        );
-                        $this->txtListNume->Text .= $strPiezReci." (FALTANTE)".chr(13);
-                        $intContFalt++;
-                        //------------------------------------------------------
-                        // Se Registra un checkpoint para cada pieza Faltante
-                        //------------------------------------------------------
-                        $arrDatoCkpt = array();
-                        $arrDatoCkpt['NumePiez'] = $strPiezReci;
-                        $arrDatoCkpt['GuiaAnul'] = $objPiezDisc->Guia->Anulada();
-                        $arrDatoCkpt['CodiCkpt'] = $objCkptFalt->Id;
-                        $arrDatoCkpt['TextCkpt'] = $objCkptFalt->Descripcion." (".$objContenedor->Numero.")";
-                        $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-                        $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-                    }
-                } else {
-                    $this->arrGuiaDisc[] = array($strPiezReci,QApplication::Translate('La Guia NO EXISTE'),'','','','','NO EXISTE');
-                    $this->txtListNume->Text .= $strPiezReci." (NO EXISTE)".chr(13);
+                if (!$objPiezDisc) {
+                    $blnHayxErro = true;
+                    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $strPiezReci;
+                    $arrParaErro['MensErro'] = 'NO EXISTE';
+                    $arrParaErro['ComeErro'] = 'LA PIEZA NO EXISTE';
+                    GrabarError($arrParaErro);
+                    continue;
+                }
+                if (!$objPiezDisc->tieneCheckpointEnSucursal('AV',$this->objUsuario->SucursalId)) {
+                    t("La pieza ".$strPiezReci." esta manifestada pero no se confirmo su Recepcion, se trata de un Faltante");
+                    $blnHayxErro = true;
+                    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $strPiezReci;
+                    $arrParaErro['MensErro'] = 'FALTANTE';
+                    $arrParaErro['ComeErro'] = 'PIEZA MANIFESTADA SIN CONFIRMACION DE RECEPCION';
+                    GrabarError($arrParaErro);
+
+                    $intContFalt++;
                 }
             }
         }
-        if (count($this->arrGuiaDisc) == 0) {
-            $strMensUsua = QApplication::Translate(sprintf("Transaccion Exitosa. Se validaron (%s) Guias",$intContGuia));
-            $this->mensaje($strMensUsua,'','','i','check');
+        $strTextMens = "Recibidas: $intContCkpt | Sobrantes: $intContSobr | Faltantes: $intContFalt";
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->NotificarAdmin = true;
+        $this->objProcEjec->Save();
+        //----------------------------------------------
+        // Se deja registro de la transacción realizada
+        //----------------------------------------------
+        $arrLogxCamb['strNombTabl'] = 'ProcesoError';
+        $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
+        $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
+        $arrLogxCamb['strDescCamb'] = 'Ejecutado';
+        $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
+        LogDeCambios($arrLogxCamb);
+        //-------------------------------------
+        // Se cambia el estatus al Manifiesto
+        //-------------------------------------
+        $objContenedor->Estatus = 'AUDITAD@';
+        $objContenedor->Save();
+        $objContenedor->logDeCambios('AUDITADO: '.$strTextMens);
+
+
+        if ($blnHayxErro) {
+            $this->btnErroProc->Visible = true;
+            $this->warning($strTextMens);
         } else {
-            $strMensUsua = QApplication::Translate(sprintf("Hubo Discrepancias. Faltantes (%s) / Sobrantes ".$intContSobr,$intContFalt,$intContSobr));
-            $this->mensaje($strMensUsua,'','d','i','hand-stop-o');
-            $this->btnRepoDisc->Enabled = true;
+            $this->success($strTextMens);
         }
     }
 }

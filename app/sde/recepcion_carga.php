@@ -94,29 +94,20 @@ class RecepcionCarga extends FormularioBaseKaizen {
 
     protected function lstOperAbie_Change() {
         $this->lstNumeCont->RemoveAllItems();
-        //$arrContPend = SdeContenedor::LoadArrayByCodiOperStatCont($this->lstOperAbie->SelectedValue, 'P', QQ::Clause(QQ::OrderBy(QQN::SdeContenedor()->Fecha, false),QQ::LimitInfo(200)));
-        $arrContPend = Containers::LoadArrayByOperacionIdEstatus($this->lstOperAbie->SelectedValue, 'ABIERT@', QQ::Clause(QQ::OrderBy(QQN::Containers()->Id, false),QQ::LimitInfo(50)));
+        $arrContPend = Containers::LoadArrayByOperacionIdEstatusTipo(
+            $this->lstOperAbie->SelectedValue,
+            'ABIERT@',
+            'MANIF',
+            QQ::Clause(QQ::OrderBy(QQN::Containers()->Id, false),
+            QQ::LimitInfo(50))
+        );
         $intContPend = count($arrContPend);
         $this->lstNumeCont->AddItem(QApplication::Translate('- Seleccione Uno - (' . $intContPend . ')'), null);
         foreach ($arrContPend as $objContenedor) {
-            $intCantPiez = $objContenedor->CountGuiaPiezasesAsContainerPieza();
+            $intCantPiez = $objContenedor->Piezas;
             $this->lstNumeCont->AddItem($objContenedor->Numero.' ('.$intCantPiez.')', $objContenedor->Id);
-            //$this->lstNumeCont->AddItem($objContenedor->Numero, $objContenedor->Id);
         }
         $this->lstNumeCont->Width = 200;
-    }
-
-    protected function obtenerGuiasDeLaMaster($strNumeVali){
-        $strCadeSqlx  = "select nume_guia ";
-        $strCadeSqlx .= "  from sde_contenedor_guia_assn ";
-        $strCadeSqlx .= " where nume_cont = '".$strNumeVali."'";
-        $objDatabase  = SdeContenedor::GetDatabase();
-        $objDbResult  = $objDatabase->Query($strCadeSqlx);
-        $arrGuiaMast  = array();
-        while ($mixRegistro = $objDbResult->FetchArray()) {
-            $arrGuiaMast[] = $mixRegistro['nume_guia'];
-        }
-        return $arrGuiaMast;
     }
 
     protected function inicializarPantalla() {
@@ -226,7 +217,6 @@ class RecepcionCarga extends FormularioBaseKaizen {
             // Ahora se procesan las piezas asociadas al Precinto en forma individual
             // es decir, aquellas que no estan asociadas a una Valija
             //---------------------------------------------------------------------------
-            //$arrGuiaVali = $this->obtenerGuiasDeLaMaster($this->lstNumeCont->SelectedValue);
             $arrPiezVali = $objContenedor->GetGuiaPiezasAsContainerPiezaArray();
             if ($arrPiezVali) {
                 t('La master tiene: '.count($arrPiezVali).' piezas individuales');
