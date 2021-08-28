@@ -54,22 +54,26 @@ abstract class ManifiestoExpEditFormBase extends QForm {
 
 	// Controls for ManifiestoExp's Data Fields
 	protected $lblId;
+	protected $txtNumero;
+	protected $lstOrigen;
+	protected $txtTransporte;
+	protected $txtMaster;
 	protected $lstDestino;
 	protected $lstLineaAerea;
-	protected $lstMasterAwb;
 	protected $txtNroBl;
 	protected $calFechaCreacion;
 	protected $calFechaDespacho;
 	protected $txtVuelo;
 	protected $txtBooking;
 	protected $txtPiezas;
+	protected $txtValijas;
 	protected $txtLibras;
 	protected $txtVolumen;
 	protected $txtKilos;
 	protected $txtPiesCub;
 	protected $txtValor;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
 
@@ -141,22 +145,26 @@ abstract class ManifiestoExpEditFormBase extends QForm {
 
 		// Call MetaControl's methods to create qcontrols based on ManifiestoExp's data fields
 		$this->lblId = $this->mctManifiestoExp->lblId_Create();
+		$this->txtNumero = $this->mctManifiestoExp->txtNumero_Create();
+		$this->lstOrigen = $this->mctManifiestoExp->lstOrigen_Create();
+		$this->txtTransporte = $this->mctManifiestoExp->txtTransporte_Create();
+		$this->txtMaster = $this->mctManifiestoExp->txtMaster_Create();
 		$this->lstDestino = $this->mctManifiestoExp->lstDestino_Create();
 		$this->lstLineaAerea = $this->mctManifiestoExp->lstLineaAerea_Create();
-		$this->lstMasterAwb = $this->mctManifiestoExp->lstMasterAwb_Create();
 		$this->txtNroBl = $this->mctManifiestoExp->txtNroBl_Create();
 		$this->calFechaCreacion = $this->mctManifiestoExp->calFechaCreacion_Create();
 		$this->calFechaDespacho = $this->mctManifiestoExp->calFechaDespacho_Create();
 		$this->txtVuelo = $this->mctManifiestoExp->txtVuelo_Create();
 		$this->txtBooking = $this->mctManifiestoExp->txtBooking_Create();
 		$this->txtPiezas = $this->mctManifiestoExp->txtPiezas_Create();
+		$this->txtValijas = $this->mctManifiestoExp->txtValijas_Create();
 		$this->txtLibras = $this->mctManifiestoExp->txtLibras_Create();
 		$this->txtVolumen = $this->mctManifiestoExp->txtVolumen_Create();
 		$this->txtKilos = $this->mctManifiestoExp->txtKilos_Create();
 		$this->txtPiesCub = $this->mctManifiestoExp->txtPiesCub_Create();
 		$this->txtValor = $this->mctManifiestoExp->txtValor_Create();
-		$this->lblCreatedAt = $this->mctManifiestoExp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctManifiestoExp->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctManifiestoExp->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctManifiestoExp->calUpdatedAt_Create();
 		$this->txtCreatedBy = $this->mctManifiestoExp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctManifiestoExp->txtUpdatedBy_Create();
 			$this->dtgBags = $this->mctManifiestoExp->dtgBags_Create();

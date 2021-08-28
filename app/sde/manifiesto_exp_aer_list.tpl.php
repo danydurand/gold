@@ -5,7 +5,7 @@
 	// Be sure to move this out of this directory before modifying to ensure that subsequent
 	// code re-generations do not overwrite your changes.
 
-	$strPageTitle = 'ManifiestoExps';
+	$strPageTitle = 'Manif. Exp AER';
 	require(__APP_INCLUDES__ . '/header.inc.php');
 	//require(__APP_INCLUDES__ . '/botonera_list.inc.php');
 ?>
@@ -15,7 +15,6 @@
     </div>
     <div class="col-sm-6 col-md-6 col-lg-6" style="text-align: center; margin-top: -0.25em;">
         <?php $this->btnNuevRegi->Render() ?>
-        <?php $this->btnNuevExpm->Render() ?>
         <?php $this->btnFiltAvan->Render() ?>
         <?php $this->btnExpoExce->Render() ?>
     </div>

@@ -73,6 +73,8 @@
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsSucursalArray the value for the private _objHistoriaClienteAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.sucursal_id reverse relationship
 	 * @property-read ManifiestoExp $_ManifiestoExpAsDestino the value for the private _objManifiestoExpAsDestino (Read-Only) if set due to an expansion on the manifiesto_exp.destino_id reverse relationship
 	 * @property-read ManifiestoExp[] $_ManifiestoExpAsDestinoArray the value for the private _objManifiestoExpAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp.destino_id reverse relationship
+	 * @property-read ManifiestoExp $_ManifiestoExpAsOrigen the value for the private _objManifiestoExpAsOrigen (Read-Only) if set due to an expansion on the manifiesto_exp.origen_id reverse relationship
+	 * @property-read ManifiestoExp[] $_ManifiestoExpAsOrigenArray the value for the private _objManifiestoExpAsOrigenArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp.origen_id reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsSucursal the value for the private _objMasterClienteAsSucursal (Read-Only) if set due to an expansion on the master_cliente.sucursal_id reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsSucursalArray the value for the private _objMasterClienteAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.sucursal_id reverse relationship
 	 * @property-read NotaEntregaCkpt $_NotaEntregaCkptAsSucursal the value for the private _objNotaEntregaCkptAsSucursal (Read-Only) if set due to an expansion on the nota_entrega_ckpt.sucursal_id reverse relationship
@@ -565,6 +567,22 @@
 		 * @var ManifiestoExp[] _objManifiestoExpAsDestinoArray;
 		 */
 		private $_objManifiestoExpAsDestinoArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ManifiestoExpAsOrigen object
+		 * (of type ManifiestoExp), if this Sucursales object was restored with
+		 * an expansion on the manifiesto_exp association table.
+		 * @var ManifiestoExp _objManifiestoExpAsOrigen;
+		 */
+		private $_objManifiestoExpAsOrigen;
+
+		/**
+		 * Private member variable that stores a reference to an array of ManifiestoExpAsOrigen objects
+		 * (of type ManifiestoExp[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the manifiesto_exp association table.
+		 * @var ManifiestoExp[] _objManifiestoExpAsOrigenArray;
+		 */
+		private $_objManifiestoExpAsOrigenArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MasterClienteAsSucursal object
@@ -1671,6 +1689,21 @@
 					$objToReturn->_objManifiestoExpAsDestinoArray[] = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasdestino__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objManifiestoExpAsDestino)) {
 					$objToReturn->_objManifiestoExpAsDestino = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasdestino__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ManifiestoExpAsOrigen Virtual Binding
+			$strAlias = $strAliasPrefix . 'manifiestoexpasorigen__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['manifiestoexpasorigen']) ? null : $objExpansionAliasArray['manifiestoexpasorigen']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objManifiestoExpAsOrigenArray)
+				$objToReturn->_objManifiestoExpAsOrigenArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objManifiestoExpAsOrigenArray[] = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasorigen__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objManifiestoExpAsOrigen)) {
+					$objToReturn->_objManifiestoExpAsOrigen = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasorigen__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2830,6 +2863,22 @@
 					 */
 					return $this->_objManifiestoExpAsDestinoArray;
 
+				case '_ManifiestoExpAsOrigen':
+					/**
+					 * Gets the value for the private _objManifiestoExpAsOrigen (Read-Only)
+					 * if set due to an expansion on the manifiesto_exp.origen_id reverse relationship
+					 * @return ManifiestoExp
+					 */
+					return $this->_objManifiestoExpAsOrigen;
+
+				case '_ManifiestoExpAsOrigenArray':
+					/**
+					 * Gets the value for the private _objManifiestoExpAsOrigenArray (Read-Only)
+					 * if set due to an ExpandAsArray on the manifiesto_exp.origen_id reverse relationship
+					 * @return ManifiestoExp[]
+					 */
+					return $this->_objManifiestoExpAsOrigenArray;
+
 				case '_MasterClienteAsSucursal':
 					/**
 					 * Gets the value for the private _objMasterClienteAsSucursal (Read-Only)
@@ -3409,6 +3458,9 @@
 				$arrTablRela[] = 'historia_cliente';
 			}
 			if ($this->CountManifiestoExpsAsDestino()) {
+				$arrTablRela[] = 'manifiesto_exp';
+			}
+			if ($this->CountManifiestoExpsAsOrigen()) {
 				$arrTablRela[] = 'manifiesto_exp';
 			}
 			if ($this->CountMasterClientesAsSucursal()) {
@@ -5847,6 +5899,155 @@
 		}
 
 
+		// Related Objects' Methods for ManifiestoExpAsOrigen
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ManifiestoExpsAsOrigen as an array of ManifiestoExp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExp[]
+		*/
+		public function GetManifiestoExpAsOrigenArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ManifiestoExp::LoadArrayByOrigenId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ManifiestoExpsAsOrigen
+		 * @return int
+		*/
+		public function CountManifiestoExpsAsOrigen() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ManifiestoExp::CountByOrigenId($this->intId);
+		}
+
+		/**
+		 * Associates a ManifiestoExpAsOrigen
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function AssociateManifiestoExpAsOrigen(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpAsOrigen on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpAsOrigen on this Sucursales with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp`
+				SET
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ManifiestoExpAsOrigen
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function UnassociateManifiestoExpAsOrigen(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsOrigen on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsOrigen on this Sucursales with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp`
+				SET
+					`origen_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . ' AND
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ManifiestoExpsAsOrigen
+		 * @return void
+		*/
+		public function UnassociateAllManifiestoExpsAsOrigen() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsOrigen on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp`
+				SET
+					`origen_id` = null
+				WHERE
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ManifiestoExpAsOrigen
+		 * @param ManifiestoExp $objManifiestoExp
+		 * @return void
+		*/
+		public function DeleteAssociatedManifiestoExpAsOrigen(ManifiestoExp $objManifiestoExp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsOrigen on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsOrigen on this Sucursales with an unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . ' AND
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ManifiestoExpsAsOrigen
+		 * @return void
+		*/
+		public function DeleteAllManifiestoExpsAsOrigen() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpAsOrigen on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp`
+				WHERE
+					`origen_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for MasterClienteAsSucursal
 		//-------------------------------------------------------------------
 
@@ -8063,6 +8264,7 @@
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsOrigen
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
+     * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsOrigen
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsSucursal
@@ -8166,6 +8368,8 @@
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteassucursal', 'reverse_reference', 'sucursal_id', 'HistoriaClienteAsSucursal');
 				case 'ManifiestoExpAsDestino':
 					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasdestino', 'reverse_reference', 'destino_id', 'ManifiestoExpAsDestino');
+				case 'ManifiestoExpAsOrigen':
+					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasorigen', 'reverse_reference', 'origen_id', 'ManifiestoExpAsOrigen');
 				case 'MasterClienteAsSucursal':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'NotaEntregaCkptAsSucursal':
@@ -8248,6 +8452,7 @@
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsOrigen
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
+     * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsOrigen
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsSucursal
@@ -8351,6 +8556,8 @@
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteassucursal', 'reverse_reference', 'sucursal_id', 'HistoriaClienteAsSucursal');
 				case 'ManifiestoExpAsDestino':
 					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasdestino', 'reverse_reference', 'destino_id', 'ManifiestoExpAsDestino');
+				case 'ManifiestoExpAsOrigen':
+					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasorigen', 'reverse_reference', 'origen_id', 'ManifiestoExpAsOrigen');
 				case 'MasterClienteAsSucursal':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'NotaEntregaCkptAsSucursal':

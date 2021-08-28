@@ -25,8 +25,6 @@
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property LineaAerea $LineaAerea the value for the LineaAerea object referenced by intLineaAereaId (Not Null)
-	 * @property-read ManifiestoExp $_ManifiestoExp the value for the private _objManifiestoExp (Read-Only) if set due to an expansion on the manifiesto_exp.master_awb_id reverse relationship
-	 * @property-read ManifiestoExp[] $_ManifiestoExpArray the value for the private _objManifiestoExpArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp.master_awb_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class MasterAwbGen extends QBaseClass implements IteratorAggregate {
@@ -107,22 +105,6 @@
 		protected $intUpdatedBy;
 		const UpdatedByDefault = null;
 
-
-		/**
-		 * Private member variable that stores a reference to a single ManifiestoExp object
-		 * (of type ManifiestoExp), if this MasterAwb object was restored with
-		 * an expansion on the manifiesto_exp association table.
-		 * @var ManifiestoExp _objManifiestoExp;
-		 */
-		private $_objManifiestoExp;
-
-		/**
-		 * Private member variable that stores a reference to an array of ManifiestoExp objects
-		 * (of type ManifiestoExp[]), if this MasterAwb object was restored with
-		 * an ExpandAsArray on the manifiesto_exp association table.
-		 * @var ManifiestoExp[] _objManifiestoExpArray;
-		 */
-		private $_objManifiestoExpArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -714,21 +696,6 @@
 
 				
 
-			// Check for ManifiestoExp Virtual Binding
-			$strAlias = $strAliasPrefix . 'manifiestoexp__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objExpansionNode = (empty($objExpansionAliasArray['manifiestoexp']) ? null : $objExpansionAliasArray['manifiestoexp']);
-			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
-			if ($blnExpanded && null === $objToReturn->_objManifiestoExpArray)
-				$objToReturn->_objManifiestoExpArray = array();
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if ($blnExpanded) {
-					$objToReturn->_objManifiestoExpArray[] = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexp__', $objExpansionNode, null, $strColumnAliasArray);
-				} elseif (is_null($objToReturn->_objManifiestoExp)) {
-					$objToReturn->_objManifiestoExp = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexp__', $objExpansionNode, null, $strColumnAliasArray);
-				}
-			}
-
 			return $objToReturn;
 		}
 		
@@ -1208,22 +1175,6 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
-				case '_ManifiestoExp':
-					/**
-					 * Gets the value for the private _objManifiestoExp (Read-Only)
-					 * if set due to an expansion on the manifiesto_exp.master_awb_id reverse relationship
-					 * @return ManifiestoExp
-					 */
-					return $this->_objManifiestoExp;
-
-				case '_ManifiestoExpArray':
-					/**
-					 * Gets the value for the private _objManifiestoExpArray (Read-Only)
-					 * if set due to an ExpandAsArray on the manifiesto_exp.master_awb_id reverse relationship
-					 * @return ManifiestoExp[]
-					 */
-					return $this->_objManifiestoExpArray;
-
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1396,9 +1347,6 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
-			if ($this->CountManifiestoExps()) {
-				$arrTablRela[] = 'manifiesto_exp';
-			}
 			
 			return $arrTablRela;
 		}
@@ -1407,155 +1355,6 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
-
-
-		// Related Objects' Methods for ManifiestoExp
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated ManifiestoExps as an array of ManifiestoExp objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return ManifiestoExp[]
-		*/
-		public function GetManifiestoExpArray($objOptionalClauses = null) {
-			if ((is_null($this->intId)))
-				return array();
-
-			try {
-				return ManifiestoExp::LoadArrayByMasterAwbId($this->intId, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated ManifiestoExps
-		 * @return int
-		*/
-		public function CountManifiestoExps() {
-			if ((is_null($this->intId)))
-				return 0;
-
-			return ManifiestoExp::CountByMasterAwbId($this->intId);
-		}
-
-		/**
-		 * Associates a ManifiestoExp
-		 * @param ManifiestoExp $objManifiestoExp
-		 * @return void
-		*/
-		public function AssociateManifiestoExp(ManifiestoExp $objManifiestoExp) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExp on this unsaved MasterAwb.');
-			if ((is_null($objManifiestoExp->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExp on this MasterAwb with an unsaved ManifiestoExp.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterAwb::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`manifiesto_exp`
-				SET
-					`master_awb_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . '
-			');
-		}
-
-		/**
-		 * Unassociates a ManifiestoExp
-		 * @param ManifiestoExp $objManifiestoExp
-		 * @return void
-		*/
-		public function UnassociateManifiestoExp(ManifiestoExp $objManifiestoExp) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExp on this unsaved MasterAwb.');
-			if ((is_null($objManifiestoExp->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExp on this MasterAwb with an unsaved ManifiestoExp.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterAwb::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`manifiesto_exp`
-				SET
-					`master_awb_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . ' AND
-					`master_awb_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Unassociates all ManifiestoExps
-		 * @return void
-		*/
-		public function UnassociateAllManifiestoExps() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExp on this unsaved MasterAwb.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterAwb::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`manifiesto_exp`
-				SET
-					`master_awb_id` = null
-				WHERE
-					`master_awb_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated ManifiestoExp
-		 * @param ManifiestoExp $objManifiestoExp
-		 * @return void
-		*/
-		public function DeleteAssociatedManifiestoExp(ManifiestoExp $objManifiestoExp) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExp on this unsaved MasterAwb.');
-			if ((is_null($objManifiestoExp->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExp on this MasterAwb with an unsaved ManifiestoExp.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterAwb::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`manifiesto_exp`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objManifiestoExp->Id) . ' AND
-					`master_awb_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes all associated ManifiestoExps
-		 * @return void
-		*/
-		public function DeleteAllManifiestoExps() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExp on this unsaved MasterAwb.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterAwb::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`manifiesto_exp`
-				WHERE
-					`master_awb_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
 
 
 		
@@ -1741,7 +1540,6 @@
      * @property-read QQNode $UpdatedBy
      *
      *
-     * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExp
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1771,8 +1569,6 @@
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'Integer', $this);
-				case 'ManifiestoExp':
-					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexp', 'reverse_reference', 'master_awb_id', 'ManifiestoExp');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -1800,7 +1596,6 @@
      * @property-read QQNode $UpdatedBy
      *
      *
-     * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExp
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1830,8 +1625,6 @@
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'integer', $this);
-				case 'ManifiestoExp':
-					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexp', 'reverse_reference', 'master_awb_id', 'ManifiestoExp');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

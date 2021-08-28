@@ -79,15 +79,19 @@ abstract class ManifiestoExpListFormBase extends QForm {
         // Create the Other Columns (note that you can use strings for manifiesto_exp's properties, or you
         // can traverse down QQN::manifiesto_exp() to display fields that are down the hierarchy)
         $this->dtgManifiestoExps->MetaAddColumn('Id');
+        $this->dtgManifiestoExps->MetaAddColumn('Numero');
+        $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Origen);
+        $this->dtgManifiestoExps->MetaAddColumn('Transporte');
+        $this->dtgManifiestoExps->MetaAddColumn('Master');
         $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Destino);
         $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->LineaAerea);
-        $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->MasterAwb);
         $this->dtgManifiestoExps->MetaAddColumn('NroBl');
         $this->dtgManifiestoExps->MetaAddColumn('FechaCreacion');
         $this->dtgManifiestoExps->MetaAddColumn('FechaDespacho');
         $this->dtgManifiestoExps->MetaAddColumn('Vuelo');
         $this->dtgManifiestoExps->MetaAddColumn('Booking');
         $this->dtgManifiestoExps->MetaAddColumn('Piezas');
+        $this->dtgManifiestoExps->MetaAddColumn('Valijas');
         $this->dtgManifiestoExps->MetaAddColumn('Libras');
         $this->dtgManifiestoExps->MetaAddColumn('Volumen');
         $this->dtgManifiestoExps->MetaAddColumn('Kilos');

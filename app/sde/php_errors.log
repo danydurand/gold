@@ -18,3 +18,162 @@
 [03-Jul-2017 17:39:02 America/La_Paz] PHP Parse error:  syntax error, unexpected '' acá toy! |'' (T_CONSTANT_ENCAPSED_STRING), expecting ',' or ';' in /var/www/html/newliberty/app/sde/resetear_clave.php on line 97
 [03-Jul-2017 17:39:41 America/La_Paz] PHP Parse error:  syntax error, unexpected '}' in /var/www/html/newliberty/app/sde/resetear_clave.php on line 109
 [06-Jul-2017 09:44:27 America/La_Paz] PHP Parse error:  syntax error, unexpected ';' in /var/www/html/newliberty/app/sde/consulta_guia.php on line 386
+[14-Jun-2021 13:46:05 America/Caracas] PHP Parse error:  syntax error, unexpected '$intCanrGrup' (T_VARIABLE) in /var/www/html/gold/app/sde/permisos.php on line 109
+[21-Jun-2021 17:27:19 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[21-Jun-2021 17:27:19 America/Caracas] PHP Stack trace:
+[21-Jun-2021 17:27:19 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/factura_html2pdf.php:0
+[21-Jun-2021 17:27:19 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/factura_html2pdf.php:30
+[21-Jun-2021 17:27:19 America/Caracas] PHP   3. QcodoHandleError() /var/www/html/gold/app/sde/factura_html2pdf.php:117
+[21-Jun-2021 17:27:19 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[21-Jun-2021 17:27:19 America/Caracas] PHP   5. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[21-Jun-2021 17:27:19 America/Caracas] PHP   6. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[21-Jun-2021 17:27:19 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[21-Jun-2021 17:27:19 America/Caracas] PHP Stack trace:
+[21-Jun-2021 17:27:19 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/factura_html2pdf.php:0
+[21-Jun-2021 17:27:19 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/factura_html2pdf.php:30
+[21-Jun-2021 17:27:19 America/Caracas] PHP   3. QcodoHandleError() /var/www/html/gold/app/sde/factura_html2pdf.php:117
+[21-Jun-2021 17:27:19 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[21-Jun-2021 17:27:19 America/Caracas] PHP   5. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[21-Jun-2021 17:27:19 America/Caracas] PHP   6. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[21-Jun-2021 17:27:19 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[21-Jun-2021 17:27:19 America/Caracas] PHP Stack trace:
+[21-Jun-2021 17:27:19 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/factura_html2pdf.php:0
+[21-Jun-2021 17:27:19 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/factura_html2pdf.php:30
+[21-Jun-2021 17:27:19 America/Caracas] PHP   3. QcodoHandleError() /var/www/html/gold/app/sde/factura_html2pdf.php:117
+[21-Jun-2021 17:27:19 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[21-Jun-2021 17:27:19 America/Caracas] PHP   5. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[21-Jun-2021 17:27:19 America/Caracas] PHP   6. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[22-Jun-2021 15:19:54 America/Caracas] PHP Parse error:  syntax error, unexpected 'trim' (T_STRING) in /var/www/html/gold/app/sde/consulta_guia_new.php on line 1156
+[29-Jul-2021 20:01:01 America/Caracas] PHP Warning:  file(/var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php(457) : eval()'d code): failed to open stream: No such file or directory in /var/www/html/gold/assets/_core/php/error_dump.php on line 21
+[29-Jul-2021 20:01:01 America/Caracas] PHP Stack trace:
+[29-Jul-2021 20:01:01 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/registrar_pago.php:0
+[29-Jul-2021 20:01:01 America/Caracas] PHP   2. QFormBase::Run() /var/www/html/gold/app/sde/registrar_pago.php:625
+[29-Jul-2021 20:01:01 America/Caracas] PHP   3. QFormBase->RenderAjax() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:456
+[29-Jul-2021 20:01:01 America/Caracas] PHP   4. QFormBase->RenderAjaxHelper() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:560
+[29-Jul-2021 20:01:01 America/Caracas] PHP   5. QControlBase->RenderAjax() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:540
+[29-Jul-2021 20:01:01 America/Caracas] PHP   6. QControlBase->Render() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1274
+[29-Jul-2021 20:01:01 America/Caracas] PHP   7. QDataGridBase->GetControlHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1249
+[29-Jul-2021 20:01:01 America/Caracas] PHP   8. QDataGridBase->GetDataGridRowHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:738
+[29-Jul-2021 20:01:01 America/Caracas] PHP   9. QDataGridBase::ParseHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:687
+[29-Jul-2021 20:01:01 America/Caracas] PHP  10. eval() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:457
+[29-Jul-2021 20:01:01 America/Caracas] PHP  11. DataGridEvalHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:1
+[29-Jul-2021 20:01:01 America/Caracas] PHP  12. QcodoHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:38
+[29-Jul-2021 20:01:01 America/Caracas] PHP  13. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[29-Jul-2021 20:01:01 America/Caracas] PHP  14. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[29-Jul-2021 20:01:01 America/Caracas] PHP  15. file() /var/www/html/gold/assets/_core/php/error_dump.php:21
+[29-Jul-2021 20:07:25 America/Caracas] PHP Parse error:  syntax error, unexpected '$objPagoApli' (T_VARIABLE) in /var/www/html/gold/app/sde/registrar_pago.php on line 109
+[29-Jul-2021 20:07:28 America/Caracas] PHP Parse error:  syntax error, unexpected '$objPagoApli' (T_VARIABLE) in /var/www/html/gold/app/sde/registrar_pago.php on line 109
+[29-Jul-2021 20:07:52 America/Caracas] PHP Parse error:  syntax error, unexpected '$objPagoApli' (T_VARIABLE) in /var/www/html/gold/app/sde/registrar_pago.php on line 109
+[19-Aug-2021 17:43:24 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:43:24 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:43:24 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:43:24 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:62
+[19-Aug-2021 17:43:24 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:43:24 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:43:24 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:43:24 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:43:24 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:43:24 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:43:24 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:62
+[19-Aug-2021 17:43:24 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:43:24 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:43:24 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:43:24 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:43:24 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:43:24 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:43:24 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:62
+[19-Aug-2021 17:43:24 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:43:24 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:43:24 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:44:02 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:44:02 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:44:02 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:44:02 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:87
+[19-Aug-2021 17:44:02 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:44:02 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:44:02 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:44:02 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:44:02 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:44:02 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:44:02 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:87
+[19-Aug-2021 17:44:02 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:44:02 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:44:02 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:44:02 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:44:02 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:44:02 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:44:02 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:87
+[19-Aug-2021 17:44:02 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:44:02 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:44:02 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:44:31 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:44:31 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:44:31 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:44:31 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:88
+[19-Aug-2021 17:44:31 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:44:31 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:44:31 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:44:31 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:44:31 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:44:31 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:44:31 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:88
+[19-Aug-2021 17:44:31 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:44:31 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:44:31 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 17:44:31 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 17:44:31 America/Caracas] PHP Stack trace:
+[19-Aug-2021 17:44:31 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_normal.php:0
+[19-Aug-2021 17:44:31 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_normal.php:88
+[19-Aug-2021 17:44:31 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 17:44:31 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 17:44:31 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 19:05:19 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 19:05:19 America/Caracas] PHP Stack trace:
+[19-Aug-2021 19:05:19 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_xls_sql.php:0
+[19-Aug-2021 19:05:19 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_xls_sql.php:78
+[19-Aug-2021 19:05:19 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 19:05:19 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 19:05:19 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[19-Aug-2021 19:05:19 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[19-Aug-2021 19:05:19 America/Caracas] PHP Stack trace:
+[19-Aug-2021 19:05:19 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/repo_guias_xls_sql.php:0
+[19-Aug-2021 19:05:19 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/repo_guias_xls_sql.php:78
+[19-Aug-2021 19:05:19 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[19-Aug-2021 19:05:19 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[19-Aug-2021 19:05:19 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[24-Aug-2021 16:38:37 America/Caracas] PHP Warning:  file(/var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php(457) : eval()'d code): failed to open stream: No such file or directory in /var/www/html/gold/assets/_core/php/error_dump.php on line 21
+[24-Aug-2021 16:38:37 America/Caracas] PHP Stack trace:
+[24-Aug-2021 16:38:37 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/auditoria_carga.php:0
+[24-Aug-2021 16:38:37 America/Caracas] PHP   2. QFormBase::Run() /var/www/html/gold/app/sde/auditoria_carga.php:460
+[24-Aug-2021 16:38:37 America/Caracas] PHP   3. QFormBase->RenderAjax() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:456
+[24-Aug-2021 16:38:37 America/Caracas] PHP   4. QFormBase->RenderAjaxHelper() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:560
+[24-Aug-2021 16:38:37 America/Caracas] PHP   5. QControlBase->RenderAjax() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:540
+[24-Aug-2021 16:38:37 America/Caracas] PHP   6. QControlBase->Render() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1274
+[24-Aug-2021 16:38:37 America/Caracas] PHP   7. QDataGridBase->GetControlHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1249
+[24-Aug-2021 16:38:37 America/Caracas] PHP   8. QDataGridBase->GetDataGridRowHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:738
+[24-Aug-2021 16:38:37 America/Caracas] PHP   9. QDataGridBase->ParseColumnHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:649
+[24-Aug-2021 16:38:37 America/Caracas] PHP  10. QDataGridBase::ParseHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:430
+[24-Aug-2021 16:38:37 America/Caracas] PHP  11. eval() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:457
+[24-Aug-2021 16:38:37 America/Caracas] PHP  12. DataGridEvalHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:1
+[24-Aug-2021 16:38:37 America/Caracas] PHP  13. QcodoHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:38
+[24-Aug-2021 16:38:37 America/Caracas] PHP  14. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[24-Aug-2021 16:38:37 America/Caracas] PHP  15. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[24-Aug-2021 16:38:37 America/Caracas] PHP  16. file() /var/www/html/gold/assets/_core/php/error_dump.php:21
+[27-Aug-2021 08:09:17 America/Caracas] PHP Parse error:  syntax error, unexpected 't' (T_STRING) in /var/www/html/gold/app/sde/armar_manif_exp_mar.php on line 739
+[27-Aug-2021 09:41:26 America/Caracas] PHP Warning:  file(/var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php(457) : eval()'d code): failed to open stream: No such file or directory in /var/www/html/gold/assets/_core/php/error_dump.php on line 21
+[27-Aug-2021 09:41:26 America/Caracas] PHP Stack trace:
+[27-Aug-2021 09:41:26 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/armar_manif_exp_mar.php:0
+[27-Aug-2021 09:41:26 America/Caracas] PHP   2. QFormBase::Run() /var/www/html/gold/app/sde/armar_manif_exp_mar.php:765
+[27-Aug-2021 09:41:26 America/Caracas] PHP   3. QFormBase->Render() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:468
+[27-Aug-2021 09:41:26 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:1159
+[27-Aug-2021 09:41:26 America/Caracas] PHP   5. QControlBase->Render() /var/www/html/gold/app/sde/armar_manif_exp_mar.tpl.php:74
+[27-Aug-2021 09:41:26 America/Caracas] PHP   6. QDataGridBase->GetControlHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1249
+[27-Aug-2021 09:41:26 America/Caracas] PHP   7. QDataGridBase->GetDataGridRowHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:738
+[27-Aug-2021 09:41:26 America/Caracas] PHP   8. QDataGridBase->ParseColumnHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:649
+[27-Aug-2021 09:41:26 America/Caracas] PHP   9. QDataGridBase::ParseHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:430
+[27-Aug-2021 09:41:26 America/Caracas] PHP  10. eval() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:457
+[27-Aug-2021 09:41:26 America/Caracas] PHP  11. DataGridEvalHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:1
+[27-Aug-2021 09:41:26 America/Caracas] PHP  12. QcodoHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:38
+[27-Aug-2021 09:41:26 America/Caracas] PHP  13. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[27-Aug-2021 09:41:26 America/Caracas] PHP  14. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[27-Aug-2021 09:41:26 America/Caracas] PHP  15. file() /var/www/html/gold/assets/_core/php/error_dump.php:21

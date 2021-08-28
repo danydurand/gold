@@ -8,15 +8,21 @@ require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 QApplication::CheckRemoteAdmin();
 
 class ArmarManifExpMar extends FormularioBaseKaizen {
-    protected $lstDestMani;  
-    protected $lstMastAwbx;
+    protected $lstOrigMani;
+    protected $lstDestMani;
+    protected $txtNumeMani;
+    protected $txtNumeMast;
     protected $txtNumeBlxx;
     protected $calFechDesp;
     protected $calFechCrea;
-    protected $txtCantPiez;
     protected $txtNumeBook;
+    protected $txtCantVali;
+    protected $txtCantPiez;
     protected $txtCantVolu;
     protected $txtCantPies;
+    protected $txtCreaPorx;
+    protected $txtModiPorx;
+
     protected $objProcEjec;
 
     protected $txtListNume;  // Lista de Seriales/Guias/Valijas
@@ -66,14 +72,20 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
 
         $this->dlgMensUsua_Create();
 
+        $this->lstOrigMani_Create();
         $this->lstDestMani_Create();
+        $this->txtNumeMani_Create();
+        $this->txtNumeMast_Create();
         $this->txtNumeBlxx_Create();
         $this->calFechCrea_Create();
         $this->calFechDesp_Create();
-        $this->txtCantPiez_Create();
         $this->txtNumeBook_Create();
-        $this->txtCantVolu_Create();
+        $this->txtCantVali_Create();
+        $this->txtCantPiez_Create();
         $this->txtCantPies_Create();
+        $this->txtCantVolu_Create();
+        $this->txtCreaPorx_Create();
+        $this->txtModiPorx_Create();
 
         $this->txtListNume_Create();
         $this->dtgPiezApta_Create();
@@ -86,10 +98,15 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
 
         $this->lblResuEntr_Create();
 
+        $this->lstOrigMani = disableControl($this->lstOrigMani);
+        $this->txtNumeMani = disableControl($this->txtNumeMani);
         $this->calFechCrea = disableControl($this->calFechCrea);
+        $this->txtCantVali = disableControl($this->txtCantVali);
         $this->txtCantPiez = disableControl($this->txtCantPiez);
         $this->txtCantVolu = disableControl($this->txtCantVolu);
         $this->txtCantPies = disableControl($this->txtCantPies);
+        $this->txtCreaPorx = disableControl($this->txtCreaPorx);
+        $this->txtModiPorx = disableControl($this->txtModiPorx);
     }
 
     //-----------------------------
@@ -99,9 +116,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
     protected function lblResuEntr_Create() {
         $this->lblResuEntr = new QLabel($this);
         $strResuEntr = 'Piezas Manifestadas';
-        //if ($this->blnEditMode) {
-        //    $strResuEntr .= $this->objManifies->__resumenEntrega();
-        //}
         $this->lblResuEntr->Text = $strResuEntr;
         $this->lblResuEntr->HtmlEntities = false;
     }
@@ -144,7 +158,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
                 //t('Checkpoints de exportacion eliminado');
                 $this->objManifies->Delete();
                 $this->objManifies->logDeCambios('Borrado');
-                QApplication::Redirect(__SIST__.'/manifiesto_exp_list.php');
+                QApplication::Redirect(__SIST__.'/manifiesto_exp_mar_list.php');
             } catch (Exception $e) {
                 $this->danger($e->getMessage());
             }
@@ -202,6 +216,17 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->dlgMensUsua->ForeColor = 'blue';
     }
 
+    protected function lstOrigMani_Create() {
+        $this->lstOrigMani = new QListBox($this);
+        $this->lstOrigMani->Width = 160;
+        if (!$this->blnEditMode) {
+            $objOrigMani = Sucursales::Load($this->objUsuario->SucursalId);
+        } else {
+            $objOrigMani = Sucursales::Load($this->objManifies->OrigenId);
+        }
+        $this->lstOrigMani->AddItem($objOrigMani->__toString(),$objOrigMani->Id,true);
+    }
+
     protected function lstDestMani_Create() {
         $this->lstDestMani = new QListBox($this);
         $this->lstDestMani->Name = 'Destino';
@@ -246,20 +271,31 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         }
     }
 
+    protected function txtNumeMani_Create() {
+        $this->txtNumeMani = new QTextBox($this);
+        $this->txtNumeMani->Width = 160;
+        if ($this->blnEditMode) {
+            $this->txtNumeMani->Text = $this->objManifies->Numero;
+        }
+        $this->txtNumeMani->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+    }
+
+    protected function txtNumeMast_Create() {
+        $this->txtNumeMast = new QTextBox($this);
+        $this->txtNumeMast->Width = 160;
+        if ($this->blnEditMode) {
+            $this->txtNumeMast->Text = $this->objManifies->Master;
+        }
+        $this->txtNumeMast->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+    }
+
     protected function txtNumeBlxx_Create() {
         $this->txtNumeBlxx = new QTextBox($this);
+        $this->txtNumeBlxx->Width = 160;
         if ($this->blnEditMode) {
             $this->txtNumeBlxx->Text = $this->objManifies->NroBl;
         }
         $this->txtNumeBlxx->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
-    }
-
-    protected function txtCantPiez_Create() {
-        $this->txtCantPiez = new QTextBox($this);
-        $this->txtCantPiez->Width = 160;
-        if ($this->blnEditMode) {
-            $this->txtCantPiez->Text  = $this->objManifies->Piezas;
-        }
     }
 
     protected function txtNumeBook_Create() {
@@ -270,17 +306,49 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         }
     }
 
+    protected function txtCantVali_Create() {
+        $this->txtCantVali = new QTextBox($this);
+        $this->txtCantVali->Width = 100;
+        if ($this->blnEditMode) {
+            $this->txtCantVali->Text  = $this->objManifies->Valijas;
+        }
+    }
+
+    protected function txtCantPiez_Create() {
+        $this->txtCantPiez = new QTextBox($this);
+        $this->txtCantPiez->Width = 100;
+        if ($this->blnEditMode) {
+            $this->txtCantPiez->Text  = $this->objManifies->Piezas;
+        }
+    }
+
     protected function txtCantVolu_Create() {
         $this->txtCantVolu = new QTextBox($this);
-        $this->txtCantVolu->Width = 160;
+        $this->txtCantVolu->Width = 100;
         if ($this->blnEditMode) {
             $this->txtCantVolu->Text  = $this->objManifies->Volumen;
         }
     }
 
+    protected function txtCreaPorx_Create() {
+        $this->txtCreaPorx = new QTextBox($this);
+        $this->txtCreaPorx->Width = 100;
+        if ($this->blnEditMode) {
+            $this->txtCreaPorx->Text  = $this->objManifies->__creator();
+        }
+    }
+
+    protected function txtModiPorx_Create() {
+        $this->txtModiPorx = new QTextBox($this);
+        $this->txtModiPorx->Width = 100;
+        if ($this->blnEditMode) {
+            $this->txtModiPorx->Text  = $this->objManifies->__updater();
+        }
+    }
+
     protected function txtCantPies_Create() {
         $this->txtCantPies = new QTextBox($this);
-        $this->txtCantPies->Width = 160;
+        $this->txtCantPies->Width = 100;
         if ($this->blnEditMode) {
             $this->txtCantPies->Text  = $this->objManifies->PiesCub;
         }
@@ -502,6 +570,10 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
             $this->danger('Debe seleccionar un Destino');
             return false;
         }
+        if (strlen($this->txtNumeMast->Text) == 0) {
+            $this->danger('El Nro de la Master, es requerido');
+            return false;
+        }
         if ( (strlen($this->txtNumeBlxx->Text) == 0) && (strlen($this->txtNumeBook->Text) == 0) ) {
             $this->danger('Debe especificar un Nro de BL o al menos un Nro de Booking');
             return false;
@@ -617,9 +689,12 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
             if (!$objContenedor) {
                 t('Manifiesto nuevo');
                 $objContenedor = new ManifiestoExp();
-                $objContenedor->DestinoId     = $this->lstDestMani->SelectedValue;
+                $objContenedor->Numero        = ManifiestoExp::proxReferencia();
                 $objContenedor->FechaCreacion = new QDateTime(QDateTime::Now());
+                $objContenedor->OrigenId      = $this->lstOrigMani->SelectedValue;
                 $objContenedor->CreatedBy     = $this->objUsuario->CodiUsua;
+                $objContenedor->CreatedAt     = new QDateTime(QDateTime::Now());
+                $objContenedor->Valijas       = 0;
                 $objContenedor->Piezas        = 0;
                 $objContenedor->Kilos         = 0;
                 $objContenedor->Libras        = 0;
@@ -627,9 +702,13 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
                 $objContenedor->Volumen       = 0;
                 $objContenedor->Valor         = 0;
             }
+            $objContenedor->Master        = $this->txtNumeMast->Text;
+            $objContenedor->DestinoId     = $this->lstDestMani->SelectedValue;
             $objContenedor->FechaDespacho = new QDateTime($this->calFechDesp->DateTime);
             $objContenedor->NroBl         = $this->txtNumeBlxx->Text;
             $objContenedor->Booking       = $this->txtNumeBook->Text;
+            $objContenedor->UpdatedBy     = $this->objUsuario->CodiUsua;
+            $objContenedor->UpdatedAt     = new QDateTime(QDateTime::Now());
             $objContenedor->Save();
             t('Manifiesto Exp MAR salvado en la BD');
         } catch (Exception $e) {
@@ -727,9 +806,13 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->dtgPiezApta->Refresh();
         t('Termine de procesar la piezas');
         $objContenedor->actualizarTotales();
+        $this->txtNumeMani->Text = $objContenedor->Numero;
+        $this->txtCantVali->Text = $objContenedor->Valijas;
         $this->txtCantPiez->Text = $objContenedor->Piezas;
         $this->txtCantVolu->Text = $objContenedor->Volumen;
         $this->txtCantPies->Text = $objContenedor->PiesCub;
+        $this->txtCreaPorx->Text = $objContenedor->__creator();
+        $this->txtModiPorx->Text = $objContenedor->__updater();
         t('Se actualizaron los totales en el manifiesto');
         $objDatabase->TransactionCommit();
         $intCantErro = DetalleError::CountByProcesoId($this->objProcEjec->Id);

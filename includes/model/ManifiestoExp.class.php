@@ -24,8 +24,16 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('ManifiestoExp Object %s',  $this->intId);
+			return sprintf('%s',  $this->Numero);
 		}
+
+		public function __creator() {
+		    return !is_null($this->CreatedBy) ? Usuario::Load($this->CreatedBy)->LogiUsua : null;
+        }
+
+		public function __updater() {
+		    return !is_null($this->UpdatedBy) ? Usuario::Load($this->UpdatedBy)->LogiUsua : null;
+        }
 
         public function actualizarTotales() {
             $intCantPiez = 0;
@@ -78,6 +86,28 @@
                 }
             }
             return $arrPiezCont;
+        }
+
+        public static function proxReferencia() {
+            //------------------------------------------------------------------------------------
+            // Para la 1era vez que se emita una factura, la referencia será tomada de la tabla
+            // "parametros" bajo la combinacion RefeFact-ProxRefe
+            //------------------------------------------------------------------------------------
+            if (ManifiestoExp::CountAll() == 0) {
+                $intRefeFact = 0;
+            } else {
+                $objAdicClau   = QQ::Clause();
+                $objAdicClau[] = QQ::OrderBy(QQN::ManifiestoExp()->Id,false);
+                $objAdicClau[] = QQ::LimitInfo(1);
+                $objClauWher   = QQ::Clause();
+                $objClauWher[] = QQ::IsNotNull(QQN::ManifiestoExp()->Id);
+                $arrUltiFact   = ManifiestoExp::QueryArray(QQ::AndCondition($objClauWher),$objAdicClau);
+                $objUltiFact   = $arrUltiFact[0];
+                $intRefeFact   = (int)explode('-',$objUltiFact->Referencia)[0];
+            }
+            $strYearDhoy = date('Y');
+            $strNumeRefe = str_pad($intRefeFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
+            return $strNumeRefe;
         }
 
         /**

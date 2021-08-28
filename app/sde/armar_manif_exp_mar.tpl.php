@@ -25,12 +25,12 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <div class="row" style="margin-top: 1em;">
                 <div class="col-md-4">
                     <div class="row">
+                        <div class="col-md-6 title">Origen</div>
                         <div class="col-md-6 title">Destino</div>
-                        <div class="col-md-6 title">Nro BL</div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6"><?php $this->lstOrigMani->Render(); ?></div>
                         <div class="col-md-6"><?php $this->lstDestMani->Render(); ?></div>
-                        <div class="col-md-6"><?php $this->txtNumeBlxx->Render(); ?></div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 title">F.Creación</div>
@@ -41,20 +41,40 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                         <div class="col-md-6"><?php $this->calFechDesp->Render(); ?></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 title">Cant Piezas</div>
+                        <div class="col-md-6 title">Nro Manif</div>
+                        <div class="col-md-6 title">Master</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><?php $this->txtNumeMani->Render(); ?></div>
+                        <div class="col-md-6"><?php $this->txtNumeMast->Render(); ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 title">Nro BL</div>
                         <div class="col-md-6 title">Nro Booking</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6"><?php $this->txtCantPiez->Render(); ?></div>
+                        <div class="col-md-6"><?php $this->txtNumeBlxx->Render(); ?></div>
                         <div class="col-md-6"><?php $this->txtNumeBook->Render(); ?></div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 title">Volumen Total</div>
-                        <div class="col-md-6 title">Total PiesCub</div>
+                        <div class="col-md-4 title">Cant. Valijas</div>
+                        <div class="col-md-4 title">Cant. Piezas</div>
+                        <div class="col-md-4 title">Total PiesCub</div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6"><?php $this->txtCantVolu->Render(); ?></div>
-                        <div class="col-md-6"><?php $this->txtCantPies->Render(); ?></div>
+                        <div class="col-md-4"><?php $this->txtCantVali->Render(); ?></div>
+                        <div class="col-md-4"><?php $this->txtCantPiez->Render(); ?></div>
+                        <div class="col-md-4"><?php $this->txtCantPies->Render(); ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 title">Volumen Total</div>
+                        <div class="col-md-4 title">Creado Por</div>
+                        <div class="col-md-4 title">Modif. Por</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"><?php $this->txtCantVolu->Render(); ?></div>
+                        <div class="col-md-4"><?php $this->txtCreaPorx->Render(); ?></div>
+                        <div class="col-md-4"><?php $this->txtModiPorx->Render(); ?></div>
                     </div>
                 </div>
                 <div class="col-md-8">

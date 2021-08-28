@@ -37,7 +37,7 @@ class ManifiestoExpListForm extends ManifiestoExpListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
-		$this->lblTituForm->Text = 'Manifiestos de EXP';
+		$this->lblTituForm->Text = 'Manif de Exp AER';
 
 		// Instantiate the Meta DataGrid
 		$this->dtgManifiestoExps = new ManifiestoExpDataGrid($this);
@@ -68,10 +68,10 @@ class ManifiestoExpListForm extends ManifiestoExpListFormBase {
 		// can traverse down QQN::manifiesto_exp() to display fields that are down the hierarchy)
 		$this->dtgManifiestoExps->MetaAddColumn('Id');
 		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Destino);
-		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->NroBl);
-		$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Booking);
+		//$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->NroBl);
+		//$this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Booking);
         $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->LineaAerea);
-        $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->MasterAwb);
+        $this->dtgManifiestoExps->MetaAddColumn(QQN::ManifiestoExp()->Master);
         $this->dtgManifiestoExps->MetaAddColumn('Vuelo');
         $this->dtgManifiestoExps->MetaAddColumn('FechaCreacion');
         $this->dtgManifiestoExps->MetaAddColumn('FechaDespacho');
@@ -82,7 +82,7 @@ class ManifiestoExpListForm extends ManifiestoExpListFormBase {
 
         $this->btnNuevExpm_Create();
         $this->btnExpoExce_Create();
-        $this->btnNuevRegi->Text = TextoIcono('plus-circle','Crear AER','F','lg');
+        $this->btnNuevRegi->Text = TextoIcono('plus-circle','Crear','F','lg');
 
     }
 

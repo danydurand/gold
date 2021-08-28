@@ -4,24 +4,37 @@ require_once('qcubed.inc.php');
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
 
+// Convirtiendo texto a fechas
+
+$strFechEntr = '2021-08-30';
+$strFechGuia = '2021-08-20';
+echo 'strtotime: '.strtotime($strFechEntr);
+echo "<br>";
+$dttFechEntr = date('Y-m-d H:i',strtotime($strFechEntr));
+echo "date: ".$dttFechEntr;
+
+$dttFechGuia = strtotime($strFechGuia);
+$intTiemTran = date_diff($dttFechEntr,$dttFechGuia);
+
+
 // Buscando Tarifas Vigentes de Exportacion
 
-$objExpoMari = Productos::LoadByCodigo('EXM');
-$strFechGuia = date('Y-m-d');
-
-echo 'Producto: '.$objExpoMari->Codigo;
-echo "<br>";
-echo 'Fecha: '.$strFechGuia;
-echo "<br>";
-echo "<br>";
-
-$arrTariProd = TarifaExp::TarifaVigente($$objExpoMari->Id,$strFechGuia);
-$decMontTari = $arrTariProd['monto'];
-$decPesoMini = $arrTariProd['minimo'];
-
-echo "El monto de la tarifa es: ".$decMontTari;
-echo "<br>";
-echo "El minimo es: ".$decPesoMini;
+//$objExpoMari = Productos::LoadByCodigo('EXM');
+//$strFechGuia = date('Y-m-d');
+//
+//echo 'Producto: '.$objExpoMari->Codigo;
+//echo "<br>";
+//echo 'Fecha: '.$strFechGuia;
+//echo "<br>";
+//echo "<br>";
+//
+//$arrTariProd = TarifaExp::TarifaVigente($$objExpoMari->Id,$strFechGuia);
+//$decMontTari = $arrTariProd['monto'];
+//$decPesoMini = $arrTariProd['minimo'];
+//
+//echo "El monto de la tarifa es: ".$decMontTari;
+//echo "<br>";
+//echo "El minimo es: ".$decPesoMini;
 
 // Validando fechas
 
