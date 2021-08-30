@@ -595,6 +595,12 @@
 			return new QQNodeGuiasH('guias_h', null, null);
 		}
 		/**
+		 * @return QQNodeGuiasManifiesto
+		 */
+		static public function GuiasManifiesto() {
+			return new QQNodeGuiasManifiesto('guias_manifiesto', null, null);
+		}
+		/**
 		 * @return QQNodeHistoriaCliente
 		 */
 		static public function HistoriaCliente() {

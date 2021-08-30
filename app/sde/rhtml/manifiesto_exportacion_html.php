@@ -4,26 +4,58 @@ if (!isset($_SESSION['ManiIdxx'])) {
     echo "Se requiere el Id del Manifiesto a imprimir...";
     return;
 }
+
+//t('======================');
+//t('Imprimiendo Manifiesto');
 $intManiIdxx = $_SESSION['ManiIdxx'];
-$strNombEmpr = $_SESSION['NombEmpr'];
 $objManiImpr = ManifiestoExp::Load($intManiIdxx);
-$strFechDesp = $objManiImpr->FechaDespacho->__toString('DD/MM/YYYY');
-$strLimiDere = '340px';
-$strNumeBlxx = $objManiImpr->NroBl;
 
+$strNombProc = 'Impresion de Manif de Exp: '.$objManiImpr->Numero;
+$objProcEjec = CrearProceso($strNombProc);
+//-----------------------------------------------------------------
 // Se seleccionan las piezas asociadas directamente al Manifiesto
-$arrGuiaMani = Guias::LoadArrayByManifiestoExp($intManiIdxx);
+//-----------------------------------------------------------------
+$arrPiezMani = $objManiImpr->GetGuiaPiezasAsPiezaArray();
+//t('El Manifiesto tiene: '.count($arrPiezMani).' piezas');
+$objDatabase = GuiasManifiesto::GetDatabase();
+foreach ($arrPiezMani as $objPiezMani) {
+    //t('Procesando la pieza: '.$objPiezMani->IdPieza);
+    $intGuiaIdxx = $objPiezMani->GuiaId;
+    $strGuiaNume = $objPiezMani->Guia->Numero;
+    $strGuiaTrac = $objPiezMani->Guia->Tracking;
+    $strNombRemi = $objPiezMani->Guia->NombreRemitente;
+    $strNombDest = $objPiezMani->Guia->NombreDestinatario;
+    $strDescCont = $objPiezMani->Guia->Contenido;
+    $intCantPiez = 1;
+    $decPesoEnvi = $objPiezMani->PiesCub;
+    $decValoEnvi = $objPiezMani->ValorDeclarado ?  $objPiezMani->ValorDeclarado : 0;
+    //------------------------------------------------------------------------------
+    // La tabla guias_manifiesto se usa para almacenar la informacion de las guias
+    // del manifiesto
+    //------------------------------------------------------------------------------
+    $strCadeSqlx  = "insert ";
+    $strCadeSqlx .= "  into guias_manifiesto ";
+    $strCadeSqlx .= "values ($intManiIdxx,$intGuiaIdxx,'$strGuiaNume','$strGuiaTrac','$strNombRemi',";
+    $strCadeSqlx .= "        '$strNombDest','$strDescCont',$intCantPiez,$decPesoEnvi,$decValoEnvi) ";
+    $strCadeSqlx .= "on duplicate key update piezas = piezas + $intCantPiez,";
+    $strCadeSqlx .= "                        peso = peso + $decPesoEnvi,";
+    $strCadeSqlx .= "                        valor = valor + $decValoEnvi;";
+    try {
+        $objDatabase->NonQuery($strCadeSqlx);
+    } catch (Exception $e) {
+        //t('SQL Upsert: '.$strCadeSqlx);
+        //t('Error: '.$e->getMessage());
+        $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+        $arrParaErro['NumeRefe'] = $objPiezMani->IdPieza;
+        $arrParaErro['MensErro'] = $e->getMessage();
+        $arrParaErro['ComeErro'] = 'upsert en la tabla guias_manifiesto';
+        GrabarError($arrParaErro);
+    }
+}
+$arrGuiaMani = GuiasManifiesto::LoadArrayByManifiestoId($intManiIdxx);
+//t('Ahora tengo: '.count($arrGuiaMani).' guias en el manifiesto');
 
-t('Son: '.count($arrGuiaMani).' guias');
-
-// Valijas asociadas al Manifiesto
-//$arrValiMani = $objManiImpr->GetContainersAsContainerContainerArray();
-//foreach ($arrValiMani as $objValiMani) {
-//     Piezas dentro la Valija
-//$arrPiezMani[] = $objValiMani->GetGuiaPiezasAsContainerPiezaArray();
-//}
-//$intCantPiez = count($arrPiezMani);
-/* @var $objGuiaMani Guias */
+/* @var $objGuiaMani GuiasManifiesto */
 ?>
 <style type="text/css">
     <!--
@@ -110,12 +142,12 @@ t('Son: '.count($arrGuiaMani).' guias');
             <?php foreach ($arrGuiaMani as $objGuiaMani) { ?>
                 <tr style="font-size: small">
                     <td style="text-align: center"><?= $objGuiaMani->Numero ?></td>
-                    <td style="text-align: left"><?= substr($objGuiaMani->NombreRemitente,0,25) ?></td>
-                    <td style="text-align: left"><?= substr($objGuiaMani->NombreDestinatario,0,25) ?></td>
-                    <td style="text-align: left"><?= substr($objGuiaMani->Contenido,0,25) ?></td>
+                    <td style="text-align: left"><?= substr($objGuiaMani->Remitente,0,25) ?></td>
+                    <td style="text-align: left"><?= substr($objGuiaMani->Destinatario,0,25) ?></td>
+                    <td style="text-align: left"><?= substr($objGuiaMani->Descripcion,0,25) ?></td>
                     <td style="text-align: center"><?= $objGuiaMani->Piezas ?></td>
-                    <td style="text-align: right"><?= $objGuiaMani->PiesCub ?></td>
-                    <td style="text-align: right"><?= $objGuiaMani->ValorDeclarado ?></td>
+                    <td style="text-align: right"><?= nf3($objGuiaMani->Peso) ?></td>
+                    <td style="text-align: right"><?= nf($objGuiaMani->Valor) ?></td>
                 </tr>
             <?php } ?>
         </table>

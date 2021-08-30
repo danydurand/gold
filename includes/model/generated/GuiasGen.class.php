@@ -91,6 +91,8 @@
 	 * @property-read GuiaConceptos[] $_GuiaConceptosAsGuiaArray the value for the private _objGuiaConceptosAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos.guia_id reverse relationship
 	 * @property-read GuiaPiezas $_GuiaPiezasAsGuia the value for the private _objGuiaPiezasAsGuia (Read-Only) if set due to an expansion on the guia_piezas.guia_id reverse relationship
 	 * @property-read GuiaPiezas[] $_GuiaPiezasAsGuiaArray the value for the private _objGuiaPiezasAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the guia_piezas.guia_id reverse relationship
+	 * @property-read GuiasManifiesto $_GuiasManifiestoAsGuia the value for the private _objGuiasManifiestoAsGuia (Read-Only) if set due to an expansion on the guias_manifiesto.guia_id reverse relationship
+	 * @property-read GuiasManifiesto[] $_GuiasManifiestoAsGuiaArray the value for the private _objGuiasManifiestoAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the guias_manifiesto.guia_id reverse relationship
 	 * @property-read Notificacion $_NotificacionAsGuia the value for the private _objNotificacionAsGuia (Read-Only) if set due to an expansion on the notificacion.guia_id reverse relationship
 	 * @property-read Notificacion[] $_NotificacionAsGuiaArray the value for the private _objNotificacionAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the notificacion.guia_id reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajoAsGuia the value for the private _objRegistroTrabajoAsGuia (Read-Only) if set due to an expansion on the registro_trabajo.guia_id reverse relationship
@@ -613,6 +615,22 @@
 		 * @var GuiaPiezas[] _objGuiaPiezasAsGuiaArray;
 		 */
 		private $_objGuiaPiezasAsGuiaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasManifiestoAsGuia object
+		 * (of type GuiasManifiesto), if this Guias object was restored with
+		 * an expansion on the guias_manifiesto association table.
+		 * @var GuiasManifiesto _objGuiasManifiestoAsGuia;
+		 */
+		private $_objGuiasManifiestoAsGuia;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasManifiestoAsGuia objects
+		 * (of type GuiasManifiesto[]), if this Guias object was restored with
+		 * an ExpandAsArray on the guias_manifiesto association table.
+		 * @var GuiasManifiesto[] _objGuiasManifiestoAsGuiaArray;
+		 */
+		private $_objGuiasManifiestoAsGuiaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single NotificacionAsGuia object
@@ -1756,6 +1774,21 @@
 					$objToReturn->_objGuiaPiezasAsGuiaArray[] = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasasguia__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiaPiezasAsGuia)) {
 					$objToReturn->_objGuiaPiezasAsGuia = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasasguia__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiasManifiestoAsGuia Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiasmanifiestoasguia__manifiesto_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiasmanifiestoasguia']) ? null : $objExpansionAliasArray['guiasmanifiestoasguia']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasManifiestoAsGuiaArray)
+				$objToReturn->_objGuiasManifiestoAsGuiaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasManifiestoAsGuiaArray[] = GuiasManifiesto::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasmanifiestoasguia__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasManifiestoAsGuia)) {
+					$objToReturn->_objGuiasManifiestoAsGuia = GuiasManifiesto::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasmanifiestoasguia__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3529,6 +3562,22 @@
 					 */
 					return $this->_objGuiaPiezasAsGuiaArray;
 
+				case '_GuiasManifiestoAsGuia':
+					/**
+					 * Gets the value for the private _objGuiasManifiestoAsGuia (Read-Only)
+					 * if set due to an expansion on the guias_manifiesto.guia_id reverse relationship
+					 * @return GuiasManifiesto
+					 */
+					return $this->_objGuiasManifiestoAsGuia;
+
+				case '_GuiasManifiestoAsGuiaArray':
+					/**
+					 * Gets the value for the private _objGuiasManifiestoAsGuiaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias_manifiesto.guia_id reverse relationship
+					 * @return GuiasManifiesto[]
+					 */
+					return $this->_objGuiasManifiestoAsGuiaArray;
+
 				case '_NotificacionAsGuia':
 					/**
 					 * Gets the value for the private _objNotificacionAsGuia (Read-Only)
@@ -4749,6 +4798,9 @@
 			if ($this->CountGuiaPiezasesAsGuia()) {
 				$arrTablRela[] = 'guia_piezas';
 			}
+			if ($this->CountGuiasManifiestosAsGuia()) {
+				$arrTablRela[] = 'guias_manifiesto';
+			}
 			if ($this->CountNotificacionsAsGuia()) {
 				$arrTablRela[] = 'notificacion';
 			}
@@ -5206,6 +5258,158 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guia_piezas`
+				WHERE
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasManifiestoAsGuia
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasManifiestosAsGuia as an array of GuiasManifiesto objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiasManifiesto[]
+		*/
+		public function GetGuiasManifiestoAsGuiaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiasManifiesto::LoadArrayByGuiaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasManifiestosAsGuia
+		 * @return int
+		*/
+		public function CountGuiasManifiestosAsGuia() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiasManifiesto::CountByGuiaId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiasManifiestoAsGuia
+		 * @param GuiasManifiesto $objGuiasManifiesto
+		 * @return void
+		*/
+		public function AssociateGuiasManifiestoAsGuia(GuiasManifiesto $objGuiasManifiesto) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasManifiestoAsGuia on this unsaved Guias.');
+			if ((is_null($objGuiasManifiesto->ManifiestoId)) || (is_null($objGuiasManifiesto->GuiaId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasManifiestoAsGuia on this Guias with an unsaved GuiasManifiesto.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_manifiesto`
+				SET
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`manifiesto_id` = ' . $objDatabase->SqlVariable($objGuiasManifiesto->ManifiestoId) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($objGuiasManifiesto->GuiaId) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasManifiestoAsGuia
+		 * @param GuiasManifiesto $objGuiasManifiesto
+		 * @return void
+		*/
+		public function UnassociateGuiasManifiestoAsGuia(GuiasManifiesto $objGuiasManifiesto) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasManifiestoAsGuia on this unsaved Guias.');
+			if ((is_null($objGuiasManifiesto->ManifiestoId)) || (is_null($objGuiasManifiesto->GuiaId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasManifiestoAsGuia on this Guias with an unsaved GuiasManifiesto.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_manifiesto`
+				SET
+					`guia_id` = null
+				WHERE
+					`manifiesto_id` = ' . $objDatabase->SqlVariable($objGuiasManifiesto->ManifiestoId) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($objGuiasManifiesto->GuiaId) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasManifiestosAsGuia
+		 * @return void
+		*/
+		public function UnassociateAllGuiasManifiestosAsGuia() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasManifiestoAsGuia on this unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias_manifiesto`
+				SET
+					`guia_id` = null
+				WHERE
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasManifiestoAsGuia
+		 * @param GuiasManifiesto $objGuiasManifiesto
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasManifiestoAsGuia(GuiasManifiesto $objGuiasManifiesto) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasManifiestoAsGuia on this unsaved Guias.');
+			if ((is_null($objGuiasManifiesto->ManifiestoId)) || (is_null($objGuiasManifiesto->GuiaId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasManifiestoAsGuia on this Guias with an unsaved GuiasManifiesto.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_manifiesto`
+				WHERE
+					`manifiesto_id` = ' . $objDatabase->SqlVariable($objGuiasManifiesto->ManifiestoId) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($objGuiasManifiesto->GuiaId) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasManifiestosAsGuia
+		 * @return void
+		*/
+		public function DeleteAllGuiasManifiestosAsGuia() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasManifiestoAsGuia on this unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias_manifiesto`
 				WHERE
 					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -6167,6 +6371,7 @@
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsGuia
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsGuia
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
+     * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsGuia
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsGuia
 
@@ -6322,6 +6527,8 @@
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosAsGuia');
 				case 'GuiaPiezasAsGuia':
 					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasasguia', 'reverse_reference', 'guia_id', 'GuiaPiezasAsGuia');
+				case 'GuiasManifiestoAsGuia':
+					return new QQReverseReferenceNodeGuiasManifiesto($this, 'guiasmanifiestoasguia', 'reverse_reference', 'guia_id', 'GuiasManifiestoAsGuia');
 				case 'NotificacionAsGuia':
 					return new QQReverseReferenceNodeNotificacion($this, 'notificacionasguia', 'reverse_reference', 'guia_id', 'NotificacionAsGuia');
 				case 'RegistroTrabajoAsGuia':
@@ -6415,6 +6622,7 @@
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsGuia
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsGuia
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
+     * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsGuia
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsGuia
 
@@ -6570,6 +6778,8 @@
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosAsGuia');
 				case 'GuiaPiezasAsGuia':
 					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasasguia', 'reverse_reference', 'guia_id', 'GuiaPiezasAsGuia');
+				case 'GuiasManifiestoAsGuia':
+					return new QQReverseReferenceNodeGuiasManifiesto($this, 'guiasmanifiestoasguia', 'reverse_reference', 'guia_id', 'GuiasManifiestoAsGuia');
 				case 'NotificacionAsGuia':
 					return new QQReverseReferenceNodeNotificacion($this, 'notificacionasguia', 'reverse_reference', 'guia_id', 'NotificacionAsGuia');
 				case 'RegistroTrabajoAsGuia':

@@ -692,6 +692,13 @@
 		QApplicationBase::$ClassFile['guiashmetacontrol'] = __META_CONTROLS__ . '/GuiasHMetaControl.class.php';
 		QApplicationBase::$ClassFile['guiashdatagrid'] = __META_CONTROLS__ . '/GuiasHDataGrid.class.php';
 
+	// ClassPaths for the GuiasManifiesto class
+		QApplicationBase::$ClassFile['guiasmanifiesto'] = __MODEL__ . '/GuiasManifiesto.class.php';
+		QApplicationBase::$ClassFile['qqnodeguiasmanifiesto'] = __MODEL__ . '/GuiasManifiesto.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeguiasmanifiesto'] = __MODEL__ . '/GuiasManifiesto.class.php';
+		QApplicationBase::$ClassFile['guiasmanifiestometacontrol'] = __META_CONTROLS__ . '/GuiasManifiestoMetaControl.class.php';
+		QApplicationBase::$ClassFile['guiasmanifiestodatagrid'] = __META_CONTROLS__ . '/GuiasManifiestoDataGrid.class.php';
+
 	// ClassPaths for the HistoriaCliente class
 		QApplicationBase::$ClassFile['historiacliente'] = __MODEL__ . '/HistoriaCliente.class.php';
 		QApplicationBase::$ClassFile['qqnodehistoriacliente'] = __MODEL__ . '/HistoriaCliente.class.php';
