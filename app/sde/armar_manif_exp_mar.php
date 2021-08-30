@@ -143,25 +143,28 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         //t('Borrando el Manifiesto');
         $objCkptExpo  = Checkpoints::LoadByCodigo('EX');
         if ($objCkptExpo instanceof Checkpoints) {
-            $intCkptExpo  = $objCkptExpo->Id;
-            $arrPiezRuta  = $this->objManifies->GetPiezasConCheckpoint('EX','Id');
-            $strIdxxRuta  = implode(',',$arrPiezRuta);
-            //t('Las piezas exportadas son: '.$strIdxxRuta);
-            $objDatabase  = Containers::GetDatabase();
-            $strCadeSqlx  = 'delete ';
-            $strCadeSqlx .= '  from pieza_checkpoints ';
-            $strCadeSqlx .= ' where pieza_id in ('.$strIdxxRuta.')';
-            $strCadeSqlx .= '   and checkpoint_id = '.$intCkptExpo;
-            //t('SQL: '.$strCadeSqlx);
-            try {
-                $objDatabase->NonQuery($strCadeSqlx);
-                //t('Checkpoints de exportacion eliminado');
-                $this->objManifies->Delete();
-                $this->objManifies->logDeCambios('Borrado');
-                QApplication::Redirect(__SIST__.'/manifiesto_exp_mar_list.php');
-            } catch (Exception $e) {
-                $this->danger($e->getMessage());
+            $intCkptExpo = $objCkptExpo->Id;
+            $arrPiezRuta = $this->objManifies->GetPiezasConCheckpoint($objCkptExpo->Codigo,'Id');
+            if (count($arrPiezRuta)) {
+                $strIdxxRuta  = implode(',',$arrPiezRuta);
+                t('Las piezas exportadas son: '.$strIdxxRuta);
+                $objDatabase  = Containers::GetDatabase();
+                $strCadeSqlx  = 'delete ';
+                $strCadeSqlx .= '  from pieza_checkpoints ';
+                $strCadeSqlx .= ' where pieza_id in ('.$strIdxxRuta.')';
+                $strCadeSqlx .= '   and checkpoint_id = '.$intCkptExpo;
+                //t('SQL: '.$strCadeSqlx);
+                try {
+
+                    $objDatabase->NonQuery($strCadeSqlx);
+                    //t('Checkpoints de exportacion eliminado');
+                } catch (Exception $e) {
+                    $this->danger($e->getMessage());
+                }
             }
+            $this->objManifies->Delete();
+            $this->objManifies->logDeCambios('Borrado');
+            QApplication::Redirect(__SIST__.'/manifiesto_exp_mar_list.php');
         } else {
             $this->danger('No existe el Checkpoint de Exportacion | Comuniquese con el Administrador del Sistema');
         }
@@ -384,11 +387,13 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
 
     protected function dtgPiezApta_Bind() {
         $intDestIdxx = $this->lstDestMani->SelectedValue;
+        t('Destino Id: '.$intDestIdxx);
         if (!is_null($intDestIdxx)) {
             $strCadeSqlx  = "select pieza_id ";
             $strCadeSqlx .= "  from v_aptas_para_exportar ";
             $strCadeSqlx .= " where destino_id = $intDestIdxx";
             $strCadeSqlx .= "   and codigo_prod = 'EXM' ";
+            t('SQL: '.$strCadeSqlx);
             $objDatabase  = GuiaPiezas::GetDatabase();
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $arrIdxxPiez  = [];

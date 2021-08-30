@@ -35,10 +35,12 @@
         }
 
 		public static function EliminarDelUsuario($intCodiUsua) {
+		    t('Voy a borrar las piezas del Usuario: '.$intCodiUsua);
 		    $objClauWher   = QQ::Clause();
 		    $objClauWher[] = QQ::Equal(QQN::PiezasTemp()->CreatedBy,$intCodiUsua);
 		    $arrRegiUsua   = PiezasTemp::QueryArray(QQ::AndCondition($objClauWher));
             foreach ($arrRegiUsua as $objRegiUsua) {
+                t('Borrando de piezas_temp...');
                 $objRegiUsua->Delete();
 		    }
         }

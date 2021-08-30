@@ -24,6 +24,7 @@
 	 * @property double $Alto the value for fltAlto 
 	 * @property double $Ancho the value for fltAncho 
 	 * @property double $Volumen the value for fltVolumen 
+	 * @property double $ValorDeclarado the value for fltValorDeclarado 
 	 * @property string $Descripcion the value for strDescripcion 
 	 * @property double $PiesCub the value for fltPiesCub 
 	 * @property double $MetrosCub the value for fltMetrosCub 
@@ -123,6 +124,14 @@
 		 */
 		protected $fltVolumen;
 		const VolumenDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.valor_declarado
+		 * @var double fltValorDeclarado
+		 */
+		protected $fltValorDeclarado;
+		const ValorDeclaradoDefault = 0;
 
 
 		/**
@@ -348,6 +357,7 @@
 			$this->fltAlto = GuiaPiezas::AltoDefault;
 			$this->fltAncho = GuiaPiezas::AnchoDefault;
 			$this->fltVolumen = GuiaPiezas::VolumenDefault;
+			$this->fltValorDeclarado = GuiaPiezas::ValorDeclaradoDefault;
 			$this->strDescripcion = GuiaPiezas::DescripcionDefault;
 			$this->fltPiesCub = GuiaPiezas::PiesCubDefault;
 			$this->fltMetrosCub = GuiaPiezas::MetrosCubDefault;
@@ -705,6 +715,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'alto', $strAliasPrefix . 'alto');
 			    $objBuilder->AddSelectItem($strTableName, 'ancho', $strAliasPrefix . 'ancho');
 			    $objBuilder->AddSelectItem($strTableName, 'volumen', $strAliasPrefix . 'volumen');
+			    $objBuilder->AddSelectItem($strTableName, 'valor_declarado', $strAliasPrefix . 'valor_declarado');
 			    $objBuilder->AddSelectItem($strTableName, 'descripcion', $strAliasPrefix . 'descripcion');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
 			    $objBuilder->AddSelectItem($strTableName, 'metros_cub', $strAliasPrefix . 'metros_cub');
@@ -864,6 +875,9 @@
 			$strAlias = $strAliasPrefix . 'volumen';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltVolumen = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'valor_declarado';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltValorDeclarado = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'descripcion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDescripcion = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1338,6 +1352,7 @@
 							`alto`,
 							`ancho`,
 							`volumen`,
+							`valor_declarado`,
 							`descripcion`,
 							`pies_cub`,
 							`metros_cub`,
@@ -1352,6 +1367,7 @@
 							' . $objDatabase->SqlVariable($this->fltAlto) . ',
 							' . $objDatabase->SqlVariable($this->fltAncho) . ',
 							' . $objDatabase->SqlVariable($this->fltVolumen) . ',
+							' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
 							' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							' . $objDatabase->SqlVariable($this->fltMetrosCub) . ',
@@ -1410,6 +1426,7 @@
 							`alto` = ' . $objDatabase->SqlVariable($this->fltAlto) . ',
 							`ancho` = ' . $objDatabase->SqlVariable($this->fltAncho) . ',
 							`volumen` = ' . $objDatabase->SqlVariable($this->fltVolumen) . ',
+							`valor_declarado` = ' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
 							`descripcion` = ' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							`metros_cub` = ' . $objDatabase->SqlVariable($this->fltMetrosCub) . ',
@@ -1609,6 +1626,7 @@
 			$this->fltAlto = $objReloaded->fltAlto;
 			$this->fltAncho = $objReloaded->fltAncho;
 			$this->fltVolumen = $objReloaded->fltVolumen;
+			$this->fltValorDeclarado = $objReloaded->fltValorDeclarado;
 			$this->strDescripcion = $objReloaded->strDescripcion;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
 			$this->fltMetrosCub = $objReloaded->fltMetrosCub;
@@ -1698,6 +1716,13 @@
 					 * @return double
 					 */
 					return $this->fltVolumen;
+
+				case 'ValorDeclarado':
+					/**
+					 * Gets the value for fltValorDeclarado 
+					 * @return double
+					 */
+					return $this->fltValorDeclarado;
 
 				case 'Descripcion':
 					/**
@@ -2015,6 +2040,19 @@
 					 */
 					try {
 						return ($this->fltVolumen = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ValorDeclarado':
+					/**
+					 * Sets the value for fltValorDeclarado 
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltValorDeclarado = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2926,6 +2964,7 @@
 			$strToReturn .= '<element name="Alto" type="xsd:float"/>';
 			$strToReturn .= '<element name="Ancho" type="xsd:float"/>';
 			$strToReturn .= '<element name="Volumen" type="xsd:float"/>';
+			$strToReturn .= '<element name="ValorDeclarado" type="xsd:float"/>';
 			$strToReturn .= '<element name="Descripcion" type="xsd:string"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
 			$strToReturn .= '<element name="MetrosCub" type="xsd:float"/>';
@@ -2975,6 +3014,8 @@
 				$objToReturn->fltAncho = $objSoapObject->Ancho;
 			if (property_exists($objSoapObject, 'Volumen'))
 				$objToReturn->fltVolumen = $objSoapObject->Volumen;
+			if (property_exists($objSoapObject, 'ValorDeclarado'))
+				$objToReturn->fltValorDeclarado = $objSoapObject->ValorDeclarado;
 			if (property_exists($objSoapObject, 'Descripcion'))
 				$objToReturn->strDescripcion = $objSoapObject->Descripcion;
 			if (property_exists($objSoapObject, 'PiesCub'))
@@ -3034,6 +3075,7 @@
 			$iArray['Alto'] = $this->fltAlto;
 			$iArray['Ancho'] = $this->fltAncho;
 			$iArray['Volumen'] = $this->fltVolumen;
+			$iArray['ValorDeclarado'] = $this->fltValorDeclarado;
 			$iArray['Descripcion'] = $this->strDescripcion;
 			$iArray['PiesCub'] = $this->fltPiesCub;
 			$iArray['MetrosCub'] = $this->fltMetrosCub;
@@ -3232,6 +3274,7 @@
      * @property-read QQNode $Alto
      * @property-read QQNode $Ancho
      * @property-read QQNode $Volumen
+     * @property-read QQNode $ValorDeclarado
      * @property-read QQNode $Descripcion
      * @property-read QQNode $PiesCub
      * @property-read QQNode $MetrosCub
@@ -3277,6 +3320,8 @@
 					return new QQNode('ancho', 'Ancho', 'Float', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'Float', $this);
+				case 'ValorDeclarado':
+					return new QQNode('valor_declarado', 'ValorDeclarado', 'Float', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'VarChar', $this);
 				case 'PiesCub':
@@ -3330,6 +3375,7 @@
      * @property-read QQNode $Alto
      * @property-read QQNode $Ancho
      * @property-read QQNode $Volumen
+     * @property-read QQNode $ValorDeclarado
      * @property-read QQNode $Descripcion
      * @property-read QQNode $PiesCub
      * @property-read QQNode $MetrosCub
@@ -3375,6 +3421,8 @@
 					return new QQNode('ancho', 'Ancho', 'double', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'double', $this);
+				case 'ValorDeclarado':
+					return new QQNode('valor_declarado', 'ValorDeclarado', 'double', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'string', $this);
 				case 'PiesCub':

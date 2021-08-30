@@ -71,7 +71,7 @@ class AuditoriaCarga extends FormularioBaseKaizen {
         $this->dtgPiezMani->AlternateRowStyle->CssClass = 'alternate';
 
         $this->dtgPiezMani->Paginator = new QPaginator($this->dtgPiezMani);
-        $this->dtgPiezMani->ItemsPerPage = 5;
+        $this->dtgPiezMani->ItemsPerPage = 10;
 
         $this->dtgPiezMani->UseAjax = true;
 

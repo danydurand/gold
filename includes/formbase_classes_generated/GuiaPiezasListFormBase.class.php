@@ -87,6 +87,7 @@ abstract class GuiaPiezasListFormBase extends QForm {
         $this->dtgGuiaPiezases->MetaAddColumn('Alto');
         $this->dtgGuiaPiezases->MetaAddColumn('Ancho');
         $this->dtgGuiaPiezases->MetaAddColumn('Volumen');
+        $this->dtgGuiaPiezases->MetaAddColumn('ValorDeclarado');
         $this->dtgGuiaPiezases->MetaAddColumn('Descripcion');
         $this->dtgGuiaPiezases->MetaAddColumn('PiesCub');
         $this->dtgGuiaPiezases->MetaAddColumn('MetrosCub');

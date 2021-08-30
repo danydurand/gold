@@ -12,7 +12,8 @@ $strLimiDere = '340px';
 $strNumeBlxx = $objManiImpr->NroBl;
 
 // Se seleccionan las piezas asociadas directamente al Manifiesto
-$arrPiezMani = $objManiImpr->GetGuiaPiezasAsPiezaArray();
+$arrGuiaMani = Guias::LoadArrayByManifiestoExp($intManiIdxx);
+
 // Valijas asociadas al Manifiesto
 //$arrValiMani = $objManiImpr->GetContainersAsContainerContainerArray();
 //foreach ($arrValiMani as $objValiMani) {
@@ -49,22 +50,23 @@ $intCantPiez = count($arrPiezMani);
         <!---------------------->
         <table style="margin-top: 24px;" border="1">
             <tr style="background-color: #CCC; font-weight: bold">
-                <td style="width: 40px; text-align: center">Nro</td>
-                <td style="width: 180px; text-align: left">Pieza</td>
-                <td style="width: 60px; text-align: center">Kilos</td>
-                <td style="width: 120px; text-align: center">Pies Cub</td>
-                <td style="width: 240px;">Contenido</td>
+                <td style="width: 040px; text-align: center">Nro Guia</td>
+                <td style="width: 180px; text-align: left">Remitente</td>
+                <td style="width: 180px; text-align: left">Destinatario</td>
+                <td style="width: 040px; text-align: center">Piezas</td>
+                <td style="width: 040px; text-align: center">PiesCub</td>
+                <td style="width: 040px; text-align: center">Valor $</td>
             </tr>
-            <?php $intNumeLine = 1 ?>
-            <?php foreach ($arrPiezMani as $objPiezMani) { ?>
-                <tr>
-                    <td style="text-align: center"><?= $intNumeLine ?></td>
-                    <td><?= $objPiezMani->IdPieza ?></td>
-                    <td style="text-align: center"><?= $objPiezMani->Kilos ?></td>
-                    <td style="text-align: left"><?= $objPiezMani->PiesCub ?></td>
-                    <td style="text-align: center"><?= $objPiezMani->Descripcion ?></td>
-                </tr>
-                <?php $intNumeLine++ ?>
+            <?php foreach ($arrGuiaMani as $objGuiaMani) { ?>
+            <tr>
+                <td style="text-align: center"><?= $objGuiaMani->Numero ?></td>
+                <td style="text-align: left"><?= $objGuiaMani->NombreRemiente ?></td>
+                <td style="text-align: left"><?= $objGuiaMani->NombreDestinatario ?></td>
+                <td style="text-align: left"><?= $objGuiaMani->Contenido ?></td>
+                <td style="text-align: center"><?= $objGuiaMani->Piezas ?></td>
+                <td style="text-align: left"><?= $objGuiaMani->PiesCub ?></td>
+                <td style="text-align: center"><?= $objGuiaMani->ValorDeclarado ?></td>
+            </tr>
             <?php } ?>
         </table>
     </page_header>

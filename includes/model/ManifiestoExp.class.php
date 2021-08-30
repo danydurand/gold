@@ -36,26 +36,31 @@
         }
 
         public function actualizarTotales() {
-            $intCantPiez = 0;
-            $decSumaLibr = 0;
-            $decSumaVolu = 0;
-            $decSumaKilo = 0;
-            $decSumaPies = 0;
-            $arrPiezCont = GuiaPiezas::LoadArrayByManifiestoExpAsPieza($this->Id);
-            foreach ($arrPiezCont as $objPiezCont) {
-                $intCantPiez ++;
-                $decSumaLibr += (double)$objPiezCont->Libras;
-                $decSumaVolu += (double)$objPiezCont->Volumen;
-                $decSumaKilo += (double)$objPiezCont->Kilos;
-                $decSumaPies += (double)$objPiezCont->PiesCub;
+            $strCadeSqlx  = "SELECT sum(gp.valor_declarado) as suma_valo, ";
+            $strCadeSqlx .= "       sum(gp.libras) as suma_libr, ";
+            $strCadeSqlx .= "       sum(gp.volumen) as suma_volu, ";
+            $strCadeSqlx .= "       sum(gp.kilos) as suma_kilo, ";
+            $strCadeSqlx .= "       sum(gp.pies_cub) as suma_pies, ";
+            $strCadeSqlx .= "       count(*) as cant_piez ";
+            $strCadeSqlx .= "  FROM guia_piezas gp ";
+            $strCadeSqlx .= "       INNER JOIN manifiesto_exp_pieza_assn m ";
+            $strCadeSqlx .= "    ON gp.id = m.guia_pieza_id ";
+            $strCadeSqlx .= " WHERE m.manifiesto_exp_id = ".$this->Id;
+            t('SQL: '.$strCadeSqlx);
+            $objDatabase  = self::GetDatabase();
+            $objDbResult  = $objDatabase->Query($strCadeSqlx);
+            $mixRegistro  = $objDbResult->FetchArray();
+            try {
+                $this->Valor   = $mixRegistro['suma_valo'];
+                $this->Libras  = $mixRegistro['suma_libr'];
+                $this->Volumen = $mixRegistro['suma_volu'];
+                $this->Kilos   = $mixRegistro['suma_kilo'];
+                $this->PiesCub = $mixRegistro['suma_pies'];
+                $this->Piezas  = $mixRegistro['cant_piez'];
+                $this->Save();
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
             }
-            $this->Piezas  = $intCantPiez;
-            $this->Libras  = $decSumaLibr;
-            $this->Volumen = $decSumaVolu;
-            $this->Kilos   = $decSumaKilo;
-            $this->PiesCub = $decSumaPies;
-            $this->Piezas  = $intCantPiez;
-            $this->Save();
         }
 
         public function GetPiezasConCheckpoint($strCodiCkpt, $strTipoDato='IdPieza') {

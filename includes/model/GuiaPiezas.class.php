@@ -27,6 +27,31 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+        public static function LoadArrayByManifiestoExp($strParam1) {
+            // Performing the load manually (instead of using QCubed Query)
+
+            // Get the Database Object for this Class
+            $objDatabase = GuiaPiezas::GetDatabase();
+
+            // Properly Escape All Input Parameters using Database->SqlVariable()
+            $strParam1 = $objDatabase->SqlVariable($strParam1);
+
+            $strCadeSqlx  = "SELECT gp.* ";
+            $strCadeSqlx .= "  FROM guia_piezas gp ";
+            $strCadeSqlx .= "    ON g.id = gp.guia_id ";
+            $strCadeSqlx .= "       INNER JOIN manifiesto_exp_pieza_assn m ";
+            $strCadeSqlx .= "    ON gp.id = m.guia_pieza_id ";
+            $strCadeSqlx .= " WHERE m.manifiesto_exp_id = %s ";
+
+
+            // Setup the SQL Query
+            $strQuery = sprintf($strCadeSqlx, $strParam1);
+
+            // Perform the Query and Instantiate the Result
+            $objDbResult = $objDatabase->Query($strQuery);
+            return Guias::InstantiateDbResult($objDbResult);
+        }
+
 
         public function TransferirHistorico($intGuiaIdxx, ProcesoError $objProcEjec) {
 		    //t('Transfiriendo pieza: '.$this->IdPieza);

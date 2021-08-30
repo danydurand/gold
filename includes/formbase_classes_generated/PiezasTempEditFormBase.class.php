@@ -55,13 +55,14 @@ abstract class PiezasTempEditFormBase extends QForm {
 	// Controls for PiezasTemp's Data Fields
 	protected $lblId;
 	protected $lstProcesoError;
-	protected $txtIdPieza;
+	protected $txtPiezaId;
 	protected $txtDescripcion;
 	protected $txtKilos;
 	protected $txtAlto;
 	protected $txtAncho;
 	protected $txtLargo;
 	protected $txtVolumen;
+	protected $txtValorDeclarado;
 	protected $txtPiesCub;
 	protected $lblCreatedAt;
 	protected $lblUpdatedAt;
@@ -135,13 +136,14 @@ abstract class PiezasTempEditFormBase extends QForm {
 		// Call MetaControl's methods to create qcontrols based on PiezasTemp's data fields
 		$this->lblId = $this->mctPiezasTemp->lblId_Create();
 		$this->lstProcesoError = $this->mctPiezasTemp->lstProcesoError_Create();
-		$this->txtIdPieza = $this->mctPiezasTemp->txtIdPieza_Create();
+		$this->txtPiezaId = $this->mctPiezasTemp->txtPiezaId_Create();
 		$this->txtDescripcion = $this->mctPiezasTemp->txtDescripcion_Create();
 		$this->txtKilos = $this->mctPiezasTemp->txtKilos_Create();
 		$this->txtAlto = $this->mctPiezasTemp->txtAlto_Create();
 		$this->txtAncho = $this->mctPiezasTemp->txtAncho_Create();
 		$this->txtLargo = $this->mctPiezasTemp->txtLargo_Create();
 		$this->txtVolumen = $this->mctPiezasTemp->txtVolumen_Create();
+		$this->txtValorDeclarado = $this->mctPiezasTemp->txtValorDeclarado_Create();
 		$this->txtPiesCub = $this->mctPiezasTemp->txtPiesCub_Create();
 		$this->lblCreatedAt = $this->mctPiezasTemp->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctPiezasTemp->lblUpdatedAt_Create();

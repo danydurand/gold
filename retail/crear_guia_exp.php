@@ -160,6 +160,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $txtAnchPiez;
     protected $txtLargPiez;
     protected $txtVoluPiez;
+    protected $txtValoPiez;
     protected $txtPiesPiez;
     protected $blnEditPiez = false;
     protected $intEditPiez;
@@ -169,11 +170,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lblAnchPiez;
     protected $lblLargPiez;
     protected $lblVoluPiez;
+    protected $lblValoPiez;
     protected $lblPiesPiez;
     protected $lblKiloPiez;
 
     protected $decTasaDola;
     protected $decTasaEuro;
+    protected $blnCambPiez;
 
     
     protected function SetupGuia() {
@@ -212,12 +215,14 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 t('Pieza: '.$objPiezGuia->IdPieza);
                 $objPiezTemp = new PiezasTemp();
                 $objPiezTemp->ProcesoErrorId = $this->objProcEjec->Id;
+                $objPiezTemp->PiezaId        = $objPiezGuia->Id;
                 $objPiezTemp->Descripcion    = trim($objPiezGuia->Descripcion);
                 $objPiezTemp->Kilos          = $objPiezGuia->Kilos;
                 $objPiezTemp->Alto           = $objPiezGuia->Alto;
                 $objPiezTemp->Ancho          = $objPiezGuia->Ancho;
                 $objPiezTemp->Largo          = $objPiezGuia->Largo;
                 $objPiezTemp->Volumen        = $objPiezGuia->Volumen;
+                $objPiezTemp->ValorDeclarado = $objPiezGuia->ValorDeclarado;
                 $objPiezTemp->PiesCub        = $objPiezGuia->PiesCub;
                 $objPiezTemp->CreatedBy      = $this->objUsuario->CodiUsua;
                 $objPiezTemp->Save();
@@ -341,6 +346,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lblAnchPiez_Create();
         $this->lblLargPiez_Create();
         $this->lblVoluPiez_Create();
+        $this->lblValoPiez_Create();
         $this->lblPiesPiez_Create();
         $this->lblKiloPiez_Create();
 
@@ -354,6 +360,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtVoluEnvi_Create();
         $this->txtPiesEnvi_Create();
 
+        $this->txtValoDecl = disableControl($this->txtValoDecl);
         $this->txtKiloEnvi = disableControl($this->txtKiloEnvi);
         $this->txtAltoEnvi = disableControl($this->txtAltoEnvi);
         $this->txtAnchEnvi = disableControl($this->txtAnchEnvi);
@@ -365,6 +372,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchPiez_Create();
         $this->txtLargPiez_Create();
         $this->txtVoluPiez_Create();
+        $this->txtValoPiez_Create();
         $this->txtPiesPiez_Create();
         $this->txtKiloPiez_Create();
         $this->btnSavePiez_Create();
@@ -375,15 +383,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //$this->btnMasxAcci_Create();
         //$this->btnErroProc_Create();
         //$this->lblPopuModa_Create();
-        //---------
-        // Eventos
-        //---------
-        //$this->lstSucuDest_Change();
-
-        //$strTextMens = 'Evite el uso de caracteres especiales (Ej: \\~°#^*+) en <b>los nombres, las direcciones, el contenido y los teléfonos</b>';
-        //$this->mensaje($strTextMens,'m','i','',__iINFO__);
-
-        //t('Voy por aqui 6');
 
         if ($this->blnEditMode) {
             if (!is_null($this->objGuia->FacturaId)) {
@@ -580,8 +579,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $blnSeleAere = $this->objGuia->ServicioImportacion == 'AER';
             $blnSeleMari = $this->objGuia->ServicioImportacion == 'MAR';
         }
-        $this->lstServExpo->AddItem('MARITIMO','MAR', $blnSeleAere);
-        $this->lstServExpo->AddItem('AEREO','AER', $blnSeleMari);
+        $this->lstServExpo->AddItem('MARITIMO','MAR', $blnSeleMari);
+        $this->lstServExpo->AddItem('AEREO','AER', $blnSeleAere);
     }
 
     protected function lstReceDest_Create() {
@@ -866,6 +865,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lblVoluPiez->Visible = false;
     }
 
+    protected function lblValoPiez_Create() {
+        $this->lblValoPiez = new QLabel($this);
+        $this->lblValoPiez->Text = 'Valor';
+        $this->lblValoPiez->Visible = false;
+    }
+
     protected function lblPiesPiez_Create() {
         $this->lblPiesPiez = new QLabel($this);
         $this->lblPiesPiez->Text = 'PiesCub';
@@ -881,7 +886,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtContPiez_Create() {
         $this->txtContPiez = new QTextBox($this);
         $this->txtContPiez->Placeholder = 'Descripcion del Contenido de la Pieza';
-        $this->txtContPiez->Width = 350;
+        $this->txtContPiez->Width = 320;
         $this->txtContPiez->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         $this->txtContPiez->Visible = false;
     }
@@ -916,6 +921,14 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtVoluPiez->Visible = false;
         $this->txtVoluPiez->Enabled = false;
         $this->txtVoluPiez->ForeColor = 'blue';
+    }
+
+    protected function txtValoPiez_Create() {
+        $this->txtValoPiez = new QTextBox($this);
+        $this->txtValoPiez->Width = 60;
+        $this->txtValoPiez->Visible = false;
+        //$this->txtValoPiez->Enabled = false;
+        //$this->txtValoPiez->ForeColor = 'blue';
     }
 
     protected function txtPiesPiez_Create() {
@@ -1012,8 +1025,21 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     public function dtgPiezTempRow_Click($strFormId, $strControlId, $strParameter) {
         $id = (int)$strParameter;
         $this->intEditPiez = $id;
-        $this->mostrarCampos('edit');
         $objPiezGuia = PiezasTemp::Load($id);
+        if (!is_null($objPiezGuia->PiezaId)) {
+            t('El Id de la pieza es: '.$objPiezGuia->PiezaId);
+            $objPiezOrig = GuiaPiezas::Load($objPiezGuia->PiezaId);
+
+            $strCodiCkpt = $objPiezOrig->ultimoCheckpoint();
+            t('El Ultimo Ckpt es: '.$strCodiCkpt);
+            if ($strCodiCkpt != 'PU') {
+                t('No se puede cambiar');
+                $this->danger('Pieza no disponible para ser modificada');
+                return;
+            }
+            t('Si admite cambios');
+        }
+        $this->mostrarCampos('edit');
 
         $this->txtContPiez->Text = $objPiezGuia->Descripcion;
         $this->txtKiloPiez->Text = $objPiezGuia->Kilos;
@@ -1021,6 +1047,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchPiez->Text = $objPiezGuia->Ancho;
         $this->txtLargPiez->Text = $objPiezGuia->Largo;
         $this->txtVoluPiez->Text = $objPiezGuia->Volumen;
+        $this->txtValoPiez->Text = $objPiezGuia->ValorDeclarado;
         $this->txtPiesPiez->Text = $objPiezGuia->PiesCub;
         $this->blnEditPiez       = true;
     }
@@ -1061,17 +1088,18 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
         }
         try {
-            $objPiezGuia->Descripcion = strtoupper(limpiarCadena($this->txtContPiez->Text));
-            $objPiezGuia->Kilos       = (float)$this->txtKiloPiez->Text;
-            $objPiezGuia->Alto        = (float)$this->txtAltoPiez->Text;
-            $objPiezGuia->Ancho       = (float)$this->txtAnchPiez->Text;
-            $objPiezGuia->Largo       = (float)$this->txtLargPiez->Text;
-            $objPiezGuia->Volumen     = (float)$this->txtVoluPiez->Text;
-            $objPiezGuia->PiesCub     = (float)$this->txtPiesPiez->Text;
+            $objPiezGuia->Descripcion    = strtoupper(limpiarCadena($this->txtContPiez->Text));
+            $objPiezGuia->Kilos          = (float)$this->txtKiloPiez->Text;
+            $objPiezGuia->Alto           = (float)$this->txtAltoPiez->Text;
+            $objPiezGuia->Ancho          = (float)$this->txtAnchPiez->Text;
+            $objPiezGuia->Largo          = (float)$this->txtLargPiez->Text;
+            $objPiezGuia->Volumen        = (float)$this->txtVoluPiez->Text;
+            $objPiezGuia->ValorDeclarado = (float)$this->txtValoPiez->Text;
+            $objPiezGuia->PiesCub        = (float)$this->txtPiesPiez->Text;
             $objPiezGuia->Save();
             t('Salve en PiezasTemp');
             $this->sumaPiezas();
-
+            $this->blnCambPiez = true;
         } catch (Exception $e) {
             t('Error: '.$e->getMessage());
         }
@@ -1084,12 +1112,14 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchPiez->Text = '';
         $this->txtLargPiez->Text = '';
         $this->txtVoluPiez->Text = '';
+        $this->txtValoPiez->Text = '';
         $this->txtPiesPiez->Text = '';
 
         //$this->success('Transaccion Exitosa.  Pieza guardada !!!');
     }
 
     protected function btnDelePiez_Click() {
+        $this->blnCambPiez = true;
         t('Borrando pieza');
         $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
 
@@ -1106,6 +1136,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchPiez->Text = '';
         $this->txtLargPiez->Text = '';
         $this->txtVoluPiez->Text = '';
+        $this->txtValoPiez->Text = '';
         $this->txtPiesPiez->Text = '';
         t('Listo el borrado');
         $this->success('Transaccion Exitosa.  Pieza borrada !!!');
@@ -1135,6 +1166,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtAnchPiez->Visible = !$this->txtAnchPiez->Visible;
             $this->txtLargPiez->Visible = !$this->txtLargPiez->Visible;
             $this->txtVoluPiez->Visible = !$this->txtVoluPiez->Visible;
+            $this->txtValoPiez->Visible = !$this->txtValoPiez->Visible;
             $this->txtPiesPiez->Visible = !$this->txtPiesPiez->Visible;
 
             $this->btnSavePiez->Visible = !$this->btnSavePiez->Visible;
@@ -1147,6 +1179,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtAltoPiez->Text = '';
             $this->txtLargPiez->Text = '';
             $this->txtVoluPiez->Text = '';
+            $this->txtValoPiez->Text = '';
             $this->txtPiesPiez->Text = '';
 
         }
@@ -1167,6 +1200,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtAltoPiez->Visible = true;
             $this->txtLargPiez->Visible = true;
             $this->txtVoluPiez->Visible = true;
+            $this->txtValoPiez->Visible = true;
             $this->txtPiesPiez->Visible = true;
 
             $this->btnSavePiez->Visible = true;
@@ -1177,6 +1211,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     }
 
     protected function btnCancel_Click() {
+        if ($this->blnCambPiez) {
+            $strTextMens = 'Hay cambios en las piezas que no han sido reflejados en la BD. Guarde los cambios !!!';
+            $this->warning($strTextMens);
+            return;
+        }
         PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
         $objUltiAcce = PilaAcceso::Pop('D');
         QApplication::Redirect(__SIST__.'/'.$objUltiAcce->__toString());
@@ -1366,9 +1405,16 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = 'DESCRIPCION';
         $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
-        $colDescPiez->Width = 220;
+        $colDescPiez->Width = 200;
         $colDescPiez->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgPiezTemp->AddColumn($colDescPiez);
+
+        $colValoPiez = new QDataGridColumn($this);
+        $colValoPiez->Name = 'VAL';
+        $colValoPiez->Html = '<?= nf($_ITEM->ValorDeclarado); ?>';
+        $colValoPiez->Width = 45;
+        $colValoPiez->HorizontalAlign = QHorizontalAlign::Left;
+        $this->dtgPiezTemp->AddColumn($colValoPiez);
 
         $colAltoPiez = new QDataGridColumn($this);
         $colAltoPiez->Name = 'ALTO';
@@ -1894,6 +1940,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtPiesEnvi->Text = $this->objGuia->PiesCub;
             $this->txtKiloEnvi->Text = $this->objGuia->Kilos;
             t('Regrese el procesamiento de las piezas');
+            $this->blnCambPiez = false;
         }
         //---------------------------------------
         // Se calculan los Importes y Conceptos
@@ -1923,8 +1970,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $arrLogxCamb['strDescCamb'] = 'Ejecutado';
         LogDeCambios($arrLogxCamb);
         if ($blnTodoOkey) {
+            PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
             QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id);
-            //$this->success('Transaccion Exitosa !!!');
         }
     }
 
@@ -1972,6 +2019,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $decSumaAnch = 0;
         $decSumaLarg = 0;
         $decSumaVolu = 0;
+        $decSumaValo = 0;
         $decSumaPies = 0;
         $strDescCont = '';
         $this->objGuia->borrarPiezas();
@@ -1990,6 +2038,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $objGuiaPiez->Ancho          = $objPiezTemp->Ancho;
                     $objGuiaPiez->Largo          = $objPiezTemp->Largo;
                     $objGuiaPiez->Volumen        = $objPiezTemp->Volumen;
+                    $objGuiaPiez->ValorDeclarado = $objPiezTemp->ValorDeclarado;
                     $objGuiaPiez->PiesCub        = $objPiezTemp->PiesCub;
                     $objGuiaPiez->Save();
                     //t('Pieza guardada');
@@ -2003,6 +2052,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $decSumaAnch += $objGuiaPiez->Ancho;
                     $decSumaLarg += $objGuiaPiez->Largo;
                     $decSumaVolu += $objGuiaPiez->Volumen;
+                    $decSumaValo += $objGuiaPiez->ValorDeclarado;
                     $decSumaPies += $objGuiaPiez->PiesCub;
                     $intCantPiez++;
                     t('acumulando...');
@@ -2015,14 +2065,15 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //-------------------------------------------------------------------
         // Se actualiza la descripcion del contenido y los kilos de la Guia
         //-------------------------------------------------------------------
-        $this->objGuia->Contenido = $strDescCont;
-        $this->objGuia->Piezas    = $intCantPiez;
-        $this->objGuia->Kilos     = $decSumaKilo;
-        $this->objGuia->Alto      = $decSumaAlto;
-        $this->objGuia->Ancho     = $decSumaAnch;
-        $this->objGuia->Largo     = $decSumaLarg;
-        $this->objGuia->Volumen   = $decSumaVolu;
-        $this->objGuia->PiesCub   = $decSumaPies;
+        $this->objGuia->Contenido      = $strDescCont;
+        $this->objGuia->Piezas         = $intCantPiez;
+        $this->objGuia->Kilos          = $decSumaKilo;
+        $this->objGuia->Alto           = $decSumaAlto;
+        $this->objGuia->Ancho          = $decSumaAnch;
+        $this->objGuia->Largo          = $decSumaLarg;
+        $this->objGuia->Volumen        = $decSumaVolu;
+        $this->objGuia->ValorDeclarado = $decSumaValo;
+        $this->objGuia->PiesCub        = $decSumaPies;
         $this->objGuia->Save();
         //t('Guia actualizada');
     }
@@ -2034,10 +2085,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $decSumaAnch = 0;
         $decSumaLarg = 0;
         $decSumaVolu = 0;
+        $decSumaValo = 0;
         $decSumaPies = 0;
         $strDescCont = '';
         $arrPiezTemp = PiezasTemp::LoadArrayByProcesoErrorId($this->objProcEjec->Id);
-        t('Hay '.count($arrPiezTemp).' piezas');
+        t('Hay '.count($arrPiezTemp).' pieza(s)');
         foreach ($arrPiezTemp as $objPiezTemp) {
             if ($objPiezTemp->Alto > 0) {
                 t('Procesando pieza: '.$intCantPiez);
@@ -2051,6 +2103,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $decSumaAnch += $objPiezTemp->Ancho;
                 $decSumaLarg += $objPiezTemp->Largo;
                 $decSumaVolu += $objPiezTemp->Volumen;
+                $decSumaValo += $objPiezTemp->ValorDeclarado;
                 $decSumaPies += $objPiezTemp->PiesCub;
                 $intCantPiez++;
                 t('acumulando...');
@@ -2067,6 +2120,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchEnvi->Text = $decSumaAnch;
         $this->txtLargEnvi->Text = $decSumaLarg;
         $this->txtVoluEnvi->Text = $decSumaVolu;
+        $this->txtValoDecl->Text = $decSumaValo;
         $this->txtPiesEnvi->Text = $decSumaPies;
     }
 
@@ -2121,7 +2175,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->Estado                = $this->txtEstaDest->Text;
             $this->objGuia->Ciudad                = $this->txtCiudDest->Text;
             $this->objGuia->CodigoPostal          = $this->txtPostDest->Text;
-            $this->objGuia->TipoExport            = $strCodiExpo;
+            $this->objGuia->TipoExport            = 'COURIER';
+            $this->objGuia->ProductoId            = $objProdExpo->Id;
 
             if (!$this->blnEditMode) {
                 //------------------------------------------------------------------------
@@ -2131,7 +2186,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->objGuia->Tracking      = $this->txtNumeGuia->Text;
                 $this->objGuia->Fecha         = new QDateTime(QDateTime::Now());
                 $this->objGuia->ClienteCorpId = $this->objClieNaci->CodiClie;
-                $this->objGuia->ProductoId    = $objProdExpo->Id;
                 $this->objGuia->Tasa          = $this->decTasaDola;
                 $this->objGuia->Alto          = 0;
                 $this->objGuia->Ancho         = 0;

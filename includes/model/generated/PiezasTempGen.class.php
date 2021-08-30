@@ -17,13 +17,14 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property integer $ProcesoErrorId the value for intProcesoErrorId (Not Null)
-	 * @property integer $IdPieza the value for intIdPieza 
+	 * @property integer $PiezaId the value for intPiezaId 
 	 * @property string $Descripcion the value for strDescripcion (Not Null)
 	 * @property double $Kilos the value for fltKilos 
 	 * @property double $Alto the value for fltAlto 
 	 * @property double $Ancho the value for fltAncho 
 	 * @property double $Largo the value for fltLargo 
 	 * @property double $Volumen the value for fltVolumen 
+	 * @property double $ValorDeclarado the value for fltValorDeclarado 
 	 * @property double $PiesCub the value for fltPiesCub 
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
@@ -55,11 +56,11 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column piezas_temp.id_pieza
-		 * @var integer intIdPieza
+		 * Protected member variable that maps to the database column piezas_temp.pieza_id
+		 * @var integer intPiezaId
 		 */
-		protected $intIdPieza;
-		const IdPiezaDefault = null;
+		protected $intPiezaId;
+		const PiezaIdDefault = null;
 
 
 		/**
@@ -109,6 +110,14 @@
 		 */
 		protected $fltVolumen;
 		const VolumenDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column piezas_temp.valor_declarado
+		 * @var double fltValorDeclarado
+		 */
+		protected $fltValorDeclarado;
+		const ValorDeclaradoDefault = 0;
 
 
 		/**
@@ -192,13 +201,14 @@
 		{
 			$this->intId = PiezasTemp::IdDefault;
 			$this->intProcesoErrorId = PiezasTemp::ProcesoErrorIdDefault;
-			$this->intIdPieza = PiezasTemp::IdPiezaDefault;
+			$this->intPiezaId = PiezasTemp::PiezaIdDefault;
 			$this->strDescripcion = PiezasTemp::DescripcionDefault;
 			$this->fltKilos = PiezasTemp::KilosDefault;
 			$this->fltAlto = PiezasTemp::AltoDefault;
 			$this->fltAncho = PiezasTemp::AnchoDefault;
 			$this->fltLargo = PiezasTemp::LargoDefault;
 			$this->fltVolumen = PiezasTemp::VolumenDefault;
+			$this->fltValorDeclarado = PiezasTemp::ValorDeclaradoDefault;
 			$this->fltPiesCub = PiezasTemp::PiesCubDefault;
 			$this->strCreatedAt = PiezasTemp::CreatedAtDefault;
 			$this->strUpdatedAt = PiezasTemp::UpdatedAtDefault;
@@ -547,13 +557,14 @@
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'proceso_error_id', $strAliasPrefix . 'proceso_error_id');
-			    $objBuilder->AddSelectItem($strTableName, 'id_pieza', $strAliasPrefix . 'id_pieza');
+			    $objBuilder->AddSelectItem($strTableName, 'pieza_id', $strAliasPrefix . 'pieza_id');
 			    $objBuilder->AddSelectItem($strTableName, 'descripcion', $strAliasPrefix . 'descripcion');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'alto', $strAliasPrefix . 'alto');
 			    $objBuilder->AddSelectItem($strTableName, 'ancho', $strAliasPrefix . 'ancho');
 			    $objBuilder->AddSelectItem($strTableName, 'largo', $strAliasPrefix . 'largo');
 			    $objBuilder->AddSelectItem($strTableName, 'volumen', $strAliasPrefix . 'volumen');
+			    $objBuilder->AddSelectItem($strTableName, 'valor_declarado', $strAliasPrefix . 'valor_declarado');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -690,9 +701,9 @@
 			$strAlias = $strAliasPrefix . 'proceso_error_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intProcesoErrorId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'id_pieza';
+			$strAlias = $strAliasPrefix . 'pieza_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intIdPieza = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$objToReturn->intPiezaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'descripcion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDescripcion = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -711,6 +722,9 @@
 			$strAlias = $strAliasPrefix . 'volumen';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltVolumen = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'valor_declarado';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltValorDeclarado = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'pies_cub';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltPiesCub = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -923,25 +937,27 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `piezas_temp` (
 							`proceso_error_id`,
-							`id_pieza`,
+							`pieza_id`,
 							`descripcion`,
 							`kilos`,
 							`alto`,
 							`ancho`,
 							`largo`,
 							`volumen`,
+							`valor_declarado`,
 							`pies_cub`,
 							`created_by`,
 							`updated_by`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intProcesoErrorId) . ',
-							' . $objDatabase->SqlVariable($this->intIdPieza) . ',
+							' . $objDatabase->SqlVariable($this->intPiezaId) . ',
 							' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							' . $objDatabase->SqlVariable($this->fltAlto) . ',
 							' . $objDatabase->SqlVariable($this->fltAncho) . ',
 							' . $objDatabase->SqlVariable($this->fltLargo) . ',
 							' . $objDatabase->SqlVariable($this->fltVolumen) . ',
+							' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
@@ -991,13 +1007,14 @@
 							`piezas_temp`
 						SET
 							`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intProcesoErrorId) . ',
-							`id_pieza` = ' . $objDatabase->SqlVariable($this->intIdPieza) . ',
+							`pieza_id` = ' . $objDatabase->SqlVariable($this->intPiezaId) . ',
 							`descripcion` = ' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							`alto` = ' . $objDatabase->SqlVariable($this->fltAlto) . ',
 							`ancho` = ' . $objDatabase->SqlVariable($this->fltAncho) . ',
 							`largo` = ' . $objDatabase->SqlVariable($this->fltLargo) . ',
 							`volumen` = ' . $objDatabase->SqlVariable($this->fltVolumen) . ',
+							`valor_declarado` = ' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
@@ -1130,13 +1147,14 @@
 
 			// Update $this's local variables to match
 			$this->ProcesoErrorId = $objReloaded->ProcesoErrorId;
-			$this->intIdPieza = $objReloaded->intIdPieza;
+			$this->intPiezaId = $objReloaded->intPiezaId;
 			$this->strDescripcion = $objReloaded->strDescripcion;
 			$this->fltKilos = $objReloaded->fltKilos;
 			$this->fltAlto = $objReloaded->fltAlto;
 			$this->fltAncho = $objReloaded->fltAncho;
 			$this->fltLargo = $objReloaded->fltLargo;
 			$this->fltVolumen = $objReloaded->fltVolumen;
+			$this->fltValorDeclarado = $objReloaded->fltValorDeclarado;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
 			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
@@ -1176,12 +1194,12 @@
 					 */
 					return $this->intProcesoErrorId;
 
-				case 'IdPieza':
+				case 'PiezaId':
 					/**
-					 * Gets the value for intIdPieza 
+					 * Gets the value for intPiezaId 
 					 * @return integer
 					 */
-					return $this->intIdPieza;
+					return $this->intPiezaId;
 
 				case 'Descripcion':
 					/**
@@ -1224,6 +1242,13 @@
 					 * @return double
 					 */
 					return $this->fltVolumen;
+
+				case 'ValorDeclarado':
+					/**
+					 * Gets the value for fltValorDeclarado 
+					 * @return double
+					 */
+					return $this->fltValorDeclarado;
 
 				case 'PiesCub':
 					/**
@@ -1325,14 +1350,14 @@
 						throw $objExc;
 					}
 
-				case 'IdPieza':
+				case 'PiezaId':
 					/**
-					 * Sets the value for intIdPieza 
+					 * Sets the value for intPiezaId 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
 					try {
-						return ($this->intIdPieza = QType::Cast($mixValue, QType::Integer));
+						return ($this->intPiezaId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1411,6 +1436,19 @@
 					 */
 					try {
 						return ($this->fltVolumen = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ValorDeclarado':
+					/**
+					 * Sets the value for fltValorDeclarado 
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltValorDeclarado = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1571,13 +1609,14 @@
 			$strToReturn = '<complexType name="PiezasTemp"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="ProcesoError" type="xsd1:ProcesoError"/>';
-			$strToReturn .= '<element name="IdPieza" type="xsd:int"/>';
+			$strToReturn .= '<element name="PiezaId" type="xsd:int"/>';
 			$strToReturn .= '<element name="Descripcion" type="xsd:string"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="Alto" type="xsd:float"/>';
 			$strToReturn .= '<element name="Ancho" type="xsd:float"/>';
 			$strToReturn .= '<element name="Largo" type="xsd:float"/>';
 			$strToReturn .= '<element name="Volumen" type="xsd:float"/>';
+			$strToReturn .= '<element name="ValorDeclarado" type="xsd:float"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
@@ -1611,8 +1650,8 @@
 			if ((property_exists($objSoapObject, 'ProcesoError')) &&
 				($objSoapObject->ProcesoError))
 				$objToReturn->ProcesoError = ProcesoError::GetObjectFromSoapObject($objSoapObject->ProcesoError);
-			if (property_exists($objSoapObject, 'IdPieza'))
-				$objToReturn->intIdPieza = $objSoapObject->IdPieza;
+			if (property_exists($objSoapObject, 'PiezaId'))
+				$objToReturn->intPiezaId = $objSoapObject->PiezaId;
 			if (property_exists($objSoapObject, 'Descripcion'))
 				$objToReturn->strDescripcion = $objSoapObject->Descripcion;
 			if (property_exists($objSoapObject, 'Kilos'))
@@ -1625,6 +1664,8 @@
 				$objToReturn->fltLargo = $objSoapObject->Largo;
 			if (property_exists($objSoapObject, 'Volumen'))
 				$objToReturn->fltVolumen = $objSoapObject->Volumen;
+			if (property_exists($objSoapObject, 'ValorDeclarado'))
+				$objToReturn->fltValorDeclarado = $objSoapObject->ValorDeclarado;
 			if (property_exists($objSoapObject, 'PiesCub'))
 				$objToReturn->fltPiesCub = $objSoapObject->PiesCub;
 			if (property_exists($objSoapObject, 'CreatedAt'))
@@ -1673,13 +1714,14 @@
 			///////////////////
 			$iArray['Id'] = $this->intId;
 			$iArray['ProcesoErrorId'] = $this->intProcesoErrorId;
-			$iArray['IdPieza'] = $this->intIdPieza;
+			$iArray['PiezaId'] = $this->intPiezaId;
 			$iArray['Descripcion'] = $this->strDescripcion;
 			$iArray['Kilos'] = $this->fltKilos;
 			$iArray['Alto'] = $this->fltAlto;
 			$iArray['Ancho'] = $this->fltAncho;
 			$iArray['Largo'] = $this->fltLargo;
 			$iArray['Volumen'] = $this->fltVolumen;
+			$iArray['ValorDeclarado'] = $this->fltValorDeclarado;
 			$iArray['PiesCub'] = $this->fltPiesCub;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
 			$iArray['UpdatedAt'] = $this->strUpdatedAt;
@@ -1725,13 +1767,14 @@
      * @property-read QQNode $Id
      * @property-read QQNode $ProcesoErrorId
      * @property-read QQNodeProcesoError $ProcesoError
-     * @property-read QQNode $IdPieza
+     * @property-read QQNode $PiezaId
      * @property-read QQNode $Descripcion
      * @property-read QQNode $Kilos
      * @property-read QQNode $Alto
      * @property-read QQNode $Ancho
      * @property-read QQNode $Largo
      * @property-read QQNode $Volumen
+     * @property-read QQNode $ValorDeclarado
      * @property-read QQNode $PiesCub
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -1754,8 +1797,8 @@
 					return new QQNode('proceso_error_id', 'ProcesoErrorId', 'Integer', $this);
 				case 'ProcesoError':
 					return new QQNodeProcesoError('proceso_error_id', 'ProcesoError', 'Integer', $this);
-				case 'IdPieza':
-					return new QQNode('id_pieza', 'IdPieza', 'Integer', $this);
+				case 'PiezaId':
+					return new QQNode('pieza_id', 'PiezaId', 'Integer', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'VarChar', $this);
 				case 'Kilos':
@@ -1768,6 +1811,8 @@
 					return new QQNode('largo', 'Largo', 'Float', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'Float', $this);
+				case 'ValorDeclarado':
+					return new QQNode('valor_declarado', 'ValorDeclarado', 'Float', $this);
 				case 'PiesCub':
 					return new QQNode('pies_cub', 'PiesCub', 'Float', $this);
 				case 'CreatedAt':
@@ -1796,13 +1841,14 @@
      * @property-read QQNode $Id
      * @property-read QQNode $ProcesoErrorId
      * @property-read QQNodeProcesoError $ProcesoError
-     * @property-read QQNode $IdPieza
+     * @property-read QQNode $PiezaId
      * @property-read QQNode $Descripcion
      * @property-read QQNode $Kilos
      * @property-read QQNode $Alto
      * @property-read QQNode $Ancho
      * @property-read QQNode $Largo
      * @property-read QQNode $Volumen
+     * @property-read QQNode $ValorDeclarado
      * @property-read QQNode $PiesCub
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -1825,8 +1871,8 @@
 					return new QQNode('proceso_error_id', 'ProcesoErrorId', 'integer', $this);
 				case 'ProcesoError':
 					return new QQNodeProcesoError('proceso_error_id', 'ProcesoError', 'integer', $this);
-				case 'IdPieza':
-					return new QQNode('id_pieza', 'IdPieza', 'integer', $this);
+				case 'PiezaId':
+					return new QQNode('pieza_id', 'PiezaId', 'integer', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'string', $this);
 				case 'Kilos':
@@ -1839,6 +1885,8 @@
 					return new QQNode('largo', 'Largo', 'double', $this);
 				case 'Volumen':
 					return new QQNode('volumen', 'Volumen', 'double', $this);
+				case 'ValorDeclarado':
+					return new QQNode('valor_declarado', 'ValorDeclarado', 'double', $this);
 				case 'PiesCub':
 					return new QQNode('pies_cub', 'PiesCub', 'double', $this);
 				case 'CreatedAt':

@@ -80,13 +80,14 @@ abstract class PiezasTempListFormBase extends QForm {
         // can traverse down QQN::piezas_temp() to display fields that are down the hierarchy)
         $this->dtgPiezasTemps->MetaAddColumn('Id');
         $this->dtgPiezasTemps->MetaAddColumn(QQN::PiezasTemp()->ProcesoError);
-        $this->dtgPiezasTemps->MetaAddColumn('IdPieza');
+        $this->dtgPiezasTemps->MetaAddColumn('PiezaId');
         $this->dtgPiezasTemps->MetaAddColumn('Descripcion');
         $this->dtgPiezasTemps->MetaAddColumn('Kilos');
         $this->dtgPiezasTemps->MetaAddColumn('Alto');
         $this->dtgPiezasTemps->MetaAddColumn('Ancho');
         $this->dtgPiezasTemps->MetaAddColumn('Largo');
         $this->dtgPiezasTemps->MetaAddColumn('Volumen');
+        $this->dtgPiezasTemps->MetaAddColumn('ValorDeclarado');
         $this->dtgPiezasTemps->MetaAddColumn('PiesCub');
         $this->dtgPiezasTemps->MetaAddColumn('CreatedAt');
         $this->dtgPiezasTemps->MetaAddColumn('UpdatedAt');

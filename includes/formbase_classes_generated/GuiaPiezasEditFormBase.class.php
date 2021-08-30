@@ -62,6 +62,7 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 	protected $txtAlto;
 	protected $txtAncho;
 	protected $txtVolumen;
+	protected $txtValorDeclarado;
 	protected $txtDescripcion;
 	protected $txtPiesCub;
 	protected $txtMetrosCub;
@@ -150,6 +151,7 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 		$this->txtAlto = $this->mctGuiaPiezas->txtAlto_Create();
 		$this->txtAncho = $this->mctGuiaPiezas->txtAncho_Create();
 		$this->txtVolumen = $this->mctGuiaPiezas->txtVolumen_Create();
+		$this->txtValorDeclarado = $this->mctGuiaPiezas->txtValorDeclarado_Create();
 		$this->txtDescripcion = $this->mctGuiaPiezas->txtDescripcion_Create();
 		$this->txtPiesCub = $this->mctGuiaPiezas->txtPiesCub_Create();
 		$this->txtMetrosCub = $this->mctGuiaPiezas->txtMetrosCub_Create();
