@@ -47,7 +47,6 @@ class ExportarDatos {
 
     public function Exportar() {
         $this->Header();
-//        $this->strHtmlExpo .= '<h3 style="margin-top: 1em; margin-bottom: 1em; text-align: center">'.$this->strTituRepo.'</h3>';
         $this->strHtmlExpo .= '<table border="'.$this->intConxBord.'">';
         $this->strHtmlExpo .= '    <thead>';
         foreach ($this->arrEncaDato as $strEncaDato) {
@@ -65,7 +64,6 @@ class ExportarDatos {
         $this->strHtmlExpo .= '    </tboby>';
         $this->strHtmlExpo .= '</table>';
         $this->Footer();
-//        echo $this->strHtmlExpo;
         return $this->strHtmlExpo;
     }
 

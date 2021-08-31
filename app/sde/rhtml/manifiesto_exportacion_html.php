@@ -9,15 +9,33 @@ if (!isset($_SESSION['ManiIdxx'])) {
 //t('Imprimiendo Manifiesto');
 $intManiIdxx = $_SESSION['ManiIdxx'];
 $objManiImpr = ManifiestoExp::Load($intManiIdxx);
-
+$objUsuario  = unserialize($_SESSION['User']);
 $strNombProc = 'Impresion de Manif de Exp: '.$objManiImpr->Numero;
-$objProcEjec = CrearProceso($strNombProc);
+$objProcEjec = CrearProceso($strNombProc,true);
 //-----------------------------------------------------------------
 // Se seleccionan las piezas asociadas directamente al Manifiesto
 //-----------------------------------------------------------------
 $arrPiezMani = $objManiImpr->GetGuiaPiezasAsPiezaArray();
 //t('El Manifiesto tiene: '.count($arrPiezMani).' piezas');
+
 $objDatabase = GuiasManifiesto::GetDatabase();
+$strCadeSqlx  = "delete ";
+$strCadeSqlx .= "  from guias_manifiesto ";
+$strCadeSqlx .= " where manifiesto_id = $intManiIdxx;";
+try {
+    $objDatabase->NonQuery($strCadeSqlx);
+} catch (Exception $e) {
+    //t('SQL Delete: '.$strCadeSqlx);
+    //t('Error: '.$e->getMessage());
+    $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+    $arrParaErro['NumeRefe'] = $objManiImpr->Numero;
+    $arrParaErro['MensErro'] = $e->getMessage();
+    $arrParaErro['ComeErro'] = 'borrando las guias del manifiesto en la impresion';
+    GrabarError($arrParaErro);
+    return;
+}
+$dttFechCrea = date('Y-m-d H:i');
+$intCodiUsua = $objUsuario->CodiUsua;
 foreach ($arrPiezMani as $objPiezMani) {
     //t('Procesando la pieza: '.$objPiezMani->IdPieza);
     $intGuiaIdxx = $objPiezMani->GuiaId;
@@ -36,15 +54,16 @@ foreach ($arrPiezMani as $objPiezMani) {
     $strCadeSqlx  = "insert ";
     $strCadeSqlx .= "  into guias_manifiesto ";
     $strCadeSqlx .= "values ($intManiIdxx,$intGuiaIdxx,'$strGuiaNume','$strGuiaTrac','$strNombRemi',";
-    $strCadeSqlx .= "        '$strNombDest','$strDescCont',$intCantPiez,$decPesoEnvi,$decValoEnvi) ";
+    $strCadeSqlx .= "'$strNombDest','$strDescCont',$intCantPiez,$decPesoEnvi,$decValoEnvi,";
+    $strCadeSqlx .= "'$dttFechCrea',$intCodiUsua) ";
     $strCadeSqlx .= "on duplicate key update piezas = piezas + $intCantPiez,";
     $strCadeSqlx .= "                        peso = peso + $decPesoEnvi,";
     $strCadeSqlx .= "                        valor = valor + $decValoEnvi;";
     try {
         $objDatabase->NonQuery($strCadeSqlx);
     } catch (Exception $e) {
-        //t('SQL Upsert: '.$strCadeSqlx);
-        //t('Error: '.$e->getMessage());
+        t('SQL Upsert: '.$strCadeSqlx);
+        t('Error: '.$e->getMessage());
         $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
         $arrParaErro['NumeRefe'] = $objPiezMani->IdPieza;
         $arrParaErro['MensErro'] = $e->getMessage();

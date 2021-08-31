@@ -28,7 +28,7 @@ class MasterCliente extends MasterClienteGen {
     }
 
     public function __saldoExcedente() {
-        return str_replace(',','.',nf($this->SaldoExcedente));
+        return str_replace(',','.',$this->SaldoExcedente);
     }
 
     public function __toStringConCodigoInterno() {
@@ -60,7 +60,8 @@ class MasterCliente extends MasterClienteGen {
         // Se deja registro en el log de transacciones
         //----------------------------------------------
         $this->logDeCambios("Se actualiza el Saldo Excedente a: ".$decDeudTota);
-        return nf($decDeudTota);
+        //return nf($decDeudTota);
+        return $decDeudTota;
     }
 
     public function _ranking() {

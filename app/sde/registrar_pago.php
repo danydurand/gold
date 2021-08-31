@@ -219,7 +219,8 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 ? $objFactPaga->MontoPendiente
                 : $objFactPaga->Total;
 	    }
-	    $decTotaPaga = str_replace(',','.',nf($decTotaPaga));
+	    //$decTotaPaga = str_replace(',','.',nf($decTotaPaga));
+	    $decTotaPaga = str_replace(',','.',$decTotaPaga);
 	    //t('Ya calcule el monto a pagar: '.$decTotaPaga);
         $this->info('Monto a Pagar: '.$decTotaPaga);
         $this->txtMonto->Text = $decTotaPaga;

@@ -393,19 +393,21 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
         $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
-
+        $strTextMens   = '';
         if (count($arrFactPend) == 0) {
             $this->danger('No hay Facturas Pendientes.  No se puede enviar el Edo de Cta');
             return;
         }
         switch ($strTipoAcci) {
             case 'E':
-                $this->RedactarCorreoEdoCta($arrFactPend,true, $strDestCorr);
+                $this->RedactarCorreoEdoCta($arrFactPend,false, $strDestCorr);
+                $strTextMens = 'El Edo de Cta fue enviado al Usuario solicitante !!!';
                 break;
             default;
                 $this->ImprimirEdoCta($arrFactPend);
+                $strTextMens = 'El Edo de Cta ha sido enviado al Cliente !!!';
         }
-        $this->success("El Edo de Cta ha sido enviado al Cliente !!!");
+        $this->success($strTextMens);
     }
 
     protected function ImprimirEdoCta($arrFactPend) {
@@ -432,17 +434,14 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
 
     protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=false, $strDestCorr='U') {
-        $objMessage = new QEmailMessage();
-        $objMessage->From = 'GoldCoast - CxC <cobranza@goldsist.com>';
+        $strDireFrom = 'GoldCoast - CxC <cobranza@goldsist.com>';;
         if ($strDestCorr == 'U') {
-            $objMessage->To = $this->objUsuario->MailUsua;
-            //$objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
+            $strEnviAxxx = $this->objUsuario->MailUsua;
         } else {
-            $objMessage->To = $this->objMasterCliente->DireMail;
-            //$objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
+            $strEnviAxxx = $this->objMasterCliente->DireMail;
         }
-        $objMessage->Subject = 'Estado de Cuenta al ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
-        t('El correo sera enviado a: '.$objMessage->To);
+        t('El correo sera enviado a: '.$strEnviAxxx);
+        $strTextSubj = 'Estado de Cuenta al ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
         //------------------------------------------------------------------------------------
         // El programa /rhtml/estado_de_cuenta.php utiliza el vector de Facturas Pendientes
         // para generar el Estado de Cuenta
@@ -451,40 +450,45 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         ob_start();
         include dirname(__FILE__) . '/rhtml/estado_de_cuenta.php';
         $strHtmlFact = ob_get_clean();
-        $objMessage->HtmlBody .= $strHtmlFact;
-
+        $strHtmlBody = $strHtmlFact;
+        t('Ya se genero el HTML');
         //--------------------------
         // Se agrega la coletilla
         //--------------------------
-        $strHtmlCole  = '<br><br><br>';
-        $strHtmlCole .= '<small>SISPAQ - SisCO. Desarrollado por Lufeman Software. http://lufemansoftware.com</small>';
-        $objMessage->HtmlBody .= $strHtmlCole;
+        $strHtmlBody .= '<br><br><br>';
+        $strHtmlBody .= '<small>SISPAQ - SisCO. Desarrollado por Lufeman Software. http://lufemansoftware.com</small>';
+        t('Ya se agrego la coletilla');
+
+        $objMessage = new QEmailMessage();
+        $objMessage->From     = $strDireFrom;
+        $objMessage->To       = $strEnviAxxx;
+        $objMessage->Subject  = $strTextSubj;
+        $objMessage->HtmlBody = $strHtmlBody;
 
         //-------------------------------------
         // Se anexan los PDFs de las Facturas
         //-------------------------------------
         if ($blnAgreFact) {
+            t('Se ha solicitado el envio de las facturas');
+            /* @var $objFactPend Facturas */
             foreach ($arrFactPend as $objFactPend) {
+                t('Procesando la factura: '.$objFactPend->Referencia);
                 //----------------------------------------------------------------------------------
                 // La rutina EmitirFactura, genera un PDF por cada Factura y cada archivo generado
                 // se anexa al correo
                 //----------------------------------------------------------------------------------
-                $strOutxFile = $this->EmitirFactura($objFactPend);
-                $objAttachment = new QEmailAttachment('/tmp/'.$strOutxFile, QMimeType::Pdf);
-                $objMessage->AddAttachment($objAttachment);
+                $strOutxFile   = $this->EmitirFactura($objFactPend);
+                $objFileAtta   = new QEmailAttachment('/tmp/'.$strOutxFile, QMimeType::Pdf);
+                $objMessage->AddAttachment($objFileAtta);
             }
+            t('Se terminaron de procesar las facturas');
         }
 
-        // Add random/custom email headers
-        $objMessage->SetHeader('x-application', 'Sistema SisCO');
-
-        //-------------------------------------
-        // Se suprimen los errores en pantalla
-        //-------------------------------------
-        $mixErroOrig = error_reporting();
-        error_reporting(0);
         try {
+            t('Voy a enviar el correo');
+            $objMessage->SetHeader('x-application', 'SisCO');
             QEmailServer::Send($objMessage);
+            t('Correo enviado');
         } catch (Exception $e) {
             $strNombProc = 'Envio de Edo de Cuenta al Cliente: '.$this->objMasterCliente->NombClie;
             $objProcEjec = CrearProceso($strNombProc,true);
@@ -495,11 +499,78 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             GrabarError($arrParaErro);
             $this->danger($e->getMessage());
         }
-        //------------------------------------------------
-        // Se levantan nuevamente los errores en pantalla
-        //------------------------------------------------
-        error_reporting($mixErroOrig);
+        t('Saliendo');
     }
+
+    //protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=false, $strDestCorr='U') {
+    //    $objMessage = new QEmailMessage();
+    //    $objMessage->From = 'GoldCoast - CxC <cobranza@goldsist.com>';
+    //    if ($strDestCorr == 'U') {
+    //        $objMessage->To = $this->objUsuario->MailUsua;
+    //        //$objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
+    //    } else {
+    //        $objMessage->To = $this->objMasterCliente->DireMail;
+    //        //$objMessage->Bcc = 'danydurand@lufemansoftware.com, danydurand@gmail.com';
+    //    }
+    //    $objMessage->Subject = 'Estado de Cuenta al ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
+    //    t('El correo sera enviado a: '.$objMessage->To);
+    //    //------------------------------------------------------------------------------------
+    //    // El programa /rhtml/estado_de_cuenta.php utiliza el vector de Facturas Pendientes
+    //    // para generar el Estado de Cuenta
+    //    //------------------------------------------------------------------------------------
+    //    $_SESSION['FactPend'] = serialize($arrFactPend);
+    //    ob_start();
+    //    include dirname(__FILE__) . '/rhtml/estado_de_cuenta.php';
+    //    $strHtmlFact = ob_get_clean();
+    //    $objMessage->HtmlBody .= $strHtmlFact;
+    //
+    //    //--------------------------
+    //    // Se agrega la coletilla
+    //    //--------------------------
+    //    $strHtmlCole  = '<br><br><br>';
+    //    $strHtmlCole .= '<small>SISPAQ - SisCO. Desarrollado por Lufeman Software. http://lufemansoftware.com</small>';
+    //    $objMessage->HtmlBody .= $strHtmlCole;
+    //
+    //    //-------------------------------------
+    //    // Se anexan los PDFs de las Facturas
+    //    //-------------------------------------
+    //    if ($blnAgreFact) {
+    //        foreach ($arrFactPend as $objFactPend) {
+    //            //----------------------------------------------------------------------------------
+    //            // La rutina EmitirFactura, genera un PDF por cada Factura y cada archivo generado
+    //            // se anexa al correo
+    //            //----------------------------------------------------------------------------------
+    //            $strOutxFile = $this->EmitirFactura($objFactPend);
+    //            $objAttachment = new QEmailAttachment('/tmp/'.$strOutxFile, QMimeType::Pdf);
+    //            $objMessage->AddAttachment($objAttachment);
+    //        }
+    //    }
+    //
+    //    // Add random/custom email headers
+    //    $objMessage->SetHeader('x-application', 'Sistema SisCO');
+    //
+    //    //-------------------------------------
+    //    // Se suprimen los errores en pantalla
+    //    //-------------------------------------
+    //    $mixErroOrig = error_reporting();
+    //    error_reporting(0);
+    //    try {
+    //        QEmailServer::Send($objMessage);
+    //    } catch (Exception $e) {
+    //        $strNombProc = 'Envio de Edo de Cuenta al Cliente: '.$this->objMasterCliente->NombClie;
+    //        $objProcEjec = CrearProceso($strNombProc,true);
+    //        $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+    //        $arrParaErro['NumeRefe'] = $this->LogiUsua;
+    //        $arrParaErro['MensErro'] = $e->getMessage();
+    //        $arrParaErro['ComeErro'] = "Fallo el envio del Edo de Cuenta";
+    //        GrabarError($arrParaErro);
+    //        $this->danger($e->getMessage());
+    //    }
+    //    //------------------------------------------------
+    //    // Se levantan nuevamente los errores en pantalla
+    //    //------------------------------------------------
+    //    error_reporting($mixErroOrig);
+    //}
 
     protected function EmitirFactura(Facturas $objFactClie) {
         $strNombArch = 'FACT_'.$objFactClie->Referencia.'.pdf';

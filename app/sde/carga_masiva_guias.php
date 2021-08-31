@@ -262,17 +262,28 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function dtgGuiaMani_Bind() {
-        $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::In(QQN::Guias()->Id,$this->objNotaEntr->IdsDeLasGuias());
-        $arrGuiaMani   = Guias::QueryArray(QQ::AndCondition($objClauWher));
+        $arrGuiaMani   = Guias::LoadArrayByNotaEntregaId($this->objNotaEntr->Id);
         $this->dtgGuiaMani->TotalItemCount = count($arrGuiaMani);
 
         // Bind the datasource to the datagrid
-        $this->dtgGuiaMani->DataSource = Guias::QueryArray(
-            QQ::AndCondition($objClauWher),
+        $this->dtgGuiaMani->DataSource = Guias::LoadArrayByNotaEntregaId(
+            $this->objNotaEntr->Id,
             QQ::Clause($this->dtgGuiaMani->OrderByClause, $this->dtgGuiaMani->LimitClause)
         );
     }
+
+    //protected function dtgGuiaMani_Bind() {
+    //    $objClauWher   = QQ::Clause();
+    //    $objClauWher[] = QQ::In(QQN::Guias()->Id,$this->objNotaEntr->IdsDeLasGuias());
+    //    $arrGuiaMani   = Guias::QueryArray(QQ::AndCondition($objClauWher));
+    //    $this->dtgGuiaMani->TotalItemCount = count($arrGuiaMani);
+    //
+    //    // Bind the datasource to the datagrid
+    //    $this->dtgGuiaMani->DataSource = Guias::QueryArray(
+    //        QQ::AndCondition($objClauWher),
+    //        QQ::Clause($this->dtgGuiaMani->OrderByClause, $this->dtgGuiaMani->LimitClause)
+    //    );
+    //}
 
     protected function createdtgGuiaManiColumns() {
         $colNumeTrac = new QDataGridColumn($this);
@@ -286,10 +297,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $colSucuDest->Html = '<?= $_ITEM->Destino->Iata ?>';
         $this->dtgGuiaMani->AddColumn($colSucuDest);
 
-        $colUltiCkpt = new QDataGridColumn($this);
-        $colUltiCkpt->Name = 'U.Ckpt';
-        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint(); ?>';
-        $this->dtgGuiaMani->AddColumn($colUltiCkpt);
+        //$colUltiCkpt = new QDataGridColumn($this);
+        //$colUltiCkpt->Name = 'U.Ckpt';
+        /*$colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint(); ?>';*/
+        //$this->dtgGuiaMani->AddColumn($colUltiCkpt);
 
         $colCantPiez = new QDataGridColumn($this);
         $colCantPiez->Name = QApplication::Translate('Pzas');
@@ -388,23 +399,36 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     }
 
+    //protected function btnExpoGuia_Create() {
+    //    $this->btnExpoGuia = new QDataGridExporterButton($this, $this->dtgGuiaMani);
+    //    $this->btnExpoGuia->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
+    //    $this->btnExpoGuia->Text = '<i class="fa fa-download fa-lg"></i> XLS';
+    //    $this->btnExpoGuia->HtmlEntities = false;
+    //    $this->btnExpoGuia->CssClass = 'btn btn-outline-danger btn-sm';
+    //}
+
     protected function btnExpoGuia_Create() {
-        $this->btnExpoGuia = new QDataGridExporterButton($this, $this->dtgGuiaMani);
-        $this->btnExpoGuia->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
-        $this->btnExpoGuia->Text = '<i class="fa fa-download fa-lg"></i> XLS';
+        $this->btnExpoGuia = new QButtonOD($this);
+        $this->btnExpoGuia->Text = TextoIcono('download','XLS','F','lg');
         $this->btnExpoGuia->HtmlEntities = false;
-        $this->btnExpoGuia->CssClass = 'btn btn-outline-danger btn-sm';
-        //$this->btnExpoGuia->Visible = $this->objUsuario->LogiUsua == 'ddurand';
+        $this->btnExpoGuia->AddAction(new QClickEvent(), new QServerAction('btnExpoGuia_Click'));
+    }
+
+    protected function btnExpoGuia_Click() {
+        QApplication::Redirect(__SIST__.'/guias_del_manifiesto_xls.php?id='.$this->objNotaEntr->Id);
     }
 
     protected function btnExpoPiez_Create() {
-        $this->btnExpoPiez = new QDataGridExporterButton($this, $this->dtgPiezMani);
-        $this->btnExpoPiez->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
-        $this->btnExpoPiez->Text = '<i class="fa fa-download fa-lg"></i> XLS';
+        $this->btnExpoPiez = new QButtonOD($this);
+        $this->btnExpoPiez->Text = TextoIcono('download','XLS','F','lg');
         $this->btnExpoPiez->HtmlEntities = false;
-        $this->btnExpoPiez->CssClass = 'btn btn-outline-danger btn-sm';
-        //$this->btnExpoPiez->Visible = $this->objUsuario->LogiUsua == 'ddurand';
+        $this->btnExpoPiez->AddAction(new QClickEvent(), new QServerAction('btnExpoPiez_Click'));
     }
+
+    protected function btnExpoPiez_Click() {
+        QApplication::Redirect(__SIST__.'/piezas_del_manifiesto_xls.php?id='.$this->objNotaEntr->Id);
+    }
+
 
     protected function lstClieCarg_Create() {
         $this->lstClieCarg = new QListBox($this);
