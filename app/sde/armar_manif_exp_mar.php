@@ -101,7 +101,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->lblResuEntr_Create();
         $this->btnMasxAcci_Create();
 
-
         $this->lstOrigMani = disableControl($this->lstOrigMani);
         $this->txtNumeMani = disableControl($this->txtNumeMani);
         $this->calFechCrea = disableControl($this->calFechCrea);
@@ -127,6 +126,11 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
                     $this->warning($strTextMens);
                 }
             }
+        } else {
+            $this->btnSacaMani->Visible = false;
+            $this->btnBorrMani->Visible = false;
+            $this->btnMasxAcci->Visible = false;
+            $this->btnExpoExce->Visible = false;
         }
     }
 

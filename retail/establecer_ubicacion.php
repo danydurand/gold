@@ -102,7 +102,7 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
         $this->objTasaDola = Tasas::UltimaTasa('USD');
         if ($this->objTasaDola) {
             $this->txtTasaDola->Text = $this->objTasaDola->Tasa;
-            $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$this->objTasaDola->Fecha->__toString("DD/MM/YYYY").')</span>';
+            $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$this->objTasaDola->Fecha->__toString("DD/MM/YYYY hh:mm:ss").')</span>';
         }
     }
 
@@ -114,7 +114,7 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
         $this->objTasaEuro = Tasas::UltimaTasa('EUR');
         if ($this->objTasaEuro) {
             $this->txtTasaEuro->Text = $this->objTasaEuro->Tasa;
-            $this->txtTasaEuro->HtmlAfter = '<span class="texto"> (del '.$this->objTasaEuro->Fecha->__toString("DD/MM/YYYY").')</span>';
+            $this->txtTasaEuro->HtmlAfter = '<span class="texto"> (del '.$this->objTasaEuro->Fecha->__toString("DD/MM/YYYY hh:mm:ss").')</span>';
         }
     }
 
@@ -204,7 +204,7 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
                 $objNuevDola->CreatedBy = $this->objUsuario->CodiUsua;
                 $objNuevDola->Save();
                 $objNuevDola->logDeCambios('Cread@');
-                $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$objNuevDola->CreatedAt->__toString("DD/MM/YYYY").')</span>';
+                $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$objNuevDola->CreatedAt->__toString("DD/MM/YYYY hh:mm:ss").')</span>';
             } catch (Exception $e) {
                 $this->danger('Error Dolar: '.$e->getMessage());
             }
@@ -219,7 +219,7 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
                 $objNuevEuro->CreatedBy = $this->objUsuario->CodiUsua;
                 $objNuevEuro->Save();
                 $objNuevEuro->logDeCambios('Cread@');
-                $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$objNuevEuro->CreatedAt->__toString("DD/MM/YYYY").')</span>';
+                $this->txtTasaDola->HtmlAfter = '<span class="texto"> (del '.$objNuevEuro->CreatedAt->__toString("DD/MM/YYYY hh:mm:ss").')</span>';
             } catch (Exception $e) {
                 $this->danger('Error Euro: '.$e->getMessage());
             }
