@@ -266,20 +266,89 @@
             $this->Save();
         }
 
+        public function borrarZonaAcumulada(ProcesoError $objProcEjec) {
+            $objDatabase = self::GetDatabase();
+            $strCadeSqlx  = "delete ";
+            $strCadeSqlx .= "  from nota_entrega_zona ";
+            $strCadeSqlx .= " where nota_entrega_id = ".$this->Id;
+            try {
+                $objDatabase->NonQuery($strCadeSqlx);
+            } catch (Exception $e) {
+                t('SQL Delete: '.$strCadeSqlx);
+                t('Error: '.$e->getMessage());
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $this->Referencia;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'Borrando el acumulado por zona';
+                GrabarError($arrParaErro);
+            }
+        }
+
+        public function acumularEnLaZona(Guias $objGuiaProc, ProcesoError $objProcEjec) {
+            $intManiIdxx = $this->Id;
+            $intZonaIdxx = $objGuiaProc->Destino->Zona;
+            $intCantPiez = $objGuiaProc->Piezas;
+            $decCantKilo = $objGuiaProc->Kilos;
+            $decCantPies = $objGuiaProc->PiesCub;
+            $intTariIdxx = $objGuiaProc->TarifaAgenteId;
+
+            $strServComp   = $objGuiaProc->ServicioImportacion == 'AER' ? 'AEREO' : 'MARITIMO';
+            $decPesoPiez   = $strServComp == 'AEREO' ? $decCantKilo : $decCantPies;
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->TarifaId,$intTariIdxx);
+            $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Zona,$intZonaIdxx);
+            $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Servicio,$strServComp);
+            $arrTariServ   = TarifaAgentesZonas::QueryArray(QQ::AndCondition($objClauWher));
+            $objTariServ   = $arrTariServ[0];
+            $decPrecZona   = $objTariServ->Precio;
+            $decTotaZona   = $decPrecZona * $decPesoPiez;
+            //-----------------------------------------------------------------------------------
+            // La tabla nota_entrega_zona se usa para acumular el importe, las piezas y el peso
+            // de la guia en la zona.  Esto sera utilizado en el desglose de la factura
+            //-----------------------------------------------------------------------------------
+            $strCadeSqlx  = "insert ";
+            $strCadeSqlx .= "  into nota_entrega_zona ";
+            $strCadeSqlx .= "values ($intManiIdxx,$intZonaIdxx,$intCantPiez,$decCantKilo,$decCantPies,";
+            $strCadeSqlx .= "$decPrecZona,$decTotaZona) ";
+            $strCadeSqlx .= "on duplicate key update piezas = piezas + $intCantPiez,";
+            $strCadeSqlx .= "                        kilos = kilos + $decCantKilo,";
+            $strCadeSqlx .= "                        pies_cub = pies_cub + $decCantPies,";
+            $strCadeSqlx .= "                        total = total + $decTotaZona;";
+            $objDatabase  = self::GetDatabase();
+            try {
+                $objDatabase->NonQuery($strCadeSqlx);
+            } catch (Exception $e) {
+                t('SQL Upsert: '.$strCadeSqlx);
+                t('Error: '.$e->getMessage());
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $objGuiaProc->Tracking;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'upsert en la tabla nota_entrega_zona';
+                GrabarError($arrParaErro);
+            }
+        }
+
+
         public function calcularTodoLosConceptos($arrConcCalc) {
             t('===============================');
             t('Calculando conceptos de la NDE: '.$this->Id);
+            $strNombProc = 'Calculando conceptos de la NDE: '.$this->Id;
+            $objProcEjec = CrearProceso($strNombProc,true);
             t('1ero se eliminan los conceptos existentes asociados a la NDE');
             $this->borrarConceptos();
+            $this->borrarZonaAcumulada($objProcEjec);
             //----------------------------------------------------------------------
             $arrGuiaNota = $this->GetGuiasArray();
             t('Cant de guias a procesar de esa nde: '.count($arrGuiaNota));
             $decTotaNdex = 0;
             foreach ($arrGuiaNota as $objGuiaNota) {
                 t('Procesando la guia: '.$objGuiaNota->Tracking);
-                //$arrConcActi = Conceptos::conceptosActivos($objGuiaNota->Producto->Codigo);
                 $objGuiaNota->calcularTodoLosConceptos($arrConcCalc);
                 $decTotaNdex += $objGuiaNota->Total;
+                //-------------------------------------------
+                // Acmulado de la Nota de Entrega por Zona
+                //-------------------------------------------
+                $this->acumularEnLaZona($objGuiaNota,$objProcEjec);
                 //--------------------------------------------------------------------
                 // La nde se actualiza con los conceptos recien caculados de la guia
                 //--------------------------------------------------------------------
@@ -287,21 +356,21 @@
                 foreach ($arrConcGuia as $objConcGuia) {
                     $objConcNota = NotaConceptos::LoadByNotaEntregaIdConceptoId($this->Id,$objConcGuia->ConceptoId);
                     //t('Concepto de la Nota: '.$objConcNota->Id);
-                    if (!$objConcNota) {
-                        $objConcNota = new NotaConceptos();
-                        $objConcNota->NotaEntregaId = $this->Id;
-                        $objConcNota->ConceptoId    = $objConcGuia->ConceptoId;
-                        $objConcNota->Tipo          = $objConcGuia->Tipo;
-                        $objConcNota->Valor         = is_numeric($objConcGuia->Valor) ? $objConcGuia->Valor : null;
-                        $objConcNota->Monto         = $objConcGuia->Monto;
-                        $objConcNota->MostrarComo   = $objConcGuia->MostrarComo;
-                        $objConcNota->Explicacion   = 'Acumulando las guias asociadas';
-                        t('El concepto: '.$objConcGuia->Concepto->Nombre.' no existia, se acaba de asociar a la nde');
-                    } else {
-                        t('El concepto: '.$objConcNota->Concepto->Nombre.' existia, sumando el monto: '.$objConcGuia->Monto);
-                        $objConcNota->Monto        += $objConcGuia->Monto;
-                    }
                     try {
+                        if (!$objConcNota) {
+                            $objConcNota = new NotaConceptos();
+                            $objConcNota->NotaEntregaId = $this->Id;
+                            $objConcNota->ConceptoId    = $objConcGuia->ConceptoId;
+                            $objConcNota->Tipo          = $objConcGuia->Tipo;
+                            $objConcNota->Valor         = is_numeric($objConcGuia->Valor) ? $objConcGuia->Valor : null;
+                            $objConcNota->Monto         = $objConcGuia->Monto;
+                            $objConcNota->MostrarComo   = $objConcGuia->MostrarComo;
+                            $objConcNota->Explicacion   = 'Acumulando las guias asociadas';
+                            t('El concepto: '.$objConcGuia->Concepto->Nombre.' no existia, se acaba de asociar a la nde');
+                        } else {
+                            t('El concepto: '.$objConcNota->Concepto->Nombre.' existia, sumando el monto: '.$objConcGuia->Monto);
+                            $objConcNota->Monto += $objConcGuia->Monto;
+                        }
                         $objConcNota->Save();
                     } catch (Exception $e) {
                         t('Error: '.$e->getMessage());

@@ -58,6 +58,8 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		t('c1');
+
 		// Use the CreateFromPathInfo shortcut (this can also be done manually using the ConceptosMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
 		$this->mctConceptos = ConceptosMetaControl::CreateFromPathInfo($this);
@@ -78,12 +80,14 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->calFechaFinal = $this->mctConceptos->calFechaFinal_Create();
 		$this->calFechaFinal->Width = 120;
 
+		t('c2');
         $this->txtOperacion = $this->mctConceptos->txtOperacion_Create();
         $this->lstOperacion = $this->lstOperacion_Create();
 
         $this->txtAplicaComo = $this->mctConceptos->txtAplicaComo_Create();
         $this->lstAplicaComo = $this->lstAplicaComo_Create();
 
+        t('c3');
 		$this->txtTipo = $this->mctConceptos->txtTipo_Create();
 		$this->lstTipo = $this->lstTipo_Create();
 
@@ -94,11 +98,13 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->txtValor = $this->mctConceptos->txtValor_Create();
 		$this->txtValor->AddAction(new QChangeEvent(), new QAjaxAction('txtValor_Change'));
 
+		t('c4');
 		$this->txtDbquery = $this->mctConceptos->txtDbquery_Create();
 		$this->txtBaseImponible = $this->mctConceptos->txtBaseImponible_Create();
 		$this->txtBaseImponible->Width = 50;
 		$this->txtMetodo = $this->mctConceptos->txtMetodo_Create();
-		$this->chkAplicarTasa = $this->mctConceptos->chkAplicarTasa_Create();
+        t('c5');
+        $this->chkAplicarTasa = $this->mctConceptos->chkAplicarTasa_Create();
 		$this->lblCreatedAt = $this->mctConceptos->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctConceptos->lblUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctConceptos->lblDeletedAt_Create();
@@ -111,6 +117,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $this->lstTipo_Change();
         $this->txtValor_Change();
 
+        t('c6');
         $this->lblTituRang_Create();
         $this->txtRangInic_Create();
         $this->txtRangFina_Create();
@@ -118,10 +125,13 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $this->btnSaveRang_Create();
         $this->btnCancRang_Create();
 
+        t('c7');
         $this->lblRangInic_Create();
         $this->lblRangFina_Create();
         $this->lblValoRang_Create();
         $this->lblAcciRang_Create();
+
+        t('c8');
     }
 
 	//----------------------------
@@ -597,7 +607,6 @@ class ConceptosEditForm extends ConceptosEditFormBase {
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
-            // Delegate "Delete" processing to the ArancelMetaControl
             $this->mctConceptos->DeleteConceptos();
             $arrLogxCamb['strNombTabl'] = 'Conceptos';
             $arrLogxCamb['intRefeRegi'] = $this->mctConceptos->Conceptos->Id;

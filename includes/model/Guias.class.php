@@ -250,10 +250,6 @@
             $intZonaIdxx = $this->Destino->Zona;
             $strServImpo = $this->__servImportacion();
             t("Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
-            //$objClauWher   = QQ::Clause();
-            //$objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->TarifaId,$this->TarifaAgenteId);
-            //$objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Zona,$intZonaIdxx);
-            //$objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Servicio,trim($strServImpo));
             $objPrecTari   = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx,$intZonaIdxx,$strServImpo);
             if ($objPrecTari) {
                 $precio = $objPrecTari->Precio;
@@ -412,7 +408,7 @@
             //----------------------------------------------------
             // Se actualiza la guia con el total de sus conceptos
             //----------------------------------------------------
-            $this->Total = $total;
+            $this->Total = (float)$total;
             $this->Save();
             t('Se actualizo el total de la guia con: '.$total);
         }
@@ -487,9 +483,9 @@
             }
             if ($concepto->Tipo == 'CAMPO') {
                 t('Tipo CAMPO');
-                if (!isset($this->$actua_sobre)) {
-                    t('No existe el campo '.$actua_sobre);
-                }
+                //if (!isset($this->$actua_sobre)) {
+                //    t('No existe el campo '.$actua_sobre);
+                //}
                 $monto = $this->$actua_sobre;
                 t('El monto es: '.$monto);
             }
@@ -526,6 +522,7 @@
                 t('Aplica como porcentaje');
                 $total = $valor * $valor_base / 100;
                 $texto = "Se aplico: $valor% sobre el concepto $valor_base obteniendo: $total";
+                t($texto);
             }
             return array($total,$texto);
         }

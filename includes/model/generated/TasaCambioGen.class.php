@@ -581,7 +581,7 @@
 			$objToReturn->intDivisaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'fecha_vigencia';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->dttFechaVigencia = $objDbRow->GetColumn($strAliasName, 'Date');
+			$objToReturn->dttFechaVigencia = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'monto';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltMonto = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1322,7 +1322,7 @@
 				case 'Divisa':
 					return new QQNodeDivisa('divisa_id', 'Divisa', 'Integer', $this);
 				case 'FechaVigencia':
-					return new QQNode('fecha_vigencia', 'FechaVigencia', 'Date', $this);
+					return new QQNode('fecha_vigencia', 'FechaVigencia', 'DateTime', $this);
 				case 'Monto':
 					return new QQNode('monto', 'Monto', 'Float', $this);
 

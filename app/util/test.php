@@ -4,6 +4,7 @@ require_once('qcubed.inc.php');
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
 
+
 // Convirtiendo texto a fechas
 
 $strFechEntr = '2021-08-30';

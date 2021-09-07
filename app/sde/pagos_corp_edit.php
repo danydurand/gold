@@ -65,7 +65,6 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 
         $this->dtgFactClie_Create();
 
-        //$this->btnDelete->Visible = false;
         $this->btnNuevRegi->Visible = false;
         $this->lstClienteCorp = disableControl($this->lstClienteCorp);
         $this->lstFormaPago   = disableControl($this->lstFormaPago);
@@ -75,6 +74,9 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 
         $this->mostrarSaldoCliente($this->mctPagosCorp->PagosCorp->ClienteCorp);
 
+        if ($this->objUsuario->LogiUsua != 'ddurand') {
+            $this->lstEstatus = disableControl($this->lstEstatus);
+        }
     }
 
 	//----------------------------

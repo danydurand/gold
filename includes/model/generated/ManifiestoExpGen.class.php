@@ -45,6 +45,8 @@
 	 * @property-read Bag[] $_BagArray the value for the private _objBagArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_bag_assn association table
 	 * @property-read GuiaPiezas $_GuiaPiezasAsPieza the value for the private _objGuiaPiezasAsPieza (Read-Only) if set due to an expansion on the manifiesto_exp_pieza_assn association table
 	 * @property-read GuiaPiezas[] $_GuiaPiezasAsPiezaArray the value for the private _objGuiaPiezasAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_pieza_assn association table
+	 * @property-read ManifiestoExpCkpt $_ManifiestoExpCkpt the value for the private _objManifiestoExpCkpt (Read-Only) if set due to an expansion on the manifiesto_exp_ckpt.manifiesto_exp_id reverse relationship
+	 * @property-read ManifiestoExpCkpt[] $_ManifiestoExpCkptArray the value for the private _objManifiestoExpCkptArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_ckpt.manifiesto_exp_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ManifiestoExpGen extends QBaseClass implements IteratorAggregate {
@@ -274,6 +276,22 @@
 		 * @var GuiaPiezas[] _objGuiaPiezasAsPiezaArray;
 		 */
 		private $_objGuiaPiezasAsPiezaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ManifiestoExpCkpt object
+		 * (of type ManifiestoExpCkpt), if this ManifiestoExp object was restored with
+		 * an expansion on the manifiesto_exp_ckpt association table.
+		 * @var ManifiestoExpCkpt _objManifiestoExpCkpt;
+		 */
+		private $_objManifiestoExpCkpt;
+
+		/**
+		 * Private member variable that stores a reference to an array of ManifiestoExpCkpt objects
+		 * (of type ManifiestoExpCkpt[]), if this ManifiestoExp object was restored with
+		 * an ExpandAsArray on the manifiesto_exp_ckpt association table.
+		 * @var ManifiestoExpCkpt[] _objManifiestoExpCkptArray;
+		 */
+		private $_objManifiestoExpCkptArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -1000,6 +1018,21 @@
 				}
 			}
 
+
+			// Check for ManifiestoExpCkpt Virtual Binding
+			$strAlias = $strAliasPrefix . 'manifiestoexpckpt__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['manifiestoexpckpt']) ? null : $objExpansionAliasArray['manifiestoexpckpt']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objManifiestoExpCkptArray)
+				$objToReturn->_objManifiestoExpCkptArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objManifiestoExpCkptArray[] = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckpt__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objManifiestoExpCkpt)) {
+					$objToReturn->_objManifiestoExpCkpt = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckpt__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
 
 			return $objToReturn;
 		}
@@ -1756,6 +1789,22 @@
 					 */
 					return $this->_objGuiaPiezasAsPiezaArray;
 
+				case '_ManifiestoExpCkpt':
+					/**
+					 * Gets the value for the private _objManifiestoExpCkpt (Read-Only)
+					 * if set due to an expansion on the manifiesto_exp_ckpt.manifiesto_exp_id reverse relationship
+					 * @return ManifiestoExpCkpt
+					 */
+					return $this->_objManifiestoExpCkpt;
+
+				case '_ManifiestoExpCkptArray':
+					/**
+					 * Gets the value for the private _objManifiestoExpCkptArray (Read-Only)
+					 * if set due to an ExpandAsArray on the manifiesto_exp_ckpt.manifiesto_exp_id reverse relationship
+					 * @return ManifiestoExpCkpt[]
+					 */
+					return $this->_objManifiestoExpCkptArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -2202,6 +2251,9 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
+			if ($this->CountManifiestoExpCkpts()) {
+				$arrTablRela[] = 'manifiesto_exp_ckpt';
+			}
 			
 			return $arrTablRela;
 		}
@@ -2210,6 +2262,155 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+
+
+		// Related Objects' Methods for ManifiestoExpCkpt
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ManifiestoExpCkpts as an array of ManifiestoExpCkpt objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExpCkpt[]
+		*/
+		public function GetManifiestoExpCkptArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ManifiestoExpCkpt::LoadArrayByManifiestoExpId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ManifiestoExpCkpts
+		 * @return int
+		*/
+		public function CountManifiestoExpCkpts() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ManifiestoExpCkpt::CountByManifiestoExpId($this->intId);
+		}
+
+		/**
+		 * Associates a ManifiestoExpCkpt
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function AssociateManifiestoExpCkpt(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpCkpt on this unsaved ManifiestoExp.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpCkpt on this ManifiestoExp with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ManifiestoExpCkpt
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function UnassociateManifiestoExpCkpt(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkpt on this unsaved ManifiestoExp.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkpt on this ManifiestoExp with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`manifiesto_exp_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . ' AND
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ManifiestoExpCkpts
+		 * @return void
+		*/
+		public function UnassociateAllManifiestoExpCkpts() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkpt on this unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`manifiesto_exp_id` = null
+				WHERE
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ManifiestoExpCkpt
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function DeleteAssociatedManifiestoExpCkpt(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkpt on this unsaved ManifiestoExp.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkpt on this ManifiestoExp with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_ckpt`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . ' AND
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ManifiestoExpCkpts
+		 * @return void
+		*/
+		public function DeleteAllManifiestoExpCkpts() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkpt on this unsaved ManifiestoExp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ManifiestoExp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_ckpt`
+				WHERE
+					`manifiesto_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 
 		// Related Many-to-Many Objects' Methods for Bag
@@ -2805,6 +3006,7 @@
      * @property-read QQNodeManifiestoExpBag $Bag
      * @property-read QQNodeManifiestoExpGuiaPiezasAsPieza $GuiaPiezasAsPieza
      *
+     * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkpt
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2870,6 +3072,8 @@
 					return new QQNodeManifiestoExpBag($this);
 				case 'GuiaPiezasAsPieza':
 					return new QQNodeManifiestoExpGuiaPiezasAsPieza($this);
+				case 'ManifiestoExpCkpt':
+					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckpt', 'reverse_reference', 'manifiesto_exp_id', 'ManifiestoExpCkpt');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2915,6 +3119,7 @@
      * @property-read QQNodeManifiestoExpBag $Bag
      * @property-read QQNodeManifiestoExpGuiaPiezasAsPieza $GuiaPiezasAsPieza
      *
+     * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkpt
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2980,6 +3185,8 @@
 					return new QQNodeManifiestoExpBag($this);
 				case 'GuiaPiezasAsPieza':
 					return new QQNodeManifiestoExpGuiaPiezasAsPieza($this);
+				case 'ManifiestoExpCkpt':
+					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckpt', 'reverse_reference', 'manifiesto_exp_id', 'ManifiestoExpCkpt');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

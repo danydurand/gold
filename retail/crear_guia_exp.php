@@ -867,7 +867,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function lblValoPiez_Create() {
         $this->lblValoPiez = new QLabel($this);
-        $this->lblValoPiez->Text = 'Valor';
+        $this->lblValoPiez->Text = 'Val Dec. ($)';
         $this->lblValoPiez->Visible = false;
     }
 
@@ -925,10 +925,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtValoPiez_Create() {
         $this->txtValoPiez = new QTextBox($this);
-        $this->txtValoPiez->Width = 60;
+        $this->txtValoPiez->Width = 80;
         $this->txtValoPiez->Visible = false;
-        //$this->txtValoPiez->Enabled = false;
-        //$this->txtValoPiez->ForeColor = 'blue';
     }
 
     protected function txtPiesPiez_Create() {
@@ -1158,6 +1156,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->lblAnchPiez->Visible = !$this->lblAnchPiez->Visible;
             $this->lblLargPiez->Visible = !$this->lblLargPiez->Visible;
             $this->lblVoluPiez->Visible = !$this->lblVoluPiez->Visible;
+            $this->lblValoPiez->Visible = !$this->lblValoPiez->Visible;
             $this->lblPiesPiez->Visible = !$this->lblPiesPiez->Visible;
 
             $this->txtContPiez->Visible = !$this->txtContPiez->Visible;
@@ -1192,6 +1191,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->lblAltoPiez->Visible = true;
             $this->lblLargPiez->Visible = true;
             $this->lblVoluPiez->Visible = true;
+            $this->lblValoPiez->Visible = true;
             $this->lblPiesPiez->Visible = true;
 
             $this->txtContPiez->Visible = true;
@@ -1948,11 +1948,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if ($blnTodoOkey) {
             $arrConcActi = Conceptos::conceptosActivos($this->objGuia->Producto->Codigo);
             $this->objGuia->calcularTodoLosConceptos($arrConcActi);
-            $this->txtTotaGuia->Text = $this->objGuia->Total;
+            $this->txtTotaGuia->Text = round($this->objGuia->Total,2);
             //-------------------------------------
             // Se graga el Pick-Up de cada piezas
             //-------------------------------------
+            t('Voy a grabar el pick-up a las piezas');
             $intContCkpt = $this->grabarPickUp();
+            t('Regrese de la rutina de Pick-Up');
         }
         //--------------------------------------
         // Se almacena el resultado del proceso
@@ -1961,16 +1963,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->objProcEjec->Comentario     = !$blnTodoOkey ? 'Guia creada exitosamente' : 'No se pudo crear la guia';
         $this->objProcEjec->NotificarAdmin = !$blnTodoOkey ? true : false;
         $this->objProcEjec->Save();
-        //----------------------------------------------
-        // Se deja registro de la transacción realizada
-        //----------------------------------------------
-        $arrLogxCamb['strNombTabl'] = 'ProcesoError';
-        $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
-        $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
-        $arrLogxCamb['strDescCamb'] = 'Ejecutado';
-        LogDeCambios($arrLogxCamb);
+        t('Proceso actualizado');
         if ($blnTodoOkey) {
+            t('Voy a eliminar la piezas del Usuario...');
             PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
+            t('Regreso del borrar de piezas temp y voy a la consulta');
             QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id);
         }
     }

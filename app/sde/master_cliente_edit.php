@@ -400,7 +400,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         }
         switch ($strTipoAcci) {
             case 'E':
-                $this->RedactarCorreoEdoCta($arrFactPend,false, $strDestCorr);
+                $this->RedactarCorreoEdoCta($arrFactPend, true, $strDestCorr);
                 $strTextMens = 'El Edo de Cta fue enviado al Usuario solicitante !!!';
                 break;
             default;
@@ -876,10 +876,11 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->dtgFactPend->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
         $this->dtgFactPend->AddRowAction(new QClickEvent(), new QAjaxAction('dtgFactPendRow_Click'));
 
-        $this->dtgFactPend->MetaAddColumn('Referencia');
+        $this->dtgFactPend->MetaAddColumn('Referencia','Name=REF');
         $this->dtgFactPend->MetaAddColumn('Fecha');
 
         $this->dtgFactPend->MetaAddColumn('Total');
+        $this->dtgFactPend->MetaAddColumn('MontoPendiente','Name=PEND');
         $this->dtgFactPend->MetaAddColumn('EstatusPago');
 
         $this->dtgFactPend->SetDataBinder('dtgFactPend_Binder');
@@ -923,8 +924,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->dtgFactPgda->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
         $this->dtgFactPgda->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
-        /*$this->dtgFactPgda->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
-        //$this->dtgFactPgda->AddRowAction(new QClickEvent(), new QAjaxAction('dtgChofSucuRow_Click'));
+        $this->dtgFactPgda->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgFactPgda->AddRowAction(new QClickEvent(), new QAjaxAction('dtgFactPgdaRow_Click'));
 
         $this->dtgFactPgda->MetaAddColumn('Referencia');
         $this->dtgFactPgda->MetaAddColumn('Fecha');
@@ -950,6 +951,12 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             QQ::Clause($this->dtgFactPgda->OrderByClause, $this->dtgFactPgda->LimitClause)
         );
     }
+
+    public function dtgFactPgdaRow_Click($strFormId, $strControlId, $strParameter) {
+        $intIdxxFact = intval($strParameter);
+        QApplication::Redirect(__SIST__."/facturas_edit.php/$intIdxxFact");
+    }
+
 
     protected function dtgNotaCred_Create() {
         $this->dtgNotaCred = new NotaCreditoCorpDataGrid($this);

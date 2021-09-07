@@ -39,12 +39,15 @@ class NotaCreditoCorpListForm extends NotaCreditoCorpListFormBase {
 
 		// Instantiate the Meta DataGrid
 		$this->dtgNotaCreditoCorps = new NotaCreditoCorpDataGrid($this);
-		$this->dtgNotaCreditoCorps->FontSize = 13;
+		$this->dtgNotaCreditoCorps->FontSize = 12;
 		$this->dtgNotaCreditoCorps->ShowFilter = false;
 
 		// Style the DataGrid (if desired)
 		$this->dtgNotaCreditoCorps->CssClass = 'datagrid';
 		$this->dtgNotaCreditoCorps->AlternateRowStyle->CssClass = 'alternate';
+
+		$this->dtgNotaCreditoCorps->SortColumnIndex = 0;
+		$this->dtgNotaCreditoCorps->SortDirection = 1;
 
 		// Add Pagination (if desired)
 		$this->dtgNotaCreditoCorps->Paginator = new QPaginator($this->dtgNotaCreditoCorps);

@@ -769,6 +769,13 @@
 		QApplicationBase::$ClassFile['manifiestoexpmetacontrol'] = __META_CONTROLS__ . '/ManifiestoExpMetaControl.class.php';
 		QApplicationBase::$ClassFile['manifiestoexpdatagrid'] = __META_CONTROLS__ . '/ManifiestoExpDataGrid.class.php';
 
+	// ClassPaths for the ManifiestoExpCkpt class
+		QApplicationBase::$ClassFile['manifiestoexpckpt'] = __MODEL__ . '/ManifiestoExpCkpt.class.php';
+		QApplicationBase::$ClassFile['qqnodemanifiestoexpckpt'] = __MODEL__ . '/ManifiestoExpCkpt.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodemanifiestoexpckpt'] = __MODEL__ . '/ManifiestoExpCkpt.class.php';
+		QApplicationBase::$ClassFile['manifiestoexpckptmetacontrol'] = __META_CONTROLS__ . '/ManifiestoExpCkptMetaControl.class.php';
+		QApplicationBase::$ClassFile['manifiestoexpckptdatagrid'] = __META_CONTROLS__ . '/ManifiestoExpCkptDataGrid.class.php';
+
 	// ClassPaths for the MasCartaDevo class
 		QApplicationBase::$ClassFile['mascartadevo'] = __MODEL__ . '/MasCartaDevo.class.php';
 		QApplicationBase::$ClassFile['qqnodemascartadevo'] = __MODEL__ . '/MasCartaDevo.class.php';
@@ -894,6 +901,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodenotaentregah'] = __MODEL__ . '/NotaEntregaH.class.php';
 		QApplicationBase::$ClassFile['notaentregahmetacontrol'] = __META_CONTROLS__ . '/NotaEntregaHMetaControl.class.php';
 		QApplicationBase::$ClassFile['notaentregahdatagrid'] = __META_CONTROLS__ . '/NotaEntregaHDataGrid.class.php';
+
+	// ClassPaths for the NotaEntregaZona class
+		QApplicationBase::$ClassFile['notaentregazona'] = __MODEL__ . '/NotaEntregaZona.class.php';
+		QApplicationBase::$ClassFile['qqnodenotaentregazona'] = __MODEL__ . '/NotaEntregaZona.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodenotaentregazona'] = __MODEL__ . '/NotaEntregaZona.class.php';
+		QApplicationBase::$ClassFile['notaentregazonametacontrol'] = __META_CONTROLS__ . '/NotaEntregaZonaMetaControl.class.php';
+		QApplicationBase::$ClassFile['notaentregazonadatagrid'] = __META_CONTROLS__ . '/NotaEntregaZonaDataGrid.class.php';
 
 	// ClassPaths for the Notificacion class
 		QApplicationBase::$ClassFile['notificacion'] = __MODEL__ . '/Notificacion.class.php';

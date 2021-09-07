@@ -18,15 +18,56 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
         </div>
         <div class="row" style="margin-top: 1em">
             <div class="col-md-5">
-                <?php //$this->lblId->RenderWithName(); ?>
-                <?php $this->lstClienteCorp->RenderWithName(); ?>
-                <?php $this->lstFormaPago->RenderWithName(); ?>
-                <?php $this->lstNotaCred->RenderWithName(); ?>
-                <?php $this->txtReferencia->RenderWithName(); ?>
-                <?php $this->calFecha->RenderWithName(); ?>
-                <?php $this->txtMonto->RenderWithName(); ?>
-                <?php //$this->txtEstatus->RenderWithName(); ?>
-                <?php $this->txtObservacion->RenderWithName(); ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Cliente Corp</label><br>
+                            <?php $this->lstClienteCorp->Render(); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Forma de Pago</label><br>
+                            <?php $this->lstFormaPago->Render(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Nota de Credito</label><br>
+                            <?php $this->lstNotaCred->Render(); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Referencia</label><br>
+                            <?php $this->txtReferencia->Render(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Fecha del Pago</label><br>
+                            <?php $this->calFecha->Render(); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Monto del Pago</label><br>
+                            <?php $this->txtMonto->Render(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="">Observacion</label><br>
+                            <?php $this->txtObservacion->Render(); ?>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-7">
                 <div class="titulo">Facturas pendientes de Pago (click para incluir en el pago)</div>

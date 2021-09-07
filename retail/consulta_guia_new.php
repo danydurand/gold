@@ -102,7 +102,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $btnImprGuia;
     protected $btnSaveCome;
     protected $btnInfoPodx;
-    protected $btnGuiaOrig;
+    protected $btnDeleGuia;
     protected $btnTrazTari;
     protected $lblComePodx;
 
@@ -308,17 +308,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             }
         }
 
-        //-------------------------------------------------------
-        // Si se trata de una Guia Retorno, se muestra un boton
-        // que permite consultar la Guia Original relacionada
-        //-------------------------------------------------------
-        $this->btnGuiaOrig_Create();
-        $intPosiCade = strpos($this->objGuia->Observacion,'RETORNO DE LA GUIA: ');
-        if ($intPosiCade !== false) {
-            $strGuiaOrig = substr($this->objGuia->Observacion,20);
-            $this->btnGuiaOrig->ActionParameter = $strGuiaOrig;
-            $this->btnGuiaOrig->Visible = true;
-        }
+        $this->btnDeleGuia_Create();
 
     }
 
@@ -436,12 +426,13 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblSistGuia->Text = $this->objGuia->sistema();
     }
 
-    protected function btnGuiaOrig_Create() {
-        $this->btnGuiaOrig = new QButtonI($this);
-        $this->btnGuiaOrig->Text = TextoIcono(__iINFO__,'G.Orig');
-        $this->btnGuiaOrig->ToolTip = 'Permite consultar la Guia Original';
-        $this->btnGuiaOrig->AddAction(new QClickEvent(), new QAjaxAction('btnGuiaOrig_Click'));
-        $this->btnGuiaOrig->Visible = false;
+    protected function btnDeleGuia_Create() {
+        $this->btnDeleGuia = new QButtonD($this);
+        $this->btnDeleGuia->Text = TextoIcono('trash-o','Borrar','F','lg');
+        $this->btnDeleGuia->ToolTip = 'Permite borrar la Guia';
+        $this->btnDeleGuia->AddAction(new QClickEvent(), new QConfirmAction('Seguro ?'));
+        $this->btnDeleGuia->AddAction(new QClickEvent(), new QAjaxAction('btnDeleGuia_Click'));
+        //$this->btnDeleGuia->Visible = false;
     }
 
     protected function lblBotoPopu_Create() {
@@ -733,9 +724,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblMontTota->Text = nf($this->objGuia->Total);
     }
 
-    // * * Lado Inferior del Formulario * * //
-    // ------ Información del Envío ------- //
-
     protected function lblNumeGuia_Create() {
         $this->lblNumeGuia = new QLabel($this);
         $this->lblNumeGuia->Name = 'Guía #';
@@ -1013,6 +1001,23 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    protected function btnDeleGuia_Click() {
+        if (!is_null($this->objGuia->FacturaId)) {
+            $this->danger('Guia Facturada.  No se puede borrar !!!');
+            return;
+        }
+        if (!in_array($this->objGuia->ultimoCheckpoint(),['PU','IA'])) {
+            $this->danger('Guia Manifiestada.  No se puede borrar !!!');
+            return;
+        }
+        try {
+            $this->objGuia->Delete();
+            QApplication::Redirect(__SIST__.'/guias_list.php');
+        } catch (Exception $e) {
+            $this->danger($e->getMessage());
+        }
+    }
 
     protected function FacturarLaGuia() {
         $arrGuiaFact = [$this->objGuia];

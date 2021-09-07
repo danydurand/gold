@@ -60,6 +60,7 @@ class SacarARuta extends FormularioBaseKaizen {
     protected $btnBorrMani;
     protected $strSiglRece;
     protected $objProcEjec;
+    protected $btnSacaMani;
 
 
     protected function SetupValores() {
@@ -120,6 +121,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnGestChve_Create();
         $this->btnExpoExce_Create();
         $this->btnBorrMani_Create();
+        $this->btnSacaMani_Create();
 
         if ($this->blnEditMode) {
             $this->lstTipoOper_Change();
@@ -133,7 +135,11 @@ class SacarARuta extends FormularioBaseKaizen {
                 $this->txtDescCont->Text = 'ARTICULOS VARIOS';
             }
             $this->txtDireEntr->Text = 'ALMACEN GOLD COAST LA GUARIA';
+            $this->btnSacaMani->Visible = false;
+            $this->btnExpoExce->Visible = false;
         }
+
+        $this->btnSave->Text = TextoIcono('plus-circle','Agregar','F','lg');
 
     }
 
@@ -143,7 +149,8 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected function btnBorrMani_Create() {
         $this->btnBorrMani = new QButtonD($this);
-        $this->btnBorrMani->Text = TextoIcono('trash-o','Borrar','F','lg');
+        $this->btnBorrMani->Text = TextoIcono('trash-o','','F','lg');
+        $this->btnBorrMani->ToolTip = 'Borrar el Manifiesto';
         $this->btnBorrMani->AddAction(new QClickEvent(), new QConfirmAction('Esta segur@ que desea borrar este Manifiesto?'));
         $this->btnBorrMani->AddAction(new QClickEvent(), new QServerAction('btnBorrMani_Click'));
         if (!$this->blnEditMode) {
@@ -185,6 +192,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgPiezMani);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = TextoIcono('download','XLS','F','lg');
+        $this->btnExpoExce->ToolTip = 'Exprtar el Manifiesto en formato XLS';
         $this->btnExpoExce->HtmlEntities = false;
         $this->btnExpoExce->CssClass = 'btn btn-outline-danger btn-sm';
         $this->btnExpoExce->ToolTip = 'Exportar las Piezas del Manifiesto';
@@ -208,10 +216,10 @@ class SacarARuta extends FormularioBaseKaizen {
             );
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/nota_de_despacho_pdf.php/'.$this->objContaine->Id,
-                TextoIcono('bank','Nota de Despacho')
+                TextoIcono('clone','Nota de Despacho')
             );
         }
-        $strTextBoto = TextoIcono('cog fa-fw','Imprimir');
+        $strTextBoto = TextoIcono('print','Impr','F','lg');
         $this->btnRepoMani->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
         return $arrOpciDrop;
     }
@@ -244,6 +252,14 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->btnRegiVehi->Text = TextoIcono(__iFLOP__,'');
         $this->btnRegiVehi->ToolTip = 'Agregar un Vehículo a la lista';
         $this->btnRegiVehi->AddAction(new QClickEvent(), new QServerAction('btnRegiVehi_Click'));
+    }
+
+    protected function btnSacaMani_Create() {
+        $this->btnSacaMani = new QButtonS($this);
+        $this->btnSacaMani->Text = TextoIcono('minus-circle','Sacar','F','lg');
+        $this->btnSacaMani->ToolTip = 'Sacar la(s) piezas(s) del Manifiesto';
+        $this->btnSacaMani->AddAction(new QClickEvent(), new QServerAction('btnSacaMani_Click'));
+
     }
 
     protected function txtNuevChof_Create() {
@@ -816,7 +832,8 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected function btnGestChve_Create() {
         $this->btnGestChve = new QButtonP($this);
-        $this->btnGestChve->Text = TextoIcono('truck','Gestionar C/V','F','fa-lg');
+        $this->btnGestChve->Text = TextoIcono('truck','Gest. C/V','F','lg');
+        $this->btnGestChve->ToolTip = 'Gestionar Chofer y Vehículo';
         $this->btnGestChve->AddAction(new QClickEvent(), new QServerAction('btnGestChve_Click'));
         $this->btnGestChve->ToolTip = 'Gestionar Choferes y Vehiculos';
     }
@@ -824,6 +841,86 @@ class SacarARuta extends FormularioBaseKaizen {
     //---------------------------------------
     // Acciones asociadas a los objetos
     //---------------------------------------
+
+    protected function btnSacaMani_Click() {
+        //t('============================');
+        //t('Sacando pieza del Manifiesto');
+
+        $strNombProc = 'Sacando piezas del Manifiesto: '.$this->txtNumeCont->Text;
+        $this->objProcEjec = CrearProceso($strNombProc);
+
+        if (strlen($this->txtListNume->Text) == 0) {
+            $this->danger('No se han especificado las piezas que serán excluidas del Manifiesto');
+            return;
+        }
+
+        $objContenedor = $this->objContaine;
+        $objCheckpoint = Checkpoints::LoadByCodigo('TR');
+        //t('El ckpt es: '.$objCheckpoint->Codigo);
+        $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
+        $this->arrListNume = LimpiarArreglo($this->arrListNume,false);
+        $this->txtListNume->Text = '';
+
+        $intCantPiez = 0;
+        $objDatabase = Containers::GetDatabase();
+        $objDatabase->TransactionBegin();
+        foreach ($this->arrListNume as $strNumeSeri) {
+            //t('Procesando: '.$strNumeSeri);
+            $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
+            if (!$objGuiaPiez) {
+                $strMensErro = 'La pieza: '.$strNumeSeri.' no existe !!!';
+                t($strMensErro);
+                $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
+                $this->arrGuiaErro[] = array($strNumeSeri,$strMensErro);
+                continue;
+            }
+            if (!$objContenedor->IsGuiaPiezasAsContainerPiezaAssociated($objGuiaPiez)) {
+                //t('La pieza no esta asociada al Manifiesto');
+                $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
+                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'Pieza no pertenece al Manifiesto');
+                continue;
+            }
+            //t('La pieza esta asociada al Manifiesto');
+            //---------------------------------------------
+            // Se establece la relacion "contenedor-guia"
+            //---------------------------------------------
+            $objContenedor->UnassociateGuiaPiezasAsContainerPieza($objGuiaPiez);
+            //t('Ya saque la pieza');
+            //-----------------------------------------
+            // Se borra el checkpoint correspondiente
+            //-----------------------------------------
+            $objClauOrde = QQ::OrderBy(QQN::PiezaCheckpoints()->Id,false);
+            $arrPiezCkpt = PiezaCheckpoints::LoadArrayByPiezaId($objGuiaPiez->Id, $objClauOrde);
+            foreach ($arrPiezCkpt as $objPiezCkpt) {
+                if ($objPiezCkpt->Checkpoint->Codigo == 'TR') {
+                    try {
+                        $objPiezCkpt->Delete();
+                        break;
+                    } catch (Exception $e) {
+                        //t('Error borrando la pieza: '.$e->getMessage());
+                        $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$e->getMessage());
+                    }
+                }
+            }
+            $intCantPiez ++;
+        }
+        $this->dtgPiezMani->Refresh();
+        $this->dtgPiezApta->Refresh();
+        //t('Termine de procesar la piezas');
+        $objContenedor->actualizarTotales();
+        //t('Se actualizaron los totales en el container');
+        $objDatabase->TransactionCommit();
+        $intCantErro = count($this->arrGuiaErro);
+        $strMensUsua = sprintf('Piezas sacadas del Manifiesto (%s) | Errores (%s)',
+            $intCantPiez,$intCantErro);
+        if ($intCantErro == 0) {
+            $this->info($strMensUsua);
+        } else {
+            $this->warning($strMensUsua);
+            $this->btnRepoErro->Visible = true;
+        }
+        $this->objContaine = $objContenedor;
+    }
 
     protected function btnGestChve_Click() {
         $this->blnGestChve = !$this->blnGestChve;

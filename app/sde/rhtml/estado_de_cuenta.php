@@ -7,6 +7,7 @@ if (!isset($_SESSION['FactPend'])) {
 $arrFactPend = unserialize($_SESSION['FactPend']);
 $decSaldExce = $arrFactPend[0]->ClienteCorp->SaldoExcedente > 0 ? $arrFactPend[0]->ClienteCorp->SaldoExcedente : 0;
 $strNombClie = $arrFactPend[0]->ClienteCorp->NombClie;
+$strDireCorr = 'auxiliaradm@goldcoastus.com';
 
 /* @var $objFactPend Facturas */
 ?>
@@ -36,6 +37,21 @@ $strNombClie = $arrFactPend[0]->ClienteCorp->NombClie;
             </tr>
             <tr>
                 <td colspan="2">Por favor revisar y enviar soporte de pago.<br><br></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span style="font-weight: bold; color: #0A246A">IMPORTANTE: Este mensaje se envia desde una
+                        cuenta de correo no monitoreada.Para cualquier comunicación adicional, por favor
+                        escríbanos directamente a:<a href="mailto:<?= $strDireCorr ?>"><?= $strDireCorr ?></a>.
+                        <br><br>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span style="font-weight: bold; color: #0A246A;">
+                    </span>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" style="font-weight: bold">Datos Bancarios:<br><br></td>
@@ -71,13 +87,17 @@ $strNombClie = $arrFactPend[0]->ClienteCorp->NombClie;
         </table>
         <table style="margin-top: 24px;">
             <tr style="background-color: #CCC; font-weight: bold">
-                <td style="border: solid 1px black; width: 120px; text-align: center"">Referencia</td>
-                <td style="border: solid 1px black; width: 120px; text-align: center">Fecha</td>
-                <td style="border: solid 1px black; width: 150px; text-align: center">Estatus de Pago</td>
-                <td style="border: solid 1px black; width: 120px; text-align: center">Cant. Manif</td>
-                <td style="border: solid 1px black; width: 120px; text-align: right">Total</td>
+                <td style="border: solid 1px black; width: 95px; text-align: center">Referencia</td>
+                <td style="border: solid 1px black; width: 95px; text-align: center">Fecha</td>
+                <td style="border: solid 1px black; width: 135px; text-align: center">Estatus de Pago</td>
+                <td style="border: solid 1px black; width: 90px; text-align: center">Cant. Manif</td>
+                <td style="border: solid 1px black; width: 75px; text-align: right">Total</td>
+                <td style="border: solid 1px black; width: 80px; text-align: right">Abonado</td>
+                <td style="border: solid 1px black; width: 75px; text-align: right">Balance</td>
             </tr>
-            <?php $decSumaFact = 0 ?>
+            <?php $decSumaTota = 0 ?>
+            <?php $decSumaCobr = 0 ?>
+            <?php $decSumaPend = 0 ?>
             <?php foreach ($arrFactPend as $objFactPend) { ?>
                 <tr>
                     <td style="border: solid 1px black; text-align: center"><?= $objFactPend->Referencia ?></td>
@@ -85,29 +105,39 @@ $strNombClie = $arrFactPend[0]->ClienteCorp->NombClie;
                     <td style="border: solid 1px black; text-align: center"><?= $objFactPend->EstatusPago ?></td>
                     <td style="border: solid 1px black; text-align: center"><?= $objFactPend->CountNotaEntregasAsFactura() ?></td>
                     <td style="border: solid 1px black; text-align: right"><?= nf($objFactPend->Total) ?></td>
+                    <td style="border: solid 1px black; text-align: right"><?= nf($objFactPend->MontoCobrado) ?></td>
+                    <td style="border: solid 1px black; text-align: right"><?= nf($objFactPend->MontoPendiente) ?></td>
                 </tr>
-                <?php $decSumaFact += $objFactPend->Total ?>
+                <?php $decSumaTota += $objFactPend->Total ?>
+                <?php $decSumaCobr += $objFactPend->MontoCobrado ?>
+                <?php $decSumaPend += $objFactPend->MontoPendiente ?>
             <?php } ?>
             <tr>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td style="border: solid 1px black; text-align: center">Total</td>
-                <td style="border: solid 1px black; text-align: right"><?= nf($decSumaFact) ?></td>
+                <td style="border: solid 1px black; text-align: center; font-weight: bold">Totales</td>
+                <td style="border: solid 1px black; text-align: right"><?= nf($decSumaTota) ?></td>
+                <td style="border: solid 1px black; text-align: right"><?= nf($decSumaCobr) ?></td>
+                <td style="border: solid 1px black; text-align: right"><?= nf($decSumaPend) ?></td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td style="border: solid 1px black; text-align: center">Saldo a Favor</td>
+                <td></td>
+                <td></td>
+                <td style="border: solid 1px black; text-align: center; font-weight: bold">Saldo a Favor</td>
                 <td style="border: solid 1px black; text-align: right"><?= nf($decSaldExce) ?></td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
+                <td></td>
                 <td style="border: solid 1px black; text-align: center; font-weight: bold">Tota a Pagar</td>
-                <td style="border: solid 1px black; text-align: right"><?= nf($decSumaFact-$decSaldExce) ?></td>
+                <td style="border: solid 1px black; text-align: right"><?= nf($decSumaPend-$decSaldExce) ?></td>
             </tr>
         </table>
     </page_header>

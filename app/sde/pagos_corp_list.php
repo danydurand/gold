@@ -44,7 +44,7 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 
 		// Instantiate the Meta DataGrid
 		$this->dtgPagosCorps = new PagosCorpDataGrid($this);
-		$this->dtgPagosCorps->FontSize = 13;
+		$this->dtgPagosCorps->FontSize = 12;
 		$this->dtgPagosCorps->ShowFilter = false;
 
 		// Style the DataGrid (if desired)
@@ -97,7 +97,8 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         $this->btnConcPago_Create();
         $this->btnIncoPago_Create();
         $this->btnPagoPend_Create();
-        //$this->btnNuevRegi->Visible = false;
+
+        $this->btnNuevRegi->Text = TextoIcono('plus-circle','Registrar','F','lg');
 
         $this->info('Utlice Doble-Click para acceder al detalle del Pago');
     }

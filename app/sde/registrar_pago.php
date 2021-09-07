@@ -60,10 +60,12 @@ class RegistrarPago extends PagosCorpEditFormBase {
         $objClauWher[] = QQ::Like(QQN::FormaPago()->ParaPagoEn,'%CONNECT%');
         $objClauWher[] = QQ::Like(QQN::FormaPago()->StatusId,SinoType::SI);
 		$this->lstFormaPago = $this->mctPagosCorp->lstFormaPago_Create(null,QQ::AndCondition($objClauWher));
-		$this->lstFormaPago->Width = 180;
+		$this->lstFormaPago->Width = 160;
         $this->lstFormaPago->AddAction(new QChangeEvent(), new QAjaxAction('lstFormaPago_Change'));
 
-		$this->lstClienteCorp = $this->mctPagosCorp->lstClienteCorp_Create();
+        $objClauOrde = QQ::OrderBy(QQN::MasterCliente()->NombClie);
+		$this->lstClienteCorp = $this->mctPagosCorp->lstClienteCorp_Create(null,null,$objClauOrde);
+		$this->lstClienteCorp->Width = 210;
 		$this->lstClienteCorp->AddAction(new QChangeEvent(), new QAjaxAction('lstClienteCorp_Change'));
 
 		$this->txtReferencia = $this->mctPagosCorp->txtReferencia_Create();
@@ -75,6 +77,9 @@ class RegistrarPago extends PagosCorpEditFormBase {
 
 		$this->txtEstatus = $this->mctPagosCorp->txtEstatus_Create();
 		$this->txtObservacion = $this->mctPagosCorp->txtObservacion_Create();
+		$this->txtObservacion->TextMode = QTextMode::MultiLine;
+		$this->txtObservacion->Rows = 2;
+		$this->txtObservacion->Width = 400;
 		$this->lblCreatedAt = $this->mctPagosCorp->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctPagosCorp->lblUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctPagosCorp->lblDeletedAt_Create();
@@ -478,11 +483,12 @@ class RegistrarPago extends PagosCorpEditFormBase {
         } else {
             $this->txtUpdatedBy->Text = $this->objUsuario->CodiUsua;
         }
-        t('k1');
+        //t('k1');
 		$this->mctPagosCorp->SavePagosCorp();
-		t('k2');
-		if ($this->mctPagosCorp->EditMode) {
-			//---------------------------------------------------------------------
+		//t('k2');
+        if ($this->mctPagosCorp->EditMode) {
+            t('En modo edicion del pago');
+            //---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
 			// de algun cambio en algun dato 
 			//---------------------------------------------------------------------
@@ -518,12 +524,12 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $this->success('Transacción Exitosa');
 			}
 		} else {
-		    t('k3');
+		    t('En modo insercion del pago');
             //-----------------------------------
             // Se asocian las facturas, al pago
             //-----------------------------------
             foreach ($this->arrFactPaga as $objFactPaga) {
-                t('k4');
+                t('Asociando la factura: '.$objFactPaga->Referencia.' al pago');
                 $this->mctPagosCorp->PagosCorp->AssociateFacturasAsFacturaPagoCorp($objFactPaga);
                 $objFactPaga->EstatusPago = 'CONCILIADO';
                 $objFactPaga->Save();
@@ -532,17 +538,17 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $arrLogxCamb['strNombRegi'] = $objFactPaga->Referencia;
                 $arrLogxCamb['strDescCamb'] = 'Pago '.$this->txtReferencia->Text.' registrado';
                 LogDeCambios($arrLogxCamb);
-                t('k5');
+                t('Factura asociada, voy a conciliar el pago');
                 $this->mctPagosCorp->PagosCorp->conciliarPago();
             }
-            t('k6');
+            t('Guardando log de transacciones del pago');
 			$arrLogxCamb['strNombTabl'] = 'PagosCorp';
 			$arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->Id;
 			$arrLogxCamb['strNombRegi'] = $this->mctPagosCorp->PagosCorp->Referencia;
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$this->mctPagosCorp->PagosCorp->Id;
 			LogDeCambios($arrLogxCamb);
-			t('k7');
+			t('Transaccion Exitosa !!!');
             $this->success('Transacción Exitosa !!');
 		}
         //--------------------------------------------------------------------------------
@@ -551,17 +557,21 @@ class RegistrarPago extends PagosCorpEditFormBase {
         $intFormPago = $this->lstFormaPago->SelectedValue;
         $objFormPago = FormaPago::Load($intFormPago);
         if ($objFormPago->Abreviado == 'NDC') {
+            t('El pago se hizo con una NDC');
             $objNotaCred = NotaCreditoCorp::Load($this->lstNotaCred->SelectedValue);
             if ($objNotaCred instanceof NotaCreditoCorp) {
+                t('Encontre la NDC y la voy a aplicar');
                 $objNotaCred->Estatus = 'APLICADA';
                 $objNotaCred->AplicadaEnPagoId = $this->mctPagosCorp->PagosCorp->Id;
                 $objNotaCred->Save();
                 $strTextMens = 'APLICADA EN PAGO ID: '.$this->mctPagosCorp->PagosCorp->Id;
                 $objNotaCred->logDeCambios($strTextMens);
+                t('NDC aplicada');
             }
         }
-
+        t('Voy a calcular el saldo excedente del Cliente');
 		$decSaldClie = $this->objClieSele->calcularSaldoExcedente();
+		t('Voy a mostrar el saldo del Cliente en la pantalla');
 		$this->mostrarSaldoCliente($this->objClieSele);
 
 		$this->dtgFactPaga->Refresh();

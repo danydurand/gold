@@ -75,6 +75,8 @@
 	 * @property-read ManifiestoExp[] $_ManifiestoExpAsDestinoArray the value for the private _objManifiestoExpAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp.destino_id reverse relationship
 	 * @property-read ManifiestoExp $_ManifiestoExpAsOrigen the value for the private _objManifiestoExpAsOrigen (Read-Only) if set due to an expansion on the manifiesto_exp.origen_id reverse relationship
 	 * @property-read ManifiestoExp[] $_ManifiestoExpAsOrigenArray the value for the private _objManifiestoExpAsOrigenArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp.origen_id reverse relationship
+	 * @property-read ManifiestoExpCkpt $_ManifiestoExpCkptAsSucursal the value for the private _objManifiestoExpCkptAsSucursal (Read-Only) if set due to an expansion on the manifiesto_exp_ckpt.sucursal_id reverse relationship
+	 * @property-read ManifiestoExpCkpt[] $_ManifiestoExpCkptAsSucursalArray the value for the private _objManifiestoExpCkptAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_ckpt.sucursal_id reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsSucursal the value for the private _objMasterClienteAsSucursal (Read-Only) if set due to an expansion on the master_cliente.sucursal_id reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsSucursalArray the value for the private _objMasterClienteAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.sucursal_id reverse relationship
 	 * @property-read NotaEntregaCkpt $_NotaEntregaCkptAsSucursal the value for the private _objNotaEntregaCkptAsSucursal (Read-Only) if set due to an expansion on the nota_entrega_ckpt.sucursal_id reverse relationship
@@ -583,6 +585,22 @@
 		 * @var ManifiestoExp[] _objManifiestoExpAsOrigenArray;
 		 */
 		private $_objManifiestoExpAsOrigenArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ManifiestoExpCkptAsSucursal object
+		 * (of type ManifiestoExpCkpt), if this Sucursales object was restored with
+		 * an expansion on the manifiesto_exp_ckpt association table.
+		 * @var ManifiestoExpCkpt _objManifiestoExpCkptAsSucursal;
+		 */
+		private $_objManifiestoExpCkptAsSucursal;
+
+		/**
+		 * Private member variable that stores a reference to an array of ManifiestoExpCkptAsSucursal objects
+		 * (of type ManifiestoExpCkpt[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the manifiesto_exp_ckpt association table.
+		 * @var ManifiestoExpCkpt[] _objManifiestoExpCkptAsSucursalArray;
+		 */
+		private $_objManifiestoExpCkptAsSucursalArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MasterClienteAsSucursal object
@@ -1704,6 +1722,21 @@
 					$objToReturn->_objManifiestoExpAsOrigenArray[] = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasorigen__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objManifiestoExpAsOrigen)) {
 					$objToReturn->_objManifiestoExpAsOrigen = ManifiestoExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpasorigen__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ManifiestoExpCkptAsSucursal Virtual Binding
+			$strAlias = $strAliasPrefix . 'manifiestoexpckptassucursal__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['manifiestoexpckptassucursal']) ? null : $objExpansionAliasArray['manifiestoexpckptassucursal']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objManifiestoExpCkptAsSucursalArray)
+				$objToReturn->_objManifiestoExpCkptAsSucursalArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objManifiestoExpCkptAsSucursalArray[] = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckptassucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objManifiestoExpCkptAsSucursal)) {
+					$objToReturn->_objManifiestoExpCkptAsSucursal = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckptassucursal__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2879,6 +2912,22 @@
 					 */
 					return $this->_objManifiestoExpAsOrigenArray;
 
+				case '_ManifiestoExpCkptAsSucursal':
+					/**
+					 * Gets the value for the private _objManifiestoExpCkptAsSucursal (Read-Only)
+					 * if set due to an expansion on the manifiesto_exp_ckpt.sucursal_id reverse relationship
+					 * @return ManifiestoExpCkpt
+					 */
+					return $this->_objManifiestoExpCkptAsSucursal;
+
+				case '_ManifiestoExpCkptAsSucursalArray':
+					/**
+					 * Gets the value for the private _objManifiestoExpCkptAsSucursalArray (Read-Only)
+					 * if set due to an ExpandAsArray on the manifiesto_exp_ckpt.sucursal_id reverse relationship
+					 * @return ManifiestoExpCkpt[]
+					 */
+					return $this->_objManifiestoExpCkptAsSucursalArray;
+
 				case '_MasterClienteAsSucursal':
 					/**
 					 * Gets the value for the private _objMasterClienteAsSucursal (Read-Only)
@@ -3462,6 +3511,9 @@
 			}
 			if ($this->CountManifiestoExpsAsOrigen()) {
 				$arrTablRela[] = 'manifiesto_exp';
+			}
+			if ($this->CountManifiestoExpCkptsAsSucursal()) {
+				$arrTablRela[] = 'manifiesto_exp_ckpt';
 			}
 			if ($this->CountMasterClientesAsSucursal()) {
 				$arrTablRela[] = 'master_cliente';
@@ -6048,6 +6100,155 @@
 		}
 
 
+		// Related Objects' Methods for ManifiestoExpCkptAsSucursal
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ManifiestoExpCkptsAsSucursal as an array of ManifiestoExpCkpt objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExpCkpt[]
+		*/
+		public function GetManifiestoExpCkptAsSucursalArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ManifiestoExpCkpt::LoadArrayBySucursalId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ManifiestoExpCkptsAsSucursal
+		 * @return int
+		*/
+		public function CountManifiestoExpCkptsAsSucursal() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ManifiestoExpCkpt::CountBySucursalId($this->intId);
+		}
+
+		/**
+		 * Associates a ManifiestoExpCkptAsSucursal
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function AssociateManifiestoExpCkptAsSucursal(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpCkptAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpCkptAsSucursal on this Sucursales with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ManifiestoExpCkptAsSucursal
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function UnassociateManifiestoExpCkptAsSucursal(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsSucursal on this Sucursales with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`sucursal_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . ' AND
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ManifiestoExpCkptsAsSucursal
+		 * @return void
+		*/
+		public function UnassociateAllManifiestoExpCkptsAsSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`sucursal_id` = null
+				WHERE
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ManifiestoExpCkptAsSucursal
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function DeleteAssociatedManifiestoExpCkptAsSucursal(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsSucursal on this unsaved Sucursales.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsSucursal on this Sucursales with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_ckpt`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . ' AND
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ManifiestoExpCkptsAsSucursal
+		 * @return void
+		*/
+		public function DeleteAllManifiestoExpCkptsAsSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_ckpt`
+				WHERE
+					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for MasterClienteAsSucursal
 		//-------------------------------------------------------------------
 
@@ -8265,6 +8466,7 @@
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsOrigen
+     * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsSucursal
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsSucursal
@@ -8370,6 +8572,8 @@
 					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasdestino', 'reverse_reference', 'destino_id', 'ManifiestoExpAsDestino');
 				case 'ManifiestoExpAsOrigen':
 					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasorigen', 'reverse_reference', 'origen_id', 'ManifiestoExpAsOrigen');
+				case 'ManifiestoExpCkptAsSucursal':
+					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckptassucursal', 'reverse_reference', 'sucursal_id', 'ManifiestoExpCkptAsSucursal');
 				case 'MasterClienteAsSucursal':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'NotaEntregaCkptAsSucursal':
@@ -8453,6 +8657,7 @@
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsSucursal
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsDestino
      * @property-read QQReverseReferenceNodeManifiestoExp $ManifiestoExpAsOrigen
+     * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsSucursal
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsSucursal
      * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptHAsSucursal
@@ -8558,6 +8763,8 @@
 					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasdestino', 'reverse_reference', 'destino_id', 'ManifiestoExpAsDestino');
 				case 'ManifiestoExpAsOrigen':
 					return new QQReverseReferenceNodeManifiestoExp($this, 'manifiestoexpasorigen', 'reverse_reference', 'origen_id', 'ManifiestoExpAsOrigen');
+				case 'ManifiestoExpCkptAsSucursal':
+					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckptassucursal', 'reverse_reference', 'sucursal_id', 'ManifiestoExpCkptAsSucursal');
 				case 'MasterClienteAsSucursal':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteassucursal', 'reverse_reference', 'sucursal_id', 'MasterClienteAsSucursal');
 				case 'NotaEntregaCkptAsSucursal':

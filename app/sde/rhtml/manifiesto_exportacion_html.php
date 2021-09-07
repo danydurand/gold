@@ -110,10 +110,10 @@ $arrGuiaMani = GuiasManifiesto::LoadArrayByManifiestoId($intManiIdxx);
                             <td class="etiqueta">Transporte:</td>
                             <td class="contenido"><?= $objManiImpr->Transporte ?></td>
                         </tr>
-                        <tr>
-                            <td class="etiqueta">Guia Madre:</td>
-                            <td class="contenido"><?= $objManiImpr->Master ?></td>
-                        </tr>
+                        <!--<tr>-->
+                        <!--    <td class="etiqueta">Guia Madre:</td>-->
+                        <!--    <td class="contenido">--><?//= $objManiImpr->Master ?><!--</td>-->
+                        <!--</tr>-->
                     </table>
                 </td>
                 <td style="width: 580px; text-align: center">

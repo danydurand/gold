@@ -10,6 +10,7 @@ require('inc/header.inc.php');
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnSave->Render(); ?>
             <?php $this->btnRepoMani->Render() ?>
+            <?php $this->btnSacaMani->Render(); ?>
             <?php $this->btnRepoErro->Render() ?>
             <?php $this->btnGestChve->Render() ?>
             <?php $this->btnExpoExce->Render() ?>

@@ -67,6 +67,8 @@
 	 * @property-read GuiaCkpt[] $_GuiaCkptAsCodiUsuaArray the value for the private _objGuiaCkptAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the guia_ckpt.codi_usua reverse relationship
 	 * @property-read HistoriaCliente $_HistoriaClienteAsCodiUsua the value for the private _objHistoriaClienteAsCodiUsua (Read-Only) if set due to an expansion on the historia_cliente.codi_usua reverse relationship
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsCodiUsuaArray the value for the private _objHistoriaClienteAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.codi_usua reverse relationship
+	 * @property-read ManifiestoExpCkpt $_ManifiestoExpCkptAsCreatedBy the value for the private _objManifiestoExpCkptAsCreatedBy (Read-Only) if set due to an expansion on the manifiesto_exp_ckpt.created_by reverse relationship
+	 * @property-read ManifiestoExpCkpt[] $_ManifiestoExpCkptAsCreatedByArray the value for the private _objManifiestoExpCkptAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_ckpt.created_by reverse relationship
 	 * @property-read MotivoEliminacion $_MotivoEliminacionAsUser the value for the private _objMotivoEliminacionAsUser (Read-Only) if set due to an expansion on the motivo_eliminacion.user_id reverse relationship
 	 * @property-read MotivoEliminacion[] $_MotivoEliminacionAsUserArray the value for the private _objMotivoEliminacionAsUserArray (Read-Only) if set due to an ExpandAsArray on the motivo_eliminacion.user_id reverse relationship
 	 * @property-read NotaCredito $_NotaCreditoAsCreadaPor the value for the private _objNotaCreditoAsCreadaPor (Read-Only) if set due to an expansion on the nota_credito.creada_por reverse relationship
@@ -483,6 +485,22 @@
 		 * @var HistoriaCliente[] _objHistoriaClienteAsCodiUsuaArray;
 		 */
 		private $_objHistoriaClienteAsCodiUsuaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ManifiestoExpCkptAsCreatedBy object
+		 * (of type ManifiestoExpCkpt), if this Usuario object was restored with
+		 * an expansion on the manifiesto_exp_ckpt association table.
+		 * @var ManifiestoExpCkpt _objManifiestoExpCkptAsCreatedBy;
+		 */
+		private $_objManifiestoExpCkptAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ManifiestoExpCkptAsCreatedBy objects
+		 * (of type ManifiestoExpCkpt[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the manifiesto_exp_ckpt association table.
+		 * @var ManifiestoExpCkpt[] _objManifiestoExpCkptAsCreatedByArray;
+		 */
+		private $_objManifiestoExpCkptAsCreatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MotivoEliminacionAsUser object
@@ -1552,6 +1570,21 @@
 					$objToReturn->_objHistoriaClienteAsCodiUsuaArray[] = HistoriaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'historiaclienteascodiusua__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objHistoriaClienteAsCodiUsua)) {
 					$objToReturn->_objHistoriaClienteAsCodiUsua = HistoriaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'historiaclienteascodiusua__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ManifiestoExpCkptAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'manifiestoexpckptascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['manifiestoexpckptascreatedby']) ? null : $objExpansionAliasArray['manifiestoexpckptascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objManifiestoExpCkptAsCreatedByArray)
+				$objToReturn->_objManifiestoExpCkptAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objManifiestoExpCkptAsCreatedByArray[] = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckptascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objManifiestoExpCkptAsCreatedBy)) {
+					$objToReturn->_objManifiestoExpCkptAsCreatedBy = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckptascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2695,6 +2728,22 @@
 					 */
 					return $this->_objHistoriaClienteAsCodiUsuaArray;
 
+				case '_ManifiestoExpCkptAsCreatedBy':
+					/**
+					 * Gets the value for the private _objManifiestoExpCkptAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the manifiesto_exp_ckpt.created_by reverse relationship
+					 * @return ManifiestoExpCkpt
+					 */
+					return $this->_objManifiestoExpCkptAsCreatedBy;
+
+				case '_ManifiestoExpCkptAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objManifiestoExpCkptAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the manifiesto_exp_ckpt.created_by reverse relationship
+					 * @return ManifiestoExpCkpt[]
+					 */
+					return $this->_objManifiestoExpCkptAsCreatedByArray;
+
 				case '_MotivoEliminacionAsUser':
 					/**
 					 * Gets the value for the private _objMotivoEliminacionAsUser (Read-Only)
@@ -3303,6 +3352,9 @@
 			}
 			if ($this->CountHistoriaClientesAsCodiUsua()) {
 				$arrTablRela[] = 'historia_cliente';
+			}
+			if ($this->CountManifiestoExpCkptsAsCreatedBy()) {
+				$arrTablRela[] = 'manifiesto_exp_ckpt';
 			}
 			if ($this->CountMotivoEliminacionsAsUser()) {
 				$arrTablRela[] = 'motivo_eliminacion';
@@ -5588,6 +5640,155 @@
 		}
 
 
+		// Related Objects' Methods for ManifiestoExpCkptAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ManifiestoExpCkptsAsCreatedBy as an array of ManifiestoExpCkpt objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExpCkpt[]
+		*/
+		public function GetManifiestoExpCkptAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return ManifiestoExpCkpt::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ManifiestoExpCkptsAsCreatedBy
+		 * @return int
+		*/
+		public function CountManifiestoExpCkptsAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return ManifiestoExpCkpt::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ManifiestoExpCkptAsCreatedBy
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function AssociateManifiestoExpCkptAsCreatedBy(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpCkptAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateManifiestoExpCkptAsCreatedBy on this Usuario with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ManifiestoExpCkptAsCreatedBy
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function UnassociateManifiestoExpCkptAsCreatedBy(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsCreatedBy on this Usuario with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ManifiestoExpCkptsAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllManifiestoExpCkptsAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`manifiesto_exp_ckpt`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ManifiestoExpCkptAsCreatedBy
+		 * @param ManifiestoExpCkpt $objManifiestoExpCkpt
+		 * @return void
+		*/
+		public function DeleteAssociatedManifiestoExpCkptAsCreatedBy(ManifiestoExpCkpt $objManifiestoExpCkpt) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objManifiestoExpCkpt->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsCreatedBy on this Usuario with an unsaved ManifiestoExpCkpt.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_ckpt`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objManifiestoExpCkpt->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ManifiestoExpCkptsAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllManifiestoExpCkptsAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateManifiestoExpCkptAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`manifiesto_exp_ckpt`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for MotivoEliminacionAsUser
 		//-------------------------------------------------------------------
 
@@ -7205,6 +7406,7 @@
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsCreadaPor
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
+     * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
      * @property-read QQReverseReferenceNodeMotivoEliminacion $MotivoEliminacionAsUser
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsCreadaPor
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntrega
@@ -7297,6 +7499,8 @@
 					return new QQReverseReferenceNodeGuiaCkpt($this, 'guiackptascodiusua', 'reverse_reference', 'codi_usua', 'GuiaCkptAsCodiUsua');
 				case 'HistoriaClienteAsCodiUsua':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
+				case 'ManifiestoExpCkptAsCreatedBy':
+					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckptascreatedby', 'reverse_reference', 'created_by', 'ManifiestoExpCkptAsCreatedBy');
 				case 'MotivoEliminacionAsUser':
 					return new QQReverseReferenceNodeMotivoEliminacion($this, 'motivoeliminacionasuser', 'reverse_reference', 'user_id', 'MotivoEliminacionAsUser');
 				case 'NotaCreditoAsCreadaPor':
@@ -7369,6 +7573,7 @@
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsCreadaPor
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
+     * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
      * @property-read QQReverseReferenceNodeMotivoEliminacion $MotivoEliminacionAsUser
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsCreadaPor
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntrega
@@ -7461,6 +7666,8 @@
 					return new QQReverseReferenceNodeGuiaCkpt($this, 'guiackptascodiusua', 'reverse_reference', 'codi_usua', 'GuiaCkptAsCodiUsua');
 				case 'HistoriaClienteAsCodiUsua':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
+				case 'ManifiestoExpCkptAsCreatedBy':
+					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckptascreatedby', 'reverse_reference', 'created_by', 'ManifiestoExpCkptAsCreatedBy');
 				case 'MotivoEliminacionAsUser':
 					return new QQReverseReferenceNodeMotivoEliminacion($this, 'motivoeliminacionasuser', 'reverse_reference', 'user_id', 'MotivoEliminacionAsUser');
 				case 'NotaCreditoAsCreadaPor':

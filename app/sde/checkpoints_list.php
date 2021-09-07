@@ -60,6 +60,8 @@ class CheckpointsListForm extends CheckpointsListFormBase {
 		$this->dtgCheckpointses->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
 		$this->dtgCheckpointses->AddRowAction(new QClickEvent(), new QAjaxAction('dtgCheckpointsesRow_Click'));
 
+		$this->dtgCheckpointses->SortColumnIndex = 1;
+
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
 		// Create the Other Columns (note that you can use strings for checkpoints's properties, or you

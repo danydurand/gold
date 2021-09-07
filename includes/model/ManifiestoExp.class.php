@@ -35,6 +35,119 @@
 		    return !is_null($this->UpdatedBy) ? Usuario::Load($this->UpdatedBy)->LogiUsua : null;
         }
 
+        public function GrabarCheckpoint(Checkpoints $objCkptMani, ProcesoError $objProcEjec, $strComeAdic=null) {
+            $arrResuGrab['TodoOkey'] = true;
+            $arrResuGrab['MotiNook'] = '';
+            $arrResuGrab['CkptMani'] = null;
+            try {
+                $strComeAdic = strlen($strComeAdic) > 0 ? ' ('.$strComeAdic.')' : '';
+                $strDescCkpt = $objCkptMani->Descripcion.$strComeAdic;
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumeCont'] = $this->Id;
+                $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+                $arrDatoCkpt['TextObse'] = $strDescCkpt;
+                $arrResuGrab = $this->GrabarCheckpointManifiestoExp($arrDatoCkpt);
+                if ($arrResuGrab['TodoOkey']) {
+                    $this->RedactarEmailCkptMani($objCkptMani,$arrResuGrab['CkptMani']);
+                } else {
+                    throw new Exception($arrResuGrab['MotiNook']);
+                }
+            } catch (Exception $e) {
+                $strComeErro = 'Grabando Ckpt '.$objCkptMani->Codigo.' al Manifiesto Exp';
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = 'Referencia: '.$this->Numero;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = $strComeErro;
+                GrabarError($arrParaErro);
+                $arrResuGrab['TodoOkey'] = false;
+                $arrResuGrab['MotiNook'] = $strComeErro;
+            }
+            return $arrResuGrab;
+        }
+
+        public function GrabarCheckpointManifiestoExp($arrDatoCkpt) {
+            /**
+             * @var $objUsuario Usuario
+             */
+            //--------------------------------------------------------
+            // Esta rutina controla lo concerniente al ingresos de
+            // informacion de la tabla de checkpoints del contenedor
+            //--------------------------------------------------------
+            $arrResuGrab = array();
+            $arrResuGrab['TodoOkey'] = true;
+            $arrResuGrab['MotiNook'] = '';
+            $arrResuGrab['CkptManu'] = null;
+            $objUsuario = unserialize($_SESSION['User']);
+
+            try {
+                $objContCkpt                  = new ManifiestoExpCkpt();
+                $objContCkpt->ManifiestoExpId = $arrDatoCkpt['NumeCont'];
+                $objContCkpt->SucursalId      = $objUsuario->SucursalId;
+                $objContCkpt->CheckpointId    = $arrDatoCkpt['CodiCkpt'];
+                $objContCkpt->Fecha           = new QDateTime(QDateTime::Now);
+                $objContCkpt->Hora            = date('H:i');
+                $objContCkpt->Observacion     = strtoupper($arrDatoCkpt['TextObse']);
+                $objContCkpt->CreatedAt       = new QDateTime(QDateTime::Now);
+                $objContCkpt->CreatedBy       = $objUsuario->CodiUsua;
+                $objContCkpt->Save();
+                $arrResuGrab['CkptMani'] = $objContCkpt;
+            } catch (Exception $e) {
+                $arrResuGrab['TodoOkey'] = false;
+                $arrResuGrab['MotiNook'] = $e->getMessage();
+            }
+
+            return $arrResuGrab;
+        }
+
+        protected function RedactarEmailCkptMani(Checkpoints $objCkptGrab, ManifiestoExpCkpt $objCkptMani) {
+            $blnNotiCkpt = false;
+            $strDireMail = '';
+            if (in_array($objCkptGrab->Codigo,['TI','CR'])) {
+                $blnNotiCkpt = true;
+                $strDireMail = Parametros::BuscarParametro('ESTAMANI',$objCkptGrab->Codigo,'Txt1','soporte@lufemansoftwware.com');
+            }
+            if ($blnNotiCkpt) {
+                $strRefeMani = $objCkptMani->ManifiestoExp->Numero;
+                $objMessage = new QEmailMessage();
+                $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
+                $objMessage->To = $strDireMail;
+                $objMessage->Bcc = 'danydurand@gmail.com';
+                $objMessage->Subject = 'Manif.: ' . $strRefeMani.' | Estatus: '.trim($objCkptGrab->Descripcion);
+
+                // Also setup HTML message (optional)
+                $strBody  = 'Estimado Usuario,<p><br>';
+                $strBody .= 'Se ha registrado un cambio en el Estatus del Manifiesto Exp Ref.: '.$strRefeMani.'<br><br>';
+                $strBody .= 'Descripcion: <b>'.$objCkptMani->Observacion.'</b><br><br>';
+                $strBody .= 'Fecha: <b>'.$objCkptMani->Fecha->__toString("DD/MM/YYYY").'</b><br>';
+                $strBody .= 'Hora: <b>'.$objCkptMani->Hora.'</b><br>';
+                $strBody .= 'Usuario: <b>'.$objCkptMani->CreatedByObject->LogiUsua.'</b><br>';
+                $objMessage->HtmlBody = $strBody;
+
+                // Add random/custom email headers
+                $objMessage->SetHeader('x-application', 'Sistema SisCO');
+
+                // Send the Message (Commented out for obvious reasons)
+                QEmailServer::Send($objMessage);
+            }
+        }
+
+        public function IdsDeLasGuias() {
+            $arrIdxxPiez = [];
+            foreach ($this->GetGuiaPiezasAsPiezaArray() as $objGuiaPiez) {
+                $arrIdxxPiez[] = $objGuiaPiez->Id;
+            }
+            return $arrIdxxPiez;
+        }
+
+        public function ultimoCheckpoint() {
+            $objClauAdic   = QQ::Clause();
+            $objClauAdic[] = QQ::OrderBy(QQN::ManifiestoExpCkpt()->Id,false);
+            $objClauAdic[] = QQ::LimitInfo(1);
+            $arrCkptMani   = $this->GetManifiestoExpCkptArray($objClauAdic);
+            return count($arrCkptMani) > 0 ? $arrCkptMani[0] : null;
+        }
+
+
         public function actualizarTotales() {
             $strCadeSqlx  = "SELECT sum(gp.valor_declarado) as suma_valo, ";
             $strCadeSqlx .= "       sum(gp.libras) as suma_libr, ";
@@ -51,12 +164,12 @@
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $mixRegistro  = $objDbResult->FetchArray();
             try {
-                $this->Valor   = $mixRegistro['suma_valo'];
-                $this->Libras  = $mixRegistro['suma_libr'];
-                $this->Volumen = $mixRegistro['suma_volu'];
-                $this->Kilos   = $mixRegistro['suma_kilo'];
-                $this->PiesCub = $mixRegistro['suma_pies'];
-                $this->Piezas  = $mixRegistro['cant_piez'];
+                $this->Valor   = !is_null($mixRegistro['suma_valo']) ? $mixRegistro['suma_valo'] : 0;
+                $this->Libras  = !is_null($mixRegistro['suma_libr']) ? $mixRegistro['suma_libr'] : 0;
+                $this->Volumen = !is_null($mixRegistro['suma_volu']) ? $mixRegistro['suma_volu'] : 0;
+                $this->Kilos   = !is_null($mixRegistro['suma_kilo']) ? $mixRegistro['suma_kilo'] : 0;
+                $this->PiesCub = !is_null($mixRegistro['suma_pies']) ? $mixRegistro['suma_pies'] : 0;
+                $this->Piezas  = !is_null($mixRegistro['cant_piez']) ? $mixRegistro['cant_piez'] : 0;
                 $this->Save();
             } catch (Exception $e) {
                 t('Error: '.$e->getMessage());

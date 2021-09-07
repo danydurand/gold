@@ -44,7 +44,8 @@
             $objDatabase->TransactionBegin();
             $objUsuario  = unserialize($_SESSION['User']);
             t('El Saldo del cliente en el arranque es: '.$this->ClienteCorp->SaldoExcedente);
-            $blnSaldDisp = $this->ClienteCorp->SaldoExcedente > 0 ? true : false;
+            $blnSaldDisp = ($this->ClienteCorp->SaldoExcedente > 0);
+            t('El cliente tiene saldo excedente ? '.$blnSaldDisp);
             //------------------------------------------------
             // Se obtienen las facturas relacionadas al Pago
             //------------------------------------------------
@@ -53,27 +54,31 @@
             t('El pago de referencia: '.$this->Referencia.' tiene: '.count($arrFactPago).' facturas relacionadas');
             $decMontPago = $this->Monto;
             foreach ($arrFactPago as $objFactPago) {
-                t('Procesando la factura: '.$objFactPago->Referencia.' con un Monto Pendiente de: '.nf($objFactPago->MontoPendiente));
+                t('Procesando la factura: '.$objFactPago->Referencia.' con Mto Pendiente: '.nf($objFactPago->MontoPendiente));
                 t('El saldo actual del pago es: '.nf($decMontPago));
-                if ( ($decMontPago < 0) && ($blnSaldDisp)) {
+                if ( ($decMontPago < 0) && ($blnSaldDisp) ) {
                     t('El saldo del pago es negativo, voy a sumar el saldo excedente del Cliente');
                     $decMontPago += $this->ClienteCorp->SaldoExcedente;
                     $blnSaldDisp = false;
                 }
                 if ($decMontPago > 0) {
-                    t('Saldo positivo voy a descontar la factura cuyo monto es: '.nf($objFactPago->MontoPendiente));
+                    t('Saldo positivo voy a descontar la factura cuyo monto pendiente es: '.nf($objFactPago->MontoPendiente));
                     if ($decMontPago >= $objFactPago->MontoPendiente) {
                         t('Se cubre el monto completo de la factura, se marca como CONCILIADO');
                         $strEstaPago = 'CONCILIADO';
-                        $objFactPago->EstatusPago    = $strEstaPago;
-                        $objFactPago->MontoCobrado   = $objFactPago->MontoPendiente;
-                        $objFactPago->MontoPendiente = 0;
+                        $objFactPago->EstatusPago     = $strEstaPago;
+                        $objFactPago->MontoCobrado   += $objFactPago->MontoPendiente;
+                        t('En este punto el saldo de los pagos es de: '.$decMontPago);
+                        $decMontPago = $decMontPago - $objFactPago->MontoPendiente;
+                        t('Desconte: '.$objFactPago->MontoPendiente.' y quedo en: '.$decMontPago);
+                        $objFactPago->MontoPendiente  = 0;
                     } else {
                         t('No cubre el monto de la factura, se marca como PAGOPARCIAL');
                         $strEstaPago = 'PAGOPARCIAL';
-                        $objFactPago->EstatusPago    = $strEstaPago;
-                        $objFactPago->MontoCobrado   = $decMontPago;
-                        $objFactPago->MontoPendiente = $objFactPago->MontoPendiente - $objFactPago->MontoCobrado;
+                        $objFactPago->EstatusPago     = $strEstaPago;
+                        $objFactPago->MontoCobrado   += $decMontPago;
+                        $objFactPago->MontoPendiente -= $decMontPago;
+                        $decMontPago = 0;
                     }
                 } else {
                     $strEstaPago = 'PENDIENTE';
@@ -81,7 +86,7 @@
                     $objFactPago->MontoCobrado = 0;
                 }
                 $objFactPago->Save();
-                $decMontPago -= $objFactPago->MontoCobrado;
+                //$decMontPago -= $objFactPago->MontoCobrado;
                 t('El saldo de los pagos esta en: '.nf($decMontPago));
                 //----------------------------------------------
                 // Se deja registro en el Log de transacciones
@@ -100,7 +105,7 @@
                 $objFactPago->ClienteCorp->logDeCambios($strMensTran);
 
                 if ($decMontPago > 0) {
-                    t('El saldo del cliente es positivo, eso implica crear una ndc');
+                    t('El saldo del pago es positivo, eso implica crear una ndc');
                     try {
                         $objNotaCorp = new NotaCreditoCorp();
                         $objNotaCorp->Referencia    = NotaCreditoCorp::proxReferencia();

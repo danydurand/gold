@@ -102,6 +102,12 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgNotaCred_Create();
         $this->btnImprFact_Create();
 
+        if ($this->objUsuario->LogiUsua != 'ddurand') {
+            $this->lstEstaPago       = disableControl($this->lstEstaPago);
+            $this->txtMontoCobrado   = disableControl($this->txtMontoCobrado);
+            $this->txtMontoPendiente = disableControl($this->txtMontoPendiente);
+        }
+
     }
 
 	//----------------------------

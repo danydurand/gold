@@ -9,8 +9,10 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <div class="hidden-xs hidden-sm col-md-7 col-lg-7" style="text-align:left; margin-top: -0.25em; margin-left: 4em">
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnSave->Render(); ?>
-            <?php $this->btnRepoMani->Render() ?>
+            <?php //$this->btnRepoMani->Render() ?>
             <?php $this->btnRepoErro->Render() ?>
+            <?php $this->btnMasxAcci->Render() ?>
+            <?php $this->btnSacaMani->Render(); ?>
             <?php $this->btnExpoExce->Render() ?>
             <?php $this->btnBorrMani->Render() ?>
         </div>
@@ -42,11 +44,11 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     </div>
                     <div class="row">
                         <div class="col-md-6 title">Nro Manif</div>
-                        <div class="col-md-6 title">Master</div>
+                        <div class="col-md-6 title"></div>
                     </div>
                     <div class="row">
                         <div class="col-md-6"><?php $this->txtNumeMani->Render(); ?></div>
-                        <div class="col-md-6"><?php $this->txtNumeMast->Render(); ?></div>
+                        <div class="col-md-6"><?php //$this->txtNumeMast->Render(); ?></div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 title">Nro BL</div>

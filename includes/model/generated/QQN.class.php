@@ -661,6 +661,12 @@
 			return new QQNodeManifiestoExp('manifiesto_exp', null, null);
 		}
 		/**
+		 * @return QQNodeManifiestoExpCkpt
+		 */
+		static public function ManifiestoExpCkpt() {
+			return new QQNodeManifiestoExpCkpt('manifiesto_exp_ckpt', null, null);
+		}
+		/**
 		 * @return QQNodeMasCartaDevo
 		 */
 		static public function MasCartaDevo() {
@@ -767,6 +773,12 @@
 		 */
 		static public function NotaEntregaH() {
 			return new QQNodeNotaEntregaH('nota_entrega_h', null, null);
+		}
+		/**
+		 * @return QQNodeNotaEntregaZona
+		 */
+		static public function NotaEntregaZona() {
+			return new QQNodeNotaEntregaZona('nota_entrega_zona', null, null);
 		}
 		/**
 		 * @return QQNodeNotificacion

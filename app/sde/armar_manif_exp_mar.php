@@ -11,7 +11,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
     protected $lstOrigMani;
     protected $lstDestMani;
     protected $txtNumeMani;
-    protected $txtNumeMast;
     protected $txtNumeBlxx;
     protected $calFechDesp;
     protected $calFechCrea;
@@ -48,6 +47,9 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
 
     protected $btnBorrMani;
     protected $lblResuEntr;
+    protected $btnSacaMani;
+    protected $btnMasxAcci;
+
 
 
     protected function SetupValores() {
@@ -75,7 +77,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->lstOrigMani_Create();
         $this->lstDestMani_Create();
         $this->txtNumeMani_Create();
-        $this->txtNumeMast_Create();
         $this->txtNumeBlxx_Create();
         $this->calFechCrea_Create();
         $this->calFechDesp_Create();
@@ -95,8 +96,11 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->btnRepoErro_Create();
         $this->btnExpoExce_Create();
         $this->btnBorrMani_Create();
+        $this->btnSacaMani_Create();
 
         $this->lblResuEntr_Create();
+        $this->btnMasxAcci_Create();
+
 
         $this->lstOrigMani = disableControl($this->lstOrigMani);
         $this->txtNumeMani = disableControl($this->txtNumeMani);
@@ -107,11 +111,29 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->txtCantPies = disableControl($this->txtCantPies);
         $this->txtCreaPorx = disableControl($this->txtCreaPorx);
         $this->txtModiPorx = disableControl($this->txtModiPorx);
+
+        $this->btnSave->Text = TextoIcono('plus-circle','Agregar','F','lg');
+        $this->btnSave->ToolTip = 'Agregar pieza(s) al Manifiesto';
+
+        if ($this->blnEditMode) {
+            $objUltiCkpt = $this->objManifies->ultimoCheckpoint();
+            if ($objUltiCkpt instanceof ManifiestoExpCkpt) {
+                t('Ckpt: '.$objUltiCkpt->Checkpoint->Codigo);
+                if ( ($objUltiCkpt->Checkpoint->Codigo == 'DF') && ($this->objUsuario->LogiUsua != 'ddurand') ) {
+                    $this->btnSacaMani->Visible = false;
+                    $this->btnSave->Visible     = false;
+                    $this->btnBorrMani->Visible = false;
+                    $strTextMens = 'Manifiesto Despachado.  No admite modificaciones';
+                    $this->warning($strTextMens);
+                }
+            }
+        }
     }
 
     //-----------------------------
     // Aqui se crean los objetos
     //-----------------------------
+
 
     protected function lblResuEntr_Create() {
         $this->lblResuEntr = new QLabel($this);
@@ -130,7 +152,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
 
     protected function btnBorrMani_Create() {
         $this->btnBorrMani = new QButtonD($this);
-        $this->btnBorrMani->Text = TextoIcono('trash-o','Borrar','F','lg');
+        $this->btnBorrMani->Text = TextoIcono('trash-o','','F','lg');
         $this->btnBorrMani->ToolTip = 'Borrar el Manifiesto';
         $this->btnBorrMani->AddAction(new QClickEvent(), new QConfirmAction('Esta segur@ que desea borrar este Manifiesto?'));
         $this->btnBorrMani->AddAction(new QClickEvent(), new QServerAction('btnBorrMani_Click'));
@@ -138,6 +160,14 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
             $this->btnBorrMani->Visible = false;
         }
     }
+
+    protected function btnSacaMani_Create() {
+        $this->btnSacaMani = new QButtonS($this);
+        $this->btnSacaMani->Text = TextoIcono('minus-circle','Sacar','F','lg');
+        $this->btnSacaMani->ToolTip = 'Sacar la(s) piezas(s) del Manifiesto';
+        $this->btnSacaMani->AddAction(new QClickEvent(), new QServerAction('btnSacaMani_Click'));
+    }
+
 
     protected function btnBorrMani_Click() {
         //t('Borrando el Manifiesto');
@@ -195,10 +225,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
                 __SIST__.'/manifiesto_exportacion_pdf.php/'.$this->objManifies->Id,
                 TextoIcono('list','Manfiesto de Carga')
             );
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/nota_de_despacho_pdf.php/'.$this->objManifies->Id,
-            //    TextoIcono('bank','Nota de Despacho')
-            //);
         }
         $strTextBoto = TextoIcono('print','Impr','F','lg');
         $this->btnRepoMani->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
@@ -283,15 +309,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->txtNumeMani->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
     }
 
-    protected function txtNumeMast_Create() {
-        $this->txtNumeMast = new QTextBox($this);
-        $this->txtNumeMast->Width = 160;
-        if ($this->blnEditMode) {
-            $this->txtNumeMast->Text = $this->objManifies->Master;
-        }
-        $this->txtNumeMast->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
-    }
-
     protected function txtNumeBlxx_Create() {
         $this->txtNumeBlxx = new QTextBox($this);
         $this->txtNumeBlxx->Width = 160;
@@ -355,6 +372,56 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         if ($this->blnEditMode) {
             $this->txtCantPies->Text  = $this->objManifies->PiesCub;
         }
+    }
+
+    protected function btnMasxAcci_Create() {
+        $this->btnMasxAcci = new QLabel($this);
+        $this->btnMasxAcci->HtmlEntities = false;
+        $this->btnMasxAcci->CssClass = '';
+
+        $strTextBoto   = TextoIcono('plus','Acciones','F','lg');
+        $arrOpciDrop   = array();
+        //$arrOpciDrop[] = OpcionDropDown(
+        //    __SIST__.'/sucursales_list.php',
+        //    TextoIcono(__iOJOS__,'Sucursales')
+        //);
+        if ($this->blnEditMode) {
+
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/manifiesto_exportacion_pdf.php/'.$this->objManifies->Id,
+                TextoIcono('list','Impr. Manfiesto')
+            );
+
+            $_SESSION['PagiBack'] = 'armar_manif_exp_mar.php/'.$this->objManifies->Id;
+            $blnCambStat = true;
+            $strUltiCkpt = '';
+            if ($this->objUsuario->Sucursal->Iata != 'MIA') {
+                $objUltiCkpt = $this->objManifies->ultimoCheckpoint();
+                if ($objUltiCkpt instanceof ManifiestoExpCkpt) {
+                    $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
+                }
+                //if ( ($this->objNotaEntr->Recibidas == 0) && (in_array($strUltiCkpt,['TI','IC']) ) ) {
+                //    $blnCambStat = true;
+                //}
+                //if ( ($this->objNotaEntr->Recibidas > 0) && (in_array($strUltiCkpt,['RA']) ) ) {
+                //    $blnCambStat = true;
+                //}
+            }
+            if ($blnCambStat) {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/cambiar_estatus_manifiesto_exp.php/'.$this->objManifies->Id,
+                    TextoIcono(__iEDIT__,'Camb. Estatus')
+                );
+            } else {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/cambiar_estatus_manifiesto_exp.php/'.$this->objManifies->Id.'/sc',
+                    TextoIcono('list','Hist. Estatus')
+                );
+            }
+        }
+
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop);
+
     }
 
     protected function dtgPiezApta_Create() {
@@ -528,6 +595,106 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
     // Acciones asociadas a los objetos
     //---------------------------------------
 
+    protected function btnSacaMani_Click() {
+        /* @var $objContenedor ManifiestoExp */
+        //t('====================================');
+        //t('Sacando pieza del Manifiesto Exp MAR');
+
+        if (strlen($this->txtListNume->Text) == 0) {
+            $this->danger('No se han especificado las piezas que serán excluidas del Manifiesto');
+            return;
+        }
+
+        $strNombProc = 'Sacando piezas del Manifiesto: '.$this->txtNumeMani->Text;
+        $this->objProcEjec = CrearProceso($strNombProc);
+
+        $strCodiCkpt   = 'EX';
+        $objContenedor = $this->objManifies;
+        //$objCheckpoint = Checkpoints::LoadByCodigo($strCodiCkpt);
+        //t('El ckpt es: '.$objCheckpoint->Codigo);
+        $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
+        $this->arrListNume = LimpiarArreglo($this->arrListNume,false);
+        $this->txtListNume->Text = '';
+
+        $intCantErro = 0;
+        $intCantPiez = 0;
+        $objDatabase = Containers::GetDatabase();
+        $objDatabase->TransactionBegin();
+        foreach ($this->arrListNume as $strNumeSeri) {
+            t('Procesando: '.$strNumeSeri);
+            $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
+            if (!$objGuiaPiez) {
+                $strTextMens = 'La pieza: '.$strNumeSeri.' no existe !!!';
+                //t($strTextMens);
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNumeSeri;
+                $arrParaErro['MensErro'] = 'La pieza no existe';
+                $arrParaErro['ComeErro'] = $strTextMens;
+                GrabarError($arrParaErro);
+                $intCantErro++;
+                continue;
+            }
+            //t('Encontre la pieza');
+            if (!$objContenedor->IsGuiaPiezasAsPiezaAssociated($objGuiaPiez)) {
+                $strTextMens = 'La pieza: '.$strNumeSeri.' no esta asociada al Manifiesto !!!';
+                //t($strTextMens);
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNumeSeri;
+                $arrParaErro['MensErro'] = 'La pieza no esta asociada al Manifiesto !!!';
+                $arrParaErro['ComeErro'] = $strTextMens;
+                GrabarError($arrParaErro);
+                $intCantErro++;
+                continue;
+            }
+            //t('La pieza esta asociada al Manifiesto');
+            //---------------------------------------------
+            // Se establece la relacion "contenedor-guia"
+            //---------------------------------------------
+            $objContenedor->UnassociateGuiaPiezasAsPieza($objGuiaPiez);
+            //t('Ya saque la pieza');
+            //-----------------------------------------
+            // Se borra el checkpoint correspondiente
+            //-----------------------------------------
+            $objClauOrde = QQ::OrderBy(QQN::PiezaCheckpoints()->Id,false);
+            $arrPiezCkpt = PiezaCheckpoints::LoadArrayByPiezaId($objGuiaPiez->Id, $objClauOrde);
+            foreach ($arrPiezCkpt as $objPiezCkpt) {
+                if ($objPiezCkpt->Checkpoint->Codigo == $strCodiCkpt) {
+                    try {
+                        $objPiezCkpt->Delete();
+                        break;
+                    } catch (Exception $e) {
+                        //t('Error borrando la pieza: '.$e->getMessage());
+                        $strTextMens = $e->getMessage();
+                        t($strTextMens);
+                        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                        $arrParaErro['NumeRefe'] = $strNumeSeri;
+                        $arrParaErro['MensErro'] = 'Borrando el Checkpoint '.$strCodiCkpt;
+                        $arrParaErro['ComeErro'] = $strTextMens;
+                        $intCantErro++;
+                        GrabarError($arrParaErro);
+                    }
+                }
+            }
+            $intCantPiez ++;
+        }
+        $this->dtgPiezMani->Refresh();
+        $this->dtgPiezApta->Refresh();
+        //t('Termine de procesar la piezas');
+        $objContenedor->actualizarTotales();
+        //t('Se actualizaron los totales en el Manifiesto Exp');
+        $objDatabase->TransactionCommit();
+        $strMensUsua = sprintf('Piezas sacadas del Manifiesto (%s) | Errores (%s)',
+            $intCantPiez,$intCantErro);
+        if ($intCantErro == 0) {
+            $this->info($strMensUsua);
+        } else {
+            $this->warning($strMensUsua);
+            $this->btnRepoErro->Visible = true;
+        }
+        $this->objManifies = $objContenedor;
+    }
+
+
     protected function advertirExistencia() {
         $strMensUsua = '';
         $strCaraConc = '';
@@ -573,10 +740,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
     {
         if (is_null($this->lstDestMani->SelectedValue)) {
             $this->danger('Debe seleccionar un Destino');
-            return false;
-        }
-        if (strlen($this->txtNumeMast->Text) == 0) {
-            $this->danger('El Nro de la Master, es requerido');
             return false;
         }
         if ( (strlen($this->txtNumeBlxx->Text) == 0) && (strlen($this->txtNumeBook->Text) == 0) ) {
@@ -707,7 +870,6 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
                 $objContenedor->Volumen       = 0;
                 $objContenedor->Valor         = 0;
             }
-            $objContenedor->Master        = $this->txtNumeMast->Text;
             $objContenedor->DestinoId     = $this->lstDestMani->SelectedValue;
             $objContenedor->FechaDespacho = new QDateTime($this->calFechDesp->DateTime);
             $objContenedor->NroBl         = $this->txtNumeBlxx->Text;

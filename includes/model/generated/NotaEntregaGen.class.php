@@ -64,6 +64,8 @@
 	 * @property-read NotaConceptos[] $_NotaConceptosArray the value for the private _objNotaConceptosArray (Read-Only) if set due to an ExpandAsArray on the nota_conceptos.nota_entrega_id reverse relationship
 	 * @property-read NotaEntregaCkpt $_NotaEntregaCkptAsContainer the value for the private _objNotaEntregaCkptAsContainer (Read-Only) if set due to an expansion on the nota_entrega_ckpt.container_id reverse relationship
 	 * @property-read NotaEntregaCkpt[] $_NotaEntregaCkptAsContainerArray the value for the private _objNotaEntregaCkptAsContainerArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_ckpt.container_id reverse relationship
+	 * @property-read NotaEntregaZona $_NotaEntregaZona the value for the private _objNotaEntregaZona (Read-Only) if set due to an expansion on the nota_entrega_zona.nota_entrega_id reverse relationship
+	 * @property-read NotaEntregaZona[] $_NotaEntregaZonaArray the value for the private _objNotaEntregaZonaArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_zona.nota_entrega_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class NotaEntregaGen extends QBaseClass implements IteratorAggregate {
@@ -436,6 +438,22 @@
 		 * @var NotaEntregaCkpt[] _objNotaEntregaCkptAsContainerArray;
 		 */
 		private $_objNotaEntregaCkptAsContainerArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single NotaEntregaZona object
+		 * (of type NotaEntregaZona), if this NotaEntrega object was restored with
+		 * an expansion on the nota_entrega_zona association table.
+		 * @var NotaEntregaZona _objNotaEntregaZona;
+		 */
+		private $_objNotaEntregaZona;
+
+		/**
+		 * Private member variable that stores a reference to an array of NotaEntregaZona objects
+		 * (of type NotaEntregaZona[]), if this NotaEntrega object was restored with
+		 * an ExpandAsArray on the nota_entrega_zona association table.
+		 * @var NotaEntregaZona[] _objNotaEntregaZonaArray;
+		 */
+		private $_objNotaEntregaZonaArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -1280,6 +1298,21 @@
 					$objToReturn->_objNotaEntregaCkptAsContainerArray[] = NotaEntregaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackptascontainer__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objNotaEntregaCkptAsContainer)) {
 					$objToReturn->_objNotaEntregaCkptAsContainer = NotaEntregaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregackptascontainer__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for NotaEntregaZona Virtual Binding
+			$strAlias = $strAliasPrefix . 'notaentregazona__nota_entrega_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['notaentregazona']) ? null : $objExpansionAliasArray['notaentregazona']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objNotaEntregaZonaArray)
+				$objToReturn->_objNotaEntregaZonaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objNotaEntregaZonaArray[] = NotaEntregaZona::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregazona__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objNotaEntregaZona)) {
+					$objToReturn->_objNotaEntregaZona = NotaEntregaZona::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregazona__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2292,6 +2325,22 @@
 					 */
 					return $this->_objNotaEntregaCkptAsContainerArray;
 
+				case '_NotaEntregaZona':
+					/**
+					 * Gets the value for the private _objNotaEntregaZona (Read-Only)
+					 * if set due to an expansion on the nota_entrega_zona.nota_entrega_id reverse relationship
+					 * @return NotaEntregaZona
+					 */
+					return $this->_objNotaEntregaZona;
+
+				case '_NotaEntregaZonaArray':
+					/**
+					 * Gets the value for the private _objNotaEntregaZonaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the nota_entrega_zona.nota_entrega_id reverse relationship
+					 * @return NotaEntregaZona[]
+					 */
+					return $this->_objNotaEntregaZonaArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -2902,6 +2951,9 @@
 			}
 			if ($this->CountNotaEntregaCkptsAsContainer()) {
 				$arrTablRela[] = 'nota_entrega_ckpt';
+			}
+			if ($this->CountNotaEntregaZonas()) {
+				$arrTablRela[] = 'nota_entrega_zona';
 			}
 			
 			return $arrTablRela;
@@ -3658,6 +3710,158 @@
 		}
 
 
+		// Related Objects' Methods for NotaEntregaZona
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated NotaEntregaZonas as an array of NotaEntregaZona objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaEntregaZona[]
+		*/
+		public function GetNotaEntregaZonaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return NotaEntregaZona::LoadArrayByNotaEntregaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated NotaEntregaZonas
+		 * @return int
+		*/
+		public function CountNotaEntregaZonas() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return NotaEntregaZona::CountByNotaEntregaId($this->intId);
+		}
+
+		/**
+		 * Associates a NotaEntregaZona
+		 * @param NotaEntregaZona $objNotaEntregaZona
+		 * @return void
+		*/
+		public function AssociateNotaEntregaZona(NotaEntregaZona $objNotaEntregaZona) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaZona on this unsaved NotaEntrega.');
+			if ((is_null($objNotaEntregaZona->NotaEntregaId)) || (is_null($objNotaEntregaZona->Zona)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateNotaEntregaZona on this NotaEntrega with an unsaved NotaEntregaZona.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_zona`
+				SET
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($objNotaEntregaZona->NotaEntregaId) . ' AND
+					`zona` = ' . $objDatabase->SqlVariable($objNotaEntregaZona->Zona) . '
+			');
+		}
+
+		/**
+		 * Unassociates a NotaEntregaZona
+		 * @param NotaEntregaZona $objNotaEntregaZona
+		 * @return void
+		*/
+		public function UnassociateNotaEntregaZona(NotaEntregaZona $objNotaEntregaZona) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaZona on this unsaved NotaEntrega.');
+			if ((is_null($objNotaEntregaZona->NotaEntregaId)) || (is_null($objNotaEntregaZona->Zona)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaZona on this NotaEntrega with an unsaved NotaEntregaZona.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_zona`
+				SET
+					`nota_entrega_id` = null
+				WHERE
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($objNotaEntregaZona->NotaEntregaId) . ' AND
+					`zona` = ' . $objDatabase->SqlVariable($objNotaEntregaZona->Zona) . ' AND
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all NotaEntregaZonas
+		 * @return void
+		*/
+		public function UnassociateAllNotaEntregaZonas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaZona on this unsaved NotaEntrega.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`nota_entrega_zona`
+				SET
+					`nota_entrega_id` = null
+				WHERE
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated NotaEntregaZona
+		 * @param NotaEntregaZona $objNotaEntregaZona
+		 * @return void
+		*/
+		public function DeleteAssociatedNotaEntregaZona(NotaEntregaZona $objNotaEntregaZona) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaZona on this unsaved NotaEntrega.');
+			if ((is_null($objNotaEntregaZona->NotaEntregaId)) || (is_null($objNotaEntregaZona->Zona)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaZona on this NotaEntrega with an unsaved NotaEntregaZona.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_zona`
+				WHERE
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($objNotaEntregaZona->NotaEntregaId) . ' AND
+					`zona` = ' . $objDatabase->SqlVariable($objNotaEntregaZona->Zona) . ' AND
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated NotaEntregaZonas
+		 * @return void
+		*/
+		public function DeleteAllNotaEntregaZonas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateNotaEntregaZona on this unsaved NotaEntrega.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`nota_entrega_zona`
+				WHERE
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -3999,6 +4203,7 @@
      * @property-read QQReverseReferenceNodeGuias $Guias
      * @property-read QQReverseReferenceNodeNotaConceptos $NotaConceptos
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsContainer
+     * @property-read QQReverseReferenceNodeNotaEntregaZona $NotaEntregaZona
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -4096,6 +4301,8 @@
 					return new QQReverseReferenceNodeNotaConceptos($this, 'notaconceptos', 'reverse_reference', 'nota_entrega_id', 'NotaConceptos');
 				case 'NotaEntregaCkptAsContainer':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackptascontainer', 'reverse_reference', 'container_id', 'NotaEntregaCkptAsContainer');
+				case 'NotaEntregaZona':
+					return new QQReverseReferenceNodeNotaEntregaZona($this, 'notaentregazona', 'reverse_reference', 'nota_entrega_id', 'NotaEntregaZona');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -4157,6 +4364,7 @@
      * @property-read QQReverseReferenceNodeGuias $Guias
      * @property-read QQReverseReferenceNodeNotaConceptos $NotaConceptos
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsContainer
+     * @property-read QQReverseReferenceNodeNotaEntregaZona $NotaEntregaZona
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -4254,6 +4462,8 @@
 					return new QQReverseReferenceNodeNotaConceptos($this, 'notaconceptos', 'reverse_reference', 'nota_entrega_id', 'NotaConceptos');
 				case 'NotaEntregaCkptAsContainer':
 					return new QQReverseReferenceNodeNotaEntregaCkpt($this, 'notaentregackptascontainer', 'reverse_reference', 'container_id', 'NotaEntregaCkptAsContainer');
+				case 'NotaEntregaZona':
+					return new QQReverseReferenceNodeNotaEntregaZona($this, 'notaentregazona', 'reverse_reference', 'nota_entrega_id', 'NotaEntregaZona');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

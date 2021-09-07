@@ -631,7 +631,10 @@ function TextoIcono($strNombIcon, $strTextAcom, $strPosiText='F', $strTamaIcon='
     }
     if ($strPosiText == 'F') {
         // El texto se ubica al (F)inal
-        return "<i class=\"fa fa-$strNombIcon $strTamaIcon\"></i>&nbsp;&nbsp;$strTextAcom";
+        if (strlen($strTextAcom)) {
+            $strTextAcom = "&nbsp;&nbsp;$strTextAcom";
+        }
+        return "<i class=\"fa fa-$strNombIcon $strTamaIcon\"></i>$strTextAcom";
     } else {
         // El texto se ubica al (P)rincipio
         return "$strTextAcom <i class=\"fa fa-$strNombIcon $strTamaIcon\"></i>";

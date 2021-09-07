@@ -116,7 +116,7 @@ class FacturasListForm extends FacturasListFormBase {
 	}
 
     public function CantPago(Facturas $objFactClie) {
-		return $objFactClie->CountFacturaPagosesAsFactura();
+		return $objFactClie->CountPagosCorpsAsFacturaPagoCorp();
 	}
 
     public function btnNuevRegi_Click()

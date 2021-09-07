@@ -8,29 +8,47 @@ if (!isset($_SESSION['FactIdxx'])) {
 /* @var $objFactOrig Facturas */
 /* @var $objFactImpr NotaEntrega */
 $objFactOrig  = unserialize($_SESSION['FactMani']);
-$arrTariAgen  = TarifaAgentes::Load($objFactOrig->ClienteCorp->TarifaAgenteId);
-$strCadeSqlx  = "select * ";
-$strCadeSqlx .= "  from v_factura_zona ";
-$strCadeSqlx .= " where factura_id = ".$objFactOrig->Id;
-$strCadeSqlx .= " order by zona";
+//t('Tengo la factura: '.$objFactOrig->Referencia);
+//$arrTariAgen  = TarifaAgentes::Load($objFactOrig->ClienteCorp->TarifaAgenteId);
+//$strCadeSqlx  = "select * ";
+//$strCadeSqlx .= "  from v_factura_zona ";
+//$strCadeSqlx .= " where factura_id = ".$objFactOrig->Id;
+//$strCadeSqlx .= " order by zona";
+//$objDatabase  = Facturas::GetDatabase();
+//$objDbResult  = $objDatabase->Query($strCadeSqlx);
+//$arrFactImpr  = [];
+//$decTotaFact  = 0;
+//while ($mixRegistro = $objDbResult->FetchArray()) {
+//    $strServComp   = $mixRegistro['servicio_importacion'] == 'AER' ? 'AEREO' : 'MARITIMO';
+//    $decPesoPiez   = $strServComp == 'AEREO' ? $mixRegistro['kilos'] : $mixRegistro['pies_cub'];
+//    $objClauWher   = QQ::Clause();
+//    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->TarifaId,$mixRegistro['tarifa_agente_id']);
+//    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Zona,$mixRegistro['zona_id']);
+//    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Servicio,$strServComp);
+//    $arrTariServ   = TarifaAgentesZonas::QueryArray(QQ::AndCondition($objClauWher));
+//    $objTariServ   = $arrTariServ[0];
+//    $mixRegistro['tarifa'] = $objTariServ->Precio;
+//    $mixRegistro['total']  = $objTariServ->Precio * $decPesoPiez;
+//    $decTotaFact  += $mixRegistro['total'];
+//    $arrFactImpr[] = $mixRegistro;
+//}
+
 $objDatabase  = Facturas::GetDatabase();
+$strCadeSqlx  = "select * ";
+$strCadeSqlx .= "  from v_nota_entrega_zona ";
+$strCadeSqlx .= " where nota_entrega_id in (select id ";
+$strCadeSqlx .= "                             from nota_entrega ";
+$strCadeSqlx .= "                            where factura_id = ".$objFactOrig->Id.")";
+$strCadeSqlx .= " order by zona";
+//t('SQL: '.$strCadeSqlx);
 $objDbResult  = $objDatabase->Query($strCadeSqlx);
 $arrFactImpr  = [];
 $decTotaFact  = 0;
 while ($mixRegistro = $objDbResult->FetchArray()) {
-    $strServComp   = $mixRegistro['servicio_importacion'] == 'AER' ? 'AEREO' : 'MARITIMO';
-    $decPesoPiez   = $strServComp == 'AEREO' ? $mixRegistro['kilos'] : $mixRegistro['pies_cub'];
-    $objClauWher   = QQ::Clause();
-    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->TarifaId,$mixRegistro['tarifa_agente_id']);
-    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Zona,$mixRegistro['zona_id']);
-    $objClauWher[] = QQ::Equal(QQN::TarifaAgentesZonas()->Servicio,$strServComp);
-    $arrTariServ   = TarifaAgentesZonas::QueryArray(QQ::AndCondition($objClauWher));
-    $objTariServ   = $arrTariServ[0];
-    $mixRegistro['tarifa'] = $objTariServ->Precio;
-    $mixRegistro['total']  = $objTariServ->Precio * $decPesoPiez;
     $decTotaFact  += $mixRegistro['total'];
     $arrFactImpr[] = $mixRegistro;
 }
+
 
 $strLimiDere = '350px';
 ?>
@@ -98,7 +116,7 @@ $strLimiDere = '350px';
                     <td style="text-align: center"><?= $objFactImpr['piezas'] ?></td>
                     <td style="text-align: right"><?= nf($objFactImpr['kilos']) ?></td>
                     <td style="text-align: right"><?= nf3($objFactImpr['pies_cub']) ?></td>
-                    <td style="text-align: right"><?= nf($objFactImpr['tarifa']) ?></td>
+                    <td style="text-align: right"><?= nf($objFactImpr['precio']) ?></td>
                     <td style="text-align: right"><?= nf($objFactImpr['total']) ?></td>
                 </tr>
             <?php } ?>
