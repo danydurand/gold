@@ -324,16 +324,6 @@ class MatchScanneo extends FormularioBaseKaizen {
 
                 if ($arrResuGrab['TodoOkey']) {
                     $intContCkpt++;
-                    //-------------------------------------------------------
-                    // Se registra tambien el Checkpoint IA para cada pieza
-                    //-------------------------------------------------------
-                    //$arrDatoCkpt = array();
-                    //$arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-                    //$arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
-                    //$arrDatoCkpt['CodiCkpt'] = $objCkptAlma->Id;
-                    //$arrDatoCkpt['TextCkpt'] = $objCkptMani->Descripcion;
-                    //$arrDatoCkpt['CodiRuta'] = '';
-                    //$arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
                 } else {
                     $strMensUsua = "Error al registrar Checkpoint a la pieza: " . $objGuiaPiez->IdPieza;
                     $strMensUsua .= " - " . $arrResuGrab['MotiNook'];
