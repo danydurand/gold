@@ -181,6 +181,13 @@
 		QApplicationBase::$ClassFile['cobrocodmetacontrol'] = __META_CONTROLS__ . '/CobroCodMetaControl.class.php';
 		QApplicationBase::$ClassFile['cobrocoddatagrid'] = __META_CONTROLS__ . '/CobroCodDataGrid.class.php';
 
+	// ClassPaths for the Cola class
+		QApplicationBase::$ClassFile['cola'] = __MODEL__ . '/Cola.class.php';
+		QApplicationBase::$ClassFile['qqnodecola'] = __MODEL__ . '/Cola.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecola'] = __MODEL__ . '/Cola.class.php';
+		QApplicationBase::$ClassFile['colametacontrol'] = __META_CONTROLS__ . '/ColaMetaControl.class.php';
+		QApplicationBase::$ClassFile['coladatagrid'] = __META_CONTROLS__ . '/ColaDataGrid.class.php';
+
 	// ClassPaths for the Compra class
 		QApplicationBase::$ClassFile['compra'] = __MODEL__ . '/Compra.class.php';
 		QApplicationBase::$ClassFile['qqnodecompra'] = __MODEL__ . '/Compra.class.php';
@@ -1006,6 +1013,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodepiezacheckpointsh'] = __MODEL__ . '/PiezaCheckpointsH.class.php';
 		QApplicationBase::$ClassFile['piezacheckpointshmetacontrol'] = __META_CONTROLS__ . '/PiezaCheckpointsHMetaControl.class.php';
 		QApplicationBase::$ClassFile['piezacheckpointshdatagrid'] = __META_CONTROLS__ . '/PiezaCheckpointsHDataGrid.class.php';
+
+	// ClassPaths for the PiezaRecibida class
+		QApplicationBase::$ClassFile['piezarecibida'] = __MODEL__ . '/PiezaRecibida.class.php';
+		QApplicationBase::$ClassFile['qqnodepiezarecibida'] = __MODEL__ . '/PiezaRecibida.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodepiezarecibida'] = __MODEL__ . '/PiezaRecibida.class.php';
+		QApplicationBase::$ClassFile['piezarecibidametacontrol'] = __META_CONTROLS__ . '/PiezaRecibidaMetaControl.class.php';
+		QApplicationBase::$ClassFile['piezarecibidadatagrid'] = __META_CONTROLS__ . '/PiezaRecibidaDataGrid.class.php';
 
 	// ClassPaths for the PiezasTemp class
 		QApplicationBase::$ClassFile['piezastemp'] = __MODEL__ . '/PiezasTemp.class.php';

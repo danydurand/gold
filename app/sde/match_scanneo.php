@@ -264,7 +264,9 @@ class MatchScanneo extends FormularioBaseKaizen {
     }
 
     protected function btnErroProc_Click() {
-        $_SESSION['PagiBack'] = __SIST__."/match_scanneo.php/";
+        //$_SESSION['PagiBack'] = __SIST__."/match_scanneo.php";
+        //$_SESSION['PagiBack'] = "match_scanneo.php";
+        unset($_SESSION['PagiBack']);
         QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
     }
 
@@ -278,6 +280,69 @@ class MatchScanneo extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click() {
+
+        $strNombProc = 'Match de Scanneo: '.date('Y-m-d h:i');
+        $this->objProcEjec = CrearProceso($strNombProc);
+
+        //----------------------------------
+        // Se crear el proceso en la Cola
+        //----------------------------------
+        try {
+            $objColaJobs = new Cola();
+            $objColaJobs->ProcesoErrorId = $this->objProcEjec->Id;
+            $objColaJobs->Clase          = 'NotaEntrega';
+            $objColaJobs->Metodo         = 'RecibirPiezas';
+            $objColaJobs->Parametros     = $this->objProcEjec->Id;
+            $objColaJobs->Ejecutado      = false;
+            $objColaJobs->Save();
+        } catch (Exception $e) {
+            $this->danger($e->getMessage());
+            return;
+        }
+
+        //----------------------------------------------------
+        // Se limpia y transforman los numeros de las piezas
+        //----------------------------------------------------
+        $arrNumePiez = explode(',',nl2br2($this->txtNumePiez->Text));
+        $arrNumePiez = LimpiarArreglo($arrNumePiez, false);
+        $arrNumePiez = array_map('transformar',$arrNumePiez);
+        $this->txtNumePiez->Text = '';
+
+        //-----------------------------------
+        // Se procesan una a una las piezas
+        //-----------------------------------
+        $intCantPiez = 0;
+        $intCantErro = 0;
+        foreach ($arrNumePiez as $strPiezArri) {
+            t("Procesando: ".$strPiezArri);
+            try {
+                $objPiezReci = new PiezaRecibida();
+                $objPiezReci->ProcesoErrorId = $this->objProcEjec->Id;
+                $objPiezReci->IdPieza        = $strPiezArri;
+                $objPiezReci->IsRecibida     = false;
+                $objPiezReci->Save();
+                $intCantPiez ++;
+            } catch (Exception $e) {
+                $intCantErro++;
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strPiezArri;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'Grabando la pieza en la tabla piezas_recibida';
+                GrabarError($arrParaErro);
+                t('Error grabando en pieza_recibida: '.$e->getMessage());
+            }
+        }
+        $strTextMens = "Total Recibidas: $intCantPiez | Errores: $intCantErro";
+
+        if ($intCantErro) {
+            $this->btnErroProc->Visible = true;
+            $this->warning($strTextMens);
+        } else {
+            $this->success($strTextMens);
+        }
+    }
+
+    protected function btnSaveOld_Click() {
         $blnHayxErro = false;
         $strNombProc = 'Match de Scanneo';
         $this->objProcEjec = CrearProceso($strNombProc);

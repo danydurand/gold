@@ -1,21 +1,21 @@
 <?php
 require_once('qcubed.inc.php');
 
+define ('__SIST__', '/app/'.$_SESSION['Sistema']);
+
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
-
-
 
 // Convirtiendo texto a fechas
 
-$strFechEntr = '2021-08-30';
-$strFechGuia = '2021-08-20';
-echo 'strtotime: '.strtotime($strFechEntr);
-echo "<br>";
-$dttFechEntr = date('Y-m-d H:i',strtotime($strFechEntr));
-echo "date: ".$dttFechEntr;
-
-$dttFechGuia = strtotime($strFechGuia);
-$intTiemTran = date_diff($dttFechEntr,$dttFechGuia);
+//$strFechEntr = '2021-08-30';
+//$strFechGuia = '2021-08-20';
+//echo 'strtotime: '.strtotime($strFechEntr);
+//echo "<br>";
+//$dttFechEntr = date('Y-m-d H:i',strtotime($strFechEntr));
+//echo "date: ".$dttFechEntr;
+//
+//$dttFechGuia = strtotime($strFechGuia);
+//$intTiemTran = date_diff($dttFechEntr,$dttFechGuia);
 
 
 // Buscando Tarifas Vigentes de Exportacion
@@ -179,23 +179,16 @@ $intTiemTran = date_diff($dttFechEntr,$dttFechGuia);
 //print_r($arrIdxxMani);
 
 
-// Pruebas de interpretacion del scanneo de Stephy ATC
-//$strNumeGuia = '169841-1/002-002:200';
-//echo "Entrando: ".$strNumeGuia."<br><br>";
-//$strNumeGuia = transformar($strNumeGuia);
-//echo "Transformada: ".$strNumeGuia;
-
-
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
 
-//$arrManiSist = NotaEntrega::LoadAll();
-//foreach ($arrManiSist as $objManiSist) {
-//    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
-//    $objManiSist->Save();
-//    $objManiSist->ContarActualizarRecibidas();
-//    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
-//    echo "<br>";
-//}
+$arrManiSist = NotaEntrega::LoadAll();
+foreach ($arrManiSist as $objManiSist) {
+    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
+    $objManiSist->Save();
+    $objManiSist->ContarActualizarRecibidas();
+    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
+    echo "<br>";
+}
 
 //-------------------
 // Buscar Parametro

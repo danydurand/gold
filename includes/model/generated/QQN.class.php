@@ -157,6 +157,12 @@
 			return new QQNodeCobroCod('cobro_cod', null, null);
 		}
 		/**
+		 * @return QQNodeCola
+		 */
+		static public function Cola() {
+			return new QQNodeCola('cola', null, null);
+		}
+		/**
 		 * @return QQNodeCompra
 		 */
 		static public function Compra() {
@@ -863,6 +869,12 @@
 		 */
 		static public function PiezaCheckpointsH() {
 			return new QQNodePiezaCheckpointsH('pieza_checkpoints_h', null, null);
+		}
+		/**
+		 * @return QQNodePiezaRecibida
+		 */
+		static public function PiezaRecibida() {
+			return new QQNodePiezaRecibida('pieza_recibida', null, null);
 		}
 		/**
 		 * @return QQNodePiezasTemp

@@ -14,17 +14,17 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <div class="hidden-sm col-md-3 col-lg-4"></div>
     </div>
     <div class="form-controls">
-        <div class="container-fluid" data-aos="flip-up" data-aos-duration="2000">
+        <div class="container-fluid" data-aos="fade-in">
             <div class="row">
                 <div class="col-sm-12" style="min-height: 1.3em; text-align: left; margin-top: 0.4em; margin-left: -1em;">
                     <?php $this->lblMensUsua->Render(); ?>
                 </div>
             </div>
             <div class="row" style="margin-top: 0.7em;">
-                <div class="col-md-5" data-aos="flip-right" data-aos-duration="2000">
+                <div class="col-md-5">
                     <?php $this->txtNumePiez->RenderWithName(); ?>
                 </div>
-                <div class="col-md-6" data-aos="flip-left" data-aos-duration="2000">
+                <div class="col-md-6">
                     <div class="titulo" style="margin-bottom: .1em">Manifiestos Pendientes</div>
                     <?php $this->dtgManiPend->Render(); ?>
                     <!--<br>-->

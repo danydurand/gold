@@ -41,6 +41,10 @@
 	 * @property-read Acceso[] $_AccesoArray the value for the private _objAccesoArray (Read-Only) if set due to an ExpandAsArray on the acceso.usuario_id reverse relationship
 	 * @property-read ClientePmn $_ClientePmnAsRegistradoPor the value for the private _objClientePmnAsRegistradoPor (Read-Only) if set due to an expansion on the cliente_pmn.registrado_por reverse relationship
 	 * @property-read ClientePmn[] $_ClientePmnAsRegistradoPorArray the value for the private _objClientePmnAsRegistradoPorArray (Read-Only) if set due to an ExpandAsArray on the cliente_pmn.registrado_por reverse relationship
+	 * @property-read Cola $_ColaAsCreatedBy the value for the private _objColaAsCreatedBy (Read-Only) if set due to an expansion on the cola.created_by reverse relationship
+	 * @property-read Cola[] $_ColaAsCreatedByArray the value for the private _objColaAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the cola.created_by reverse relationship
+	 * @property-read Cola $_ColaAsUpdatedBy the value for the private _objColaAsUpdatedBy (Read-Only) if set due to an expansion on the cola.updated_by reverse relationship
+	 * @property-read Cola[] $_ColaAsUpdatedByArray the value for the private _objColaAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the cola.updated_by reverse relationship
 	 * @property-read ContainerCkpt $_ContainerCkpt the value for the private _objContainerCkpt (Read-Only) if set due to an expansion on the container_ckpt.usuario_id reverse relationship
 	 * @property-read ContainerCkpt[] $_ContainerCkptArray the value for the private _objContainerCkptArray (Read-Only) if set due to an ExpandAsArray on the container_ckpt.usuario_id reverse relationship
 	 * @property-read ContenedorCkpt $_ContenedorCkpt the value for the private _objContenedorCkpt (Read-Only) if set due to an expansion on the contenedor_ckpt.usuario reverse relationship
@@ -83,6 +87,10 @@
 	 * @property-read NotaEntregaH[] $_NotaEntregaHArray the value for the private _objNotaEntregaHArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_h.usuario_id reverse relationship
 	 * @property-read PagoFacturaPmn $_PagoFacturaPmnAsCreadoPor the value for the private _objPagoFacturaPmnAsCreadoPor (Read-Only) if set due to an expansion on the pago_factura_pmn.creado_por reverse relationship
 	 * @property-read PagoFacturaPmn[] $_PagoFacturaPmnAsCreadoPorArray the value for the private _objPagoFacturaPmnAsCreadoPorArray (Read-Only) if set due to an ExpandAsArray on the pago_factura_pmn.creado_por reverse relationship
+	 * @property-read PiezaRecibida $_PiezaRecibidaAsCreatedBy the value for the private _objPiezaRecibidaAsCreatedBy (Read-Only) if set due to an expansion on the pieza_recibida.created_by reverse relationship
+	 * @property-read PiezaRecibida[] $_PiezaRecibidaAsCreatedByArray the value for the private _objPiezaRecibidaAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.created_by reverse relationship
+	 * @property-read PiezaRecibida $_PiezaRecibidaAsUpdatedBy the value for the private _objPiezaRecibidaAsUpdatedBy (Read-Only) if set due to an expansion on the pieza_recibida.updated_by reverse relationship
+	 * @property-read PiezaRecibida[] $_PiezaRecibidaAsUpdatedByArray the value for the private _objPiezaRecibidaAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.updated_by reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajo the value for the private _objRegistroTrabajo (Read-Only) if set due to an expansion on the registro_trabajo.usuario_id reverse relationship
 	 * @property-read RegistroTrabajo[] $_RegistroTrabajoArray the value for the private _objRegistroTrabajoArray (Read-Only) if set due to an ExpandAsArray on the registro_trabajo.usuario_id reverse relationship
 	 * @property-read SreGuiaCkpt $_SreGuiaCkptAsCodiUsua the value for the private _objSreGuiaCkptAsCodiUsua (Read-Only) if set due to an expansion on the sre_guia_ckpt.codi_usua reverse relationship
@@ -277,6 +285,38 @@
 		 * @var ClientePmn[] _objClientePmnAsRegistradoPorArray;
 		 */
 		private $_objClientePmnAsRegistradoPorArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ColaAsCreatedBy object
+		 * (of type Cola), if this Usuario object was restored with
+		 * an expansion on the cola association table.
+		 * @var Cola _objColaAsCreatedBy;
+		 */
+		private $_objColaAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ColaAsCreatedBy objects
+		 * (of type Cola[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the cola association table.
+		 * @var Cola[] _objColaAsCreatedByArray;
+		 */
+		private $_objColaAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ColaAsUpdatedBy object
+		 * (of type Cola), if this Usuario object was restored with
+		 * an expansion on the cola association table.
+		 * @var Cola _objColaAsUpdatedBy;
+		 */
+		private $_objColaAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ColaAsUpdatedBy objects
+		 * (of type Cola[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the cola association table.
+		 * @var Cola[] _objColaAsUpdatedByArray;
+		 */
+		private $_objColaAsUpdatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single ContainerCkpt object
@@ -613,6 +653,38 @@
 		 * @var PagoFacturaPmn[] _objPagoFacturaPmnAsCreadoPorArray;
 		 */
 		private $_objPagoFacturaPmnAsCreadoPorArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PiezaRecibidaAsCreatedBy object
+		 * (of type PiezaRecibida), if this Usuario object was restored with
+		 * an expansion on the pieza_recibida association table.
+		 * @var PiezaRecibida _objPiezaRecibidaAsCreatedBy;
+		 */
+		private $_objPiezaRecibidaAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of PiezaRecibidaAsCreatedBy objects
+		 * (of type PiezaRecibida[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the pieza_recibida association table.
+		 * @var PiezaRecibida[] _objPiezaRecibidaAsCreatedByArray;
+		 */
+		private $_objPiezaRecibidaAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PiezaRecibidaAsUpdatedBy object
+		 * (of type PiezaRecibida), if this Usuario object was restored with
+		 * an expansion on the pieza_recibida association table.
+		 * @var PiezaRecibida _objPiezaRecibidaAsUpdatedBy;
+		 */
+		private $_objPiezaRecibidaAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of PiezaRecibidaAsUpdatedBy objects
+		 * (of type PiezaRecibida[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the pieza_recibida association table.
+		 * @var PiezaRecibida[] _objPiezaRecibidaAsUpdatedByArray;
+		 */
+		private $_objPiezaRecibidaAsUpdatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single RegistroTrabajo object
@@ -1378,6 +1450,36 @@
 				}
 			}
 
+			// Check for ColaAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'colaascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['colaascreatedby']) ? null : $objExpansionAliasArray['colaascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objColaAsCreatedByArray)
+				$objToReturn->_objColaAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objColaAsCreatedByArray[] = Cola::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colaascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objColaAsCreatedBy)) {
+					$objToReturn->_objColaAsCreatedBy = Cola::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colaascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ColaAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'colaasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['colaasupdatedby']) ? null : $objExpansionAliasArray['colaasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objColaAsUpdatedByArray)
+				$objToReturn->_objColaAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objColaAsUpdatedByArray[] = Cola::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objColaAsUpdatedBy)) {
+					$objToReturn->_objColaAsUpdatedBy = Cola::InstantiateDbRow($objDbRow, $strAliasPrefix . 'colaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for ContainerCkpt Virtual Binding
 			$strAlias = $strAliasPrefix . 'containerckpt__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1690,6 +1792,36 @@
 					$objToReturn->_objPagoFacturaPmnAsCreadoPorArray[] = PagoFacturaPmn::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagofacturapmnascreadopor__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPagoFacturaPmnAsCreadoPor)) {
 					$objToReturn->_objPagoFacturaPmnAsCreadoPor = PagoFacturaPmn::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagofacturapmnascreadopor__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for PiezaRecibidaAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'piezarecibidaascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['piezarecibidaascreatedby']) ? null : $objExpansionAliasArray['piezarecibidaascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPiezaRecibidaAsCreatedByArray)
+				$objToReturn->_objPiezaRecibidaAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPiezaRecibidaAsCreatedByArray[] = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPiezaRecibidaAsCreatedBy)) {
+					$objToReturn->_objPiezaRecibidaAsCreatedBy = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for PiezaRecibidaAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'piezarecibidaasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['piezarecibidaasupdatedby']) ? null : $objExpansionAliasArray['piezarecibidaasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPiezaRecibidaAsUpdatedByArray)
+				$objToReturn->_objPiezaRecibidaAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPiezaRecibidaAsUpdatedByArray[] = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPiezaRecibidaAsUpdatedBy)) {
+					$objToReturn->_objPiezaRecibidaAsUpdatedBy = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2520,6 +2652,38 @@
 					 */
 					return $this->_objClientePmnAsRegistradoPorArray;
 
+				case '_ColaAsCreatedBy':
+					/**
+					 * Gets the value for the private _objColaAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the cola.created_by reverse relationship
+					 * @return Cola
+					 */
+					return $this->_objColaAsCreatedBy;
+
+				case '_ColaAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objColaAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the cola.created_by reverse relationship
+					 * @return Cola[]
+					 */
+					return $this->_objColaAsCreatedByArray;
+
+				case '_ColaAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objColaAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the cola.updated_by reverse relationship
+					 * @return Cola
+					 */
+					return $this->_objColaAsUpdatedBy;
+
+				case '_ColaAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objColaAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the cola.updated_by reverse relationship
+					 * @return Cola[]
+					 */
+					return $this->_objColaAsUpdatedByArray;
+
 				case '_ContainerCkpt':
 					/**
 					 * Gets the value for the private _objContainerCkpt (Read-Only)
@@ -2855,6 +3019,38 @@
 					 * @return PagoFacturaPmn[]
 					 */
 					return $this->_objPagoFacturaPmnAsCreadoPorArray;
+
+				case '_PiezaRecibidaAsCreatedBy':
+					/**
+					 * Gets the value for the private _objPiezaRecibidaAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the pieza_recibida.created_by reverse relationship
+					 * @return PiezaRecibida
+					 */
+					return $this->_objPiezaRecibidaAsCreatedBy;
+
+				case '_PiezaRecibidaAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objPiezaRecibidaAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pieza_recibida.created_by reverse relationship
+					 * @return PiezaRecibida[]
+					 */
+					return $this->_objPiezaRecibidaAsCreatedByArray;
+
+				case '_PiezaRecibidaAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objPiezaRecibidaAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the pieza_recibida.updated_by reverse relationship
+					 * @return PiezaRecibida
+					 */
+					return $this->_objPiezaRecibidaAsUpdatedBy;
+
+				case '_PiezaRecibidaAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objPiezaRecibidaAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pieza_recibida.updated_by reverse relationship
+					 * @return PiezaRecibida[]
+					 */
+					return $this->_objPiezaRecibidaAsUpdatedByArray;
 
 				case '_RegistroTrabajo':
 					/**
@@ -3314,6 +3510,12 @@
 			if ($this->CountClientePmnsAsRegistradoPor()) {
 				$arrTablRela[] = 'cliente_pmn';
 			}
+			if ($this->CountColasAsCreatedBy()) {
+				$arrTablRela[] = 'cola';
+			}
+			if ($this->CountColasAsUpdatedBy()) {
+				$arrTablRela[] = 'cola';
+			}
 			if ($this->CountContainerCkpts()) {
 				$arrTablRela[] = 'container_ckpt';
 			}
@@ -3376,6 +3578,12 @@
 			}
 			if ($this->CountPagoFacturaPmnsAsCreadoPor()) {
 				$arrTablRela[] = 'pago_factura_pmn';
+			}
+			if ($this->CountPiezaRecibidasAsCreatedBy()) {
+				$arrTablRela[] = 'pieza_recibida';
+			}
+			if ($this->CountPiezaRecibidasAsUpdatedBy()) {
+				$arrTablRela[] = 'pieza_recibida';
 			}
 			if ($this->CountRegistroTrabajos()) {
 				$arrTablRela[] = 'registro_trabajo';
@@ -3687,6 +3895,304 @@
 					`cliente_pmn`
 				WHERE
 					`registrado_por` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ColaAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ColasAsCreatedBy as an array of Cola objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Cola[]
+		*/
+		public function GetColaAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Cola::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ColasAsCreatedBy
+		 * @return int
+		*/
+		public function CountColasAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Cola::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ColaAsCreatedBy
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function AssociateColaAsCreatedBy(Cola $objCola) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateColaAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateColaAsCreatedBy on this Usuario with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ColaAsCreatedBy
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function UnassociateColaAsCreatedBy(Cola $objCola) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsCreatedBy on this Usuario with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ColasAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllColasAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ColaAsCreatedBy
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function DeleteAssociatedColaAsCreatedBy(Cola $objCola) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsCreatedBy on this Usuario with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`cola`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ColasAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllColasAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`cola`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ColaAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ColasAsUpdatedBy as an array of Cola objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Cola[]
+		*/
+		public function GetColaAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Cola::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ColasAsUpdatedBy
+		 * @return int
+		*/
+		public function CountColasAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Cola::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ColaAsUpdatedBy
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function AssociateColaAsUpdatedBy(Cola $objCola) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateColaAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateColaAsUpdatedBy on this Usuario with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ColaAsUpdatedBy
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function UnassociateColaAsUpdatedBy(Cola $objCola) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsUpdatedBy on this Usuario with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ColasAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllColasAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ColaAsUpdatedBy
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function DeleteAssociatedColaAsUpdatedBy(Cola $objCola) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsUpdatedBy on this Usuario with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`cola`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ColasAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllColasAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateColaAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`cola`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
 			');
 		}
 
@@ -6832,6 +7338,304 @@
 		}
 
 
+		// Related Objects' Methods for PiezaRecibidaAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PiezaRecibidasAsCreatedBy as an array of PiezaRecibida objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PiezaRecibida[]
+		*/
+		public function GetPiezaRecibidaAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return PiezaRecibida::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PiezaRecibidasAsCreatedBy
+		 * @return int
+		*/
+		public function CountPiezaRecibidasAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return PiezaRecibida::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a PiezaRecibidaAsCreatedBy
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function AssociatePiezaRecibidaAsCreatedBy(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaRecibidaAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaRecibidaAsCreatedBy on this Usuario with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PiezaRecibidaAsCreatedBy
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function UnassociatePiezaRecibidaAsCreatedBy(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsCreatedBy on this Usuario with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PiezaRecibidasAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllPiezaRecibidasAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PiezaRecibidaAsCreatedBy
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function DeleteAssociatedPiezaRecibidaAsCreatedBy(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsCreatedBy on this Usuario with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_recibida`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PiezaRecibidasAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllPiezaRecibidasAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_recibida`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for PiezaRecibidaAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PiezaRecibidasAsUpdatedBy as an array of PiezaRecibida objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PiezaRecibida[]
+		*/
+		public function GetPiezaRecibidaAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return PiezaRecibida::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PiezaRecibidasAsUpdatedBy
+		 * @return int
+		*/
+		public function CountPiezaRecibidasAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return PiezaRecibida::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a PiezaRecibidaAsUpdatedBy
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function AssociatePiezaRecibidaAsUpdatedBy(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaRecibidaAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaRecibidaAsUpdatedBy on this Usuario with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PiezaRecibidaAsUpdatedBy
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function UnassociatePiezaRecibidaAsUpdatedBy(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsUpdatedBy on this Usuario with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PiezaRecibidasAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllPiezaRecibidasAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PiezaRecibidaAsUpdatedBy
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function DeleteAssociatedPiezaRecibidaAsUpdatedBy(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsUpdatedBy on this Usuario with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_recibida`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PiezaRecibidasAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllPiezaRecibidasAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibidaAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_recibida`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for RegistroTrabajo
 		//-------------------------------------------------------------------
 
@@ -7393,6 +8197,8 @@
      * @property-read QQReverseReferenceNodeAcceso $Acceso
      * @property-read QQReverseReferenceNodeCajero $Cajero
      * @property-read QQReverseReferenceNodeClientePmn $ClientePmnAsRegistradoPor
+     * @property-read QQReverseReferenceNodeCola $ColaAsCreatedBy
+     * @property-read QQReverseReferenceNodeCola $ColaAsUpdatedBy
      * @property-read QQReverseReferenceNodeContainerCkpt $ContainerCkpt
      * @property-read QQReverseReferenceNodeContenedorCkpt $ContenedorCkpt
      * @property-read QQReverseReferenceNodeDatosPago $DatosPago
@@ -7414,6 +8220,8 @@
      * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptH
      * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaH
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
+     * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
+     * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
 
@@ -7473,6 +8281,10 @@
 					return new QQReverseReferenceNodeCajero($this, 'cajero', 'reverse_reference', 'usuario_id', 'Cajero');
 				case 'ClientePmnAsRegistradoPor':
 					return new QQReverseReferenceNodeClientePmn($this, 'clientepmnasregistradopor', 'reverse_reference', 'registrado_por', 'ClientePmnAsRegistradoPor');
+				case 'ColaAsCreatedBy':
+					return new QQReverseReferenceNodeCola($this, 'colaascreatedby', 'reverse_reference', 'created_by', 'ColaAsCreatedBy');
+				case 'ColaAsUpdatedBy':
+					return new QQReverseReferenceNodeCola($this, 'colaasupdatedby', 'reverse_reference', 'updated_by', 'ColaAsUpdatedBy');
 				case 'ContainerCkpt':
 					return new QQReverseReferenceNodeContainerCkpt($this, 'containerckpt', 'reverse_reference', 'usuario_id', 'ContainerCkpt');
 				case 'ContenedorCkpt':
@@ -7515,6 +8327,10 @@
 					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregah', 'reverse_reference', 'usuario_id', 'NotaEntregaH');
 				case 'PagoFacturaPmnAsCreadoPor':
 					return new QQReverseReferenceNodePagoFacturaPmn($this, 'pagofacturapmnascreadopor', 'reverse_reference', 'creado_por', 'PagoFacturaPmnAsCreadoPor');
+				case 'PiezaRecibidaAsCreatedBy':
+					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaascreatedby', 'reverse_reference', 'created_by', 'PiezaRecibidaAsCreatedBy');
+				case 'PiezaRecibidaAsUpdatedBy':
+					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
 				case 'RegistroTrabajo':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajo', 'reverse_reference', 'usuario_id', 'RegistroTrabajo');
 				case 'SreGuiaCkptAsCodiUsua':
@@ -7560,6 +8376,8 @@
      * @property-read QQReverseReferenceNodeAcceso $Acceso
      * @property-read QQReverseReferenceNodeCajero $Cajero
      * @property-read QQReverseReferenceNodeClientePmn $ClientePmnAsRegistradoPor
+     * @property-read QQReverseReferenceNodeCola $ColaAsCreatedBy
+     * @property-read QQReverseReferenceNodeCola $ColaAsUpdatedBy
      * @property-read QQReverseReferenceNodeContainerCkpt $ContainerCkpt
      * @property-read QQReverseReferenceNodeContenedorCkpt $ContenedorCkpt
      * @property-read QQReverseReferenceNodeDatosPago $DatosPago
@@ -7581,6 +8399,8 @@
      * @property-read QQReverseReferenceNodeNotaEntregaCkptH $NotaEntregaCkptH
      * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaH
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
+     * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
+     * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
 
@@ -7640,6 +8460,10 @@
 					return new QQReverseReferenceNodeCajero($this, 'cajero', 'reverse_reference', 'usuario_id', 'Cajero');
 				case 'ClientePmnAsRegistradoPor':
 					return new QQReverseReferenceNodeClientePmn($this, 'clientepmnasregistradopor', 'reverse_reference', 'registrado_por', 'ClientePmnAsRegistradoPor');
+				case 'ColaAsCreatedBy':
+					return new QQReverseReferenceNodeCola($this, 'colaascreatedby', 'reverse_reference', 'created_by', 'ColaAsCreatedBy');
+				case 'ColaAsUpdatedBy':
+					return new QQReverseReferenceNodeCola($this, 'colaasupdatedby', 'reverse_reference', 'updated_by', 'ColaAsUpdatedBy');
 				case 'ContainerCkpt':
 					return new QQReverseReferenceNodeContainerCkpt($this, 'containerckpt', 'reverse_reference', 'usuario_id', 'ContainerCkpt');
 				case 'ContenedorCkpt':
@@ -7682,6 +8506,10 @@
 					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregah', 'reverse_reference', 'usuario_id', 'NotaEntregaH');
 				case 'PagoFacturaPmnAsCreadoPor':
 					return new QQReverseReferenceNodePagoFacturaPmn($this, 'pagofacturapmnascreadopor', 'reverse_reference', 'creado_por', 'PagoFacturaPmnAsCreadoPor');
+				case 'PiezaRecibidaAsCreatedBy':
+					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaascreatedby', 'reverse_reference', 'created_by', 'PiezaRecibidaAsCreatedBy');
+				case 'PiezaRecibidaAsUpdatedBy':
+					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
 				case 'RegistroTrabajo':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajo', 'reverse_reference', 'usuario_id', 'RegistroTrabajo');
 				case 'SreGuiaCkptAsCodiUsua':

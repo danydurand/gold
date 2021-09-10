@@ -27,6 +27,121 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
+		public static function RecibirPiezas($intIdxxProc) {
+            $strNombProc = 'Recibiendo Piezas del Proceso: '.$intIdxxProc;
+            t($strNombProc);
+            $objProcEjec = ProcesoError::Load($intIdxxProc);
+            $objCkptMani = Checkpoints::LoadByCodigo('RA');
+            $intContCkpt = 0;
+            $intCantSobr = 0;
+            $blnHayxErro = false;
+            $arrNumePiez = PiezaRecibida::LoadArrayByProcesoErrorId($intIdxxProc);
+            t('Hay: '.count($arrNumePiez).' piezas asociadas el proceso');
+            foreach ($arrNumePiez as $objPiezReci) {
+                $strPiezReci = $objPiezReci->IdPieza;
+                t("Procesando: ".$strPiezReci);
+                $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strPiezReci);
+                if (!$objGuiaPiez) {
+                    $blnHayxErro = true;
+                    $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $strPiezReci;
+                    $arrParaErro['MensErro'] = 'Sobrante';
+                    $arrParaErro['ComeErro'] = 'Chequeando la existencia de la Pieza';
+                    GrabarError($arrParaErro);
+
+                    $intCantSobr ++;
+                    t('La pieza no existe, es un sobrante');
+                    continue;
+                }
+                //t('La pieza existe en la BD');
+                //----------------------------------------------------------
+                // Se registra el checkpoint correspondiente para la pieza
+                //----------------------------------------------------------
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+                $arrDatoCkpt['GuiaAnul'] = false;
+                $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
+                $arrDatoCkpt['TextCkpt'] = $objCkptMani->Descripcion;
+                $arrDatoCkpt['CodiRuta'] = '';
+                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+
+                if ($arrResuGrab['TodoOkey']) {
+                    $intContCkpt++;
+                    //-------------------------------------------------
+                    // La pieza se marca como efectivamente recibida
+                    //-------------------------------------------------
+                    $objPiezReci->IsRecibida = true;
+                    $objPiezReci->Save();
+                } else {
+                    $strMensUsua = "Error grabando ckpt RA a la pieza: " . $objGuiaPiez->IdPieza;
+                    $strMensUsua .= " - " . $arrResuGrab['MotiNook'];
+
+                    $blnHayxErro = true;
+                    $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $objGuiaPiez->IdPieza;
+                    $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
+                    $arrParaErro['ComeErro'] = 'Grabando Ckpt RA a la Pieza';
+                    GrabarError($arrParaErro);
+
+                    t($strMensUsua);
+                }
+            }
+            $strTextMens = "Total Recibidas: $intContCkpt | Cantidad de Sobrantes: $intCantSobr";
+            //-------------------------------------------------------------------
+            // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
+            //-------------------------------------------------------------------
+            $blnSecuEstr = Parametros::BuscarParametro('SECUESTR','MATCSCAN','Val1',false);
+            $arrIdxxMani = [];
+            if ($blnSecuEstr) {
+                //----------------------------------------------------------------------------------------
+                // Los Manifestos a procesar, serán estrictamente aquellos que hayan sido Nacionalizados
+                //----------------------------------------------------------------------------------------
+                $objClauWher   = QQ::Clause();
+                $objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');
+                $objClauSele   = QQ::Select(QQN::NotaEntregaCkpt()->ContainerId);
+                $arrManiNaci   = NotaEntregaCkpt::QueryArray(
+                    QQ::AndCondition($objClauWher),
+                    QQ::Clause(
+                        $objClauSele,
+                        QQ::Distinct()
+                    ));
+                $arrIdxxMani   = [];
+                foreach ($arrManiNaci as $objManiNaci) {
+                    $arrIdxxMani[] = $objManiNaci->ContainerId;
+                }
+            }
+            $objClauWher = QQ::Clause();
+            if ($blnSecuEstr) {
+                $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id,$arrIdxxMani);
+            }
+            $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
+            $objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
+            $arrManiPend   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+
+            foreach ($arrManiPend as $objManiPend) {
+                t('Voy a contar y actualizar las piezas del Manifiesto: '.$objManiPend->Referencia);
+                $objManiPend->ContarActualizarRecibidas();
+                //---------------------------------------
+                // Se graba el checkpoint al Manifiesto
+                //---------------------------------------
+                if ($objManiPend->Recibidas > 0) {
+                    t('Se recibieron: '.$objManiPend->Recibidas.' voy a grabar el checkpoint al Manif');
+                    $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $objProcEjec);
+                    if (!$arrResuGrab['TodoOkey']) {
+                        $blnHayxErro = true;
+                        $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                        $arrParaErro['NumeRefe'] = $objManiPend->Referencia;
+                        $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
+                        $arrParaErro['ComeErro'] = 'Grabando Ckpt al Manifiesto';
+                        GrabarError($arrParaErro);
+
+                        t('Error: '.$arrResuGrab['MotiNook']);
+                    }
+                }
+            }
+            return [$strTextMens,$blnHayxErro];
+        }
+
         public function TransferirHistorico(ProcesoError $objProcEjec) {
 		    //t('Transfiriendo Manif Referencia: '.$this->Referencia);
 		    $strTextMens = '';

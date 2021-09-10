@@ -24,6 +24,10 @@
 	 * @property string $Comentario Comentarios y/u observaciones relacionados al proceso. 
 	 * @property boolean $NotificarAdmin Confirmación de notificación al administrador del sistema (Not Null)
 	 * @property boolean $NotificarUsuario Confirmacion de notificacion al usuario del sistema. (Not Null)
+	 * @property-read Cola $_Cola the value for the private _objCola (Read-Only) if set due to an expansion on the cola.proceso_error_id reverse relationship
+	 * @property-read Cola[] $_ColaArray the value for the private _objColaArray (Read-Only) if set due to an ExpandAsArray on the cola.proceso_error_id reverse relationship
+	 * @property-read PiezaRecibida $_PiezaRecibida the value for the private _objPiezaRecibida (Read-Only) if set due to an expansion on the pieza_recibida.proceso_error_id reverse relationship
+	 * @property-read PiezaRecibida[] $_PiezaRecibidaArray the value for the private _objPiezaRecibidaArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.proceso_error_id reverse relationship
 	 * @property-read PiezasTemp $_PiezasTemp the value for the private _objPiezasTemp (Read-Only) if set due to an expansion on the piezas_temp.proceso_error_id reverse relationship
 	 * @property-read PiezasTemp[] $_PiezasTempArray the value for the private _objPiezasTempArray (Read-Only) if set due to an ExpandAsArray on the piezas_temp.proceso_error_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -107,6 +111,38 @@
 		protected $blnNotificarUsuario;
 		const NotificarUsuarioDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single Cola object
+		 * (of type Cola), if this ProcesoError object was restored with
+		 * an expansion on the cola association table.
+		 * @var Cola _objCola;
+		 */
+		private $_objCola;
+
+		/**
+		 * Private member variable that stores a reference to an array of Cola objects
+		 * (of type Cola[]), if this ProcesoError object was restored with
+		 * an ExpandAsArray on the cola association table.
+		 * @var Cola[] _objColaArray;
+		 */
+		private $_objColaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PiezaRecibida object
+		 * (of type PiezaRecibida), if this ProcesoError object was restored with
+		 * an expansion on the pieza_recibida association table.
+		 * @var PiezaRecibida _objPiezaRecibida;
+		 */
+		private $_objPiezaRecibida;
+
+		/**
+		 * Private member variable that stores a reference to an array of PiezaRecibida objects
+		 * (of type PiezaRecibida[]), if this ProcesoError object was restored with
+		 * an ExpandAsArray on the pieza_recibida association table.
+		 * @var PiezaRecibida[] _objPiezaRecibidaArray;
+		 */
+		private $_objPiezaRecibidaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single PiezasTemp object
@@ -697,6 +733,36 @@
 
 				
 
+			// Check for Cola Virtual Binding
+			$strAlias = $strAliasPrefix . 'cola__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['cola']) ? null : $objExpansionAliasArray['cola']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objColaArray)
+				$objToReturn->_objColaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objColaArray[] = Cola::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cola__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objCola)) {
+					$objToReturn->_objCola = Cola::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cola__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for PiezaRecibida Virtual Binding
+			$strAlias = $strAliasPrefix . 'piezarecibida__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['piezarecibida']) ? null : $objExpansionAliasArray['piezarecibida']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPiezaRecibidaArray)
+				$objToReturn->_objPiezaRecibidaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPiezaRecibidaArray[] = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibida__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPiezaRecibida)) {
+					$objToReturn->_objPiezaRecibida = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibida__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for PiezasTemp Virtual Binding
 			$strAlias = $strAliasPrefix . 'piezastemp__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1081,6 +1147,38 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
+				case '_Cola':
+					/**
+					 * Gets the value for the private _objCola (Read-Only)
+					 * if set due to an expansion on the cola.proceso_error_id reverse relationship
+					 * @return Cola
+					 */
+					return $this->_objCola;
+
+				case '_ColaArray':
+					/**
+					 * Gets the value for the private _objColaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the cola.proceso_error_id reverse relationship
+					 * @return Cola[]
+					 */
+					return $this->_objColaArray;
+
+				case '_PiezaRecibida':
+					/**
+					 * Gets the value for the private _objPiezaRecibida (Read-Only)
+					 * if set due to an expansion on the pieza_recibida.proceso_error_id reverse relationship
+					 * @return PiezaRecibida
+					 */
+					return $this->_objPiezaRecibida;
+
+				case '_PiezaRecibidaArray':
+					/**
+					 * Gets the value for the private _objPiezaRecibidaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pieza_recibida.proceso_error_id reverse relationship
+					 * @return PiezaRecibida[]
+					 */
+					return $this->_objPiezaRecibidaArray;
+
 				case '_PiezasTemp':
 					/**
 					 * Gets the value for the private _objPiezasTemp (Read-Only)
@@ -1262,6 +1360,12 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
+			if ($this->CountColas()) {
+				$arrTablRela[] = 'cola';
+			}
+			if ($this->CountPiezaRecibidas()) {
+				$arrTablRela[] = 'pieza_recibida';
+			}
 			if ($this->CountPiezasTemps()) {
 				$arrTablRela[] = 'piezas_temp';
 			}
@@ -1273,6 +1377,304 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+
+
+		// Related Objects' Methods for Cola
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated Colas as an array of Cola objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Cola[]
+		*/
+		public function GetColaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Cola::LoadArrayByProcesoErrorId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated Colas
+		 * @return int
+		*/
+		public function CountColas() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Cola::CountByProcesoErrorId($this->intId);
+		}
+
+		/**
+		 * Associates a Cola
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function AssociateCola(Cola $objCola) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateCola on this unsaved ProcesoError.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateCola on this ProcesoError with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a Cola
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function UnassociateCola(Cola $objCola) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCola on this unsaved ProcesoError.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCola on this ProcesoError with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all Colas
+		 * @return void
+		*/
+		public function UnassociateAllColas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCola on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`cola`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated Cola
+		 * @param Cola $objCola
+		 * @return void
+		*/
+		public function DeleteAssociatedCola(Cola $objCola) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCola on this unsaved ProcesoError.');
+			if ((is_null($objCola->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCola on this ProcesoError with an unsaved Cola.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`cola`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCola->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated Colas
+		 * @return void
+		*/
+		public function DeleteAllColas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCola on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`cola`
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for PiezaRecibida
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PiezaRecibidas as an array of PiezaRecibida objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PiezaRecibida[]
+		*/
+		public function GetPiezaRecibidaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return PiezaRecibida::LoadArrayByProcesoErrorId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PiezaRecibidas
+		 * @return int
+		*/
+		public function CountPiezaRecibidas() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return PiezaRecibida::CountByProcesoErrorId($this->intId);
+		}
+
+		/**
+		 * Associates a PiezaRecibida
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function AssociatePiezaRecibida(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaRecibida on this unsaved ProcesoError.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePiezaRecibida on this ProcesoError with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PiezaRecibida
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function UnassociatePiezaRecibida(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibida on this unsaved ProcesoError.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibida on this ProcesoError with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PiezaRecibidas
+		 * @return void
+		*/
+		public function UnassociateAllPiezaRecibidas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibida on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pieza_recibida`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PiezaRecibida
+		 * @param PiezaRecibida $objPiezaRecibida
+		 * @return void
+		*/
+		public function DeleteAssociatedPiezaRecibida(PiezaRecibida $objPiezaRecibida) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibida on this unsaved ProcesoError.');
+			if ((is_null($objPiezaRecibida->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibida on this ProcesoError with an unsaved PiezaRecibida.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_recibida`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPiezaRecibida->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PiezaRecibidas
+		 * @return void
+		*/
+		public function DeleteAllPiezaRecibidas() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePiezaRecibida on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pieza_recibida`
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 
 		// Related Objects' Methods for PiezasTemp
@@ -1606,6 +2008,8 @@
      * @property-read QQNode $NotificarUsuario
      *
      *
+     * @property-read QQReverseReferenceNodeCola $Cola
+     * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -1634,6 +2038,10 @@
 					return new QQNode('notificar_admin', 'NotificarAdmin', 'Bit', $this);
 				case 'NotificarUsuario':
 					return new QQNode('notificar_usuario', 'NotificarUsuario', 'Bit', $this);
+				case 'Cola':
+					return new QQReverseReferenceNodeCola($this, 'cola', 'reverse_reference', 'proceso_error_id', 'Cola');
+				case 'PiezaRecibida':
+					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':
 					return new QQReverseReferenceNodePiezasTemp($this, 'piezastemp', 'reverse_reference', 'proceso_error_id', 'PiezasTemp');
 
@@ -1662,6 +2070,8 @@
      * @property-read QQNode $NotificarUsuario
      *
      *
+     * @property-read QQReverseReferenceNodeCola $Cola
+     * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -1690,6 +2100,10 @@
 					return new QQNode('notificar_admin', 'NotificarAdmin', 'boolean', $this);
 				case 'NotificarUsuario':
 					return new QQNode('notificar_usuario', 'NotificarUsuario', 'boolean', $this);
+				case 'Cola':
+					return new QQReverseReferenceNodeCola($this, 'cola', 'reverse_reference', 'proceso_error_id', 'Cola');
+				case 'PiezaRecibida':
+					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':
 					return new QQReverseReferenceNodePiezasTemp($this, 'piezastemp', 'reverse_reference', 'proceso_error_id', 'PiezasTemp');
 
