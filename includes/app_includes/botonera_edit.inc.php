@@ -11,6 +11,9 @@
             <?php $this->btnSave->Render(); ?>
             <?php $this->btnDelete->Render(); ?>
             <?php $this->btnLogxCamb->Render(); ?>
+            <?php if (isset($this->btnExpoExce)) { ?>
+                <?php $this->btnExpoExce->Render(); ?>
+            <?php } ?>
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-4 pull-right" style="text-align: right; padding-right: 3px; margin-top: -0.25em">
             <?php $this->btnPrimRegi->Render(); ?>

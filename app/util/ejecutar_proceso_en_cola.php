@@ -5,7 +5,13 @@
 // Fecha Elab.   : 09/09/2021
 // Descripcion   : Este programa corre vía cron ejecutando los Jobs pendientes en la cola
 //------------------------------------------------------------------------------------------------
-$_SERVER['SERVER_NAME'] = 'gold.dev.com';
+
+$strNombHost = gethostname();
+if ($strNombHost == 'umar') {
+    $_SERVER['SERVER_NAME'] = 'goldsist.com';
+} else {
+    $_SERVER['SERVER_NAME'] = 'gold.dev.com';
+}
 require_once('qcubed.inc.php');
 
 //-----------------------------------------------------------
@@ -62,17 +68,17 @@ foreach ($arrJobsPend as $objJobsPend) {
             $objJobsPend->ProcesoError->Save();
             t('Proceso original actualizado...');
 
-            if ($objJobsPend->ProcesoError->NotificarUsuario) {
-                t('Voy a notificar al Usuario');
-                EnviarCorreo($objJobsPend->ProcesoError,'usuario');
-                t('Regrese de enviar el correo al Usuario');
-            }
+            //if ($objJobsPend->ProcesoError->NotificarUsuario) {
+            //    t('Voy a notificar al Usuario');
+            //    EnviarCorreo($objJobsPend->ProcesoError,'usuario');
+            //    t('Regrese de enviar el correo al Usuario');
+            //}
 
-            if ($objJobsPend->ProcesoError->NotificarAdmin) {
-                t('Voy a notificar al Administrador');
-                EnviarCorreo($objJobsPend->ProcesoError,'admin');
-                t('Regrese de enviar el correo al Administrador');
-            }
+            //if ($objJobsPend->ProcesoError->NotificarAdmin) {
+            //    t('Voy a notificar al Administrador');
+            //    EnviarCorreo($objJobsPend->ProcesoError,'admin');
+            //    t('Regrese de enviar el correo al Administrador');
+            //}
 
         } catch (Exception $e) {
             t('Error actualizando proceso original: '.$e->getMessage());

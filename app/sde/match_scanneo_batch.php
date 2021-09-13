@@ -8,7 +8,7 @@ require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 
-class MatchScanneo extends FormularioBaseKaizen {
+class MatchScanneoBatch extends FormularioBaseKaizen {
 
     protected $objDataBase;
     protected $txtNumePiez;  // Piezas Recibidas
@@ -279,113 +279,70 @@ class MatchScanneo extends FormularioBaseKaizen {
         return true;
     }
 
-
     protected function btnSave_Click() {
-        $blnHayxErro = false;
-        $strNombProc = 'Match de Scanneo';
+
+        $strNombProc = 'Scanneo: '.date('Y-m-d h:i');
         $this->objProcEjec = CrearProceso($strNombProc);
 
-        $arrNumePiez = explode(',',nl2br2($this->txtNumePiez->Text));
-        $arrNumePiez = array_unique($arrNumePiez);
-        $arrNumePiez = array_map('transformar',$arrNumePiez);
+        //----------------------------------
+        // Se crear el proceso en la Cola
+        //----------------------------------
+        try {
+            $objColaJobs = new Cola();
+            $objColaJobs->ProcesoErrorId = $this->objProcEjec->Id;
+            $objColaJobs->Clase          = 'NotaEntrega';
+            $objColaJobs->Metodo         = 'RecibirPiezas';
+            $objColaJobs->Parametros     = $this->objProcEjec->Id;
+            $objColaJobs->Ejecutado      = false;
+            $objColaJobs->Save();
+        } catch (Exception $e) {
+            $this->danger($e->getMessage());
+            return;
+        }
 
+        //----------------------------------------------------
+        // Se limpia y transforman los numeros de las piezas
+        //----------------------------------------------------
+        $arrNumePiez = explode(',',nl2br2($this->txtNumePiez->Text));
+        $arrNumePiez = LimpiarArreglo($arrNumePiez, false);
+        $arrNumePiez = array_map('transformar',$arrNumePiez);
         $this->txtNumePiez->Text = '';
-        $objCkptMani = Checkpoints::LoadByCodigo('RA');
-        //$objCkptAlma = Checkpoints::LoadByCodigo('IA');
-        $intContCkpt = 0;
-        $intCantSobr = 0;
-        $arrRelaSobr = [];
+
+        //-----------------------------------
+        // Se procesan una a una las piezas
+        //-----------------------------------
+        $intCantPiez = 0;
+        $intCantErro = 0;
         foreach ($arrNumePiez as $strPiezArri) {
             t("Procesando: ".$strPiezArri);
-            if (strlen($strPiezArri) > 0) {
-                $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strPiezArri);
-                if (!$objGuiaPiez) {
-                    $blnHayxErro = true;
-                    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-                    $arrParaErro['NumeRefe'] = $strPiezArri;
-                    $arrParaErro['MensErro'] = 'La Pieza NO Existe - Sobrante';
-                    $arrParaErro['ComeErro'] = 'Chequeando la existencia de la Pieza';
-                    GrabarError($arrParaErro);
-
-                    $intCantSobr ++;
-                    $arrRelaSobr[] = $strPiezArri;
-                    //$this->txtNumePiez->Text = $strPiezArri.' (SOB)'. chr(13);
-                    t('La pieza no existe, es un sobrante');
-                    continue;
-                }
-                //t('La pieza existe en la BD');
-                //----------------------------------------------------------
-                // Se registra el checkpoint correspondiente para la pieza
-                //----------------------------------------------------------
-                $arrDatoCkpt = array();
-                $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-                $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
-                $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
-                $arrDatoCkpt['TextCkpt'] = $objCkptMani->Descripcion;
-                $arrDatoCkpt['CodiRuta'] = '';
-                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-
-                if ($arrResuGrab['TodoOkey']) {
-                    $intContCkpt++;
-                } else {
-                    $strMensUsua = "Error al registrar Checkpoint a la pieza: " . $objGuiaPiez->IdPieza;
-                    $strMensUsua .= " - " . $arrResuGrab['MotiNook'];
-
-                    $blnHayxErro = true;
-                    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
-                    $arrParaErro['NumeRefe'] = $objGuiaPiez->IdPieza;
-                    $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
-                    $arrParaErro['ComeErro'] = 'Registrando Checkpoint RA a la Pieza';
-                    GrabarError($arrParaErro);
-
-                    t($strMensUsua);
-                }
+            try {
+                $objPiezReci = new PiezaRecibida();
+                $objPiezReci->ProcesoErrorId = $this->objProcEjec->Id;
+                $objPiezReci->IdPieza        = $strPiezArri;
+                $objPiezReci->IsRecibida     = false;
+                $objPiezReci->Save();
+                $intCantPiez ++;
+            } catch (Exception $e) {
+                $intCantErro++;
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strPiezArri;
+                $arrParaErro['MensErro'] = $e->getMessage();
+                $arrParaErro['ComeErro'] = 'Grabando la pieza en la tabla piezas_recibida';
+                GrabarError($arrParaErro);
+                t('Error grabando en pieza_recibida: '.$e->getMessage());
             }
         }
-        $strTextMens = "Total Recibidas: $intContCkpt | Cantidad de Sobrantes: $intCantSobr";
-        //-------------------------------------------------------------------
-        // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
-        //-------------------------------------------------------------------
-        //$objCkptMani = Checkpoints::LoadByCodigo('RA');
-        /* @var $objManiPend NotaEntrega */
-        foreach ($this->arrManiPend as $objManiPend) {
-            $objManiPend->ContarActualizarRecibidas();
-            //---------------------------------------
-            // Se graba el checkpoint al Manifiesto
-            //---------------------------------------
-            if ($objManiPend->Recibidas > 0) {
-                $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
-                if (!$arrResuGrab['TodoOkey']) {
-                    $blnHayxErro = true;
-                }
-            }
-        }
-        //--------------------------------------
-        // Se almacena el resultado del proceso
-        //--------------------------------------
-        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
-        $this->objProcEjec->Comentario = $strTextMens;
-        $this->objProcEjec->NotificarAdmin = true;
-        $this->objProcEjec->Save();
-        //----------------------------------------------
-        // Se deja registro de la transacción realizada
-        //----------------------------------------------
-        $arrLogxCamb['strNombTabl'] = 'ProcesoError';
-        $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
-        $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
-        $arrLogxCamb['strDescCamb'] = 'Ejecutado';
-        $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
-        LogDeCambios($arrLogxCamb);
+        $strTextMens = "Total Recibidas: $intCantPiez | Errores: $intCantErro";
 
-        if ($blnHayxErro) {
+        if ($intCantErro) {
             $this->btnErroProc->Visible = true;
             $this->warning($strTextMens);
         } else {
             $this->success($strTextMens);
         }
-        $this->dtgManiPend->Refresh();
     }
+
 }
 
-MatchScanneo::Run('MatchScanneo');
+MatchScanneoBatch::Run('MatchScanneoBatch');
 ?>
