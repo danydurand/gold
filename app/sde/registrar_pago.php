@@ -60,7 +60,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
         $objClauWher[] = QQ::Like(QQN::FormaPago()->ParaPagoEn,'%CONNECT%');
         $objClauWher[] = QQ::Like(QQN::FormaPago()->StatusId,SinoType::SI);
 		$this->lstFormaPago = $this->mctPagosCorp->lstFormaPago_Create(null,QQ::AndCondition($objClauWher));
-		$this->lstFormaPago->Width = 160;
+		$this->lstFormaPago->Width = 210;
         $this->lstFormaPago->AddAction(new QChangeEvent(), new QAjaxAction('lstFormaPago_Change'));
 
         $objClauOrde = QQ::OrderBy(QQN::MasterCliente()->NombClie);
@@ -70,16 +70,18 @@ class RegistrarPago extends PagosCorpEditFormBase {
 
 		$this->txtReferencia = $this->mctPagosCorp->txtReferencia_Create();
 		$this->txtReferencia->Placeholder = 'Nro de Documento';
+		$this->txtReferencia->Width = 210;
 
 		$this->calFecha = $this->mctPagosCorp->calFecha_Create();
 		$this->txtMonto = $this->mctPagosCorp->txtMonto_Create();
 		$this->txtMonto->Placeholder = 'Separe con punto';
+		$this->txtMonto->Width = 210;
 
 		$this->txtEstatus = $this->mctPagosCorp->txtEstatus_Create();
 		$this->txtObservacion = $this->mctPagosCorp->txtObservacion_Create();
 		$this->txtObservacion->TextMode = QTextMode::MultiLine;
-		$this->txtObservacion->Rows = 2;
-		$this->txtObservacion->Width = 400;
+		$this->txtObservacion->Rows = 12;
+		$this->txtObservacion->Width = 450;
 		$this->lblCreatedAt = $this->mctPagosCorp->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctPagosCorp->lblUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctPagosCorp->lblDeletedAt_Create();
@@ -508,10 +510,9 @@ class RegistrarPago extends PagosCorpEditFormBase {
                     $arrLogxCamb['strNombRegi'] = $objFactPaga->Referencia;
                     $arrLogxCamb['strDescCamb'] = 'Pago '.$this->txtReferencia->Text.' registrado';
                     LogDeCambios($arrLogxCamb);
-
-                    $this->mctPagosCorp->PagosCorp->conciliarPago();
-
                 }
+                //$this->mctPagosCorp->PagosCorp->conciliarPago();
+                list($intCantFact,$decMontPago) = $this->mctPagosCorp->PagosCorp->conciliarPago();
 				//------------------------------------------
 				// En caso de que el objeto haya cambiado 
 				//------------------------------------------
@@ -528,6 +529,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
             //-----------------------------------
             // Se asocian las facturas, al pago
             //-----------------------------------
+            $decMontPago = 0;
             foreach ($this->arrFactPaga as $objFactPaga) {
                 t('Asociando la factura: '.$objFactPaga->Referencia.' al pago');
                 $this->mctPagosCorp->PagosCorp->AssociateFacturasAsFacturaPagoCorp($objFactPaga);
@@ -539,8 +541,9 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $arrLogxCamb['strDescCamb'] = 'Pago '.$this->txtReferencia->Text.' registrado';
                 LogDeCambios($arrLogxCamb);
                 t('Factura asociada, voy a conciliar el pago');
-                $this->mctPagosCorp->PagosCorp->conciliarPago();
             }
+            list($intCantFact,$decMontPago) = $this->mctPagosCorp->PagosCorp->conciliarPago();
+            //$this->mctPagosCorp->PagosCorp->conciliarPago();
             t('Guardando log de transacciones del pago');
 			$arrLogxCamb['strNombTabl'] = 'PagosCorp';
 			$arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->Id;
@@ -548,7 +551,34 @@ class RegistrarPago extends PagosCorpEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$this->mctPagosCorp->PagosCorp->Id;
 			LogDeCambios($arrLogxCamb);
-			t('Transaccion Exitosa !!!');
+            //-------------------------------------------------------------------------
+            // Un saldo positivo en este punto significa que ya se cubrio el importe
+            // de todas las facturas y sobro, por lo tanto, se genera una NDC
+            //-------------------------------------------------------------------------
+            if ($decMontPago > 0) {
+                t('El saldo del pago es positivo, eso implica crear una ndc');
+                $strMensTran = 'Saldo excedente por el Pago Referencia: '.$this->mctPagosCorp->PagosCorp->Referencia;
+                try {
+                    $objNotaCorp = new NotaCreditoCorp();
+                    $objNotaCorp->Referencia    = NotaCreditoCorp::proxReferencia();
+                    $objNotaCorp->Tipo          = 'AUTOMATICA';
+                    $objNotaCorp->ClienteCorpId = $this->mctPagosCorp->PagosCorp->ClienteCorpId;
+                    $objNotaCorp->PagoCorpId    = $this->mctPagosCorp->PagosCorp->Id;
+                    $objNotaCorp->Fecha         = new QDateTime(QDateTime::Now());
+                    $objNotaCorp->Monto         = $decMontPago;
+                    $objNotaCorp->Estatus       = 'DISPONIBLE';
+                    $objNotaCorp->Observacion   = strtoupper($strMensTran);
+                    $objNotaCorp->CreatedBy     = $this->objUsuario->CodiUsua;
+                    $objNotaCorp->Save();
+                    t('Se creo una ndc por un monto de: '.$decMontPago);
+                    $objNotaCorp->logDeCambios($strMensTran);
+                } catch (Exception $e) {
+                    t('Error: '.$e->getMessage());
+                    $this->mctPagosCorp->PagosCorp->logDeCambios($e->getMessage());
+                }
+            }
+
+            t('Transaccion Exitosa !!!');
             $this->success('Transacción Exitosa !!');
 		}
         //--------------------------------------------------------------------------------

@@ -27,7 +27,7 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
-        public static function LoadArrayByManifiestoExp($strParam1) {
+        public static function LoadArrayByManifiestoExp($strParam1, $objOptionalClauses) {
             // Performing the load manually (instead of using QCubed Query)
 
             // Get the Database Object for this Class
@@ -50,6 +50,49 @@
             // Perform the Query and Instantiate the Result
             $objDbResult = $objDatabase->Query($strQuery);
             return Guias::InstantiateDbResult($objDbResult);
+        }
+
+        public static function LoadArrayByManifiestoImp($strParam1,  $objOptionalClauses=null) {
+
+            // Performing the load manually (instead of using QCubed Query)
+
+            // Get the Database Object for this Class
+            $objDatabase = GuiaPiezas::GetDatabase();
+
+            // Properly Escape All Input Parameters using Database->SqlVariable()
+            $strParam1 = $objDatabase->SqlVariable($strParam1);
+
+            $strCadeSqlx  = "SELECT gp.* ";
+            $strCadeSqlx .= "  FROM nota_entrega ne ";
+            $strCadeSqlx .= "       INNER JOIN guias g ";
+            $strCadeSqlx .= "    ON ne.id = g.nota_entrega_id ";
+            $strCadeSqlx .= "       INNER JOIN guia_piezas gp ";
+            $strCadeSqlx .= "    ON g.id = gp.guia_id ";
+            $strCadeSqlx .= " WHERE ne.id = %s ";
+
+            //t('Query: '.$strCadeSqlx);
+
+            // Setup the SQL Query
+            $strQuery = sprintf($strCadeSqlx, $strParam1);
+
+            //t('Query: '.$strQuery);
+
+            // Perform the Query and Instantiate the Result
+            $objDbResult = $objDatabase->Query($strQuery);
+
+            $arrIdxxPiez = [];
+            while ($mixRegistro = $objDbResult->FetchArray()) {
+                $arrIdxxPiez[] = $mixRegistro['id'];
+            }
+
+            return GuiaPiezas::QueryArray(
+                QQ::AndCondition(
+                    QQ::In(QQN::GuiaPiezas()->Id, $arrIdxxPiez)
+                ),
+                $objOptionalClauses
+            );
+
+            //return GuiaPiezas::InstantiateDbResult($objDbResult);
         }
 
 

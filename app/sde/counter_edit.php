@@ -50,16 +50,7 @@ class CounterEditForm extends CounterEditFormBase {
 		$this->lblId = $this->mctCounter->lblId_Create();
 		$this->txtDescripcion = $this->mctCounter->txtDescripcion_Create();
         $this->lstSucursal = $this->mctCounter->lstSucursal_Create();
-        //if (isset($_SESSION['CodiSucu'])) {
-        //    $this->lstSucursal->RemoveAllItems();
-        //    $objSucuSele = Estacion::Load($_SESSION['CodiSucu']);
-        //    if ($objSucuSele) {
-        //        $this->lstSucursal->AddItem($objSucuSele->__toString(),$objSucuSele->CodiEsta,true);
-        //    }
-        //    $this->lstSucursal->Enabled = false;
-        //    $this->lstSucursal->ForeColor = 'blue';
-        //    unset($_SESSION['CodiSucu']);
-        //}
+
 		$this->lstRuta = $this->mctCounter->lstRuta_Create();
 		$this->lstRuta->Width = 350;
 		$this->lstEntregaInmediataObject = $this->mctCounter->lstEntregaInmediataObject_Create();
@@ -268,7 +259,7 @@ class CounterEditForm extends CounterEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/counter_edit.php/'.$this->mctCounter->Counter->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Actualización Exitosa !!!');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Counter';
@@ -277,7 +268,7 @@ class CounterEditForm extends CounterEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/counter_edit.php/'.$this->mctCounter->Counter->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Inserción Exitosa !!!');
 		}
 	}
 
@@ -289,9 +280,7 @@ class CounterEditForm extends CounterEditFormBase {
         $arrTablRela = $this->mctCounter->TablasRelacionadasCounter();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            $this->danger(sprintf('Existen registros relacionados en %s',$strTablRela));
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
@@ -299,7 +288,7 @@ class CounterEditForm extends CounterEditFormBase {
             $this->mctCounter->DeleteCounter();
             $arrLogxCamb['strNombTabl'] = 'Counter';
             $arrLogxCamb['intRefeRegi'] = $this->mctCounter->Counter->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctCounter->Counter->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->mctCounter->Counter->Descripcion;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

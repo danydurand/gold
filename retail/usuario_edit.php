@@ -1,7 +1,7 @@
 <?php
 // Load the QCubed Development Framework
 require_once('qcubed.inc.php');
-require_once(__APP_INCLUDES__.'/protected.inc.php');
+//require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__FORMBASE_CLASSES__ . '/UsuarioEditFormBase.class.php');
 
 /**
@@ -55,9 +55,11 @@ class UsuarioEditForm extends UsuarioEditFormBase {
 
         $this->txtNombUsua = $this->mctUsuario->txtNombUsua_Create();
         $this->txtNombUsua->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
-        
+        $this->txtNombUsua->Width = 180;
+
         $this->txtApelUsua = $this->mctUsuario->txtApelUsua_Create();
         $this->txtApelUsua->AddAction(new QChangeEvent(), new QAjaxAction('crearLogin'));
+        $this->txtApelUsua->Width = 180;
 
         $this->txtLogiUsua = $this->mctUsuario->txtLogiUsua_Create();
         $this->txtLogiUsua->Width = 80;
@@ -405,12 +407,14 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         // Se clona el objeto para verificar cambios
         //--------------------------------------------
         $objRegiViej = clone $this->mctUsuario->Usuario;
+        t('Grupo seleccionado: '.$this->lstGrupo->SelectedValue);
         $this->lstCodiGrupObject->SelectedIndex = 1; //$this->lstGrupo->SelectedIndex;
         try {
             $this->mctUsuario->SaveUsuario();
         } catch (Exception $e) {
             t('Error guardando al Usuario: '.$e->getMessage());
         }
+        t('Grupo asignado: '.$this->mctUsuario->Usuario->GrupoId);
         if ($this->mctUsuario->EditMode) {
             t('Estamos en modo Edicion');
             //------------------------------------------------------------------
@@ -479,7 +483,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
 
         // Also setup HTML message (optional)
         $strBody  = 'Estimado Usuario,<p><br>';
-        $strBody .= 'Bienvenido a la Plataforma SISPAQ de Gold Coast (http://goldsist.com).<br><br>';
+        $strBody .= 'Bienvenido a la Plataforma SISPAQ de Gold Coast (http://goldsist.com/retail).<br><br>';
         $strBody .= 'El personal autorizado ha aperturado una cuenta para Usted con el siguiente ';
         $strBody .= 'Login de Usuario: "<b style="color:blue">'.$strLogiUsua.'</b>".<br>';
         $strBody .= 'Su Clave para acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b>.<br><br>';
@@ -507,7 +511,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
 
         // Also setup HTML message (optional) //
         $strBody  = 'Estimado Usuario,<p><br>';
-        $strBody .= 'Desde el Sistema SisCO, el personal autorizado ha registrado ';
+        $strBody .= 'Desde el Sistema Retail, el personal autorizado ha registrado ';
         $strBody .= 'un reseteo de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br><br>';
         $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b>.<br>';
         $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema nuevamente. Gracias!<br><br>';
@@ -524,45 +528,35 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     }
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-        //----------------------------------------
-        // SoftDelete del Registro
-        //----------------------------------------
-        $this->mctUsuario->Usuario->DeleteAt = new QDateTime(QDateTime::Now);
-        $this->mctUsuario->Usuario->PassUsua = md5(generarCodigo());
-        $this->mctUsuario->Usuario->CodiStat = StatusType::INACTIVO;
-        $this->mctUsuario->Usuario->CantInte = 50;
-        $this->mctUsuario->Usuario->MotiBloq = 'Usuario Borrado del Sistema';
-        $this->mctUsuario->Usuario->Save();
-        //------------------------
-        // Log de Transacciones
-        //------------------------
-        $arrLogxCamb['strNombTabl'] = 'Usuario';
-        $arrLogxCamb['intRefeRegi'] = $this->mctUsuario->Usuario->CodiUsua;
-        $arrLogxCamb['strNombRegi'] = $this->mctUsuario->Usuario->LogiUsua;
-        $arrLogxCamb['strDescCamb'] = 'Borrado (Soft)';
-        LogDeCambios($arrLogxCamb);
-        $this->RedirectToListPage();
-
-        //--------------------------------------------------------
-        // Esta es la rutina anterior de HardDelete del registro
-        //--------------------------------------------------------
-
-        // $arrTablRela = $this->mctUsuario->TablasRelacionadasUsuario();
-        // if (count($arrTablRela)) {
-        //     $strTablRela = implode(',',$arrTablRela);
-        //
-        //     $this->lblCodiUsua->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-        //     $blnTodoOkey = false;
-        // }
-        // if ($blnTodoOkey) {
-        //     $this->mctUsuario->DeleteUsuario();
-        //     $arrLogxCamb['strNombTabl'] = 'Usuario';
-        //     $arrLogxCamb['intRefeRegi'] = $this->mctUsuario->Usuario->CodiUsua;
-        //     $arrLogxCamb['strNombRegi'] = $this->mctUsuario->Usuario->LogiUsua;
-        //     $arrLogxCamb['strDescCamb'] = "Borrado";
-        //     LogDeCambios($arrLogxCamb);
-        //     $this->RedirectToListPage();
-        // }
+        $arrTablRela = $this->mctUsuario->TablasRelacionadasUsuario();
+        if (count($arrTablRela)) {
+            //----------------------------------------
+            // SoftDelete del Registro
+            //----------------------------------------
+            $this->mctUsuario->Usuario->DeleteAt = new QDateTime(QDateTime::Now);
+            $this->mctUsuario->Usuario->PassUsua = md5(generarCodigo());
+            $this->mctUsuario->Usuario->CodiStat = StatusType::INACTIVO;
+            $this->mctUsuario->Usuario->CantInte = 50;
+            $this->mctUsuario->Usuario->MotiBloq = 'Usuario Borrado del Sistema';
+            $this->mctUsuario->Usuario->Save();
+            //------------------------
+            // Log de Transacciones
+            //------------------------
+            $arrLogxCamb['strNombTabl'] = 'Usuario';
+            $arrLogxCamb['intRefeRegi'] = $this->mctUsuario->Usuario->CodiUsua;
+            $arrLogxCamb['strNombRegi'] = $this->mctUsuario->Usuario->LogiUsua;
+            $arrLogxCamb['strDescCamb'] = 'Borrado (Soft)';
+            LogDeCambios($arrLogxCamb);
+            $this->RedirectToListPage();
+        } else {
+            $this->mctUsuario->DeleteUsuario();
+            $arrLogxCamb['strNombTabl'] = 'Usuario';
+            $arrLogxCamb['intRefeRegi'] = $this->mctUsuario->Usuario->CodiUsua;
+            $arrLogxCamb['strNombRegi'] = $this->mctUsuario->Usuario->LogiUsua;
+            $arrLogxCamb['strDescCamb'] = "Borrado";
+            LogDeCambios($arrLogxCamb);
+            $this->RedirectToListPage();
+        }
     }
 }
 

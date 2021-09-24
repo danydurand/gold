@@ -636,10 +636,10 @@
             $decPiesProm = $objParaPiez->PiesProm;
             $intIdxxPiez = $objParaPiez->IdxxPiez;
 
-            t('Rutina: crearPieza');
-            t('==================');
+            //t('Rutina: crearPieza');
+            //t('==================');
             $strNumePiez = completar($intIdxxPiez);
-            t('Procesando IdPieza: '.$strNumePiez);
+            //t('Procesando IdPieza: '.$strNumePiez);
             try {
                 $objNuevPiez = new GuiaPiezas();
                 $objNuevPiez->GuiaId      = $this->Id;

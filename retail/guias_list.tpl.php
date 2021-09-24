@@ -18,7 +18,7 @@
         <?php $this->btnGuiaExpo->Render() ?>
         <?php $this->btnFiltAvan->Render() ?>
         <?php $this->btnFactGuia->Render() ?>
-        <?php $this->btnExpoExce->Render() ?>
+        <?php //$this->btnExpoExce->Render() ?>
     </div>
     <div class="col-sm-3 col-md-3 col-lg-3"></div>
 </div>

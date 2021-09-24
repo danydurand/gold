@@ -94,9 +94,16 @@ abstract class GuiasListFormBase extends QForm {
         $this->dtgGuiases->MetaAddColumn('NombreRemitente');
         $this->dtgGuiases->MetaAddColumn('DireccionRemitente');
         $this->dtgGuiases->MetaAddColumn('TelefonoRemitente');
+        $this->dtgGuiases->MetaAddColumn('TelefonoMovilRemitente');
+        $this->dtgGuiases->MetaAddColumn('EmailRemitente');
+        $this->dtgGuiases->MetaAddColumn('SexoRemitente');
+        $this->dtgGuiases->MetaAddColumn('CedulaRifDestinatario');
         $this->dtgGuiases->MetaAddColumn('NombreDestinatario');
         $this->dtgGuiases->MetaAddColumn('DireccionDestinatario');
         $this->dtgGuiases->MetaAddColumn('TelefonoDestinatario');
+        $this->dtgGuiases->MetaAddColumn('TelefonoMovilDestinatario');
+        $this->dtgGuiases->MetaAddColumn('EmailDestinatario');
+        $this->dtgGuiases->MetaAddColumn('SexoDestinatario');
         $this->dtgGuiases->MetaAddColumn('Contenido');
         $this->dtgGuiases->MetaAddColumn('Piezas');
         $this->dtgGuiases->MetaAddColumn('ValorDeclarado');

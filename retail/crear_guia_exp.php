@@ -22,6 +22,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     /* @var $objProdExpo Productos */
     protected $objProdExpo;
 
+    /* @var $objDestPmnx ClientesRetail */
     protected $objDestPmnx;
     protected $objProducto;
     protected $objGuiaOrig;
@@ -73,9 +74,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected $calFechGuia;
 
-
     protected $lstServExpo;
     protected $lstFormPago;
+    protected $lstClieCorp;
 
     protected $txtNumeGuia;
 
@@ -178,6 +179,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $decTasaEuro;
     protected $blnCambPiez;
 
+    protected $lblRepePiez;
+    protected $txtRepePiez;
+    protected $lstUnidMedi;
+    protected $lblUnidMedi;
+
     
     protected function SetupGuia() {
         $intIdxxGuia = QApplication::PathInfo(0);
@@ -204,6 +210,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
             if ($this->objDestPmnx) {
                 $this->blnEditDest = true;
+                t('Cedula del Deestinatario: '.$this->objGuia->CedulaDestinatario);
+                t('Nombre: '.$this->objDestPmnx->Nombre);
             }
 
             //--------------------------------------------------------
@@ -246,9 +254,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
-        t('Voy al setup...');
+        //t('Voy al setup...');
         $this->SetupGuia();
-        t('Regrese el setup...');
+        //t('Regrese el setup...');
 
         $this->lblTituForm->Text = QApplication::Translate('Guia Exportación');
 
@@ -264,7 +272,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtDireClie_Create();
         $this->txtEmaiRemi_Create();
         $this->calFechNaci_Create();
-        t('k1');
+
+        //t('k1');
         $this->lstProfClie_Create();
         $this->lstSexoClie_Create();
 
@@ -274,7 +283,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtNuevProf_Create();
         $this->btnSaveProf_Create();
 
-        t('k2');
+        //t('k2');
         //------------------------
         // Servicio
         //------------------------
@@ -283,7 +292,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //$this->lstServExpo = disableControl($this->lstServExpo);
         $this->lstReceDest_Create();
 
-        t('k3');
+        //t('k3');
         //------------------------
         // Datos del Destinatario
         //------------------------
@@ -298,8 +307,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtCiudDest_Create();
         $this->txtPostDest_Create();
 
-        t('k5');
-
+        //t('k5');
         //-----------------
         // Datos del Envío
         //-----------------
@@ -307,13 +315,15 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtValoDecl_Create();
         $this->lstEnviSgro_Create();
         $this->lstFormPago_Create();
+        $this->lblUnidMedi_Create();
+        $this->lstUnidMedi_Create();
+        $this->lstClieCorp_Create();
         $this->txtCantPiez_Create();
 
         $this->txtDescCont = disableControl($this->txtDescCont);
         $this->txtCantPiez = disableControl($this->txtCantPiez);
 
-        t('k6');
-
+        //t('k6');
         //---------------------
         // Costos del Servicio
         //---------------------
@@ -331,8 +341,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
         $this->dtgPiezTemp_Create();
 
-        t('k7');
-
+        //t('k7');
         //-----------------
         // Botones y otros
         //-----------------
@@ -347,11 +356,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lblLargPiez_Create();
         $this->lblVoluPiez_Create();
         $this->lblValoPiez_Create();
+        $this->lblRepePiez_Create();
         $this->lblPiesPiez_Create();
         $this->lblKiloPiez_Create();
 
-        t('K8');
-
+        //t('K8');
         $this->txtContPiez_Create();
         $this->txtKiloEnvi_Create();
         $this->txtAltoEnvi_Create();
@@ -373,6 +382,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtLargPiez_Create();
         $this->txtVoluPiez_Create();
         $this->txtValoPiez_Create();
+        $this->txtRepePiez_Create();
         $this->txtPiesPiez_Create();
         $this->txtKiloPiez_Create();
         $this->btnSavePiez_Create();
@@ -452,8 +462,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTeleFijo = new QTextBox($this);
         $this->txtTeleFijo->Placeholder = 'Ej: 02123782514';
         $this->txtTeleFijo->Width = 120;
-        if ($this->blnEditMode) {
-            $this->txtTeleFijo->Text = $this->objGuia->TelefonoRemitente;
+        if ($this->blnEditMode  && $this->objClieReta) {
+            $this->txtTeleFijo->Text = $this->objClieReta->TelefonoFijo;
         }
     }
 
@@ -481,8 +491,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function calFechNaci_Create() {
         $this->calFechNaci = new QTextBox($this);
         $this->calFechNaci->Width = 120;
-        if ($this->blnEditMode) {
+        if ($this->blnEditMode && (strlen($this->objGuia->ClienteRetail->FechaNacimiento) > 0)) {
+            //t('Aqui estoy. La fecha es: '.$this->objGuia->ClienteRetail->FechaNacimiento);
             $this->calFechNaci->Text = $this->objGuia->ClienteRetail->FechaNacimiento->__toString("DD/MM/YYYY");
+        } else {
+            //t('Estoy aca...');
         }
     }
 
@@ -564,7 +577,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         } else {
             $this->cargarDestinos();
         }
-        //$this->lstSucuDest->AddAction(new QChangeEvent(), new QAjaxAction('lstSucuDest_Change'));
     }
 
     protected function lstServExpo_Create() {
@@ -587,11 +599,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstReceDest = new QListBox($this);
         $this->lstReceDest->Name = 'Receptoria';
         $this->lstReceDest->Width = 150;
-        //if ($this->blnEditMode) {
-        //    //t('En el create del listbox, la receptoria destino es: '.$this->objGuia->ReceptoriaDestino);
-        //    $this->cargarReceptorias($this->objGuia->EstaDest,$this->objGuia->ReceptoriaDestino);
-        //}
-        //$this->lstReceDest->AddAction(new QChangeEvent(), new QAjaxAction('lstReceDest_Change'));
     }
 
     protected function txtCeduDest_Create() {
@@ -617,16 +624,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function lstSexoDest_Create() {
         $this->lstSexoDest = new QListBox($this);
-        //if ($this->blnEditMode) {
-        //    $this->cargarSexos($this->lstSexoDest,$this->objGuia->ClienteRetail->Sexo);
-        //} else {
-        //    $this->cargarSexos($this->lstSexoDest);
-        //}
         $blnSeleMasc = false;
         $blnSeleFeme = false;
         if ($this->blnEditMode) {
-            $blnSeleMasc = $this->objGuia->ClienteRetail->Sexo == 'M' ? true : false;
-            $blnSeleFeme = $this->objGuia->ClienteRetail->Sexo == 'F' ? true : false;
+            $blnSeleMasc = $this->objDestPmnx->Sexo == 'M' ? true : false;
+            $blnSeleFeme = $this->objDestPmnx->Sexo == 'F' ? true : false;
         }
         $this->lstSexoDest->AddItem('- Selec -',null);
         $this->lstSexoDest->AddItem('MASCULINO','M', $blnSeleMasc);
@@ -644,7 +646,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTlfdFijo->Placeholder = 'Ej: 02125261498';
         $this->txtTlfdFijo->Width = 120;
         if ($this->blnEditMode) {
-            $this->txtTlfdFijo->Text = $this->objGuia->TelefonoDestinatario;
+            $this->txtTlfdFijo->Text = $this->objDestPmnx->TelefonoFijo;
         }
     }
 
@@ -653,7 +655,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTlfdMovi->Placeholder = 'Ej: 04162513678';
         $this->txtTlfdMovi->Width = 120;
         if ($this->blnEditMode) {
-            $this->txtTlfdMovi->Text = $this->objGuia->ClienteRetail->TelefonoMovil;
+            $this->txtTlfdMovi->Text = $this->objDestPmnx->TelefonoMovil;
         }
     }
 
@@ -663,7 +665,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtEmaiDest->Width = 260;
         $this->txtEmaiDest->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
         if ($this->blnEditMode) {
-            $this->txtEmaiDest->Text = $this->objGuia->ClienteRetail->Email;
+            t('Email de: '.$this->objDestPmnx->Nombre.' = '.$this->objDestPmnx->Email);
+            $this->txtEmaiDest->Text = $this->objDestPmnx->Email;
         }
     }
 
@@ -713,7 +716,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function lstEnviSgro_Create() {
         $this->lstEnviSgro = new QListBox($this);
-        $this->lstEnviSgro->Width = 100;
+        $this->lstEnviSgro->Width = 80;
         if ($this->blnEditMode) {
             $this->cargarModalidadesDeSgro($this->objGuia->Asegurado);
         } else {
@@ -724,7 +727,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtValoDecl_Create() {
         $this->txtValoDecl = new QFloatTextBox($this);
         $this->txtValoDecl->Name = 'Valor Decl.';
-        $this->txtValoDecl->Width = 120;
+        $this->txtValoDecl->Width = 80;
         $this->txtValoDecl->ToolTip = 'Un monto mayor a cero, implica que el envío se asegura';
         if ($this->blnEditMode) {
             $this->txtValoDecl->Text = $this->objGuia->ValorDeclarado;
@@ -740,6 +743,32 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->cargarModalidadesDePago();
         } else {
             $this->cargarModalidadesDePago($this->objGuia->FormaPago);
+        }
+    }
+
+    protected function lblUnidMedi_Create() {
+        $this->lblUnidMedi = new QLabel($this);
+        $this->lblUnidMedi->Text = 'Unid.';
+        $this->lblUnidMedi->Visible = false;
+    }
+
+    protected function lstUnidMedi_Create() {
+        $this->lstUnidMedi = new QListBox($this);
+        $this->lstUnidMedi->Name = 'Unid. Medida';
+        $this->lstUnidMedi->AddItem('cm','cm');
+        $this->lstUnidMedi->AddItem('pl','pl');
+        $this->lstUnidMedi->Visible = false;
+        $this->lstUnidMedi->AddAction(new QChangeEvent(), new QAjaxAction('lstUnidMedi_Change'));
+    }
+
+    protected function lstClieCorp_Create() {
+        $this->lstClieCorp = new QListBox($this);
+        $this->lstClieCorp->Name = 'C. CORP';
+        $this->lstClieCorp->Width = 210;
+        if (!$this->blnEditMode) {
+            $this->cargarClientesCorp();
+        } else {
+            $this->cargarClientesCorp($this->objGuia->ClienteCorpId);
         }
     }
 
@@ -824,7 +853,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function lblTituPiez_Create() {
         $this->lblTituPiez = new QLabel($this);
-        $this->lblTituPiez->Text = 'Piezas de la Guia <i class="fa fa-plus-circle fa-lg"></i>';
+        $this->lblTituPiez->Text = 'Piezas <i class="fa fa-plus-circle fa-lg"></i>';
         $this->lblTituPiez->HtmlEntities = false;
         $this->lblTituPiez->CssClass = 'titulo';
         $this->lblTituPiez->AddAction(new QClickEvent(), new QAjaxAction('lblTituPiez_Click'));
@@ -867,8 +896,14 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function lblValoPiez_Create() {
         $this->lblValoPiez = new QLabel($this);
-        $this->lblValoPiez->Text = 'Val Dec. ($)';
+        $this->lblValoPiez->Text = 'ValDec($)';
         $this->lblValoPiez->Visible = false;
+    }
+
+    protected function lblRepePiez_Create() {
+        $this->lblRepePiez = new QLabel($this);
+        $this->lblRepePiez->Text = 'Repetir';
+        $this->lblRepePiez->Visible = false;
     }
 
     protected function lblPiesPiez_Create() {
@@ -885,8 +920,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtContPiez_Create() {
         $this->txtContPiez = new QTextBox($this);
-        $this->txtContPiez->Placeholder = 'Descripcion del Contenido de la Pieza';
-        $this->txtContPiez->Width = 320;
+        $this->txtContPiez->Placeholder = 'Desc. del Contenido de la Pieza';
+        $this->txtContPiez->Width = 350;
         $this->txtContPiez->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         $this->txtContPiez->Visible = false;
     }
@@ -925,8 +960,16 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtValoPiez_Create() {
         $this->txtValoPiez = new QTextBox($this);
-        $this->txtValoPiez->Width = 80;
+        $this->txtValoPiez->Width = 60;
         $this->txtValoPiez->Visible = false;
+    }
+
+    protected function txtRepePiez_Create() {
+        $this->txtRepePiez = new QTextBox($this);
+        $this->txtRepePiez->Width = 60;
+        $this->txtRepePiez->ToolTip = 'Cantidad de piezas que se repiten con las mismas medidas';
+        $this->txtRepePiez->Text = 1;
+        $this->txtRepePiez->Visible = false;
     }
 
     protected function txtPiesPiez_Create() {
@@ -1012,11 +1055,21 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $decLargPiez = strlen($this->txtLargPiez->Text) ? (float)$this->txtLargPiez->Text : null;
         $decVoluPiez = 0;
         $decPiesPiez = 0;
+
         if (!is_null($decAltoPiez) && !is_null($decAnchPiez) && !is_null($decLargPiez)) {
+            if ($this->lstUnidMedi->SelectedValue == 'pl') {
+                //-------------------------------
+                // Las pulgadas se llevan a cms
+                //-------------------------------
+                $decAltoPiez *= 2.54;
+                $decAnchPiez *= 2.54;
+                $decLargPiez *= 2.54;
+                // Los valores re-expresados en cms se actualizan en la pantalla
+            }
             $decVoluPiez = ($decAltoPiez * $decAnchPiez * $decLargPiez) / 5000;
             $decPiesPiez = (($decAltoPiez * $decAnchPiez * $decLargPiez) / 1000000) * 35.315;
         }
-        $this->txtVoluPiez->Text = $decVoluPiez;
+        $this->txtVoluPiez->Text = round($decVoluPiez,4);
         $this->txtPiesPiez->Text = round($decPiesPiez,3);
     }
 
@@ -1076,30 +1129,47 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     }
 
     protected function btnSavePiez_Click() {
-        if (!$this->blnEditPiez) {
-            t('Estoy en modo insercion');
-            $objPiezGuia = new PiezasTemp();
-            $objPiezGuia->ProcesoErrorId = $this->objProcEjec->Id;
-            $objPiezGuia->CreatedBy      = $this->objUsuario->CodiUsua;
-        } else {
-            t('Estoy en modo edicion');
-            $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
-        }
-        try {
-            $objPiezGuia->Descripcion    = strtoupper(limpiarCadena($this->txtContPiez->Text));
-            $objPiezGuia->Kilos          = (float)$this->txtKiloPiez->Text;
-            $objPiezGuia->Alto           = (float)$this->txtAltoPiez->Text;
-            $objPiezGuia->Ancho          = (float)$this->txtAnchPiez->Text;
-            $objPiezGuia->Largo          = (float)$this->txtLargPiez->Text;
-            $objPiezGuia->Volumen        = (float)$this->txtVoluPiez->Text;
-            $objPiezGuia->ValorDeclarado = (float)$this->txtValoPiez->Text;
-            $objPiezGuia->PiesCub        = (float)$this->txtPiesPiez->Text;
-            $objPiezGuia->Save();
-            t('Salve en PiezasTemp');
-            $this->sumaPiezas();
-            $this->blnCambPiez = true;
-        } catch (Exception $e) {
-            t('Error: '.$e->getMessage());
+        $intCantRepe = strlen($this->txtRepePiez->Text) ? (int)$this->txtRepePiez->Text : 1;
+        for ($i = 0; $i < $intCantRepe; $i++) {
+            if (!$this->blnEditPiez) {
+                t('Estoy en modo insercion');
+                $objPiezGuia = new PiezasTemp();
+                $objPiezGuia->ProcesoErrorId = $this->objProcEjec->Id;
+                $objPiezGuia->CreatedBy      = $this->objUsuario->CodiUsua;
+            } else {
+                t('Estoy en modo edicion');
+                $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
+            }
+            try {
+                $decAltoPiez = strlen($this->txtAltoPiez->Text) ? (float)$this->txtAltoPiez->Text : null;
+                $decAnchPiez = strlen($this->txtAnchPiez->Text) ? (float)$this->txtAnchPiez->Text : null;
+                $decLargPiez = strlen($this->txtLargPiez->Text) ? (float)$this->txtLargPiez->Text : null;
+
+                if ($this->lstUnidMedi->SelectedValue == 'pl') {
+                    //-------------------------------
+                    // Las pulgadas se llevan a cms
+                    //-------------------------------
+                    $decAltoPiez *= 2.54;
+                    $decAnchPiez *= 2.54;
+                    $decLargPiez *= 2.54;
+                }
+
+                $objPiezGuia->Descripcion    = strtoupper(limpiarCadena($this->txtContPiez->Text));
+                $objPiezGuia->Kilos          = (float)$this->txtKiloPiez->Text;
+                $objPiezGuia->Alto           = $decAltoPiez;
+                $objPiezGuia->Ancho          = $decAnchPiez;
+                $objPiezGuia->Largo          = $decLargPiez;
+                $objPiezGuia->Volumen        = (float)$this->txtVoluPiez->Text;
+                $objPiezGuia->ValorDeclarado = (float)$this->txtValoPiez->Text;
+                $objPiezGuia->PiesCub        = (float)$this->txtPiesPiez->Text;
+                $objPiezGuia->Save();
+                t('Salve en PiezasTemp');
+                $this->sumaPiezas();
+                $this->blnCambPiez = true;
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
+                break;
+            }
         }
 
         $this->dtgPiezTemp->Refresh();
@@ -1111,6 +1181,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtLargPiez->Text = '';
         $this->txtVoluPiez->Text = '';
         $this->txtValoPiez->Text = '';
+        $this->txtRepePiez->Text = 1;
         $this->txtPiesPiez->Text = '';
 
         //$this->success('Transaccion Exitosa.  Pieza guardada !!!');
@@ -1118,12 +1189,18 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function btnDelePiez_Click() {
         $this->blnCambPiez = true;
-        t('Borrando pieza');
+        //t('Borrando pieza');
         $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
 
         $objPiezGuia->Delete();
-        t('Pieza borrada');
+        //t('Pieza borrada');
         $this->sumaPiezas();
+
+        if ($this->txtCantPiez->Text == 0) {
+            // Ya no quedan piezas, por lo tanto se establece el modo insercion
+            $this->blnEditPiez = false;
+            $this->btnDelePiez->Visible = false;
+        }
 
 
         $this->dtgPiezTemp->Refresh();
@@ -1135,8 +1212,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtLargPiez->Text = '';
         $this->txtVoluPiez->Text = '';
         $this->txtValoPiez->Text = '';
+        $this->txtRepePiez->Text = 1;
         $this->txtPiesPiez->Text = '';
-        t('Listo el borrado');
+        //t('Listo el borrado');
         $this->success('Transaccion Exitosa.  Pieza borrada !!!');
     }
 
@@ -1167,7 +1245,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtVoluPiez->Visible = !$this->txtVoluPiez->Visible;
             $this->txtValoPiez->Visible = !$this->txtValoPiez->Visible;
             $this->txtPiesPiez->Visible = !$this->txtPiesPiez->Visible;
-
+            $this->lblUnidMedi->Visible = !$this->lblUnidMedi->Visible;
+            $this->lstUnidMedi->Visible = !$this->lstUnidMedi->Visible;
             $this->btnSavePiez->Visible = !$this->btnSavePiez->Visible;
             $this->btnCancPiez->Visible = !$this->btnCancPiez->Visible;
             $this->btnDelePiez->Visible = false;
@@ -1179,6 +1258,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtLargPiez->Text = '';
             $this->txtVoluPiez->Text = '';
             $this->txtValoPiez->Text = '';
+            $this->txtRepePiez->Text = 1;
             $this->txtPiesPiez->Text = '';
 
         }
@@ -1203,11 +1283,28 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtValoPiez->Visible = true;
             $this->txtPiesPiez->Visible = true;
 
+            $this->lblUnidMedi->Visible = true;
+            $this->lstUnidMedi->Visible = true;
             $this->btnSavePiez->Visible = true;
             $this->btnCancPiez->Visible = true;
             $this->btnDelePiez->Visible = true;
 
         }
+
+        if ($this->blnEditPiez) {
+            t('Editando...');
+        } else {
+            t('Agregando...');
+        }
+        $this->lblRepePiez->Visible = $this->lblValoPiez->Visible;
+        $this->txtRepePiez->Visible = $this->txtValoPiez->Visible;
+    }
+
+    protected function lstUnidMedi_Change() {
+        $this->txtAltoPiez->Placeholder = $this->lstUnidMedi->SelectedValue;
+        $this->txtAnchPiez->Placeholder = $this->lstUnidMedi->SelectedValue;
+        $this->txtLargPiez->Placeholder = $this->lstUnidMedi->SelectedValue;
+        $this->calcularVolumenPies();
     }
 
     protected function btnCancel_Click() {
@@ -1507,6 +1604,17 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtCeduDest_Blur() {
         if (!$this->blnEditMode) {
             $strNumeCedu = DejarNumerosVJGuion($this->txtCeduDest->Text);
+            if ($strNumeCedu == '99999999') {
+                $this->txtNombDest->Text = '';
+                $this->txtTlfdFijo->Text = '';
+                $this->txtTlfdMovi->Text = '';
+                $this->lstSexoDest->SelectedIndex = 0;
+                if (is_null($this->lstReceDest->SelectedValue)) {
+                    $this->txtDireDest->Text = '';
+                }
+                $this->txtNombDest->SetFocus();
+                return;
+            }
             if (strlen($strNumeCedu) > 0) {
                 $this->objDestPmnx = ClientesRetail::LoadByCedulaRif($strNumeCedu);
                 if ($this->objDestPmnx) {
@@ -1785,10 +1893,25 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstFormPago->AddItem('CREDITO','CRD',$strFormPago=='CRD');
     }
 
+    protected function cargarClientesCorp($intCodiClie=null) {
+        if (is_null($intCodiClie)) {
+            $intCodiClie = $this->objClieNaci->CodiClie;
+        }
+        $this->lstClieCorp->RemoveAllItems();
+        $objClauOrde = QQ::OrderBy(QQN::MasterCliente()->NombClie);
+        $arrClieCorp = MasterCliente::LoadArrayByCodiStat(1,$objClauOrde);
+        foreach ($arrClieCorp as $objClieCorp) {
+            $blnSeleRegi = $objClieCorp->CodiClie == $intCodiClie;
+            $this->lstClieCorp->AddItem($objClieCorp->__toString(), $objClieCorp->CodiClie, $blnSeleRegi);
+        }
+        $this->lstClieCorp->Width = 210;
+    }
+
     protected function cargarModalidadesDeSgro($intEnviSgro=null) {
         $this->lstEnviSgro->RemoveAllItems();
         $this->lstEnviSgro->AddItem('SI',1,$intEnviSgro==1);
         $this->lstEnviSgro->AddItem('NO',0,$intEnviSgro==0);
+        $this->lstEnviSgro->Width = 80;
     }
 
     //------------------------------------------------------------
@@ -1844,13 +1967,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objClieReta->Direccion       = substr(limpiarCadena($this->txtDireClie->Text),0,250);
             $this->objClieReta->Email           = substr(strtolower($this->txtEmaiRemi->Text),0,191);
             $this->objClieReta->Sexo            = $this->lstSexoClie->SelectedValue;
-            $this->objClieReta->FechaNacimiento = new QDateTime($this->calFechNaci->Text);
+            $this->objClieReta->FechaNacimiento = strlen($this->calFechNaci->Text)
+                ? new QDateTime($this->calFechNaci->Text)
+                : null;
             $this->objClieReta->ProfesionId     = $this->lstProfClie->SelectedValue;
-            //if (!is_null($this->lstProfClie->SelectedValue)) {
-            //    $this->objClieReta->ProfesionId = $this->lstProfClie->SelectedValue;
-            //} else {
-            //    $this->objClieReta->ProfesionId = null;
-            //}
             //----------------------------------------------------------------------------------
             // Si el Cliente Remitente no existe aún, se graba Usuario y la fecha de creación.
             //----------------------------------------------------------------------------------
@@ -1875,7 +1995,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->objDestPmnx->CedulaRif = DejarNumerosVJGuion($this->txtCeduDest->Text);
             }
             $this->objDestPmnx->Nombre        = substr(limpiarCadena($this->txtNombDest->Text),0,100);
-            $this->objDestPmnx->TelefonoFijo = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
+            $this->objDestPmnx->TelefonoFijo  = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
             $this->objDestPmnx->TelefonoMovil = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
             $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
             $this->objDestPmnx->Email         = substr(strtolower($this->txtEmaiDest->Text),0,191);
@@ -2133,11 +2253,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         // El servicio determina el producto
         //-------------------------------------
         $strServExpo = $this->lstServExpo->SelectedValue;
-        t('Servicio de Exportacion: '.$strServExpo);
         $strCodiExpo = $strServExpo == 'AER' ? 'EXA' : 'EXM';
-        t('Producto de Exportacion: '.$strCodiExpo);
         $objProdExpo = Productos::LoadByCodigo($strCodiExpo);
-        t('Id del Producto: '.$objProdExpo->Id);
         //-------------------------------------
         // Se suprimen los errores en pantalla
         //-------------------------------------
@@ -2174,24 +2291,24 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->CodigoPostal          = $this->txtPostDest->Text;
             $this->objGuia->TipoExport            = 'COURIER';
             $this->objGuia->ProductoId            = $objProdExpo->Id;
+            $this->objGuia->ClienteCorpId         = $this->lstClieCorp->SelectedValue;
 
             if (!$this->blnEditMode) {
                 //------------------------------------------------------------------------
                 // En caso de Insercion, se asignan valores por defecto ciertos campos
                 //------------------------------------------------------------------------
-                $this->objGuia->Numero        = $this->txtNumeGuia->Text;
-                $this->objGuia->Tracking      = $this->txtNumeGuia->Text;
-                $this->objGuia->Fecha         = new QDateTime(QDateTime::Now());
-                $this->objGuia->ClienteCorpId = $this->objClieNaci->CodiClie;
-                $this->objGuia->Tasa          = $this->decTasaDola;
-                $this->objGuia->Alto          = 0;
-                $this->objGuia->Ancho         = 0;
-                $this->objGuia->Largo         = 0;
-                $this->objGuia->Volumen       = 0;
-                $this->objGuia->PiesCub       = 0;
-                $this->objGuia->Total         = 0;
-                $this->objGuia->CreatedBy     = $this->objUsuario->CodiUsua;
-                $this->objGuia->TarifaId      = $this->objClieNaci->TarifaId;
+                $this->objGuia->Numero    = $this->txtNumeGuia->Text;
+                $this->objGuia->Tracking  = $this->txtNumeGuia->Text;
+                $this->objGuia->Fecha     = new QDateTime(QDateTime::Now());
+                $this->objGuia->Tasa      = $this->decTasaDola;
+                $this->objGuia->Alto      = 0;
+                $this->objGuia->Ancho     = 0;
+                $this->objGuia->Largo     = 0;
+                $this->objGuia->Volumen   = 0;
+                $this->objGuia->PiesCub   = 0;
+                $this->objGuia->Total     = 0;
+                $this->objGuia->CreatedBy = $this->objUsuario->CodiUsua;
+                $this->objGuia->TarifaId  = $this->objClieNaci->TarifaId;
             }
 
         } catch (Exception $e) {
@@ -2231,12 +2348,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             return false;
         }
         //t('3');
-        $this->txtTeleFijo->Text = DejarSoloLosNumeros($this->txtTeleFijo->Text);
-        if (strlen($this->txtTeleFijo->Text) == 0) {
-            $strTextMens = 'Teléfono Fijo del Remitente <b>Requerido</b>';
-            $this->danger($strTextMens);
-            return false;
-        }
+        //$this->txtTeleFijo->Text = DejarSoloLosNumeros($this->txtTeleFijo->Text);
+        //if (strlen($this->txtTeleFijo->Text) == 0) {
+        //    $strTextMens = 'Teléfono Fijo del Remitente <b>Requerido</b>';
+        //    $this->danger($strTextMens);
+        //    return false;
+        //}
         //t('4');
         if (strlen($this->txtTeleFijo->Text) > 12) {
             $strTextMens = 'Teléfono Fijo del Remitente <b>No debe tener más de 12 caracteres numéricos</b>';
@@ -2288,11 +2405,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
         //t('10');
         $this->txtCeduDest->Text = DejarNumerosVJGuion($this->txtCeduDest->Text);
-        if (strlen($this->txtCeduDest->Text) == 0) {
-            $strTextMens = 'Cédula del Destinario <b>Requerida</b>';
-            $this->danger($strTextMens);
-            return false;
-        }
+        //if (strlen($this->txtCeduDest->Text) == 0) {
+        //    $strTextMens = 'Cédula del Destinario <b>Requerida</b>';
+        //    $this->danger($strTextMens);
+        //    return false;
+        //}
         //t('11');
         $this->txtNombDest->Text = limpiarCadena($this->txtNombDest->Text);
         if (strlen($this->txtNombDest->Text) == 0) {
@@ -2301,12 +2418,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             return false;
         }
         //t('12');
-        $this->txtTlfdFijo->Text = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
-        if (strlen($this->txtTlfdFijo->Text) == 0) {
-            $strTextMens = 'Teléfono Fijo del Destinario <b>Requerido</b>';
-            $this->danger($strTextMens);
-            return false;
-        }
+        //$this->txtTlfdFijo->Text = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
+        //if (strlen($this->txtTlfdFijo->Text) == 0) {
+        //    $strTextMens = 'Teléfono Fijo del Destinario <b>Requerido</b>';
+        //    $this->danger($strTextMens);
+        //    return false;
+        //}
         //t('13');
         if (strlen($this->txtTlfdFijo->Text) > 12) {
             $strTextMens = 'Teléfono Movil del Destinatario <b>No debe tener más de 12 caracteres numéricos</b>';

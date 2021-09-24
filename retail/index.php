@@ -174,8 +174,8 @@ class Index extends QForm {
         $objClieExpo = MasterCliente::LoadByCodigoInterno('EXP01');
         $_SESSION['ClieExpo'] = serialize($objClieExpo);
 
-        //$strEmaiSopo = BuscarParametro('CntaSopo','EmaiSopo','Txt1','soportelufeman@gmail.com');
-        //$_SESSION['EmaiSopo'] = serialize($strEmaiSopo);
+        $strEmaiSopo = BuscarParametro('CntaSopo','EmaiSopo','Txt1','soporte@lufemansoftware.com');
+        $_SESSION['EmaiSopo'] = serialize($strEmaiSopo);
         ////---------------------------------------------------------------------------------------------------------
         //// Se establecen algunos valores de interés para el cálculo de la tarifa en todos los Sistemas en general.
         ////---------------------------------------------------------------------------------------------------------

@@ -104,36 +104,36 @@
                 $strMensTran = 'Pago Procesando: '.$this->Referencia.' (Saldo: '.$decMontPago.')';
                 $objFactPago->ClienteCorp->logDeCambios($strMensTran);
 
-                if ($decMontPago > 0) {
-                    t('El saldo del pago es positivo, eso implica crear una ndc');
-                    try {
-                        $objNotaCorp = new NotaCreditoCorp();
-                        $objNotaCorp->Referencia    = NotaCreditoCorp::proxReferencia();
-                        $objNotaCorp->Tipo          = 'AUTOMATICA';
-                        $objNotaCorp->ClienteCorpId = $this->ClienteCorpId;
-                        $objNotaCorp->PagoCorpId    = $this->Id;
-                        $objNotaCorp->Fecha         = new QDateTime(QDateTime::Now());
-                        $objNotaCorp->Monto         = $decMontPago;
-                        $objNotaCorp->Estatus       = 'DISPONIBLE';
-                        $objNotaCorp->Observacion   = strtoupper('Saldo Excedente por Pago a la Factura con Referencia: '.$objFactPago->Referencia);
-                        $objNotaCorp->CreatedBy     = $objUsuario->CodiUsua;
-                        $objNotaCorp->Save();
-                        t('Se creo una ndc por un monto de: '.$decMontPago);
-                        $strMensTran = 'Saldo excedente por el Pago Referencia: '.$objFactPago->Referencia;
-                        $objNotaCorp->logDeCambios($strMensTran);
-                    } catch (Exception $e) {
-                        t('Error: '.$e->getMessage());
-                        $objFactPago->logDeCambios($e->getMessage());
-                    }
-                }
                 $intCantFact++;
                 $blnSaldDisp = $objFactPago->ClienteCorp->SaldoExcedente > 0 ? true : false;
             }
+            //if ($decMontPago > 0) {
+            //    t('El saldo del pago es positivo, eso implica crear una ndc');
+            //    $strMensTran = 'Saldo excedente por el Pago Referencia: '.$this->Referencia;
+            //    try {
+            //        $objNotaCorp = new NotaCreditoCorp();
+            //        $objNotaCorp->Referencia    = NotaCreditoCorp::proxReferencia();
+            //        $objNotaCorp->Tipo          = 'AUTOMATICA';
+            //        $objNotaCorp->ClienteCorpId = $this->ClienteCorpId;
+            //        $objNotaCorp->PagoCorpId    = $this->Id;
+            //        $objNotaCorp->Fecha         = new QDateTime(QDateTime::Now());
+            //        $objNotaCorp->Monto         = $decMontPago;
+            //        $objNotaCorp->Estatus       = 'DISPONIBLE';
+            //        $objNotaCorp->Observacion   = strtoupper($strMensTran);
+            //        $objNotaCorp->CreatedBy     = $objUsuario->CodiUsua;
+            //        $objNotaCorp->Save();
+            //        t('Se creo una ndc por un monto de: '.$decMontPago);
+            //        $objNotaCorp->logDeCambios($strMensTran);
+            //    } catch (Exception $e) {
+            //        t('Error: '.$e->getMessage());
+            //        $this->logDeCambios($e->getMessage());
+            //    }
+            //}
             t('Termine de procesar los pagos');
             $objDatabase->TransactionCommit();
             t('El proceso de conciliacion ha terminado');
             t('***************************************');
-            return $intCantFact;
+            return [$intCantFact,$decMontPago];
         }
 
 		public function replicarEstatusPago($strEstaPago) {

@@ -1,7 +1,7 @@
 <?php
 // Load the QCubed Development Framework
 require_once('qcubed.inc.php');
-require_once(__APP_INCLUDES__.'/protected.inc.php');
+//require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__FORMBASE_CLASSES__ . '/NewGrupoListFormBase.class.php');
 
 /**
@@ -76,7 +76,7 @@ class NewGrupoListForm extends NewGrupoListFormBase {
         $colCantUsua->Width = 75;
         $this->dtgNewGrupos->AddColumn($colCantUsua);
 		$this->dtgNewGrupos->MetaAddColumn('Activo');
-		$this->dtgNewGrupos->MetaAddColumn(QQN::NewGrupo()->Sistema);
+//		$this->dtgNewGrupos->MetaAddColumn(QQN::NewGrupo()->Sistema);
 
         $this->btnExpoExce_Create();
 

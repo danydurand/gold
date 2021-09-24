@@ -76,7 +76,7 @@ class GuiasListForm extends GuiasListFormBase {
 
 		// Instantiate the Meta DataGrid
 		$this->dtgGuiases = new GuiasDataGrid($this);
-		$this->dtgGuiases->FontSize = 12.5;
+		$this->dtgGuiases->FontSize = 12;
 		$this->dtgGuiases->ShowFilter = false;
 
 		// Style the DataGrid (if desired)
@@ -124,6 +124,7 @@ class GuiasListForm extends GuiasListFormBase {
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino->Iata, 'Name=Dest');
         //$this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino->Siglas, 'Name=R.Dest');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->FormaPago,'Name=F.Pag');
+        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteCorp->NombClie,'Name=Cliente');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
         $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');
         $this->dtgGuiases->AddColumn($colUltiCkpt);

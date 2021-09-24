@@ -1,20 +1,26 @@
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-2">
         <div class="form-group" style="text-align: center">
-            <label for="">Desea Seguro ?</label><br>
+            <label for="">Seguro ?</label><br>
             <?php $this->lstEnviSgro->Render(); ?>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-2">
         <div class="form-group">
-            <label for="">Valor Decl. (USD)</label><br>
+            <label for="">V-Decl. ($)</label><br>
             <?php $this->txtValoDecl->Render(); ?>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="">Forma Pago</label><br>
             <?php $this->lstFormPago->Render(); ?>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="form-group">
+            <label for="">Cliente CORP</label><br>
+            <?php $this->lstClieCorp->Render(); ?>
         </div>
     </div>
 </div>
@@ -71,10 +77,16 @@
     </div>
 </div>
 <div class="row" style="margin-top: 0.5em; line-height: 0.5em">
-    <div class="col-md-12" style="border-radius: 3px; padding: 0.5em">
+    <div class="col-md-4" style="border-radius: 3px; padding: 0.5em">
         <div style="cursor: pointer; text-align: center">
             <div><?php $this->lblTituPiez->Render() ?></div>
         </div>
+    </div>
+    <div class="col-sm-4 text-center">
+        <?php $this->lstUnidMedi->Render(); ?>
+    </div>
+    <div class="col-sm-3 text-center">
+        <?php $this->btnSavePiez->Render(); $this->btnCancPiez->Render(); $this->btnDelePiez->Render(); ?>
     </div>
 </div>
 
@@ -99,13 +111,15 @@
                 <div class="col-sm-2 text-left" style="text-align: center"><?php $this->txtPiesPiez->Render(); ?></div>
             </div>
             <div class="row">
-                <div class="col-sm-7 text-center" style="font-weight: bold; text-align: left"><?php $this->lblContPiez->Render(); ?></div>
-                <div class="col-sm-3 text-center" style="font-weight: bold; text-align: left"><?php $this->lblValoPiez->Render(); ?></div>
+                <div class="col-sm-8 text-center" style="font-weight: bold; text-align: left"><?php $this->lblContPiez->Render(); ?></div>
+                <div class="col-sm-2 text-center" style="font-weight: bold; text-align: left"><?php $this->lblValoPiez->Render(); ?></div>
+                <div class="col-sm-2" style="font-weight: bold; text-align: center"><?php $this->lblRepePiez->Render(); ?></div>
             </div>
             <div class="row">
-                <div class="col-sm-7 text-center" style="text-align: left"><?php $this->txtContPiez->Render(); ?></div>
+                <div class="col-sm-8 text-center" style="text-align: left"><?php $this->txtContPiez->Render(); ?></div>
                 <div class="col-sm-2 text-center" style="text-align: left"><?php $this->txtValoPiez->Render(); ?></div>
-                <div class="col-sm-3 text-center"><?php $this->btnSavePiez->Render(); $this->btnCancPiez->Render(); $this->btnDelePiez->Render(); ?></div>
+                <div class="col-sm-2" style="text-align: right"><?php $this->txtRepePiez->Render(); ?></div>
+                <!--<div class="col-sm-3 text-center">--><?php //$this->btnSavePiez->Render(); $this->btnCancPiez->Render(); $this->btnDelePiez->Render(); ?><!--</div>-->
             </div>
         </div>
         <?php } ?>

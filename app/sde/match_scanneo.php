@@ -291,7 +291,6 @@ class MatchScanneo extends FormularioBaseKaizen {
 
         $this->txtNumePiez->Text = '';
         $objCkptMani = Checkpoints::LoadByCodigo('RA');
-        //$objCkptAlma = Checkpoints::LoadByCodigo('IA');
         $intContCkpt = 0;
         $intCantSobr = 0;
         $arrRelaSobr = [];

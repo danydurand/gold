@@ -210,6 +210,8 @@ class FacturasEditForm extends FacturasEditFormBase {
         }
         if ($this->objUsuario->LogiUsua == 'ddurand') {
             $this->btnDelete->Visible = true;
+        } else {
+            $this->btnDelete->Visible = false;
         }
 	}
 

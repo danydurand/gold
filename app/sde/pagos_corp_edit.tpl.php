@@ -55,26 +55,60 @@
         </div>
         <div class="row" style="margin-top: 1em;">
             <div class="col-md-5">
-                <?php $this->lblId->RenderWithName(); ?>
-                <?php $this->lstClienteCorp->RenderWithName(); ?>
-                <?php $this->lstFormaPago->RenderWithName(); ?>
-                <?php $this->txtReferencia->RenderWithName(); ?>
-                <?php $this->calFecha->RenderWithName(); ?>
-                <?php $this->txtMonto->RenderWithName(); ?>
-                <?php //$this->txtEstatus->RenderWithName(); ?>
-                <?php $this->lstEstatus->RenderWithName(); ?>
-                <?php $this->txtObservacion->RenderWithName(); ?>
+                <?php //$this->lblId->RenderWithName(); ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Cliente Corp</label><br>
+                            <?php $this->lstClienteCorp->Render(); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Forma de Pago</label><br>
+                            <?php $this->lstFormaPago->Render(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Referencia</label><br>
+                            <?php $this->txtReferencia->Render(); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Fecha</label><br>
+                            <?php $this->calFecha->Render(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Monto</label><br>
+                            <?php $this->txtMonto->Render(); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Estatus</label><br>
+                            <?php $this->lstEstatus->Render(); ?>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-7">
                 <div class="titulo">Facturas incluidas en este Pago</div>
                 <?php $this->dtgFactClie->Render(); ?>
-                <?php //$this->lblCreatedAt->RenderWithName(); ?>
-                <?php //$this->lblUpdatedAt->RenderWithName(); ?>
-                <?php //$this->lblDeletedAt->RenderWithName(); ?>
-                <?php //$this->txtCreatedBy->RenderWithName(); ?>
-                <?php //$this->txtUpdatedBy->RenderWithName(); ?>
-                <?php //$this->txtDeletedBy->RenderWithName(); ?>
 	        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span style="font-weight: bold">Observacion</span><br>
+                <?php $this->txtObservacion->Render(); ?>
+            </div>
         </div>
     </div>
 </div>

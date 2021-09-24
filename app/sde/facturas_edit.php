@@ -106,6 +106,7 @@ class FacturasEditForm extends FacturasEditFormBase {
             $this->lstEstaPago       = disableControl($this->lstEstaPago);
             $this->txtMontoCobrado   = disableControl($this->txtMontoCobrado);
             $this->txtMontoPendiente = disableControl($this->txtMontoPendiente);
+            $this->btnDelete->Visible = false;
         }
 
     }

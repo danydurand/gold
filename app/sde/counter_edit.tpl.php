@@ -42,29 +42,14 @@
                                     <?php $this->txtSiglas->RenderWithName(); ?>
                                     <?php $this->lstSucursal->RenderWithName(); ?>
                                     <?php $this->lstRuta->RenderWithName(); ?>
-                                    <?php //$this->lstEntregaInmediataObject->RenderWithName(); ?>
-                                    <?php //$this->txtLimiteDePaquetes->RenderWithName(); ?>
-                                    <?php //$this->txtCantidadDePaquetes->RenderWithName(); ?>
-                                    <?php //$this->txtCkptRecepcion->RenderWithName(); ?>
-                                    <?php //$this->txtCkptConfirmacion->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAlmacen->RenderWithName(); ?>
-                                    <?php //$this->txtPaisId->RenderWithName(); ?>
-                                    <?php //$this->txtStatusId->RenderWithName(); ?>
                                     <?php $this->lstStatCoun->RenderWithName(); ?>
                                     <?php $this->txtDireccion->RenderWithName(); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <?php //$this->lstElegirServicioObject->RenderWithName(); ?>
                                     <?php $this->lstEsRutaObject->RenderWithName(); ?>
-                                    <?php //$this->lstSeFacturaObject->RenderWithName(); ?>
-                                    <?php //$this->lstPermitePagoObject->RenderWithName(); ?>
                                     <?php $this->txtEmailJefeAlmacen->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAntiguedad1->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAntiguedad2->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAntiguedad0->RenderWithName(); ?>
                                     <?php $this->lstAliadoComercial->RenderWithName(); ?>
                                     <?php $this->txtLimiteKilos->RenderWithName(); ?>
-                                    <?php //$this->txtDependeDe->RenderWithName(); ?>
                                     <?php $this->chkDomOrigen->RenderWithName(); ?>
                                     <?php $this->chkDomDestino->RenderWithName(); ?>
                                 </div>
@@ -74,7 +59,7 @@
                     <div class="tab-pane" role="tabpanel" id="seccion2">
                         <div class="media">
                             <div class="media-body"><br>
-                                <div class="col-md-12">
+                                <div class="col-md-offset-1 col-md-10">
                                     <div class="text-center" style="margin-bottom: .8em">
                                         <?php $this->btnNuevCaja->Render(); ?>
                                     </div>
@@ -97,10 +82,10 @@
         font-weight: bold;
     }
     .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-        background-color: #a52422;
+        background-color: #4682B4;
     }
     .nav-tabs > li > a {
-        color: #A52422;
+        color: #4682B4;
     }
     .form-name {
         width: 30%;

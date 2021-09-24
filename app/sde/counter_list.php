@@ -35,6 +35,8 @@ class CounterListForm extends CounterListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->lblTituForm->Text = 'Receptorias';
+
 		// Instantiate the Meta DataGrid
 		$this->dtgCounters = new CounterDataGrid($this);
 		$this->dtgCounters->FontSize = 13;

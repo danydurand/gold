@@ -24,7 +24,7 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
-
+        t('e1');
         $this->objDefaultWaitIcon = new QWaitIcon($this);
         $this->btnSave->Text = '<i class="fa fa-check fa-lg"></i> Guardar';
 
@@ -42,17 +42,25 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
             t('Modo insercion');
             $this->lblTituForm->Text = 'Establecer Ubicacion';
         }
+        t('e2');
 
         $this->lstSucuDisp_Create();
+        t('e3');
         $this->lstReceSucu_Create();
+        t('e4');
         $this->lstCajaRece_Create();
+        t('e5');
         $this->txtTasaDola_Create();
+        t('e6');
         $this->txtTasaEuro_Create();
+        t('e7');
+
 
         if ($this->blnEditMode) {
             $this->lstSucuDisp_Change();
             $this->lstReceSucu_Change();
         }
+        t('e8');
 
     }
 
@@ -61,19 +69,40 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
     //--------------------------------
 
     protected function lstSucuDisp_Create() {
+        /* @var $objSucuRece Sucursales */
+        t('s1');
         $this->lstSucuDisp = new QListBox($this);
         $this->lstSucuDisp->Name = "Sucursal";
         $this->lstSucuDisp->Width = 250;
-        $arrSucuDisp = Sucursales::LoadSucursalesActivas('Nombre');
+        $arrSucuRece = Sucursales::LoadSucursalesActivas('Nombre');
+        $arrSucuDisp = [];
+        t('s2');
+        foreach ($arrSucuRece as $objSucuRece) {
+            if ($objSucuRece->CountCountersAsSucursal() > 0) {
+                $arrSucuDisp[] = $objSucuRece;
+            }
+        }
+        t('s3');
+        $blnSeleRegi = false;
         $intCantSucu = count($arrSucuDisp);
         $this->lstSucuDisp->AddItem('- Seleccione Una - ('.$intCantSucu.')',null);
+        t('s4');
         foreach ($arrSucuDisp as $objSucuDisp) {
             $blnSeleRegi = $objSucuDisp->Id == $this->objUbicUsua->Valor1 ? true : false;
+            if ($blnSeleRegi) {
+                $blnSeleRegi = $intCantSucu == 1 ? true : false;
+            }
             $this->lstSucuDisp->AddItem($objSucuDisp->__toString(), $objSucuDisp->Id, $blnSeleRegi);
         }
+        t('s5');
+        //if ($blnSeleRegi) {
+        //    $this->lstSucuDisp_Change();
+        //}
+        t('s6');
         $this->lstSucuDisp->Width = 250;
         $this->lstSucuDisp->Required = true;
         $this->lstSucuDisp->AddAction(new QChangeEvent(), new QAjaxAction('lstSucuDisp_Change'));
+        t('s7');
     }
 
 

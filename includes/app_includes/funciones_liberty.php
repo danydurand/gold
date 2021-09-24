@@ -2100,7 +2100,7 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
     $intParaSucu = isset($arrDatoCkpt['CodiSucu']) ? $arrDatoCkpt['CodiSucu'] : '';
     $intNotiCkpt = isset($arrDatoCkpt['NotiCkpt']) ? $arrDatoCkpt['NotiCkpt'] : null;
 
-    t('Voy a grabar un checkpoint en la pieza: '.$strNumePiez);
+    //t('Voy a grabar un checkpoint en la pieza: '.$strNumePiez);
 
     $arrResuGrab = array();
     $arrResuGrab['TodoOkey'] = true;
@@ -2123,13 +2123,13 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
     if ($objPiezProc) {
         t('Encontre la pieza');
         if ($blnGuiaAnul) {
-            t('La guia asociada al pieza fue eliminada...');
+            //t('La guia asociada al pieza fue eliminada...');
             $arrResuGrab['MotiNook'] = "Guia Eliminada. No Adtmite Incidencias";
             $arrResuGrab['TodoOkey'] = false;
             return $arrResuGrab;
         }
         if ($objPiezProc->tieneCheckpointDeCierre()) {
-            t('La pieza tiene checkpoint de cierre');
+            //t('La pieza tiene checkpoint de cierre');
             $arrResuGrab['MotiNook'] = "La Pieza ya cerro su ciclo. No Adtmite Incidencias";
             $arrResuGrab['TodoOkey'] = false;
             return $arrResuGrab;
@@ -2170,7 +2170,7 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
             t('Error grabando checkpoint a la pieza: '.$objPiezProc->Id.': '.$e->getMessage());
         }
 
-        t('Ckpt grabado en la Pieza, el Id es: '.$objPiezCkpt->Id);
+        //t('Ckpt grabado en la Pieza, el Id es: '.$objPiezCkpt->Id);
 
         if ($intNotiCkpt) {
             t('El checkpoint requiere ser notificado');

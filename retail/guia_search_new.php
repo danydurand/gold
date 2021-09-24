@@ -35,8 +35,9 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $chkPesoVolu;
     protected $txtUsuaCrea;
     protected $txtUbicFisi;
-    protected $btnExceFact;
+    protected $btnExceNorm;
     protected $btnExceReta;
+    protected $btnExceFact;
     protected $lstReceOrig;
 
     // Zona 3
@@ -48,6 +49,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $lstCodiCkpt;
     protected $txtSepaColu;
     protected $chkConxDesc;
+    protected $txtGuiaTran;
     protected $chkMostQuer;
 
 
@@ -75,6 +77,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->lstFormPago_Create();
         $this->lstCodiOrig_Create();
         $this->lstReceOrig_Create();
+
         $this->lstCodiDest_Create();
         $this->lstReceDest_Create();
         $this->lstCodiVend_Create();
@@ -84,11 +87,9 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->lstTariIdxx_Create();
         $this->txtUsuaPodx_Create();
         $this->txtRefeFact_Create();
-        //$this->txtUsuaCrea_Create();
+        $this->txtGuiaTran_Create();
         $this->txtUbicFisi_Create();
-        //$this->lstCodiCkpt_Create();
         $this->chkMostQuer_Create();
-        //$this->chkConxDesc_Create();
         $this->chkInclSubc_Create();
 
         // Botónes del Formulario //
@@ -96,6 +97,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->btnSave->Text = TextoIcono('search fa-lg','Buscar');
         $this->btnSave->ActionParameter = "B";
         $this->btnExceFact_Create();
+        $this->btnExceNorm_Create();
         $this->btnExceReta_Create();
         $this->txtSepaColu_Create();
 
@@ -299,6 +301,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtRefeFact->Width = 100;
     }
 
+    protected function txtGuiaTran_Create() {
+        $this->txtGuiaTran = new QTextBox($this);
+        $this->txtGuiaTran->Name = 'Guia-Transportista';
+        $this->txtGuiaTran->Width = 100;
+    }
+
     protected function txtUbicFisi_Create() {
         $this->txtUbicFisi = new QTextBox($this);
         $this->txtUbicFisi->Name = 'Ubicación Física';
@@ -333,6 +341,15 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->btnExceReta->HtmlEntities = false;
         $this->btnExceReta->CssClass = 'btn btn-outline-danger btn-sm';
         $this->btnExceReta->AddAction(new QClickEvent(), new QServerAction('btnSave_Click'));
+    }
+
+    protected function btnExceNorm_Create() {
+        $this->btnExceNorm = new QButtonP($this);
+        $this->btnExceNorm->Text = '<i class="fa fa-download fa-lg"></i> XLS';
+        $this->btnExceNorm->ActionParameter = "N";
+        $this->btnExceNorm->HtmlEntities = false;
+        $this->btnExceNorm->CssClass = 'btn btn-outline-success btn-sm';
+        $this->btnExceNorm->AddAction(new QClickEvent(), new QServerAction('btnSave_Click'));
     }
 
     protected function txtSepaColu_Create() {
@@ -446,41 +463,17 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         $this->mensaje();
-        $objUsuaPodx = null;
-        $objUsuaCrea = null;
-        $strMensMost = '';
-        $strCadeSqlx = "
-            select g.numero,
-                   g.tracking,
-                   g.cliente_retail_id,
-                   m.codigo_interno,
-                   date_format(g.created_at, '%Y-%m-%d') fech_guia,
-                   g.origen_id,
-                   g.receptoria_origen_id,
-                   g.destino_id,
-                   g.receptoria_destino_id,
-                   g.forma_pago,
-                   g.nombre_remitente remitente,
-                   g.nombre_destinatario,
-                   g.kilos,
-                   g.volumen,
-                   g.piezas,
-                   g.valor_declarado,
-                   ne.referencia,
-                   g.contenido,
-                   ta.descripcion
-              from guias g left join clientes_retail c
-                on g.cliente_retail_id = c.id
-                   left join master_cliente m
-                on m.codi_clie = g.cliente_corp_id
-                   left join usuario u
-                on g.created_by = u.codi_usua
-                   left join fac_tarifa ta
-                on g.tarifa_id = ta.id
-                   left join nota_entrega ne 
-                on g.nota_entrega_id = ne.id
-             where 1 = 1
-        ";
+        $objUsuaPodx  = null;
+        $objUsuaCrea  = null;
+        $strMensMost  = '';
+
+        //-----------------------------------------------------------------------
+        // En esta vista residen las guias y sus piezas con informacion general
+        //-----------------------------------------------------------------------
+        $strCadeSqlx  = "select * ";
+        $strCadeSqlx .= "  from v_info_guia_y_piezas ";
+        $strCadeSqlx .= " where 1 = 1 ";
+
         $objClausula = QQ::Clause();
         //------------------------------------------------------------------------------
         // Antes de armar el SQL, se verifica si se ha seteado un usuario en particular
@@ -505,7 +498,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $intUsuaPodx = $objUsuaPodx->CodiUsua;
             }
         }
-        $intRefeFact   = null;
+        $intRefeFact = null;
         if (strlen($this->txtRefeFact->Text)) {
             $strRefeFact = trim($this->txtRefeFact->Text);
             //---------------------------------------------------------------------------
@@ -523,32 +516,47 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $intRefeFact = $arrRefeFact[0]->Id;
             }
         }
+        $intGuiaTran = null;
+        if (strlen($this->txtGuiaTran->Text)) {
+            $strGuiaTran = trim($this->txtGuiaTran->Text);
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::GuiaTransportista()->Guia,$strGuiaTran);
+            $objAdicClau   = QQ::Clause();
+            $objAdicClau[] = QQ::LimitInfo(1);
+            $arrGuiaTran   = GuiaTransportista::QueryArray(QQ::AndCondition($objClauWher),$objAdicClau);
+            if (count($arrGuiaTran) == 0) {
+                $strMensMost = 'No existe la Guia-Transportista: <b>'.$strGuiaTran.'</b> !';
+                $blnTodoOkey = false;
+            } else {
+                $intGuiaTran = $arrGuiaTran[0]->GuiaPieza->Guia->Id;
+            }
+        }
         if ($blnTodoOkey) {
             //--------------------------------------------------------------------------------------------------
             // Se Arma el SQL para la busqueda de registros, comenzando con la determinación del tipo de envío.
             //--------------------------------------------------------------------------------------------------
             if (strlen($this->txtNumeGuia->Text)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->Numero,DejarSoloLosNumeros($this->txtNumeGuia->Text));
-                $strCadeSqlx  .= " and g.numero = '".$this->txtNumeGuia->Text."'";
+                $strCadeSqlx  .= " and numero = '".$this->txtNumeGuia->Text."'";
             }
             if (strlen($this->txtGuiaExte->Text)) {
                 $objClausula[] = QQ::Like(QQN::Guias()->Tracking,"%".$this->txtGuiaExte->Text."%");
-                $strCadeSqlx  .= " and g.tracking = '".$this->txtGuiaExte->Text."'";
+                $strCadeSqlx  .= " and tracking = '".$this->txtGuiaExte->Text."'";
             }
             if (!is_null($this->lstCodiClie->SelectedValue) && (!$this->chkInclSubc->Checked)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$this->lstCodiClie->SelectedValue);
-                $strCadeSqlx  .= " and g.cliente_corp_id = ".$this->lstCodiClie->SelectedValue;
+                $strCadeSqlx  .= " and cliente_corp_id = ".$this->lstCodiClie->SelectedValue;
             }
             if (!is_null($this->lstCodiProd->SelectedValue) && (!$this->chkInclSubc->Checked)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->ProductoId,$this->lstCodiProd->SelectedValue);
-                $strCadeSqlx  .= " and g.producto_id = ".$this->lstCodiProd->SelectedValue;
+                $strCadeSqlx  .= " and producto_id = ".$this->lstCodiProd->SelectedValue;
             }
             if (strlen($this->txtNotaEntr->Text) > 0) {
                 //--------------------------
                 // Manifiesto de Recepcion
                 //--------------------------
                 $objClausula[] = QQ::Equal(QQN::Guias()->NotaEntrega->Referencia,$this->txtNotaEntr->Text);
-                $strCadeSqlx  .= " and ne.referencia = ".$this->txtNotaEntr->Text;
+                $strCadeSqlx  .= " and referencia = ".$this->txtNotaEntr->Text;
             }
             if (strlen($this->txtNumeMast->Text) > 0) {
                 //-------------------------------
@@ -560,7 +568,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                     $arrGuiaMast = $objManiRuta->obtenerGuiasDeLaMaster();
                 }
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaMast);
-                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaMast).')';
+                $strCadeSqlx  .= " and guia_id in (".implode(',',$arrGuiaMast).')';
             }
             if ($this->chkInclSubc->Checked) {
                 if (!is_null($this->lstCodiClie->SelectedValue)) {
@@ -570,21 +578,21 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                         array_push($arrSubcClie,$objClieSele->CodiClie);
                         $strSubcClie   = implode(',',$arrSubcClie);
                         $objClausula[] = QQ::In(QQN::Guias()->ClienteCorpId,$arrSubcClie);
-                        $strCadeSqlx  .= " or g.cliente_corp_id in ($strSubcClie)";
+                        $strCadeSqlx  .= " or cliente_corp_id in ($strSubcClie)";
                     }
                 }
             }
             if (!is_null($this->calFechInic->DateTime)) {
                 $objClausula[] = QQ::GreaterOrEqual(QQN::Guias()->Fecha,$this->calFechInic->DateTime->__toString("YYYY-MM-DD 00:00:00"));
-                $strCadeSqlx  .= " and date(g.fecha) >= '".$this->calFechInic->DateTime->__toString("YYYY-MM-DD")."'";
+                $strCadeSqlx  .= " and date(fecha_guia) >= '".$this->calFechInic->DateTime->__toString("YYYY-MM-DD")."'";
             }
             if (!is_null($this->calFechFina->DateTime)) {
                 $objClausula[] = QQ::LessOrEqual(QQN::Guias()->Fecha,$this->calFechFina->DateTime->__toString("YYYY-MM-DD 23:59:59"));
-                $strCadeSqlx  .= " and (g.fecha) <= '".$this->calFechFina->DateTime->__toString("YYYY-MM-DD")."'";
+                $strCadeSqlx  .= " and date(fecha_guia) <= '".$this->calFechFina->DateTime->__toString("YYYY-MM-DD")."'";
             }
             if (!is_null($this->lstFormPago->SelectedValue)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->FormaPago, $this->lstFormPago->SelectedValue);
-                $strCadeSqlx  .= " and g.forma_pago = ".$this->lstFormPago->SelectedValue;
+                $strCadeSqlx  .= " and forma_pago = ".$this->lstFormPago->SelectedValue;
             }
             if (strlen($this->txtUbicFisi->Text)) {
                 //----------------------------------------------------------------------------
@@ -592,49 +600,53 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 //----------------------------------------------------------------------------
                 $arrGuiaIdxx   = GuiaPiezas::EnEstaUbicacion($this->txtUbicFisi->Text);
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaIdxx);
-                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaIdxx).")";
+                $strCadeSqlx  .= " and guia_id in (".implode(',',$arrGuiaIdxx).")";
             }
             if (!is_null($this->lstCodiOrig->SelectedValue)) {
                 $objClausula[]= QQ::Equal(QQN::Guias()->OrigenId,$this->lstCodiOrig->SelectedValue);
-                $strCadeSqlx  .= " and g.origen_id = '".$this->lstCodiOrig->SelectedValue."'";
+                $strCadeSqlx  .= " and origen_id = '".$this->lstCodiOrig->SelectedValue."'";
             }
             if (!is_null($this->lstReceOrig->SelectedValue)) {
                 $objClausula[]= QQ::Equal(QQN::Guias()->ReceptoriaOrigenId,$this->lstReceOrig->SelectedValue);
-                $strCadeSqlx  .= " and g.receptoria_origen_id = '".$this->lstReceOrig->SelectedValue."'";
+                $strCadeSqlx  .= " and receptoria_origen_id = '".$this->lstReceOrig->SelectedValue."'";
             }
             if (!is_null($this->lstCodiDest->SelectedValue)) {
                 $objClausula[]= QQ::Equal(QQN::Guias()->DestinoId,$this->lstCodiDest->SelectedValue);
-                $strCadeSqlx  .= " and g.destino_id = '".$this->lstCodiDest->SelectedValue."'";
+                $strCadeSqlx  .= " and destino_id = '".$this->lstCodiDest->SelectedValue."'";
             }
             if (!is_null($this->lstReceDest->SelectedValue)) {
                 $objClausula[]= QQ::Equal(QQN::Guias()->ReceptoriaDestinoId,$this->lstReceDest->SelectedValue);
-                $strCadeSqlx  .= " and g.receptoria_destino_id = '".$this->lstReceDest->SelectedValue."'";
+                $strCadeSqlx  .= " and receptoria_destino_id = '".$this->lstReceDest->SelectedValue."'";
             }
             if (!is_null($this->lstCodiVend->SelectedValue)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->VendedorId,$this->lstCodiVend->SelectedValue);
-                $strCadeSqlx  .= " and g.vendedor_id = ".$this->lstCodiVend->SelectedValue;
+                $strCadeSqlx  .= " and vendedor_id = ".$this->lstCodiVend->SelectedValue;
             }
             if (!is_null($this->calEntrInic->DateTime)) {
                 $arrGuiaSele   = Guias::ConCheckpointEnFechaInicial('OK',$this->calEntrInic->DateTime->__toString("YYYY-MM-DD"));
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
-                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
+                $strCadeSqlx  .= " and guia_id in (".implode(',',$arrGuiaSele).")";
             }
             if (!is_null($this->calEntrFina->DateTime)) {
                 $arrGuiaSele   = Guias::ConCheckpointEnFechaFinal('OK',$this->calEntrInic->DateTime->__toString("YYYY-MM-DD"));
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
-                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
+                $strCadeSqlx  .= " and guia_id in (".implode(',',$arrGuiaSele).")";
             }
             if (strlen($this->txtUsuaPodx->Text)) {
                 $arrGuiaSele   = Guias::ConCheckpointRegistradoPor('OK',$intUsuaPodx);
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaSele);
-                $strCadeSqlx  .= " and g.id in (".implode(',',$arrGuiaSele).")";
+                $strCadeSqlx  .= " and guia_id in (".implode(',',$arrGuiaSele).")";
             }
             if (!is_null($intRefeFact)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->FacturaId,$intRefeFact);
-                $strCadeSqlx  .= " and g.factura_id = $intRefeFact";
+                $strCadeSqlx  .= " and factura_id = $intRefeFact";
+            }
+            if (!is_null($intGuiaTran)) {
+                $objClausula[] = QQ::Equal(QQN::Guias()->Id,$intGuiaTran);
+                $strCadeSqlx  .= " and guia_id = $intGuiaTran";
             }
             $objClausula[] = QQ::IsNull(QQN::Guias()->DeletedBy);
-            $strCadeSqlx  .= " and g.deleted_by IS NULL ";
+            $strCadeSqlx  .= " and deleted_by IS NULL ";
             if ($this->chkMostQuer->Checked) {
                 echo $strCadeSqlx;
                 return;
@@ -654,17 +666,21 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                                 $_SESSION['ProgEspe'] = basename($_SERVER['SCRIPT_FILENAME']);
                                 QApplication::Redirect('guias_list.php');
                                 break;
+                            case 'N':
+                                //--------------------------
+                                // Formato de Guias Normal
+                                //--------------------------
+                                $_SESSION['SepaColu'] = ';';
+                                $_SESSION['SepaColu'] = '|';
+                                $_SESSION['CondWher'] = serialize($objClausula);
+                                $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
+                                QApplication::Redirect('repo_guias_normal.php');
+                                break;
                             case 'F':
                                 //----------------------
                                 // Formato Facturacion
                                 //----------------------
-                                $_SESSION['SepaColu'] = ';';
-                                $strSepaColu = $this->txtSepaColu->Text;
-                                if (strlen($strSepaColu) > 0) {
-                                    if (in_array($strSepaColu,array(',',';','|','*'))) {
-                                        $_SESSION['SepaColu'] = $strSepaColu;
-                                    }
-                                }
+                                $_SESSION['SepaColu'] = '|';
                                 $_SESSION['CondWher'] = serialize($objClausula);
                                 $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
                                 QApplication::Redirect('repo_guias_facturacion.php');
@@ -673,13 +689,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                                 //-------------------
                                 // Reporte en Excel
                                 //-------------------
-                                $_SESSION['SepaColu'] = ';';
-                                $strSepaColu = $this->txtSepaColu->Text;
-                                if (strlen($strSepaColu) > 0) {
-                                    if (in_array($strSepaColu,array(',',';','|','*'))) {
-                                        $_SESSION['SepaColu'] = $strSepaColu;
-                                    }
-                                }
+                                $_SESSION['SepaColu'] = '|';
                                 $_SESSION['CondWher'] = serialize($objClausula);
                                 $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
                                 QApplication::Redirect('repo_guias_xls_sql.php');
