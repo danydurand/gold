@@ -33,8 +33,6 @@
 	 * @property string $TelefonoRemitente the value for strTelefonoRemitente (Not Null)
 	 * @property string $TelefonoMovilRemitente the value for strTelefonoMovilRemitente 
 	 * @property string $EmailRemitente the value for strEmailRemitente 
-	 * @property string $SexoRemitente the value for strSexoRemitente 
-	 * @property string $CedulaRifDestinatario the value for strCedulaRifDestinatario 
 	 * @property string $NombreDestinatario the value for strNombreDestinatario (Not Null)
 	 * @property string $DireccionDestinatario the value for strDireccionDestinatario (Not Null)
 	 * @property string $TelefonoDestinatario the value for strTelefonoDestinatario (Not Null)
@@ -261,24 +259,6 @@
 		protected $strEmailRemitente;
 		const EmailRemitenteMaxLength = 100;
 		const EmailRemitenteDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column guias.sexo_remitente
-		 * @var string strSexoRemitente
-		 */
-		protected $strSexoRemitente;
-		const SexoRemitenteMaxLength = 1;
-		const SexoRemitenteDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column guias.cedula_rif_destinatario
-		 * @var string strCedulaRifDestinatario
-		 */
-		protected $strCedulaRifDestinatario;
-		const CedulaRifDestinatarioMaxLength = 20;
-		const CedulaRifDestinatarioDefault = null;
 
 
 		/**
@@ -929,8 +909,6 @@
 			$this->strTelefonoRemitente = Guias::TelefonoRemitenteDefault;
 			$this->strTelefonoMovilRemitente = Guias::TelefonoMovilRemitenteDefault;
 			$this->strEmailRemitente = Guias::EmailRemitenteDefault;
-			$this->strSexoRemitente = Guias::SexoRemitenteDefault;
-			$this->strCedulaRifDestinatario = Guias::CedulaRifDestinatarioDefault;
 			$this->strNombreDestinatario = Guias::NombreDestinatarioDefault;
 			$this->strDireccionDestinatario = Guias::DireccionDestinatarioDefault;
 			$this->strTelefonoDestinatario = Guias::TelefonoDestinatarioDefault;
@@ -1331,8 +1309,6 @@
 			    $objBuilder->AddSelectItem($strTableName, 'telefono_remitente', $strAliasPrefix . 'telefono_remitente');
 			    $objBuilder->AddSelectItem($strTableName, 'telefono_movil_remitente', $strAliasPrefix . 'telefono_movil_remitente');
 			    $objBuilder->AddSelectItem($strTableName, 'email_remitente', $strAliasPrefix . 'email_remitente');
-			    $objBuilder->AddSelectItem($strTableName, 'sexo_remitente', $strAliasPrefix . 'sexo_remitente');
-			    $objBuilder->AddSelectItem($strTableName, 'cedula_rif_destinatario', $strAliasPrefix . 'cedula_rif_destinatario');
 			    $objBuilder->AddSelectItem($strTableName, 'nombre_destinatario', $strAliasPrefix . 'nombre_destinatario');
 			    $objBuilder->AddSelectItem($strTableName, 'direccion_destinatario', $strAliasPrefix . 'direccion_destinatario');
 			    $objBuilder->AddSelectItem($strTableName, 'telefono_destinatario', $strAliasPrefix . 'telefono_destinatario');
@@ -1553,12 +1529,6 @@
 			$strAlias = $strAliasPrefix . 'email_remitente';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strEmailRemitente = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'sexo_remitente';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strSexoRemitente = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'cedula_rif_destinatario';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCedulaRifDestinatario = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'nombre_destinatario';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strNombreDestinatario = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -2579,8 +2549,6 @@
 							`telefono_remitente`,
 							`telefono_movil_remitente`,
 							`email_remitente`,
-							`sexo_remitente`,
-							`cedula_rif_destinatario`,
 							`nombre_destinatario`,
 							`direccion_destinatario`,
 							`telefono_destinatario`,
@@ -2637,8 +2605,6 @@
 							' . $objDatabase->SqlVariable($this->strTelefonoRemitente) . ',
 							' . $objDatabase->SqlVariable($this->strTelefonoMovilRemitente) . ',
 							' . $objDatabase->SqlVariable($this->strEmailRemitente) . ',
-							' . $objDatabase->SqlVariable($this->strSexoRemitente) . ',
-							' . $objDatabase->SqlVariable($this->strCedulaRifDestinatario) . ',
 							' . $objDatabase->SqlVariable($this->strNombreDestinatario) . ',
 							' . $objDatabase->SqlVariable($this->strDireccionDestinatario) . ',
 							' . $objDatabase->SqlVariable($this->strTelefonoDestinatario) . ',
@@ -2754,8 +2720,6 @@
 							`telefono_remitente` = ' . $objDatabase->SqlVariable($this->strTelefonoRemitente) . ',
 							`telefono_movil_remitente` = ' . $objDatabase->SqlVariable($this->strTelefonoMovilRemitente) . ',
 							`email_remitente` = ' . $objDatabase->SqlVariable($this->strEmailRemitente) . ',
-							`sexo_remitente` = ' . $objDatabase->SqlVariable($this->strSexoRemitente) . ',
-							`cedula_rif_destinatario` = ' . $objDatabase->SqlVariable($this->strCedulaRifDestinatario) . ',
 							`nombre_destinatario` = ' . $objDatabase->SqlVariable($this->strNombreDestinatario) . ',
 							`direccion_destinatario` = ' . $objDatabase->SqlVariable($this->strDireccionDestinatario) . ',
 							`telefono_destinatario` = ' . $objDatabase->SqlVariable($this->strTelefonoDestinatario) . ',
@@ -2980,8 +2944,6 @@
 			$this->strTelefonoRemitente = $objReloaded->strTelefonoRemitente;
 			$this->strTelefonoMovilRemitente = $objReloaded->strTelefonoMovilRemitente;
 			$this->strEmailRemitente = $objReloaded->strEmailRemitente;
-			$this->strSexoRemitente = $objReloaded->strSexoRemitente;
-			$this->strCedulaRifDestinatario = $objReloaded->strCedulaRifDestinatario;
 			$this->strNombreDestinatario = $objReloaded->strNombreDestinatario;
 			$this->strDireccionDestinatario = $objReloaded->strDireccionDestinatario;
 			$this->strTelefonoDestinatario = $objReloaded->strTelefonoDestinatario;
@@ -3168,20 +3130,6 @@
 					 * @return string
 					 */
 					return $this->strEmailRemitente;
-
-				case 'SexoRemitente':
-					/**
-					 * Gets the value for strSexoRemitente 
-					 * @return string
-					 */
-					return $this->strSexoRemitente;
-
-				case 'CedulaRifDestinatario':
-					/**
-					 * Gets the value for strCedulaRifDestinatario 
-					 * @return string
-					 */
-					return $this->strCedulaRifDestinatario;
 
 				case 'NombreDestinatario':
 					/**
@@ -4041,32 +3989,6 @@
 					 */
 					try {
 						return ($this->strEmailRemitente = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'SexoRemitente':
-					/**
-					 * Sets the value for strSexoRemitente 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strSexoRemitente = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CedulaRifDestinatario':
-					/**
-					 * Sets the value for strCedulaRifDestinatario 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCedulaRifDestinatario = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -6165,8 +6087,6 @@
 			$strToReturn .= '<element name="TelefonoRemitente" type="xsd:string"/>';
 			$strToReturn .= '<element name="TelefonoMovilRemitente" type="xsd:string"/>';
 			$strToReturn .= '<element name="EmailRemitente" type="xsd:string"/>';
-			$strToReturn .= '<element name="SexoRemitente" type="xsd:string"/>';
-			$strToReturn .= '<element name="CedulaRifDestinatario" type="xsd:string"/>';
 			$strToReturn .= '<element name="NombreDestinatario" type="xsd:string"/>';
 			$strToReturn .= '<element name="DireccionDestinatario" type="xsd:string"/>';
 			$strToReturn .= '<element name="TelefonoDestinatario" type="xsd:string"/>';
@@ -6285,10 +6205,6 @@
 				$objToReturn->strTelefonoMovilRemitente = $objSoapObject->TelefonoMovilRemitente;
 			if (property_exists($objSoapObject, 'EmailRemitente'))
 				$objToReturn->strEmailRemitente = $objSoapObject->EmailRemitente;
-			if (property_exists($objSoapObject, 'SexoRemitente'))
-				$objToReturn->strSexoRemitente = $objSoapObject->SexoRemitente;
-			if (property_exists($objSoapObject, 'CedulaRifDestinatario'))
-				$objToReturn->strCedulaRifDestinatario = $objSoapObject->CedulaRifDestinatario;
 			if (property_exists($objSoapObject, 'NombreDestinatario'))
 				$objToReturn->strNombreDestinatario = $objSoapObject->NombreDestinatario;
 			if (property_exists($objSoapObject, 'DireccionDestinatario'))
@@ -6482,8 +6398,6 @@
 			$iArray['TelefonoRemitente'] = $this->strTelefonoRemitente;
 			$iArray['TelefonoMovilRemitente'] = $this->strTelefonoMovilRemitente;
 			$iArray['EmailRemitente'] = $this->strEmailRemitente;
-			$iArray['SexoRemitente'] = $this->strSexoRemitente;
-			$iArray['CedulaRifDestinatario'] = $this->strCedulaRifDestinatario;
 			$iArray['NombreDestinatario'] = $this->strNombreDestinatario;
 			$iArray['DireccionDestinatario'] = $this->strDireccionDestinatario;
 			$iArray['TelefonoDestinatario'] = $this->strTelefonoDestinatario;
@@ -6622,8 +6536,6 @@
      * @property-read QQNode $TelefonoRemitente
      * @property-read QQNode $TelefonoMovilRemitente
      * @property-read QQNode $EmailRemitente
-     * @property-read QQNode $SexoRemitente
-     * @property-read QQNode $CedulaRifDestinatario
      * @property-read QQNode $NombreDestinatario
      * @property-read QQNode $DireccionDestinatario
      * @property-read QQNode $TelefonoDestinatario
@@ -6739,10 +6651,6 @@
 					return new QQNode('telefono_movil_remitente', 'TelefonoMovilRemitente', 'VarChar', $this);
 				case 'EmailRemitente':
 					return new QQNode('email_remitente', 'EmailRemitente', 'VarChar', $this);
-				case 'SexoRemitente':
-					return new QQNode('sexo_remitente', 'SexoRemitente', 'VarChar', $this);
-				case 'CedulaRifDestinatario':
-					return new QQNode('cedula_rif_destinatario', 'CedulaRifDestinatario', 'VarChar', $this);
 				case 'NombreDestinatario':
 					return new QQNode('nombre_destinatario', 'NombreDestinatario', 'VarChar', $this);
 				case 'DireccionDestinatario':
@@ -6894,8 +6802,6 @@
      * @property-read QQNode $TelefonoRemitente
      * @property-read QQNode $TelefonoMovilRemitente
      * @property-read QQNode $EmailRemitente
-     * @property-read QQNode $SexoRemitente
-     * @property-read QQNode $CedulaRifDestinatario
      * @property-read QQNode $NombreDestinatario
      * @property-read QQNode $DireccionDestinatario
      * @property-read QQNode $TelefonoDestinatario
@@ -7011,10 +6917,6 @@
 					return new QQNode('telefono_movil_remitente', 'TelefonoMovilRemitente', 'string', $this);
 				case 'EmailRemitente':
 					return new QQNode('email_remitente', 'EmailRemitente', 'string', $this);
-				case 'SexoRemitente':
-					return new QQNode('sexo_remitente', 'SexoRemitente', 'string', $this);
-				case 'CedulaRifDestinatario':
-					return new QQNode('cedula_rif_destinatario', 'CedulaRifDestinatario', 'string', $this);
 				case 'NombreDestinatario':
 					return new QQNode('nombre_destinatario', 'NombreDestinatario', 'string', $this);
 				case 'DireccionDestinatario':

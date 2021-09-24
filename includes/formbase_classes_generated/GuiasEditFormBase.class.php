@@ -71,8 +71,6 @@ abstract class GuiasEditFormBase extends QForm {
 	protected $txtTelefonoRemitente;
 	protected $txtTelefonoMovilRemitente;
 	protected $txtEmailRemitente;
-	protected $txtSexoRemitente;
-	protected $txtCedulaRifDestinatario;
 	protected $txtNombreDestinatario;
 	protected $txtDireccionDestinatario;
 	protected $txtTelefonoDestinatario;
@@ -200,8 +198,6 @@ abstract class GuiasEditFormBase extends QForm {
 		$this->txtTelefonoRemitente = $this->mctGuias->txtTelefonoRemitente_Create();
 		$this->txtTelefonoMovilRemitente = $this->mctGuias->txtTelefonoMovilRemitente_Create();
 		$this->txtEmailRemitente = $this->mctGuias->txtEmailRemitente_Create();
-		$this->txtSexoRemitente = $this->mctGuias->txtSexoRemitente_Create();
-		$this->txtCedulaRifDestinatario = $this->mctGuias->txtCedulaRifDestinatario_Create();
 		$this->txtNombreDestinatario = $this->mctGuias->txtNombreDestinatario_Create();
 		$this->txtDireccionDestinatario = $this->mctGuias->txtDireccionDestinatario_Create();
 		$this->txtTelefonoDestinatario = $this->mctGuias->txtTelefonoDestinatario_Create();

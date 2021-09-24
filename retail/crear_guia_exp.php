@@ -210,8 +210,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
             if ($this->objDestPmnx) {
                 $this->blnEditDest = true;
-                t('Cedula del Deestinatario: '.$this->objGuia->CedulaDestinatario);
-                t('Nombre: '.$this->objDestPmnx->Nombre);
             }
 
             //--------------------------------------------------------
@@ -289,7 +287,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //------------------------
         $this->lstSucuDest_Create();
         $this->lstServExpo_Create();
-        //$this->lstServExpo = disableControl($this->lstServExpo);
         $this->lstReceDest_Create();
 
         //t('k3');
@@ -404,7 +401,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         } else {
             $this->txtNumeCedu->SetFocus();
         }
-
+        //t('k9');
     }
 
 
@@ -462,8 +459,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTeleFijo = new QTextBox($this);
         $this->txtTeleFijo->Placeholder = 'Ej: 02123782514';
         $this->txtTeleFijo->Width = 120;
-        if ($this->blnEditMode  && $this->objClieReta) {
-            $this->txtTeleFijo->Text = $this->objClieReta->TelefonoFijo;
+        if ($this->blnEditMode) {
+            $this->txtTeleFijo->Text = $this->objGuia->TelefonoRemitente;
         }
     }
 
@@ -471,8 +468,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTeleMovi = new QTextBox($this);
         $this->txtTeleMovi->Placeholder = 'Ej: 04241238715';
         $this->txtTeleMovi->Width = 120;
-        if ($this->blnEditMode && $this->objClieReta) {
-            $this->txtTeleMovi->Text = $this->objClieReta->TelefonoMovil;
+        if ($this->blnEditMode) {
+            t('Tlf Movil Remi: '.$this->objGuia->TelefonoMovilRemitente);
+            $this->txtTeleMovi->Text = $this->objGuia->TelefonoMovilRemitente;
         }
     }
 
@@ -505,7 +503,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtEmaiRemi->Width = 260;
         $this->txtEmaiRemi->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
         if ($this->blnEditMode) {
-            $this->txtEmaiRemi->Text = $this->objGuia->ClienteRetail->Email;
+            $this->txtEmaiRemi->Text = $this->objGuia->EmailRemitente;
         }
     }
 
@@ -627,8 +625,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $blnSeleMasc = false;
         $blnSeleFeme = false;
         if ($this->blnEditMode) {
-            $blnSeleMasc = $this->objDestPmnx->Sexo == 'M' ? true : false;
-            $blnSeleFeme = $this->objDestPmnx->Sexo == 'F' ? true : false;
+            $blnSeleMasc = $this->objGuia->SexoDestinatario == 'M' ? true : false;
+            $blnSeleFeme = $this->objGuia->SexoDestinatario == 'F' ? true : false;
         }
         $this->lstSexoDest->AddItem('- Selec -',null);
         $this->lstSexoDest->AddItem('MASCULINO','M', $blnSeleMasc);
@@ -646,7 +644,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTlfdFijo->Placeholder = 'Ej: 02125261498';
         $this->txtTlfdFijo->Width = 120;
         if ($this->blnEditMode) {
-            $this->txtTlfdFijo->Text = $this->objDestPmnx->TelefonoFijo;
+            $this->txtTlfdFijo->Text = $this->objGuia->TelefonoDestinatario;
         }
     }
 
@@ -655,7 +653,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtTlfdMovi->Placeholder = 'Ej: 04162513678';
         $this->txtTlfdMovi->Width = 120;
         if ($this->blnEditMode) {
-            $this->txtTlfdMovi->Text = $this->objDestPmnx->TelefonoMovil;
+            $this->txtTlfdMovi->Text = $this->objGuia->TelefonoMovilDestinatario;
         }
     }
 
@@ -665,8 +663,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtEmaiDest->Width = 260;
         $this->txtEmaiDest->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
         if ($this->blnEditMode) {
-            t('Email de: '.$this->objDestPmnx->Nombre.' = '.$this->objDestPmnx->Email);
-            $this->txtEmaiDest->Text = $this->objDestPmnx->Email;
+            $this->txtEmaiDest->Text = $this->objGuia->EmailDestinatario;
         }
     }
 
@@ -1989,32 +1986,34 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         // Si los datos del Destinatario no existen, se almacenan en la base de datos, para futuros envios.
         //  En caso de que exista, se actualizan sus datos.
         //---------------------------------------------------------------------------------------------------
-        try {
-            if (!$this->objDestPmnx) {
-                $this->objDestPmnx = new ClientesRetail();
-                $this->objDestPmnx->CedulaRif = DejarNumerosVJGuion($this->txtCeduDest->Text);
+        if (strlen(trim($this->txtCeduDest->Text))) {
+            try {
+                if (!$this->objDestPmnx) {
+                    $this->objDestPmnx = new ClientesRetail();
+                    $this->objDestPmnx->CedulaRif = DejarNumerosVJGuion($this->txtCeduDest->Text);
+                }
+                $this->objDestPmnx->Nombre        = substr(limpiarCadena($this->txtNombDest->Text),0,100);
+                $this->objDestPmnx->TelefonoFijo  = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
+                $this->objDestPmnx->TelefonoMovil = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
+                $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
+                $this->objDestPmnx->Email         = substr(strtolower($this->txtEmaiDest->Text),0,100);
+                $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
+                $this->objDestPmnx->Direccion     = substr(limpiarCadena($this->txtDireDest->Text),0,250);
+                $this->objDestPmnx->Estado        = $this->txtEstaDest->Text;
+                $this->objDestPmnx->Ciudad        = $this->txtCiudDest->Text;
+                $this->objDestPmnx->CodigoPostal  = $this->txtPostDest->Text;
+                if (!$this->blnEditDest) {
+                    $this->objDestPmnx->SucursalId   = $this->objUsuario->SucursalId;
+                    $this->objDestPmnx->CreatedBy    = $this->objUsuario->CodiUsua;
+                }
+                $this->objDestPmnx->Save();
+            } catch (Exception $e) {
+                t('Error guardando Destinatario: '.$e->getMessage());
+                $this->danger($e->getMessage());
+                return;
             }
-            $this->objDestPmnx->Nombre        = substr(limpiarCadena($this->txtNombDest->Text),0,100);
-            $this->objDestPmnx->TelefonoFijo  = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
-            $this->objDestPmnx->TelefonoMovil = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
-            $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
-            $this->objDestPmnx->Email         = substr(strtolower($this->txtEmaiDest->Text),0,191);
-            $this->objDestPmnx->Sexo          = $this->lstSexoDest->SelectedValue;
-            $this->objDestPmnx->Direccion     = substr(limpiarCadena($this->txtDireDest->Text),0,250);
-            $this->objDestPmnx->Estado        = $this->txtEstaDest->Text;
-            $this->objDestPmnx->Ciudad        = $this->txtCiudDest->Text;
-            $this->objDestPmnx->CodigoPostal  = $this->txtPostDest->Text;
-            if (!$this->blnEditDest) {
-                $this->objDestPmnx->SucursalId   = $this->objUsuario->SucursalId;
-                $this->objDestPmnx->CreatedBy    = $this->objUsuario->CodiUsua;
-            }
-            $this->objDestPmnx->Save();
-        } catch (Exception $e) {
-            t('Error guardando Destinatario: '.$e->getMessage());
-            $this->danger($e->getMessage());
-            return;
+            t('Destinatario almacenado');
         }
-        t('Destinatario almacenado');
 
     }
 
@@ -2268,30 +2267,35 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->objGuia->OrigenId           = $this->intSucuOrig;
                 $this->objGuia->ReceptoriaOrigenId = $this->intReceOrig;
             }
-            $this->objGuia->ServicioEntrega       = 'DOM';
-            $this->objGuia->DestinoId             = $this->lstSucuDest->SelectedValue;
-            $this->objGuia->ReceptoriaDestinoId   = !is_null($this->lstReceDest->SelectedValue) ? $this->lstReceDest->SelectedValue : null;
-            $this->objGuia->NombreRemitente       = $this->txtNombClie->Text;
-            $this->objGuia->DireccionRemitente    = $this->txtDireClie->Text;
-            $this->objGuia->TelefonoRemitente     = DejarSoloLosNumeros($this->txtTeleMovi->Text);
-            $this->objGuia->NombreDestinatario    = $this->txtNombDest->Text;
-            $this->objGuia->DireccionDestinatario = $this->txtDireDest->Text;
-            $this->objGuia->CedulaDestinatario    = DejarNumerosVJGuion($this->txtCeduDest->Text);
-            $this->objGuia->TelefonoDestinatario  = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
-            $this->objGuia->Piezas                = $this->txtCantPiez->Text;
-            $this->objGuia->FormaPago             = $this->lstFormPago->SelectedValue;
-            $this->objGuia->ValorDeclarado        = str_replace(",", '', $this->txtValoDecl->Text);
-            $this->objGuia->Asegurado             = $this->lstEnviSgro->SelectedValue;
-            $this->objGuia->Observacion           = '';
-            $this->objGuia->VendedorId            = $this->objClieNaci->VendedorId;
-            $this->objGuia->Contenido             = '';
-            $this->objGuia->Kilos                 = 0;
-            $this->objGuia->Estado                = $this->txtEstaDest->Text;
-            $this->objGuia->Ciudad                = $this->txtCiudDest->Text;
-            $this->objGuia->CodigoPostal          = $this->txtPostDest->Text;
-            $this->objGuia->TipoExport            = 'COURIER';
-            $this->objGuia->ProductoId            = $objProdExpo->Id;
-            $this->objGuia->ClienteCorpId         = $this->lstClieCorp->SelectedValue;
+            $this->objGuia->ServicioEntrega           = 'DOM';
+            $this->objGuia->DestinoId                 = $this->lstSucuDest->SelectedValue;
+            $this->objGuia->ReceptoriaDestinoId       = !is_null($this->lstReceDest->SelectedValue) ? $this->lstReceDest->SelectedValue : null;
+            $this->objGuia->NombreRemitente           = $this->txtNombClie->Text;
+            $this->objGuia->DireccionRemitente        = $this->txtDireClie->Text;
+            $this->objGuia->TelefonoRemitente         = DejarSoloLosNumeros($this->txtTeleFijo->Text);
+            $this->objGuia->TelefonoMovilRemitente    = DejarSoloLosNumeros($this->txtTeleMovi->Text);
+            $this->objGuia->EmailRemitente            = strtolower($this->txtEmaiRemi->Text);
+            $this->objGuia->CedulaDestinatario        = DejarNumerosVJGuion($this->txtCeduDest->Text);
+            $this->objGuia->NombreDestinatario        = $this->txtNombDest->Text;
+            $this->objGuia->DireccionDestinatario     = $this->txtDireDest->Text;
+            $this->objGuia->TelefonoDestinatario      = DejarSoloLosNumeros($this->txtTlfdFijo->Text);
+            $this->objGuia->TelefonoMovilDestinatario = DejarSoloLosNumeros($this->txtTlfdMovi->Text);
+            $this->objGuia->EmailDestinatario         = strtolower($this->txtEmaiDest->Text);
+            $this->objGuia->SexoDestinatario          = $this->lstSexoDest->SelectedValue;
+            $this->objGuia->Piezas                    = $this->txtCantPiez->Text;
+            $this->objGuia->FormaPago                 = $this->lstFormPago->SelectedValue;
+            $this->objGuia->ValorDeclarado            = str_replace(",", '', $this->txtValoDecl->Text);
+            $this->objGuia->Asegurado                 = $this->lstEnviSgro->SelectedValue;
+            $this->objGuia->Observacion               = '';
+            $this->objGuia->VendedorId                = $this->objClieNaci->VendedorId;
+            $this->objGuia->Contenido                 = '';
+            $this->objGuia->Kilos                     = 0;
+            $this->objGuia->Estado                    = $this->txtEstaDest->Text;
+            $this->objGuia->Ciudad                    = $this->txtCiudDest->Text;
+            $this->objGuia->CodigoPostal              = $this->txtPostDest->Text;
+            $this->objGuia->TipoExport                = 'COURIER';
+            $this->objGuia->ProductoId                = $objProdExpo->Id;
+            $this->objGuia->ClienteCorpId             = $this->lstClieCorp->SelectedValue;
 
             if (!$this->blnEditMode) {
                 //------------------------------------------------------------------------
