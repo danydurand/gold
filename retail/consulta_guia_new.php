@@ -612,7 +612,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblTeleRemi_Create() {
         $this->lblTeleRemi = new QLabel($this);
         $this->lblTeleRemi->Name = 'Tlf. Remitente';
-        $this->lblTeleRemi->Text = substr($this->objGuia->TelefonoRemitente,0,15);
+        $this->lblTeleRemi->Text = substr($this->objGuia->TelefonoMovilRemitente,0,15);
         $this->lblTeleRemi->ToolTip = $this->objGuia->TelefonoRemitente;
     }
 
@@ -682,7 +682,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblTeleDest_Create() {
         $this->lblTeleDest = new QLabel($this);
         $this->lblTeleDest->Name = 'Tlf. Destinatario';
-        $this->lblTeleDest->Text = $this->objGuia->TelefonoDestinatario;
+        $this->lblTeleDest->Text = $this->objGuia->TelefonoMovilDestinatario;
     }
 
     // -------- Costos del Servicio -------- //
@@ -1063,17 +1063,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
             $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
-            $strNombForm = 'guia_exportacion.php';
 
             $_SESSION['GuiaImpr'] = serialize($this->objGuia);
             $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
 
             $html2pdf->pdf->SetDisplayMode('fullpage');
+            //$html2pdf->setModeDebug();
             $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
             ob_start();
             foreach ($arrPiezGuia as $objPiezGuia) {
                 $_SESSION['PiezGuia'] = serialize($objPiezGuia);
-                include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+                include dirname(__FILE__) . '/rhtml/guia_exportacion.php';
             }
             $content = ob_get_clean();
 

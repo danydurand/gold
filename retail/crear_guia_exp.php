@@ -222,7 +222,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $objPiezTemp = new PiezasTemp();
                 $objPiezTemp->ProcesoErrorId = $this->objProcEjec->Id;
                 $objPiezTemp->PiezaId        = $objPiezGuia->Id;
-                $objPiezTemp->Descripcion    = trim($objPiezGuia->Descripcion);
+                $objPiezTemp->Descripcion    = substr(trim($objPiezGuia->Descripcion),0,50);
                 $objPiezTemp->Kilos          = $objPiezGuia->Kilos;
                 $objPiezTemp->Alto           = $objPiezGuia->Alto;
                 $objPiezTemp->Ancho          = $objPiezGuia->Ancho;
@@ -1127,6 +1127,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function btnSavePiez_Click() {
         $intCantRepe = strlen($this->txtRepePiez->Text) ? (int)$this->txtRepePiez->Text : 1;
+        $decValoPiez = (float)$this->txtValoPiez->Text;
+        $decValoDecl = $decValoPiez / $intCantRepe;
         for ($i = 0; $i < $intCantRepe; $i++) {
             if (!$this->blnEditPiez) {
                 t('Estoy en modo insercion');
@@ -1151,13 +1153,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $decLargPiez *= 2.54;
                 }
 
-                $objPiezGuia->Descripcion    = strtoupper(limpiarCadena($this->txtContPiez->Text));
+                $objPiezGuia->Descripcion    = substr(strtoupper(limpiarCadena($this->txtContPiez->Text)),0,50);
                 $objPiezGuia->Kilos          = (float)$this->txtKiloPiez->Text;
                 $objPiezGuia->Alto           = $decAltoPiez;
                 $objPiezGuia->Ancho          = $decAnchPiez;
                 $objPiezGuia->Largo          = $decLargPiez;
                 $objPiezGuia->Volumen        = (float)$this->txtVoluPiez->Text;
-                $objPiezGuia->ValorDeclarado = (float)$this->txtValoPiez->Text;
+                $objPiezGuia->ValorDeclarado = $decValoDecl;
                 $objPiezGuia->PiesCub        = (float)$this->txtPiesPiez->Text;
                 $objPiezGuia->Save();
                 t('Salve en PiezasTemp');
@@ -1181,7 +1183,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtRepePiez->Text = 1;
         $this->txtPiesPiez->Text = '';
 
-        //$this->success('Transaccion Exitosa.  Pieza guardada !!!');
+        $this->success('Transaccion Exitosa.  Pieza guardada !!!');
     }
 
     protected function btnDelePiez_Click() {
@@ -1196,8 +1198,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if ($this->txtCantPiez->Text == 0) {
             // Ya no quedan piezas, por lo tanto se establece el modo insercion
             $this->blnEditPiez = false;
-            $this->btnDelePiez->Visible = false;
         }
+        $this->btnDelePiez->Visible = false;
 
 
         $this->dtgPiezTemp->Refresh();
@@ -2140,15 +2142,16 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $strDescCont = '';
         $this->objGuia->borrarPiezas();
         $arrPiezTemp = PiezasTemp::LoadArrayByProcesoErrorId($this->objProcEjec->Id);
+        $strDescAnte = '';
         //t('Hay '.count($arrPiezTemp).' piezas en la tabla temporal');
         foreach ($arrPiezTemp as $objPiezTemp) {
-            if ($objPiezTemp->Kilos > 0) {
+            if ($objPiezTemp->Alto > 0) {
                 //t('Procesando pieza: '.$intCantPiez);
                 try {
                     $objGuiaPiez = new GuiaPiezas();
                     $objGuiaPiez->GuiaId         = $this->objGuia->Id;
                     $objGuiaPiez->IdPieza        = $this->objGuia->proximoIdPieza();
-                    $objGuiaPiez->Descripcion    = $objPiezTemp->Descripcion;
+                    $objGuiaPiez->Descripcion    = substr($objPiezTemp->Descripcion,0,50);
                     $objGuiaPiez->Kilos          = $objPiezTemp->Kilos;
                     $objGuiaPiez->Alto           = $objPiezTemp->Alto;
                     $objGuiaPiez->Ancho          = $objPiezTemp->Ancho;
@@ -2158,11 +2161,15 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $objGuiaPiez->PiesCub        = $objPiezTemp->PiesCub;
                     $objGuiaPiez->Save();
                     //t('Pieza guardada');
-                    $strSepaPiez = '';
-                    if ($intCantPiez > 0) {
-                        $strSepaPiez = ' | ';
+                    if (trim($strDescAnte) != trim($objGuiaPiez->Descripcion)) {
+                        t('Desc Anterio: '.$strDescAnte.' Descripcion de la Pieza: '.$objGuiaPiez->Descripcion);
+                        $strSepaPiez = '';
+                        if (strlen($strDescCont) > 0) {
+                            $strSepaPiez = ' | ';
+                        }
+                        $strDescCont .= $strSepaPiez.$objGuiaPiez->Descripcion;
+                        $strDescAnte  = $objGuiaPiez->Descripcion;
                     }
-                    $strDescCont .= $strSepaPiez.$objGuiaPiez->Descripcion;
                     $decSumaKilo += $objGuiaPiez->Kilos;
                     $decSumaAlto += $objGuiaPiez->Alto;
                     $decSumaAnch += $objGuiaPiez->Ancho;
@@ -2181,17 +2188,21 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //-------------------------------------------------------------------
         // Se actualiza la descripcion del contenido y los kilos de la Guia
         //-------------------------------------------------------------------
-        $this->objGuia->Contenido      = $strDescCont;
-        $this->objGuia->Piezas         = $intCantPiez;
-        $this->objGuia->Kilos          = $decSumaKilo;
-        $this->objGuia->Alto           = $decSumaAlto;
-        $this->objGuia->Ancho          = $decSumaAnch;
-        $this->objGuia->Largo          = $decSumaLarg;
-        $this->objGuia->Volumen        = $decSumaVolu;
-        $this->objGuia->ValorDeclarado = $decSumaValo;
-        $this->objGuia->PiesCub        = $decSumaPies;
-        $this->objGuia->Save();
-        //t('Guia actualizada');
+        try {
+            $this->objGuia->Contenido      = substr($strDescCont,0,100);
+            $this->objGuia->Piezas         = $intCantPiez;
+            $this->objGuia->Kilos          = $decSumaKilo;
+            $this->objGuia->Alto           = $decSumaAlto;
+            $this->objGuia->Ancho          = $decSumaAnch;
+            $this->objGuia->Largo          = $decSumaLarg;
+            $this->objGuia->Volumen        = $decSumaVolu;
+            $this->objGuia->ValorDeclarado = $decSumaValo;
+            $this->objGuia->PiesCub        = $decSumaPies;
+            $this->objGuia->Save();
+            t('Guia actualizada');
+        } catch (Exception $e) {
+            t('Error: '.$e->getMessage());
+        }
     }
 
     protected function sumaPiezas() {
@@ -2205,15 +2216,21 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $decSumaPies = 0;
         $strDescCont = '';
         $arrPiezTemp = PiezasTemp::LoadArrayByProcesoErrorId($this->objProcEjec->Id);
-        t('Hay '.count($arrPiezTemp).' pieza(s)');
+        $strDescAnte = '';
+        //t('Hay '.count($arrPiezTemp).' pieza(s)');
         foreach ($arrPiezTemp as $objPiezTemp) {
             if ($objPiezTemp->Alto > 0) {
-                t('Procesando pieza: '.$intCantPiez);
-                $strSepaPiez = '';
-                if ($intCantPiez > 0) {
-                    $strSepaPiez = ' | ';
+                //t('Procesando pieza: '.$intCantPiez);
+                if (trim($strDescAnte) != trim($objPiezTemp->Descripcion)) {
+                    //t('Desc Ante: '.$strDescAnte.' Desc de la Pieza: '.$objPiezTemp->Descripcion);
+                    $strSepaPiez = '';
+                    if (strlen($strDescCont) > 0) {
+                        //t('Hay algo en la descripcion del contenido: '.$strDescCont);
+                        $strSepaPiez = ' | ';
+                    }
+                    $strDescCont .= $strSepaPiez.$objPiezTemp->Descripcion;
+                    $strDescAnte  = $objPiezTemp->Descripcion;
                 }
-                $strDescCont .= $strSepaPiez.$objPiezTemp->Descripcion;
                 $decSumaKilo += $objPiezTemp->Kilos;
                 $decSumaAlto += $objPiezTemp->Alto;
                 $decSumaAnch += $objPiezTemp->Ancho;
@@ -2222,10 +2239,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $decSumaValo += $objPiezTemp->ValorDeclarado;
                 $decSumaPies += $objPiezTemp->PiesCub;
                 $intCantPiez++;
-                t('acumulando...');
+                //t('acumulando...');
             }
         }
-        t('Termine la piezas, voy a actualizar la guia');
+        //t('Termine la piezas, voy a actualizar la guia');
         //-------------------------------------------------------------------
         // Se actualiza la descripcion del contenido y los kilos de la Guia
         //-------------------------------------------------------------------
@@ -2236,7 +2253,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchEnvi->Text = $decSumaAnch;
         $this->txtLargEnvi->Text = $decSumaLarg;
         $this->txtVoluEnvi->Text = $decSumaVolu;
-        $this->txtValoDecl->Text = $decSumaValo;
+        $this->txtValoDecl->Text = round($decSumaValo,2);
         $this->txtPiesEnvi->Text = $decSumaPies;
     }
 

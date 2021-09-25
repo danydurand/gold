@@ -16,7 +16,7 @@ $strFechGuia = $objGuiaImpr->Fecha->__toString("DD/MM/YYYY");
 $strNombRemi = $objGuiaImpr->NombreRemitente;
 $strCeduRifx = $objGuiaImpr->ClienteRetail->CedulaRif;
 
-$intMaxiTama = 48;
+$intMaxiTama = 46;
 $strDireRemi = $objGuiaImpr->DireccionRemitente;
 $strDireRem1 = $objGuiaImpr->DireccionRemitente;
 $strDireRem2 = '';
@@ -26,13 +26,16 @@ if ($intTamaRemi > $intMaxiTama) {
     $strDireRem2 = substr($strDireRemi,$intMaxiTama,$intMaxiTama);
 }
 
-$strTeleRemi = $objGuiaImpr->TelefonoRemitente;
+$strTeleRemi = $objGuiaImpr->TelefonoMovilRemitente;
+if (strlen($objGuiaImpr->TelefonoRemitente)) {
+    $strTeleRemi .= ' | '.$objGuiaImpr->TelefonoRemitente;
+}
 $strEmaiRemi = $objGuiaImpr->ClienteRetail->Email;
 $intCantPiez = $objGuiaImpr->Piezas;
 $strSucuOrig = $objGuiaImpr->Origen->Iata;
 $strNombDest = $objGuiaImpr->NombreDestinatario;
 
-$intMaxiTama = 48;
+$intMaxiTama = 46;
 $strDireDest = $objGuiaImpr->DireccionDestinatario;
 t('La direccion de destino es: '.$strDireDest);
 $strDireDes1 = $objGuiaImpr->DireccionDestinatario;
@@ -46,7 +49,10 @@ if ($strTamaDest > $intMaxiTama) {
     t('2da parte; '.$strDireDes2);
 }
 
-$strTeleDest = $objGuiaImpr->TelefonoDestinatario;
+$strTeleDest = $objGuiaImpr->TelefonoMovilDestinatario;
+if (strlen($objGuiaImpr->TelefonoDestinatario)) {
+    $strTeleDest .= ' | '.$objGuiaImpr->TelefonoDestinatario;
+}
 $strCeduDest = $objGuiaImpr->CedulaDestinatario;
 $strSucuDest = $objGuiaImpr->Destino->Iata;
 $strServEntr = $objGuiaImpr->ServicioEntrega;
