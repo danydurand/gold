@@ -61,8 +61,8 @@ abstract class PiezaCheckpointsEditFormBase extends QForm {
 	protected $txtHora;
 	protected $txtComentario;
 	protected $lstRuta;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
 
@@ -139,8 +139,8 @@ abstract class PiezaCheckpointsEditFormBase extends QForm {
 		$this->txtHora = $this->mctPiezaCheckpoints->txtHora_Create();
 		$this->txtComentario = $this->mctPiezaCheckpoints->txtComentario_Create();
 		$this->lstRuta = $this->mctPiezaCheckpoints->lstRuta_Create();
-		$this->lblCreatedAt = $this->mctPiezaCheckpoints->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctPiezaCheckpoints->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctPiezaCheckpoints->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctPiezaCheckpoints->calUpdatedAt_Create();
 		$this->txtCreatedBy = $this->mctPiezaCheckpoints->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctPiezaCheckpoints->txtUpdatedBy_Create();
 

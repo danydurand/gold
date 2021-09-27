@@ -80,8 +80,8 @@ abstract class CounterEditFormBase extends QForm {
 	protected $txtDependeDe;
 	protected $chkDomOrigen;
 	protected $chkDomDestino;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -179,8 +179,8 @@ abstract class CounterEditFormBase extends QForm {
 		$this->txtDependeDe = $this->mctCounter->txtDependeDe_Create();
 		$this->chkDomOrigen = $this->mctCounter->chkDomOrigen_Create();
 		$this->chkDomDestino = $this->mctCounter->chkDomDestino_Create();
-		$this->lblCreatedAt = $this->mctCounter->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctCounter->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctCounter->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctCounter->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctCounter->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctCounter->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctCounter->txtUpdatedBy_Create();

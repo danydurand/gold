@@ -80,7 +80,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblMontCanc;
     protected $txtTextCome;
     protected $lblNotaEntr;
-    protected $lblServEntr;
+    protected $lblClieCorp;
     protected $lblNumeFact;
 
     // Parámetros de Posición //
@@ -189,6 +189,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 $this->ImprimirAcuerdoDeLiberacion();
             }
         }
+        if ($strAcciPlus == 'fc') {
+            if ($this->objGuia) {
+                $this->ImprimirFacturaComercial();
+            }
+        }
         if ($strAcciPlus == 'ca') {
             if ($this->objGuia) {
                 $this->ImprimirCartaAntiDroga();
@@ -204,6 +209,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
+        t('g1');
         $this->SetupValores();
 
         $this->determinarPosicion();
@@ -212,6 +218,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         $this->lblSistGuia_Create();
 
+        t('g2');
         //---- Remitente ---- //
         $this->lblSucuOrig_Create();
         $this->lblNombRemi_Create();
@@ -220,6 +227,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblEmaiRemi_Create();
         $this->lblProfRemi_Create();
 
+        t('g3');
         // ---- Destinatario ---- //
         $this->lblSucuDest_Create();
         $this->lblNombDest_Create();
@@ -229,6 +237,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblCiudDest_Create();
         $this->lblCodiPost_Create();
 
+        t('g4');
         // - Costos del Servicio - //
         $this->lblTipoTari_Create();
         $this->lblSeguGuia_Create();
@@ -247,13 +256,15 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblTextObse_Create();
         $this->lblMediEnvi_Create();
         $this->lblCreaPorx_Create();
+        t('g5.6');
         $this->lblFechHora_Create();
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
-        $this->lblServEntr_Create();
+        $this->lblClieCorp_Create();
         $this->lblNumeFact_Create();
         $this->lblPesoAlte_Create();
 
+        t('g6');
         // Para cargar el POD
         $this->lblQuieReci_Create();
         $this->txtQuieReci_Create();
@@ -269,12 +280,14 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblBotoPopu_Create();
         $this->lblPopuModa_Create();
 
+        t('g8');
         $this->dtgGuiaCkpt_Create();
 
         $this->dtgRegiTrab_Create();
         $this->dtgConcGuia_Create();
         $this->dtgPiezGuia_Create();
 
+        t('g9');
         //--------------------
         // Botónes Regulares
         //--------------------
@@ -395,6 +408,10 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__ . '/consulta_guia_new.php/' . $this->objGuia->Id . '/co',
                 TextoIcono('print', 'Acuerdo L.R. y Carta A.D.')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__ . '/consulta_guia_new.php/' . $this->objGuia->Id . '/fc',
+                TextoIcono('newspaper-o', 'Factura Comercial')
             );
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/lr',
@@ -805,7 +822,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
     protected function lblMediEnvi_Create() {
-        $strMediEnvi = $this->objGuia->Alto.' / '.$this->objGuia->Ancho.' / '.$this->objGuia->Largo;
+        $strMediEnvi = $this->objGuia->Alto.'/'.$this->objGuia->Ancho.'/'.$this->objGuia->Largo;
         $this->lblMediEnvi = new QLabel($this);
         $this->lblMediEnvi->Text = $strMediEnvi;
     }
@@ -822,8 +839,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function lblFechHora_Create() {
         $this->lblFechHora = new QLabel($this);
-        $this->lblFechHora->Text = substr($this->objGuia->CreatedAt,0,10);
-        $this->lblFechHora->ToolTip = $this->objGuia->CreatedAt;
+        $this->lblFechHora->Text = $this->objGuia->CreatedAt->__toString("DD/MM/YYYY");
     }
 
     protected function txtTextCome_Create() {
@@ -836,12 +852,19 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function lblNotaEntr_Create() {
         $this->lblNotaEntr = new QLabel($this);
-        $this->lblNotaEntr->Text = $this->objGuia->NotaEntregaId ? $this->objGuia->NotaEntrega->Referencia : null;
+        $this->lblNotaEntr->Text = $this->objGuia->NotaEntregaId
+            ? $this->objGuia->NotaEntrega->Referencia
+            : null;
     }
 
-    protected function lblServEntr_Create() {
-        $this->lblServEntr = new QLabel($this);
-        $this->lblServEntr->Text = strlen($this->objGuia->ServicioEntrega) ? $this->objGuia->ServicioEntrega : null;
+    protected function lblClieCorp_Create() {
+        $this->lblClieCorp = new QLabel($this);
+        $this->lblClieCorp->ToolTip = !is_null($this->objGuia->ClienteCorpId)
+            ? $this->objGuia->ClienteCorp->NombClie
+            : null;
+        $this->lblClieCorp->Text = !is_null($this->objGuia->ClienteCorpId)
+            ? substr($this->objGuia->ClienteCorp->NombClie,0,15)
+            : null;
     }
 
     protected function lblNumeFact_Create() {
@@ -1087,6 +1110,43 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
     }
 
+
+    protected function ImprimirGuiaExportacionMP()
+    {
+        $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
+        $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+        try {
+            $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
+
+            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
+            $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
+
+            $intTamaLote = 3;
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            //$html2pdf->setModeDebug();
+            $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+            $intCantPiez = count($arrPiezGuia);
+            if ($intCantPiez > $intTamaLote) {
+                $intCantLote = $intCantPiez / $intTamaLote;
+            } else {
+                ob_start();
+                foreach ($arrPiezGuia as $objPiezGuia) {
+                    $_SESSION['PiezGuia'] = serialize($objPiezGuia);
+                    include dirname(__FILE__) . '/rhtml/guia_exportacion.php';
+                }
+                $content = ob_get_clean();
+            }
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+    }
+
     protected function ImprimirAcuerdoDeLiberacion()
     {
         try {
@@ -1100,6 +1160,30 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $html2pdf->pdf->SetDisplayMode('fullpage');
             ob_start();
             include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+    }
+
+    protected function ImprimirFacturaComercial()
+    {
+        try {
+            $strNombArch = 'FC' . $this->objGuia->Numero . '.pdf';
+            $strPosiHoja = 'P';
+
+            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
+
+            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/factura_comercial.php';
             $content = ob_get_clean();
 
             $html2pdf->writeHTML($content);

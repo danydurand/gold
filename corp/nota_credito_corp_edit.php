@@ -55,8 +55,8 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->txtMaquinaFiscal = $this->mctNotaCreditoCorp->txtMaquinaFiscal_Create();
 		$this->txtFechaImpresion = $this->mctNotaCreditoCorp->txtFechaImpresion_Create();
 		$this->txtHoraImpresion = $this->mctNotaCreditoCorp->txtHoraImpresion_Create();
-		$this->lblCreatedAt = $this->mctNotaCreditoCorp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaCreditoCorp->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctNotaCreditoCorp->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctNotaCreditoCorp->calUpdatedAt_Create();
 		$this->txtCreatedBy = $this->mctNotaCreditoCorp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctNotaCreditoCorp->txtUpdatedBy_Create();
 

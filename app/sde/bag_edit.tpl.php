@@ -26,8 +26,8 @@
 				<?php $this->txtLibras->RenderWithName(); ?>
 				<?php $this->txtVolumen->RenderWithName(); ?>
 				<?php $this->txtValor->RenderWithName(); ?>
-				<?php $this->lblCreatedAt->RenderWithName(); ?>
-				<?php $this->lblUpdatedAt->RenderWithName(); ?>
+				<?php $this->calCreatedAt->RenderWithName(); ?>
+				<?php $this->calUpdatedAt->RenderWithName(); ?>
 				<?php $this->txtCreatedBy->RenderWithName(); ?>
 				<?php $this->txtUpdatedBy->RenderWithName(); ?>
 	<?php $this->dtgGuiaPiezasesAsPieza->RenderWithName(true); ?>

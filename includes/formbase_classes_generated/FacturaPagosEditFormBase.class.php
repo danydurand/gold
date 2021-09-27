@@ -63,8 +63,8 @@ abstract class FacturaPagosEditFormBase extends QForm {
 	protected $txtMontoUsd;
 	protected $txtMontoBs;
 	protected $lstCaja;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -145,8 +145,8 @@ abstract class FacturaPagosEditFormBase extends QForm {
 		$this->txtMontoUsd = $this->mctFacturaPagos->txtMontoUsd_Create();
 		$this->txtMontoBs = $this->mctFacturaPagos->txtMontoBs_Create();
 		$this->lstCaja = $this->mctFacturaPagos->lstCaja_Create();
-		$this->lblCreatedAt = $this->mctFacturaPagos->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctFacturaPagos->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctFacturaPagos->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctFacturaPagos->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctFacturaPagos->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctFacturaPagos->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctFacturaPagos->txtUpdatedBy_Create();

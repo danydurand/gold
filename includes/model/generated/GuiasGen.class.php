@@ -68,9 +68,11 @@
 	 * @property integer $GuiaPodId the value for intGuiaPodId 
 	 * @property integer $NotaEntregaId the value for intNotaEntregaId 
 	 * @property string $Observacion the value for strObservacion 
-	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
-	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
-	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
+	 * @property string $ReferenciaExp the value for strReferenciaExp 
+	 * @property string $RazonesExp the value for strRazonesExp 
+	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
+	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
+	 * @property QDateTime $DeletedAt the value for dttDeletedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property integer $DeletedBy the value for intDeletedBy 
@@ -555,26 +557,44 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column guias.created_at
-		 * @var string strCreatedAt
+		 * Protected member variable that maps to the database column guias.referencia_exp
+		 * @var string strReferenciaExp
 		 */
-		protected $strCreatedAt;
+		protected $strReferenciaExp;
+		const ReferenciaExpMaxLength = 20;
+		const ReferenciaExpDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias.razones_exp
+		 * @var string strRazonesExp
+		 */
+		protected $strRazonesExp;
+		const RazonesExpMaxLength = 100;
+		const RazonesExpDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias.created_at
+		 * @var QDateTime dttCreatedAt
+		 */
+		protected $dttCreatedAt;
 		const CreatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column guias.updated_at
-		 * @var string strUpdatedAt
+		 * @var QDateTime dttUpdatedAt
 		 */
-		protected $strUpdatedAt;
+		protected $dttUpdatedAt;
 		const UpdatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column guias.deleted_at
-		 * @var string strDeletedAt
+		 * @var QDateTime dttDeletedAt
 		 */
-		protected $strDeletedAt;
+		protected $dttDeletedAt;
 		const DeletedAtDefault = null;
 
 
@@ -944,9 +964,11 @@
 			$this->intGuiaPodId = Guias::GuiaPodIdDefault;
 			$this->intNotaEntregaId = Guias::NotaEntregaIdDefault;
 			$this->strObservacion = Guias::ObservacionDefault;
-			$this->strCreatedAt = Guias::CreatedAtDefault;
-			$this->strUpdatedAt = Guias::UpdatedAtDefault;
-			$this->strDeletedAt = Guias::DeletedAtDefault;
+			$this->strReferenciaExp = Guias::ReferenciaExpDefault;
+			$this->strRazonesExp = Guias::RazonesExpDefault;
+			$this->dttCreatedAt = (Guias::CreatedAtDefault === null)?null:new QDateTime(Guias::CreatedAtDefault);
+			$this->dttUpdatedAt = (Guias::UpdatedAtDefault === null)?null:new QDateTime(Guias::UpdatedAtDefault);
+			$this->dttDeletedAt = (Guias::DeletedAtDefault === null)?null:new QDateTime(Guias::DeletedAtDefault);
 			$this->intCreatedBy = Guias::CreatedByDefault;
 			$this->intUpdatedBy = Guias::UpdatedByDefault;
 			$this->intDeletedBy = Guias::DeletedByDefault;
@@ -1344,6 +1366,8 @@
 			    $objBuilder->AddSelectItem($strTableName, 'guia_pod_id', $strAliasPrefix . 'guia_pod_id');
 			    $objBuilder->AddSelectItem($strTableName, 'nota_entrega_id', $strAliasPrefix . 'nota_entrega_id');
 			    $objBuilder->AddSelectItem($strTableName, 'observacion', $strAliasPrefix . 'observacion');
+			    $objBuilder->AddSelectItem($strTableName, 'referencia_exp', $strAliasPrefix . 'referencia_exp');
+			    $objBuilder->AddSelectItem($strTableName, 'razones_exp', $strAliasPrefix . 'razones_exp');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'deleted_at', $strAliasPrefix . 'deleted_at');
@@ -1634,15 +1658,21 @@
 			$strAlias = $strAliasPrefix . 'observacion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strObservacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'referencia_exp';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strReferenciaExp = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'razones_exp';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strRazonesExp = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'updated_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strUpdatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'deleted_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strDeletedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttDeletedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'created_by';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCreatedBy = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -2584,6 +2614,11 @@
 							`guia_pod_id`,
 							`nota_entrega_id`,
 							`observacion`,
+							`referencia_exp`,
+							`razones_exp`,
+							`created_at`,
+							`updated_at`,
+							`deleted_at`,
 							`created_by`,
 							`updated_by`,
 							`deleted_by`
@@ -2640,6 +2675,11 @@
 							' . $objDatabase->SqlVariable($this->intGuiaPodId) . ',
 							' . $objDatabase->SqlVariable($this->intNotaEntregaId) . ',
 							' . $objDatabase->SqlVariable($this->strObservacion) . ',
+							' . $objDatabase->SqlVariable($this->strReferenciaExp) . ',
+							' . $objDatabase->SqlVariable($this->strRazonesExp) . ',
+							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttDeletedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -2652,51 +2692,6 @@
 					// Perform an UPDATE query
 
 					// First checking for Optimistic Locking constraints (if applicable)
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`created_at`
-							FROM
-								`guias`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strCreatedAt)
-							throw new QOptimisticLockingException('Guias');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`updated_at`
-							FROM
-								`guias`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strUpdatedAt)
-							throw new QOptimisticLockingException('Guias');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`deleted_at`
-							FROM
-								`guias`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strDeletedAt)
-							throw new QOptimisticLockingException('Guias');
-					}
 
 					// Perform the UPDATE query
 					$objDatabase->NonQuery('
@@ -2755,6 +2750,11 @@
 							`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intGuiaPodId) . ',
 							`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intNotaEntregaId) . ',
 							`observacion` = ' . $objDatabase->SqlVariable($this->strObservacion) . ',
+							`referencia_exp` = ' . $objDatabase->SqlVariable($this->strReferenciaExp) . ',
+							`razones_exp` = ' . $objDatabase->SqlVariable($this->strRazonesExp) . ',
+							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
+							`deleted_at` = ' . $objDatabase->SqlVariable($this->dttDeletedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							`deleted_by` = ' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -2792,42 +2792,6 @@
 			// Update __blnRestored and any Non-Identity PK Columns (if applicable)
 			$this->__blnRestored = true;
 
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`created_at`
-				FROM
-					`guias`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strCreatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`updated_at`
-				FROM
-					`guias`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strUpdatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`deleted_at`
-				FROM
-					`guias`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strDeletedAt = $objRow[0];
 
 			$this->DeleteCache();
 
@@ -2979,9 +2943,11 @@
 			$this->GuiaPodId = $objReloaded->GuiaPodId;
 			$this->NotaEntregaId = $objReloaded->NotaEntregaId;
 			$this->strObservacion = $objReloaded->strObservacion;
-			$this->strCreatedAt = $objReloaded->strCreatedAt;
-			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
-			$this->strDeletedAt = $objReloaded->strDeletedAt;
+			$this->strReferenciaExp = $objReloaded->strReferenciaExp;
+			$this->strRazonesExp = $objReloaded->strRazonesExp;
+			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
+			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
+			$this->dttDeletedAt = $objReloaded->dttDeletedAt;
 			$this->intCreatedBy = $objReloaded->intCreatedBy;
 			$this->intUpdatedBy = $objReloaded->intUpdatedBy;
 			$this->intDeletedBy = $objReloaded->intDeletedBy;
@@ -3376,26 +3342,40 @@
 					 */
 					return $this->strObservacion;
 
-				case 'CreatedAt':
+				case 'ReferenciaExp':
 					/**
-					 * Gets the value for strCreatedAt (Read-Only Timestamp)
+					 * Gets the value for strReferenciaExp 
 					 * @return string
 					 */
-					return $this->strCreatedAt;
+					return $this->strReferenciaExp;
+
+				case 'RazonesExp':
+					/**
+					 * Gets the value for strRazonesExp 
+					 * @return string
+					 */
+					return $this->strRazonesExp;
+
+				case 'CreatedAt':
+					/**
+					 * Gets the value for dttCreatedAt 
+					 * @return QDateTime
+					 */
+					return $this->dttCreatedAt;
 
 				case 'UpdatedAt':
 					/**
-					 * Gets the value for strUpdatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttUpdatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strUpdatedAt;
+					return $this->dttUpdatedAt;
 
 				case 'DeletedAt':
 					/**
-					 * Gets the value for strDeletedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttDeletedAt 
+					 * @return QDateTime
 					 */
-					return $this->strDeletedAt;
+					return $this->dttDeletedAt;
 
 				case 'CreatedBy':
 					/**
@@ -4451,6 +4431,71 @@
 					 */
 					try {
 						return ($this->strObservacion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ReferenciaExp':
+					/**
+					 * Sets the value for strReferenciaExp 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strReferenciaExp = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'RazonesExp':
+					/**
+					 * Sets the value for strRazonesExp 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strRazonesExp = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'CreatedAt':
+					/**
+					 * Sets the value for dttCreatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttCreatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UpdatedAt':
+					/**
+					 * Sets the value for dttUpdatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttUpdatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'DeletedAt':
+					/**
+					 * Sets the value for dttDeletedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttDeletedAt = QType::Cast($mixValue, QType::DateTime));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -6122,9 +6167,11 @@
 			$strToReturn .= '<element name="GuiaPod" type="xsd1:GuiaPod"/>';
 			$strToReturn .= '<element name="NotaEntrega" type="xsd1:NotaEntrega"/>';
 			$strToReturn .= '<element name="Observacion" type="xsd:string"/>';
-			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
+			$strToReturn .= '<element name="ReferenciaExp" type="xsd:string"/>';
+			$strToReturn .= '<element name="RazonesExp" type="xsd:string"/>';
+			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="DeletedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="UpdatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="DeletedBy" type="xsd:int"/>';
@@ -6282,12 +6329,16 @@
 				$objToReturn->NotaEntrega = NotaEntrega::GetObjectFromSoapObject($objSoapObject->NotaEntrega);
 			if (property_exists($objSoapObject, 'Observacion'))
 				$objToReturn->strObservacion = $objSoapObject->Observacion;
+			if (property_exists($objSoapObject, 'ReferenciaExp'))
+				$objToReturn->strReferenciaExp = $objSoapObject->ReferenciaExp;
+			if (property_exists($objSoapObject, 'RazonesExp'))
+				$objToReturn->strRazonesExp = $objSoapObject->RazonesExp;
 			if (property_exists($objSoapObject, 'CreatedAt'))
-				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
+				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
-				$objToReturn->strUpdatedAt = $objSoapObject->UpdatedAt;
+				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
 			if (property_exists($objSoapObject, 'DeletedAt'))
-				$objToReturn->strDeletedAt = $objSoapObject->DeletedAt;
+				$objToReturn->dttDeletedAt = new QDateTime($objSoapObject->DeletedAt);
 			if (property_exists($objSoapObject, 'CreatedBy'))
 				$objToReturn->intCreatedBy = $objSoapObject->CreatedBy;
 			if (property_exists($objSoapObject, 'UpdatedBy'))
@@ -6366,6 +6417,12 @@
 				$objObject->objNotaEntrega = NotaEntrega::GetSoapObjectFromObject($objObject->objNotaEntrega, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intNotaEntregaId = null;
+			if ($objObject->dttCreatedAt)
+				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttUpdatedAt)
+				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttDeletedAt)
+				$objObject->dttDeletedAt = $objObject->dttDeletedAt->qFormat(QDateTime::FormatSoap);
 			return $objObject;
 		}
 
@@ -6433,9 +6490,11 @@
 			$iArray['GuiaPodId'] = $this->intGuiaPodId;
 			$iArray['NotaEntregaId'] = $this->intNotaEntregaId;
 			$iArray['Observacion'] = $this->strObservacion;
-			$iArray['CreatedAt'] = $this->strCreatedAt;
-			$iArray['UpdatedAt'] = $this->strUpdatedAt;
-			$iArray['DeletedAt'] = $this->strDeletedAt;
+			$iArray['ReferenciaExp'] = $this->strReferenciaExp;
+			$iArray['RazonesExp'] = $this->strRazonesExp;
+			$iArray['CreatedAt'] = $this->dttCreatedAt;
+			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
+			$iArray['DeletedAt'] = $this->dttDeletedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedBy'] = $this->intUpdatedBy;
 			$iArray['DeletedBy'] = $this->intDeletedBy;
@@ -6578,6 +6637,8 @@
      * @property-read QQNode $NotaEntregaId
      * @property-read QQNodeNotaEntrega $NotaEntrega
      * @property-read QQNode $Observacion
+     * @property-read QQNode $ReferenciaExp
+     * @property-read QQNode $RazonesExp
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -6735,12 +6796,16 @@
 					return new QQNodeNotaEntrega('nota_entrega_id', 'NotaEntrega', 'Integer', $this);
 				case 'Observacion':
 					return new QQNode('observacion', 'Observacion', 'VarChar', $this);
+				case 'ReferenciaExp':
+					return new QQNode('referencia_exp', 'ReferenciaExp', 'VarChar', $this);
+				case 'RazonesExp':
+					return new QQNode('razones_exp', 'RazonesExp', 'VarChar', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
+					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'DeletedAt':
-					return new QQNode('deleted_at', 'DeletedAt', 'VarChar', $this);
+					return new QQNode('deleted_at', 'DeletedAt', 'DateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
 				case 'UpdatedBy':
@@ -6844,6 +6909,8 @@
      * @property-read QQNode $NotaEntregaId
      * @property-read QQNodeNotaEntrega $NotaEntrega
      * @property-read QQNode $Observacion
+     * @property-read QQNode $ReferenciaExp
+     * @property-read QQNode $RazonesExp
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -7001,12 +7068,16 @@
 					return new QQNodeNotaEntrega('nota_entrega_id', 'NotaEntrega', 'integer', $this);
 				case 'Observacion':
 					return new QQNode('observacion', 'Observacion', 'string', $this);
+				case 'ReferenciaExp':
+					return new QQNode('referencia_exp', 'ReferenciaExp', 'string', $this);
+				case 'RazonesExp':
+					return new QQNode('razones_exp', 'RazonesExp', 'string', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'string', $this);
+					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'DeletedAt':
-					return new QQNode('deleted_at', 'DeletedAt', 'string', $this);
+					return new QQNode('deleted_at', 'DeletedAt', 'QDateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
 				case 'UpdatedBy':

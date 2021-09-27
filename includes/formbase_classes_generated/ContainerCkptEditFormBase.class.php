@@ -61,8 +61,8 @@ abstract class ContainerCkptEditFormBase extends QForm {
 	protected $txtHora;
 	protected $lstUsuario;
 	protected $txtObservacion;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
 
@@ -139,8 +139,8 @@ abstract class ContainerCkptEditFormBase extends QForm {
 		$this->txtHora = $this->mctContainerCkpt->txtHora_Create();
 		$this->lstUsuario = $this->mctContainerCkpt->lstUsuario_Create();
 		$this->txtObservacion = $this->mctContainerCkpt->txtObservacion_Create();
-		$this->lblCreatedAt = $this->mctContainerCkpt->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctContainerCkpt->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctContainerCkpt->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctContainerCkpt->calUpdatedAt_Create();
 		$this->txtCreatedBy = $this->mctContainerCkpt->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctContainerCkpt->txtUpdatedBy_Create();
 

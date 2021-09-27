@@ -82,8 +82,8 @@ abstract class NotaEntregaEditFormBase extends QForm {
 	protected $txtValorDeclarado;
 	protected $txtObservacion;
 	protected $txtRelacionSobrantes;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -183,8 +183,8 @@ abstract class NotaEntregaEditFormBase extends QForm {
 		$this->txtValorDeclarado = $this->mctNotaEntrega->txtValorDeclarado_Create();
 		$this->txtObservacion = $this->mctNotaEntrega->txtObservacion_Create();
 		$this->txtRelacionSobrantes = $this->mctNotaEntrega->txtRelacionSobrantes_Create();
-		$this->lblCreatedAt = $this->mctNotaEntrega->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaEntrega->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctNotaEntrega->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctNotaEntrega->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctNotaEntrega->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctNotaEntrega->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctNotaEntrega->txtUpdatedBy_Create();

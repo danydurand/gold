@@ -23,8 +23,8 @@
 	 * @property string $Hora the value for strHora (Not Null)
 	 * @property integer $UsuarioId the value for intUsuarioId (Not Null)
 	 * @property string $Observacion the value for strObservacion 
-	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
-	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
+	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
+	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property Containers $Container the value for the Containers object referenced by intContainerId (Not Null)
@@ -107,17 +107,17 @@
 
 		/**
 		 * Protected member variable that maps to the database column container_ckpt.created_at
-		 * @var string strCreatedAt
+		 * @var QDateTime dttCreatedAt
 		 */
-		protected $strCreatedAt;
+		protected $dttCreatedAt;
 		const CreatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column container_ckpt.updated_at
-		 * @var string strUpdatedAt
+		 * @var QDateTime dttUpdatedAt
 		 */
-		protected $strUpdatedAt;
+		protected $dttUpdatedAt;
 		const UpdatedAtDefault = null;
 
 
@@ -214,8 +214,8 @@
 			$this->strHora = ContainerCkpt::HoraDefault;
 			$this->intUsuarioId = ContainerCkpt::UsuarioIdDefault;
 			$this->strObservacion = ContainerCkpt::ObservacionDefault;
-			$this->strCreatedAt = ContainerCkpt::CreatedAtDefault;
-			$this->strUpdatedAt = ContainerCkpt::UpdatedAtDefault;
+			$this->dttCreatedAt = (ContainerCkpt::CreatedAtDefault === null)?null:new QDateTime(ContainerCkpt::CreatedAtDefault);
+			$this->dttUpdatedAt = (ContainerCkpt::UpdatedAtDefault === null)?null:new QDateTime(ContainerCkpt::UpdatedAtDefault);
 			$this->intCreatedBy = ContainerCkpt::CreatedByDefault;
 			$this->intUpdatedBy = ContainerCkpt::UpdatedByDefault;
 		}
@@ -722,10 +722,10 @@
 			$objToReturn->strObservacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'updated_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strUpdatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'created_by';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCreatedBy = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1052,6 +1052,8 @@
 							`hora`,
 							`usuario_id`,
 							`observacion`,
+							`created_at`,
+							`updated_at`,
 							`created_by`,
 							`updated_by`
 						) VALUES (
@@ -1062,6 +1064,8 @@
 							' . $objDatabase->SqlVariable($this->strHora) . ',
 							' . $objDatabase->SqlVariable($this->intUsuarioId) . ',
 							' . $objDatabase->SqlVariable($this->strObservacion) . ',
+							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						)
@@ -1073,36 +1077,6 @@
 					// Perform an UPDATE query
 
 					// First checking for Optimistic Locking constraints (if applicable)
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`created_at`
-							FROM
-								`container_ckpt`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strCreatedAt)
-							throw new QOptimisticLockingException('ContainerCkpt');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`updated_at`
-							FROM
-								`container_ckpt`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strUpdatedAt)
-							throw new QOptimisticLockingException('ContainerCkpt');
-					}
 
 					// Perform the UPDATE query
 					$objDatabase->NonQuery('
@@ -1116,6 +1090,8 @@
 							`hora` = ' . $objDatabase->SqlVariable($this->strHora) . ',
 							`usuario_id` = ' . $objDatabase->SqlVariable($this->intUsuarioId) . ',
 							`observacion` = ' . $objDatabase->SqlVariable($this->strObservacion) . ',
+							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						WHERE
@@ -1132,30 +1108,6 @@
 			// Update __blnRestored and any Non-Identity PK Columns (if applicable)
 			$this->__blnRestored = true;
 
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`created_at`
-				FROM
-					`container_ckpt`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strCreatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`updated_at`
-				FROM
-					`container_ckpt`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strUpdatedAt = $objRow[0];
 
 			$this->DeleteCache();
 
@@ -1253,8 +1205,8 @@
 			$this->strHora = $objReloaded->strHora;
 			$this->UsuarioId = $objReloaded->UsuarioId;
 			$this->strObservacion = $objReloaded->strObservacion;
-			$this->strCreatedAt = $objReloaded->strCreatedAt;
-			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
+			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
+			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->intCreatedBy = $objReloaded->intCreatedBy;
 			$this->intUpdatedBy = $objReloaded->intUpdatedBy;
 		}
@@ -1335,17 +1287,17 @@
 
 				case 'CreatedAt':
 					/**
-					 * Gets the value for strCreatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttCreatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strCreatedAt;
+					return $this->dttCreatedAt;
 
 				case 'UpdatedAt':
 					/**
-					 * Gets the value for strUpdatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttUpdatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strUpdatedAt;
+					return $this->dttUpdatedAt;
 
 				case 'CreatedBy':
 					/**
@@ -1544,6 +1496,32 @@
 					 */
 					try {
 						return ($this->strObservacion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'CreatedAt':
+					/**
+					 * Sets the value for dttCreatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttCreatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UpdatedAt':
+					/**
+					 * Sets the value for dttUpdatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttUpdatedAt = QType::Cast($mixValue, QType::DateTime));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1793,8 +1771,8 @@
 			$strToReturn .= '<element name="Hora" type="xsd:string"/>';
 			$strToReturn .= '<element name="Usuario" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="Observacion" type="xsd:string"/>';
-			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
+			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="UpdatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
@@ -1844,9 +1822,9 @@
 			if (property_exists($objSoapObject, 'Observacion'))
 				$objToReturn->strObservacion = $objSoapObject->Observacion;
 			if (property_exists($objSoapObject, 'CreatedAt'))
-				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
+				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
-				$objToReturn->strUpdatedAt = $objSoapObject->UpdatedAt;
+				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
 			if (property_exists($objSoapObject, 'CreatedBy'))
 				$objToReturn->intCreatedBy = $objSoapObject->CreatedBy;
 			if (property_exists($objSoapObject, 'UpdatedBy'))
@@ -1887,6 +1865,10 @@
 				$objObject->objUsuario = Usuario::GetSoapObjectFromObject($objObject->objUsuario, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intUsuarioId = null;
+			if ($objObject->dttCreatedAt)
+				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttUpdatedAt)
+				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
 			return $objObject;
 		}
 
@@ -1909,8 +1891,8 @@
 			$iArray['Hora'] = $this->strHora;
 			$iArray['UsuarioId'] = $this->intUsuarioId;
 			$iArray['Observacion'] = $this->strObservacion;
-			$iArray['CreatedAt'] = $this->strCreatedAt;
-			$iArray['UpdatedAt'] = $this->strUpdatedAt;
+			$iArray['CreatedAt'] = $this->dttCreatedAt;
+			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedBy'] = $this->intUpdatedBy;
 			return new ArrayIterator($iArray);
@@ -2002,9 +1984,9 @@
 				case 'Observacion':
 					return new QQNode('observacion', 'Observacion', 'VarChar', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
+					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
 				case 'UpdatedBy':
@@ -2076,9 +2058,9 @@
 				case 'Observacion':
 					return new QQNode('observacion', 'Observacion', 'string', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'string', $this);
+					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
 				case 'UpdatedBy':

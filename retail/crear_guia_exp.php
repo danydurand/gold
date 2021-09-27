@@ -184,6 +184,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lstUnidMedi;
     protected $lblUnidMedi;
 
+    protected $txtRefeExpo;
+    protected $txtRazoExpo;
+
     
     protected function SetupGuia() {
         $intIdxxGuia = QApplication::PathInfo(0);
@@ -325,6 +328,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         // Costos del Servicio
         //---------------------
         $this->dtgConcGuia_Create();
+        $this->txtRefeExpo_Create();
+        $this->txtRazoExpo_Create();
 
         //----------------
         // Facturacion
@@ -819,6 +824,26 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtDescCont->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
             $this->txtDescCont->Text = $this->objGuia->Contenido;
+        }
+    }
+
+    protected function txtRefeExpo_Create() {
+        $this->txtRefeExpo = new QTextBox($this);
+        $this->txtRefeExpo->Width = 250;
+        $this->txtRefeExpo->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+        if ($this->blnEditMode) {
+            $this->txtRefeExpo->Text = $this->objGuia->ReferenciaExp;
+        }
+    }
+
+    protected function txtRazoExpo_Create() {
+        $this->txtRazoExpo = new QTextBox($this);
+        $this->txtRazoExpo->Width = 250;
+        $this->txtRazoExpo->TextMode = QTextMode::MultiLine;
+        $this->txtRazoExpo->Rows = 3;
+        $this->txtRazoExpo->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
+        if ($this->blnEditMode) {
+            $this->txtRazoExpo->Text = $this->objGuia->RazonesExp;
         }
     }
 
@@ -2052,14 +2077,21 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if ($blnTodoOkey) {
             t('Voy a procesar las piezas');
             $this->procesamientoDePiezas();
-            $this->txtDescCont->Text = $this->objGuia->Contenido;
-            $this->txtCantPiez->Text = $this->objGuia->Piezas;
-            $this->txtAltoEnvi->Text = $this->objGuia->Alto;
-            $this->txtAnchEnvi->Text = $this->objGuia->Ancho;
-            $this->txtLargEnvi->Text = $this->objGuia->Largo;
-            $this->txtVoluEnvi->Text = $this->objGuia->Volumen;
-            $this->txtPiesEnvi->Text = $this->objGuia->PiesCub;
-            $this->txtKiloEnvi->Text = $this->objGuia->Kilos;
+            t('Regresando a la invocacion de la rutina');
+            try {
+                $this->txtDescCont->Text = $this->objGuia->Contenido;
+                $this->txtCantPiez->Text = $this->objGuia->Piezas;
+                $this->txtAltoEnvi->Text = $this->objGuia->Alto;
+                $this->txtAnchEnvi->Text = $this->objGuia->Ancho;
+                $this->txtLargEnvi->Text = $this->objGuia->Largo;
+                $this->txtVoluEnvi->Text = $this->objGuia->Volumen;
+                $this->txtPiesEnvi->Text = $this->objGuia->PiesCub;
+                $this->txtKiloEnvi->Text = $this->objGuia->Kilos;
+            } catch (Exception $e) {
+                t('Excepcion: '.$e->getMessage());
+            } catch (Error $e) {
+                t('Error: '.$e->getMessage());
+            }
             t('Regrese el procesamiento de las piezas');
             $this->blnCambPiez = false;
         }
@@ -2162,7 +2194,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $objGuiaPiez->Save();
                     //t('Pieza guardada');
                     if (trim($strDescAnte) != trim($objGuiaPiez->Descripcion)) {
-                        t('Desc Anterio: '.$strDescAnte.' Descripcion de la Pieza: '.$objGuiaPiez->Descripcion);
+                        //t('Desc Anterio: '.$strDescAnte.' Descripcion de la Pieza: '.$objGuiaPiez->Descripcion);
                         $strSepaPiez = '';
                         if (strlen($strDescCont) > 0) {
                             $strSepaPiez = ' | ';
@@ -2201,8 +2233,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->Save();
             t('Guia actualizada');
         } catch (Exception $e) {
-            t('Error: '.$e->getMessage());
+            t('Excepcion: '.$e->getMessage());
         }
+        //t('Saliendo del procesamiento de las piezas');
     }
 
     protected function sumaPiezas() {
@@ -2313,6 +2346,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->TipoExport                = 'COURIER';
             $this->objGuia->ProductoId                = $objProdExpo->Id;
             $this->objGuia->ClienteCorpId             = $this->lstClieCorp->SelectedValue;
+            $this->objGuia->ReferenciaExp             = $this->txtRefeExpo->Text;
+            $this->objGuia->RazonesExp                = $this->txtRazoExpo->Text;
 
             if (!$this->blnEditMode) {
                 //------------------------------------------------------------------------

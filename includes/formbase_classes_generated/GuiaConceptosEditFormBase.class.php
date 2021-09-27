@@ -61,8 +61,8 @@ abstract class GuiaConceptosEditFormBase extends QForm {
 	protected $txtMonto;
 	protected $txtMostrarComo;
 	protected $txtExplicacion;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -141,8 +141,8 @@ abstract class GuiaConceptosEditFormBase extends QForm {
 		$this->txtMonto = $this->mctGuiaConceptos->txtMonto_Create();
 		$this->txtMostrarComo = $this->mctGuiaConceptos->txtMostrarComo_Create();
 		$this->txtExplicacion = $this->mctGuiaConceptos->txtExplicacion_Create();
-		$this->lblCreatedAt = $this->mctGuiaConceptos->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctGuiaConceptos->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctGuiaConceptos->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctGuiaConceptos->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctGuiaConceptos->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctGuiaConceptos->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctGuiaConceptos->txtUpdatedBy_Create();

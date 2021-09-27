@@ -23,8 +23,8 @@
 	 * @property double $Monto the value for fltMonto (Not Null)
 	 * @property string $MostrarComo the value for strMostrarComo (Not Null)
 	 * @property string $Explicacion the value for strExplicacion (Not Null)
-	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
-	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
+	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
+	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
@@ -107,17 +107,17 @@
 
 		/**
 		 * Protected member variable that maps to the database column nota_conceptos.created_at
-		 * @var string strCreatedAt
+		 * @var QDateTime dttCreatedAt
 		 */
-		protected $strCreatedAt;
+		protected $dttCreatedAt;
 		const CreatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column nota_conceptos.updated_at
-		 * @var string strUpdatedAt
+		 * @var QDateTime dttUpdatedAt
 		 */
-		protected $strUpdatedAt;
+		protected $dttUpdatedAt;
 		const UpdatedAtDefault = null;
 
 
@@ -210,8 +210,8 @@
 			$this->fltMonto = NotaConceptos::MontoDefault;
 			$this->strMostrarComo = NotaConceptos::MostrarComoDefault;
 			$this->strExplicacion = NotaConceptos::ExplicacionDefault;
-			$this->strCreatedAt = NotaConceptos::CreatedAtDefault;
-			$this->strUpdatedAt = NotaConceptos::UpdatedAtDefault;
+			$this->dttCreatedAt = (NotaConceptos::CreatedAtDefault === null)?null:new QDateTime(NotaConceptos::CreatedAtDefault);
+			$this->dttUpdatedAt = (NotaConceptos::UpdatedAtDefault === null)?null:new QDateTime(NotaConceptos::UpdatedAtDefault);
 			$this->strDeletedAt = NotaConceptos::DeletedAtDefault;
 			$this->intCreatedBy = NotaConceptos::CreatedByDefault;
 			$this->intUpdatedBy = NotaConceptos::UpdatedByDefault;
@@ -722,10 +722,10 @@
 			$objToReturn->strExplicacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'updated_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strUpdatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'deleted_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDeletedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -998,6 +998,8 @@
 							`monto`,
 							`mostrar_como`,
 							`explicacion`,
+							`created_at`,
+							`updated_at`,
 							`created_by`,
 							`updated_by`,
 							`deleted_by`
@@ -1009,6 +1011,8 @@
 							' . $objDatabase->SqlVariable($this->fltMonto) . ',
 							' . $objDatabase->SqlVariable($this->strMostrarComo) . ',
 							' . $objDatabase->SqlVariable($this->strExplicacion) . ',
+							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -1021,36 +1025,6 @@
 					// Perform an UPDATE query
 
 					// First checking for Optimistic Locking constraints (if applicable)
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`created_at`
-							FROM
-								`nota_conceptos`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strCreatedAt)
-							throw new QOptimisticLockingException('NotaConceptos');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`updated_at`
-							FROM
-								`nota_conceptos`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strUpdatedAt)
-							throw new QOptimisticLockingException('NotaConceptos');
-					}
 					if (!$blnForceUpdate) {
 						// Perform the Optimistic Locking check
 						$objResult = $objDatabase->Query('
@@ -1079,6 +1053,8 @@
 							`monto` = ' . $objDatabase->SqlVariable($this->fltMonto) . ',
 							`mostrar_como` = ' . $objDatabase->SqlVariable($this->strMostrarComo) . ',
 							`explicacion` = ' . $objDatabase->SqlVariable($this->strExplicacion) . ',
+							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							`deleted_by` = ' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -1096,30 +1072,6 @@
 			// Update __blnRestored and any Non-Identity PK Columns (if applicable)
 			$this->__blnRestored = true;
 
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`created_at`
-				FROM
-					`nota_conceptos`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strCreatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`updated_at`
-				FROM
-					`nota_conceptos`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strUpdatedAt = $objRow[0];
 			// Update Local Timestamp
 			$objResult = $objDatabase->Query('
 				SELECT
@@ -1229,8 +1181,8 @@
 			$this->fltMonto = $objReloaded->fltMonto;
 			$this->strMostrarComo = $objReloaded->strMostrarComo;
 			$this->strExplicacion = $objReloaded->strExplicacion;
-			$this->strCreatedAt = $objReloaded->strCreatedAt;
-			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
+			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
+			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->strDeletedAt = $objReloaded->strDeletedAt;
 			$this->intCreatedBy = $objReloaded->intCreatedBy;
 			$this->intUpdatedBy = $objReloaded->intUpdatedBy;
@@ -1313,17 +1265,17 @@
 
 				case 'CreatedAt':
 					/**
-					 * Gets the value for strCreatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttCreatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strCreatedAt;
+					return $this->dttCreatedAt;
 
 				case 'UpdatedAt':
 					/**
-					 * Gets the value for strUpdatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttUpdatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strUpdatedAt;
+					return $this->dttUpdatedAt;
 
 				case 'DeletedAt':
 					/**
@@ -1506,6 +1458,32 @@
 					 */
 					try {
 						return ($this->strExplicacion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'CreatedAt':
+					/**
+					 * Sets the value for dttCreatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttCreatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UpdatedAt':
+					/**
+					 * Sets the value for dttUpdatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttUpdatedAt = QType::Cast($mixValue, QType::DateTime));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1704,8 +1682,8 @@
 			$strToReturn .= '<element name="Monto" type="xsd:float"/>';
 			$strToReturn .= '<element name="MostrarComo" type="xsd:string"/>';
 			$strToReturn .= '<element name="Explicacion" type="xsd:string"/>';
-			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
+			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="CreatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="UpdatedBy" type="xsd:int"/>';
@@ -1753,9 +1731,9 @@
 			if (property_exists($objSoapObject, 'Explicacion'))
 				$objToReturn->strExplicacion = $objSoapObject->Explicacion;
 			if (property_exists($objSoapObject, 'CreatedAt'))
-				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
+				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
-				$objToReturn->strUpdatedAt = $objSoapObject->UpdatedAt;
+				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
 			if (property_exists($objSoapObject, 'DeletedAt'))
 				$objToReturn->strDeletedAt = $objSoapObject->DeletedAt;
 			if (property_exists($objSoapObject, 'CreatedBy'))
@@ -1790,6 +1768,10 @@
 				$objObject->objConcepto = Conceptos::GetSoapObjectFromObject($objObject->objConcepto, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intConceptoId = null;
+			if ($objObject->dttCreatedAt)
+				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttUpdatedAt)
+				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
 			return $objObject;
 		}
 
@@ -1812,8 +1794,8 @@
 			$iArray['Monto'] = $this->fltMonto;
 			$iArray['MostrarComo'] = $this->strMostrarComo;
 			$iArray['Explicacion'] = $this->strExplicacion;
-			$iArray['CreatedAt'] = $this->strCreatedAt;
-			$iArray['UpdatedAt'] = $this->strUpdatedAt;
+			$iArray['CreatedAt'] = $this->dttCreatedAt;
+			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['DeletedAt'] = $this->strDeletedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedBy'] = $this->intUpdatedBy;
@@ -1903,9 +1885,9 @@
 				case 'Explicacion':
 					return new QQNode('explicacion', 'Explicacion', 'VarChar', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
+					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'DeletedAt':
 					return new QQNode('deleted_at', 'DeletedAt', 'VarChar', $this);
 				case 'CreatedBy':
@@ -1977,9 +1959,9 @@
 				case 'Explicacion':
 					return new QQNode('explicacion', 'Explicacion', 'string', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'string', $this);
+					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'DeletedAt':
 					return new QQNode('deleted_at', 'DeletedAt', 'string', $this);
 				case 'CreatedBy':

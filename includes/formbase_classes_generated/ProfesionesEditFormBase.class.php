@@ -55,8 +55,8 @@ abstract class ProfesionesEditFormBase extends QForm {
 	// Controls for Profesiones's Data Fields
 	protected $lblId;
 	protected $txtNombre;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -129,8 +129,8 @@ abstract class ProfesionesEditFormBase extends QForm {
 		// Call MetaControl's methods to create qcontrols based on Profesiones's data fields
 		$this->lblId = $this->mctProfesiones->lblId_Create();
 		$this->txtNombre = $this->mctProfesiones->txtNombre_Create();
-		$this->lblCreatedAt = $this->mctProfesiones->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctProfesiones->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctProfesiones->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctProfesiones->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctProfesiones->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctProfesiones->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctProfesiones->txtUpdatedBy_Create();

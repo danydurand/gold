@@ -58,8 +58,8 @@ abstract class ProductosEditFormBase extends QForm {
 	protected $txtNombre;
 	protected $chkSeVende;
 	protected $txtObservacion;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -135,8 +135,8 @@ abstract class ProductosEditFormBase extends QForm {
 		$this->txtNombre = $this->mctProductos->txtNombre_Create();
 		$this->chkSeVende = $this->mctProductos->chkSeVende_Create();
 		$this->txtObservacion = $this->mctProductos->txtObservacion_Create();
-		$this->lblCreatedAt = $this->mctProductos->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctProductos->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctProductos->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctProductos->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctProductos->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctProductos->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctProductos->txtUpdatedBy_Create();

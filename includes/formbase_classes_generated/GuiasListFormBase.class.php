@@ -131,6 +131,8 @@ abstract class GuiasListFormBase extends QForm {
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->GuiaPod);
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->NotaEntrega);
         $this->dtgGuiases->MetaAddColumn('Observacion');
+        $this->dtgGuiases->MetaAddColumn('ReferenciaExp');
+        $this->dtgGuiases->MetaAddColumn('RazonesExp');
         $this->dtgGuiases->MetaAddColumn('CreatedAt');
         $this->dtgGuiases->MetaAddColumn('UpdatedAt');
         $this->dtgGuiases->MetaAddColumn('DeletedAt');

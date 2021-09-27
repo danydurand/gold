@@ -57,8 +57,8 @@ abstract class FacturaGuiasEditFormBase extends QForm {
 	protected $lstFactura;
 	protected $lstGuia;
 	protected $txtTotal;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -129,8 +129,8 @@ abstract class FacturaGuiasEditFormBase extends QForm {
 		$this->lstFactura = $this->mctFacturaGuias->lstFactura_Create();
 		$this->lstGuia = $this->mctFacturaGuias->lstGuia_Create();
 		$this->txtTotal = $this->mctFacturaGuias->txtTotal_Create();
-		$this->lblCreatedAt = $this->mctFacturaGuias->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctFacturaGuias->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctFacturaGuias->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctFacturaGuias->calUpdatedAt_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();

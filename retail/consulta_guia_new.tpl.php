@@ -284,10 +284,10 @@ require('inc/header.inc.php');
                             </div>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <div class="titulo-c">Serv. Entr.</div>
+                                    <div class="titulo-c">Cliente</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <?php $this->lblServEntr->Render(); ?>
+                                    <?php $this->lblClieCorp->Render(); ?>
                                 </div>
                             </div>
                             <div class="row">

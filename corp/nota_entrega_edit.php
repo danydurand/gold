@@ -78,8 +78,8 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
 		$this->txtObservacion->TextMode = QTextMode::MultiLine;
 		$this->txtObservacion->Rows = 3;
 
-		$this->lblCreatedAt = $this->mctNotaEntrega->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaEntrega->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctNotaEntrega->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctNotaEntrega->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctNotaEntrega->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctNotaEntrega->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctNotaEntrega->txtUpdatedBy_Create();

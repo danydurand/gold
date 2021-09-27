@@ -61,8 +61,8 @@ abstract class NotaConceptosEditFormBase extends QForm {
 	protected $txtMonto;
 	protected $txtMostrarComo;
 	protected $txtExplicacion;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -141,8 +141,8 @@ abstract class NotaConceptosEditFormBase extends QForm {
 		$this->txtMonto = $this->mctNotaConceptos->txtMonto_Create();
 		$this->txtMostrarComo = $this->mctNotaConceptos->txtMostrarComo_Create();
 		$this->txtExplicacion = $this->mctNotaConceptos->txtExplicacion_Create();
-		$this->lblCreatedAt = $this->mctNotaConceptos->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaConceptos->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctNotaConceptos->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctNotaConceptos->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctNotaConceptos->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctNotaConceptos->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctNotaConceptos->txtUpdatedBy_Create();

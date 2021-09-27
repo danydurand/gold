@@ -5,4 +5,18 @@
         </div>
     </div>
 </div>
+<div class="row" style="margin-top: 36px">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="">Referencia Exp</label><br>
+            <?php $this->txtRefeExpo->Render(); ?>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="">Razones p/Exportar</label><br>
+            <?php $this->txtRazoExpo->Render(); ?>
+        </div>
+    </div>
+</div>
 

@@ -105,8 +105,8 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->txtMetodo = $this->mctConceptos->txtMetodo_Create();
         t('c5');
         $this->chkAplicarTasa = $this->mctConceptos->chkAplicarTasa_Create();
-		$this->lblCreatedAt = $this->mctConceptos->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctConceptos->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctConceptos->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctConceptos->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctConceptos->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctConceptos->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctConceptos->txtUpdatedBy_Create();

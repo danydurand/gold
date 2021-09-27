@@ -58,8 +58,8 @@ abstract class NotaCreditoItemsEditFormBase extends QForm {
 	protected $lstConcepto;
 	protected $txtMostrarComo;
 	protected $txtMonto;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -131,8 +131,8 @@ abstract class NotaCreditoItemsEditFormBase extends QForm {
 		$this->lstConcepto = $this->mctNotaCreditoItems->lstConcepto_Create();
 		$this->txtMostrarComo = $this->mctNotaCreditoItems->txtMostrarComo_Create();
 		$this->txtMonto = $this->mctNotaCreditoItems->txtMonto_Create();
-		$this->lblCreatedAt = $this->mctNotaCreditoItems->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctNotaCreditoItems->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctNotaCreditoItems->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctNotaCreditoItems->calUpdatedAt_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();

@@ -77,8 +77,8 @@ abstract class ContainersEditFormBase extends QForm {
 	protected $txtPiesCub;
 	protected $txtContenido;
 	protected $txtDireccion;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -176,8 +176,8 @@ abstract class ContainersEditFormBase extends QForm {
 		$this->txtPiesCub = $this->mctContainers->txtPiesCub_Create();
 		$this->txtContenido = $this->mctContainers->txtContenido_Create();
 		$this->txtDireccion = $this->mctContainers->txtDireccion_Create();
-		$this->lblCreatedAt = $this->mctContainers->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctContainers->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctContainers->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctContainers->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctContainers->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctContainers->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctContainers->txtUpdatedBy_Create();

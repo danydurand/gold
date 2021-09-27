@@ -78,8 +78,8 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->txtHoraImpresion = $this->mctFacturas->txtHoraImpresion_Create();
 		$this->chkTieneRetencion = $this->mctFacturas->chkTieneRetencion_Create();
 		$this->txtNotaCreditoId = $this->mctFacturas->txtNotaCreditoId_Create();
-		$this->lblCreatedAt = $this->mctFacturas->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctFacturas->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctFacturas->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctFacturas->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctFacturas->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctFacturas->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctFacturas->txtUpdatedBy_Create();

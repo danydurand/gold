@@ -30,8 +30,8 @@
 	 * @property string $MaquinaFiscal the value for strMaquinaFiscal 
 	 * @property string $FechaImpresion the value for strFechaImpresion 
 	 * @property string $HoraImpresion the value for strHoraImpresion 
-	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
-	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
+	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
+	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property MasterCliente $ClienteCorp the value for the MasterCliente object referenced by intClienteCorpId 
@@ -174,17 +174,17 @@
 
 		/**
 		 * Protected member variable that maps to the database column nota_credito_corp.created_at
-		 * @var string strCreatedAt
+		 * @var QDateTime dttCreatedAt
 		 */
-		protected $strCreatedAt;
+		protected $dttCreatedAt;
 		const CreatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column nota_credito_corp.updated_at
-		 * @var string strUpdatedAt
+		 * @var QDateTime dttUpdatedAt
 		 */
-		protected $strUpdatedAt;
+		protected $dttUpdatedAt;
 		const UpdatedAtDefault = null;
 
 
@@ -288,8 +288,8 @@
 			$this->strMaquinaFiscal = NotaCreditoCorp::MaquinaFiscalDefault;
 			$this->strFechaImpresion = NotaCreditoCorp::FechaImpresionDefault;
 			$this->strHoraImpresion = NotaCreditoCorp::HoraImpresionDefault;
-			$this->strCreatedAt = NotaCreditoCorp::CreatedAtDefault;
-			$this->strUpdatedAt = NotaCreditoCorp::UpdatedAtDefault;
+			$this->dttCreatedAt = (NotaCreditoCorp::CreatedAtDefault === null)?null:new QDateTime(NotaCreditoCorp::CreatedAtDefault);
+			$this->dttUpdatedAt = (NotaCreditoCorp::UpdatedAtDefault === null)?null:new QDateTime(NotaCreditoCorp::UpdatedAtDefault);
 			$this->intCreatedBy = NotaCreditoCorp::CreatedByDefault;
 			$this->intUpdatedBy = NotaCreditoCorp::UpdatedByDefault;
 		}
@@ -824,10 +824,10 @@
 			$objToReturn->strHoraImpresion = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'updated_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strUpdatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'created_by';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCreatedBy = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1161,6 +1161,8 @@
 							`maquina_fiscal`,
 							`fecha_impresion`,
 							`hora_impresion`,
+							`created_at`,
+							`updated_at`,
 							`created_by`,
 							`updated_by`
 						) VALUES (
@@ -1178,6 +1180,8 @@
 							' . $objDatabase->SqlVariable($this->strMaquinaFiscal) . ',
 							' . $objDatabase->SqlVariable($this->strFechaImpresion) . ',
 							' . $objDatabase->SqlVariable($this->strHoraImpresion) . ',
+							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						)
@@ -1189,36 +1193,6 @@
 					// Perform an UPDATE query
 
 					// First checking for Optimistic Locking constraints (if applicable)
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`created_at`
-							FROM
-								`nota_credito_corp`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strCreatedAt)
-							throw new QOptimisticLockingException('NotaCreditoCorp');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`updated_at`
-							FROM
-								`nota_credito_corp`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strUpdatedAt)
-							throw new QOptimisticLockingException('NotaCreditoCorp');
-					}
 
 					// Perform the UPDATE query
 					$objDatabase->NonQuery('
@@ -1239,6 +1213,8 @@
 							`maquina_fiscal` = ' . $objDatabase->SqlVariable($this->strMaquinaFiscal) . ',
 							`fecha_impresion` = ' . $objDatabase->SqlVariable($this->strFechaImpresion) . ',
 							`hora_impresion` = ' . $objDatabase->SqlVariable($this->strHoraImpresion) . ',
+							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						WHERE
@@ -1255,30 +1231,6 @@
 			// Update __blnRestored and any Non-Identity PK Columns (if applicable)
 			$this->__blnRestored = true;
 
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`created_at`
-				FROM
-					`nota_credito_corp`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strCreatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`updated_at`
-				FROM
-					`nota_credito_corp`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strUpdatedAt = $objRow[0];
 
 			$this->DeleteCache();
 
@@ -1383,8 +1335,8 @@
 			$this->strMaquinaFiscal = $objReloaded->strMaquinaFiscal;
 			$this->strFechaImpresion = $objReloaded->strFechaImpresion;
 			$this->strHoraImpresion = $objReloaded->strHoraImpresion;
-			$this->strCreatedAt = $objReloaded->strCreatedAt;
-			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
+			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
+			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->intCreatedBy = $objReloaded->intCreatedBy;
 			$this->intUpdatedBy = $objReloaded->intUpdatedBy;
 		}
@@ -1514,17 +1466,17 @@
 
 				case 'CreatedAt':
 					/**
-					 * Gets the value for strCreatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttCreatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strCreatedAt;
+					return $this->dttCreatedAt;
 
 				case 'UpdatedAt':
 					/**
-					 * Gets the value for strUpdatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttUpdatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strUpdatedAt;
+					return $this->dttUpdatedAt;
 
 				case 'CreatedBy':
 					/**
@@ -1819,6 +1771,32 @@
 						throw $objExc;
 					}
 
+				case 'CreatedAt':
+					/**
+					 * Sets the value for dttCreatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttCreatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UpdatedAt':
+					/**
+					 * Sets the value for dttUpdatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttUpdatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'CreatedBy':
 					/**
 					 * Sets the value for intCreatedBy 
@@ -2070,8 +2048,8 @@
 			$strToReturn .= '<element name="MaquinaFiscal" type="xsd:string"/>';
 			$strToReturn .= '<element name="FechaImpresion" type="xsd:string"/>';
 			$strToReturn .= '<element name="HoraImpresion" type="xsd:string"/>';
-			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
+			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="UpdatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
@@ -2135,9 +2113,9 @@
 			if (property_exists($objSoapObject, 'HoraImpresion'))
 				$objToReturn->strHoraImpresion = $objSoapObject->HoraImpresion;
 			if (property_exists($objSoapObject, 'CreatedAt'))
-				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
+				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
-				$objToReturn->strUpdatedAt = $objSoapObject->UpdatedAt;
+				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
 			if (property_exists($objSoapObject, 'CreatedBy'))
 				$objToReturn->intCreatedBy = $objSoapObject->CreatedBy;
 			if (property_exists($objSoapObject, 'UpdatedBy'))
@@ -2178,6 +2156,10 @@
 				$objObject->objAplicadaEnPago = PagosCorp::GetSoapObjectFromObject($objObject->objAplicadaEnPago, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intAplicadaEnPagoId = null;
+			if ($objObject->dttCreatedAt)
+				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttUpdatedAt)
+				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
 			return $objObject;
 		}
 
@@ -2207,8 +2189,8 @@
 			$iArray['MaquinaFiscal'] = $this->strMaquinaFiscal;
 			$iArray['FechaImpresion'] = $this->strFechaImpresion;
 			$iArray['HoraImpresion'] = $this->strHoraImpresion;
-			$iArray['CreatedAt'] = $this->strCreatedAt;
-			$iArray['UpdatedAt'] = $this->strUpdatedAt;
+			$iArray['CreatedAt'] = $this->dttCreatedAt;
+			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedBy'] = $this->intUpdatedBy;
 			return new ArrayIterator($iArray);
@@ -2321,9 +2303,9 @@
 				case 'HoraImpresion':
 					return new QQNode('hora_impresion', 'HoraImpresion', 'VarChar', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
+					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
 				case 'UpdatedBy':
@@ -2416,9 +2398,9 @@
 				case 'HoraImpresion':
 					return new QQNode('hora_impresion', 'HoraImpresion', 'string', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'string', $this);
+					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
 				case 'UpdatedBy':

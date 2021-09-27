@@ -71,8 +71,8 @@ abstract class ConceptosEditFormBase extends QForm {
 	protected $txtMetodo;
 	protected $chkAplicarTasa;
 	protected $txtCondicion;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $lblDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
@@ -161,8 +161,8 @@ abstract class ConceptosEditFormBase extends QForm {
 		$this->txtMetodo = $this->mctConceptos->txtMetodo_Create();
 		$this->chkAplicarTasa = $this->mctConceptos->chkAplicarTasa_Create();
 		$this->txtCondicion = $this->mctConceptos->txtCondicion_Create();
-		$this->lblCreatedAt = $this->mctConceptos->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctConceptos->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctConceptos->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctConceptos->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctConceptos->lblDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctConceptos->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctConceptos->txtUpdatedBy_Create();

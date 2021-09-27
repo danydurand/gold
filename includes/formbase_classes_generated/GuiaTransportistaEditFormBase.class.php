@@ -58,8 +58,8 @@ abstract class GuiaTransportistaEditFormBase extends QForm {
 	protected $lstGuiaPieza;
 	protected $txtGuia;
 	protected $txtProcesoId;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
 
@@ -133,8 +133,8 @@ abstract class GuiaTransportistaEditFormBase extends QForm {
 		$this->lstGuiaPieza = $this->mctGuiaTransportista->lstGuiaPieza_Create();
 		$this->txtGuia = $this->mctGuiaTransportista->txtGuia_Create();
 		$this->txtProcesoId = $this->mctGuiaTransportista->txtProcesoId_Create();
-		$this->lblCreatedAt = $this->mctGuiaTransportista->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctGuiaTransportista->lblUpdatedAt_Create();
+		$this->calCreatedAt = $this->mctGuiaTransportista->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctGuiaTransportista->calUpdatedAt_Create();
 		$this->txtCreatedBy = $this->mctGuiaTransportista->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctGuiaTransportista->txtUpdatedBy_Create();
 
