@@ -37,12 +37,16 @@ $strNombDest = $objGuiaImpr->NombreDestinatario;
 
 $intMaxiTama = 46;
 $strDireDest = $objGuiaImpr->DireccionDestinatario;
+t('La direccion de destino es: '.$strDireDest);
 $strDireDes1 = $objGuiaImpr->DireccionDestinatario;
 $strDireDes2 = '';
 $strTamaDest = strlen($strDireDest);
 if ($strTamaDest > $intMaxiTama) {
+    t('Es mas grande que el maximo');
     $strDireDes1 = substr($strDireDest,0,$intMaxiTama);
+    t('1era parte: '.$strDireDes1);
     $strDireDes2 = substr($strDireDest,$intMaxiTama,$intMaxiTama);
+    t('2da parte; '.$strDireDes2);
 }
 
 $strTeleDest = $objGuiaImpr->TelefonoMovilDestinatario;

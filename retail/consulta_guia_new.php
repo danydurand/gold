@@ -209,7 +209,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
-        t('g1');
         $this->SetupValores();
 
         $this->determinarPosicion();
@@ -218,7 +217,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         $this->lblSistGuia_Create();
 
-        t('g2');
         //---- Remitente ---- //
         $this->lblSucuOrig_Create();
         $this->lblNombRemi_Create();
@@ -227,7 +225,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblEmaiRemi_Create();
         $this->lblProfRemi_Create();
 
-        t('g3');
         // ---- Destinatario ---- //
         $this->lblSucuDest_Create();
         $this->lblNombDest_Create();
@@ -237,12 +234,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblCiudDest_Create();
         $this->lblCodiPost_Create();
 
-        t('g4');
         // - Costos del Servicio - //
         $this->lblTipoTari_Create();
         $this->lblSeguGuia_Create();
         $this->lblMontTota_Create();
 
+        t('g1');
         // -- Información del Envío -- //
         $this->lblNumeGuia_Create();
         $this->lblFechGuia_Create();
@@ -252,19 +249,19 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblPiezPeso_Create();
         $this->lblValoDecl_Create();
         $this->lblPersEntr_Create();
+        t('g2');
         $this->lblFechEntr_Create();
         $this->lblTextObse_Create();
         $this->lblMediEnvi_Create();
         $this->lblCreaPorx_Create();
-        t('g5.6');
         $this->lblFechHora_Create();
+        t('g3');
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
         $this->lblClieCorp_Create();
         $this->lblNumeFact_Create();
         $this->lblPesoAlte_Create();
 
-        t('g6');
         // Para cargar el POD
         $this->lblQuieReci_Create();
         $this->txtQuieReci_Create();
@@ -280,14 +277,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblBotoPopu_Create();
         $this->lblPopuModa_Create();
 
-        t('g8');
         $this->dtgGuiaCkpt_Create();
 
         $this->dtgRegiTrab_Create();
         $this->dtgConcGuia_Create();
         $this->dtgPiezGuia_Create();
 
-        t('g9');
         //--------------------
         // Botónes Regulares
         //--------------------
@@ -839,7 +834,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function lblFechHora_Create() {
         $this->lblFechHora = new QLabel($this);
-        $this->lblFechHora->Text = $this->objGuia->CreatedAt->__toString("DD/MM/YYYY");
+        $this->lblFechHora->Text = (!is_null($this->objGuia->CreatedAt))
+            ? $this->objGuia->CreatedAt->__toString("DD/MM/YYYY")
+            : null;
     }
 
     protected function txtTextCome_Create() {
@@ -1080,7 +1077,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
     }
 
-    protected function ImprimirGuiaExportacion()
+    protected function ImprimirGuiaExportacionOld()
     {
         $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
         $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
@@ -1111,32 +1108,20 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
 
-    protected function ImprimirGuiaExportacionMP()
+    protected function ImprimirGuiaExportacion()
     {
         $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
         $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
-            $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
+            t('Imprimiendo...');
+            $_SESSION['IdxxGuia'] = $this->objGuia->Id;
 
-            $_SESSION['GuiaImpr'] = serialize($this->objGuia);
-            $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
-
-            $intTamaLote = 3;
             $html2pdf->pdf->SetDisplayMode('fullpage');
-            //$html2pdf->setModeDebug();
-            $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
-            $intCantPiez = count($arrPiezGuia);
-            if ($intCantPiez > $intTamaLote) {
-                $intCantLote = $intCantPiez / $intTamaLote;
-            } else {
-                ob_start();
-                foreach ($arrPiezGuia as $objPiezGuia) {
-                    $_SESSION['PiezGuia'] = serialize($objPiezGuia);
-                    include dirname(__FILE__) . '/rhtml/guia_exportacion.php';
-                }
-                $content = ob_get_clean();
-            }
 
+            $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/guia_exportacion_mp.php';
+            $content = ob_get_clean();
             $html2pdf->writeHTML($content);
             $html2pdf->output($strNombArch);
         } catch (Html2PdfException $e) {
