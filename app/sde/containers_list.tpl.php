@@ -29,7 +29,7 @@
                 <?php $this->lblMensUsua->Render(); ?>
             </div>
         </div>
-        <div class="row" data-aos="fade-in" data-aos-duration="2000">
+        <div class="row" data-aos="fade-in">
             <div class="table-responsive">
                 <?php $this->dtgContainerses->Render(); ?>
             </div>

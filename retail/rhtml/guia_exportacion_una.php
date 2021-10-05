@@ -3,8 +3,15 @@ require_once('qcubed.inc.php');
 
 /* @var $objGuiaImpr Guias */
 /* @var $objPiezGuia GuiaPiezas */
-$objGuiaImpr = unserialize($_SESSION['GuiaImpr']);
-$objPiezGuia = unserialize($_SESSION['PiezGuia']);
+
+$intIdxxProc = getmypid();
+echo "En guia_exportacion_una el Id del Proceso es: $intIdxxProc\n";
+$objPiezPara = Parametros::LoadByIndiceCodigo('PiezPara',$intIdxxProc);
+$intIdxxPiez = (int)$objPiezPara->Valor1;
+$objPiezGuia = GuiaPiezas::Load($intIdxxPiez);
+echo "La pieza es: $objPiezGuia->IdPieza\n";
+return;
+$objGuiaImpr = $objPiezGuia->Guia;
 $intAnchPagi = "660px";
 $intMediPagi = "320px";
 $intAnchEtiq = "50px";

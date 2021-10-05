@@ -24,6 +24,7 @@ require('inc/header.inc.php');
             <?php //$this->btnInfoPodx->Render(); ?>
             <?php $this->btnDeleGuia->Render(); ?>
             <?php $this->btnMasxAcci->Render(); ?>
+            <?php $this->btnImprPiez->Render(); ?>
             <?php $this->lblBotoPopu->Render(); ?>
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-4 pull-right" style="text-align: right; padding-right: 3px; margin-top: -0.25em">
@@ -257,7 +258,7 @@ require('inc/header.inc.php');
                 <!-- Lado derecho del formulario -->
                 <div class="col-md-6">
                     <div class="row">
-                        <div class="col-md-7">
+                        <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="titulo-c">Tarifa</div>
@@ -307,7 +308,7 @@ require('inc/header.inc.php');
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <?php $this->dtgConcGuia->Render(); ?>
                         </div>
                     </div>

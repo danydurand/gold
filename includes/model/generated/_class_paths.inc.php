@@ -629,6 +629,13 @@
 		QApplicationBase::$ClassFile['guiaconsecutivometacontrol'] = __META_CONTROLS__ . '/GuiaConsecutivoMetaControl.class.php';
 		QApplicationBase::$ClassFile['guiaconsecutivodatagrid'] = __META_CONTROLS__ . '/GuiaConsecutivoDataGrid.class.php';
 
+	// ClassPaths for the GuiaImprimir class
+		QApplicationBase::$ClassFile['guiaimprimir'] = __MODEL__ . '/GuiaImprimir.class.php';
+		QApplicationBase::$ClassFile['qqnodeguiaimprimir'] = __MODEL__ . '/GuiaImprimir.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeguiaimprimir'] = __MODEL__ . '/GuiaImprimir.class.php';
+		QApplicationBase::$ClassFile['guiaimprimirmetacontrol'] = __META_CONTROLS__ . '/GuiaImprimirMetaControl.class.php';
+		QApplicationBase::$ClassFile['guiaimprimirdatagrid'] = __META_CONTROLS__ . '/GuiaImprimirDataGrid.class.php';
+
 	// ClassPaths for the GuiaMasivaConnect class
 		QApplicationBase::$ClassFile['guiamasivaconnect'] = __MODEL__ . '/GuiaMasivaConnect.class.php';
 		QApplicationBase::$ClassFile['qqnodeguiamasivaconnect'] = __MODEL__ . '/GuiaMasivaConnect.class.php';

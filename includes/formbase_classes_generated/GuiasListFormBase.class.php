@@ -105,6 +105,7 @@ abstract class GuiasListFormBase extends QForm {
         $this->dtgGuiases->MetaAddColumn('Contenido');
         $this->dtgGuiases->MetaAddColumn('Piezas');
         $this->dtgGuiases->MetaAddColumn('ValorDeclarado');
+        $this->dtgGuiases->MetaAddColumn('ModoValor');
         $this->dtgGuiases->MetaAddColumn('TipoExport');
         $this->dtgGuiases->MetaAddColumn('Asegurado');
         $this->dtgGuiases->MetaAddColumn('Total');
@@ -140,6 +141,7 @@ abstract class GuiasListFormBase extends QForm {
         $this->dtgGuiases->MetaAddColumn('UpdatedBy');
         $this->dtgGuiases->MetaAddColumn('DeletedBy');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->EstadisticaDeGuias);
+        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->GuiaImprimirAsGuia);
 
         $this->btnExpoExce_Create();
 

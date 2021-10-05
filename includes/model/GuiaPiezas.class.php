@@ -27,6 +27,14 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
+		public function __ordinal() {
+		    return (int)explode('-',$this->IdPieza)[1];
+        }
+
+		public function  __printName() {
+		    return '/var/www/html/gold/retail/tmp/GuiaExp'.$this->IdPieza.'.pdf';
+        }
+
         public static function LoadArrayByManifiestoExp($strParam1, $objOptionalClauses) {
             // Performing the load manually (instead of using QCubed Query)
 

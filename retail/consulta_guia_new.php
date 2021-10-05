@@ -122,6 +122,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblPopuModa;
     protected $strErroProc;
     protected $btnMasxAcci;
+    protected $btnImprPiez;
+    protected $arrPiezGuia;
+    protected $intPiezGrup = 3;
 
 
     protected function SetupValores() {
@@ -130,6 +133,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         //-----------------------------------------
         $strNumeGuia = QApplication::PathInfo(0);
         $strAcciPlus = QApplication::PathInfo(1);
+        $intGrupImpr = QApplication::PathInfo(2);
         if ($strNumeGuia) {
             $this->objGuia = Guias::Load($strNumeGuia);
             if (!$this->objGuia) {
@@ -151,20 +155,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $strMensMost = 'Debe especificar un Número de Guía para Consultar.';
             $this->danger($strMensMost);
         }
+        $this->arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
 
         $this->objRegiTrab = $this->CrearRegistroDeTrabajo();
 
         if ($strAcciPlus == 'cc') {
-            //t('Excelente, voy a calcular los conceptos');
             if ($this->objGuia) {
-                //t('La guia si existe');
                 if (is_null($this->objGuia->FacturaId)) {
-                    //t('La guia no esta facturada');
                     $arrConcActi = Conceptos::conceptosActivos($this->objGuia->Producto->Codigo);
                     $this->objGuia->calcularTodoLosConceptos($arrConcActi);
                     QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id);
                 } else {
-                    //t('La guia esta facturada, no se puede re-calcular los conceptos');
                     $this->warning('La Guia ya fue Facturada.  No admite re-calculo de Conceptos');
                 }
             }
@@ -181,7 +182,13 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
         if ($strAcciPlus == 'ie') {
             if ($this->objGuia) {
-                $this->ImprimirGuiaExportacion();
+                //t('Voy a imprimir el grupo: '.$intGrupImpr);
+                $this->ImprimirGuiaExportacion($intGrupImpr);
+            }
+        }
+        if ($strAcciPlus == 'mp') {
+            if ($this->objGuia) {
+                $this->ImprimirGuiaExportacionMP();
             }
         }
         if ($strAcciPlus == 'lr') {
@@ -239,7 +246,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblSeguGuia_Create();
         $this->lblMontTota_Create();
 
-        t('g1');
         // -- Información del Envío -- //
         $this->lblNumeGuia_Create();
         $this->lblFechGuia_Create();
@@ -249,13 +255,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblPiezPeso_Create();
         $this->lblValoDecl_Create();
         $this->lblPersEntr_Create();
-        t('g2');
         $this->lblFechEntr_Create();
         $this->lblTextObse_Create();
         $this->lblMediEnvi_Create();
         $this->lblCreaPorx_Create();
         $this->lblFechHora_Create();
-        t('g3');
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
         $this->lblClieCorp_Create();
@@ -317,6 +321,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
 
         $this->btnDeleGuia_Create();
+
+        $this->btnImprPiez_Create();
+
 
     }
 
@@ -395,10 +402,25 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         } else {
             $strCodiAcci = 'ie';
         }
-        $arrOpciDrop[] = OpcionDropDown(
-            __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/'.$strCodiAcci,
-            TextoIcono('print', 'Imprimir Guía')
-        );
+        if ($this->objGuia->Piezas <= 5) {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/'.$strCodiAcci.'/0',
+                TextoIcono('print', 'Imprimir Guia')
+            );
+        }
+
+        //$objImprGuia = GuiaImprimir::LoadByGuiaId($this->objGuia->Id);
+        //if ($objImprGuia instanceof GuiaImprimir) {
+        //    if ($objImprGuia->IsImpresa) {
+        //        $strEnlaOpci = __UTIL__.'/descargar_archivo.php?f='.$this->objGuia->__printName();
+        //        $arrOpciDrop[] = OpcionDropDown($strEnlaOpci, TextoIcono('clone', 'Imprimir Multi-Pzas '));
+        //    }
+        //}
+
+        //$arrOpciDrop[] = OpcionDropDown(
+        //    __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/mp',
+        //    TextoIcono('print', 'Generar Formatos Impr. Guias')
+        //);
         if (in_array($this->objGuia->Producto->Codigo,['EXA','EXM'])) {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__ . '/consulta_guia_new.php/' . $this->objGuia->Id . '/co',
@@ -433,6 +455,62 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     }
 
+    protected function btnImprPiez_Create() {
+        $this->btnImprPiez = new QLabel($this);
+        $this->btnImprPiez->HtmlEntities = false;
+        $this->btnImprPiez->CssClass = '';
+
+        $arrOpciDrop = [];
+        $strTextBoto = TextoIcono('print','Impr');
+
+        if ($this->objGuia->Producto->Codigo == 'NAC') {
+            $strCodiAcci = 'in';
+        } else {
+            $strCodiAcci = 'ie';
+        }
+
+        $intCantPiez = $this->objGuia->Piezas;
+        $intCantGrup = $intCantPiez / $this->intPiezGrup;
+        $intRestDivi = $intCantPiez % $this->intPiezGrup;
+        if ($intRestDivi > 0) {
+            $intCantGrup += 1;
+        }
+        $li = 1;
+        for ($i = 1; $i <= $intCantGrup; $i++) {
+            $lf = $li + $this->intPiezGrup - 1;
+            if ($lf > $intCantPiez) {
+                $lf = $intCantPiez;
+            }
+            $strTextAdic = '('.$li.'-'.$lf.')';
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/'.$strCodiAcci.'/'.$i,
+                TextoIcono('clone', 'Imprimir Guia '.$strTextAdic)
+            );
+            $li = $lf + 1;
+        }
+
+        $this->btnImprPiez->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 's');
+    }
+
+    //protected function btnImprPiez_Create() {
+    //    $this->btnImprPiez = new QLabel($this);
+    //    $this->btnImprPiez->HtmlEntities = false;
+    //    $this->btnImprPiez->CssClass = '';
+    //
+    //    $_SESSION['GuiaCamb'] = $this->objGuia->Id;
+    //    $arrOpciDrop = [];
+    //    $strTextBoto = TextoIcono('print','Impr');
+    //
+    //    $objImprGuia = GuiaImprimir::LoadByGuiaId($this->objGuia->Id);
+    //    if ($objImprGuia instanceof GuiaImprimir) {
+    //        if ($objImprGuia->IsImpresa) {
+    //            $strEnlaOpci = __UTIL__.'/descargar_archivo.php?f='.$this->objGuia->__printName();
+    //            $arrOpciDrop[] = OpcionDropDown($strEnlaOpci, TextoIcono('clone', 'Imprimir Guía '));
+    //        }
+    //    }
+    //    $this->btnImprPiez->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 's');
+    //}
+
     protected function lblSistGuia_Create() {
         $this->lblSistGuia = new QLabel($this);
         $this->lblSistGuia->Text = $this->objGuia->sistema();
@@ -444,7 +522,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->btnDeleGuia->ToolTip = 'Permite borrar la Guia';
         $this->btnDeleGuia->AddAction(new QClickEvent(), new QConfirmAction('Seguro ?'));
         $this->btnDeleGuia->AddAction(new QClickEvent(), new QAjaxAction('btnDeleGuia_Click'));
-        //$this->btnDeleGuia->Visible = false;
     }
 
     protected function lblBotoPopu_Create() {
@@ -1052,19 +1129,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function ImprimirGuiaNacional()
     {
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
         try {
             $strNombArch = 'GuiaNac' . $this->objGuia->Numero . '.pdf';
-            $strNombForm = 'guia_nacional.php';
-            $strPosiHoja = 'P';
 
             $_SESSION['GuiaImpr'] = serialize($this->objGuia);
             $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
 
-            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
             $html2pdf->pdf->SetDisplayMode('fullpage');
             ob_start();
-            include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            include dirname(__FILE__) . '/rhtml/guia_nacional.php';
             $content = ob_get_clean();
 
             $html2pdf->writeHTML($content);
@@ -1077,76 +1152,113 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
     }
 
-    protected function ImprimirGuiaExportacionOld()
+    protected function ImprimirGuiaExportacion($intGrupPiez=0)
     {
-        $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
         $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
             $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
 
             $_SESSION['GuiaImpr'] = serialize($this->objGuia);
-            $_SESSION['ImpoGuia'] = serialize($arrImpoGuia);
 
-            $html2pdf->pdf->SetDisplayMode('fullpage');
-            //$html2pdf->setModeDebug();
-            $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+            $arrPiezProc = [];
+            if ($intGrupPiez == 0) {
+                $arrPiezProc = $this->arrPiezGuia;
+            } else {
+                $arrRangPiez = [];
+                $intLimiFina = $intGrupPiez * $this->intPiezGrup;
+                for ($i = 1; $i <= $this->intPiezGrup; $i++) {
+                    $arrRangPiez[] = $intLimiFina - ($i-1);
+                }
+                /* @var $objPiezGuia GuiaPiezas */
+                foreach ($this->arrPiezGuia as $objPiezGuia) {
+                    if (in_array($objPiezGuia->__ordinal(),$arrRangPiez)) {
+                        $arrPiezProc[] = $objPiezGuia;
+                    }
+                }
+            }
             ob_start();
-            foreach ($arrPiezGuia as $objPiezGuia) {
+            foreach ($arrPiezProc as $objPiezGuia) {
                 $_SESSION['PiezGuia'] = serialize($objPiezGuia);
                 include dirname(__FILE__) . '/rhtml/guia_exportacion.php';
             }
             $content = ob_get_clean();
 
+            //$html2pdf->setModeDebug();
+            $html2pdf->pdf->SetDisplayMode('fullpage');
             $html2pdf->writeHTML($content);
             $html2pdf->output($strNombArch);
         } catch (Html2PdfException $e) {
             $html2pdf->clean();
-
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
+        } catch (Exception $e) {
+            $html2pdf->clean();
+            echo $e->getMessage();
+        } catch (Error $e) {
+            $html2pdf->clean();
+            echo $e->getMessage();
         }
     }
 
 
-    protected function ImprimirGuiaExportacion()
+    protected function ImprimirGuiaExportacionMP()
     {
-        $arrImpoGuia = $this->objGuia->GetGuiaConceptosAsGuiaArray();
+        $strArchGuia = $this->objGuia->__printName();
+        $arrArchGene = [];
+        $arrPiezGuia = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+        foreach ($arrPiezGuia as $objPiezGuia) {
+            t('Procesando: '.$objPiezGuia->IdPieza);
+            $arrArchGene[] = $this->ImprimirUna($objPiezGuia);
+            //t('El vector contiene: ');
+            //foreach ($arrArchGene as $strNombArch) {
+            //    t($strNombArch);
+            //}
+        }
+        $strComaUnix = 'convert '.implode(' ',$arrArchGene)." $strArchGuia";
+        //t('Unix: '.$strComaUnix);
+        exec($strComaUnix,$output,$retval);
+        //t('Return value: '.$retval);
+        $this->success('La Guia ha sido generada');
+    }
+
+    protected function ImprimirUna(GuiaPiezas $objPiezGuia)
+    {
         $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
-            t('Imprimiendo...');
-            $_SESSION['IdxxGuia'] = $this->objGuia->Id;
+            //t('Imprimiendo: '.$objPiezGuia->IdPieza);
+            $_SESSION['PiezGuia'] = serialize($objPiezGuia);
+
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/guia_exportacion_una.php';
+            $content = ob_get_clean();
 
             $html2pdf->pdf->SetDisplayMode('fullpage');
-
-            $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
-            ob_start();
-            include dirname(__FILE__) . '/rhtml/guia_exportacion_mp.php';
-            $content = ob_get_clean();
             $html2pdf->writeHTML($content);
-            $html2pdf->output($strNombArch);
+            $strNombArch = $objPiezGuia->__printName();
+            $html2pdf->output($strNombArch,'F');
+            return $strNombArch;
         } catch (Html2PdfException $e) {
             $html2pdf->clean();
 
             $formatter = new ExceptionFormatter($e);
             echo $formatter->getHtmlMessage();
         }
+        return null;
     }
 
     protected function ImprimirAcuerdoDeLiberacion()
     {
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
             $strNombArch = 'AcuerdoDeLiberacion' . $this->objGuia->Numero . '.pdf';
-            $strNombForm = 'acuerdo_lr.php';
-            $strPosiHoja = 'P';
 
             $_SESSION['GuiaImpr'] = serialize($this->objGuia);
 
-            $html2pdf = new Html2Pdf($strPosiHoja, 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
-            $html2pdf->pdf->SetDisplayMode('fullpage');
             ob_start();
-            include dirname(__FILE__) . '/rhtml/' . $strNombForm;
+            include dirname(__FILE__) . '/rhtml/acuerdo_lr.php';
             $content = ob_get_clean();
 
+            $html2pdf->pdf->SetDisplayMode('fullpage');
             $html2pdf->writeHTML($content);
             $html2pdf->output($strNombArch);
         } catch (Html2PdfException $e) {
@@ -1227,7 +1339,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
 
     }
-
 
     protected function btnInfoPodx_Click($strFormId, $strControlId, $strParameter) {
         $this->mensaje();
@@ -1583,12 +1694,19 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colMostComo = new QDataGridColumn($this);
         $colMostComo->Name = QApplication::Translate('CONCEPTO');
         $colMostComo->Html = '<?= $_ITEM->MostrarComo; ?>';
-        $colMostComo->Width = 1800;
+        $colMostComo->Width = 900;
         $colMostComo->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgConcGuia->AddColumn($colMostComo);
 
         $colMontConc = new QDataGridColumn($this);
-        $colMontConc->Name = QApplication::Translate('MONTO');
+        $colMontConc->Name = QApplication::Translate('MTO $');
+        $colMontConc->Html = '<?= nf($_ITEM->Monto/$_ITEM->Guia->Tasa); ?>';
+        $colMontConc->Width = 250;
+        $colMontConc->HorizontalAlign = QHorizontalAlign::Right;
+        $this->dtgConcGuia->AddColumn($colMontConc);
+
+        $colMontConc = new QDataGridColumn($this);
+        $colMontConc->Name = QApplication::Translate('MTO BS');
         $colMontConc->Html = '<?= nf($_ITEM->Monto); ?>';
         $colMontConc->Width = 200;
         $colMontConc->HorizontalAlign = QHorizontalAlign::Right;

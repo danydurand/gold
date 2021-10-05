@@ -14,7 +14,8 @@ $strLimiDere = '350px';
 $intFactIdxx = $_SESSION['FactIdxx'];
 $objFactImpr = Facturas::Load($intFactIdxx);
 $arrGuiaFact = $objFactImpr->GetFacturaGuiasAsFacturaArray();
-$arrItemFact = $objFactImpr->GetFacturaItemsAsFacturaArray();
+$objClauOrde = QQ::OrderBy(QQN::FacturaItems()->Concepto->Orden);
+$arrItemFact = $objFactImpr->GetFacturaItemsAsFacturaArray($objClauOrde);
 $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
 ?>
 

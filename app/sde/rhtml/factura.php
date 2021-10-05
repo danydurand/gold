@@ -85,7 +85,7 @@ $objFactImpr = Facturas::Load($intFactIdxx);
         <table style="border: solid .5mm; font-size: 10px;">
             <tr>
                 <td class="titulo" style="width: 150px;">PLEASE MAKE CHECK TO:</td>
-                <td style="text-align: left">GOLD COAST CUSTOM EXPRESS CORP.</td>
+                <td style="text-align: left">GOLD COAST CUSTOMS EXPRESS CORP.</td>
             </tr>
         </table>
         <br>
@@ -99,7 +99,7 @@ $objFactImpr = Facturas::Load($intFactIdxx);
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">A NOMBRE DE:</td>
-                <td style="text-align: left">GOLD COAST CUSTOM AND TRADING CORP.</td>
+                <td style="text-align: left">GOLD COAST CUSTOMS EXPRESS CORP.</td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">TIPO DE CUENTA:</td>
@@ -107,7 +107,7 @@ $objFactImpr = Facturas::Load($intFactIdxx);
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">NRO DE CUENTA:</td>
-                <td style="text-align: left">898111123004</td>
+                <td style="text-align: left">8981 1112 7602</td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">SWIFT:</td>
@@ -115,7 +115,7 @@ $objFactImpr = Facturas::Load($intFactIdxx);
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">ABA:</td>
-                <td style="text-align: left">063100277</td>
+                <td style="text-align: left">063000047</td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">ZELLE:</td>

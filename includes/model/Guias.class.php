@@ -27,6 +27,10 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
+		public function __printName() {
+		    return '/var/www/html/gold/retail/tmp/Guia'.$this->Numero.'.pdf';
+        }
+
 		public function ResumenDeEntrega() {
             $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
             $intCantOkey = $this->ContarPiezasConCheckpoint('OK');

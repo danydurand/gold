@@ -7,8 +7,8 @@
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label for="">V-Decl. ($)</label><br>
-            <?php $this->txtValoDecl->Render(); ?>
+            <label for="">Modo V.D.</label><br>
+            <?php $this->lstModoValo->Render(); ?>
         </div>
     </div>
     <div class="col-md-3">
@@ -73,6 +73,12 @@
         <div class="form-group" style="text-align: right">
             <label for="">Pzas</label><br>
             <?php $this->txtCantPiez->Render(); ?>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="form-group">
+            <label for="">V-Decl. ($)</label><br>
+            <?php $this->txtValoDecl->Render(); ?>
         </div>
     </div>
 </div>

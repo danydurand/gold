@@ -541,6 +541,12 @@
 			return new QQNodeGuiaConsecutivo('guia_consecutivo', null, null);
 		}
 		/**
+		 * @return QQNodeGuiaImprimir
+		 */
+		static public function GuiaImprimir() {
+			return new QQNodeGuiaImprimir('guia_imprimir', null, null);
+		}
+		/**
 		 * @return QQNodeGuiaMasivaConnect
 		 */
 		static public function GuiaMasivaConnect() {

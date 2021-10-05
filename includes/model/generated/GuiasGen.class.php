@@ -42,6 +42,7 @@
 	 * @property string $Contenido the value for strContenido (Not Null)
 	 * @property integer $Piezas the value for intPiezas (Not Null)
 	 * @property double $ValorDeclarado the value for fltValorDeclarado (Not Null)
+	 * @property string $ModoValor the value for strModoValor 
 	 * @property string $TipoExport the value for strTipoExport 
 	 * @property boolean $Asegurado the value for blnAsegurado (Not Null)
 	 * @property double $Total the value for fltTotal (Not Null)
@@ -90,6 +91,7 @@
 	 * @property GuiaPod $GuiaPod the value for the GuiaPod object referenced by intGuiaPodId 
 	 * @property NotaEntrega $NotaEntrega the value for the NotaEntrega object referenced by intNotaEntregaId 
 	 * @property EstadisticaDeGuias $EstadisticaDeGuias the value for the EstadisticaDeGuias object that uniquely references this Guias
+	 * @property GuiaImprimir $GuiaImprimirAsGuia the value for the GuiaImprimir object that uniquely references this Guias
 	 * @property-read Manifiesto $_ManifiestoAsManiGuia the value for the private _objManifiestoAsManiGuia (Read-Only) if set due to an expansion on the mani_guia_assn association table
 	 * @property-read Manifiesto[] $_ManifiestoAsManiGuiaArray the value for the private _objManifiestoAsManiGuiaArray (Read-Only) if set due to an ExpandAsArray on the mani_guia_assn association table
 	 * @property-read FacturaGuias $_FacturaGuiasAsGuia the value for the private _objFacturaGuiasAsGuia (Read-Only) if set due to an expansion on the factura_guias.guia_id reverse relationship
@@ -340,6 +342,15 @@
 		 */
 		protected $fltValorDeclarado;
 		const ValorDeclaradoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias.modo_valor
+		 * @var string strModoValor
+		 */
+		protected $strModoValor;
+		const ModoValorMaxLength = 2;
+		const ModoValorDefault = null;
 
 
 		/**
@@ -904,6 +915,24 @@
 		 */
 		protected $blnDirtyEstadisticaDeGuias;
 
+		/**
+		 * Protected member variable that contains the object which points to
+		 * this object by the reference in the unique database column guia_imprimir.guia_id.
+		 *
+		 * NOTE: Always use the GuiaImprimirAsGuia property getter to correctly retrieve this GuiaImprimir object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var GuiaImprimir objGuiaImprimirAsGuia
+		 */
+		protected $objGuiaImprimirAsGuia;
+
+		/**
+		 * Used internally to manage whether the adjoined GuiaImprimirAsGuia object
+		 * needs to be updated on save.
+		 *
+		 * NOTE: Do not manually update this value
+		 */
+		protected $blnDirtyGuiaImprimirAsGuia;
+
 
 
 		/**
@@ -938,6 +967,7 @@
 			$this->strContenido = Guias::ContenidoDefault;
 			$this->intPiezas = Guias::PiezasDefault;
 			$this->fltValorDeclarado = Guias::ValorDeclaradoDefault;
+			$this->strModoValor = Guias::ModoValorDefault;
 			$this->strTipoExport = Guias::TipoExportDefault;
 			$this->blnAsegurado = Guias::AseguradoDefault;
 			$this->fltTotal = Guias::TotalDefault;
@@ -1340,6 +1370,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'contenido', $strAliasPrefix . 'contenido');
 			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
 			    $objBuilder->AddSelectItem($strTableName, 'valor_declarado', $strAliasPrefix . 'valor_declarado');
+			    $objBuilder->AddSelectItem($strTableName, 'modo_valor', $strAliasPrefix . 'modo_valor');
 			    $objBuilder->AddSelectItem($strTableName, 'tipo_export', $strAliasPrefix . 'tipo_export');
 			    $objBuilder->AddSelectItem($strTableName, 'asegurado', $strAliasPrefix . 'asegurado');
 			    $objBuilder->AddSelectItem($strTableName, 'total', $strAliasPrefix . 'total');
@@ -1580,6 +1611,9 @@
 			$strAlias = $strAliasPrefix . 'valor_declarado';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltValorDeclarado = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'modo_valor';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strModoValor = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'tipo_export';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strTipoExport = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1816,6 +1850,21 @@
 					// We ATTEMPTED to do an Early Bind but the Object Doesn't Exist
 					// Let's set to FALSE so that the object knows not to try and re-query again
 					$objToReturn->objEstadisticaDeGuias = false;
+				}
+			}
+
+			// Check for GuiaImprimirAsGuia Unique ReverseReference Binding
+			$strAlias = $strAliasPrefix . 'guiaimprimirasguia__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if ($objDbRow->ColumnExists($strAliasName)) {
+				if (!is_null($objDbRow->GetColumn($strAliasName))) {
+					$objExpansionNode = (empty($objExpansionAliasArray['guiaimprimirasguia']) ? null : $objExpansionAliasArray['guiaimprimirasguia']);
+					$objToReturn->objGuiaImprimirAsGuia = GuiaImprimir::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaimprimirasguia__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+				else {
+					// We ATTEMPTED to do an Early Bind but the Object Doesn't Exist
+					// Let's set to FALSE so that the object knows not to try and re-query again
+					$objToReturn->objGuiaImprimirAsGuia = false;
 				}
 			}
 
@@ -2588,6 +2637,7 @@
 							`contenido`,
 							`piezas`,
 							`valor_declarado`,
+							`modo_valor`,
 							`tipo_export`,
 							`asegurado`,
 							`total`,
@@ -2649,6 +2699,7 @@
 							' . $objDatabase->SqlVariable($this->strContenido) . ',
 							' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
+							' . $objDatabase->SqlVariable($this->strModoValor) . ',
 							' . $objDatabase->SqlVariable($this->strTipoExport) . ',
 							' . $objDatabase->SqlVariable($this->blnAsegurado) . ',
 							' . $objDatabase->SqlVariable($this->fltTotal) . ',
@@ -2724,6 +2775,7 @@
 							`contenido` = ' . $objDatabase->SqlVariable($this->strContenido) . ',
 							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							`valor_declarado` = ' . $objDatabase->SqlVariable($this->fltValorDeclarado) . ',
+							`modo_valor` = ' . $objDatabase->SqlVariable($this->strModoValor) . ',
 							`tipo_export` = ' . $objDatabase->SqlVariable($this->strTipoExport) . ',
 							`asegurado` = ' . $objDatabase->SqlVariable($this->blnAsegurado) . ',
 							`total` = ' . $objDatabase->SqlVariable($this->fltTotal) . ',
@@ -2784,6 +2836,26 @@
 					// Reset the "Dirty" flag
 					$this->blnDirtyEstadisticaDeGuias = false;
 				}
+
+
+				// Update the adjoined GuiaImprimirAsGuia object (if applicable)
+				// TODO: Make this into hard-coded SQL queries
+				if ($this->blnDirtyGuiaImprimirAsGuia) {
+					// Unassociate the old one (if applicable)
+					if ($objAssociated = GuiaImprimir::LoadByGuiaId($this->intId)) {
+						$objAssociated->GuiaId = null;
+						$objAssociated->Save();
+					}
+
+					// Associate the new one (if applicable)
+					if ($this->objGuiaImprimirAsGuia) {
+						$this->objGuiaImprimirAsGuia->GuiaId = $this->intId;
+						$this->objGuiaImprimirAsGuia->Save();
+					}
+
+					// Reset the "Dirty" flag
+					$this->blnDirtyGuiaImprimirAsGuia = false;
+				}
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -2817,6 +2889,15 @@
 			// Optional -- if you **KNOW** that you do not want to EVER run any level of business logic on the disassocation,
 			// you *could* override Delete() so that this step can be a single hard coded query to optimize performance.
 			if ($objAssociated = EstadisticaDeGuias::LoadByGuiaId($this->intId)) {
+				$objAssociated->Delete();
+			}
+
+		
+			// Update the adjoined GuiaImprimirAsGuia object (if applicable) and perform a delete
+
+			// Optional -- if you **KNOW** that you do not want to EVER run any level of business logic on the disassocation,
+			// you *could* override Delete() so that this step can be a single hard coded query to optimize performance.
+			if ($objAssociated = GuiaImprimir::LoadByGuiaId($this->intId)) {
 				$objAssociated->Delete();
 			}
 
@@ -2917,6 +2998,7 @@
 			$this->strContenido = $objReloaded->strContenido;
 			$this->intPiezas = $objReloaded->intPiezas;
 			$this->fltValorDeclarado = $objReloaded->fltValorDeclarado;
+			$this->strModoValor = $objReloaded->strModoValor;
 			$this->strTipoExport = $objReloaded->strTipoExport;
 			$this->blnAsegurado = $objReloaded->blnAsegurado;
 			$this->fltTotal = $objReloaded->fltTotal;
@@ -3159,6 +3241,13 @@
 					 * @return double
 					 */
 					return $this->fltValorDeclarado;
+
+				case 'ModoValor':
+					/**
+					 * Gets the value for strModoValor 
+					 * @return string
+					 */
+					return $this->strModoValor;
 
 				case 'TipoExport':
 					/**
@@ -3597,6 +3686,24 @@
 						if (!$this->objEstadisticaDeGuias)
 							$this->objEstadisticaDeGuias = EstadisticaDeGuias::LoadByGuiaId($this->intId);
 						return $this->objEstadisticaDeGuias;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'GuiaImprimirAsGuia':
+					/**
+					 * Gets the value for the GuiaImprimir object that uniquely references this Guias
+					 * by objGuiaImprimirAsGuia (Unique)
+					 * @return GuiaImprimir
+					 */
+					try {
+						if ($this->objGuiaImprimirAsGuia === false)
+							// We've attempted early binding -- and the reverse reference object does not exist
+							return null;
+						if (!$this->objGuiaImprimirAsGuia)
+							$this->objGuiaImprimirAsGuia = GuiaImprimir::LoadByGuiaId($this->intId);
+						return $this->objGuiaImprimirAsGuia;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4086,6 +4193,19 @@
 					 */
 					try {
 						return ($this->fltValorDeclarado = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ModoValor':
+					/**
+					 * Sets the value for strModoValor 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strModoValor = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4990,6 +5110,45 @@
 
 							// Update Local Member Variable
 							$this->objEstadisticaDeGuias = $mixValue;
+						} else {
+							// Nope -- therefore, make no changes
+						}
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'GuiaImprimirAsGuia':
+					/**
+					 * Sets the value for the GuiaImprimir object referenced by objGuiaImprimirAsGuia (Unique)
+					 * @param GuiaImprimir $mixValue
+					 * @return GuiaImprimir
+					 */
+					if (is_null($mixValue)) {
+						$this->objGuiaImprimirAsGuia = null;
+
+						// Make sure we update the adjoined GuiaImprimir object the next time we call Save()
+						$this->blnDirtyGuiaImprimirAsGuia = true;
+
+						return null;
+					} else {
+						// Make sure $mixValue actually is a GuiaImprimir object
+						try {
+							$mixValue = QType::Cast($mixValue, 'GuiaImprimir');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Are we setting objGuiaImprimirAsGuia to a DIFFERENT $mixValue?
+						if ((!$this->GuiaImprimirAsGuia) || ($this->GuiaImprimirAsGuia->Id != $mixValue->Id)) {
+							// Yes -- therefore, set the "Dirty" flag to true
+							// to make sure we update the adjoined GuiaImprimir object the next time we call Save()
+							$this->blnDirtyGuiaImprimirAsGuia = true;
+
+							// Update Local Member Variable
+							$this->objGuiaImprimirAsGuia = $mixValue;
 						} else {
 							// Nope -- therefore, make no changes
 						}
@@ -6141,6 +6300,7 @@
 			$strToReturn .= '<element name="Contenido" type="xsd:string"/>';
 			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
 			$strToReturn .= '<element name="ValorDeclarado" type="xsd:float"/>';
+			$strToReturn .= '<element name="ModoValor" type="xsd:string"/>';
 			$strToReturn .= '<element name="TipoExport" type="xsd:string"/>';
 			$strToReturn .= '<element name="Asegurado" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Total" type="xsd:float"/>';
@@ -6270,6 +6430,8 @@
 				$objToReturn->intPiezas = $objSoapObject->Piezas;
 			if (property_exists($objSoapObject, 'ValorDeclarado'))
 				$objToReturn->fltValorDeclarado = $objSoapObject->ValorDeclarado;
+			if (property_exists($objSoapObject, 'ModoValor'))
+				$objToReturn->strModoValor = $objSoapObject->ModoValor;
 			if (property_exists($objSoapObject, 'TipoExport'))
 				$objToReturn->strTipoExport = $objSoapObject->TipoExport;
 			if (property_exists($objSoapObject, 'Asegurado'))
@@ -6464,6 +6626,7 @@
 			$iArray['Contenido'] = $this->strContenido;
 			$iArray['Piezas'] = $this->intPiezas;
 			$iArray['ValorDeclarado'] = $this->fltValorDeclarado;
+			$iArray['ModoValor'] = $this->strModoValor;
 			$iArray['TipoExport'] = $this->strTipoExport;
 			$iArray['Asegurado'] = $this->blnAsegurado;
 			$iArray['Total'] = $this->fltTotal;
@@ -6604,6 +6767,7 @@
      * @property-read QQNode $Contenido
      * @property-read QQNode $Piezas
      * @property-read QQNode $ValorDeclarado
+     * @property-read QQNode $ModoValor
      * @property-read QQNode $TipoExport
      * @property-read QQNode $Asegurado
      * @property-read QQNode $Total
@@ -6651,6 +6815,7 @@
      * @property-read QQReverseReferenceNodeEstadisticaDeGuias $EstadisticaDeGuias
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsGuia
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsGuia
+     * @property-read QQReverseReferenceNodeGuiaImprimir $GuiaImprimirAsGuia
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
      * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsGuia
@@ -6730,6 +6895,8 @@
 					return new QQNode('piezas', 'Piezas', 'Integer', $this);
 				case 'ValorDeclarado':
 					return new QQNode('valor_declarado', 'ValorDeclarado', 'Float', $this);
+				case 'ModoValor':
+					return new QQNode('modo_valor', 'ModoValor', 'VarChar', $this);
 				case 'TipoExport':
 					return new QQNode('tipo_export', 'TipoExport', 'VarChar', $this);
 				case 'Asegurado':
@@ -6820,6 +6987,8 @@
 					return new QQReverseReferenceNodeFacturaGuias($this, 'facturaguiasasguia', 'reverse_reference', 'guia_id', 'FacturaGuiasAsGuia');
 				case 'GuiaConceptosAsGuia':
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosAsGuia');
+				case 'GuiaImprimirAsGuia':
+					return new QQReverseReferenceNodeGuiaImprimir($this, 'guiaimprimirasguia', 'reverse_reference', 'guia_id', 'GuiaImprimirAsGuia');
 				case 'GuiaPiezasAsGuia':
 					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasasguia', 'reverse_reference', 'guia_id', 'GuiaPiezasAsGuia');
 				case 'GuiasManifiestoAsGuia':
@@ -6876,6 +7045,7 @@
      * @property-read QQNode $Contenido
      * @property-read QQNode $Piezas
      * @property-read QQNode $ValorDeclarado
+     * @property-read QQNode $ModoValor
      * @property-read QQNode $TipoExport
      * @property-read QQNode $Asegurado
      * @property-read QQNode $Total
@@ -6923,6 +7093,7 @@
      * @property-read QQReverseReferenceNodeEstadisticaDeGuias $EstadisticaDeGuias
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsGuia
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsGuia
+     * @property-read QQReverseReferenceNodeGuiaImprimir $GuiaImprimirAsGuia
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
      * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsGuia
@@ -7002,6 +7173,8 @@
 					return new QQNode('piezas', 'Piezas', 'integer', $this);
 				case 'ValorDeclarado':
 					return new QQNode('valor_declarado', 'ValorDeclarado', 'double', $this);
+				case 'ModoValor':
+					return new QQNode('modo_valor', 'ModoValor', 'string', $this);
 				case 'TipoExport':
 					return new QQNode('tipo_export', 'TipoExport', 'string', $this);
 				case 'Asegurado':
@@ -7092,6 +7265,8 @@
 					return new QQReverseReferenceNodeFacturaGuias($this, 'facturaguiasasguia', 'reverse_reference', 'guia_id', 'FacturaGuiasAsGuia');
 				case 'GuiaConceptosAsGuia':
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosAsGuia');
+				case 'GuiaImprimirAsGuia':
+					return new QQReverseReferenceNodeGuiaImprimir($this, 'guiaimprimirasguia', 'reverse_reference', 'guia_id', 'GuiaImprimirAsGuia');
 				case 'GuiaPiezasAsGuia':
 					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasasguia', 'reverse_reference', 'guia_id', 'GuiaPiezasAsGuia');
 				case 'GuiasManifiestoAsGuia':

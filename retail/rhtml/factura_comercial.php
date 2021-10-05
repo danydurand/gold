@@ -1,3 +1,23 @@
+<style type="text/css">
+    <!--
+    .titulo {
+        background-color: #CCC;
+        font-weight: bold;
+        font-size: 25px;
+        text-align: center;
+    }
+    .etiqueta {
+        font-weight: bold;
+        vertical-align: top;
+    }
+    .recuadro {
+        border: solid 1px;
+    }
+    .contenido {
+        font-size: small;
+    }
+    -->
+</style>
 <?php
 require_once('qcubed.inc.php');
 
@@ -6,7 +26,7 @@ $objGuiaImpr  = unserialize($_SESSION['GuiaImpr']);
 $intAnchPagi  = "680px";
 $intMediPagi  = "340px";
 $strLimiDere  = '350px';
-$strTituRepo  = "PROFORME INVOICE";
+$strTituRepo  = "INVOICE / FACTURA COMERCIAL";
 $strFechDhoy  = date('d/m/Y');
 $strFechGuia  = $objGuiaImpr->Fecha->__toString('DD/MM/YYYY');
 $strNumeGuia  = $objGuiaImpr->Numero;
@@ -27,44 +47,29 @@ if (strlen($objGuiaImpr->TelefonoDestinatario)) {
 }
 $strDescCont  = $objGuiaImpr->Contenido;
 $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
+$arrPiezGuia  = $objGuiaImpr->GetGuiaPiezasAsGuiaArray();
+$intIdxxItem  = 1;
+$intRegiPpag  = 28;
+$intCantPagi  = (int)($objGuiaImpr->Piezas / $intRegiPpag);
+$intRestDivi  = $objGuiaImpr->Piezas % $intRegiPpag;
+if ($intRestDivi > 0) {
+    $intCantPagi++;
+}
+$arrRangRegi = [];
+$intLimiInic = 1;
+for ($i = 0; $i < $intCantPagi; $i++) {
+    $arrRangRegi[$i] = range($intLimiInic,($i+1)*$intRegiPpag);
+    $intLimiInic = ($intRegiPpag*($i+1))+1;
+}
 ?>
-<style type="text/css">
-    <!--
-    .titulo {
-        background-color: #CCC;
-        font-weight: bold;
-        font-size: 25px;
-        text-align: center;
-    }
-    .etiqueta {
-        font-weight: bold;
-        vertical-align: top;
-    }
-    .parrafo {
-        /*width: */<?//= $intAnchPagi ?>/*;*/
-        width: 100%;
-        text-align: justify;
-        font-size: 15px;
-        line-height: 20px;
-        word-wrap: normal;
-    }
-    .medio_parrafo {
-        width: <?= $intMediPagi ?>;
-        /* text-align: justify; */
-        font-size: 15px;
-        line-height: 20px;
-    }
-    .recuadro {
-        border: solid 1px;
-    }
-    -->
-</style>
+
+<?php for($i = 0; $i < $intCantPagi; $i++) { ?>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
         <table style="margin-top: 36px; width: 100%;">
             <tr>
                 <td class="titulo" style="width: 100%">
-                    <?= $strTituRepo ?>
+                    <?= $strTituRepo.' (Pag.'.($i+1).')' ?>
                 </td>
             </tr>
         </table>
@@ -72,15 +77,12 @@ $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
             <tr>
                 <td style="width: 50%" class="recuadro">
                     <span class="etiqueta">Shipper / Remitente:</span> <?= $strNombRemi ?>
-                    <br><br>
                 </td>
                 <td style="width: 25%" class="recuadro">
                     <span class="etiqueta">Date / Fecha:</span> <?= $strFechDhoy ?>
-                    <br><br>
                 </td>
                 <td style="width: 25%" class="recuadro">
                     <span class="etiqueta">AWB Number:</span> <?= $strNumeGuia ?>
-                    <br><br>
                 </td>
             </tr>
         </table>
@@ -97,11 +99,9 @@ $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
             <tr>
                 <td class="recuadro" style="width: 60%">
                     <?= $strDireRemi.'  '.$strSucuPais ?>
-                    <br><br>
                 </td>
                 <td class="recuadro" style="width: 40%">
                     <?= $strTeleRemi ?>
-                    <br><br>
                 </td>
             </tr>
         </table>
@@ -109,11 +109,9 @@ $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
             <tr>
                 <td style="width: 60%" class="recuadro">
                     <span class="etiqueta">Consignee / Destinatario:</span> <?= $strNombDest ?>
-                    <br><br>
                 </td>
                 <td style="width: 40%" class="recuadro">
                     <span class="etiqueta">Export Reference:</span> <?= $objGuiaImpr->ReferenciaExp ?>
-                    <br><br>
                 </td>
             </tr>
         </table>
@@ -135,19 +133,16 @@ $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
             <tr>
                 <td class="recuadro" style="width: 40%">
                     <?= $strDireDest.' '.$strSucuDest ?>
-                    <br><br>
                 </td>
                 <td class="recuadro" style="width: 20%">
                     <?= $strTeleDest ?>
-                    <br><br>
                 </td>
                 <td class="recuadro" style="width: 40%">
                     <?= $objGuiaImpr->RazonesExp ?>
-                    <br><br>
                 </td>
             </tr>
         </table>
-        <table style="border: solid; width: 100%">
+        <table style="border: solid; width: 100%;">
             <tr>
                 <td class="recuadro etiqueta" style="width: 8%">
                     # of Pkg<br>
@@ -180,37 +175,37 @@ $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
             </tr>
         </table>
         <table style="border: solid; width: 100%">
-            <tr>
-                <td class="recuadro etiqueta" style="width: 8%; text-align: center">
-                    <?= $objGuiaImpr->Piezas ?>
-                    <br><br>
-                </td>
-                <td class="recuadro etiqueta" style="width: 9%; text-align: center">
-                    BOX
-                    <br><br>
-                </td>
-                <td class="recuadro etiqueta" style="width: 36%">
-                    <?= $objGuiaImpr->Contenido ?>
-                    <br><br>
-                </td>
-                <td class="recuadro etiqueta" style="width: 17%; text-align: center">
-                    VENEZUELA
-                    <br><br>
-                </td>
-                <td class="recuadro etiqueta" style="width: 6%; text-align: center">
-                    <?= $objGuiaImpr->Piezas ?>
-                    <br><br>
-                </td>
-                <td class="recuadro etiqueta" style="width: 10%; text-align: right">
-                    <?= $objGuiaImpr->ValorDeclarado ?>
-                    <br><br>
-                </td>
-                <td class="recuadro etiqueta" style="width: 14%; text-align: right">
-                    <?= number_format($objGuiaImpr->Total,2) ?>
-                    <br><br>
-                </td>
-            </tr>
+            <?php /* @var $objPiezGuia GuiaPiezas */ ?>
+            <?php foreach ($arrPiezGuia as $objPiezGuia) { ?>
+                <?php if (in_array($objPiezGuia->__ordinal(),$arrRangRegi[$i])) { ?>
+                    <tr>
+                        <td class="recuadro contenido" style="width: 8%; text-align: center">
+                            <?= $intIdxxItem ?>
+                        </td>
+                        <td class="recuadro contenido" style="width: 9%; text-align: center">
+                            BOX
+                        </td>
+                        <td class="recuadro contenido" style="width: 36%">
+                            <?= $objPiezGuia->Descripcion ?>
+                        </td>
+                        <td class="recuadro contenido" style="width: 17%; text-align: center">
+                            VENEZUELA
+                        </td>
+                        <td class="recuadro contenido" style="width: 6%; text-align: center">
+                            <?= 1 ?>
+                        </td>
+                        <td class="recuadro contenido" style="width: 10%; text-align: right">
+                            <?= number_format($objPiezGuia->ValorDeclarado,2) ?>
+                        </td>
+                        <td class="recuadro contenido" style="width: 14%; text-align: right">
+                            <?= number_format($objPiezGuia->ValorDeclarado,2) ?>
+                        </td>
+                    </tr>
+                    <?php $intIdxxItem++ ?>
+                <?php } ?>
+            <?php } ?>
         </table>
+        <?php if ($i == $intCantPagi-1) { ?>
         <table style="border: solid; width: 100%">
             <tr>
                 <td class="recuadro etiqueta" style="width: 15%">
@@ -233,20 +228,16 @@ $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
         </table>
         <table style="border: solid; width: 100%">
             <tr>
-                <td class="recuadro etiqueta" style="width: 15%">
+                <td class="recuadro contenido" style="width: 15%; text-align: right">
                     <?= $objGuiaImpr->Piezas ?>
-                    <br><br>
                 </td>
-                <td class="recuadro etiqueta" style="width: 15%">
+                <td class="recuadro contenido" style="width: 15%; text-align: right">
                     <?= $objGuiaImpr->PiesCub ?>
-                    <br><br>
                 </td>
-                <td class="recuadro etiqueta" style="width: 40%">
-                    <br><br>
+                <td class="recuadro contenido" style="width: 40%">
                 </td>
-                <td class="recuadro etiqueta" style="width: 30%; text-align: right">
-                    <?= number_format(($objGuiaImpr->Total / $objGuiaImpr->Tasa),2) ?>
-                    <br><br>
+                <td class="recuadro contenido" style="width: 30%; text-align: right">
+                    <?= $objGuiaImpr->ValorDeclarado ?>
                 </td>
             </tr>
         </table>
@@ -260,5 +251,7 @@ $strSucuDest  = $objGuiaImpr->Destino->Nombre.' - USA';
                 </td>
             </tr>
         </table>
+        <?php } ?>
     </page_header>
 </page>
+<?php } ?>

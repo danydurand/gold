@@ -80,6 +80,7 @@ abstract class GuiasEditFormBase extends QForm {
 	protected $txtContenido;
 	protected $txtPiezas;
 	protected $txtValorDeclarado;
+	protected $txtModoValor;
 	protected $txtTipoExport;
 	protected $chkAsegurado;
 	protected $txtTotal;
@@ -117,6 +118,7 @@ abstract class GuiasEditFormBase extends QForm {
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 	protected $lstEstadisticaDeGuias;
+	protected $lstGuiaImprimirAsGuia;
 	protected $dtgManifiestosAsManiGuia;
 
 	// Other Controls
@@ -209,6 +211,7 @@ abstract class GuiasEditFormBase extends QForm {
 		$this->txtContenido = $this->mctGuias->txtContenido_Create();
 		$this->txtPiezas = $this->mctGuias->txtPiezas_Create();
 		$this->txtValorDeclarado = $this->mctGuias->txtValorDeclarado_Create();
+		$this->txtModoValor = $this->mctGuias->txtModoValor_Create();
 		$this->txtTipoExport = $this->mctGuias->txtTipoExport_Create();
 		$this->chkAsegurado = $this->mctGuias->chkAsegurado_Create();
 		$this->txtTotal = $this->mctGuias->txtTotal_Create();
@@ -244,6 +247,7 @@ abstract class GuiasEditFormBase extends QForm {
 		$this->txtUpdatedBy = $this->mctGuias->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctGuias->txtDeletedBy_Create();
 			$this->lstEstadisticaDeGuias = $this->mctGuias->lstEstadisticaDeGuias_Create();
+			$this->lstGuiaImprimirAsGuia = $this->mctGuias->lstGuiaImprimirAsGuia_Create();
 			$this->dtgManifiestosAsManiGuia = $this->mctGuias->dtgManifiestosAsManiGuia_Create();
 
 		$this->btnSave_Create();
