@@ -45,6 +45,8 @@
 	 * @property-read SdeContenedor[] $_SdeContenedorAsGuiaArray the value for the private _objSdeContenedorAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the sde_contenedor_guia_assn association table
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsPieza the value for the private _objPiezaCheckpointsAsPieza (Read-Only) if set due to an expansion on the pieza_checkpoints.pieza_id reverse relationship
 	 * @property-read PiezaCheckpoints[] $_PiezaCheckpointsAsPiezaArray the value for the private _objPiezaCheckpointsAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints.pieza_id reverse relationship
+	 * @property-read ScanneoPiezas $_ScanneoPiezasAsGuiaPieza the value for the private _objScanneoPiezasAsGuiaPieza (Read-Only) if set due to an expansion on the scanneo_piezas.guia_pieza_id reverse relationship
+	 * @property-read ScanneoPiezas[] $_ScanneoPiezasAsGuiaPiezaArray the value for the private _objScanneoPiezasAsGuiaPiezaArray (Read-Only) if set due to an ExpandAsArray on the scanneo_piezas.guia_pieza_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class GuiaPiezasGen extends QBaseClass implements IteratorAggregate {
@@ -272,6 +274,22 @@
 		 * @var PiezaCheckpoints[] _objPiezaCheckpointsAsPiezaArray;
 		 */
 		private $_objPiezaCheckpointsAsPiezaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ScanneoPiezasAsGuiaPieza object
+		 * (of type ScanneoPiezas), if this GuiaPiezas object was restored with
+		 * an expansion on the scanneo_piezas association table.
+		 * @var ScanneoPiezas _objScanneoPiezasAsGuiaPieza;
+		 */
+		private $_objScanneoPiezasAsGuiaPieza;
+
+		/**
+		 * Private member variable that stores a reference to an array of ScanneoPiezasAsGuiaPieza objects
+		 * (of type ScanneoPiezas[]), if this GuiaPiezas object was restored with
+		 * an ExpandAsArray on the scanneo_piezas association table.
+		 * @var ScanneoPiezas[] _objScanneoPiezasAsGuiaPiezaArray;
+		 */
+		private $_objScanneoPiezasAsGuiaPiezaArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -1045,6 +1063,21 @@
 					$objToReturn->_objPiezaCheckpointsAsPiezaArray[] = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsaspieza__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPiezaCheckpointsAsPieza)) {
 					$objToReturn->_objPiezaCheckpointsAsPieza = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsaspieza__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ScanneoPiezasAsGuiaPieza Virtual Binding
+			$strAlias = $strAliasPrefix . 'scanneopiezasasguiapieza__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['scanneopiezasasguiapieza']) ? null : $objExpansionAliasArray['scanneopiezasasguiapieza']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objScanneoPiezasAsGuiaPiezaArray)
+				$objToReturn->_objScanneoPiezasAsGuiaPiezaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objScanneoPiezasAsGuiaPiezaArray[] = ScanneoPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneopiezasasguiapieza__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objScanneoPiezasAsGuiaPieza)) {
+					$objToReturn->_objScanneoPiezasAsGuiaPieza = ScanneoPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneopiezasasguiapieza__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -1865,6 +1898,22 @@
 					 */
 					return $this->_objPiezaCheckpointsAsPiezaArray;
 
+				case '_ScanneoPiezasAsGuiaPieza':
+					/**
+					 * Gets the value for the private _objScanneoPiezasAsGuiaPieza (Read-Only)
+					 * if set due to an expansion on the scanneo_piezas.guia_pieza_id reverse relationship
+					 * @return ScanneoPiezas
+					 */
+					return $this->_objScanneoPiezasAsGuiaPieza;
+
+				case '_ScanneoPiezasAsGuiaPiezaArray':
+					/**
+					 * Gets the value for the private _objScanneoPiezasAsGuiaPiezaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the scanneo_piezas.guia_pieza_id reverse relationship
+					 * @return ScanneoPiezas[]
+					 */
+					return $this->_objScanneoPiezasAsGuiaPiezaArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -2248,6 +2297,9 @@
 			if ($this->CountPiezaCheckpointsesAsPieza()) {
 				$arrTablRela[] = 'pieza_checkpoints';
 			}
+			if ($this->CountScanneoPiezasesAsGuiaPieza()) {
+				$arrTablRela[] = 'scanneo_piezas';
+			}
 			
 			return $arrTablRela;
 		}
@@ -2403,6 +2455,155 @@
 					`pieza_checkpoints`
 				WHERE
 					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ScanneoPiezasAsGuiaPieza
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ScanneoPiezasesAsGuiaPieza as an array of ScanneoPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ScanneoPiezas[]
+		*/
+		public function GetScanneoPiezasAsGuiaPiezaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ScanneoPiezas::LoadArrayByGuiaPiezaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ScanneoPiezasesAsGuiaPieza
+		 * @return int
+		*/
+		public function CountScanneoPiezasesAsGuiaPieza() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ScanneoPiezas::CountByGuiaPiezaId($this->intId);
+		}
+
+		/**
+		 * Associates a ScanneoPiezasAsGuiaPieza
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function AssociateScanneoPiezasAsGuiaPieza(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoPiezasAsGuiaPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoPiezasAsGuiaPieza on this GuiaPiezas with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ScanneoPiezasAsGuiaPieza
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function UnassociateScanneoPiezasAsGuiaPieza(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsGuiaPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsGuiaPieza on this GuiaPiezas with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`guia_pieza_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . ' AND
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ScanneoPiezasesAsGuiaPieza
+		 * @return void
+		*/
+		public function UnassociateAllScanneoPiezasesAsGuiaPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsGuiaPieza on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`guia_pieza_id` = null
+				WHERE
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ScanneoPiezasAsGuiaPieza
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function DeleteAssociatedScanneoPiezasAsGuiaPieza(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsGuiaPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsGuiaPieza on this GuiaPiezas with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo_piezas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . ' AND
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ScanneoPiezasesAsGuiaPieza
+		 * @return void
+		*/
+		public function DeleteAllScanneoPiezasesAsGuiaPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsGuiaPieza on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo_piezas`
+				WHERE
+					`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 		}
 
@@ -3273,6 +3474,7 @@
      * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
      * @property-read QQReverseReferenceNodeGuiaTransportista $GuiaTransportistaAsGuiaPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
+     * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsGuiaPieza
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -3332,6 +3534,8 @@
 					return new QQReverseReferenceNodeGuiaTransportista($this, 'guiatransportistaasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaTransportistaAsGuiaPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
+				case 'ScanneoPiezasAsGuiaPieza':
+					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasguiapieza', 'reverse_reference', 'guia_pieza_id', 'ScanneoPiezasAsGuiaPieza');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -3374,6 +3578,7 @@
      * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
      * @property-read QQReverseReferenceNodeGuiaTransportista $GuiaTransportistaAsGuiaPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
+     * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsGuiaPieza
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -3433,6 +3638,8 @@
 					return new QQReverseReferenceNodeGuiaTransportista($this, 'guiatransportistaasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaTransportistaAsGuiaPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
+				case 'ScanneoPiezasAsGuiaPieza':
+					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasguiapieza', 'reverse_reference', 'guia_pieza_id', 'ScanneoPiezasAsGuiaPieza');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

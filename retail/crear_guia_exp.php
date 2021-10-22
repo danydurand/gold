@@ -190,6 +190,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected $arrDatoFact;
     protected $dtgDatoFact;
+    protected $blnAliaCome = false;
+    protected $blnPrimInte = true;
 
     
     protected function SetupGuia() {
@@ -402,7 +404,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //
         //$this->dtgDatoFact_Create();
 
-
         //$this->lblBotoPopu_Create();
         //$this->btnMasxAcci_Create();
         //$this->btnErroProc_Create();
@@ -420,7 +421,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
 
         $this->lstModoValo_Change();
-        //t('k9');
+
+        $objSucuUsua = Counter::Load($_SESSION['ReceptoriaId']);
+        if (!is_null($objSucuUsua->AliadoComercialId)) {
+            $this->blnAliaCome = true;
+            $this->lstClieCorp->Visible = false;
+        }
     }
 
 
@@ -497,7 +503,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtDireClie = new QTextBox($this);
         $this->txtDireClie->Placeholder = 'Direccion del Remitente';
         $this->txtDireClie->Width = 408;
-        $this->txtDireClie->Rows = 6;
+        $this->txtDireClie->Rows = 4;
         $this->txtDireClie->TextMode = QTextMode::MultiLine;
         $this->txtDireClie->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
@@ -691,7 +697,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtDireDest = new QTextBox($this);
         $this->txtDireDest->Placeholder = 'Direccion de entrega (incluya puntos de referencia)';
         $this->txtDireDest->Width = 545;
-        $this->txtDireDest->Rows = 4;
+        $this->txtDireDest->Rows = 3;
         $this->txtDireDest->TextMode = QTextMode::MultiLine;
         $this->txtDireDest->SetCustomAttribute('onblur',"this.value=this.value.toUpperCase()");
         if ($this->blnEditMode) {
@@ -922,7 +928,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function lblContPiez_Create() {
         $this->lblContPiez = new QLabel($this);
-        $this->lblContPiez->Text = 'Contenido';
+        $this->lblContPiez->Text = 'Contenido (max 50 caracteres)';
         $this->lblContPiez->Visible = false;
     }
 
@@ -1199,7 +1205,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             //-------------------------------------
             $intCantPiez = (int)$this->txtCantPiez->Text;
             $decValoPiez = (float)$this->txtValoDecl->Text;
-            $decValoDecl = $decValoPiez / ($intCantRepe + $intCantPiez);
+            if (!$this->blnEditPiez) {
+                $intCantPiez += $intCantRepe;
+            }
+            $decValoDecl = $decValoPiez / $intCantPiez;
         }
         for ($i = 0; $i < $intCantRepe; $i++) {
             if (!$this->blnEditPiez) {
@@ -1406,9 +1415,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     }
 
     protected function btnCancel_Click() {
-        if ($this->blnCambPiez) {
-            $strTextMens = 'Hay cambios en las piezas que no han sido reflejados en la BD. Guarde los cambios !!!';
+        if ($this->blnCambPiez && $this->blnPrimInte) {
+            $strTextMens = 'Cambios en las piezas <b>NO Guardados</b> | Presione <b>Volver para Cancelar</b> los Cambios | Presione <b>Guardar para Aplicar</b> los cambios !!!';
             $this->warning($strTextMens);
+            $this->blnPrimInte = false;
             return;
         }
         PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
@@ -1738,42 +1748,31 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtCeduDest_Blur() {
         if (!$this->blnEditMode) {
             $strNumeCedu = DejarNumerosVJGuion($this->txtCeduDest->Text);
-            if ($strNumeCedu == '99999999') {
-                $this->txtNombDest->Text = '';
-                $this->txtTlfdFijo->Text = '';
-                $this->txtTlfdMovi->Text = '';
-                $this->lstSexoDest->SelectedIndex = 0;
-                if (is_null($this->lstReceDest->SelectedValue)) {
-                    $this->txtDireDest->Text = '';
-                }
-                $this->txtNombDest->SetFocus();
-                return;
-            }
             if (strlen($strNumeCedu) > 0) {
                 $this->objDestPmnx = ClientesRetail::LoadByCedulaRif($strNumeCedu);
                 if ($this->objDestPmnx) {
                     $this->blnEditDest = true;
-                    //$this->txtCeduDest->HtmlAfter = '';
-                    $this->txtNombDest->Text          = $this->objDestPmnx->Nombre;
-                    $this->txtTlfdFijo->Text          = $this->objDestPmnx->TelefonoFijo;
-                    $this->txtTlfdMovi->Text          = $this->objDestPmnx->TelefonoMovil;
-                    $this->txtEmaiDest->Text          = $this->objDestPmnx->Email;
+                    $this->txtNombDest->Text = $this->objDestPmnx->Nombre;
+                    $this->txtTlfdFijo->Text = $this->objDestPmnx->TelefonoFijo;
+                    $this->txtTlfdMovi->Text = $this->objDestPmnx->TelefonoMovil;
+                    $this->txtEmaiDest->Text = $this->objDestPmnx->Email;
+                    $this->txtDireDest->Text = $this->objDestPmnx->Direccion;
+                    $this->txtEstaDest->Text = $this->objDestPmnx->Estado;
+                    $this->txtCiudDest->Text = $this->objDestPmnx->Ciudad;
+                    $this->txtPostDest->Text = $this->objDestPmnx->CodigoPostal;
                     $this->lstSexoDest->SelectedIndex = $this->objDestPmnx->Sexo == 'M' ? 1 : 2;
-                    if ($this->lstServExpo->SelectedValue == 'DOM') {
-                        $this->txtDireDest->Text = $this->objDestPmnx->Direccion;
-                    }
                 } else {
                     $this->blnEditDest = false;
                     $this->objDestPmnx = new ClientesRetail();
-                    $this->objDestPmnx->CedulaRif     = $strNumeCedu;
-                    //$this->txtCeduDest->HtmlAfter     = ' (Nuevo Cliente)';
-                    $this->txtNombDest->Text          = '';
-                    $this->txtTlfdFijo->Text          = '';
-                    $this->txtTlfdMovi->Text          = '';
+                    $this->objDestPmnx->CedulaRif = $strNumeCedu;
+                    $this->txtNombDest->Text = '';
+                    $this->txtTlfdFijo->Text = '';
+                    $this->txtTlfdMovi->Text = '';
+                    $this->txtDireDest->Text = '';
+                    $this->txtEstaDest->Text = '';
+                    $this->txtCiudDest->Text = '';
+                    $this->txtPostDest->Text = '';
                     $this->lstSexoDest->SelectedIndex = 0;
-                    if (is_null($this->lstReceDest->SelectedValue)) {
-                        $this->txtDireDest->Text = '';
-                    }
                     $this->txtNombDest->SetFocus();
                 }
             }

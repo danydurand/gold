@@ -24,7 +24,6 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
-        t('e1');
         $this->objDefaultWaitIcon = new QWaitIcon($this);
         $this->btnSave->Text = '<i class="fa fa-check fa-lg"></i> Guardar';
 
@@ -42,25 +41,18 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
             t('Modo insercion');
             $this->lblTituForm->Text = 'Establecer Ubicacion';
         }
-        t('e2');
 
         $this->lstSucuDisp_Create();
-        t('e3');
         $this->lstReceSucu_Create();
-        t('e4');
         $this->lstCajaRece_Create();
-        t('e5');
         $this->txtTasaDola_Create();
-        t('e6');
         $this->txtTasaEuro_Create();
-        t('e7');
 
 
         if ($this->blnEditMode) {
             $this->lstSucuDisp_Change();
             $this->lstReceSucu_Change();
         }
-        t('e8');
 
     }
 
@@ -70,39 +62,29 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
 
     protected function lstSucuDisp_Create() {
         /* @var $objSucuRece Sucursales */
-        t('s1');
         $this->lstSucuDisp = new QListBox($this);
         $this->lstSucuDisp->Name = "Sucursal";
         $this->lstSucuDisp->Width = 250;
         $arrSucuRece = Sucursales::LoadSucursalesActivas('Nombre');
         $arrSucuDisp = [];
-        t('s2');
         foreach ($arrSucuRece as $objSucuRece) {
             if ($objSucuRece->CountCountersAsSucursal() > 0) {
                 $arrSucuDisp[] = $objSucuRece;
             }
         }
-        t('s3');
         $blnSeleRegi = false;
         $intCantSucu = count($arrSucuDisp);
         $this->lstSucuDisp->AddItem('- Seleccione Una - ('.$intCantSucu.')',null);
-        t('s4');
         foreach ($arrSucuDisp as $objSucuDisp) {
-            $blnSeleRegi = $objSucuDisp->Id == $this->objUbicUsua->Valor1 ? true : false;
-            if ($blnSeleRegi) {
+            $blnSeleRegi = $objSucuDisp->Id == (int)$this->objUbicUsua->Valor1 ? true : false;
+            if (!$blnSeleRegi) {
                 $blnSeleRegi = $intCantSucu == 1 ? true : false;
             }
             $this->lstSucuDisp->AddItem($objSucuDisp->__toString(), $objSucuDisp->Id, $blnSeleRegi);
         }
-        t('s5');
-        //if ($blnSeleRegi) {
-        //    $this->lstSucuDisp_Change();
-        //}
-        t('s6');
         $this->lstSucuDisp->Width = 250;
         $this->lstSucuDisp->Required = true;
         $this->lstSucuDisp->AddAction(new QChangeEvent(), new QAjaxAction('lstSucuDisp_Change'));
-        t('s7');
     }
 
 
@@ -174,7 +156,7 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
             $this->lstReceSucu->AddItem('- Seleccione Una - ('.$intCantRece.')',null);
             foreach ($arrReceSucu as $objReceSucu) {
                 if ($this->blnEditMode) {
-                    $blnSeleRegi = $objReceSucu->Id == $this->objUbicUsua->Valor2 ? true : false;
+                    $blnSeleRegi = $objReceSucu->Id == (int)$this->objUbicUsua->Valor2 ? true : false;
                 } else {
                     $blnSeleRegi = $intCantRece == 1 ? true : false;
                 }
@@ -195,7 +177,7 @@ class EstablecerUbicacion extends FormularioBaseKaizen {
             $this->lstCajaRece->AddItem('- Seleccione Una - ('.$intCantCaja.')',null);
             foreach ($arrCajaRece as $objCajaRece) {
                 if ($this->blnEditMode) {
-                    $blnSeleRegi = $objCajaRece->Id == $this->objUbicUsua->Valor3 ? true : false;
+                    $blnSeleRegi = $objCajaRece->Id == (int)$this->objUbicUsua->Valor3 ? true : false;
                 } else {
                     $blnSeleRegi = $intCantCaja == 1 ? true : false;
                 }

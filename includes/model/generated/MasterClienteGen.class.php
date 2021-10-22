@@ -286,7 +286,7 @@
 		 * @var string strDireMail
 		 */
 		protected $strDireMail;
-		const DireMailMaxLength = 50;
+		const DireMailMaxLength = 250;
 		const DireMailDefault = null;
 
 

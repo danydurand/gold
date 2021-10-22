@@ -268,7 +268,7 @@ class CounterEditForm extends CounterEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/counter_edit.php/'.$this->mctCounter->Counter->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->mensaje('Transacción Exitosa','','','check');
+                $this->success('Transacción Exitosa !!!');
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Counter';
@@ -277,7 +277,7 @@ class CounterEditForm extends CounterEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/counter_edit.php/'.$this->mctCounter->Counter->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->mensaje('Transacción Exitosa','','','check');
+            $this->success('Transacción Exitosa !!!');
 		}
 	}
 
@@ -289,9 +289,7 @@ class CounterEditForm extends CounterEditFormBase {
         $arrTablRela = $this->mctCounter->TablasRelacionadasCounter();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-
-            //$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-            $this->
+            $this->danger(sprintf('Existen registros relacionados en %s',$strTablRela));
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {
@@ -299,7 +297,7 @@ class CounterEditForm extends CounterEditFormBase {
             $this->mctCounter->DeleteCounter();
             $arrLogxCamb['strNombTabl'] = 'Counter';
             $arrLogxCamb['intRefeRegi'] = $this->mctCounter->Counter->Id;
-            $arrLogxCamb['strNombRegi'] = $this->mctCounter->Counter->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->mctCounter->Counter->Descripcion;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
             $this->RedirectToListPage();

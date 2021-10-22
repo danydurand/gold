@@ -318,21 +318,21 @@ class FacturasEditForm extends FacturasEditFormBase {
 
     protected function btnSavePago_Create() {
         $this->btnSavePago = new QButtonP($this);
-        $this->btnSavePago->Text = TextoIcono('check','','F','lg'); //'<i class="fa fa-floppy-o fa-lg"></i>';
+        $this->btnSavePago->Text = TextoIcono('check','','F','lg');
         $this->btnSavePago->HtmlEntities = false;
         $this->btnSavePago->AddAction(new QClickEvent(), new QServerAction('btnSavePago_Click'));
     }
 
     protected function btnCancPago_Create() {
         $this->btnCancPago = new QButtonW($this);
-        $this->btnCancPago->Text = TextoIcono('times-circle','','F','lg'); //'<i class="fa fa-times-circle fa-lg"></i>';
+        $this->btnCancPago->Text = TextoIcono('times-circle','','F','lg');
         $this->btnCancPago->HtmlEntities = false;
         $this->btnCancPago->AddAction(new QClickEvent(), new QServerAction('btnCancPago_Click'));
     }
 
     protected function btnBorrPago_Create() {
         $this->btnBorrPago = new QButtonD($this);
-        $this->btnBorrPago->Text = TextoIcono('trash','','F','lg'); //'<i class="fa fa-trash fa-lg"></i>';
+        $this->btnBorrPago->Text = TextoIcono('trash','','F','lg');
         $this->btnBorrPago->HtmlEntities = false;
         $this->btnBorrPago->AddAction(new QClickEvent(), new QConfirmAction('Seguro que desea borrar el Pago ?'));
         $this->btnBorrPago->AddAction(new QClickEvent(), new QServerAction('btnBorrPago_Click'));
@@ -381,6 +381,11 @@ class FacturasEditForm extends FacturasEditFormBase {
                 }
                 $objPagoFact->Save();
             } catch (Exception $e) {
+                t('Excepcion: '.$e->getMessage());
+                $this->danger($e->getMessage());
+                return;
+            } catch (Error $e) {
+                t('Error: '.$e->getMessage());
                 $this->danger($e->getMessage());
                 return;
             }
@@ -400,7 +405,7 @@ class FacturasEditForm extends FacturasEditFormBase {
             }
             $objPagoFact->logDeCambios($strMensTran);
 
-            $this->mctFacturas->Facturas->ActualizarMontos();
+            $this->mctFacturas->Facturas->ActualizarMontosRetail();
 
             $this->ActualizarCamposEnPantalla();
 
@@ -448,7 +453,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 
         $this->resetearCamposDelPago();
 
-        $this->mctFacturas->Facturas->ActualizarMontos();
+        $this->mctFacturas->Facturas->ActualizarMontosRetail();
 
         $this->ActualizarCamposEnPantalla();
 
@@ -457,22 +462,26 @@ class FacturasEditForm extends FacturasEditFormBase {
     }
 
     protected function ActualizarCamposEnPantalla() {
-        $this->txtCobrDola->Text       = nf($this->mctFacturas->Facturas->MontoCobrado / $this->decTasaDola);
-        $this->txtPendDola->Text       = nf($this->mctFacturas->Facturas->MontoPendiente / $this->decTasaDola);
-        $this->txtMontoCobrado->Text   = $this->mctFacturas->Facturas->MontoCobrado;
-        $this->txtMontoPendiente->Text = $this->mctFacturas->Facturas->MontoPendiente;
+        t('Actualizando campos en la pantalla');
+        $this->txtCobrDola->Text       = round($this->mctFacturas->Facturas->MontoCobrado / $this->decTasaDola,2);
+        $this->txtPendDola->Text       = round($this->mctFacturas->Facturas->MontoPendiente / $this->decTasaDola,2);
+        $this->txtMontoCobrado->Text   = round($this->mctFacturas->Facturas->MontoCobrado,2);
+        $this->txtMontoPendiente->Text = round($this->mctFacturas->Facturas->MontoPendiente,2);
+        t('aja');
         if ($this->txtMontoPendiente->Text == 0) {
             $this->btnSavePago->Visible = false;
             $this->btnCancPago_Click();
         } else {
             $this->btnSavePago->Visible = true;
         }
+        t('voy');
         if ($this->mctFacturas->Facturas->MontoCobrado == 0) {
             t('No se ha cobrado nada,... tampoco hay cambio ni vuelto que dar');
             $this->txtCambDola->Text = 0;
             $this->txtCambBoli->Text = 0;
         } else {
             if ($this->strMonePago == 'USD') {
+                t('Pago en USD');
                 $decDeudDola = $this->txtTotaDola->Text;
                 if ($this->decMontPago > $decDeudDola) {
                     t('Pago en USD.  El monto del pago fue: '.$this->decMontPago);
@@ -488,6 +497,7 @@ class FacturasEditForm extends FacturasEditFormBase {
                 }
             }
             if ($this->strMonePago == 'VEB') {
+                t('Pago en BS');
                 $decDeudBoli = $this->txtTotal->Text;
                 if ($this->decMontPago > $decDeudBoli) {
                     $decCambBoli = $this->decMontPago - $this->mctFacturas->Facturas->MontoCobrado;
@@ -499,6 +509,7 @@ class FacturasEditForm extends FacturasEditFormBase {
                     $this->txtCambBoli->Text = nf(0);
                 }
             }
+            t('pasando por aqui');
         }
         $this->cargarMasAcciones();
     }
@@ -753,7 +764,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 
         $colDescCont = new QDataGridColumn($this);
         $colDescCont->Name = QApplication::Translate('Contenido');
-        $colDescCont->Html = '<?= $_ITEM->Guia->Contenido ?>';
+        $colDescCont->Html = '<?= substr($_ITEM->Guia->Contenido,0,35) ?>';
         $colDescCont->Width = 200;
         $this->dtgGuiaFact->AddColumn($colDescCont);
 
@@ -895,14 +906,14 @@ class FacturasEditForm extends FacturasEditFormBase {
         // Se verifica la integridad referencial
         //----------------------------------------
         $blnTodoOkey = true;
-        if ($this->objUsuario->LogiUsua != 'ddurand') {
-            $arrTablRela = $this->mctFacturas->TablasRelacionadasFacturas();
-            if (count($arrTablRela)) {
-                $strTablRela = implode(',',$arrTablRela);
-                $this->warning('Existen registros relacionados en '.$strTablRela);
-                $blnTodoOkey = false;
-            }
-        }
+        //if ($this->objUsuario->LogiUsua != 'ddurand') {
+        //    $arrTablRela = $this->mctFacturas->TablasRelacionadasFacturas();
+        //    if (count($arrTablRela)) {
+        //        $strTablRela = implode(',',$arrTablRela);
+        //        $this->warning('Existen registros relacionados en '.$strTablRela);
+        //        $blnTodoOkey = false;
+        //    }
+        //}
         if ($blnTodoOkey) {
             Guias::RomperRelacionConFactura($this->mctFacturas->Facturas->Id);
             $this->mctFacturas->DeleteFacturas();

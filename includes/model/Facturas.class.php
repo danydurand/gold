@@ -88,6 +88,50 @@
             $this->Save();
 		}
 
+        public function ActualizarMontosRetail() {
+		    t('==============================================');
+		    t('Rutina: ActualizarMontosRetail (en la Factura)');
+
+            t('Voy a buscar los pagos asociados a la factura');
+            $arrPagoFact = $this->GetFacturaPagosAsFacturaArray();
+            t('Hay: '.count($arrPagoFact).' pagos asociados');
+            $decTotaFact = 0;
+            foreach ($arrPagoFact as $objPagoFact) {
+                t('Procesando el pago: '.$objPagoFact->Id);
+                if (($decTotaFact + $objPagoFact->MontoBs) > $this->Total) {
+                    $objPagoFact->MontoBs  = $this->Total;
+                    $objPagoFact->Save();
+                }
+                $decTotaFact += $objPagoFact->MontoBs;
+            }
+            t('Al salir del ciclo, el Total en Bs es: '.$decTotaFact);
+            $this->MontoCobrado   = $decTotaFact;
+            $decMontPend          = round($this->Total - $this->MontoCobrado,2);
+            t('El monto pendiente es de: '.$decMontPend);
+            if ($decMontPend < 0) {
+                t('Como era negativo, lo deje en cero');
+                $decMontPend = 0;
+            }
+            $this->MontoPendiente = $decMontPend;
+            if ($this->MontoPendiente == $this->Total) {
+                t('MontoPendiente y Total son iguales, el Estatus del Pago cambia a Pendiente');
+                $this->EstatusPago = 'PENDIENTE';
+            } else {
+                if (count($arrPagoFact) > 0) {
+                    t('Habiendo pagos.. el estatus queda como PagoParcial');
+                    $this->EstatusPago = 'PAGOPARCIAL';
+                }
+            }
+            t('El status de la factura quedo en: '.$this->EstatusPago);
+            try {
+                $this->Save();
+            } catch (Exception $e) {
+                t('Excepcion actualizando la factura: '.$e->getMessage());
+            } catch (Error $e) {
+                t('Error actualizando la factura: '.$e->getMessage());
+            }
+		}
+
 		public static function crearFactura($arrGuiaProc,$intIdxxUsua) {
 
 		    t('=====================');

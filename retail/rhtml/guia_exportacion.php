@@ -108,7 +108,9 @@ $strTamaLetr = '6px';
                     <?php include('barra_y_qr_exp.php') ?>
                 </td>
                 <td style="width: 50%; vertical-align: top;">
+                    <?php if ($intNumePiez == 1) { ?>
                     <?php include('terminos_y_condiciones_exp.php') ?>
+                    <?php } ?>
                 </td>
             </tr>
         </table>

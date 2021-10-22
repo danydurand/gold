@@ -36,7 +36,7 @@
 		}
 
 
-		public function resetearClave($strPassUsua) {
+		public function resetearClave($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
             $this->PassUsua = md5($strPassUsua);
             $this->FechClav = new QDateTime("2010-01-01");
             $this->CantInte = 0;
@@ -51,10 +51,10 @@
             $arrLogxCamb['strNombRegi'] = $this->LogiUsua;
             $arrLogxCamb['strDescCamb'] = "Clave Reseteada";
             LogDeCambios($arrLogxCamb);
-            $this->RedactarEmailPassword($strPassUsua);
+            $this->RedactarEmailPassword($strPassUsua,$strUrlxSist,$strNombSist);
         }
 
-        protected function RedactarEmailPassword($strPassUsua) {
+        protected function RedactarEmailPassword($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
             //---------------------------------
             // Se Envía el Mensaje por E-mail
             //---------------------------------
@@ -66,12 +66,16 @@
 
             // Also setup HTML message (optional)
             $strBody  = 'Estimado Usuario,<p><br>';
-            $strBody .= 'Desde el Sistema SisCO, el personal autorizado ha registrado ';
-            $strBody .= 'un cambio de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br><br>';
-            $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b>.<br>';
-            $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema nuevamente. Gracias!<br><br>';
+            $strBody .= 'Desde el Sistema '.$strNombSist.', el personal autorizado ha registrado ';
+            $strBody .= 'un cambio de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br>';
+            $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b><br>';
+            if (strlen($strUrlxSist)) {
+                $strBody .= 'Para acceder al Sistema, diríjase a: <b style="color:blue">'.$strUrlxSist.'<br>';
+            }
+            $strBody .= '<br>';
+            $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema nuevamente. Gracias!<br>';
             $strBody .= 'Si Usted desconoce esta transacción, por favor comuníquese a la brevedad<br>';
-            $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br><br>';
+            $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br>';
             $strBody .= 'soporte@lufemansoftware.com<br>';
             $objMessage->HtmlBody = $strBody;
 

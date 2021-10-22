@@ -24,7 +24,7 @@ require('inc/header.inc.php');
             <?php //$this->btnInfoPodx->Render(); ?>
             <?php $this->btnDeleGuia->Render(); ?>
             <?php $this->btnMasxAcci->Render(); ?>
-            <?php $this->btnImprPiez->Render(); ?>
+            <?php //$this->btnImprPiez->Render(); ?>
             <?php $this->lblBotoPopu->Render(); ?>
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-4 pull-right" style="text-align: right; padding-right: 3px; margin-top: -0.25em">

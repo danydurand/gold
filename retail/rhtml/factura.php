@@ -24,7 +24,7 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
         <!---------------------->
         <!--     RECUADROS    -->
         <!---------------------->
-        <table style="margin-top: 100px; margin-left: -3px;">
+        <table style="margin-top: 200px; margin-left: -3px;">
             <tr>
                 <td style="width: 300px">
                     <table style=" border: solid .5mm">
@@ -105,6 +105,14 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                                 <td style="width: 100px; text-align: right"><?= nf($objItemFact->Monto) ?></td>
                             </tr>
                         <?php } ?>
+                        <tr style="background-color: #CCC; font-weight: bold">
+                            <td style="width: 100px; text-align: right">TOTAL BSD</td>
+                            <td style="width: 100px; text-align: right"><?= nf($objFactImpr->Total) ?></td>
+                        </tr>
+                        <tr style="background-color: #CCC; font-weight: bold">
+                            <td style="width: 100px; text-align: right;">TOTAL USD</td>
+                            <td style="width: 100px; text-align: right"><?= nf($objFactImpr->Total/$objFactImpr->Tasa) ?></td>
+                        </tr>
                     </table>
                 </td>
             </tr>
@@ -118,20 +126,33 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                 <td style="width: 110px; text-align: left">BANCO</td>
                 <td style="width: 100px; text-align: right">MTO PAGO</td>
                 <td style="width: 80px; text-align: right">MTO USD</td>
-                <td style="width: 100px; text-align: right">MTO EN BS</td>
+                <td style="width: 100px; text-align: right">MTO EN BSD</td>
             </tr>
+            <?php $decAcumBoli = 0 ?>
+            <?php $decAcumDola = 0 ?>
             <?php foreach ($arrPagoFact as $objPagoFact) { ?>
                 <?php $strNombBanc = !is_null($objPagoFact->BancoId) ? $objPagoFact->Banco->Descripcion : null ?>
                 <tr>
-                    <td style="width: 120px; text-align: left"><?= $objPagoFact->FormaPago->Descripcion ?></td>
+                    <td style="width: 115px; text-align: left"><?= $objPagoFact->FormaPago->Descripcion ?></td>
                     <td style="width: 60px; text-align: center"><?= $objPagoFact->Divisa->Codigo ?></td>
                     <td style="width: 80px; text-align: center"><?= $objPagoFact->Referencia ?></td>
                     <td style="width: 110px; text-align: left"><?= $strNombBanc ?></td>
-                    <td style="width: 100px; text-align: right"><?= nf($objPagoFact->MontoDivisa) ?></td>
-                    <td style="width: 80px; text-align: right"><?= nf($objPagoFact->MontoUsd) ?></td>
+                    <td style="width: 90px; text-align: right"><?= nf($objPagoFact->MontoDivisa) ?></td>
+                    <td style="width: 70px; text-align: right"><?= nf($objPagoFact->MontoUsd) ?></td>
                     <td style="width: 100px; text-align: right"><?= nf($objPagoFact->MontoBs) ?></td>
                 </tr>
+                <?php $decAcumBoli += $objPagoFact->MontoBs ?>
+                <?php $decAcumDola += $objPagoFact->MontoUsd ?>
             <?php } ?>
+            <tr>
+                <td style="width: 115px; text-align: left"></td>
+                <td style="width: 60px; text-align: center"></td>
+                <td style="width: 80px; text-align: center"></td>
+                <td style="width: 110px; text-align: left"></td>
+                <td style="width: 90px; text-align: right; font-weight: bold">TOTALES</td>
+                <td style="width: 70px; text-align: right"><?= nf($decAcumDola) ?></td>
+                <td style="width: 100px; text-align: right"><?= nf($decAcumBoli) ?></td>
+            </tr>
         </table>
         <?php } ?>
     </page_header>

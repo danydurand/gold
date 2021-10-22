@@ -93,6 +93,14 @@
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaAsUpdatedByArray the value for the private _objPiezaRecibidaAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.updated_by reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajo the value for the private _objRegistroTrabajo (Read-Only) if set due to an expansion on the registro_trabajo.usuario_id reverse relationship
 	 * @property-read RegistroTrabajo[] $_RegistroTrabajoArray the value for the private _objRegistroTrabajoArray (Read-Only) if set due to an ExpandAsArray on the registro_trabajo.usuario_id reverse relationship
+	 * @property-read Scanneo $_ScanneoAsCreatedBy the value for the private _objScanneoAsCreatedBy (Read-Only) if set due to an expansion on the scanneo.created_by reverse relationship
+	 * @property-read Scanneo[] $_ScanneoAsCreatedByArray the value for the private _objScanneoAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the scanneo.created_by reverse relationship
+	 * @property-read Scanneo $_ScanneoAsUpdatedBy the value for the private _objScanneoAsUpdatedBy (Read-Only) if set due to an expansion on the scanneo.updated_by reverse relationship
+	 * @property-read Scanneo[] $_ScanneoAsUpdatedByArray the value for the private _objScanneoAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the scanneo.updated_by reverse relationship
+	 * @property-read ScanneoPiezas $_ScanneoPiezasAsCreatedBy the value for the private _objScanneoPiezasAsCreatedBy (Read-Only) if set due to an expansion on the scanneo_piezas.created_by reverse relationship
+	 * @property-read ScanneoPiezas[] $_ScanneoPiezasAsCreatedByArray the value for the private _objScanneoPiezasAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the scanneo_piezas.created_by reverse relationship
+	 * @property-read ScanneoPiezas $_ScanneoPiezasAsUpdatedBy the value for the private _objScanneoPiezasAsUpdatedBy (Read-Only) if set due to an expansion on the scanneo_piezas.updated_by reverse relationship
+	 * @property-read ScanneoPiezas[] $_ScanneoPiezasAsUpdatedByArray the value for the private _objScanneoPiezasAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the scanneo_piezas.updated_by reverse relationship
 	 * @property-read SreGuiaCkpt $_SreGuiaCkptAsCodiUsua the value for the private _objSreGuiaCkptAsCodiUsua (Read-Only) if set due to an expansion on the sre_guia_ckpt.codi_usua reverse relationship
 	 * @property-read SreGuiaCkpt[] $_SreGuiaCkptAsCodiUsuaArray the value for the private _objSreGuiaCkptAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the sre_guia_ckpt.codi_usua reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -701,6 +709,70 @@
 		 * @var RegistroTrabajo[] _objRegistroTrabajoArray;
 		 */
 		private $_objRegistroTrabajoArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ScanneoAsCreatedBy object
+		 * (of type Scanneo), if this Usuario object was restored with
+		 * an expansion on the scanneo association table.
+		 * @var Scanneo _objScanneoAsCreatedBy;
+		 */
+		private $_objScanneoAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ScanneoAsCreatedBy objects
+		 * (of type Scanneo[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the scanneo association table.
+		 * @var Scanneo[] _objScanneoAsCreatedByArray;
+		 */
+		private $_objScanneoAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ScanneoAsUpdatedBy object
+		 * (of type Scanneo), if this Usuario object was restored with
+		 * an expansion on the scanneo association table.
+		 * @var Scanneo _objScanneoAsUpdatedBy;
+		 */
+		private $_objScanneoAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ScanneoAsUpdatedBy objects
+		 * (of type Scanneo[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the scanneo association table.
+		 * @var Scanneo[] _objScanneoAsUpdatedByArray;
+		 */
+		private $_objScanneoAsUpdatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ScanneoPiezasAsCreatedBy object
+		 * (of type ScanneoPiezas), if this Usuario object was restored with
+		 * an expansion on the scanneo_piezas association table.
+		 * @var ScanneoPiezas _objScanneoPiezasAsCreatedBy;
+		 */
+		private $_objScanneoPiezasAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ScanneoPiezasAsCreatedBy objects
+		 * (of type ScanneoPiezas[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the scanneo_piezas association table.
+		 * @var ScanneoPiezas[] _objScanneoPiezasAsCreatedByArray;
+		 */
+		private $_objScanneoPiezasAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ScanneoPiezasAsUpdatedBy object
+		 * (of type ScanneoPiezas), if this Usuario object was restored with
+		 * an expansion on the scanneo_piezas association table.
+		 * @var ScanneoPiezas _objScanneoPiezasAsUpdatedBy;
+		 */
+		private $_objScanneoPiezasAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ScanneoPiezasAsUpdatedBy objects
+		 * (of type ScanneoPiezas[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the scanneo_piezas association table.
+		 * @var ScanneoPiezas[] _objScanneoPiezasAsUpdatedByArray;
+		 */
+		private $_objScanneoPiezasAsUpdatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single SreGuiaCkptAsCodiUsua object
@@ -1837,6 +1909,66 @@
 					$objToReturn->_objRegistroTrabajoArray[] = RegistroTrabajo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'registrotrabajo__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objRegistroTrabajo)) {
 					$objToReturn->_objRegistroTrabajo = RegistroTrabajo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'registrotrabajo__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ScanneoAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'scanneoascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['scanneoascreatedby']) ? null : $objExpansionAliasArray['scanneoascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objScanneoAsCreatedByArray)
+				$objToReturn->_objScanneoAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objScanneoAsCreatedByArray[] = Scanneo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneoascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objScanneoAsCreatedBy)) {
+					$objToReturn->_objScanneoAsCreatedBy = Scanneo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneoascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ScanneoAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'scanneoasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['scanneoasupdatedby']) ? null : $objExpansionAliasArray['scanneoasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objScanneoAsUpdatedByArray)
+				$objToReturn->_objScanneoAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objScanneoAsUpdatedByArray[] = Scanneo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneoasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objScanneoAsUpdatedBy)) {
+					$objToReturn->_objScanneoAsUpdatedBy = Scanneo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneoasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ScanneoPiezasAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'scanneopiezasascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['scanneopiezasascreatedby']) ? null : $objExpansionAliasArray['scanneopiezasascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objScanneoPiezasAsCreatedByArray)
+				$objToReturn->_objScanneoPiezasAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objScanneoPiezasAsCreatedByArray[] = ScanneoPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneopiezasascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objScanneoPiezasAsCreatedBy)) {
+					$objToReturn->_objScanneoPiezasAsCreatedBy = ScanneoPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneopiezasascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ScanneoPiezasAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'scanneopiezasasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['scanneopiezasasupdatedby']) ? null : $objExpansionAliasArray['scanneopiezasasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objScanneoPiezasAsUpdatedByArray)
+				$objToReturn->_objScanneoPiezasAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objScanneoPiezasAsUpdatedByArray[] = ScanneoPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneopiezasasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objScanneoPiezasAsUpdatedBy)) {
+					$objToReturn->_objScanneoPiezasAsUpdatedBy = ScanneoPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'scanneopiezasasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3068,6 +3200,70 @@
 					 */
 					return $this->_objRegistroTrabajoArray;
 
+				case '_ScanneoAsCreatedBy':
+					/**
+					 * Gets the value for the private _objScanneoAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the scanneo.created_by reverse relationship
+					 * @return Scanneo
+					 */
+					return $this->_objScanneoAsCreatedBy;
+
+				case '_ScanneoAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objScanneoAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the scanneo.created_by reverse relationship
+					 * @return Scanneo[]
+					 */
+					return $this->_objScanneoAsCreatedByArray;
+
+				case '_ScanneoAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objScanneoAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the scanneo.updated_by reverse relationship
+					 * @return Scanneo
+					 */
+					return $this->_objScanneoAsUpdatedBy;
+
+				case '_ScanneoAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objScanneoAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the scanneo.updated_by reverse relationship
+					 * @return Scanneo[]
+					 */
+					return $this->_objScanneoAsUpdatedByArray;
+
+				case '_ScanneoPiezasAsCreatedBy':
+					/**
+					 * Gets the value for the private _objScanneoPiezasAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the scanneo_piezas.created_by reverse relationship
+					 * @return ScanneoPiezas
+					 */
+					return $this->_objScanneoPiezasAsCreatedBy;
+
+				case '_ScanneoPiezasAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objScanneoPiezasAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the scanneo_piezas.created_by reverse relationship
+					 * @return ScanneoPiezas[]
+					 */
+					return $this->_objScanneoPiezasAsCreatedByArray;
+
+				case '_ScanneoPiezasAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objScanneoPiezasAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the scanneo_piezas.updated_by reverse relationship
+					 * @return ScanneoPiezas
+					 */
+					return $this->_objScanneoPiezasAsUpdatedBy;
+
+				case '_ScanneoPiezasAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objScanneoPiezasAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the scanneo_piezas.updated_by reverse relationship
+					 * @return ScanneoPiezas[]
+					 */
+					return $this->_objScanneoPiezasAsUpdatedByArray;
+
 				case '_SreGuiaCkptAsCodiUsua':
 					/**
 					 * Gets the value for the private _objSreGuiaCkptAsCodiUsua (Read-Only)
@@ -3587,6 +3783,18 @@
 			}
 			if ($this->CountRegistroTrabajos()) {
 				$arrTablRela[] = 'registro_trabajo';
+			}
+			if ($this->CountScanneosAsCreatedBy()) {
+				$arrTablRela[] = 'scanneo';
+			}
+			if ($this->CountScanneosAsUpdatedBy()) {
+				$arrTablRela[] = 'scanneo';
+			}
+			if ($this->CountScanneoPiezasesAsCreatedBy()) {
+				$arrTablRela[] = 'scanneo_piezas';
+			}
+			if ($this->CountScanneoPiezasesAsUpdatedBy()) {
+				$arrTablRela[] = 'scanneo_piezas';
 			}
 			if ($this->CountSreGuiaCkptsAsCodiUsua()) {
 				$arrTablRela[] = 'sre_guia_ckpt';
@@ -7785,6 +7993,602 @@
 		}
 
 
+		// Related Objects' Methods for ScanneoAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ScanneosAsCreatedBy as an array of Scanneo objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Scanneo[]
+		*/
+		public function GetScanneoAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Scanneo::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ScanneosAsCreatedBy
+		 * @return int
+		*/
+		public function CountScanneosAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Scanneo::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ScanneoAsCreatedBy
+		 * @param Scanneo $objScanneo
+		 * @return void
+		*/
+		public function AssociateScanneoAsCreatedBy(Scanneo $objScanneo) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneo->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoAsCreatedBy on this Usuario with an unsaved Scanneo.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneo->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ScanneoAsCreatedBy
+		 * @param Scanneo $objScanneo
+		 * @return void
+		*/
+		public function UnassociateScanneoAsCreatedBy(Scanneo $objScanneo) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneo->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsCreatedBy on this Usuario with an unsaved Scanneo.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneo->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ScanneosAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllScanneosAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ScanneoAsCreatedBy
+		 * @param Scanneo $objScanneo
+		 * @return void
+		*/
+		public function DeleteAssociatedScanneoAsCreatedBy(Scanneo $objScanneo) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneo->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsCreatedBy on this Usuario with an unsaved Scanneo.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneo->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ScanneosAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllScanneosAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ScanneoAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ScanneosAsUpdatedBy as an array of Scanneo objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Scanneo[]
+		*/
+		public function GetScanneoAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Scanneo::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ScanneosAsUpdatedBy
+		 * @return int
+		*/
+		public function CountScanneosAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Scanneo::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ScanneoAsUpdatedBy
+		 * @param Scanneo $objScanneo
+		 * @return void
+		*/
+		public function AssociateScanneoAsUpdatedBy(Scanneo $objScanneo) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneo->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoAsUpdatedBy on this Usuario with an unsaved Scanneo.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneo->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ScanneoAsUpdatedBy
+		 * @param Scanneo $objScanneo
+		 * @return void
+		*/
+		public function UnassociateScanneoAsUpdatedBy(Scanneo $objScanneo) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneo->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsUpdatedBy on this Usuario with an unsaved Scanneo.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneo->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ScanneosAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllScanneosAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ScanneoAsUpdatedBy
+		 * @param Scanneo $objScanneo
+		 * @return void
+		*/
+		public function DeleteAssociatedScanneoAsUpdatedBy(Scanneo $objScanneo) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneo->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsUpdatedBy on this Usuario with an unsaved Scanneo.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneo->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ScanneosAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllScanneosAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ScanneoPiezasAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ScanneoPiezasesAsCreatedBy as an array of ScanneoPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ScanneoPiezas[]
+		*/
+		public function GetScanneoPiezasAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return ScanneoPiezas::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ScanneoPiezasesAsCreatedBy
+		 * @return int
+		*/
+		public function CountScanneoPiezasesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return ScanneoPiezas::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ScanneoPiezasAsCreatedBy
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function AssociateScanneoPiezasAsCreatedBy(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoPiezasAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoPiezasAsCreatedBy on this Usuario with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ScanneoPiezasAsCreatedBy
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function UnassociateScanneoPiezasAsCreatedBy(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsCreatedBy on this Usuario with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ScanneoPiezasesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllScanneoPiezasesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ScanneoPiezasAsCreatedBy
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function DeleteAssociatedScanneoPiezasAsCreatedBy(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsCreatedBy on this Usuario with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo_piezas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ScanneoPiezasesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllScanneoPiezasesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo_piezas`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ScanneoPiezasAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ScanneoPiezasesAsUpdatedBy as an array of ScanneoPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ScanneoPiezas[]
+		*/
+		public function GetScanneoPiezasAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return ScanneoPiezas::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ScanneoPiezasesAsUpdatedBy
+		 * @return int
+		*/
+		public function CountScanneoPiezasesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return ScanneoPiezas::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ScanneoPiezasAsUpdatedBy
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function AssociateScanneoPiezasAsUpdatedBy(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoPiezasAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateScanneoPiezasAsUpdatedBy on this Usuario with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ScanneoPiezasAsUpdatedBy
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function UnassociateScanneoPiezasAsUpdatedBy(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsUpdatedBy on this Usuario with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ScanneoPiezasesAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllScanneoPiezasesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`scanneo_piezas`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ScanneoPiezasAsUpdatedBy
+		 * @param ScanneoPiezas $objScanneoPiezas
+		 * @return void
+		*/
+		public function DeleteAssociatedScanneoPiezasAsUpdatedBy(ScanneoPiezas $objScanneoPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objScanneoPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsUpdatedBy on this Usuario with an unsaved ScanneoPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo_piezas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objScanneoPiezas->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ScanneoPiezasesAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllScanneoPiezasesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateScanneoPiezasAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`scanneo_piezas`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for SreGuiaCkptAsCodiUsua
 		//-------------------------------------------------------------------
 
@@ -8223,6 +9027,10 @@
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
+     * @property-read QQReverseReferenceNodeScanneo $ScanneoAsCreatedBy
+     * @property-read QQReverseReferenceNodeScanneo $ScanneoAsUpdatedBy
+     * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsCreatedBy
+     * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsUpdatedBy
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -8333,6 +9141,14 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
 				case 'RegistroTrabajo':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajo', 'reverse_reference', 'usuario_id', 'RegistroTrabajo');
+				case 'ScanneoAsCreatedBy':
+					return new QQReverseReferenceNodeScanneo($this, 'scanneoascreatedby', 'reverse_reference', 'created_by', 'ScanneoAsCreatedBy');
+				case 'ScanneoAsUpdatedBy':
+					return new QQReverseReferenceNodeScanneo($this, 'scanneoasupdatedby', 'reverse_reference', 'updated_by', 'ScanneoAsUpdatedBy');
+				case 'ScanneoPiezasAsCreatedBy':
+					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasascreatedby', 'reverse_reference', 'created_by', 'ScanneoPiezasAsCreatedBy');
+				case 'ScanneoPiezasAsUpdatedBy':
+					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasupdatedby', 'reverse_reference', 'updated_by', 'ScanneoPiezasAsUpdatedBy');
 				case 'SreGuiaCkptAsCodiUsua':
 					return new QQReverseReferenceNodeSreGuiaCkpt($this, 'sreguiackptascodiusua', 'reverse_reference', 'codi_usua', 'SreGuiaCkptAsCodiUsua');
 
@@ -8402,6 +9218,10 @@
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
+     * @property-read QQReverseReferenceNodeScanneo $ScanneoAsCreatedBy
+     * @property-read QQReverseReferenceNodeScanneo $ScanneoAsUpdatedBy
+     * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsCreatedBy
+     * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsUpdatedBy
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -8512,6 +9332,14 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
 				case 'RegistroTrabajo':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajo', 'reverse_reference', 'usuario_id', 'RegistroTrabajo');
+				case 'ScanneoAsCreatedBy':
+					return new QQReverseReferenceNodeScanneo($this, 'scanneoascreatedby', 'reverse_reference', 'created_by', 'ScanneoAsCreatedBy');
+				case 'ScanneoAsUpdatedBy':
+					return new QQReverseReferenceNodeScanneo($this, 'scanneoasupdatedby', 'reverse_reference', 'updated_by', 'ScanneoAsUpdatedBy');
+				case 'ScanneoPiezasAsCreatedBy':
+					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasascreatedby', 'reverse_reference', 'created_by', 'ScanneoPiezasAsCreatedBy');
+				case 'ScanneoPiezasAsUpdatedBy':
+					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasupdatedby', 'reverse_reference', 'updated_by', 'ScanneoPiezasAsUpdatedBy');
 				case 'SreGuiaCkptAsCodiUsua':
 					return new QQReverseReferenceNodeSreGuiaCkpt($this, 'sreguiackptascodiusua', 'reverse_reference', 'codi_usua', 'SreGuiaCkptAsCodiUsua');
 

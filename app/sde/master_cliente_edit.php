@@ -401,11 +401,19 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         switch ($strTipoAcci) {
             case 'E':
                 $this->RedactarCorreoEdoCta($arrFactPend, true, $strDestCorr);
-                $strTextMens = 'El Edo de Cta fue enviado al Usuario solicitante !!!';
+                if ($strDestCorr == 'U') {
+                    $strTextMens = 'El Edo de Cta fue enviado al Usuario solicitante !!!';
+                } else {
+                    $strTextMens = 'El Edo de Cta ha sido enviado al Cliente !!!';
+                }
+                break;
+            case 'M':
+                $this->ImprimirEdoCta($arrFactPend);
+                $strTextMens = 'Mostrando el Edo de Cta !!!';
                 break;
             default;
-                $this->ImprimirEdoCta($arrFactPend);
-                $strTextMens = 'El Edo de Cta ha sido enviado al Cliente !!!';
+                $this->danger('Opcion de envio no definida');
+                return;
         }
         $this->success($strTextMens);
     }
@@ -1323,6 +1331,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtDireMail = new QTextBox($this);
         $this->txtDireMail->Name = 'Correo Electronico';
         $this->txtDireMail->Width = 250;
+        $this->txtDireMail->Rows = 4;
+        $this->txtDireMail->TextMode = QTextMode::MultiLine;
         if ($this->blnEditMode) {
             $this->txtDireMail->Text = $this->objMasterCliente->DireMail;
         }

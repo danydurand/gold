@@ -1154,6 +1154,20 @@
 		QApplicationBase::$ClassFile['saldoexcedentemetacontrol'] = __META_CONTROLS__ . '/SaldoExcedenteMetaControl.class.php';
 		QApplicationBase::$ClassFile['saldoexcedentedatagrid'] = __META_CONTROLS__ . '/SaldoExcedenteDataGrid.class.php';
 
+	// ClassPaths for the Scanneo class
+		QApplicationBase::$ClassFile['scanneo'] = __MODEL__ . '/Scanneo.class.php';
+		QApplicationBase::$ClassFile['qqnodescanneo'] = __MODEL__ . '/Scanneo.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodescanneo'] = __MODEL__ . '/Scanneo.class.php';
+		QApplicationBase::$ClassFile['scanneometacontrol'] = __META_CONTROLS__ . '/ScanneoMetaControl.class.php';
+		QApplicationBase::$ClassFile['scanneodatagrid'] = __META_CONTROLS__ . '/ScanneoDataGrid.class.php';
+
+	// ClassPaths for the ScanneoPiezas class
+		QApplicationBase::$ClassFile['scanneopiezas'] = __MODEL__ . '/ScanneoPiezas.class.php';
+		QApplicationBase::$ClassFile['qqnodescanneopiezas'] = __MODEL__ . '/ScanneoPiezas.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodescanneopiezas'] = __MODEL__ . '/ScanneoPiezas.class.php';
+		QApplicationBase::$ClassFile['scanneopiezasmetacontrol'] = __META_CONTROLS__ . '/ScanneoPiezasMetaControl.class.php';
+		QApplicationBase::$ClassFile['scanneopiezasdatagrid'] = __META_CONTROLS__ . '/ScanneoPiezasDataGrid.class.php';
+
 	// ClassPaths for the SdeCheckpoint class
 		QApplicationBase::$ClassFile['sdecheckpoint'] = __MODEL__ . '/SdeCheckpoint.class.php';
 		QApplicationBase::$ClassFile['qqnodesdecheckpoint'] = __MODEL__ . '/SdeCheckpoint.class.php';

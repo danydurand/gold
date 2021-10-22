@@ -391,7 +391,9 @@ class UsuarioEditForm extends UsuarioEditFormBase {
             return;
         }
         $strPassUsua = generarCodigo();
-        $this->mctUsuario->Usuario->resetearClave($strPassUsua);
+        $strUrlxSist = 'http://goldsist.com/retail';
+        $strNombSist = 'Retail';
+        $this->mctUsuario->Usuario->resetearClave($strPassUsua,$strUrlxSist,$strNombSist);
         $this->txtCantInte->Text = $this->mctUsuario->Usuario->CantInte;
         $this->calFechClav->DateTime = new QDateTime($this->mctUsuario->Usuario->FechClav);
         $this->txtMotiBloq->Text = $this->mctUsuario->Usuario->MotiBloq;
@@ -501,6 +503,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     protected function RedactarEmailEdicion($objUsuario,$strPassUsua) {
         $strMailPara = $objUsuario->MailUsua;
         $strLogiUsua = $objUsuario->LogiUsua;
+        $strUrlxSist = 'http://goldsist.com/retail';
         /* @var $objMessage QEmailMessage */
         $objMessage = new QEmailMessage();
         $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
@@ -512,8 +515,9 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         // Also setup HTML message (optional) //
         $strBody  = 'Estimado Usuario,<p><br>';
         $strBody .= 'Desde el Sistema Retail, el personal autorizado ha registrado ';
-        $strBody .= 'un reseteo de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br><br>';
+        $strBody .= 'un reseteo de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br>';
         $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b>.<br>';
+        $strBody .= 'Para acceder al Sistema, diríjase a : <b style="color:blue">'.$strUrlxSist.'</b><br>';
         $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema nuevamente. Gracias!<br><br>';
         $strBody .= 'Si Usted desconoce esta transacción, por favor comuníquese a la brevedad<br>';
         $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br><br>';

@@ -991,6 +991,18 @@
 			return new QQNodeSaldoExcedente('saldo_excedente', null, null);
 		}
 		/**
+		 * @return QQNodeScanneo
+		 */
+		static public function Scanneo() {
+			return new QQNodeScanneo('scanneo', null, null);
+		}
+		/**
+		 * @return QQNodeScanneoPiezas
+		 */
+		static public function ScanneoPiezas() {
+			return new QQNodeScanneoPiezas('scanneo_piezas', null, null);
+		}
+		/**
 		 * @return QQNodeSdeCheckpoint
 		 */
 		static public function SdeCheckpoint() {

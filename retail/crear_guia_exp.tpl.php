@@ -125,7 +125,7 @@ require('inc/header.inc.php');
             text-align: center;
         }
         .form-controls {
-            line-height: 0.9;
+            /*line-height: 1.2;*/
         }
         .form-name {
             width: 31%;

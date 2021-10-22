@@ -1,11 +1,11 @@
 <?php
-	require(__MODEL_GEN__ . '/CounterGen.class.php');
+	require(__MODEL_GEN__ . '/ScanneoGen.class.php');
 
 	/**
-	 * The Counter class defined here contains any
-	 * customized code for the Counter class in the
-	 * Object Relational Model.  It represents the "counter" table
-	 * in the database, and extends from the code generated abstract CounterGen
+	 * The Scanneo class defined here contains any
+	 * customized code for the Scanneo class in the
+	 * Object Relational Model.  It represents the "scanneo" table
+	 * in the database, and extends from the code generated abstract ScanneoGen
 	 * class, which contains all the basic CRUD-type functionality as well as
 	 * basic methods to handle relationships and index-based loading.
 	 *
@@ -13,70 +13,67 @@
 	 * @subpackage DataObjects
 	 *
 	 */
-	class Counter extends CounterGen {
+	class Scanneo extends ScanneoGen {
 		/**
 		 * Default "to string" handler
 		 * Allows pages to _p()/echo()/print() this object, and to define the default
 		 * way this object would be outputted.
 		 *
-		 * Can also be called directly via $objCounter->__toString().
+		 * Can also be called directly via $objScanneo->__toString().
 		 *
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('%s',  $this->strDescripcion);
+			return sprintf('%s',  $this->Descripcion);
 		}
 
-        public function __status()
-        {
-            return $this->StatusId ? 'ACTIVA' : 'INACTIVA';
-		}
 
-        public static function LoadArrayBySucursalId($strSucursalId, $objOptionalClauses = null) {
-            // Call Counter::QueryArray to perform the LoadArrayBySucursalId query
-            $objClauWher  = QQ::Clause();
-            $objClauWher[] = QQ::Equal(QQN::Counter()->SucursalId, $strSucursalId);
-            $objClauWher[] = QQ::Equal(QQN::Counter()->StatusId, StatusType::ACTIVO);
-            try {
-                return Counter::QueryArray(QQ::AndCondition($objClauWher), $objOptionalClauses);
-            } catch (QCallerException $objExc) {
-                $objExc->IncrementOffset();
-                throw $objExc;
-            }
+        /**
+        * Esta runtina deja registro de la operacion indicada en
+        * el log de transacciones
+        */
+        public function logDeCambios($strMensTran) {
+            $arrLogxCamb['strNombTabl'] = 'Scanneo';
+            $arrLogxCamb['intRefeRegi'] = $this->Id;
+            $arrLogxCamb['strNombRegi'] = $this->Descripcion;
+            $arrLogxCamb['strDescCamb'] = $strMensTran;
+            $arrLogxCamb['strEnlaEnti'] = __SIST__.'/scanneo_edit.php/'.$this->Id;
+            LogDeCambios($arrLogxCamb);
         }
+
 
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...
 		// but feel free to use these as a starting point)
 /*
 		public static function LoadArrayBySample($strParam1, $intParam2, $objOptionalClauses = null) {
-			// This will return an array of Counter objects
-			return Counter::QueryArray(
+			// This will return an array of Scanneo objects
+			return Scanneo::QueryArray(
 				QQ::AndCondition(
-					QQ::Equal(QQN::Counter()->Param1, $strParam1),
-					QQ::GreaterThan(QQN::Counter()->Param2, $intParam2)
+					QQ::Equal(QQN::Scanneo()->Param1, $strParam1),
+					QQ::GreaterThan(QQN::Scanneo()->Param2, $intParam2)
 				),
 				$objOptionalClauses
 			);
 		}
 
 		public static function LoadBySample($strParam1, $intParam2, $objOptionalClauses = null) {
-			// This will return a single Counter object
-			return Counter::QuerySingle(
+			// This will return a single Scanneo object
+			return Scanneo::QuerySingle(
 				QQ::AndCondition(
-					QQ::Equal(QQN::Counter()->Param1, $strParam1),
-					QQ::GreaterThan(QQN::Counter()->Param2, $intParam2)
+					QQ::Equal(QQN::Scanneo()->Param1, $strParam1),
+					QQ::GreaterThan(QQN::Scanneo()->Param2, $intParam2)
 				),
 				$objOptionalClauses
 			);
 		}
 
 		public static function CountBySample($strParam1, $intParam2, $objOptionalClauses = null) {
-			// This will return a count of Counter objects
-			return Counter::QueryCount(
+			// This will return a count of Scanneo objects
+			return Scanneo::QueryCount(
 				QQ::AndCondition(
-					QQ::Equal(QQN::Counter()->Param1, $strParam1),
-					QQ::Equal(QQN::Counter()->Param2, $intParam2)
+					QQ::Equal(QQN::Scanneo()->Param1, $strParam1),
+					QQ::Equal(QQN::Scanneo()->Param2, $intParam2)
 				),
 				$objOptionalClauses
 			);
@@ -86,7 +83,7 @@
 			// Performing the load manually (instead of using QCubed Query)
 
 			// Get the Database Object for this Class
-			$objDatabase = Counter::GetDatabase();
+			$objDatabase = Scanneo::GetDatabase();
 
 			// Properly Escape All Input Parameters using Database->SqlVariable()
 			$strParam1 = $objDatabase->SqlVariable($strParam1);
@@ -95,9 +92,9 @@
 			// Setup the SQL Query
 			$strQuery = sprintf('
 				SELECT
-					`counter`.*
+					`scanneo`.*
 				FROM
-					`counter` AS `counter`
+					`scanneo` AS `scanneo`
 				WHERE
 					param_1 = %s AND
 					param_2 < %s',
@@ -105,10 +102,9 @@
 
 			// Perform the Query and Instantiate the Result
 			$objDbResult = $objDatabase->Query($strQuery);
-			return Counter::InstantiateDbResult($objDbResult);
+			return Scanneo::InstantiateDbResult($objDbResult);
 		}
 */
-
 
 
 		// Override or Create New Properties and Variables
@@ -152,7 +148,6 @@
 			}
 		}
 */
-
 
 		// Initialize each property with default values from database definition
 /*

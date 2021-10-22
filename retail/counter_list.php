@@ -76,7 +76,9 @@ class CounterListForm extends CounterListFormBase {
 		//$this->dtgCounters->MetaAddColumn('CkptConfirmacion');
 		//$this->dtgCounters->MetaAddColumn('CkptAlmacen');
 		//$this->dtgCounters->MetaAddColumn('PaisId');
-		$this->dtgCounters->MetaAddColumn('StatusId');
+		//$this->dtgCounters->MetaAddColumn('StatusId');
+		$colStatRece = new QDataGridColumn('Status','<?= $_ITEM->__status() ?>');
+		$this->dtgCounters->AddColumn($colStatRece);
 		//$this->dtgCounters->MetaAddColumn('Direccion');
 		//$this->dtgCounters->MetaAddTypeColumn('ElegirServicio', 'SinoType');
 		//$this->dtgCounters->MetaAddTypeColumn('EsRuta', 'SinoType');
@@ -86,7 +88,7 @@ class CounterListForm extends CounterListFormBase {
 		//$this->dtgCounters->MetaAddColumn('CkptAntiguedad1');
 		//$this->dtgCounters->MetaAddColumn('CkptAntiguedad2');
 		//$this->dtgCounters->MetaAddColumn('CkptAntiguedad0');
-		//$this->dtgCounters->MetaAddColumn(QQN::Counter()->AliadoComercial);
+		$this->dtgCounters->MetaAddColumn(QQN::Counter()->AliadoComercial);
 		//$this->dtgCounters->MetaAddColumn('LimiteKilos');
 		//$this->dtgCounters->MetaAddColumn('DependeDe');
 		//$this->dtgCounters->MetaAddColumn('DomOrigen');
