@@ -1,6 +1,23 @@
 <style type="text/css">
     <!--
-    .titulo { background-color: #CCC; font-weight: bold }
+    .titulo {
+        background-color: #CCC;
+        font-weight: bold
+    }
+    .renglon {
+        background-color: #CCC;
+        font-weight: bold;
+        text-align: right;
+        width: 130px;
+    }
+    .valor {
+        text-align: left;
+        width: 100px;
+    }
+    .concepto {
+        text-align: right;
+        width: 135px;
+    }
     -->
 </style>
 
@@ -47,20 +64,24 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                 <td style="width: 230px; vertical-align: top">
                     <table style=" border: solid .5mm">
                         <tr>
-                            <td style="width: 130px; background-color: #CCC; font-weight: bold">FACTURA:</td>
-                            <td style="width: 100px; text-align: right"><?= $objFactImpr->Referencia ?></td>
+                            <td class="renglon">FACTURA:</td>
+                            <td class="valor"><?= $objFactImpr->Referencia ?></td>
                         </tr>
                         <tr>
-                            <td style="width: 130px; background-color: #CCC; font-weight: bold">FECHA:</td>
-                            <td style="width: 100px; text-align: right"><?= $objFactImpr->Fecha->__toString("DD/MM/YYYY") ?></td>
+                            <td class="renglon">FECHA:</td>
+                            <td class="valor"><?= $objFactImpr->Fecha->__toString("DD/MM/YYYY") ?></td>
                         </tr>
                         <tr>
-                            <td style="width: 130px; background-color: #CCC; font-weight: bold">CED/RIF:</td>
-                            <td style="width: 100px; text-align: right"><?= $objFactImpr->CedulaRif ?></td>
+                            <td class="renglon">CED/RIF:</td>
+                            <td class="valor"><?= $objFactImpr->CedulaRif ?></td>
                         </tr>
                         <tr>
-                            <td style="width: 130px; background-color: #CCC; font-weight: bold">TELEFONO:</td>
-                            <td style="width: 100px; text-align: right"><?= $objFactImpr->Telefono ?></td>
+                            <td class="renglon">TELEFONO:</td>
+                            <td class="valor"><?= $objFactImpr->Telefono ?></td>
+                        </tr>
+                        <tr>
+                            <td class="renglon">CONDICION PAGO:</td>
+                            <td class="valor">5 DIAS</td>
                         </tr>
                     </table>
                 </td>
@@ -75,21 +96,33 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                     <!------------------>
                     <table style="width: 100%; border: solid .5mm;">
                         <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="width: 60px; text-align: center">GUIA</td>
-                            <td style="width: 200px; text-align: left">CONTENIDO</td>
-                            <td style="width: 60px; text-align: center">DEST</td>
+                            <td style="width: 55px; text-align: center">GUIA</td>
+                            <td style="width: 310px; text-align: left">CONTENIDO</td>
+                            <td style="width: 40px; text-align: center">DEST</td>
+                            <td style="width: 38px; text-align: center">PRD</td>
+                            <td style="width: 35px; text-align: center">KG</td>
+                            <td style="width: 35px; text-align: center">PZAS</td>
+                            <td style="width: 70px; text-align: center">A x A x L</td>
                             <td style="width: 60px; text-align: right">MONTO</td>
                         </tr>
                         <?php foreach ($arrGuiaFact as $objGuiaFact) { ?>
                         <tr>
-                            <td style="width: 60px; text-align: center"><?= $objGuiaFact->Guia->Numero ?></td>
-                            <td style="width: 180px; text-align: left"><?= $objGuiaFact->Guia->Contenido ?></td>
-                            <td style="width: 60px; text-align: center"><?= $objGuiaFact->Guia->Destino->Iata ?></td>
-                            <td style="width: 80px; text-align: right"><?= nf($objGuiaFact->Guia->Total) ?></td>
+                            <td style="width: 55px; text-align: center"><?= $objGuiaFact->Guia->Numero ?></td>
+                            <td style="width: 310px; text-align: left"><?= $objGuiaFact->Guia->Contenido ?></td>
+                            <td style="width: 40px; text-align: center"><?= $objGuiaFact->Guia->Destino->Iata ?></td>
+                            <td style="width: 38px; text-align: center"><?= $objGuiaFact->Guia->Producto->Codigo ?></td>
+                            <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Kilos ?></td>
+                            <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Piezas ?></td>
+                            <td style="width: 70px; text-align: center"><?= $objGuiaFact->Guia->__medidas() ?></td>
+                            <td style="width: 60px; text-align: right"><?= nf($objGuiaFact->Guia->Total) ?></td>
                         </tr>
                         <?php } ?>
                     </table>
                 </td>
+            </tr>
+        </table>
+        <table style="margin-left:445px; font-size: small">
+            <tr>
                 <td style="width: 35%; text-align: right; vertical-align: top">
                     <!------------------>
                     <!--   IMPORTES   -->
@@ -101,7 +134,7 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                         </tr>
                         <?php foreach ($arrItemFact as $objItemFact) { ?>
                             <tr>
-                                <td style="width: 135px; text-align: left"><?= $objItemFact->Concepto->MostrarComo ?></td>
+                                <td class="concepto"><?= $objItemFact->Concepto->MostrarComo ?>:</td>
                                 <td style="width: 100px; text-align: right"><?= nf($objItemFact->Monto) ?></td>
                             </tr>
                         <?php } ?>

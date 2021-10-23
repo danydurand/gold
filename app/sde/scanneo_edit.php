@@ -157,12 +157,12 @@ class ScanneoEditForm extends ScanneoEditFormBase {
 	    $this->mensaje();
         $this->txtResuScan->Text = '';
         $this->txtResuScan->ForeColor = null;
-        $strNumePiez = trim($this->txtNumePiez->Text);
+        $strNumePiez = transformar(trim($this->txtNumePiez->Text));
         if (strlen($strNumePiez) > 0) {
             try {
                 $objScanPiez = new ScanneoPiezas();
                 $objScanPiez->ScanneoId = $this->mctScanneo->Scanneo->Id;
-                $objScanPiez->IdPieza = transformar($strNumePiez);
+                $objScanPiez->IdPieza = $strNumePiez;
                 $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumePiez);
                 if ($objGuiaPiez) {
                     $objScanPiez->GuiaPiezaId = $objGuiaPiez->Id;

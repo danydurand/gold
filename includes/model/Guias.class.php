@@ -31,6 +31,10 @@
 		    return '/var/www/html/gold/retail/tmp/Guia'.$this->Numero.'.pdf';
         }
 
+		public function __medidas() {
+		    return $this->Alto.' x '.$this->Ancho.' x '.$this->Largo;
+        }
+
 		public function ResumenDeEntrega() {
             $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
             $intCantOkey = $this->ContarPiezasConCheckpoint('OK');
