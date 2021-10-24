@@ -19,6 +19,7 @@
 	 * @property integer $GuiaId the value for intGuiaId (Not Null)
 	 * @property string $IdPieza the value for strIdPieza (Unique)
 	 * @property double $Kilos the value for fltKilos (Not Null)
+	 * @property integer $EmpaqueId the value for intEmpaqueId 
 	 * @property double $Libras the value for fltLibras 
 	 * @property double $Largo the value for fltLargo 
 	 * @property double $Alto the value for fltAlto 
@@ -33,6 +34,7 @@
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property Guias $Guia the value for the Guias object referenced by intGuiaId (Not Null)
+	 * @property Empaque $Empaque the value for the Empaque object referenced by intEmpaqueId 
 	 * @property GuiaPiezaPod $GuiaPiezaPodAsGuiaPieza the value for the GuiaPiezaPod object that uniquely references this GuiaPiezas
 	 * @property GuiaTransportista $GuiaTransportistaAsGuiaPieza the value for the GuiaTransportista object that uniquely references this GuiaPiezas
 	 * @property-read Bag $_BagAsPieza the value for the private _objBagAsPieza (Read-Only) if set due to an expansion on the bag_pieza_assn association table
@@ -86,6 +88,14 @@
 		 */
 		protected $fltKilos;
 		const KilosDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.empaque_id
+		 * @var integer intEmpaqueId
+		 */
+		protected $intEmpaqueId;
+		const EmpaqueIdDefault = null;
 
 
 		/**
@@ -324,6 +334,16 @@
 		protected $objGuia;
 
 		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guia_piezas.empaque_id.
+		 *
+		 * NOTE: Always use the Empaque property getter to correctly retrieve this Empaque object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Empaque objEmpaque
+		 */
+		protected $objEmpaque;
+
+		/**
 		 * Protected member variable that contains the object which points to
 		 * this object by the reference in the unique database column guia_pieza_pod.guia_pieza_id.
 		 *
@@ -370,6 +390,7 @@
 			$this->intGuiaId = GuiaPiezas::GuiaIdDefault;
 			$this->strIdPieza = GuiaPiezas::IdPiezaDefault;
 			$this->fltKilos = GuiaPiezas::KilosDefault;
+			$this->intEmpaqueId = GuiaPiezas::EmpaqueIdDefault;
 			$this->fltLibras = GuiaPiezas::LibrasDefault;
 			$this->fltLargo = GuiaPiezas::LargoDefault;
 			$this->fltAlto = GuiaPiezas::AltoDefault;
@@ -728,6 +749,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'guia_id', $strAliasPrefix . 'guia_id');
 			    $objBuilder->AddSelectItem($strTableName, 'id_pieza', $strAliasPrefix . 'id_pieza');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
+			    $objBuilder->AddSelectItem($strTableName, 'empaque_id', $strAliasPrefix . 'empaque_id');
 			    $objBuilder->AddSelectItem($strTableName, 'libras', $strAliasPrefix . 'libras');
 			    $objBuilder->AddSelectItem($strTableName, 'largo', $strAliasPrefix . 'largo');
 			    $objBuilder->AddSelectItem($strTableName, 'alto', $strAliasPrefix . 'alto');
@@ -878,6 +900,9 @@
 			$strAlias = $strAliasPrefix . 'kilos';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltKilos = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'empaque_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intEmpaqueId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'libras';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltLibras = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -953,6 +978,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['guia_id']) ? null : $objExpansionAliasArray['guia_id']);
 				$objToReturn->objGuia = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guia_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for Empaque Early Binding
+			$strAlias = $strAliasPrefix . 'empaque_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['empaque_id']) ? null : $objExpansionAliasArray['empaque_id']);
+				$objToReturn->objEmpaque = Empaque::InstantiateDbRow($objDbRow, $strAliasPrefix . 'empaque_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 			// Check for GuiaPiezaPodAsGuiaPieza Unique ReverseReference Binding
@@ -1222,6 +1254,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by EmpaqueId Index(es)
+		 * @param integer $intEmpaqueId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByEmpaqueId($intEmpaqueId, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByEmpaqueId query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->EmpaqueId, $intEmpaqueId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by EmpaqueId Index(es)
+		 * @param integer $intEmpaqueId
+		 * @return int
+		*/
+		public static function CountByEmpaqueId($intEmpaqueId) {
+			// Call GuiaPiezas::QueryCount to perform the CountByEmpaqueId query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->EmpaqueId, $intEmpaqueId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -1380,6 +1444,7 @@
 							`guia_id`,
 							`id_pieza`,
 							`kilos`,
+							`empaque_id`,
 							`libras`,
 							`largo`,
 							`alto`,
@@ -1397,6 +1462,7 @@
 							' . $objDatabase->SqlVariable($this->intGuiaId) . ',
 							' . $objDatabase->SqlVariable($this->strIdPieza) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							' . $objDatabase->SqlVariable($this->fltLargo) . ',
 							' . $objDatabase->SqlVariable($this->fltAlto) . ',
@@ -1428,6 +1494,7 @@
 							`guia_id` = ' . $objDatabase->SqlVariable($this->intGuiaId) . ',
 							`id_pieza` = ' . $objDatabase->SqlVariable($this->strIdPieza) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							`empaque_id` = ' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							`libras` = ' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							`largo` = ' . $objDatabase->SqlVariable($this->fltLargo) . ',
 							`alto` = ' . $objDatabase->SqlVariable($this->fltAlto) . ',
@@ -1606,6 +1673,7 @@
 			$this->GuiaId = $objReloaded->GuiaId;
 			$this->strIdPieza = $objReloaded->strIdPieza;
 			$this->fltKilos = $objReloaded->fltKilos;
+			$this->EmpaqueId = $objReloaded->EmpaqueId;
 			$this->fltLibras = $objReloaded->fltLibras;
 			$this->fltLargo = $objReloaded->fltLargo;
 			$this->fltAlto = $objReloaded->fltAlto;
@@ -1666,6 +1734,13 @@
 					 * @return double
 					 */
 					return $this->fltKilos;
+
+				case 'EmpaqueId':
+					/**
+					 * Gets the value for intEmpaqueId 
+					 * @return integer
+					 */
+					return $this->intEmpaqueId;
 
 				case 'Libras':
 					/**
@@ -1771,6 +1846,20 @@
 						if ((!$this->objGuia) && (!is_null($this->intGuiaId)))
 							$this->objGuia = Guias::Load($this->intGuiaId);
 						return $this->objGuia;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Empaque':
+					/**
+					 * Gets the value for the Empaque object referenced by intEmpaqueId 
+					 * @return Empaque
+					 */
+					try {
+						if ((!$this->objEmpaque) && (!is_null($this->intEmpaqueId)))
+							$this->objEmpaque = Empaque::Load($this->intEmpaqueId);
+						return $this->objEmpaque;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1981,6 +2070,20 @@
 						throw $objExc;
 					}
 
+				case 'EmpaqueId':
+					/**
+					 * Sets the value for intEmpaqueId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objEmpaque = null;
+						return ($this->intEmpaqueId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Libras':
 					/**
 					 * Sets the value for fltLibras 
@@ -2180,6 +2283,38 @@
 						// Update Local Member Variables
 						$this->objGuia = $mixValue;
 						$this->intGuiaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'Empaque':
+					/**
+					 * Sets the value for the Empaque object referenced by intEmpaqueId 
+					 * @param Empaque $mixValue
+					 * @return Empaque
+					 */
+					if (is_null($mixValue)) {
+						$this->intEmpaqueId = null;
+						$this->objEmpaque = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Empaque object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Empaque');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Empaque object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Empaque for this GuiaPiezas');
+
+						// Update Local Member Variables
+						$this->objEmpaque = $mixValue;
+						$this->intEmpaqueId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -3138,6 +3273,7 @@
 			$strToReturn .= '<element name="Guia" type="xsd1:Guias"/>';
 			$strToReturn .= '<element name="IdPieza" type="xsd:string"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
+			$strToReturn .= '<element name="Empaque" type="xsd1:Empaque"/>';
 			$strToReturn .= '<element name="Libras" type="xsd:float"/>';
 			$strToReturn .= '<element name="Largo" type="xsd:float"/>';
 			$strToReturn .= '<element name="Alto" type="xsd:float"/>';
@@ -3160,6 +3296,7 @@
 			if (!array_key_exists('GuiaPiezas', $strComplexTypeArray)) {
 				$strComplexTypeArray['GuiaPiezas'] = GuiaPiezas::GetSoapComplexTypeXml();
 				Guias::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Empaque::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -3183,6 +3320,9 @@
 				$objToReturn->strIdPieza = $objSoapObject->IdPieza;
 			if (property_exists($objSoapObject, 'Kilos'))
 				$objToReturn->fltKilos = $objSoapObject->Kilos;
+			if ((property_exists($objSoapObject, 'Empaque')) &&
+				($objSoapObject->Empaque))
+				$objToReturn->Empaque = Empaque::GetObjectFromSoapObject($objSoapObject->Empaque);
 			if (property_exists($objSoapObject, 'Libras'))
 				$objToReturn->fltLibras = $objSoapObject->Libras;
 			if (property_exists($objSoapObject, 'Largo'))
@@ -3231,6 +3371,10 @@
 				$objObject->objGuia = Guias::GetSoapObjectFromObject($objObject->objGuia, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intGuiaId = null;
+			if ($objObject->objEmpaque)
+				$objObject->objEmpaque = Empaque::GetSoapObjectFromObject($objObject->objEmpaque, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intEmpaqueId = null;
 			if ($objObject->dttCreatedAt)
 				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttUpdatedAt)
@@ -3253,6 +3397,7 @@
 			$iArray['GuiaId'] = $this->intGuiaId;
 			$iArray['IdPieza'] = $this->strIdPieza;
 			$iArray['Kilos'] = $this->fltKilos;
+			$iArray['EmpaqueId'] = $this->intEmpaqueId;
 			$iArray['Libras'] = $this->fltLibras;
 			$iArray['Largo'] = $this->fltLargo;
 			$iArray['Alto'] = $this->fltAlto;
@@ -3452,6 +3597,8 @@
      * @property-read QQNodeGuias $Guia
      * @property-read QQNode $IdPieza
      * @property-read QQNode $Kilos
+     * @property-read QQNode $EmpaqueId
+     * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
      * @property-read QQNode $Largo
      * @property-read QQNode $Alto
@@ -3494,6 +3641,10 @@
 					return new QQNode('id_pieza', 'IdPieza', 'VarChar', $this);
 				case 'Kilos':
 					return new QQNode('kilos', 'Kilos', 'Float', $this);
+				case 'EmpaqueId':
+					return new QQNode('empaque_id', 'EmpaqueId', 'Integer', $this);
+				case 'Empaque':
+					return new QQNodeEmpaque('empaque_id', 'Empaque', 'Integer', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'Float', $this);
 				case 'Largo':
@@ -3556,6 +3707,8 @@
      * @property-read QQNodeGuias $Guia
      * @property-read QQNode $IdPieza
      * @property-read QQNode $Kilos
+     * @property-read QQNode $EmpaqueId
+     * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
      * @property-read QQNode $Largo
      * @property-read QQNode $Alto
@@ -3598,6 +3751,10 @@
 					return new QQNode('id_pieza', 'IdPieza', 'string', $this);
 				case 'Kilos':
 					return new QQNode('kilos', 'Kilos', 'double', $this);
+				case 'EmpaqueId':
+					return new QQNode('empaque_id', 'EmpaqueId', 'integer', $this);
+				case 'Empaque':
+					return new QQNodeEmpaque('empaque_id', 'Empaque', 'integer', $this);
 				case 'Libras':
 					return new QQNode('libras', 'Libras', 'double', $this);
 				case 'Largo':

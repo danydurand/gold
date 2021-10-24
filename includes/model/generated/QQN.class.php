@@ -301,6 +301,12 @@
 			return new QQNodeDspMotivoNoco('dsp_motivo_noco', null, null);
 		}
 		/**
+		 * @return QQNodeEmpaque
+		 */
+		static public function Empaque() {
+			return new QQNodeEmpaque('empaque', null, null);
+		}
+		/**
 		 * @return QQNodeEmpresa
 		 */
 		static public function Empresa() {

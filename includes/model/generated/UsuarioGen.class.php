@@ -59,6 +59,10 @@
 	 * @property-read DspDespacho[] $_DspDespachoAsUsuaCierArray the value for the private _objDspDespachoAsUsuaCierArray (Read-Only) if set due to an ExpandAsArray on the dsp_despacho.usua_cier reverse relationship
 	 * @property-read DspDespacho $_DspDespachoAsUsuaDesp the value for the private _objDspDespachoAsUsuaDesp (Read-Only) if set due to an expansion on the dsp_despacho.usua_desp reverse relationship
 	 * @property-read DspDespacho[] $_DspDespachoAsUsuaDespArray the value for the private _objDspDespachoAsUsuaDespArray (Read-Only) if set due to an ExpandAsArray on the dsp_despacho.usua_desp reverse relationship
+	 * @property-read Empaque $_EmpaqueAsCreatedBy the value for the private _objEmpaqueAsCreatedBy (Read-Only) if set due to an expansion on the empaque.created_by reverse relationship
+	 * @property-read Empaque[] $_EmpaqueAsCreatedByArray the value for the private _objEmpaqueAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the empaque.created_by reverse relationship
+	 * @property-read Empaque $_EmpaqueAsUpdatedBy the value for the private _objEmpaqueAsUpdatedBy (Read-Only) if set due to an expansion on the empaque.updated_by reverse relationship
+	 * @property-read Empaque[] $_EmpaqueAsUpdatedByArray the value for the private _objEmpaqueAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the empaque.updated_by reverse relationship
 	 * @property-read Factura $_FacturaAsCreacion the value for the private _objFacturaAsCreacion (Read-Only) if set due to an expansion on the factura.usuario_creacion reverse relationship
 	 * @property-read Factura[] $_FacturaAsCreacionArray the value for the private _objFacturaAsCreacionArray (Read-Only) if set due to an ExpandAsArray on the factura.usuario_creacion reverse relationship
 	 * @property-read Factura $_FacturaAsAnulacion the value for the private _objFacturaAsAnulacion (Read-Only) if set due to an expansion on the factura.usuario_anulacion reverse relationship
@@ -437,6 +441,38 @@
 		 * @var DspDespacho[] _objDspDespachoAsUsuaDespArray;
 		 */
 		private $_objDspDespachoAsUsuaDespArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single EmpaqueAsCreatedBy object
+		 * (of type Empaque), if this Usuario object was restored with
+		 * an expansion on the empaque association table.
+		 * @var Empaque _objEmpaqueAsCreatedBy;
+		 */
+		private $_objEmpaqueAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of EmpaqueAsCreatedBy objects
+		 * (of type Empaque[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the empaque association table.
+		 * @var Empaque[] _objEmpaqueAsCreatedByArray;
+		 */
+		private $_objEmpaqueAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single EmpaqueAsUpdatedBy object
+		 * (of type Empaque), if this Usuario object was restored with
+		 * an expansion on the empaque association table.
+		 * @var Empaque _objEmpaqueAsUpdatedBy;
+		 */
+		private $_objEmpaqueAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of EmpaqueAsUpdatedBy objects
+		 * (of type Empaque[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the empaque association table.
+		 * @var Empaque[] _objEmpaqueAsUpdatedByArray;
+		 */
+		private $_objEmpaqueAsUpdatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single FacturaAsCreacion object
@@ -1654,6 +1690,36 @@
 					$objToReturn->_objDspDespachoAsUsuaDespArray[] = DspDespacho::InstantiateDbRow($objDbRow, $strAliasPrefix . 'dspdespachoasusuadesp__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objDspDespachoAsUsuaDesp)) {
 					$objToReturn->_objDspDespachoAsUsuaDesp = DspDespacho::InstantiateDbRow($objDbRow, $strAliasPrefix . 'dspdespachoasusuadesp__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for EmpaqueAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'empaqueascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['empaqueascreatedby']) ? null : $objExpansionAliasArray['empaqueascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objEmpaqueAsCreatedByArray)
+				$objToReturn->_objEmpaqueAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objEmpaqueAsCreatedByArray[] = Empaque::InstantiateDbRow($objDbRow, $strAliasPrefix . 'empaqueascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objEmpaqueAsCreatedBy)) {
+					$objToReturn->_objEmpaqueAsCreatedBy = Empaque::InstantiateDbRow($objDbRow, $strAliasPrefix . 'empaqueascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for EmpaqueAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'empaqueasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['empaqueasupdatedby']) ? null : $objExpansionAliasArray['empaqueasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objEmpaqueAsUpdatedByArray)
+				$objToReturn->_objEmpaqueAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objEmpaqueAsUpdatedByArray[] = Empaque::InstantiateDbRow($objDbRow, $strAliasPrefix . 'empaqueasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objEmpaqueAsUpdatedBy)) {
+					$objToReturn->_objEmpaqueAsUpdatedBy = Empaque::InstantiateDbRow($objDbRow, $strAliasPrefix . 'empaqueasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2928,6 +2994,38 @@
 					 */
 					return $this->_objDspDespachoAsUsuaDespArray;
 
+				case '_EmpaqueAsCreatedBy':
+					/**
+					 * Gets the value for the private _objEmpaqueAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the empaque.created_by reverse relationship
+					 * @return Empaque
+					 */
+					return $this->_objEmpaqueAsCreatedBy;
+
+				case '_EmpaqueAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objEmpaqueAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the empaque.created_by reverse relationship
+					 * @return Empaque[]
+					 */
+					return $this->_objEmpaqueAsCreatedByArray;
+
+				case '_EmpaqueAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objEmpaqueAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the empaque.updated_by reverse relationship
+					 * @return Empaque
+					 */
+					return $this->_objEmpaqueAsUpdatedBy;
+
+				case '_EmpaqueAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objEmpaqueAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the empaque.updated_by reverse relationship
+					 * @return Empaque[]
+					 */
+					return $this->_objEmpaqueAsUpdatedByArray;
+
 				case '_FacturaAsCreacion':
 					/**
 					 * Gets the value for the private _objFacturaAsCreacion (Read-Only)
@@ -3732,6 +3830,12 @@
 			}
 			if ($this->CountDspDespachosAsUsuaDesp()) {
 				$arrTablRela[] = 'dsp_despacho';
+			}
+			if ($this->CountEmpaquesAsCreatedBy()) {
+				$arrTablRela[] = 'empaque';
+			}
+			if ($this->CountEmpaquesAsUpdatedBy()) {
+				$arrTablRela[] = 'empaque';
 			}
 			if ($this->CountFacturasAsCreacion()) {
 				$arrTablRela[] = 'factura';
@@ -5444,6 +5548,304 @@
 					`dsp_despacho`
 				WHERE
 					`usua_desp` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for EmpaqueAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated EmpaquesAsCreatedBy as an array of Empaque objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Empaque[]
+		*/
+		public function GetEmpaqueAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Empaque::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated EmpaquesAsCreatedBy
+		 * @return int
+		*/
+		public function CountEmpaquesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Empaque::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a EmpaqueAsCreatedBy
+		 * @param Empaque $objEmpaque
+		 * @return void
+		*/
+		public function AssociateEmpaqueAsCreatedBy(Empaque $objEmpaque) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateEmpaqueAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objEmpaque->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateEmpaqueAsCreatedBy on this Usuario with an unsaved Empaque.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`empaque`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objEmpaque->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a EmpaqueAsCreatedBy
+		 * @param Empaque $objEmpaque
+		 * @return void
+		*/
+		public function UnassociateEmpaqueAsCreatedBy(Empaque $objEmpaque) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objEmpaque->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsCreatedBy on this Usuario with an unsaved Empaque.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`empaque`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objEmpaque->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all EmpaquesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllEmpaquesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`empaque`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated EmpaqueAsCreatedBy
+		 * @param Empaque $objEmpaque
+		 * @return void
+		*/
+		public function DeleteAssociatedEmpaqueAsCreatedBy(Empaque $objEmpaque) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objEmpaque->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsCreatedBy on this Usuario with an unsaved Empaque.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`empaque`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objEmpaque->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated EmpaquesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllEmpaquesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`empaque`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for EmpaqueAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated EmpaquesAsUpdatedBy as an array of Empaque objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Empaque[]
+		*/
+		public function GetEmpaqueAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Empaque::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated EmpaquesAsUpdatedBy
+		 * @return int
+		*/
+		public function CountEmpaquesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Empaque::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a EmpaqueAsUpdatedBy
+		 * @param Empaque $objEmpaque
+		 * @return void
+		*/
+		public function AssociateEmpaqueAsUpdatedBy(Empaque $objEmpaque) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateEmpaqueAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objEmpaque->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateEmpaqueAsUpdatedBy on this Usuario with an unsaved Empaque.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`empaque`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objEmpaque->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a EmpaqueAsUpdatedBy
+		 * @param Empaque $objEmpaque
+		 * @return void
+		*/
+		public function UnassociateEmpaqueAsUpdatedBy(Empaque $objEmpaque) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objEmpaque->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsUpdatedBy on this Usuario with an unsaved Empaque.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`empaque`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objEmpaque->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all EmpaquesAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllEmpaquesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`empaque`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated EmpaqueAsUpdatedBy
+		 * @param Empaque $objEmpaque
+		 * @return void
+		*/
+		public function DeleteAssociatedEmpaqueAsUpdatedBy(Empaque $objEmpaque) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objEmpaque->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsUpdatedBy on this Usuario with an unsaved Empaque.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`empaque`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objEmpaque->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated EmpaquesAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllEmpaquesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateEmpaqueAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`empaque`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
 			');
 		}
 
@@ -9010,6 +9412,8 @@
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsUsuaModi
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsUsuaCier
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsUsuaDesp
+     * @property-read QQReverseReferenceNodeEmpaque $EmpaqueAsCreatedBy
+     * @property-read QQReverseReferenceNodeEmpaque $EmpaqueAsUpdatedBy
      * @property-read QQReverseReferenceNodeFactura $FacturaAsCreacion
      * @property-read QQReverseReferenceNodeFactura $FacturaAsAnulacion
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsAnuladaPor
@@ -9107,6 +9511,10 @@
 					return new QQReverseReferenceNodeDspDespacho($this, 'dspdespachoasusuacier', 'reverse_reference', 'usua_cier', 'DspDespachoAsUsuaCier');
 				case 'DspDespachoAsUsuaDesp':
 					return new QQReverseReferenceNodeDspDespacho($this, 'dspdespachoasusuadesp', 'reverse_reference', 'usua_desp', 'DspDespachoAsUsuaDesp');
+				case 'EmpaqueAsCreatedBy':
+					return new QQReverseReferenceNodeEmpaque($this, 'empaqueascreatedby', 'reverse_reference', 'created_by', 'EmpaqueAsCreatedBy');
+				case 'EmpaqueAsUpdatedBy':
+					return new QQReverseReferenceNodeEmpaque($this, 'empaqueasupdatedby', 'reverse_reference', 'updated_by', 'EmpaqueAsUpdatedBy');
 				case 'FacturaAsCreacion':
 					return new QQReverseReferenceNodeFactura($this, 'facturaascreacion', 'reverse_reference', 'usuario_creacion', 'FacturaAsCreacion');
 				case 'FacturaAsAnulacion':
@@ -9201,6 +9609,8 @@
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsUsuaModi
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsUsuaCier
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsUsuaDesp
+     * @property-read QQReverseReferenceNodeEmpaque $EmpaqueAsCreatedBy
+     * @property-read QQReverseReferenceNodeEmpaque $EmpaqueAsUpdatedBy
      * @property-read QQReverseReferenceNodeFactura $FacturaAsCreacion
      * @property-read QQReverseReferenceNodeFactura $FacturaAsAnulacion
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsAnuladaPor
@@ -9298,6 +9708,10 @@
 					return new QQReverseReferenceNodeDspDespacho($this, 'dspdespachoasusuacier', 'reverse_reference', 'usua_cier', 'DspDespachoAsUsuaCier');
 				case 'DspDespachoAsUsuaDesp':
 					return new QQReverseReferenceNodeDspDespacho($this, 'dspdespachoasusuadesp', 'reverse_reference', 'usua_desp', 'DspDespachoAsUsuaDesp');
+				case 'EmpaqueAsCreatedBy':
+					return new QQReverseReferenceNodeEmpaque($this, 'empaqueascreatedby', 'reverse_reference', 'created_by', 'EmpaqueAsCreatedBy');
+				case 'EmpaqueAsUpdatedBy':
+					return new QQReverseReferenceNodeEmpaque($this, 'empaqueasupdatedby', 'reverse_reference', 'updated_by', 'EmpaqueAsUpdatedBy');
 				case 'FacturaAsCreacion':
 					return new QQReverseReferenceNodeFactura($this, 'facturaascreacion', 'reverse_reference', 'usuario_creacion', 'FacturaAsCreacion');
 				case 'FacturaAsAnulacion':

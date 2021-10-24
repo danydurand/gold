@@ -57,6 +57,7 @@ abstract class PiezasTempEditFormBase extends QForm {
 	protected $lstProcesoError;
 	protected $txtPiezaId;
 	protected $txtDescripcion;
+	protected $lstEmpaque;
 	protected $txtKilos;
 	protected $txtAlto;
 	protected $txtAncho;
@@ -138,6 +139,7 @@ abstract class PiezasTempEditFormBase extends QForm {
 		$this->lstProcesoError = $this->mctPiezasTemp->lstProcesoError_Create();
 		$this->txtPiezaId = $this->mctPiezasTemp->txtPiezaId_Create();
 		$this->txtDescripcion = $this->mctPiezasTemp->txtDescripcion_Create();
+		$this->lstEmpaque = $this->mctPiezasTemp->lstEmpaque_Create();
 		$this->txtKilos = $this->mctPiezasTemp->txtKilos_Create();
 		$this->txtAlto = $this->mctPiezasTemp->txtAlto_Create();
 		$this->txtAncho = $this->mctPiezasTemp->txtAncho_Create();

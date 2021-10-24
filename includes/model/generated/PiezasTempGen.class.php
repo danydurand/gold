@@ -19,6 +19,7 @@
 	 * @property integer $ProcesoErrorId the value for intProcesoErrorId (Not Null)
 	 * @property integer $PiezaId the value for intPiezaId 
 	 * @property string $Descripcion the value for strDescripcion (Not Null)
+	 * @property integer $EmpaqueId the value for intEmpaqueId 
 	 * @property double $Kilos the value for fltKilos 
 	 * @property double $Alto the value for fltAlto 
 	 * @property double $Ancho the value for fltAncho 
@@ -31,6 +32,7 @@
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property ProcesoError $ProcesoError the value for the ProcesoError object referenced by intProcesoErrorId (Not Null)
+	 * @property Empaque $Empaque the value for the Empaque object referenced by intEmpaqueId 
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class PiezasTempGen extends QBaseClass implements IteratorAggregate {
@@ -70,6 +72,14 @@
 		protected $strDescripcion;
 		const DescripcionMaxLength = 50;
 		const DescripcionDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column piezas_temp.empaque_id
+		 * @var integer intEmpaqueId
+		 */
+		protected $intEmpaqueId;
+		const EmpaqueIdDefault = null;
 
 
 		/**
@@ -192,6 +202,16 @@
 		 */
 		protected $objProcesoError;
 
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column piezas_temp.empaque_id.
+		 *
+		 * NOTE: Always use the Empaque property getter to correctly retrieve this Empaque object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Empaque objEmpaque
+		 */
+		protected $objEmpaque;
+
 
 
 		/**
@@ -203,6 +223,7 @@
 			$this->intProcesoErrorId = PiezasTemp::ProcesoErrorIdDefault;
 			$this->intPiezaId = PiezasTemp::PiezaIdDefault;
 			$this->strDescripcion = PiezasTemp::DescripcionDefault;
+			$this->intEmpaqueId = PiezasTemp::EmpaqueIdDefault;
 			$this->fltKilos = PiezasTemp::KilosDefault;
 			$this->fltAlto = PiezasTemp::AltoDefault;
 			$this->fltAncho = PiezasTemp::AnchoDefault;
@@ -559,6 +580,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'proceso_error_id', $strAliasPrefix . 'proceso_error_id');
 			    $objBuilder->AddSelectItem($strTableName, 'pieza_id', $strAliasPrefix . 'pieza_id');
 			    $objBuilder->AddSelectItem($strTableName, 'descripcion', $strAliasPrefix . 'descripcion');
+			    $objBuilder->AddSelectItem($strTableName, 'empaque_id', $strAliasPrefix . 'empaque_id');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'alto', $strAliasPrefix . 'alto');
 			    $objBuilder->AddSelectItem($strTableName, 'ancho', $strAliasPrefix . 'ancho');
@@ -707,6 +729,9 @@
 			$strAlias = $strAliasPrefix . 'descripcion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDescripcion = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'empaque_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intEmpaqueId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'kilos';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltKilos = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -776,6 +801,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['proceso_error_id']) ? null : $objExpansionAliasArray['proceso_error_id']);
 				$objToReturn->objProcesoError = ProcesoError::InstantiateDbRow($objDbRow, $strAliasPrefix . 'proceso_error_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for Empaque Early Binding
+			$strAlias = $strAliasPrefix . 'empaque_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['empaque_id']) ? null : $objExpansionAliasArray['empaque_id']);
+				$objToReturn->objEmpaque = Empaque::InstantiateDbRow($objDbRow, $strAliasPrefix . 'empaque_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -905,6 +937,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of PiezasTemp objects,
+		 * by EmpaqueId Index(es)
+		 * @param integer $intEmpaqueId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PiezasTemp[]
+		*/
+		public static function LoadArrayByEmpaqueId($intEmpaqueId, $objOptionalClauses = null) {
+			// Call PiezasTemp::QueryArray to perform the LoadArrayByEmpaqueId query
+			try {
+				return PiezasTemp::QueryArray(
+					QQ::Equal(QQN::PiezasTemp()->EmpaqueId, $intEmpaqueId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count PiezasTemps
+		 * by EmpaqueId Index(es)
+		 * @param integer $intEmpaqueId
+		 * @return int
+		*/
+		public static function CountByEmpaqueId($intEmpaqueId) {
+			// Call PiezasTemp::QueryCount to perform the CountByEmpaqueId query
+			return PiezasTemp::QueryCount(
+				QQ::Equal(QQN::PiezasTemp()->EmpaqueId, $intEmpaqueId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -939,6 +1003,7 @@
 							`proceso_error_id`,
 							`pieza_id`,
 							`descripcion`,
+							`empaque_id`,
 							`kilos`,
 							`alto`,
 							`ancho`,
@@ -952,6 +1017,7 @@
 							' . $objDatabase->SqlVariable($this->intProcesoErrorId) . ',
 							' . $objDatabase->SqlVariable($this->intPiezaId) . ',
 							' . $objDatabase->SqlVariable($this->strDescripcion) . ',
+							' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							' . $objDatabase->SqlVariable($this->fltAlto) . ',
 							' . $objDatabase->SqlVariable($this->fltAncho) . ',
@@ -1009,6 +1075,7 @@
 							`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intProcesoErrorId) . ',
 							`pieza_id` = ' . $objDatabase->SqlVariable($this->intPiezaId) . ',
 							`descripcion` = ' . $objDatabase->SqlVariable($this->strDescripcion) . ',
+							`empaque_id` = ' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
 							`alto` = ' . $objDatabase->SqlVariable($this->fltAlto) . ',
 							`ancho` = ' . $objDatabase->SqlVariable($this->fltAncho) . ',
@@ -1149,6 +1216,7 @@
 			$this->ProcesoErrorId = $objReloaded->ProcesoErrorId;
 			$this->intPiezaId = $objReloaded->intPiezaId;
 			$this->strDescripcion = $objReloaded->strDescripcion;
+			$this->EmpaqueId = $objReloaded->EmpaqueId;
 			$this->fltKilos = $objReloaded->fltKilos;
 			$this->fltAlto = $objReloaded->fltAlto;
 			$this->fltAncho = $objReloaded->fltAncho;
@@ -1207,6 +1275,13 @@
 					 * @return string
 					 */
 					return $this->strDescripcion;
+
+				case 'EmpaqueId':
+					/**
+					 * Gets the value for intEmpaqueId 
+					 * @return integer
+					 */
+					return $this->intEmpaqueId;
 
 				case 'Kilos':
 					/**
@@ -1303,6 +1378,20 @@
 						throw $objExc;
 					}
 
+				case 'Empaque':
+					/**
+					 * Gets the value for the Empaque object referenced by intEmpaqueId 
+					 * @return Empaque
+					 */
+					try {
+						if ((!$this->objEmpaque) && (!is_null($this->intEmpaqueId)))
+							$this->objEmpaque = Empaque::Load($this->intEmpaqueId);
+						return $this->objEmpaque;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 
 				////////////////////////////
 				// Virtual Object References (Many to Many and Reverse References)
@@ -1371,6 +1460,20 @@
 					 */
 					try {
 						return ($this->strDescripcion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'EmpaqueId':
+					/**
+					 * Sets the value for intEmpaqueId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objEmpaque = null;
+						return ($this->intEmpaqueId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1529,6 +1632,38 @@
 					}
 					break;
 
+				case 'Empaque':
+					/**
+					 * Sets the value for the Empaque object referenced by intEmpaqueId 
+					 * @param Empaque $mixValue
+					 * @return Empaque
+					 */
+					if (is_null($mixValue)) {
+						$this->intEmpaqueId = null;
+						$this->objEmpaque = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Empaque object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Empaque');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Empaque object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Empaque for this PiezasTemp');
+
+						// Update Local Member Variables
+						$this->objEmpaque = $mixValue;
+						$this->intEmpaqueId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				default:
 					try {
 						return parent::__set($strName, $mixValue);
@@ -1611,6 +1746,7 @@
 			$strToReturn .= '<element name="ProcesoError" type="xsd1:ProcesoError"/>';
 			$strToReturn .= '<element name="PiezaId" type="xsd:int"/>';
 			$strToReturn .= '<element name="Descripcion" type="xsd:string"/>';
+			$strToReturn .= '<element name="Empaque" type="xsd1:Empaque"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="Alto" type="xsd:float"/>';
 			$strToReturn .= '<element name="Ancho" type="xsd:float"/>';
@@ -1631,6 +1767,7 @@
 			if (!array_key_exists('PiezasTemp', $strComplexTypeArray)) {
 				$strComplexTypeArray['PiezasTemp'] = PiezasTemp::GetSoapComplexTypeXml();
 				ProcesoError::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Empaque::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1654,6 +1791,9 @@
 				$objToReturn->intPiezaId = $objSoapObject->PiezaId;
 			if (property_exists($objSoapObject, 'Descripcion'))
 				$objToReturn->strDescripcion = $objSoapObject->Descripcion;
+			if ((property_exists($objSoapObject, 'Empaque')) &&
+				($objSoapObject->Empaque))
+				$objToReturn->Empaque = Empaque::GetObjectFromSoapObject($objSoapObject->Empaque);
 			if (property_exists($objSoapObject, 'Kilos'))
 				$objToReturn->fltKilos = $objSoapObject->Kilos;
 			if (property_exists($objSoapObject, 'Alto'))
@@ -1698,6 +1838,10 @@
 				$objObject->objProcesoError = ProcesoError::GetSoapObjectFromObject($objObject->objProcesoError, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intProcesoErrorId = null;
+			if ($objObject->objEmpaque)
+				$objObject->objEmpaque = Empaque::GetSoapObjectFromObject($objObject->objEmpaque, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intEmpaqueId = null;
 			return $objObject;
 		}
 
@@ -1716,6 +1860,7 @@
 			$iArray['ProcesoErrorId'] = $this->intProcesoErrorId;
 			$iArray['PiezaId'] = $this->intPiezaId;
 			$iArray['Descripcion'] = $this->strDescripcion;
+			$iArray['EmpaqueId'] = $this->intEmpaqueId;
 			$iArray['Kilos'] = $this->fltKilos;
 			$iArray['Alto'] = $this->fltAlto;
 			$iArray['Ancho'] = $this->fltAncho;
@@ -1769,6 +1914,8 @@
      * @property-read QQNodeProcesoError $ProcesoError
      * @property-read QQNode $PiezaId
      * @property-read QQNode $Descripcion
+     * @property-read QQNode $EmpaqueId
+     * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Kilos
      * @property-read QQNode $Alto
      * @property-read QQNode $Ancho
@@ -1801,6 +1948,10 @@
 					return new QQNode('pieza_id', 'PiezaId', 'Integer', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'VarChar', $this);
+				case 'EmpaqueId':
+					return new QQNode('empaque_id', 'EmpaqueId', 'Integer', $this);
+				case 'Empaque':
+					return new QQNodeEmpaque('empaque_id', 'Empaque', 'Integer', $this);
 				case 'Kilos':
 					return new QQNode('kilos', 'Kilos', 'Float', $this);
 				case 'Alto':
@@ -1843,6 +1994,8 @@
      * @property-read QQNodeProcesoError $ProcesoError
      * @property-read QQNode $PiezaId
      * @property-read QQNode $Descripcion
+     * @property-read QQNode $EmpaqueId
+     * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Kilos
      * @property-read QQNode $Alto
      * @property-read QQNode $Ancho
@@ -1875,6 +2028,10 @@
 					return new QQNode('pieza_id', 'PiezaId', 'integer', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'string', $this);
+				case 'EmpaqueId':
+					return new QQNode('empaque_id', 'EmpaqueId', 'integer', $this);
+				case 'Empaque':
+					return new QQNodeEmpaque('empaque_id', 'Empaque', 'integer', $this);
 				case 'Kilos':
 					return new QQNode('kilos', 'Kilos', 'double', $this);
 				case 'Alto':

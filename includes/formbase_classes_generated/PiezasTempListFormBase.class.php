@@ -82,6 +82,7 @@ abstract class PiezasTempListFormBase extends QForm {
         $this->dtgPiezasTemps->MetaAddColumn(QQN::PiezasTemp()->ProcesoError);
         $this->dtgPiezasTemps->MetaAddColumn('PiezaId');
         $this->dtgPiezasTemps->MetaAddColumn('Descripcion');
+        $this->dtgPiezasTemps->MetaAddColumn(QQN::PiezasTemp()->Empaque);
         $this->dtgPiezasTemps->MetaAddColumn('Kilos');
         $this->dtgPiezasTemps->MetaAddColumn('Alto');
         $this->dtgPiezasTemps->MetaAddColumn('Ancho');

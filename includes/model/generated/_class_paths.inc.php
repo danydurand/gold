@@ -349,6 +349,13 @@
 		QApplicationBase::$ClassFile['dspmotivonocometacontrol'] = __META_CONTROLS__ . '/DspMotivoNocoMetaControl.class.php';
 		QApplicationBase::$ClassFile['dspmotivonocodatagrid'] = __META_CONTROLS__ . '/DspMotivoNocoDataGrid.class.php';
 
+	// ClassPaths for the Empaque class
+		QApplicationBase::$ClassFile['empaque'] = __MODEL__ . '/Empaque.class.php';
+		QApplicationBase::$ClassFile['qqnodeempaque'] = __MODEL__ . '/Empaque.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeempaque'] = __MODEL__ . '/Empaque.class.php';
+		QApplicationBase::$ClassFile['empaquemetacontrol'] = __META_CONTROLS__ . '/EmpaqueMetaControl.class.php';
+		QApplicationBase::$ClassFile['empaquedatagrid'] = __META_CONTROLS__ . '/EmpaqueDataGrid.class.php';
+
 	// ClassPaths for the Empresa class
 		QApplicationBase::$ClassFile['empresa'] = __MODEL__ . '/Empresa.class.php';
 		QApplicationBase::$ClassFile['qqnodeempresa'] = __MODEL__ . '/Empresa.class.php';
