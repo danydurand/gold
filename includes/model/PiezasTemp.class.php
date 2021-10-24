@@ -27,6 +27,10 @@
 			return sprintf('PiezasTemp Object %s',  $this->intId);
 		}
 
+		public function __medidas() {
+		    return nf($this->Alto).' x '.nf($this->Ancho).' x '.nf($this->Largo);
+        }
+
 		public static function EliminarDelProceso($intIdxxProc) {
 		    $arrRegiProc = PiezasTemp::LoadArrayByProcesoErrorId($intIdxxProc);
             foreach ($arrRegiProc as $objRegiProc) {

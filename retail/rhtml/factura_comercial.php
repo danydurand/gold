@@ -183,7 +183,7 @@ for ($i = 0; $i < $intCantPagi; $i++) {
                             <?= $intIdxxItem ?>
                         </td>
                         <td class="recuadro contenido" style="width: 9%; text-align: center">
-                            BOX
+                            <?= $objPiezGuia->Empaque ? $objPiezGuia->Empaque->Siglas : 'BOX' ?>
                         </td>
                         <td class="recuadro contenido" style="width: 36%">
                             <?= $objPiezGuia->Descripcion ?>

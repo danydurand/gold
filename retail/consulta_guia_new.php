@@ -354,8 +354,14 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('Pza');
         $colIdxxPiez->Html = '<?= $_FORM->dtgPiezGuia_IdxxPiez_Render($_ITEM); ?>';
-        $colIdxxPiez->Width = 40;
+        $colIdxxPiez->Width = 35;
         $this->dtgPiezGuia->AddColumn($colIdxxPiez);
+
+        $colDescPiez = new QDataGridColumn($this);
+        $colDescPiez->Name = 'Empq';
+        $colDescPiez->Html = '<?= $_ITEM->Empaque ? $_ITEM->Empaque->Siglas : null ; ?>';
+        $colDescPiez->Width = 40;
+        $this->dtgPiezGuia->AddColumn($colDescPiez);
 
         $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = QApplication::Translate('Contenido');
@@ -371,6 +377,14 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         //}
 
         if (in_array($this->objGuia->Producto->Codigo,['EXA','EXM'])) {
+
+            $colMediPiez = new QDataGridColumn($this);
+            $colMediPiez->Name = 'Medidas';
+            $colMediPiez->Html = '<?= $_ITEM->__medidas(); ?>';
+            $colMediPiez->Width = 150;
+            $this->dtgPiezGuia->AddColumn($colMediPiez);
+
+            /*
             $colAltoPiez = new QDataGridColumn($this);
             $colAltoPiez->Name = QApplication::Translate('Alto');
             $colAltoPiez->Html = '<?= $_ITEM->Alto; ?>';
@@ -385,6 +399,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $colLargPiez->Name = QApplication::Translate('Largo');
             $colLargPiez->Html = '<?= $_ITEM->Largo; ?>';
             $this->dtgPiezGuia->AddColumn($colLargPiez);
+            */
 
             $colLibrPiez = new QDataGridColumn($this);
             $colLibrPiez->Name = QApplication::Translate('PiesCub');

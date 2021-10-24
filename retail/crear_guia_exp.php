@@ -158,6 +158,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $txtPiesEnvi;
 
     protected $txtKiloPiez;
+    protected $lstEmpaPiez;
     protected $txtAltoPiez;
     protected $txtAnchPiez;
     protected $txtLargPiez;
@@ -168,6 +169,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $intEditPiez;
 
     protected $lblContPiez;
+    protected $lblEmpaPiez;
     protected $lblAltoPiez;
     protected $lblAnchPiez;
     protected $lblLargPiez;
@@ -231,6 +233,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $objPiezTemp = new PiezasTemp();
                 $objPiezTemp->ProcesoErrorId = $this->objProcEjec->Id;
                 $objPiezTemp->PiezaId        = $objPiezGuia->Id;
+                $objPiezTemp->EmpaqueId      = $objPiezGuia->EmpaqueId;
                 $objPiezTemp->Descripcion    = substr(trim($objPiezGuia->Descripcion),0,50);
                 $objPiezTemp->Kilos          = $objPiezGuia->Kilos;
                 $objPiezTemp->Alto           = $objPiezGuia->Alto;
@@ -360,6 +363,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
         $this->lblTituPiez_Create();
         $this->lblContPiez_Create();
+        $this->lblEmpaPiez_Create();
         $this->lblAltoPiez_Create();
         $this->lblAnchPiez_Create();
         $this->lblLargPiez_Create();
@@ -386,6 +390,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtVoluEnvi = disableControl($this->txtVoluEnvi);
         $this->txtPiesEnvi = disableControl($this->txtPiesEnvi);
 
+        $this->lstEmpaPiez_Create();
         $this->txtAltoPiez_Create();
         $this->txtAnchPiez_Create();
         $this->txtLargPiez_Create();
@@ -836,6 +841,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             for ($i = 0; $i < $intCantProc; $i++) {
                 $objPiezTemp = new PiezasTemp();
                 $objPiezTemp->ProcesoErrorId = $this->objProcEjec->Id;
+                $objPiezTemp->EmpaqueId      = null;
                 $objPiezTemp->Descripcion    = '';
                 $objPiezTemp->Alto           = 0;
                 $objPiezTemp->Ancho          = 0;
@@ -932,10 +938,15 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lblContPiez->Visible = false;
     }
 
+    protected function lblEmpaPiez_Create() {
+        $this->lblEmpaPiez = new QLabel($this);
+        $this->lblEmpaPiez->Text = 'Empaque';
+        $this->lblEmpaPiez->Visible = false;
+    }
+
     protected function lblAltoPiez_Create() {
         $this->lblAltoPiez = new QLabel($this);
         $this->lblAltoPiez->Text = 'Alto';
-        //$this->lblAltoPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->lblAltoPiez->Visible = false;
     }
 
@@ -977,7 +988,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function lblKiloPiez_Create() {
         $this->lblKiloPiez = new QLabel($this);
-        $this->lblKiloPiez->Text = 'Kilos';
+        $this->lblKiloPiez->Text = 'Kgs';
         $this->lblKiloPiez->Visible = false;
     }
 
@@ -989,9 +1000,29 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtContPiez->Visible = false;
     }
 
+    protected function lstEmpaPiez_Create() {
+        $this->lstEmpaPiez = new QListBox($this);
+        $this->lstEmpaPiez->Width = 130;
+        $this->lstEmpaPiez->Visible = false;
+        $this->cargarEmpaques();
+    }
+
+    protected function cargarEmpaques($intEmpaIdxx=null) {
+        $this->lstEmpaPiez->RemoveAllItems();
+        $arrEmpaActi = Empaque::LoadAll();
+        $this->lstEmpaPiez->AddItem('- Seleccione -',null);
+        foreach ($arrEmpaActi as $objEmpaActi) {
+            $blnSeleRegi = false;
+            if (!is_null($intEmpaIdxx)) {
+                $blnSeleRegi = $intEmpaIdxx == $objEmpaActi->Id;
+            }
+            $this->lstEmpaPiez->AddItem($objEmpaActi->__toString(), $objEmpaActi->Id, $blnSeleRegi);
+        }
+    }
+
     protected function txtAltoPiez_Create() {
         $this->txtAltoPiez = new QTextBox($this);
-        $this->txtAltoPiez->Width = 60;
+        $this->txtAltoPiez->Width = 40;
         $this->txtAltoPiez->Placeholder = 'cm';
         $this->txtAltoPiez->Visible = false;
         $this->txtAltoPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
@@ -999,7 +1030,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtAnchPiez_Create() {
         $this->txtAnchPiez = new QTextBox($this);
-        $this->txtAnchPiez->Width = 60;
+        $this->txtAnchPiez->Width = 40;
         $this->txtAnchPiez->Placeholder = 'cm';
         $this->txtAnchPiez->Visible = false;
         $this->txtAnchPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
@@ -1007,7 +1038,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtLargPiez_Create() {
         $this->txtLargPiez = new QTextBox($this);
-        $this->txtLargPiez->Width = 60;
+        $this->txtLargPiez->Width = 40;
         $this->txtLargPiez->Placeholder = 'cm';
         $this->txtLargPiez->Visible = false;
         $this->txtLargPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
@@ -1086,7 +1117,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtKiloPiez_Create() {
         $this->txtKiloPiez = new QTextBox($this);
         $this->txtKiloPiez->Placeholder = 'Kg';
-        $this->txtKiloPiez->Width = 60;
+        $this->txtKiloPiez->Width = 40;
         $this->txtKiloPiez->Visible = false;
     }
 
@@ -1157,6 +1188,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
         $this->txtContPiez->Text = $objPiezGuia->Descripcion;
         $this->txtKiloPiez->Text = $objPiezGuia->Kilos;
+        $this->cargarEmpaques($objPiezGuia->EmpaqueId);
         $this->txtAltoPiez->Text = $objPiezGuia->Alto;
         $this->txtAnchPiez->Text = $objPiezGuia->Ancho;
         $this->txtLargPiez->Text = $objPiezGuia->Largo;
@@ -1234,6 +1266,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $decLargPiez *= 2.54;
                 }
 
+                $objPiezGuia->EmpaqueId      = $this->lstEmpaPiez->SelectedValue;
                 $objPiezGuia->Descripcion    = substr(strtoupper(limpiarCadena($this->txtContPiez->Text)),0,50);
                 $objPiezGuia->Kilos          = (float)$this->txtKiloPiez->Text;
                 $objPiezGuia->Alto           = $decAltoPiez;
@@ -1260,6 +1293,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
         $this->txtContPiez->Text = '';
         $this->txtKiloPiez->Text = '';
+        $this->cargarEmpaques();
         $this->txtAltoPiez->Text = '';
         $this->txtAnchPiez->Text = '';
         $this->txtLargPiez->Text = '';
@@ -1313,6 +1347,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
         $this->txtContPiez->Text = '';
         $this->txtKiloPiez->Text = '';
+        $this->cargarEmpaques();
         $this->txtAltoPiez->Text = '';
         $this->txtAnchPiez->Text = '';
         $this->txtLargPiez->Text = '';
@@ -1337,6 +1372,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
             $this->lblContPiez->Visible = !$this->lblContPiez->Visible;
             $this->lblKiloPiez->Visible = !$this->lblKiloPiez->Visible;
+            $this->lblEmpaPiez->Visible = !$this->lblEmpaPiez->Visible;
             $this->lblAltoPiez->Visible = !$this->lblAltoPiez->Visible;
             $this->lblAnchPiez->Visible = !$this->lblAnchPiez->Visible;
             $this->lblLargPiez->Visible = !$this->lblLargPiez->Visible;
@@ -1346,6 +1382,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
             $this->txtContPiez->Visible = !$this->txtContPiez->Visible;
             $this->txtKiloPiez->Visible = !$this->txtKiloPiez->Visible;
+            $this->lstEmpaPiez->Visible = !$this->lstEmpaPiez->Visible;
             $this->txtAltoPiez->Visible = !$this->txtAltoPiez->Visible;
             $this->txtAnchPiez->Visible = !$this->txtAnchPiez->Visible;
             $this->txtLargPiez->Visible = !$this->txtLargPiez->Visible;
@@ -1361,6 +1398,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtContPiez->Text = '';
             $this->txtKiloPiez->Text = '';
             $this->txtAnchPiez->Text = '';
+            $this->cargarEmpaques();
             $this->txtAltoPiez->Text = '';
             $this->txtLargPiez->Text = '';
             $this->txtVoluPiez->Text = '';
@@ -1375,6 +1413,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->lblContPiez->Visible = true;
             $this->lblKiloPiez->Visible = true;
             $this->lblAnchPiez->Visible = true;
+            $this->lblEmpaPiez->Visible = true;
             $this->lblAltoPiez->Visible = true;
             $this->lblLargPiez->Visible = true;
             $this->lblVoluPiez->Visible = true;
@@ -1384,6 +1423,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtContPiez->Visible = true;
             $this->txtKiloPiez->Visible = true;
             $this->txtAnchPiez->Visible = true;
+            $this->lstEmpaPiez->Visible = true;
             $this->txtAltoPiez->Visible = true;
             $this->txtLargPiez->Visible = true;
             $this->txtVoluPiez->Visible = true;
@@ -1644,19 +1684,34 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function createdtgPiezTempColumns() {
         $colDescPiez = new QDataGridColumn($this);
+        $colDescPiez->Name = 'EMPQ';
+        $colDescPiez->Html = '<?= $_ITEM->Empaque ? $_ITEM->Empaque->Siglas : null; ?>';
+        $colDescPiez->Width = 50;
+        $colDescPiez->HorizontalAlign = QHorizontalAlign::Left;
+        $this->dtgPiezTemp->AddColumn($colDescPiez);
+
+        $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = 'DESCRIPCION';
         $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
-        $colDescPiez->Width = 200;
+        $colDescPiez->Width = 180;
         $colDescPiez->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgPiezTemp->AddColumn($colDescPiez);
 
         $colValoPiez = new QDataGridColumn($this);
         $colValoPiez->Name = 'VAL';
         $colValoPiez->Html = '<?= nf($_ITEM->ValorDeclarado); ?>';
-        $colValoPiez->Width = 45;
+        $colValoPiez->Width = 30;
         $colValoPiez->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgPiezTemp->AddColumn($colValoPiez);
 
+        $colMediPiez = new QDataGridColumn($this);
+        $colMediPiez->Name = 'MEDIDAS';
+        $colMediPiez->Html = '<?= $_ITEM->__medidas(); ?>';
+        $colMediPiez->Width = 110;
+        $colMediPiez->HorizontalAlign = QHorizontalAlign::Right;
+        $this->dtgPiezTemp->AddColumn($colMediPiez);
+
+        /*
         $colAltoPiez = new QDataGridColumn($this);
         $colAltoPiez->Name = 'ALTO';
         $colAltoPiez->Html = '<?= nf($_ITEM->Alto); ?>';
@@ -1677,25 +1732,28 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $colLargPiez->Width = 45;
         $colLargPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgPiezTemp->AddColumn($colLargPiez);
+        */
 
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = 'KG';
         $colKiloPiez->Html = '<?= nf($_ITEM->Kilos); ?>';
-        $colKiloPiez->Width = 45;
+        $colKiloPiez->Width = 30;
         $colKiloPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgPiezTemp->AddColumn($colKiloPiez);
 
+        /*
         $colVoluPiez = new QDataGridColumn($this);
         $colVoluPiez->Name = 'VOL.';
         $colVoluPiez->Html = '<?= nf($_ITEM->Volumen); ?>';
         $colVoluPiez->Width = 45;
         $colVoluPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgPiezTemp->AddColumn($colVoluPiez);
+        */
 
         $colPiesPiez = new QDataGridColumn($this);
         $colPiesPiez->Name = 'P.CUB';
         $colPiesPiez->Html = '<?= nf3($_ITEM->PiesCub); ?>';
-        $colPiesPiez->Width = 50;
+        $colPiesPiez->Width = 30;
         $colPiesPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgPiezTemp->AddColumn($colPiesPiez);
 
@@ -2331,6 +2389,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $objGuiaPiez = new GuiaPiezas();
                     $objGuiaPiez->GuiaId         = $this->objGuia->Id;
                     $objGuiaPiez->IdPieza        = $this->objGuia->proximoIdPieza();
+                    $objGuiaPiez->EmpaqueId      = $objPiezTemp->EmpaqueId;
                     $objGuiaPiez->Descripcion    = substr($objPiezTemp->Descripcion,0,50);
                     $objGuiaPiez->Kilos          = $objPiezTemp->Kilos;
                     $objGuiaPiez->Alto           = $objPiezTemp->Alto;

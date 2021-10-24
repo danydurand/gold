@@ -24,10 +24,10 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('Empaque Object %s',  $this->intId);
+			return sprintf('%s',  $this->Nombre);
 		}
 
-                /**
+        /**
         * Esta runtina deja registro de la operacion indicada en
         * el log de transacciones
         */

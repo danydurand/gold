@@ -27,7 +27,11 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
-		public function __ordinal() {
+        public function __medidas() {
+            return nf($this->Alto).' x '.nf($this->Ancho).' x '.nf($this->Largo);
+        }
+
+        public function __ordinal() {
 		    return (int)explode('-',$this->IdPieza)[1];
         }
 
