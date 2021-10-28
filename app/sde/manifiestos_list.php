@@ -23,6 +23,9 @@ require_once(__FORMBASE_CLASSES__ . '/NotaEntregaListFormBase.class.php');
 class ManifiestosList extends NotaEntregaListFormBase {
     protected $btnCambFact;
     protected $colManiSele;
+    protected $btnTranHist;
+    protected $objProcEjec;
+    protected $btnErroProc;
 
 
     // Override Form Event Handlers as Needed
@@ -116,6 +119,8 @@ class ManifiestosList extends NotaEntregaListFormBase {
 
         $this->btnExpoExce_Create();
         $this->btnCambFact_Create();
+        $this->btnTranHist_Create();
+        $this->btnErroProc_Create();
 
 
     }
@@ -145,11 +150,27 @@ class ManifiestosList extends NotaEntregaListFormBase {
 
     protected function btnCambFact_Create() {
         $this->btnCambFact = new QButtonOP($this);
-        $this->btnCambFact->Text = TextoIcono('exchange','Camb. Fact', 'F','lg');
+        $this->btnCambFact->Text = TextoIcono('exchange','Camb.Fact', 'F','lg');
         $this->btnCambFact->Visible = false;
         $this->btnCambFact->ToolTip = 'Cambia el estatus del Manifiesto FACTURABLE/NOFACTURABLE';
         $this->btnCambFact->AddAction(new QClickEvent(), new QAjaxAction('btnCambFact_Click'));
     }
+
+    protected function btnTranHist_Create() {
+        $this->btnTranHist = new QButtonOD($this);
+        $this->btnTranHist->Text = TextoIcono('folder-o','Trans.Hist');
+        $this->btnTranHist->Visible = false;
+        $this->btnTranHist->ToolTip = 'Transf Manifiestos al Histórico';
+        $this->btnTranHist->AddAction(new QClickEvent(), new QAjaxAction('btnTranHist_Click'));
+    }
+
+    protected function btnErroProc_Create() {
+        $this->btnErroProc = new QButtonD($this);
+        $this->btnErroProc->Text = TextoIcono('eye','Error(es)','F','lg');
+        $this->btnErroProc->AddAction(new QClickEvent(), new QServerAction('btnErroProc_Click'));
+        $this->btnErroProc->Visible = false;
+    }
+
 
     protected function btnCambFact_Click() {
         $arrIdxxSele = $this->colManiSele->GetChangedIds();
@@ -185,8 +206,21 @@ class ManifiestosList extends NotaEntregaListFormBase {
         $arrIdxxSele = $this->colManiSele->GetChangedIds();
         if (count($arrIdxxSele) > 0) {
             $this->btnCambFact->Visible = true;
+
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id, array_keys($arrIdxxSele));
+            $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Facturable, SinoType::NO);
+            $intCantMani   = NotaEntrega::QueryCount(QQ::AndCondition($objClauWher));
+            $blnMostTran   = ($intCantMani == count($arrIdxxSele));
+            $this->btnTranHist->Visible = $blnMostTran;
+            if (!$blnMostTran) {
+                $this->warning('Para Transf al Historico, debe seleccionar únicamente Manif NO Facturables');
+            } else {
+                $this->mensaje();
+            }
         } else {
             $this->btnCambFact->Visible = false;
+            $this->btnTranHist->Visible = false;
         }
     }
 
@@ -202,8 +236,64 @@ class ManifiestosList extends NotaEntregaListFormBase {
     public function dtgNotaEntregasRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
         QApplication::Redirect("carga_masiva_guias.php/$intId");
-	}		
+	}
 
+    protected function btnErroProc_Click() {
+        QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
+    }
+
+    protected function btnTranHist_Click() {
+        $strNombProc = 'Transferir Manifiestos Masivamente';
+        $this->objProcEjec = CrearProceso($strNombProc);
+        $blnHuboErro = false;
+        //-------------------------------------
+        // Se suprimen los errores en pantalla
+        //-------------------------------------
+        $mixErroOrig = error_reporting();
+        error_reporting(0);
+        $this->mensaje();
+
+        $arrIdxxSele = $this->colManiSele->GetChangedIds();
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id, array_keys($arrIdxxSele));
+        $arrManiTran   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+        $intCantTran   = 0;
+        foreach ($arrManiTran as $objManiTran) {
+            t('Transfiriendo Manifiesto: '.$objManiTran->Referencia);
+            $strTextMens = $objManiTran->TransferirHistorico($this->objProcEjec);
+            $blnHuboErro = DetalleError::CountByProcesoId($this->objProcEjec->Id);
+            if (!$blnHuboErro) {
+                $objManiTran->Delete();
+                $arrLogxCamb['strNombTabl'] = 'NotaEntrega';
+                $arrLogxCamb['intRefeRegi'] = $objManiTran->Id;
+                $arrLogxCamb['strNombRegi'] = $objManiTran->Referencia;
+                $arrLogxCamb['strDescCamb'] = "Transferido a Historico y Borrado posteriormente";
+                LogDeCambios($arrLogxCamb);
+                $intCantTran++;
+            }
+        }
+        $strTextMens = 'Manifiestos Transferidos: '.$intCantTran;
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal      = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario     = $strTextMens;
+        $this->objProcEjec->NotificarAdmin = true;
+        $this->objProcEjec->Save();
+        //------------------------------------------------
+        // Se levantan nuevamente los errores en pantalla
+        //------------------------------------------------
+        error_reporting($mixErroOrig);
+        if ($blnHuboErro) {
+            $strMensErro  = 'El proceso culmino con error(es).';
+            $strMensErro .= ' Presione el boton de errores para mas detalles.';
+            $this->btnErroProc->Visible = true;
+            $this->warning($strMensErro);
+        } else {
+            $this->success($strTextMens);
+        }
+        $this->dtgNotaEntregas->Refresh();
+    }
 }
 
 

@@ -17,6 +17,8 @@
         <?php $this->btnNuevRegi->Render() ?>
         <?php $this->btnFiltAvan->Render() ?>
         <?php $this->btnCambFact->Render() ?>
+        <?php $this->btnTranHist->Render() ?>
+        <?php $this->btnErroProc->Render() ?>
         <?php $this->btnExpoExce->Render() ?>
     </div>
     <div class="col-sm-3 col-md-3 col-lg-3"></div>
