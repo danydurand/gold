@@ -187,23 +187,23 @@
         },
         {
             "name": "shuchkin/simplexls",
-            "version": "0.9.10",
-            "version_normalized": "0.9.10.0",
+            "version": "0.9.13",
+            "version_normalized": "0.9.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shuchkin/simplexls.git",
-                "reference": "3b633e3c5e10d9a60f3972a8cf9350444d6482a8"
+                "reference": "1f6be6894a591f476752b508f6c2cdb24c69a68c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shuchkin/simplexls/zipball/3b633e3c5e10d9a60f3972a8cf9350444d6482a8",
-                "reference": "3b633e3c5e10d9a60f3972a8cf9350444d6482a8",
+                "url": "https://api.github.com/repos/shuchkin/simplexls/zipball/1f6be6894a591f476752b508f6c2cdb24c69a68c",
+                "reference": "1f6be6894a591f476752b508f6c2cdb24c69a68c",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*"
             },
-            "time": "2021-05-19T08:10:36+00:00",
+            "time": "2021-09-21T14:12:25+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -233,23 +233,23 @@
             ],
             "support": {
                 "issues": "https://github.com/shuchkin/simplexls/issues",
-                "source": "https://github.com/shuchkin/simplexls/tree/0.9.10"
+                "source": "https://github.com/shuchkin/simplexls/tree/0.9.13"
             },
             "install-path": "../shuchkin/simplexls"
         },
         {
             "name": "shuchkin/simplexlsx",
-            "version": "0.8.25",
-            "version_normalized": "0.8.25.0",
+            "version": "0.8.27",
+            "version_normalized": "0.8.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shuchkin/simplexlsx.git",
-                "reference": "7dfacfbe51137ad08e047cd5ac57eef26158d120"
+                "reference": "ffdbfaee68c43f3c2b63a6a3775e3421710e0ec4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shuchkin/simplexlsx/zipball/7dfacfbe51137ad08e047cd5ac57eef26158d120",
-                "reference": "7dfacfbe51137ad08e047cd5ac57eef26158d120",
+                "url": "https://api.github.com/repos/shuchkin/simplexlsx/zipball/ffdbfaee68c43f3c2b63a6a3775e3421710e0ec4",
+                "reference": "ffdbfaee68c43f3c2b63a6a3775e3421710e0ec4",
                 "shasum": ""
             },
             "require": {
@@ -257,7 +257,7 @@
                 "ext-simplexml": "*",
                 "ext-zlib": "*"
             },
-            "time": "2021-07-28T15:21:45+00:00",
+            "time": "2021-09-29T23:20:51+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -287,30 +287,30 @@
             ],
             "support": {
                 "issues": "https://github.com/shuchkin/simplexlsx/issues",
-                "source": "https://github.com/shuchkin/simplexlsx/tree/0.8.25"
+                "source": "https://github.com/shuchkin/simplexlsx/tree/0.8.27"
             },
             "install-path": "../shuchkin/simplexlsx"
         },
         {
             "name": "spipu/html2pdf",
-            "version": "v5.2.2",
-            "version_normalized": "5.2.2.0",
+            "version": "v5.2.3",
+            "version_normalized": "5.2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spipu/html2pdf.git",
-                "reference": "e6d8ca22347b6691bb8c2652212b1be2c89b3eff"
+                "reference": "119d660876546c6b496f8aa6490f1ab8111350f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spipu/html2pdf/zipball/e6d8ca22347b6691bb8c2652212b1be2c89b3eff",
-                "reference": "e6d8ca22347b6691bb8c2652212b1be2c89b3eff",
+                "url": "https://api.github.com/repos/spipu/html2pdf/zipball/119d660876546c6b496f8aa6490f1ab8111350f9",
+                "reference": "119d660876546c6b496f8aa6490f1ab8111350f9",
                 "shasum": ""
             },
             "require": {
                 "ext-gd": "*",
                 "ext-mbstring": "*",
-                "php": "^5.6 || ^7.0",
-                "tecnickcom/tcpdf": "^6.2"
+                "php": "^5.6 || ^7.0 || ^8.0",
+                "tecnickcom/tcpdf": "^6.3"
             },
             "require-dev": {
                 "phake/phake": "^2.0",
@@ -320,7 +320,7 @@
                 "ext-gd": "Allows to embed images into the PDF",
                 "fagundes/zff-html2pdf": "if you need to integrate Html2Pdf with Zend Framework 2 (zf2)"
             },
-            "time": "2020-03-22T16:23:26+00:00",
+            "time": "2021-10-19T10:35:24+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -348,7 +348,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spipu/html2pdf/issues",
-                "source": "https://github.com/spipu/html2pdf/tree/v5.2.2"
+                "source": "https://github.com/spipu/html2pdf/tree/v5.2.3"
             },
             "install-path": "../spipu/html2pdf"
         },

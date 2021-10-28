@@ -400,13 +400,13 @@ class ScanneoEditForm extends ScanneoEditFormBase {
 	}
 
     protected function btnProcPend_Click() {
-        $blnHayxErro = false;
         $strNombProc = 'Scanneo Individual';
         $this->objProcEjec = CrearProceso($strNombProc);
 
         $arrNumePiez = ScanneoPiezas::LoadArrayPendientesDelScanneo($this->mctScanneo->Scanneo->Id);
         $objCkptMani = Checkpoints::LoadByCodigo('RA');
         $intContCkpt = 0;
+        $intCantErro = 0;
         /* @var $objPiezScan ScanneoPiezas */
         foreach ($arrNumePiez as $objPiezScan) {
             t("Procesando: ".$objPiezScan->IdPieza);
@@ -428,7 +428,7 @@ class ScanneoEditForm extends ScanneoEditFormBase {
                 $strMensUsua = "Error al registrar Checkpoint a la pieza: " . $objPiezScan->IdPieza;
                 $strMensUsua .= " - " . $arrResuGrab['MotiNook'];
 
-                $blnHayxErro = true;
+                $intCantErro++;
                 $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
                 $arrParaErro['NumeRefe'] = $objPiezScan->IdPieza;
                 $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
@@ -438,6 +438,7 @@ class ScanneoEditForm extends ScanneoEditFormBase {
                 t($strMensUsua);
             }
         }
+        /*
         $strTextMens = "Total Recibidas: $intContCkpt";
         //--------------------------------------
         // Se almacena el resultado del proceso
@@ -462,7 +463,89 @@ class ScanneoEditForm extends ScanneoEditFormBase {
         } else {
             $this->success($strTextMens);
         }
+        */
+
         $this->dtgPiezPend->Refresh();
+
+        //--------------------------------
+        // Se actualizan los Manifiestos
+        //--------------------------------
+
+        $blnSecuEstr = Parametros::BuscarParametro('SECUESTR','MATCSCAN','Val1',false);
+        $arrIdxxMani = [];
+        if ($blnSecuEstr) {
+            //----------------------------------------------------------------------------------------
+            // Los Manifestos a procesar, serán estrictamente aquellos que hayan sido Nacionalizados
+            //----------------------------------------------------------------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'CR');
+            $objClauSele   = QQ::Select(QQN::NotaEntregaCkpt()->ContainerId);
+            $arrManiNaci   = NotaEntregaCkpt::QueryArray(
+                QQ::AndCondition($objClauWher),
+                QQ::Clause(
+                    $objClauSele,
+                    QQ::Distinct()
+                ));
+            $arrIdxxMani   = [];
+            foreach ($arrManiNaci as $objManiNaci) {
+                $arrIdxxMani[] = $objManiNaci->ContainerId;
+            }
+        }
+        //--------------------------------------------------------------------------------------
+        // Adicionalmente, se deben considerar los Manifiestos ya Procesados, con diferencias
+        // entre la cantidad de piezas recibidas y la cantidad de piezas total del Manifiesto
+        //--------------------------------------------------------------------------------------
+        $objClauWher   = QQ::Clause();
+        if ($blnSecuEstr) {
+            $objClauWher[] = QQ::In(QQN::NotaEntrega()->Id,$arrIdxxMani);
+        }
+        $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
+        $objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
+        $intCantMani   = 0;
+        $intCantErro   = 0;
+        $arrManiSist   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+        foreach ($arrManiSist as $objManiSist) {
+            $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
+            $objManiSist->Save();
+            $objManiSist->ContarActualizarRecibidas();
+            //---------------------------------------
+            // Se graba el checkpoint al Manifiesto
+            //---------------------------------------
+            if ($objManiSist->Recibidas > 0) {
+                $arrResuGrab = $objManiSist->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+                if (!$arrResuGrab['TodoOkey']) {
+                    $strMensUsua = "Error al registrar Checkpoint a la pieza: " . $objManiSist->Referencia;
+                    $strMensUsua .= " - " . $arrResuGrab['MotiNook'];
+
+                    $intCantErro++;
+                    $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $objManiSist->Referencia;
+                    $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
+                    $arrParaErro['ComeErro'] = 'Registrando Checkpoint RA al Manifiesto';
+                    GrabarError($arrParaErro);
+
+                    t($strMensUsua);
+                }
+            }
+            $intCantMani++;
+        }
+        $strTextMens = "Total Recibidas: $intContCkpt | Manifiestos Actualizados: $intCantMani | Errores: $intCantErro";
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->NotificarAdmin = true;
+        $this->objProcEjec->Save();
+
+        if ($intCantErro) {
+            $this->btnErroProc->Visible = true;
+            $this->warning($strTextMens);
+        } else {
+            $this->success($strTextMens);
+        }
+
+
     }
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {

@@ -45,6 +45,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		$this->lblId = $this->mctPagosCorp->lblId_Create();
 		$this->lstClienteCorp = $this->mctPagosCorp->lstClienteCorp_Create();
 		$this->lstClienteCorp->Name = $this->enlaceCliente();
+		$this->lstClienteCorp->Width = 200;
 		$this->lstFormaPago = $this->mctPagosCorp->lstFormaPago_Create();
 		$this->lstFormaPago->AddAction(new QChangeEvent(), new QAjaxAction('lstFormaPago_Change'));
 		$this->txtReferencia = $this->mctPagosCorp->txtReferencia_Create();
@@ -151,6 +152,12 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         $colTotaFact->Html = '<?= nf($_ITEM->Total) ?>';
         $colTotaFact->Width = 70;
         $this->dtgFactClie->AddColumn($colTotaFact);
+
+        $colMontAbon = new QDataGridColumn($this);
+        $colMontAbon->Name = 'Abono';
+        $colMontAbon->Html = '<?= nf($_ITEM->MontoAbono) ?>';
+        $colMontAbon->Width = 70;
+        $this->dtgFactClie->AddColumn($colMontAbon);
 
         $colMontCobr = new QDataGridColumn($this);
         $colMontCobr->Name = QApplication::Translate('Pagado');

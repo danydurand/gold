@@ -403,6 +403,12 @@
 			return new QQNodeFacVendedor('fac_vendedor', null, null);
 		}
 		/**
+		 * @return QQNodeFactPagoTemp
+		 */
+		static public function FactPagoTemp() {
+			return new QQNodeFactPagoTemp('fact_pago_temp', null, null);
+		}
+		/**
 		 * @return QQNodeFactura
 		 */
 		static public function Factura() {
@@ -841,6 +847,12 @@
 			return new QQNodePagosCorp('pagos_corp', null, null);
 		}
 		/**
+		 * @return QQNodePagosCorpDetail
+		 */
+		static public function PagosCorpDetail() {
+			return new QQNodePagosCorpDetail('pagos_corp_detail', null, null);
+		}
+		/**
 		 * @return QQNodePais
 		 */
 		static public function Pais() {
@@ -1037,12 +1049,6 @@
 		 */
 		static public function Sistema() {
 			return new QQNodeSistema('sistema', null, null);
-		}
-		/**
-		 * @return QQNodeSocialAccounts
-		 */
-		static public function SocialAccounts() {
-			return new QQNodeSocialAccounts('social_accounts', null, null);
 		}
 		/**
 		 * @return QQNodeSodexoInput

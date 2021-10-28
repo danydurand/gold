@@ -93,6 +93,7 @@ abstract class FacturasListFormBase extends QForm {
         $this->dtgFacturases->MetaAddColumn('Tasa');
         $this->dtgFacturases->MetaAddColumn('Total');
         $this->dtgFacturases->MetaAddColumn('MontoDscto');
+        $this->dtgFacturases->MetaAddColumn('MontoAbono');
         $this->dtgFacturases->MetaAddColumn('MontoCobrado');
         $this->dtgFacturases->MetaAddColumn('MontoPendiente');
         $this->dtgFacturases->MetaAddColumn('EstatusPago');

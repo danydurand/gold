@@ -67,8 +67,8 @@ class MatchScanneo extends FormularioBaseKaizen {
         $this->dtgManiPend->Paginator = new QPaginator($this->dtgManiPend);
         $this->dtgManiPend->ItemsPerPage = 20;
 
-        $this->dtgManiPend->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgManiPend->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        //$this->dtgManiPend->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        //$this->dtgManiPend->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         /*$this->dtgManiPend->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
         //$this->dtgManiPend->AddRowAction(new QClickEvent(), new QAjaxAction('dtgManiPendRow_Click'));

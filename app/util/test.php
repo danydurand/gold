@@ -181,11 +181,28 @@ $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
 
-$arrManiSist = NotaEntrega::LoadAll();
+$strNombProc = 'Match de Scanneo Manual';
+$objProcEjec = CrearProceso($strNombProc);
+$objCkptMani = Checkpoints::LoadByCodigo('RA');
+
+$objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
+$objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
+
+$arrManiSist = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
 foreach ($arrManiSist as $objManiSist) {
     $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
     $objManiSist->Save();
     $objManiSist->ContarActualizarRecibidas();
+    //---------------------------------------
+    // Se graba el checkpoint al Manifiesto
+    //---------------------------------------
+    if ($objManiSist->Recibidas > 0) {
+        $arrResuGrab = $objManiSist->GrabarCheckpoint($objCkptMani, $objProcEjec);
+        if (!$arrResuGrab['TodoOkey']) {
+            echo "Error: ".$arrResuGrab['TodoOkey']."<br>";
+        }
+    }
+
     echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
     echo "<br>";
 }

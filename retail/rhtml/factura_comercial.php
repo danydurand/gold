@@ -1,23 +1,3 @@
-<style type="text/css">
-    <!--
-    .titulo {
-        background-color: #CCC;
-        font-weight: bold;
-        font-size: 25px;
-        text-align: center;
-    }
-    .etiqueta {
-        font-weight: bold;
-        vertical-align: top;
-    }
-    .recuadro {
-        border: solid 1px;
-    }
-    .contenido {
-        font-size: small;
-    }
-    -->
-</style>
 <?php
 require_once('qcubed.inc.php');
 
@@ -62,7 +42,26 @@ for ($i = 0; $i < $intCantPagi; $i++) {
     $intLimiInic = ($intRegiPpag*($i+1))+1;
 }
 ?>
-
+<style type="text/css">
+    <!--
+    .titulo {
+        background-color: #CCC;
+        font-weight: bold;
+        font-size: 25px;
+        text-align: center;
+    }
+    .etiqueta {
+        font-weight: bold;
+        vertical-align: top;
+    }
+    .recuadro {
+        border: solid 1px;
+    }
+    .contenido {
+        font-size: small;
+    }
+    -->
+</style>
 <?php for($i = 0; $i < $intCantPagi; $i++) { ?>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>

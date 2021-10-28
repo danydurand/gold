@@ -68,6 +68,7 @@ abstract class FacturasEditFormBase extends QForm {
 	protected $txtTasa;
 	protected $txtTotal;
 	protected $txtMontoDscto;
+	protected $txtMontoAbono;
 	protected $txtMontoCobrado;
 	protected $txtMontoPendiente;
 	protected $txtEstatusPago;
@@ -166,6 +167,7 @@ abstract class FacturasEditFormBase extends QForm {
 		$this->txtTasa = $this->mctFacturas->txtTasa_Create();
 		$this->txtTotal = $this->mctFacturas->txtTotal_Create();
 		$this->txtMontoDscto = $this->mctFacturas->txtMontoDscto_Create();
+		$this->txtMontoAbono = $this->mctFacturas->txtMontoAbono_Create();
 		$this->txtMontoCobrado = $this->mctFacturas->txtMontoCobrado_Create();
 		$this->txtMontoPendiente = $this->mctFacturas->txtMontoPendiente_Create();
 		$this->txtEstatusPago = $this->mctFacturas->txtEstatusPago_Create();

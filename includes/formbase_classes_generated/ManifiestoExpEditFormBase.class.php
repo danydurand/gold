@@ -412,7 +412,12 @@ abstract class ManifiestoExpEditFormBase extends QForm {
 
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
-		
+		// Check for records that may violate Unique Clauses
+			if (($objManifiestoExp = ManifiestoExp::LoadByNumero($this->txtNumero->Text)) && ($objManifiestoExp->Id != $this->mctManifiestoExp->ManifiestoExp->Id )){
+				$blnToReturn = false;
+				$this->txtNumero->Warning = QApplication::Translate("Already in Use");
+			}
+
 		$blnFocused = false;
 		foreach ($this->GetErrorControls() as $objControl) {
 			// Set Focus to the top-most invalid control

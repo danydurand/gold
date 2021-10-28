@@ -468,6 +468,13 @@
 		QApplicationBase::$ClassFile['facvendedormetacontrol'] = __META_CONTROLS__ . '/FacVendedorMetaControl.class.php';
 		QApplicationBase::$ClassFile['facvendedordatagrid'] = __META_CONTROLS__ . '/FacVendedorDataGrid.class.php';
 
+	// ClassPaths for the FactPagoTemp class
+		QApplicationBase::$ClassFile['factpagotemp'] = __MODEL__ . '/FactPagoTemp.class.php';
+		QApplicationBase::$ClassFile['qqnodefactpagotemp'] = __MODEL__ . '/FactPagoTemp.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodefactpagotemp'] = __MODEL__ . '/FactPagoTemp.class.php';
+		QApplicationBase::$ClassFile['factpagotempmetacontrol'] = __META_CONTROLS__ . '/FactPagoTempMetaControl.class.php';
+		QApplicationBase::$ClassFile['factpagotempdatagrid'] = __META_CONTROLS__ . '/FactPagoTempDataGrid.class.php';
+
 	// ClassPaths for the Factura class
 		QApplicationBase::$ClassFile['factura'] = __MODEL__ . '/Factura.class.php';
 		QApplicationBase::$ClassFile['qqnodefactura'] = __MODEL__ . '/Factura.class.php';
@@ -979,6 +986,13 @@
 		QApplicationBase::$ClassFile['pagoscorpmetacontrol'] = __META_CONTROLS__ . '/PagosCorpMetaControl.class.php';
 		QApplicationBase::$ClassFile['pagoscorpdatagrid'] = __META_CONTROLS__ . '/PagosCorpDataGrid.class.php';
 
+	// ClassPaths for the PagosCorpDetail class
+		QApplicationBase::$ClassFile['pagoscorpdetail'] = __MODEL__ . '/PagosCorpDetail.class.php';
+		QApplicationBase::$ClassFile['qqnodepagoscorpdetail'] = __MODEL__ . '/PagosCorpDetail.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodepagoscorpdetail'] = __MODEL__ . '/PagosCorpDetail.class.php';
+		QApplicationBase::$ClassFile['pagoscorpdetailmetacontrol'] = __META_CONTROLS__ . '/PagosCorpDetailMetaControl.class.php';
+		QApplicationBase::$ClassFile['pagoscorpdetaildatagrid'] = __META_CONTROLS__ . '/PagosCorpDetailDataGrid.class.php';
+
 	// ClassPaths for the Pais class
 		QApplicationBase::$ClassFile['pais'] = __MODEL__ . '/Pais.class.php';
 		QApplicationBase::$ClassFile['qqnodepais'] = __MODEL__ . '/Pais.class.php';
@@ -1209,13 +1223,6 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodesistema'] = __MODEL__ . '/Sistema.class.php';
 		QApplicationBase::$ClassFile['sistemametacontrol'] = __META_CONTROLS__ . '/SistemaMetaControl.class.php';
 		QApplicationBase::$ClassFile['sistemadatagrid'] = __META_CONTROLS__ . '/SistemaDataGrid.class.php';
-
-	// ClassPaths for the SocialAccounts class
-		QApplicationBase::$ClassFile['socialaccounts'] = __MODEL__ . '/SocialAccounts.class.php';
-		QApplicationBase::$ClassFile['qqnodesocialaccounts'] = __MODEL__ . '/SocialAccounts.class.php';
-		QApplicationBase::$ClassFile['qqreversereferencenodesocialaccounts'] = __MODEL__ . '/SocialAccounts.class.php';
-		QApplicationBase::$ClassFile['socialaccountsmetacontrol'] = __META_CONTROLS__ . '/SocialAccountsMetaControl.class.php';
-		QApplicationBase::$ClassFile['socialaccountsdatagrid'] = __META_CONTROLS__ . '/SocialAccountsDataGrid.class.php';
 
 	// ClassPaths for the SodexoInput class
 		QApplicationBase::$ClassFile['sodexoinput'] = __MODEL__ . '/SodexoInput.class.php';

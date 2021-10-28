@@ -16,7 +16,7 @@
 	 * @package My QCubed Application
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
-	 * @property string $Referencia the value for strReferencia (Not Null)
+	 * @property string $Referencia the value for strReferencia (Unique)
 	 * @property string $Tipo the value for strTipo (Not Null)
 	 * @property integer $ClienteCorpId the value for intClienteCorpId 
 	 * @property integer $PagoCorpId the value for intPagoCorpId 
@@ -989,6 +989,22 @@
 		}
 
 		/**
+		 * Load a single NotaCreditoCorp object,
+		 * by Referencia Index(es)
+		 * @param string $strReferencia
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return NotaCreditoCorp
+		*/
+		public static function LoadByReferencia($strReferencia, $objOptionalClauses = null) {
+			return NotaCreditoCorp::QuerySingle(
+				QQ::AndCondition(
+					QQ::Equal(QQN::NotaCreditoCorp()->Referencia, $strReferencia)
+				),
+				$objOptionalClauses
+			);
+		}
+
+		/**
 		 * Load an array of NotaCreditoCorp objects,
 		 * by ClienteCorpId Index(es)
 		 * @param integer $intClienteCorpId
@@ -1368,7 +1384,7 @@
 
 				case 'Referencia':
 					/**
-					 * Gets the value for strReferencia (Not Null)
+					 * Gets the value for strReferencia (Unique)
 					 * @return string
 					 */
 					return $this->strReferencia;
@@ -1587,7 +1603,7 @@
 				///////////////////
 				case 'Referencia':
 					/**
-					 * Sets the value for strReferencia (Not Null)
+					 * Sets the value for strReferencia (Unique)
 					 * @param string $mixValue
 					 * @return string
 					 */

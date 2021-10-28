@@ -1,8 +1,10 @@
-# SimpleXLS class 0.9.10
+# SimpleXLS class 0.9.13
 [<img src="https://img.shields.io/packagist/dt/shuchkin/simplexls" />](https://packagist.org/packages/shuchkin/simplexls)
 
 Parse and retrieve data from old Excel .XLS files. MS Excel 97-2003 workbooks PHP reader. PHP BIFF reader. No additional extensions needed (internal olereader).
-<br/>Modern .XLSX php reader [here](https://github.com/shuchkin/simplexlsx).  
+<br/>Modern .XLSX php reader [here](https://github.com/shuchkin/simplexlsx).
+
+*Hey, bro, please ★ the package for my motivation :) and [donate](https://opencollective.com/simplexlsx) for more motivation!*
 
 [**Sergey Shuchkin**](https://www.patreon.com/shuchkin) <sergey.shuchkin@gmail.com> 2016-2021<br/>
 
@@ -65,9 +67,48 @@ if ($xls->success()) {
 	echo 'xls error: '.$xls->error();
 }
 ```
+### Rows with header values as keys
+```php
+if ( $xls = SimpleXLS::parse('books.xls')) {
+	// Produce array keys from the array values of 1st array element
+	$header_values = $rows = array();
+	foreach ( $xls->rows() as $k => $r ) {
+		if ( $k === 0 ) {
+			$header_values = $r;
+			continue;
+		}
+		$rows[] = array_combine( $header_values, $r );
+	}
+	print_r( $rows );
+}
+```
+```
+Array
+(
+    [0] => Array
+        (
+            [ISBN] => 618260307
+            [title] => The Hobbit
+            [author] => J. R. R. Tolkien
+            [publisher] => Houghton Mifflin
+            [ctry] => USA
+        )
+    [1] => Array
+        (
+            [ISBN] => 908606664
+            [title] => Slinky Malinki
+            [author] => Lynley Dodd
+            [publisher] => Mallinson Rendel
+            [ctry] => NZ
+        )
+)
+```
 	
 ## History
 ```
+0.9.13 (2021-09-21) Fixed éàù... in sheet names, added flag *hidden* in $xls->boundsheets info
+0.9.12 (2021-09-20) Fixed éàù...
+0.9.11 (2021-09-02) Added *Rows with header values as keys* example
 0.9.10 (2021-05-19) SimpleXLSX to SimpleXLS in example
 0.9.9 (2021-03-04) Added $xls->toHTML()
 0.9.8 (2021-03-04) Fixed skipping first row & col, fixed datetime format in unicode  

@@ -342,7 +342,9 @@
         }
 
         public function cantidadDePiezas() {
-            return count($this->piezasDeLaNota());
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Guia->NotaEntregaId,$this->Id);
+            return GuiaPiezas::QueryCount(QQ::AndCondition($objClauWher));
         }
 
         public function piezasDeLaNota() {

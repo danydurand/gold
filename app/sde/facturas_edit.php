@@ -275,8 +275,20 @@ class FacturasEditForm extends FacturasEditFormBase {
 
         $colMontPago = new QDataGridColumn($this);
         $colMontPago->Name = QApplication::Translate('Monto');
-        $colMontPago->Html = '<?= nf($_ITEM->Monto) ?>';
+        /*$colMontPago->Html = '<?= nf($_ITEM->Monto) ?>';*/
+        $colMontPago->Html = '<?= nf($_FORM->dtgMontAbon_Render($_ITEM)); ?>';
         $this->dtgPagoFact->AddColumn($colMontPago);
+    }
+
+    public function dtgMontAbon_Render(PagosCorp $objPagoFact) {
+        t('Voy a buscar el abono de: '.$objPagoFact->Id.' y '.$this->mctFacturas->Facturas->Id);
+        $objPagoDeta = PagosCorpDetail::LoadByPagoCorpIdFacturaId($objPagoFact->Id, $this->mctFacturas->Facturas->Id);
+        if ($objPagoDeta) {
+            t('Lo encontre');
+            return $objPagoDeta->MontoAbonado;
+        } else {
+            return $objPagoFact->Monto;
+        }
     }
 
     protected function dtgNotaCred_Create() {

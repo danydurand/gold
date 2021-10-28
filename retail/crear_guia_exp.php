@@ -1009,7 +1009,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function cargarEmpaques($intEmpaIdxx=null) {
         $this->lstEmpaPiez->RemoveAllItems();
-        $arrEmpaActi = Empaque::LoadAll();
+        $objClauOrde = QQ::OrderBy(QQN::Empaque()->Siglas);
+        $arrEmpaActi = Empaque::LoadArrayByIsActivo(true,$objClauOrde);
         $this->lstEmpaPiez->AddItem('- Seleccione -',null);
         foreach ($arrEmpaActi as $objEmpaActi) {
             $blnSeleRegi = false;

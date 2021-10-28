@@ -43,6 +43,8 @@ class EmpaqueEditForm extends EmpaqueEditFormBase {
 		$this->lblId = $this->mctEmpaque->lblId_Create();
 		$this->txtNombre = $this->mctEmpaque->txtNombre_Create();
 		$this->txtSiglas = $this->mctEmpaque->txtSiglas_Create();
+		$this->txtSiglas->Width = 40;
+		$this->txtSiglas->MaxLength = 3;
 		$this->chkIsActivo = $this->mctEmpaque->chkIsActivo_Create();
 		$this->calCreatedAt = $this->mctEmpaque->calCreatedAt_Create();
 		$this->calCreatedAt->Name = 'F.Creacion';

@@ -103,7 +103,7 @@ $objFactImpr = Facturas::Load($intFactIdxx);
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">TIPO DE CUENTA:</td>
-                <td style="text-align: left">BUSINESS FUNDAMENTAL CHK</td>
+                <td style="text-align: left">BUSINESS FUNDAMENTALS CHK</td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">NRO DE CUENTA:</td>

@@ -1,8 +1,4 @@
 <?php
-//-------------------------------------------------------------------------------------
-// Programa       : consulta_guia.php
-// Descripcion    : Este programa muestra información detallada de una guía al Usuario
-//-------------------------------------------------------------------------------------
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 
@@ -1337,6 +1333,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function ImprimirFacturaComercial()
     {
+        t('Entrando a FC');
         try {
             $strNombArch = 'FC' . $this->objGuia->Numero . '.pdf';
             $strPosiHoja = 'P';

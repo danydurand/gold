@@ -76,22 +76,32 @@ class PagosCorpListForm extends PagosCorpListFormBase {
 
         $this->colPagoSele = new QCheckBoxColumn('', $this->dtgPagosCorps);
         $this->colPagoSele->PrimaryKey = 'Id';
+        $this->colPagoSele->Width = 10;
         //$this->colPagoSele->SetCheckboxCallback($this, 'dtgPagosCorps_Selected');
         $this->dtgPagosCorps->AddColumn($this->colPagoSele);
 
-        $this->dtgPagosCorps->MetaAddColumn('Id');
-		$this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->ClienteCorp);
-        $this->dtgPagosCorps->MetaAddColumn('Referencia');
+        $colIdxxPago = $this->dtgPagosCorps->MetaAddColumn('Id');
+        $colIdxxPago->Width = 10;
+		$colCliePago = $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->ClienteCorp);
+		$colCliePago->Width = 145;
+        $colRefePago = $this->dtgPagosCorps->MetaAddColumn('Referencia');
+        $colRefePago->Width = 160;
         $colCantFact = new QDataGridColumn('C.FACT','<?= $_ITEM->CountFacturasesAsFacturaPagoCorp(); ?>');
+        $colCantFact->Width = 40;
         $this->dtgPagosCorps->AddColumn($colCantFact);
-        $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->FormaPago);
+        $colFormPago = $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->FormaPago);
+        $colFormPago->Width = 100;
         $colFechPago = new QDataGridColumn('FECHA','<?= $_FORM->FechPago_Render($_ITEM) ?>');
+        $colFechPago->Width = 80;
         $this->dtgPagosCorps->AddColumn($colFechPago);
         //$this->dtgPagosCorps->MetaAddColumn('Monto');
         $colMontPago = new QDataGridColumn('MONTO','<?= nf($_ITEM->Monto) ?>');
+        $colMontPago->Width = 75;
         $this->dtgPagosCorps->AddColumn($colMontPago);
-		$this->dtgPagosCorps->MetaAddColumn('Estatus');
-		$this->dtgPagosCorps->MetaAddColumn('Observacion');
+		$colEstapago = $this->dtgPagosCorps->MetaAddColumn('Estatus');
+		$colEstapago->Width = 90;
+		$colObsePago = $this->dtgPagosCorps->MetaAddColumn('Observacion');
+		$colObsePago->Width = 250;
 
         $this->btnExpoExce_Create();
         $this->btnConcPago_Create();

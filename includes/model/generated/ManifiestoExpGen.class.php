@@ -16,7 +16,7 @@
 	 * @package My QCubed Application
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
-	 * @property string $Numero the value for strNumero (Not Null)
+	 * @property string $Numero the value for strNumero (Unique)
 	 * @property integer $OrigenId the value for intOrigenId (Not Null)
 	 * @property string $Transporte the value for strTransporte 
 	 * @property string $Master the value for strMaster 
@@ -1128,6 +1128,22 @@
 		}
 
 		/**
+		 * Load a single ManifiestoExp object,
+		 * by Numero Index(es)
+		 * @param string $strNumero
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ManifiestoExp
+		*/
+		public static function LoadByNumero($strNumero, $objOptionalClauses = null) {
+			return ManifiestoExp::QuerySingle(
+				QQ::AndCondition(
+					QQ::Equal(QQN::ManifiestoExp()->Numero, $strNumero)
+				),
+				$objOptionalClauses
+			);
+		}
+
+		/**
 		 * Load an array of ManifiestoExp objects,
 		 * by DestinoId Index(es)
 		 * @param integer $intDestinoId
@@ -1553,7 +1569,7 @@
 
 				case 'Numero':
 					/**
-					 * Gets the value for strNumero (Not Null)
+					 * Gets the value for strNumero (Unique)
 					 * @return string
 					 */
 					return $this->strNumero;
@@ -1834,7 +1850,7 @@
 				///////////////////
 				case 'Numero':
 					/**
-					 * Sets the value for strNumero (Not Null)
+					 * Sets the value for strNumero (Unique)
 					 * @param string $mixValue
 					 * @return string
 					 */

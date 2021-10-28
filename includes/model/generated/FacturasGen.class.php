@@ -30,6 +30,7 @@
 	 * @property double $Tasa the value for fltTasa (Not Null)
 	 * @property double $Total the value for fltTotal (Not Null)
 	 * @property double $MontoDscto the value for fltMontoDscto 
+	 * @property double $MontoAbono the value for fltMontoAbono 
 	 * @property double $MontoCobrado the value for fltMontoCobrado 
 	 * @property double $MontoPendiente the value for fltMontoPendiente (Not Null)
 	 * @property string $EstatusPago the value for strEstatusPago (Not Null)
@@ -53,6 +54,8 @@
 	 * @property Caja $Caja the value for the Caja object referenced by intCajaId 
 	 * @property-read PagosCorp $_PagosCorpAsFacturaPagoCorp the value for the private _objPagosCorpAsFacturaPagoCorp (Read-Only) if set due to an expansion on the factura_pago_corp_assn association table
 	 * @property-read PagosCorp[] $_PagosCorpAsFacturaPagoCorpArray the value for the private _objPagosCorpAsFacturaPagoCorpArray (Read-Only) if set due to an ExpandAsArray on the factura_pago_corp_assn association table
+	 * @property-read FactPagoTemp $_FactPagoTempAsFactura the value for the private _objFactPagoTempAsFactura (Read-Only) if set due to an expansion on the fact_pago_temp.factura_id reverse relationship
+	 * @property-read FactPagoTemp[] $_FactPagoTempAsFacturaArray the value for the private _objFactPagoTempAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the fact_pago_temp.factura_id reverse relationship
 	 * @property-read FacturaGuias $_FacturaGuiasAsFactura the value for the private _objFacturaGuiasAsFactura (Read-Only) if set due to an expansion on the factura_guias.factura_id reverse relationship
 	 * @property-read FacturaGuias[] $_FacturaGuiasAsFacturaArray the value for the private _objFacturaGuiasAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the factura_guias.factura_id reverse relationship
 	 * @property-read FacturaItems $_FacturaItemsAsFactura the value for the private _objFacturaItemsAsFactura (Read-Only) if set due to an expansion on the factura_items.factura_id reverse relationship
@@ -67,6 +70,8 @@
 	 * @property-read NotaEntrega[] $_NotaEntregaAsFacturaArray the value for the private _objNotaEntregaAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega.factura_id reverse relationship
 	 * @property-read NotaEntregaH $_NotaEntregaHAsFactura the value for the private _objNotaEntregaHAsFactura (Read-Only) if set due to an expansion on the nota_entrega_h.factura_id reverse relationship
 	 * @property-read NotaEntregaH[] $_NotaEntregaHAsFacturaArray the value for the private _objNotaEntregaHAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_h.factura_id reverse relationship
+	 * @property-read PagosCorpDetail $_PagosCorpDetailAsFactura the value for the private _objPagosCorpDetailAsFactura (Read-Only) if set due to an expansion on the pagos_corp_detail.factura_id reverse relationship
+	 * @property-read PagosCorpDetail[] $_PagosCorpDetailAsFacturaArray the value for the private _objPagosCorpDetailAsFacturaArray (Read-Only) if set due to an ExpandAsArray on the pagos_corp_detail.factura_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class FacturasGen extends QBaseClass implements IteratorAggregate {
@@ -197,6 +202,14 @@
 		 */
 		protected $fltMontoDscto;
 		const MontoDsctoDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column facturas.monto_abono
+		 * @var double fltMontoAbono
+		 */
+		protected $fltMontoAbono;
+		const MontoAbonoDefault = null;
 
 
 		/**
@@ -349,6 +362,22 @@
 		private $_objPagosCorpAsFacturaPagoCorpArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single FactPagoTempAsFactura object
+		 * (of type FactPagoTemp), if this Facturas object was restored with
+		 * an expansion on the fact_pago_temp association table.
+		 * @var FactPagoTemp _objFactPagoTempAsFactura;
+		 */
+		private $_objFactPagoTempAsFactura;
+
+		/**
+		 * Private member variable that stores a reference to an array of FactPagoTempAsFactura objects
+		 * (of type FactPagoTemp[]), if this Facturas object was restored with
+		 * an ExpandAsArray on the fact_pago_temp association table.
+		 * @var FactPagoTemp[] _objFactPagoTempAsFacturaArray;
+		 */
+		private $_objFactPagoTempAsFacturaArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single FacturaGuiasAsFactura object
 		 * (of type FacturaGuias), if this Facturas object was restored with
 		 * an expansion on the factura_guias association table.
@@ -461,6 +490,22 @@
 		private $_objNotaEntregaHAsFacturaArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single PagosCorpDetailAsFactura object
+		 * (of type PagosCorpDetail), if this Facturas object was restored with
+		 * an expansion on the pagos_corp_detail association table.
+		 * @var PagosCorpDetail _objPagosCorpDetailAsFactura;
+		 */
+		private $_objPagosCorpDetailAsFactura;
+
+		/**
+		 * Private member variable that stores a reference to an array of PagosCorpDetailAsFactura objects
+		 * (of type PagosCorpDetail[]), if this Facturas object was restored with
+		 * an ExpandAsArray on the pagos_corp_detail association table.
+		 * @var PagosCorpDetail[] _objPagosCorpDetailAsFacturaArray;
+		 */
+		private $_objPagosCorpDetailAsFacturaArray = null;
+
+		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
 		 * columns from the run-time database query result for this object).  Used by InstantiateDbRow and
 		 * GetVirtualAttribute.
@@ -554,6 +599,7 @@
 			$this->fltTasa = Facturas::TasaDefault;
 			$this->fltTotal = Facturas::TotalDefault;
 			$this->fltMontoDscto = Facturas::MontoDsctoDefault;
+			$this->fltMontoAbono = Facturas::MontoAbonoDefault;
 			$this->fltMontoCobrado = Facturas::MontoCobradoDefault;
 			$this->fltMontoPendiente = Facturas::MontoPendienteDefault;
 			$this->strEstatusPago = Facturas::EstatusPagoDefault;
@@ -926,6 +972,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'tasa', $strAliasPrefix . 'tasa');
 			    $objBuilder->AddSelectItem($strTableName, 'total', $strAliasPrefix . 'total');
 			    $objBuilder->AddSelectItem($strTableName, 'monto_dscto', $strAliasPrefix . 'monto_dscto');
+			    $objBuilder->AddSelectItem($strTableName, 'monto_abono', $strAliasPrefix . 'monto_abono');
 			    $objBuilder->AddSelectItem($strTableName, 'monto_cobrado', $strAliasPrefix . 'monto_cobrado');
 			    $objBuilder->AddSelectItem($strTableName, 'monto_pendiente', $strAliasPrefix . 'monto_pendiente');
 			    $objBuilder->AddSelectItem($strTableName, 'estatus_pago', $strAliasPrefix . 'estatus_pago');
@@ -1112,6 +1159,9 @@
 			$strAlias = $strAliasPrefix . 'monto_dscto';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltMontoDscto = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'monto_abono';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltMontoAbono = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'monto_cobrado';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltMontoCobrado = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1244,6 +1294,21 @@
 			}
 
 
+			// Check for FactPagoTempAsFactura Virtual Binding
+			$strAlias = $strAliasPrefix . 'factpagotempasfactura__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['factpagotempasfactura']) ? null : $objExpansionAliasArray['factpagotempasfactura']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objFactPagoTempAsFacturaArray)
+				$objToReturn->_objFactPagoTempAsFacturaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objFactPagoTempAsFacturaArray[] = FactPagoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'factpagotempasfactura__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objFactPagoTempAsFactura)) {
+					$objToReturn->_objFactPagoTempAsFactura = FactPagoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'factpagotempasfactura__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for FacturaGuiasAsFactura Virtual Binding
 			$strAlias = $strAliasPrefix . 'facturaguiasasfactura__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1346,6 +1411,21 @@
 					$objToReturn->_objNotaEntregaHAsFacturaArray[] = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregahasfactura__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objNotaEntregaHAsFactura)) {
 					$objToReturn->_objNotaEntregaHAsFactura = NotaEntregaH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notaentregahasfactura__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for PagosCorpDetailAsFactura Virtual Binding
+			$strAlias = $strAliasPrefix . 'pagoscorpdetailasfactura__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['pagoscorpdetailasfactura']) ? null : $objExpansionAliasArray['pagoscorpdetailasfactura']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPagosCorpDetailAsFacturaArray)
+				$objToReturn->_objPagosCorpDetailAsFacturaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPagosCorpDetailAsFacturaArray[] = PagosCorpDetail::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagoscorpdetailasfactura__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPagosCorpDetailAsFactura)) {
+					$objToReturn->_objPagosCorpDetailAsFactura = PagosCorpDetail::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagoscorpdetailasfactura__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -1678,6 +1758,7 @@
 							`tasa`,
 							`total`,
 							`monto_dscto`,
+							`monto_abono`,
 							`monto_cobrado`,
 							`monto_pendiente`,
 							`estatus_pago`,
@@ -1708,6 +1789,7 @@
 							' . $objDatabase->SqlVariable($this->fltTasa) . ',
 							' . $objDatabase->SqlVariable($this->fltTotal) . ',
 							' . $objDatabase->SqlVariable($this->fltMontoDscto) . ',
+							' . $objDatabase->SqlVariable($this->fltMontoAbono) . ',
 							' . $objDatabase->SqlVariable($this->fltMontoCobrado) . ',
 							' . $objDatabase->SqlVariable($this->fltMontoPendiente) . ',
 							' . $objDatabase->SqlVariable($this->strEstatusPago) . ',
@@ -1767,6 +1849,7 @@
 							`tasa` = ' . $objDatabase->SqlVariable($this->fltTasa) . ',
 							`total` = ' . $objDatabase->SqlVariable($this->fltTotal) . ',
 							`monto_dscto` = ' . $objDatabase->SqlVariable($this->fltMontoDscto) . ',
+							`monto_abono` = ' . $objDatabase->SqlVariable($this->fltMontoAbono) . ',
 							`monto_cobrado` = ' . $objDatabase->SqlVariable($this->fltMontoCobrado) . ',
 							`monto_pendiente` = ' . $objDatabase->SqlVariable($this->fltMontoPendiente) . ',
 							`estatus_pago` = ' . $objDatabase->SqlVariable($this->strEstatusPago) . ',
@@ -1912,6 +1995,7 @@
 			$this->fltTasa = $objReloaded->fltTasa;
 			$this->fltTotal = $objReloaded->fltTotal;
 			$this->fltMontoDscto = $objReloaded->fltMontoDscto;
+			$this->fltMontoAbono = $objReloaded->fltMontoAbono;
 			$this->fltMontoCobrado = $objReloaded->fltMontoCobrado;
 			$this->fltMontoPendiente = $objReloaded->fltMontoPendiente;
 			$this->strEstatusPago = $objReloaded->strEstatusPago;
@@ -2052,6 +2136,13 @@
 					 * @return double
 					 */
 					return $this->fltMontoDscto;
+
+				case 'MontoAbono':
+					/**
+					 * Gets the value for fltMontoAbono 
+					 * @return double
+					 */
+					return $this->fltMontoAbono;
 
 				case 'MontoCobrado':
 					/**
@@ -2261,6 +2352,22 @@
 					 */
 					return $this->_objPagosCorpAsFacturaPagoCorpArray;
 
+				case '_FactPagoTempAsFactura':
+					/**
+					 * Gets the value for the private _objFactPagoTempAsFactura (Read-Only)
+					 * if set due to an expansion on the fact_pago_temp.factura_id reverse relationship
+					 * @return FactPagoTemp
+					 */
+					return $this->_objFactPagoTempAsFactura;
+
+				case '_FactPagoTempAsFacturaArray':
+					/**
+					 * Gets the value for the private _objFactPagoTempAsFacturaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the fact_pago_temp.factura_id reverse relationship
+					 * @return FactPagoTemp[]
+					 */
+					return $this->_objFactPagoTempAsFacturaArray;
+
 				case '_FacturaGuiasAsFactura':
 					/**
 					 * Gets the value for the private _objFacturaGuiasAsFactura (Read-Only)
@@ -2372,6 +2479,22 @@
 					 * @return NotaEntregaH[]
 					 */
 					return $this->_objNotaEntregaHAsFacturaArray;
+
+				case '_PagosCorpDetailAsFactura':
+					/**
+					 * Gets the value for the private _objPagosCorpDetailAsFactura (Read-Only)
+					 * if set due to an expansion on the pagos_corp_detail.factura_id reverse relationship
+					 * @return PagosCorpDetail
+					 */
+					return $this->_objPagosCorpDetailAsFactura;
+
+				case '_PagosCorpDetailAsFacturaArray':
+					/**
+					 * Gets the value for the private _objPagosCorpDetailAsFacturaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pagos_corp_detail.factura_id reverse relationship
+					 * @return PagosCorpDetail[]
+					 */
+					return $this->_objPagosCorpDetailAsFacturaArray;
 
 
 				case '__Restored':
@@ -2582,6 +2705,19 @@
 					 */
 					try {
 						return ($this->fltMontoDscto = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'MontoAbono':
+					/**
+					 * Sets the value for fltMontoAbono 
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltMontoAbono = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2976,6 +3112,9 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
+			if ($this->CountFactPagoTempsAsFactura()) {
+				$arrTablRela[] = 'fact_pago_temp';
+			}
 			if ($this->CountFacturaGuiasesAsFactura()) {
 				$arrTablRela[] = 'factura_guias';
 			}
@@ -2997,6 +3136,9 @@
 			if ($this->CountNotaEntregaHsAsFactura()) {
 				$arrTablRela[] = 'nota_entrega_h';
 			}
+			if ($this->CountPagosCorpDetailsAsFactura()) {
+				$arrTablRela[] = 'pagos_corp_detail';
+			}
 			
 			return $arrTablRela;
 		}
@@ -3005,6 +3147,155 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+
+
+		// Related Objects' Methods for FactPagoTempAsFactura
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated FactPagoTempsAsFactura as an array of FactPagoTemp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return FactPagoTemp[]
+		*/
+		public function GetFactPagoTempAsFacturaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return FactPagoTemp::LoadArrayByFacturaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated FactPagoTempsAsFactura
+		 * @return int
+		*/
+		public function CountFactPagoTempsAsFactura() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return FactPagoTemp::CountByFacturaId($this->intId);
+		}
+
+		/**
+		 * Associates a FactPagoTempAsFactura
+		 * @param FactPagoTemp $objFactPagoTemp
+		 * @return void
+		*/
+		public function AssociateFactPagoTempAsFactura(FactPagoTemp $objFactPagoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFactPagoTempAsFactura on this unsaved Facturas.');
+			if ((is_null($objFactPagoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFactPagoTempAsFactura on this Facturas with an unsaved FactPagoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`fact_pago_temp`
+				SET
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFactPagoTemp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a FactPagoTempAsFactura
+		 * @param FactPagoTemp $objFactPagoTemp
+		 * @return void
+		*/
+		public function UnassociateFactPagoTempAsFactura(FactPagoTemp $objFactPagoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFactPagoTempAsFactura on this unsaved Facturas.');
+			if ((is_null($objFactPagoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFactPagoTempAsFactura on this Facturas with an unsaved FactPagoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`fact_pago_temp`
+				SET
+					`factura_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFactPagoTemp->Id) . ' AND
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all FactPagoTempsAsFactura
+		 * @return void
+		*/
+		public function UnassociateAllFactPagoTempsAsFactura() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFactPagoTempAsFactura on this unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`fact_pago_temp`
+				SET
+					`factura_id` = null
+				WHERE
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated FactPagoTempAsFactura
+		 * @param FactPagoTemp $objFactPagoTemp
+		 * @return void
+		*/
+		public function DeleteAssociatedFactPagoTempAsFactura(FactPagoTemp $objFactPagoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFactPagoTempAsFactura on this unsaved Facturas.');
+			if ((is_null($objFactPagoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFactPagoTempAsFactura on this Facturas with an unsaved FactPagoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`fact_pago_temp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFactPagoTemp->Id) . ' AND
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated FactPagoTempsAsFactura
+		 * @return void
+		*/
+		public function DeleteAllFactPagoTempsAsFactura() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFactPagoTempAsFactura on this unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`fact_pago_temp`
+				WHERE
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 
 		// Related Objects' Methods for FacturaGuiasAsFactura
@@ -4050,6 +4341,155 @@
 		}
 
 
+		// Related Objects' Methods for PagosCorpDetailAsFactura
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PagosCorpDetailsAsFactura as an array of PagosCorpDetail objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PagosCorpDetail[]
+		*/
+		public function GetPagosCorpDetailAsFacturaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return PagosCorpDetail::LoadArrayByFacturaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PagosCorpDetailsAsFactura
+		 * @return int
+		*/
+		public function CountPagosCorpDetailsAsFactura() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return PagosCorpDetail::CountByFacturaId($this->intId);
+		}
+
+		/**
+		 * Associates a PagosCorpDetailAsFactura
+		 * @param PagosCorpDetail $objPagosCorpDetail
+		 * @return void
+		*/
+		public function AssociatePagosCorpDetailAsFactura(PagosCorpDetail $objPagosCorpDetail) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePagosCorpDetailAsFactura on this unsaved Facturas.');
+			if ((is_null($objPagosCorpDetail->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePagosCorpDetailAsFactura on this Facturas with an unsaved PagosCorpDetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pagos_corp_detail`
+				SET
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPagosCorpDetail->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PagosCorpDetailAsFactura
+		 * @param PagosCorpDetail $objPagosCorpDetail
+		 * @return void
+		*/
+		public function UnassociatePagosCorpDetailAsFactura(PagosCorpDetail $objPagosCorpDetail) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsFactura on this unsaved Facturas.');
+			if ((is_null($objPagosCorpDetail->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsFactura on this Facturas with an unsaved PagosCorpDetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pagos_corp_detail`
+				SET
+					`factura_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPagosCorpDetail->Id) . ' AND
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PagosCorpDetailsAsFactura
+		 * @return void
+		*/
+		public function UnassociateAllPagosCorpDetailsAsFactura() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsFactura on this unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pagos_corp_detail`
+				SET
+					`factura_id` = null
+				WHERE
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PagosCorpDetailAsFactura
+		 * @param PagosCorpDetail $objPagosCorpDetail
+		 * @return void
+		*/
+		public function DeleteAssociatedPagosCorpDetailAsFactura(PagosCorpDetail $objPagosCorpDetail) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsFactura on this unsaved Facturas.');
+			if ((is_null($objPagosCorpDetail->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsFactura on this Facturas with an unsaved PagosCorpDetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pagos_corp_detail`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPagosCorpDetail->Id) . ' AND
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PagosCorpDetailsAsFactura
+		 * @return void
+		*/
+		public function DeleteAllPagosCorpDetailsAsFactura() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsFactura on this unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Facturas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pagos_corp_detail`
+				WHERE
+					`factura_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Many-to-Many Objects' Methods for PagosCorpAsFacturaPagoCorp
 		//-------------------------------------------------------------------
 
@@ -4225,6 +4665,7 @@
 			$strToReturn .= '<element name="Tasa" type="xsd:float"/>';
 			$strToReturn .= '<element name="Total" type="xsd:float"/>';
 			$strToReturn .= '<element name="MontoDscto" type="xsd:float"/>';
+			$strToReturn .= '<element name="MontoAbono" type="xsd:float"/>';
 			$strToReturn .= '<element name="MontoCobrado" type="xsd:float"/>';
 			$strToReturn .= '<element name="MontoPendiente" type="xsd:float"/>';
 			$strToReturn .= '<element name="EstatusPago" type="xsd:string"/>';
@@ -4303,6 +4744,8 @@
 				$objToReturn->fltTotal = $objSoapObject->Total;
 			if (property_exists($objSoapObject, 'MontoDscto'))
 				$objToReturn->fltMontoDscto = $objSoapObject->MontoDscto;
+			if (property_exists($objSoapObject, 'MontoAbono'))
+				$objToReturn->fltMontoAbono = $objSoapObject->MontoAbono;
 			if (property_exists($objSoapObject, 'MontoCobrado'))
 				$objToReturn->fltMontoCobrado = $objSoapObject->MontoCobrado;
 			if (property_exists($objSoapObject, 'MontoPendiente'))
@@ -4408,6 +4851,7 @@
 			$iArray['Tasa'] = $this->fltTasa;
 			$iArray['Total'] = $this->fltTotal;
 			$iArray['MontoDscto'] = $this->fltMontoDscto;
+			$iArray['MontoAbono'] = $this->fltMontoAbono;
 			$iArray['MontoCobrado'] = $this->fltMontoCobrado;
 			$iArray['MontoPendiente'] = $this->fltMontoPendiente;
 			$iArray['EstatusPago'] = $this->strEstatusPago;
@@ -4517,6 +4961,7 @@
      * @property-read QQNode $Tasa
      * @property-read QQNode $Total
      * @property-read QQNode $MontoDscto
+     * @property-read QQNode $MontoAbono
      * @property-read QQNode $MontoCobrado
      * @property-read QQNode $MontoPendiente
      * @property-read QQNode $EstatusPago
@@ -4536,6 +4981,7 @@
      *
      * @property-read QQNodeFacturasPagosCorpAsFacturaPagoCorp $PagosCorpAsFacturaPagoCorp
      *
+     * @property-read QQReverseReferenceNodeFactPagoTemp $FactPagoTempAsFactura
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsFactura
      * @property-read QQReverseReferenceNodeFacturaItems $FacturaItemsAsFactura
      * @property-read QQReverseReferenceNodeFacturaNotas $FacturaNotasAsFactura
@@ -4543,6 +4989,7 @@
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsFactura
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsFactura
      * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsFactura
+     * @property-read QQReverseReferenceNodePagosCorpDetail $PagosCorpDetailAsFactura
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -4592,6 +5039,8 @@
 					return new QQNode('total', 'Total', 'Float', $this);
 				case 'MontoDscto':
 					return new QQNode('monto_dscto', 'MontoDscto', 'Float', $this);
+				case 'MontoAbono':
+					return new QQNode('monto_abono', 'MontoAbono', 'Float', $this);
 				case 'MontoCobrado':
 					return new QQNode('monto_cobrado', 'MontoCobrado', 'Float', $this);
 				case 'MontoPendiente':
@@ -4626,6 +5075,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'Integer', $this);
 				case 'PagosCorpAsFacturaPagoCorp':
 					return new QQNodeFacturasPagosCorpAsFacturaPagoCorp($this);
+				case 'FactPagoTempAsFactura':
+					return new QQReverseReferenceNodeFactPagoTemp($this, 'factpagotempasfactura', 'reverse_reference', 'factura_id', 'FactPagoTempAsFactura');
 				case 'FacturaGuiasAsFactura':
 					return new QQReverseReferenceNodeFacturaGuias($this, 'facturaguiasasfactura', 'reverse_reference', 'factura_id', 'FacturaGuiasAsFactura');
 				case 'FacturaItemsAsFactura':
@@ -4640,6 +5091,8 @@
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasfactura', 'reverse_reference', 'factura_id', 'NotaEntregaAsFactura');
 				case 'NotaEntregaHAsFactura':
 					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahasfactura', 'reverse_reference', 'factura_id', 'NotaEntregaHAsFactura');
+				case 'PagosCorpDetailAsFactura':
+					return new QQReverseReferenceNodePagosCorpDetail($this, 'pagoscorpdetailasfactura', 'reverse_reference', 'factura_id', 'PagosCorpDetailAsFactura');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -4675,6 +5128,7 @@
      * @property-read QQNode $Tasa
      * @property-read QQNode $Total
      * @property-read QQNode $MontoDscto
+     * @property-read QQNode $MontoAbono
      * @property-read QQNode $MontoCobrado
      * @property-read QQNode $MontoPendiente
      * @property-read QQNode $EstatusPago
@@ -4694,6 +5148,7 @@
      *
      * @property-read QQNodeFacturasPagosCorpAsFacturaPagoCorp $PagosCorpAsFacturaPagoCorp
      *
+     * @property-read QQReverseReferenceNodeFactPagoTemp $FactPagoTempAsFactura
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsFactura
      * @property-read QQReverseReferenceNodeFacturaItems $FacturaItemsAsFactura
      * @property-read QQReverseReferenceNodeFacturaNotas $FacturaNotasAsFactura
@@ -4701,6 +5156,7 @@
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsFactura
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsFactura
      * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsFactura
+     * @property-read QQReverseReferenceNodePagosCorpDetail $PagosCorpDetailAsFactura
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -4750,6 +5206,8 @@
 					return new QQNode('total', 'Total', 'double', $this);
 				case 'MontoDscto':
 					return new QQNode('monto_dscto', 'MontoDscto', 'double', $this);
+				case 'MontoAbono':
+					return new QQNode('monto_abono', 'MontoAbono', 'double', $this);
 				case 'MontoCobrado':
 					return new QQNode('monto_cobrado', 'MontoCobrado', 'double', $this);
 				case 'MontoPendiente':
@@ -4784,6 +5242,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'integer', $this);
 				case 'PagosCorpAsFacturaPagoCorp':
 					return new QQNodeFacturasPagosCorpAsFacturaPagoCorp($this);
+				case 'FactPagoTempAsFactura':
+					return new QQReverseReferenceNodeFactPagoTemp($this, 'factpagotempasfactura', 'reverse_reference', 'factura_id', 'FactPagoTempAsFactura');
 				case 'FacturaGuiasAsFactura':
 					return new QQReverseReferenceNodeFacturaGuias($this, 'facturaguiasasfactura', 'reverse_reference', 'factura_id', 'FacturaGuiasAsFactura');
 				case 'FacturaItemsAsFactura':
@@ -4798,6 +5258,8 @@
 					return new QQReverseReferenceNodeNotaEntrega($this, 'notaentregaasfactura', 'reverse_reference', 'factura_id', 'NotaEntregaAsFactura');
 				case 'NotaEntregaHAsFactura':
 					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahasfactura', 'reverse_reference', 'factura_id', 'NotaEntregaHAsFactura');
+				case 'PagosCorpDetailAsFactura':
+					return new QQReverseReferenceNodePagosCorpDetail($this, 'pagoscorpdetailasfactura', 'reverse_reference', 'factura_id', 'PagosCorpDetailAsFactura');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

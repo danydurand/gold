@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '1ce39d646d987c6eece4b3656e000f18abbc36aa',
+    'reference' => 'eda71afbc9f054743bdeca5cfde7a9c39728ee1f',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '1ce39d646d987c6eece4b3656e000f18abbc36aa',
+      'reference' => 'eda71afbc9f054743bdeca5cfde7a9c39728ee1f',
     ),
     'monolog/monolog' => 
     array (
@@ -49,30 +49,30 @@
     ),
     'shuchkin/simplexls' => 
     array (
-      'pretty_version' => '0.9.10',
-      'version' => '0.9.10.0',
+      'pretty_version' => '0.9.13',
+      'version' => '0.9.13.0',
       'aliases' => 
       array (
       ),
-      'reference' => '3b633e3c5e10d9a60f3972a8cf9350444d6482a8',
+      'reference' => '1f6be6894a591f476752b508f6c2cdb24c69a68c',
     ),
     'shuchkin/simplexlsx' => 
     array (
-      'pretty_version' => '0.8.25',
-      'version' => '0.8.25.0',
+      'pretty_version' => '0.8.27',
+      'version' => '0.8.27.0',
       'aliases' => 
       array (
       ),
-      'reference' => '7dfacfbe51137ad08e047cd5ac57eef26158d120',
+      'reference' => 'ffdbfaee68c43f3c2b63a6a3775e3421710e0ec4',
     ),
     'spipu/html2pdf' => 
     array (
-      'pretty_version' => 'v5.2.2',
-      'version' => '5.2.2.0',
+      'pretty_version' => 'v5.2.3',
+      'version' => '5.2.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'e6d8ca22347b6691bb8c2652212b1be2c89b3eff',
+      'reference' => '119d660876546c6b496f8aa6490f1ab8111350f9',
     ),
     'tecnickcom/tcpdf' => 
     array (

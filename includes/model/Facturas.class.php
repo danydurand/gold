@@ -55,6 +55,40 @@
 		    t('Rutina: ActualizarMontos (en la Factura)');
 
             t('Voy a buscar los pagos asociados a la factura');
+            $arrPagoFact = $this->GetPagosCorpDetailAsFacturaArray();
+            t('Hay: '.count($arrPagoFact).' pagos asociados');
+            $decTotaAbon = 0;
+            foreach ($arrPagoFact as $objPagoFact) {
+                t('Procesando el pago: '.$objPagoFact->PagoCorp->Referencia);
+                $decTotaAbon += $objPagoFact->MontoAbonado;
+            }
+            t('Al salir del ciclo, el Total en Bs es: '.$decTotaAbon);
+            $this->MontoCobrado = $decTotaAbon;
+            $decMontPend        = $this->Total - $this->MontoCobrado;
+            t('El monto pendiente es de: '.$decMontPend);
+            if ($decMontPend < 0) {
+                t('Como era negativo, lo deje en cero');
+                $decMontPend = 0;
+            }
+            $this->MontoPendiente = $decMontPend;
+            if ($this->MontoPendiente == $this->Total) {
+                t('MontoPendiente y Total son iguales, el Estatus del Pago cambia a Pendiente');
+                $this->EstatusPago = 'PENDIENTE';
+            } else {
+                if (count($arrPagoFact) > 0) {
+                    t('Habiendo pagos.. el estatus queda como PagoParcial');
+                    $this->EstatusPago = 'PAGOPARCIAL';
+                }
+            }
+            t('El status de la factura quedo en: '.$this->EstatusPago);
+            $this->Save();
+		}
+
+        public function ActualizarMontosOld() {
+		    t('========================================');
+		    t('Rutina: ActualizarMontos (en la Factura)');
+
+            t('Voy a buscar los pagos asociados a la factura');
             $arrPagoFact = $this->GetPagosCorpAsFacturaPagoCorpArray();
             t('Hay: '.count($arrPagoFact).' pagos asociados');
             $decTotaFact = 0;
@@ -67,8 +101,8 @@
                 $decTotaFact += $objPagoFact->Monto;
             }
             t('Al salir del ciclo, el Total en Bs es: '.$decTotaFact);
-            $this->MontoCobrado   = $decTotaFact;
-            $decMontPend          = $this->Total - $this->MontoCobrado;
+            $this->MontoCobrado = $decTotaFact;
+            $decMontPend        = $this->Total - $this->MontoCobrado;
             t('El monto pendiente es de: '.$decMontPend);
             if ($decMontPend < 0) {
                 t('Como era negativo, lo deje en cero');

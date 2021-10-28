@@ -34,7 +34,7 @@
 	 * @property integer $Devueltas the value for intDevueltas (Not Null)
 	 * @property integer $SinGestionar the value for intSinGestionar (Not Null)
 	 * @property integer $Pendientes the value for intPendientes 
-	 * @property double $Peso the value for fltPeso (Not Null)
+	 * @property double $Peso the value for fltPeso 
 	 * @property double $Kilos the value for fltKilos (Not Null)
 	 * @property double $PiesCub the value for fltPiesCub (Not Null)
 	 * @property string $Contenido the value for strContenido 
@@ -228,7 +228,7 @@
 		 * @var double fltPeso
 		 */
 		protected $fltPeso;
-		const PesoDefault = null;
+		const PesoDefault = 0;
 
 
 		/**
@@ -2158,7 +2158,7 @@
 
 				case 'Peso':
 					/**
-					 * Gets the value for fltPeso (Not Null)
+					 * Gets the value for fltPeso 
 					 * @return double
 					 */
 					return $this->fltPeso;
@@ -2630,7 +2630,7 @@
 
 				case 'Peso':
 					/**
-					 * Sets the value for fltPeso (Not Null)
+					 * Sets the value for fltPeso 
 					 * @param double $mixValue
 					 * @return double
 					 */

@@ -70,7 +70,7 @@ $strDireCorr = 'auxiliaradm@goldcoastus.com';
             </tr>
             <tr>
                 <td style="font-weight: bold">Número de Cuenta:</td>
-                <td>898111123004</td>
+                <td>8981 1112 7602</td>
             </tr>
             <tr>
                 <td style="font-weight: bold">SWIFT:</td>
@@ -78,7 +78,7 @@ $strDireCorr = 'auxiliaradm@goldcoastus.com';
             </tr>
             <tr>
                 <td style="font-weight: bold">ABA:</td>
-                <td>063100277</td>
+                <td>063000047</td>
             </tr>
             <tr>
                 <td style="font-weight: bold"><br><br>ZELLE:</td>

@@ -37,6 +37,8 @@
 	 * @property-read NotaCreditoCorp[] $_NotaCreditoCorpAsAplicadaEnPagoArray the value for the private _objNotaCreditoCorpAsAplicadaEnPagoArray (Read-Only) if set due to an ExpandAsArray on the nota_credito_corp.aplicada_en_pago_id reverse relationship
 	 * @property-read NotaCreditoCorp $_NotaCreditoCorpAsPagoCorp the value for the private _objNotaCreditoCorpAsPagoCorp (Read-Only) if set due to an expansion on the nota_credito_corp.pago_corp_id reverse relationship
 	 * @property-read NotaCreditoCorp[] $_NotaCreditoCorpAsPagoCorpArray the value for the private _objNotaCreditoCorpAsPagoCorpArray (Read-Only) if set due to an ExpandAsArray on the nota_credito_corp.pago_corp_id reverse relationship
+	 * @property-read PagosCorpDetail $_PagosCorpDetailAsPagoCorp the value for the private _objPagosCorpDetailAsPagoCorp (Read-Only) if set due to an expansion on the pagos_corp_detail.pago_corp_id reverse relationship
+	 * @property-read PagosCorpDetail[] $_PagosCorpDetailAsPagoCorpArray the value for the private _objPagosCorpDetailAsPagoCorpArray (Read-Only) if set due to an ExpandAsArray on the pagos_corp_detail.pago_corp_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class PagosCorpGen extends QBaseClass implements IteratorAggregate {
@@ -205,6 +207,22 @@
 		 * @var NotaCreditoCorp[] _objNotaCreditoCorpAsPagoCorpArray;
 		 */
 		private $_objNotaCreditoCorpAsPagoCorpArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PagosCorpDetailAsPagoCorp object
+		 * (of type PagosCorpDetail), if this PagosCorp object was restored with
+		 * an expansion on the pagos_corp_detail association table.
+		 * @var PagosCorpDetail _objPagosCorpDetailAsPagoCorp;
+		 */
+		private $_objPagosCorpDetailAsPagoCorp;
+
+		/**
+		 * Private member variable that stores a reference to an array of PagosCorpDetailAsPagoCorp objects
+		 * (of type PagosCorpDetail[]), if this PagosCorp object was restored with
+		 * an ExpandAsArray on the pagos_corp_detail association table.
+		 * @var PagosCorpDetail[] _objPagosCorpDetailAsPagoCorpArray;
+		 */
+		private $_objPagosCorpDetailAsPagoCorpArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -884,6 +902,21 @@
 				}
 			}
 
+			// Check for PagosCorpDetailAsPagoCorp Virtual Binding
+			$strAlias = $strAliasPrefix . 'pagoscorpdetailaspagocorp__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['pagoscorpdetailaspagocorp']) ? null : $objExpansionAliasArray['pagoscorpdetailaspagocorp']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPagosCorpDetailAsPagoCorpArray)
+				$objToReturn->_objPagosCorpDetailAsPagoCorpArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPagosCorpDetailAsPagoCorpArray[] = PagosCorpDetail::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagoscorpdetailaspagocorp__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPagosCorpDetailAsPagoCorp)) {
+					$objToReturn->_objPagosCorpDetailAsPagoCorp = PagosCorpDetail::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagoscorpdetailaspagocorp__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			return $objToReturn;
 		}
 		
@@ -1551,6 +1584,22 @@
 					 */
 					return $this->_objNotaCreditoCorpAsPagoCorpArray;
 
+				case '_PagosCorpDetailAsPagoCorp':
+					/**
+					 * Gets the value for the private _objPagosCorpDetailAsPagoCorp (Read-Only)
+					 * if set due to an expansion on the pagos_corp_detail.pago_corp_id reverse relationship
+					 * @return PagosCorpDetail
+					 */
+					return $this->_objPagosCorpDetailAsPagoCorp;
+
+				case '_PagosCorpDetailAsPagoCorpArray':
+					/**
+					 * Gets the value for the private _objPagosCorpDetailAsPagoCorpArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pagos_corp_detail.pago_corp_id reverse relationship
+					 * @return PagosCorpDetail[]
+					 */
+					return $this->_objPagosCorpDetailAsPagoCorpArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1813,6 +1862,9 @@
 			}
 			if ($this->CountNotaCreditoCorpsAsPagoCorp()) {
 				$arrTablRela[] = 'nota_credito_corp';
+			}
+			if ($this->CountPagosCorpDetailsAsPagoCorp()) {
+				$arrTablRela[] = 'pagos_corp_detail';
 			}
 			
 			return $arrTablRela;
@@ -2116,6 +2168,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`nota_credito_corp`
+				WHERE
+					`pago_corp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for PagosCorpDetailAsPagoCorp
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PagosCorpDetailsAsPagoCorp as an array of PagosCorpDetail objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return PagosCorpDetail[]
+		*/
+		public function GetPagosCorpDetailAsPagoCorpArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return PagosCorpDetail::LoadArrayByPagoCorpId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PagosCorpDetailsAsPagoCorp
+		 * @return int
+		*/
+		public function CountPagosCorpDetailsAsPagoCorp() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return PagosCorpDetail::CountByPagoCorpId($this->intId);
+		}
+
+		/**
+		 * Associates a PagosCorpDetailAsPagoCorp
+		 * @param PagosCorpDetail $objPagosCorpDetail
+		 * @return void
+		*/
+		public function AssociatePagosCorpDetailAsPagoCorp(PagosCorpDetail $objPagosCorpDetail) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePagosCorpDetailAsPagoCorp on this unsaved PagosCorp.');
+			if ((is_null($objPagosCorpDetail->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePagosCorpDetailAsPagoCorp on this PagosCorp with an unsaved PagosCorpDetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PagosCorp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pagos_corp_detail`
+				SET
+					`pago_corp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPagosCorpDetail->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PagosCorpDetailAsPagoCorp
+		 * @param PagosCorpDetail $objPagosCorpDetail
+		 * @return void
+		*/
+		public function UnassociatePagosCorpDetailAsPagoCorp(PagosCorpDetail $objPagosCorpDetail) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsPagoCorp on this unsaved PagosCorp.');
+			if ((is_null($objPagosCorpDetail->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsPagoCorp on this PagosCorp with an unsaved PagosCorpDetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PagosCorp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pagos_corp_detail`
+				SET
+					`pago_corp_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPagosCorpDetail->Id) . ' AND
+					`pago_corp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PagosCorpDetailsAsPagoCorp
+		 * @return void
+		*/
+		public function UnassociateAllPagosCorpDetailsAsPagoCorp() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsPagoCorp on this unsaved PagosCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PagosCorp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pagos_corp_detail`
+				SET
+					`pago_corp_id` = null
+				WHERE
+					`pago_corp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PagosCorpDetailAsPagoCorp
+		 * @param PagosCorpDetail $objPagosCorpDetail
+		 * @return void
+		*/
+		public function DeleteAssociatedPagosCorpDetailAsPagoCorp(PagosCorpDetail $objPagosCorpDetail) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsPagoCorp on this unsaved PagosCorp.');
+			if ((is_null($objPagosCorpDetail->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsPagoCorp on this PagosCorp with an unsaved PagosCorpDetail.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PagosCorp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pagos_corp_detail`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPagosCorpDetail->Id) . ' AND
+					`pago_corp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PagosCorpDetailsAsPagoCorp
+		 * @return void
+		*/
+		public function DeleteAllPagosCorpDetailsAsPagoCorp() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePagosCorpDetailAsPagoCorp on this unsaved PagosCorp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PagosCorp::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pagos_corp_detail`
 				WHERE
 					`pago_corp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2500,6 +2701,7 @@
      *
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsAplicadaEnPago
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsPagoCorp
+     * @property-read QQReverseReferenceNodePagosCorpDetail $PagosCorpDetailAsPagoCorp
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2547,6 +2749,8 @@
 					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasaplicadaenpago', 'reverse_reference', 'aplicada_en_pago_id', 'NotaCreditoCorpAsAplicadaEnPago');
 				case 'NotaCreditoCorpAsPagoCorp':
 					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpaspagocorp', 'reverse_reference', 'pago_corp_id', 'NotaCreditoCorpAsPagoCorp');
+				case 'PagosCorpDetailAsPagoCorp':
+					return new QQReverseReferenceNodePagosCorpDetail($this, 'pagoscorpdetailaspagocorp', 'reverse_reference', 'pago_corp_id', 'PagosCorpDetailAsPagoCorp');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2583,6 +2787,7 @@
      *
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsAplicadaEnPago
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsPagoCorp
+     * @property-read QQReverseReferenceNodePagosCorpDetail $PagosCorpDetailAsPagoCorp
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2630,6 +2835,8 @@
 					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpasaplicadaenpago', 'reverse_reference', 'aplicada_en_pago_id', 'NotaCreditoCorpAsAplicadaEnPago');
 				case 'NotaCreditoCorpAsPagoCorp':
 					return new QQReverseReferenceNodeNotaCreditoCorp($this, 'notacreditocorpaspagocorp', 'reverse_reference', 'pago_corp_id', 'NotaCreditoCorpAsPagoCorp');
+				case 'PagosCorpDetailAsPagoCorp':
+					return new QQReverseReferenceNodePagosCorpDetail($this, 'pagoscorpdetailaspagocorp', 'reverse_reference', 'pago_corp_id', 'PagosCorpDetailAsPagoCorp');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);
