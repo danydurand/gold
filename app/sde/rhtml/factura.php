@@ -13,6 +13,14 @@ if (!isset($_SESSION['FactIdxx'])) {
 $strLimiDere = '350px';
 $intFactIdxx = $_SESSION['FactIdxx'];
 $objFactImpr = Facturas::Load($intFactIdxx);
+$strNombBanc = Parametros::BP('DATOBANC','NOMBBANC','Txt1','BANK OF AMERICA');
+$strNombBene = Parametros::BP('DATOBANC','NOMBBENE','Txt1','GOLD COAST CUSTOM EXPRESS CORP');
+$strTipoCnta = Parametros::BP('DATOBANC','TIPOCNTA','Txt1','Business Fundamentals Chk');
+$strNrodCnta = Parametros::BP('DATOBANC','NRODCNTA','Txt1','8981 1112 7602');
+$strNrodSwif = Parametros::BP('DATOBANC','NRODSWIF','Txt1','026009593');
+$strNrodAbax = Parametros::BP('DATOBANC','NRODABAX','Txt1','063000047');
+$strCntaZell = Parametros::BP('DATOBANC','CNTAZELL','Txt1','administracion@goldcoastus.com');
+
 ?>
 
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
@@ -95,31 +103,31 @@ $objFactImpr = Facturas::Load($intFactIdxx);
         <table style="border: solid .5mm; font-size: 10px;">
             <tr>
                 <td class="titulo" style="width: 150px;">BANCO:</td>
-                <td style="text-align: left">BANK OF AMERICA</td>
+                <td style="text-align: left"><?= $strNombBanc ?></td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">A NOMBRE DE:</td>
-                <td style="text-align: left">GOLD COAST CUSTOMS EXPRESS CORP.</td>
+                <td style="text-align: left"><?= $strNombBene ?></td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">TIPO DE CUENTA:</td>
-                <td style="text-align: left">BUSINESS FUNDAMENTALS CHK</td>
+                <td style="text-align: left"><?= $strTipoCnta ?></td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">NRO DE CUENTA:</td>
-                <td style="text-align: left">8981 1112 7602</td>
+                <td style="text-align: left"><?= $strNrodCnta ?></td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">SWIFT:</td>
-                <td style="text-align: left">026009593</td>
+                <td style="text-align: left"><?= $strNrodSwif ?></td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">ABA:</td>
-                <td style="text-align: left">063000047</td>
+                <td style="text-align: left"><?= $strNrodAbax ?></td>
             </tr>
             <tr>
                 <td class="titulo" style="width: 150px;">ZELLE:</td>
-                <td style="text-align: left">administracion@goldcoastus.com</td>
+                <td style="text-align: left"><?= $strCntaZell ?></td>
             </tr>
         </table>
 

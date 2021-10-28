@@ -27,7 +27,12 @@
 			return sprintf('%s',  $this->Descripcion);
 		}
 
-        /**
+
+        public static function BP($strIndiPara,$strCodiPara,$strTipoDato,$strValoDefe=-1) {
+		    return Parametros::BuscarParametro($strIndiPara,$strCodiPara,$strTipoDato,$strValoDefe);
+        }
+
+            /**
          * Esta rutina devuelve el registro cuya clave coincida con los 2 primeros valores
          * que entran como parametro/ Si el 3er parametro tiene el valor 'TODO' se devuelve
          * el registro completo como un objeto/  Otros valores posibles son 'Txt1'...'Txt5' ó

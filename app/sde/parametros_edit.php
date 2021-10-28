@@ -201,6 +201,7 @@ class ParametrosEditForm extends ParametrosEditFormBase {
 			LogDeCambios($arrLogxCamb);
             $this->success('Transacción Exitosa !!!');
 		}
+		$this->btnNuevRegi->Visible = true;
 	}
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
