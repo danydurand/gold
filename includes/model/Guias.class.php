@@ -261,8 +261,20 @@
             $objPrecTari   = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx,$intZonaIdxx,$strServImpo);
             if ($objPrecTari) {
                 $precio = $objPrecTari->Precio;
+                $minimo = $objPrecTari->MinimoFacturable;
+                t('El minimo es: '.$minimo);
+                if ( ($minimo > 0) && ($decPesoTari < $minimo) ) {
+                    t('Guia: '.$this->Tracking.' con peso menor al minimo: '.$decPesoTari);
+                    $decPesoTari = $minimo;
+                    t('El peso quedo en: '.$decPesoTari);
+                } else {
+                    if ($minimo == 0) {
+                        $decPesoTari = 0;
+                        t('Minimo en cero, no se debe facturar');
+                    }
+                }
                 $monto  = $precio * $decPesoTari;
-                $texto  = "Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari: $precio, ";
+                $texto  = "Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari: $precio, Min Facturable: $minimo";
                 $texto .= "para un peso de: $decPesoTari, totaliza: $monto";
             } else {
                 $monto = 0;
@@ -543,7 +555,6 @@
             t('Dentro de la Guia, calculando el Concepto: '.$concepto->Nombre);
             t('Rutina: calcularConcepto');
             $actua_sobre = $concepto->ActuaSobre;
-            t('El concepto actua sobre: '.$actua_sobre);
             $concepto_id = $concepto->Id;
             t('El Id del Concepto es: ' . $concepto_id);
             //------------------------------------------------------------------------------------------

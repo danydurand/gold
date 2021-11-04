@@ -598,6 +598,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 $strSucuDest .= ' ('.$this->objGuia->ReceptoriaDestino->Siglas.')';
             }
         }
+        if (in_array($this->objGuia->Producto->Codigo,['IMP'])) {
+            $strSucuDest .= ' (Zona: '.$this->objGuia->Destino->Zona.')';
+        }
         $this->lblSucuDest->Text = $strSucuDest;
     }
 

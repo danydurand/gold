@@ -415,12 +415,6 @@
 			return new QQNodeFactura('factura', null, null);
 		}
 		/**
-		 * @return QQNodeFacturaConsecutivo
-		 */
-		static public function FacturaConsecutivo() {
-			return new QQNodeFacturaConsecutivo('factura_consecutivo', null, null);
-		}
-		/**
 		 * @return QQNodeFacturaGuias
 		 */
 		static public function FacturaGuias() {

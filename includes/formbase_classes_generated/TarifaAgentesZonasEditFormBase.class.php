@@ -58,6 +58,7 @@ abstract class TarifaAgentesZonasEditFormBase extends QForm {
 	protected $txtZona;
 	protected $txtServicio;
 	protected $txtPrecio;
+	protected $txtMinimoFacturable;
 	protected $lblCreatedAt;
 	protected $lblUpdatedAt;
 	protected $lblDeletedAt;
@@ -135,6 +136,7 @@ abstract class TarifaAgentesZonasEditFormBase extends QForm {
 		$this->txtZona = $this->mctTarifaAgentesZonas->txtZona_Create();
 		$this->txtServicio = $this->mctTarifaAgentesZonas->txtServicio_Create();
 		$this->txtPrecio = $this->mctTarifaAgentesZonas->txtPrecio_Create();
+		$this->txtMinimoFacturable = $this->mctTarifaAgentesZonas->txtMinimoFacturable_Create();
 		$this->lblCreatedAt = $this->mctTarifaAgentesZonas->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctTarifaAgentesZonas->lblUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctTarifaAgentesZonas->lblDeletedAt_Create();

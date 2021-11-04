@@ -20,6 +20,7 @@
 	 * @property integer $Zona the value for intZona (Not Null)
 	 * @property string $Servicio the value for strServicio (Not Null)
 	 * @property double $Precio the value for fltPrecio (Not Null)
+	 * @property double $MinimoFacturable the value for fltMinimoFacturable 
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
 	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
@@ -73,6 +74,14 @@
 		 */
 		protected $fltPrecio;
 		const PrecioDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column tarifa_agentes_zonas.minimo_facturable
+		 * @var double fltMinimoFacturable
+		 */
+		protected $fltMinimoFacturable;
+		const MinimoFacturableDefault = null;
 
 
 		/**
@@ -167,6 +176,7 @@
 			$this->intZona = TarifaAgentesZonas::ZonaDefault;
 			$this->strServicio = TarifaAgentesZonas::ServicioDefault;
 			$this->fltPrecio = TarifaAgentesZonas::PrecioDefault;
+			$this->fltMinimoFacturable = TarifaAgentesZonas::MinimoFacturableDefault;
 			$this->strCreatedAt = TarifaAgentesZonas::CreatedAtDefault;
 			$this->strUpdatedAt = TarifaAgentesZonas::UpdatedAtDefault;
 			$this->strDeletedAt = TarifaAgentesZonas::DeletedAtDefault;
@@ -519,6 +529,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'zona', $strAliasPrefix . 'zona');
 			    $objBuilder->AddSelectItem($strTableName, 'servicio', $strAliasPrefix . 'servicio');
 			    $objBuilder->AddSelectItem($strTableName, 'precio', $strAliasPrefix . 'precio');
+			    $objBuilder->AddSelectItem($strTableName, 'minimo_facturable', $strAliasPrefix . 'minimo_facturable');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'deleted_at', $strAliasPrefix . 'deleted_at');
@@ -665,6 +676,9 @@
 			$strAlias = $strAliasPrefix . 'precio';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltPrecio = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'minimo_facturable';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->fltMinimoFacturable = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -903,6 +917,7 @@
 							`zona`,
 							`servicio`,
 							`precio`,
+							`minimo_facturable`,
 							`created_by`,
 							`updated_by`,
 							`deleted_by`
@@ -911,6 +926,7 @@
 							' . $objDatabase->SqlVariable($this->intZona) . ',
 							' . $objDatabase->SqlVariable($this->strServicio) . ',
 							' . $objDatabase->SqlVariable($this->fltPrecio) . ',
+							' . $objDatabase->SqlVariable($this->fltMinimoFacturable) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -978,6 +994,7 @@
 							`zona` = ' . $objDatabase->SqlVariable($this->intZona) . ',
 							`servicio` = ' . $objDatabase->SqlVariable($this->strServicio) . ',
 							`precio` = ' . $objDatabase->SqlVariable($this->fltPrecio) . ',
+							`minimo_facturable` = ' . $objDatabase->SqlVariable($this->fltMinimoFacturable) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							`deleted_by` = ' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -1125,6 +1142,7 @@
 			$this->intZona = $objReloaded->intZona;
 			$this->strServicio = $objReloaded->strServicio;
 			$this->fltPrecio = $objReloaded->fltPrecio;
+			$this->fltMinimoFacturable = $objReloaded->fltMinimoFacturable;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
 			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
 			$this->strDeletedAt = $objReloaded->strDeletedAt;
@@ -1185,6 +1203,13 @@
 					 * @return double
 					 */
 					return $this->fltPrecio;
+
+				case 'MinimoFacturable':
+					/**
+					 * Gets the value for fltMinimoFacturable 
+					 * @return double
+					 */
+					return $this->fltMinimoFacturable;
 
 				case 'CreatedAt':
 					/**
@@ -1327,6 +1352,19 @@
 					 */
 					try {
 						return ($this->fltPrecio = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'MinimoFacturable':
+					/**
+					 * Sets the value for fltMinimoFacturable 
+					 * @param double $mixValue
+					 * @return double
+					 */
+					try {
+						return ($this->fltMinimoFacturable = QType::Cast($mixValue, QType::Float));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1490,6 +1528,7 @@
 			$strToReturn .= '<element name="Zona" type="xsd:int"/>';
 			$strToReturn .= '<element name="Servicio" type="xsd:string"/>';
 			$strToReturn .= '<element name="Precio" type="xsd:float"/>';
+			$strToReturn .= '<element name="MinimoFacturable" type="xsd:float"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
@@ -1530,6 +1569,8 @@
 				$objToReturn->strServicio = $objSoapObject->Servicio;
 			if (property_exists($objSoapObject, 'Precio'))
 				$objToReturn->fltPrecio = $objSoapObject->Precio;
+			if (property_exists($objSoapObject, 'MinimoFacturable'))
+				$objToReturn->fltMinimoFacturable = $objSoapObject->MinimoFacturable;
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
 			if (property_exists($objSoapObject, 'UpdatedAt'))
@@ -1583,6 +1624,7 @@
 			$iArray['Zona'] = $this->intZona;
 			$iArray['Servicio'] = $this->strServicio;
 			$iArray['Precio'] = $this->fltPrecio;
+			$iArray['MinimoFacturable'] = $this->fltMinimoFacturable;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
 			$iArray['UpdatedAt'] = $this->strUpdatedAt;
 			$iArray['DeletedAt'] = $this->strDeletedAt;
@@ -1632,6 +1674,7 @@
      * @property-read QQNode $Zona
      * @property-read QQNode $Servicio
      * @property-read QQNode $Precio
+     * @property-read QQNode $MinimoFacturable
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -1661,6 +1704,8 @@
 					return new QQNode('servicio', 'Servicio', 'VarChar', $this);
 				case 'Precio':
 					return new QQNode('precio', 'Precio', 'Float', $this);
+				case 'MinimoFacturable':
+					return new QQNode('minimo_facturable', 'MinimoFacturable', 'Float', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
 				case 'UpdatedAt':
@@ -1694,6 +1739,7 @@
      * @property-read QQNode $Zona
      * @property-read QQNode $Servicio
      * @property-read QQNode $Precio
+     * @property-read QQNode $MinimoFacturable
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -1723,6 +1769,8 @@
 					return new QQNode('servicio', 'Servicio', 'string', $this);
 				case 'Precio':
 					return new QQNode('precio', 'Precio', 'double', $this);
+				case 'MinimoFacturable':
+					return new QQNode('minimo_facturable', 'MinimoFacturable', 'double', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'string', $this);
 				case 'UpdatedAt':

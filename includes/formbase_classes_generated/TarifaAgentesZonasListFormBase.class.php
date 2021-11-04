@@ -83,6 +83,7 @@ abstract class TarifaAgentesZonasListFormBase extends QForm {
         $this->dtgTarifaAgentesZonases->MetaAddColumn('Zona');
         $this->dtgTarifaAgentesZonases->MetaAddColumn('Servicio');
         $this->dtgTarifaAgentesZonases->MetaAddColumn('Precio');
+        $this->dtgTarifaAgentesZonases->MetaAddColumn('MinimoFacturable');
         $this->dtgTarifaAgentesZonases->MetaAddColumn('CreatedAt');
         $this->dtgTarifaAgentesZonases->MetaAddColumn('UpdatedAt');
         $this->dtgTarifaAgentesZonases->MetaAddColumn('DeletedAt');

@@ -27,12 +27,14 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
     protected $lblZonaTari;
     protected $lblServTari;
     protected $lblPrecTari;
+    protected $lblMiniFact;
     protected $lblAcciTari;
 
     protected $blnAgreTari = true;
     protected $txtZonaTari;
     protected $lstServTari;
     protected $txtPrecTari;
+    protected $txtMiniFact;
     protected $btnSaveTari;
     protected $btnCancTari;
     protected $btnDeleTari;
@@ -79,11 +81,13 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
 		$this->lblZonaTari_Create();
 		$this->lblServTari_Create();
 		$this->lblPrecTari_Create();
+		$this->lblMiniFact_Create();
 		$this->lblAcciTari_Create();
 
         $this->txtZonaTari_Create();
         $this->lstServTari_Create();
         $this->txtPrecTari_Create();
+        $this->txtMiniFact_Create();
 
         $this->btnSaveTari_Create();
         $this->btnCancTari_Create();
@@ -122,6 +126,12 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
 	    $this->lblPrecTari->Visible = false;
     }
 
+    protected function lblMiniFact_Create() {
+	    $this->lblMiniFact = new QLabel($this);
+	    $this->lblMiniFact->Text = 'Min.Fact';
+	    $this->lblMiniFact->Visible = false;
+    }
+
     protected function lblAcciTari_Create() {
 	    $this->lblAcciTari = new QLabel($this);
 	    $this->lblAcciTari->Text = 'Acción';
@@ -150,6 +160,13 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
         $this->txtPrecTari->Width = 70;
         $this->txtPrecTari->Required = true;
         $this->txtPrecTari->Visible = false;
+    }
+
+    protected function txtMiniFact_Create() {
+        $this->txtMiniFact = new QTextBox($this);
+        $this->txtMiniFact->Width = 70;
+        $this->txtMiniFact->Required = true;
+        $this->txtMiniFact->Visible = false;
     }
 
     protected function btnSaveTari_Create() {
@@ -224,6 +241,12 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
         $colPrecTari->Html = '<?= $_ITEM->Precio ?>';
         $colPrecTari->Width = 100;
         $this->dtgTariZona->AddColumn($colPrecTari);
+
+        $colMiniFact = new QDataGridColumn($this);
+        $colMiniFact->Name = 'Min. Fact';
+        $colMiniFact->Html = '<?= $_ITEM->MinimoFacturable ?>';
+        $colMiniFact->Width = 100;
+        $this->dtgTariZona->AddColumn($colMiniFact);
 
         $colUsuaCrea = new QDataGridColumn($this);
         $colUsuaCrea->Name = QApplication::Translate('Creada Por');
@@ -309,6 +332,7 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
         $this->txtZonaTari->Text = $objTariZona->Zona;
         $this->lstServTari->SelectedIndex = $objTariZona->Servicio == 'AEREO' ? 1 : 2;
         $this->txtPrecTari->Text = $objTariZona->Precio;
+        $this->txtMiniFact->Text = $objTariZona->MinimoFacturable;
         $this->blnEditTari       = true;
     }
 
@@ -325,6 +349,7 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
         $objTariZona->Zona     = (int)$this->txtZonaTari->Text;
         $objTariZona->Servicio = $this->lstServTari->SelectedValue;
         $objTariZona->Precio   = (float)$this->txtPrecTari->Text;
+        $objTariZona->MinimoFacturable = (float)$this->txtMiniFact->Text;
 
         $objTariZona->Save();
         $strMensTran = 'N/A';
@@ -348,6 +373,7 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
         $this->txtZonaTari->Text = '';
         $this->lstServTari->SelectedIndex = 0;
         $this->txtPrecTari->Text = '';
+        $this->txtMiniFact->Text = '';
 
         // Se notifica al Usuario el exito de la transaccion
         $this->success('Transaccion Exitosa.  Tarifa guardada !!!');
@@ -363,6 +389,7 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
         $this->txtZonaTari->Text = '';
         $this->lstServTari->SelectedIndex = 0;
         $this->txtPrecTari->Text = '';
+        $this->txtMiniFact->Text = '';
 
         // Se notifica al Usuario el exito de la transaccion
         $this->success('Transaccion Exitosa.  Tarifa borrada !!!');
@@ -384,6 +411,7 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
             $this->txtZonaTari->Visible = !$this->txtZonaTari->Visible;
             $this->lstServTari->Visible = !$this->lstServTari->Visible;
             $this->txtPrecTari->Visible = !$this->txtPrecTari->Visible;
+            $this->txtMiniFact->Visible = !$this->txtMiniFact->Visible;
             $this->btnSaveTari->Visible = !$this->btnSaveTari->Visible;
             $this->btnCancTari->Visible = !$this->btnCancTari->Visible;
             $this->btnDeleTari->Visible = false;
@@ -391,10 +419,12 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
             $this->txtZonaTari->Text = '';
             $this->lstServTari->SelectedIndex = 0;
             $this->txtPrecTari->Text = '';
+            $this->txtMiniFact->Text = '';
 
             $this->lblZonaTari->Visible = !$this->lblZonaTari->Visible;
             $this->lblServTari->Visible = !$this->lblServTari->Visible;
             $this->lblPrecTari->Visible = !$this->lblPrecTari->Visible;
+            $this->lblMiniFact->Visible = !$this->lblMiniFact->Visible;
             $this->lblAcciTari->Visible = !$this->lblAcciTari->Visible;
         }
         if ($strAction == 'edit') {
@@ -402,6 +432,7 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
             $this->txtZonaTari->Visible = true;
             $this->lstServTari->Visible = true;
             $this->txtPrecTari->Visible = true;
+            $this->txtMiniFact->Visible = true;
             $this->btnSaveTari->Visible = true;
             $this->btnCancTari->Visible = true;
             $this->btnDeleTari->Visible = true;
@@ -409,6 +440,7 @@ class TarifaAgentesEditForm extends TarifaAgentesEditFormBase {
             $this->lblZonaTari->Visible = true;
             $this->lblServTari->Visible = true;
             $this->lblPrecTari->Visible = true;
+            $this->lblMiniFact->Visible = true;
             $this->lblAcciTari->Visible = true;
         }
     }

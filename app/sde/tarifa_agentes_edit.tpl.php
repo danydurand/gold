@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="row" style="margin-top: 1em;">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <?php $this->lblId->RenderWithName(); ?>
                 <?php $this->txtNombre->RenderWithName(); ?>
                 <?php $this->calFecha->RenderWithName(); ?>
@@ -25,7 +25,7 @@
                 <?php $this->txtUpdatedBy->RenderWithName(); ?>
 
             </div>
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <?php if ($this->mctTarifaAgentes->EditMode) { ?>
                     <div style="margin-bottom: .3em; cursor: pointer">
                         <div class="titulo"><?php $this->lblTituTari->Render() ?></div>
