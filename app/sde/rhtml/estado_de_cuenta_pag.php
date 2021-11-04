@@ -17,10 +17,33 @@ $strNrodAbax = Parametros::BP('DATOBANC','NRODABAX','Txt1','063000047');
 $strCntaZell = Parametros::BP('DATOBANC','CNTAZELL','Txt1','administracion@goldcoastus.com');
 $strEmaiAdmi = Parametros::BP('DATOBANC','EMAIADMI','Txt1','auxiliaradm@goldcoastus.com');
 
-
+$intRegiPpag = 12;
+$intCantFact = count($arrFactPend);
+$intCantPagi = (int)($intCantFact / $intRegiPpag);
+$intRestDivi = $intCantFact % $intRegiPpag;
+if ($intRestDivi > 0) {
+    $intCantPagi++;
+}
+$arrRangRegi = [];
 /* @var $objFactPend Facturas */
+for ($i = 0; $i < $intCantPagi; $i++) {
+    $arrFactImpr = [];
+    $intContFact = 0;
+    foreach ($arrFactPend as $objFactPend) {
+        $arrFactImpr[] = $objFactPend;
+        unset($arrFactPend[$intContFact]);
+        $intContFact++;
+        if ($intContFact > $intRegiPpag) {
+            break;
+        }
+    }
+    $arrRangRegi[] = $arrFactImpr;
+}
 ?>
-
+<?php $decSumaTota = 0 ?>
+<?php $decSumaCobr = 0 ?>
+<?php $decSumaPend = 0 ?>
+<?php for($i = 0; $i < $intCantPagi; $i++) { ?>
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
         <!---------------------->
@@ -50,7 +73,7 @@ $strEmaiAdmi = Parametros::BP('DATOBANC','EMAIADMI','Txt1','auxiliaradm@goldcoas
             <tr>
                 <td colspan="2">
                     <span style="font-weight: bold; color: #0A246A">IMPORTANTE: Este mensaje se envia desde una
-                        cuenta de correo no monitoreada.Para cualquier comunicación adicional, por favor
+                        cuenta de correo no monitoreada.  Para cualquier comunicación adicional, por favor
                         escríbanos directamente a:<a href="mailto:<?= $strEmaiAdmi ?>"><?= $strEmaiAdmi ?></a>.
                         <br><br>
                     </span>
@@ -104,10 +127,7 @@ $strEmaiAdmi = Parametros::BP('DATOBANC','EMAIADMI','Txt1','auxiliaradm@goldcoas
                 <td style="border: solid 1px black; width: 80px; text-align: right">Abonado</td>
                 <td style="border: solid 1px black; width: 75px; text-align: right">Balance</td>
             </tr>
-            <?php $decSumaTota = 0 ?>
-            <?php $decSumaCobr = 0 ?>
-            <?php $decSumaPend = 0 ?>
-            <?php foreach ($arrFactPend as $objFactPend) { ?>
+            <?php foreach ($arrRangRegi[$i] as $objFactPend) { ?>
                 <tr>
                     <td style="border: solid 1px black; text-align: center"><?= $objFactPend->Referencia ?></td>
                     <td style="border: solid 1px black; text-align: center"><?= $objFactPend->Fecha->__toString("DD/MM/YYYY") ?></td>
@@ -121,6 +141,7 @@ $strEmaiAdmi = Parametros::BP('DATOBANC','EMAIADMI','Txt1','auxiliaradm@goldcoas
                 <?php $decSumaCobr += $objFactPend->MontoCobrado ?>
                 <?php $decSumaPend += $objFactPend->MontoPendiente ?>
             <?php } ?>
+            <?php if ($i == $intCantPagi-1) { ?>
             <tr>
                 <td></td>
                 <td></td>
@@ -148,15 +169,19 @@ $strEmaiAdmi = Parametros::BP('DATOBANC','EMAIADMI','Txt1','auxiliaradm@goldcoas
                 <td style="border: solid 1px black; text-align: center; font-weight: bold">Tota a Pagar</td>
                 <td style="border: solid 1px black; text-align: right"><?= nf($decSumaPend-$decSaldExce) ?></td>
             </tr>
+            <?php } ?>
         </table>
     </page_header>
+    <?php if ($i == $intCantPagi-1) { ?>
     <page_footer>
         <table>
             <tr>
                 <td style="width: 100%">
-                    <!--<img src="--><?//= __VIRTUAL_DIRECTORY__.__APP_IMAGE_ASSETS__."/banner_mtovar.jpg" ?><!--" alt="Banner" width="615px" height="166px">-->
+                    <img src="<?= __VIRTUAL_DIRECTORY__.__APP_IMAGE_ASSETS__."/banner_mtovar.jpg" ?>" alt="Banner" width="615px" height="166px">
                 </td>
             </tr>
         </table>
     </page_footer>
+    <?php } ?>
 </page>
+<?php } ?>

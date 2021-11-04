@@ -186,8 +186,8 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
 
         if ($this->mctNotaEntrega->NotaEntrega->ServicioImportacion == 'AER') {
             $colLibrGuia = new QDataGridColumn($this);
-            $colLibrGuia->Name = QApplication::Translate('Libras');
-            $colLibrGuia->Html = '<?= $_ITEM->Libras ?>';
+            $colLibrGuia->Name = QApplication::Translate('Kilos');
+            $colLibrGuia->Html = '<?= $_ITEM->Kilos ?>';
             $colLibrGuia->Width = 80;
             $this->dtgGuiaNota->AddColumn($colLibrGuia);
         } else {

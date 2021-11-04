@@ -197,7 +197,6 @@
                 $objNuevFact->EstatusPago     = 'PENDIENTE';
                 $objNuevFact->CreatedBy       = $intIdxxUsua;
                 $objNuevFact->Save();
-                t('Factura creada sin problemas');
 		    } catch (Exception $e) {
                 $strTextMens = $e->getMessage();
                 t('Error creando la factura: '.$strTextMens);
@@ -218,9 +217,7 @@
                         //------------------------------------------------------------
                         // Este Save dispara el calculo de los conceptos de la guia
                         //------------------------------------------------------------
-                        t('Voy a asociar la guia '.$objGuiaProc->Numero);
                         $objGuiaFact->Save();
-                        t('Listo... ya quedo asociada la guia');
                         //-----------------------------------------------
                         // Se acumula el total de la guia en la factura
                         //-----------------------------------------------
@@ -230,7 +227,6 @@
                         //--------------------------------------------------
                         $objGuiaProc->FacturaId = $objNuevFact->Id;
                         $objGuiaProc->Save();
-                        t('La guia quedo atada a la factura');
                     } catch (Exception $e) {
                         $strTextMens = $e->getMessage();
                         t('Error asociado la guia a la factura: '.$strTextMens);
@@ -240,14 +236,11 @@
                 if ($blnTodoOkey) {
                     $objNuevFact->MontoPendiente = $objNuevFact->Total;
                     $objNuevFact->Save();
-                    t('Factura actualizada');
                 }
             }
             if ($blnTodoOkey) {
-		        t('Retornando la factura');
 		        return $objNuevFact;
             } else {
-		        t('Retornando mensaje de error');
                 return $strTextMens;
             }
         }
@@ -270,6 +263,30 @@
 		}
 
         public static function proxReferencia() {
+		    $intRefeFact   = Facturas::proxConsecutivo();
+		    $strNumeRefe   = Facturas::crearReferencia($intRefeFact);
+		    t('Referencia generada: '.$strNumeRefe);
+		    $objClauWher[] = QQ::Equal(QQN::Facturas()->Referencia,$strNumeRefe);
+		    $objFactExis   = Facturas::QuerySingle(QQ::AndCondition($objClauWher));
+		    while ($objFactExis instanceof Facturas) {
+		        t('Existe una factura con esa referencia, voy a generar otra');
+		        $intRefeFact++;
+                $strNumeRefe   = Facturas::crearReferencia($intRefeFact);
+                $objClauWher[] = QQ::Equal(QQN::Facturas()->Referencia,$strNumeRefe);
+                $objFactExis   = Facturas::QuerySingle(QQ::AndCondition($objClauWher));
+            }
+            t('Saliendo de la rutina con: '.$strNumeRefe);
+		    return $strNumeRefe;
+        }
+
+        public static function crearReferencia($intConsFact) {
+            $strYearDhoy = date('Y');
+            $strNumeRefe = str_pad($intConsFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
+            return $strNumeRefe;
+        }
+
+        public static function proxConsecutivo()
+        {
             //------------------------------------------------------------------------------------
             // Para la 1era vez que se emita una factura, la referencia será tomada de la tabla
             // "parametros" bajo la combinacion RefeFact-ProxRefe
@@ -286,9 +303,7 @@
                 $objUltiFact   = $arrUltiFact[0];
                 $intRefeFact   = (int)explode('-',$objUltiFact->Referencia)[0];
             }
-		    $strYearDhoy = date('Y');
-		    $strNumeRefe = str_pad($intRefeFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
-		    return $strNumeRefe;
+            return $intRefeFact;
         }
 
 		// Override or Create New Load/Count methods

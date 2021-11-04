@@ -861,14 +861,9 @@ class FacturasEditForm extends FacturasEditFormBase {
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
-        t('====================');
-        t('Guardando la Factura');
 		$objRegiViej = clone $this->mctFacturas->Facturas;
-		t('k1');
 		$this->mctFacturas->SaveFacturas();
-		t('k2');
 		if ($this->mctFacturas->EditMode) {
-		    t('k3');
 			//---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
 			// de algun cambio en algun dato 
@@ -876,7 +871,6 @@ class FacturasEditForm extends FacturasEditFormBase {
 			$objRegiNuev = $this->mctFacturas->Facturas;
 			$objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
 			if ($objResuComp->FriendlyComparisonStatus == 'different') {
-			    t('k4');
 				//------------------------------------------
 				// En caso de que el objeto haya cambiado 
 				//------------------------------------------
@@ -888,7 +882,6 @@ class FacturasEditForm extends FacturasEditFormBase {
 				LogDeCambios($arrLogxCamb);
                 $this->success('Transacción Exitosa !!!');
 			}
-			t('k5');
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Facturas';
 			$arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
@@ -897,7 +890,6 @@ class FacturasEditForm extends FacturasEditFormBase {
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id;
 			LogDeCambios($arrLogxCamb);
             $this->success('Transacción Exitosa !!!');
-            t('k6');
 		}
 	}
 

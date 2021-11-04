@@ -441,7 +441,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     }
 
 
-    protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=false, $strDestCorr='U') {
+    protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=true, $strDestCorr='U') {
         $strDireFrom = 'GoldCoast - CxC <cobranza@goldsist.com>';;
         if ($strDestCorr == 'U') {
             $strEnviAxxx = $this->objUsuario->MailUsua;
@@ -485,8 +485,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 // La rutina EmitirFactura, genera un PDF por cada Factura y cada archivo generado
                 // se anexa al correo
                 //----------------------------------------------------------------------------------
-                $strOutxFile   = $this->EmitirFactura($objFactPend);
-                $objFileAtta   = new QEmailAttachment('/tmp/'.$strOutxFile, QMimeType::Pdf);
+                $strOutxFile = $this->EmitirFactura($objFactPend);
+                $objFileAtta = new QEmailAttachment('/tmp/'.$strOutxFile, QMimeType::Pdf);
                 $objMessage->AddAttachment($objFileAtta);
             }
             t('Se terminaron de procesar las facturas');

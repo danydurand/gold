@@ -1142,7 +1142,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function FacturarLaGuia() {
         $arrGuiaFact = [$this->objGuia];
         $mixResuFact = Facturas::crearFactura($arrGuiaFact,$this->objUsuario->CodiUsua);
-        t('Regrese de la creacion de la factura');
         if ($mixResuFact instanceof Facturas) {
             QApplication::Redirect(__SIST__.'/facturas_edit.php/'.$mixResuFact->Id);
         } else {

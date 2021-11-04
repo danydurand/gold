@@ -482,6 +482,13 @@
 		QApplicationBase::$ClassFile['facturametacontrol'] = __META_CONTROLS__ . '/FacturaMetaControl.class.php';
 		QApplicationBase::$ClassFile['facturadatagrid'] = __META_CONTROLS__ . '/FacturaDataGrid.class.php';
 
+	// ClassPaths for the FacturaConsecutivo class
+		QApplicationBase::$ClassFile['facturaconsecutivo'] = __MODEL__ . '/FacturaConsecutivo.class.php';
+		QApplicationBase::$ClassFile['qqnodefacturaconsecutivo'] = __MODEL__ . '/FacturaConsecutivo.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodefacturaconsecutivo'] = __MODEL__ . '/FacturaConsecutivo.class.php';
+		QApplicationBase::$ClassFile['facturaconsecutivometacontrol'] = __META_CONTROLS__ . '/FacturaConsecutivoMetaControl.class.php';
+		QApplicationBase::$ClassFile['facturaconsecutivodatagrid'] = __META_CONTROLS__ . '/FacturaConsecutivoDataGrid.class.php';
+
 	// ClassPaths for the FacturaGuias class
 		QApplicationBase::$ClassFile['facturaguias'] = __MODEL__ . '/FacturaGuias.class.php';
 		QApplicationBase::$ClassFile['qqnodefacturaguias'] = __MODEL__ . '/FacturaGuias.class.php';

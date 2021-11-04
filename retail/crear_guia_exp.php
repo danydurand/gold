@@ -989,6 +989,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function lblKiloPiez_Create() {
         $this->lblKiloPiez = new QLabel($this);
         $this->lblKiloPiez->Text = 'Kgs';
+        $this->lblKiloPiez->Width = 45;
         $this->lblKiloPiez->Visible = false;
     }
 
@@ -1023,7 +1024,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtAltoPiez_Create() {
         $this->txtAltoPiez = new QTextBox($this);
-        $this->txtAltoPiez->Width = 40;
+        $this->txtAltoPiez->Width = 45;
         $this->txtAltoPiez->Placeholder = 'cm';
         $this->txtAltoPiez->Visible = false;
         $this->txtAltoPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
@@ -1031,7 +1032,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtAnchPiez_Create() {
         $this->txtAnchPiez = new QTextBox($this);
-        $this->txtAnchPiez->Width = 40;
+        $this->txtAnchPiez->Width = 45;
         $this->txtAnchPiez->Placeholder = 'cm';
         $this->txtAnchPiez->Visible = false;
         $this->txtAnchPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
@@ -1039,7 +1040,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function txtLargPiez_Create() {
         $this->txtLargPiez = new QTextBox($this);
-        $this->txtLargPiez->Width = 40;
+        $this->txtLargPiez->Width = 45;
         $this->txtLargPiez->Placeholder = 'cm';
         $this->txtLargPiez->Visible = false;
         $this->txtLargPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));

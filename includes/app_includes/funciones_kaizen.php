@@ -239,7 +239,7 @@ function t($strTextTraz) {
                 $strLogiUsua = $objUsuario->Login;
             }
         }
-        $blnTodoOkey = true;
+        //$blnTodoOkey = true;
         if ($blnTodoOkey) {
             $mixManeArch = fopen(__LOG_DIRECTORY__.'/traza.log','a');
             $arrLineAudi = array();

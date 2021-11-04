@@ -53,7 +53,7 @@ class FacturasListForm extends FacturasListFormBase {
 		// Solo Facturas Retail creada por el Usuario
 		$objClauWher   = QQ::Clause();
 		$objClauWher[] = QQ::IsNotNull(QQN::Facturas()->ClienteRetailId);
-		$objClauWher[] = QQ::Equal(QQN::Facturas()->CreatedBy,$objUsuario->CodiUsua);
+		//$objClauWher[] = QQ::Equal(QQN::Facturas()->CreatedBy,$objUsuario->CodiUsua);
 		$this->dtgFacturases->AdditionalConditions = QQ::AndCondition($objClauWher);
 
 		// Ordenadas de manera descendente
@@ -79,6 +79,7 @@ class FacturasListForm extends FacturasListFormBase {
 		// Create the Other Columns (note that you can use strings for facturas's properties, or you
 		// can traverse down QQN::facturas() to display fields that are down the hierarchy)
 		$this->dtgFacturases->MetaAddColumn('Id');
+        $this->dtgFacturases->MetaAddColumn('Referencia');
 		$this->dtgFacturases->MetaAddColumn(QQN::Facturas()->ClienteRetail);
 		//$this->dtgFacturases->MetaAddColumn(QQN::Facturas()->ClienteCorp);
 		$this->dtgFacturases->MetaAddColumn('Fecha');
@@ -96,7 +97,6 @@ class FacturasListForm extends FacturasListFormBase {
 		//$this->dtgFacturases->MetaAddColumn('MontoCobrado');
 		//$this->dtgFacturases->MetaAddColumn('MontoPendiente');
 		$this->dtgFacturases->MetaAddColumn('EstatusPago');
-		$this->dtgFacturases->MetaAddColumn('Referencia');
 		//$this->dtgFacturases->MetaAddColumn('Numero');
 		//$this->dtgFacturases->MetaAddColumn('MaquinaFiscal');
 		//$this->dtgFacturases->MetaAddColumn('FechaImpresion');
@@ -112,6 +112,7 @@ class FacturasListForm extends FacturasListFormBase {
 
         $this->btnExpoExce_Create();
         $this->btnExpoExce->Visible = true;
+        $this->btnNuevRegi->Visible = false;
 
     }
 
