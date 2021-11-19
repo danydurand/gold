@@ -81,7 +81,7 @@ class FacturasListForm extends FacturasListFormBase {
         $colNombClie->Filter = QQ::Like(QQN::Facturas()->ClienteCorp->NombClie,null);
         $colNombClie->FilterType = QFilterType::TextFilter;
 
-		$this->dtgFacturases->MetaAddColumn('CedulaRif');
+		$this->dtgFacturases->MetaAddColumn('Fecha');
 		$this->dtgFacturases->MetaAddColumn('Estatus');
 
         $colCantMani = new QDataGridColumn('Cant. Manif','<?= $_FORM->CantMani($_ITEM) ?>');

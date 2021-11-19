@@ -55,6 +55,7 @@ abstract class TarifaAgentesEditFormBase extends QForm {
 	// Controls for TarifaAgentes's Data Fields
 	protected $lblId;
 	protected $txtNombre;
+	protected $chkEsPublica;
 	protected $calFecha;
 	protected $lblCreatedAt;
 	protected $lblUpdatedAt;
@@ -130,6 +131,7 @@ abstract class TarifaAgentesEditFormBase extends QForm {
 		// Call MetaControl's methods to create qcontrols based on TarifaAgentes's data fields
 		$this->lblId = $this->mctTarifaAgentes->lblId_Create();
 		$this->txtNombre = $this->mctTarifaAgentes->txtNombre_Create();
+		$this->chkEsPublica = $this->mctTarifaAgentes->chkEsPublica_Create();
 		$this->calFecha = $this->mctTarifaAgentes->calFecha_Create();
 		$this->lblCreatedAt = $this->mctTarifaAgentes->lblCreatedAt_Create();
 		$this->lblUpdatedAt = $this->mctTarifaAgentes->lblUpdatedAt_Create();

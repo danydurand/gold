@@ -80,6 +80,9 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->calFechaFinal = $this->mctConceptos->calFechaFinal_Create();
 		$this->calFechaFinal->Width = 120;
 
+		$this->chkEsFijo = $this->mctConceptos->chkEsFijo_Create();
+		$this->chkEsFijo->Name = 'Es Fijo ?';
+
 		t('c2');
         $this->txtOperacion = $this->mctConceptos->txtOperacion_Create();
         $this->lstOperacion = $this->lstOperacion_Create();

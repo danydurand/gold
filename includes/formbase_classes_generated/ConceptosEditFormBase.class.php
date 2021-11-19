@@ -61,6 +61,7 @@ abstract class ConceptosEditFormBase extends QForm {
 	protected $chkActivo;
 	protected $calFechaInicial;
 	protected $calFechaFinal;
+	protected $chkEsFijo;
 	protected $txtOperacion;
 	protected $txtAplicaComo;
 	protected $txtTipo;
@@ -151,6 +152,7 @@ abstract class ConceptosEditFormBase extends QForm {
 		$this->chkActivo = $this->mctConceptos->chkActivo_Create();
 		$this->calFechaInicial = $this->mctConceptos->calFechaInicial_Create();
 		$this->calFechaFinal = $this->mctConceptos->calFechaFinal_Create();
+		$this->chkEsFijo = $this->mctConceptos->chkEsFijo_Create();
 		$this->txtOperacion = $this->mctConceptos->txtOperacion_Create();
 		$this->txtAplicaComo = $this->mctConceptos->txtAplicaComo_Create();
 		$this->txtTipo = $this->mctConceptos->txtTipo_Create();

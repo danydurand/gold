@@ -96,6 +96,8 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         
         $this->btnSave->Text = TextoIcono('search fa-lg','Buscar');
         $this->btnSave->ActionParameter = "B";
+        //$this->btnSave->CssClass = 'btn btn-sm btn-success ladda-button';
+
         $this->btnExceFact_Create();
         $this->btnExceNorm_Create();
         $this->btnExceReta_Create();

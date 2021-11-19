@@ -23,6 +23,7 @@
 	 * @property boolean $Activo the value for blnActivo (Not Null)
 	 * @property QDateTime $FechaInicial the value for dttFechaInicial (Not Null)
 	 * @property QDateTime $FechaFinal the value for dttFechaFinal 
+	 * @property boolean $EsFijo the value for blnEsFijo 
 	 * @property string $Operacion the value for strOperacion (Not Null)
 	 * @property string $AplicaComo the value for strAplicaComo (Not Null)
 	 * @property string $Tipo the value for strTipo (Not Null)
@@ -43,8 +44,12 @@
 	 * @property-read ConceptoRangos[] $_ConceptoRangosAsConceptoArray the value for the private _objConceptoRangosAsConceptoArray (Read-Only) if set due to an ExpandAsArray on the concepto_rangos.concepto_id reverse relationship
 	 * @property-read FacturaItems $_FacturaItemsAsConcepto the value for the private _objFacturaItemsAsConcepto (Read-Only) if set due to an expansion on the factura_items.concepto_id reverse relationship
 	 * @property-read FacturaItems[] $_FacturaItemsAsConceptoArray the value for the private _objFacturaItemsAsConceptoArray (Read-Only) if set due to an ExpandAsArray on the factura_items.concepto_id reverse relationship
+	 * @property-read GcoTemp $_GcoTempAsConcepto the value for the private _objGcoTempAsConcepto (Read-Only) if set due to an expansion on the gco_temp.concepto_id reverse relationship
+	 * @property-read GcoTemp[] $_GcoTempAsConceptoArray the value for the private _objGcoTempAsConceptoArray (Read-Only) if set due to an ExpandAsArray on the gco_temp.concepto_id reverse relationship
 	 * @property-read GuiaConceptos $_GuiaConceptosAsConcepto the value for the private _objGuiaConceptosAsConcepto (Read-Only) if set due to an expansion on the guia_conceptos.concepto_id reverse relationship
 	 * @property-read GuiaConceptos[] $_GuiaConceptosAsConceptoArray the value for the private _objGuiaConceptosAsConceptoArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos.concepto_id reverse relationship
+	 * @property-read GuiaConceptosOpcionales $_GuiaConceptosOpcionalesAsConcepto the value for the private _objGuiaConceptosOpcionalesAsConcepto (Read-Only) if set due to an expansion on the guia_conceptos_opcionales.concepto_id reverse relationship
+	 * @property-read GuiaConceptosOpcionales[] $_GuiaConceptosOpcionalesAsConceptoArray the value for the private _objGuiaConceptosOpcionalesAsConceptoArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos_opcionales.concepto_id reverse relationship
 	 * @property-read NotaConceptos $_NotaConceptosAsConcepto the value for the private _objNotaConceptosAsConcepto (Read-Only) if set due to an expansion on the nota_conceptos.concepto_id reverse relationship
 	 * @property-read NotaConceptos[] $_NotaConceptosAsConceptoArray the value for the private _objNotaConceptosAsConceptoArray (Read-Only) if set due to an ExpandAsArray on the nota_conceptos.concepto_id reverse relationship
 	 * @property-read NotaCreditoItems $_NotaCreditoItemsAsConcepto the value for the private _objNotaCreditoItemsAsConcepto (Read-Only) if set due to an expansion on the nota_credito_items.concepto_id reverse relationship
@@ -122,6 +127,14 @@
 		 */
 		protected $dttFechaFinal;
 		const FechaFinalDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column conceptos.es_fijo
+		 * @var boolean blnEsFijo
+		 */
+		protected $blnEsFijo;
+		const EsFijoDefault = null;
 
 
 		/**
@@ -289,6 +302,22 @@
 		private $_objFacturaItemsAsConceptoArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single GcoTempAsConcepto object
+		 * (of type GcoTemp), if this Conceptos object was restored with
+		 * an expansion on the gco_temp association table.
+		 * @var GcoTemp _objGcoTempAsConcepto;
+		 */
+		private $_objGcoTempAsConcepto;
+
+		/**
+		 * Private member variable that stores a reference to an array of GcoTempAsConcepto objects
+		 * (of type GcoTemp[]), if this Conceptos object was restored with
+		 * an ExpandAsArray on the gco_temp association table.
+		 * @var GcoTemp[] _objGcoTempAsConceptoArray;
+		 */
+		private $_objGcoTempAsConceptoArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single GuiaConceptosAsConcepto object
 		 * (of type GuiaConceptos), if this Conceptos object was restored with
 		 * an expansion on the guia_conceptos association table.
@@ -303,6 +332,22 @@
 		 * @var GuiaConceptos[] _objGuiaConceptosAsConceptoArray;
 		 */
 		private $_objGuiaConceptosAsConceptoArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaConceptosOpcionalesAsConcepto object
+		 * (of type GuiaConceptosOpcionales), if this Conceptos object was restored with
+		 * an expansion on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales _objGuiaConceptosOpcionalesAsConcepto;
+		 */
+		private $_objGuiaConceptosOpcionalesAsConcepto;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaConceptosOpcionalesAsConcepto objects
+		 * (of type GuiaConceptosOpcionales[]), if this Conceptos object was restored with
+		 * an ExpandAsArray on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales[] _objGuiaConceptosOpcionalesAsConceptoArray;
+		 */
+		private $_objGuiaConceptosOpcionalesAsConceptoArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single NotaConceptosAsConcepto object
@@ -373,6 +418,7 @@
 			$this->blnActivo = Conceptos::ActivoDefault;
 			$this->dttFechaInicial = (Conceptos::FechaInicialDefault === null)?null:new QDateTime(Conceptos::FechaInicialDefault);
 			$this->dttFechaFinal = (Conceptos::FechaFinalDefault === null)?null:new QDateTime(Conceptos::FechaFinalDefault);
+			$this->blnEsFijo = Conceptos::EsFijoDefault;
 			$this->strOperacion = Conceptos::OperacionDefault;
 			$this->strAplicaComo = Conceptos::AplicaComoDefault;
 			$this->strTipo = Conceptos::TipoDefault;
@@ -738,6 +784,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'activo', $strAliasPrefix . 'activo');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha_inicial', $strAliasPrefix . 'fecha_inicial');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha_final', $strAliasPrefix . 'fecha_final');
+			    $objBuilder->AddSelectItem($strTableName, 'es_fijo', $strAliasPrefix . 'es_fijo');
 			    $objBuilder->AddSelectItem($strTableName, 'operacion', $strAliasPrefix . 'operacion');
 			    $objBuilder->AddSelectItem($strTableName, 'aplica_como', $strAliasPrefix . 'aplica_como');
 			    $objBuilder->AddSelectItem($strTableName, 'tipo', $strAliasPrefix . 'tipo');
@@ -903,6 +950,9 @@
 			$strAlias = $strAliasPrefix . 'fecha_final';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttFechaFinal = $objDbRow->GetColumn($strAliasName, 'Date');
+			$strAlias = $strAliasPrefix . 'es_fijo';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnEsFijo = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'operacion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strOperacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1014,6 +1064,21 @@
 				}
 			}
 
+			// Check for GcoTempAsConcepto Virtual Binding
+			$strAlias = $strAliasPrefix . 'gcotempasconcepto__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['gcotempasconcepto']) ? null : $objExpansionAliasArray['gcotempasconcepto']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGcoTempAsConceptoArray)
+				$objToReturn->_objGcoTempAsConceptoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGcoTempAsConceptoArray[] = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotempasconcepto__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGcoTempAsConcepto)) {
+					$objToReturn->_objGcoTempAsConcepto = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotempasconcepto__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for GuiaConceptosAsConcepto Virtual Binding
 			$strAlias = $strAliasPrefix . 'guiaconceptosasconcepto__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1026,6 +1091,21 @@
 					$objToReturn->_objGuiaConceptosAsConceptoArray[] = GuiaConceptos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosasconcepto__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiaConceptosAsConcepto)) {
 					$objToReturn->_objGuiaConceptosAsConcepto = GuiaConceptos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosasconcepto__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiaConceptosOpcionalesAsConcepto Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiaconceptosopcionalesasconcepto__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiaconceptosopcionalesasconcepto']) ? null : $objExpansionAliasArray['guiaconceptosopcionalesasconcepto']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaConceptosOpcionalesAsConceptoArray)
+				$objToReturn->_objGuiaConceptosOpcionalesAsConceptoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsConceptoArray[] = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesasconcepto__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaConceptosOpcionalesAsConcepto)) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsConcepto = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesasconcepto__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -1226,6 +1306,7 @@
 							`activo`,
 							`fecha_inicial`,
 							`fecha_final`,
+							`es_fijo`,
 							`operacion`,
 							`aplica_como`,
 							`tipo`,
@@ -1249,6 +1330,7 @@
 							' . $objDatabase->SqlVariable($this->blnActivo) . ',
 							' . $objDatabase->SqlVariable($this->dttFechaInicial) . ',
 							' . $objDatabase->SqlVariable($this->dttFechaFinal) . ',
+							' . $objDatabase->SqlVariable($this->blnEsFijo) . ',
 							' . $objDatabase->SqlVariable($this->strOperacion) . ',
 							' . $objDatabase->SqlVariable($this->strAplicaComo) . ',
 							' . $objDatabase->SqlVariable($this->strTipo) . ',
@@ -1301,6 +1383,7 @@
 							`activo` = ' . $objDatabase->SqlVariable($this->blnActivo) . ',
 							`fecha_inicial` = ' . $objDatabase->SqlVariable($this->dttFechaInicial) . ',
 							`fecha_final` = ' . $objDatabase->SqlVariable($this->dttFechaFinal) . ',
+							`es_fijo` = ' . $objDatabase->SqlVariable($this->blnEsFijo) . ',
 							`operacion` = ' . $objDatabase->SqlVariable($this->strOperacion) . ',
 							`aplica_como` = ' . $objDatabase->SqlVariable($this->strAplicaComo) . ',
 							`tipo` = ' . $objDatabase->SqlVariable($this->strTipo) . ',
@@ -1439,6 +1522,7 @@
 			$this->blnActivo = $objReloaded->blnActivo;
 			$this->dttFechaInicial = $objReloaded->dttFechaInicial;
 			$this->dttFechaFinal = $objReloaded->dttFechaFinal;
+			$this->blnEsFijo = $objReloaded->blnEsFijo;
 			$this->strOperacion = $objReloaded->strOperacion;
 			$this->strAplicaComo = $objReloaded->strAplicaComo;
 			$this->strTipo = $objReloaded->strTipo;
@@ -1530,6 +1614,13 @@
 					 * @return QDateTime
 					 */
 					return $this->dttFechaFinal;
+
+				case 'EsFijo':
+					/**
+					 * Gets the value for blnEsFijo 
+					 * @return boolean
+					 */
+					return $this->blnEsFijo;
 
 				case 'Operacion':
 					/**
@@ -1685,6 +1776,22 @@
 					 */
 					return $this->_objFacturaItemsAsConceptoArray;
 
+				case '_GcoTempAsConcepto':
+					/**
+					 * Gets the value for the private _objGcoTempAsConcepto (Read-Only)
+					 * if set due to an expansion on the gco_temp.concepto_id reverse relationship
+					 * @return GcoTemp
+					 */
+					return $this->_objGcoTempAsConcepto;
+
+				case '_GcoTempAsConceptoArray':
+					/**
+					 * Gets the value for the private _objGcoTempAsConceptoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the gco_temp.concepto_id reverse relationship
+					 * @return GcoTemp[]
+					 */
+					return $this->_objGcoTempAsConceptoArray;
+
 				case '_GuiaConceptosAsConcepto':
 					/**
 					 * Gets the value for the private _objGuiaConceptosAsConcepto (Read-Only)
@@ -1700,6 +1807,22 @@
 					 * @return GuiaConceptos[]
 					 */
 					return $this->_objGuiaConceptosAsConceptoArray;
+
+				case '_GuiaConceptosOpcionalesAsConcepto':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsConcepto (Read-Only)
+					 * if set due to an expansion on the guia_conceptos_opcionales.concepto_id reverse relationship
+					 * @return GuiaConceptosOpcionales
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsConcepto;
+
+				case '_GuiaConceptosOpcionalesAsConceptoArray':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsConceptoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_conceptos_opcionales.concepto_id reverse relationship
+					 * @return GuiaConceptosOpcionales[]
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsConceptoArray;
 
 				case '_NotaConceptosAsConcepto':
 					/**
@@ -1846,6 +1969,19 @@
 					 */
 					try {
 						return ($this->dttFechaFinal = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'EsFijo':
+					/**
+					 * Sets the value for blnEsFijo 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnEsFijo = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2086,8 +2222,14 @@
 			if ($this->CountFacturaItemsesAsConcepto()) {
 				$arrTablRela[] = 'factura_items';
 			}
+			if ($this->CountGcoTempsAsConcepto()) {
+				$arrTablRela[] = 'gco_temp';
+			}
 			if ($this->CountGuiaConceptosesAsConcepto()) {
 				$arrTablRela[] = 'guia_conceptos';
+			}
+			if ($this->CountGuiaConceptosOpcionalesesAsConcepto()) {
+				$arrTablRela[] = 'guia_conceptos_opcionales';
 			}
 			if ($this->CountNotaConceptosesAsConcepto()) {
 				$arrTablRela[] = 'nota_conceptos';
@@ -2403,6 +2545,155 @@
 		}
 
 
+		// Related Objects' Methods for GcoTempAsConcepto
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GcoTempsAsConcepto as an array of GcoTemp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GcoTemp[]
+		*/
+		public function GetGcoTempAsConceptoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GcoTemp::LoadArrayByConceptoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GcoTempsAsConcepto
+		 * @return int
+		*/
+		public function CountGcoTempsAsConcepto() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GcoTemp::CountByConceptoId($this->intId);
+		}
+
+		/**
+		 * Associates a GcoTempAsConcepto
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function AssociateGcoTempAsConcepto(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTempAsConcepto on this unsaved Conceptos.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTempAsConcepto on this Conceptos with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GcoTempAsConcepto
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function UnassociateGcoTempAsConcepto(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsConcepto on this unsaved Conceptos.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsConcepto on this Conceptos with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`concepto_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GcoTempsAsConcepto
+		 * @return void
+		*/
+		public function UnassociateAllGcoTempsAsConcepto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsConcepto on this unsaved Conceptos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`concepto_id` = null
+				WHERE
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GcoTempAsConcepto
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function DeleteAssociatedGcoTempAsConcepto(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsConcepto on this unsaved Conceptos.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsConcepto on this Conceptos with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GcoTempsAsConcepto
+		 * @return void
+		*/
+		public function DeleteAllGcoTempsAsConcepto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsConcepto on this unsaved Conceptos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
+				WHERE
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for GuiaConceptosAsConcepto
 		//-------------------------------------------------------------------
 
@@ -2546,6 +2837,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guia_conceptos`
+				WHERE
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiaConceptosOpcionalesAsConcepto
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaConceptosOpcionalesesAsConcepto as an array of GuiaConceptosOpcionales objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaConceptosOpcionales[]
+		*/
+		public function GetGuiaConceptosOpcionalesAsConceptoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiaConceptosOpcionales::LoadArrayByConceptoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaConceptosOpcionalesesAsConcepto
+		 * @return int
+		*/
+		public function CountGuiaConceptosOpcionalesesAsConcepto() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiaConceptosOpcionales::CountByConceptoId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiaConceptosOpcionalesAsConcepto
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function AssociateGuiaConceptosOpcionalesAsConcepto(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsConcepto on this unsaved Conceptos.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsConcepto on this Conceptos with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaConceptosOpcionalesAsConcepto
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function UnassociateGuiaConceptosOpcionalesAsConcepto(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsConcepto on this unsaved Conceptos.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsConcepto on this Conceptos with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`concepto_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaConceptosOpcionalesesAsConcepto
+		 * @return void
+		*/
+		public function UnassociateAllGuiaConceptosOpcionalesesAsConcepto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsConcepto on this unsaved Conceptos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`concepto_id` = null
+				WHERE
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaConceptosOpcionalesAsConcepto
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaConceptosOpcionalesAsConcepto(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsConcepto on this unsaved Conceptos.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsConcepto on this Conceptos with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaConceptosOpcionalesesAsConcepto
+		 * @return void
+		*/
+		public function DeleteAllGuiaConceptosOpcionalesesAsConcepto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsConcepto on this unsaved Conceptos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Conceptos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
 				WHERE
 					`concepto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2896,6 +3336,7 @@
 			$strToReturn .= '<element name="Activo" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="FechaInicial" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="FechaFinal" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="EsFijo" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Operacion" type="xsd:string"/>';
 			$strToReturn .= '<element name="AplicaComo" type="xsd:string"/>';
 			$strToReturn .= '<element name="Tipo" type="xsd:string"/>';
@@ -2950,6 +3391,8 @@
 				$objToReturn->dttFechaInicial = new QDateTime($objSoapObject->FechaInicial);
 			if (property_exists($objSoapObject, 'FechaFinal'))
 				$objToReturn->dttFechaFinal = new QDateTime($objSoapObject->FechaFinal);
+			if (property_exists($objSoapObject, 'EsFijo'))
+				$objToReturn->blnEsFijo = $objSoapObject->EsFijo;
 			if (property_exists($objSoapObject, 'Operacion'))
 				$objToReturn->strOperacion = $objSoapObject->Operacion;
 			if (property_exists($objSoapObject, 'AplicaComo'))
@@ -3030,6 +3473,7 @@
 			$iArray['Activo'] = $this->blnActivo;
 			$iArray['FechaInicial'] = $this->dttFechaInicial;
 			$iArray['FechaFinal'] = $this->dttFechaFinal;
+			$iArray['EsFijo'] = $this->blnEsFijo;
 			$iArray['Operacion'] = $this->strOperacion;
 			$iArray['AplicaComo'] = $this->strAplicaComo;
 			$iArray['Tipo'] = $this->strTipo;
@@ -3091,6 +3535,7 @@
      * @property-read QQNode $Activo
      * @property-read QQNode $FechaInicial
      * @property-read QQNode $FechaFinal
+     * @property-read QQNode $EsFijo
      * @property-read QQNode $Operacion
      * @property-read QQNode $AplicaComo
      * @property-read QQNode $Tipo
@@ -3111,7 +3556,9 @@
      *
      * @property-read QQReverseReferenceNodeConceptoRangos $ConceptoRangosAsConcepto
      * @property-read QQReverseReferenceNodeFacturaItems $FacturaItemsAsConcepto
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsConcepto
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsConcepto
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsConcepto
      * @property-read QQReverseReferenceNodeNotaConceptos $NotaConceptosAsConcepto
      * @property-read QQReverseReferenceNodeNotaCreditoItems $NotaCreditoItemsAsConcepto
 
@@ -3139,6 +3586,8 @@
 					return new QQNode('fecha_inicial', 'FechaInicial', 'Date', $this);
 				case 'FechaFinal':
 					return new QQNode('fecha_final', 'FechaFinal', 'Date', $this);
+				case 'EsFijo':
+					return new QQNode('es_fijo', 'EsFijo', 'Bit', $this);
 				case 'Operacion':
 					return new QQNode('operacion', 'Operacion', 'VarChar', $this);
 				case 'AplicaComo':
@@ -3175,8 +3624,12 @@
 					return new QQReverseReferenceNodeConceptoRangos($this, 'conceptorangosasconcepto', 'reverse_reference', 'concepto_id', 'ConceptoRangosAsConcepto');
 				case 'FacturaItemsAsConcepto':
 					return new QQReverseReferenceNodeFacturaItems($this, 'facturaitemsasconcepto', 'reverse_reference', 'concepto_id', 'FacturaItemsAsConcepto');
+				case 'GcoTempAsConcepto':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempasconcepto', 'reverse_reference', 'concepto_id', 'GcoTempAsConcepto');
 				case 'GuiaConceptosAsConcepto':
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasconcepto', 'reverse_reference', 'concepto_id', 'GuiaConceptosAsConcepto');
+				case 'GuiaConceptosOpcionalesAsConcepto':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasconcepto', 'reverse_reference', 'concepto_id', 'GuiaConceptosOpcionalesAsConcepto');
 				case 'NotaConceptosAsConcepto':
 					return new QQReverseReferenceNodeNotaConceptos($this, 'notaconceptosasconcepto', 'reverse_reference', 'concepto_id', 'NotaConceptosAsConcepto');
 				case 'NotaCreditoItemsAsConcepto':
@@ -3204,6 +3657,7 @@
      * @property-read QQNode $Activo
      * @property-read QQNode $FechaInicial
      * @property-read QQNode $FechaFinal
+     * @property-read QQNode $EsFijo
      * @property-read QQNode $Operacion
      * @property-read QQNode $AplicaComo
      * @property-read QQNode $Tipo
@@ -3224,7 +3678,9 @@
      *
      * @property-read QQReverseReferenceNodeConceptoRangos $ConceptoRangosAsConcepto
      * @property-read QQReverseReferenceNodeFacturaItems $FacturaItemsAsConcepto
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsConcepto
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsConcepto
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsConcepto
      * @property-read QQReverseReferenceNodeNotaConceptos $NotaConceptosAsConcepto
      * @property-read QQReverseReferenceNodeNotaCreditoItems $NotaCreditoItemsAsConcepto
 
@@ -3252,6 +3708,8 @@
 					return new QQNode('fecha_inicial', 'FechaInicial', 'QDateTime', $this);
 				case 'FechaFinal':
 					return new QQNode('fecha_final', 'FechaFinal', 'QDateTime', $this);
+				case 'EsFijo':
+					return new QQNode('es_fijo', 'EsFijo', 'boolean', $this);
 				case 'Operacion':
 					return new QQNode('operacion', 'Operacion', 'string', $this);
 				case 'AplicaComo':
@@ -3288,8 +3746,12 @@
 					return new QQReverseReferenceNodeConceptoRangos($this, 'conceptorangosasconcepto', 'reverse_reference', 'concepto_id', 'ConceptoRangosAsConcepto');
 				case 'FacturaItemsAsConcepto':
 					return new QQReverseReferenceNodeFacturaItems($this, 'facturaitemsasconcepto', 'reverse_reference', 'concepto_id', 'FacturaItemsAsConcepto');
+				case 'GcoTempAsConcepto':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempasconcepto', 'reverse_reference', 'concepto_id', 'GcoTempAsConcepto');
 				case 'GuiaConceptosAsConcepto':
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasconcepto', 'reverse_reference', 'concepto_id', 'GuiaConceptosAsConcepto');
+				case 'GuiaConceptosOpcionalesAsConcepto':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasconcepto', 'reverse_reference', 'concepto_id', 'GuiaConceptosOpcionalesAsConcepto');
 				case 'NotaConceptosAsConcepto':
 					return new QQReverseReferenceNodeNotaConceptos($this, 'notaconceptosasconcepto', 'reverse_reference', 'concepto_id', 'NotaConceptosAsConcepto');
 				case 'NotaCreditoItemsAsConcepto':

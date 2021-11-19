@@ -18,7 +18,7 @@
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property integer $FacturaId the value for intFacturaId (Not Null)
 	 * @property integer $NotaEntregaId the value for intNotaEntregaId (Not Null)
-	 * @property double $Total the value for fltTotal (Not Null)
+	 * @property double $Total the value for fltTotal 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property Facturas $Factura the value for the Facturas object referenced by intFacturaId (Not Null)
@@ -1042,7 +1042,7 @@
 
 				case 'Total':
 					/**
-					 * Gets the value for fltTotal (Not Null)
+					 * Gets the value for fltTotal 
 					 * @return double
 					 */
 					return $this->fltTotal;
@@ -1156,7 +1156,7 @@
 
 				case 'Total':
 					/**
-					 * Sets the value for fltTotal (Not Null)
+					 * Sets the value for fltTotal 
 					 * @param double $mixValue
 					 * @return double
 					 */

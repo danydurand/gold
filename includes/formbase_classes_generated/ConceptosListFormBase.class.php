@@ -86,6 +86,7 @@ abstract class ConceptosListFormBase extends QForm {
         $this->dtgConceptoses->MetaAddColumn('Activo');
         $this->dtgConceptoses->MetaAddColumn('FechaInicial');
         $this->dtgConceptoses->MetaAddColumn('FechaFinal');
+        $this->dtgConceptoses->MetaAddColumn('EsFijo');
         $this->dtgConceptoses->MetaAddColumn('Operacion');
         $this->dtgConceptoses->MetaAddColumn('AplicaComo');
         $this->dtgConceptoses->MetaAddColumn('Tipo');

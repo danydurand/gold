@@ -55,6 +55,9 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
 
     <!-- AOS -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/ladda-themeless.min.css"?> rel="stylesheet">
 
     <style>
         .navbar-default {

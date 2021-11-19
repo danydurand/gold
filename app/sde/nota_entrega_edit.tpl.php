@@ -69,11 +69,11 @@
                 <?php //$this->txtPorCorregir->RenderWithName(); ?>
                 <?php $this->txtProcesadas->RenderWithName(); ?>
                 <?php $this->txtRecibidas->RenderWithName(); ?>
-                <?php $this->txtLibras->RenderWithName(); ?>
+                <?php $this->txtKilos->RenderWithName(); ?>
                 <?php $this->txtPiesCub->RenderWithName(); ?>
 	        </div>
             <div class="col-md-3">
-                <?php $this->txtVolumen->RenderWithName(); ?>
+                <?php $this->txtTotal->RenderWithName(); ?>
                 <?php $this->txtPiezas->RenderWithName(); ?>
                 <?php $this->calFecha->RenderWithName(); ?>
                 <?php $this->txtHora->RenderWithName(); ?>

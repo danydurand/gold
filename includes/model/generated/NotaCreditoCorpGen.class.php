@@ -22,7 +22,7 @@
 	 * @property integer $PagoCorpId the value for intPagoCorpId 
 	 * @property integer $FacturaId the value for intFacturaId 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
-	 * @property double $Monto the value for fltMonto (Not Null)
+	 * @property double $Monto the value for fltMonto 
 	 * @property string $Estatus the value for strEstatus (Not Null)
 	 * @property integer $AplicadaEnPagoId the value for intAplicadaEnPagoId 
 	 * @property string $Observacion the value for strObservacion 
@@ -1426,7 +1426,7 @@
 
 				case 'Monto':
 					/**
-					 * Gets the value for fltMonto (Not Null)
+					 * Gets the value for fltMonto 
 					 * @return double
 					 */
 					return $this->fltMonto;
@@ -1684,7 +1684,7 @@
 
 				case 'Monto':
 					/**
-					 * Sets the value for fltMonto (Not Null)
+					 * Sets the value for fltMonto 
 					 * @param double $mixValue
 					 * @return double
 					 */

@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="row" style="margin-top: .5em">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <?php $this->lblId->RenderWithName(); ?>
                 <?php $this->txtNombre->RenderWithName(); ?>
                 <?php $this->txtOrden->RenderWithName(); ?>
@@ -28,24 +28,18 @@
                 <?php $this->calFechaFinal->RenderWithName(); ?>
             </div>
             <div class="col-md-4">
+				<?php $this->chkEsFijo->RenderWithName(); ?>
 				<?php $this->lstOperacion->RenderWithName(); ?>
 				<?php $this->lstAplicaComo->RenderWithName(); ?>
 				<?php $this->lstTipo->RenderWithName(); ?>
 				<?php $this->txtActuaSobre->RenderWithName(); ?>
 				<?php $this->lstActuaSobre->RenderWithName(); ?>
 				<?php $this->txtValor->RenderWithName(); ?>
-				<?php //$this->txtDbquery->RenderWithName(); ?>
 				<?php $this->txtBaseImponible->RenderWithName(); ?>
 				<?php $this->txtMetodo->RenderWithName(); ?>
 				<?php $this->chkAplicarTasa->RenderWithName(); ?>
-				<?php //$this->lblCreatedAt->RenderWithName(); ?>
-				<?php //$this->lblUpdatedAt->RenderWithName(); ?>
-				<?php //$this->lblDeletedAt->RenderWithName(); ?>
-				<?php //$this->txtCreatedBy->RenderWithName(); ?>
-				<?php //$this->txtUpdatedBy->RenderWithName(); ?>
-				<?php //$this->txtDeletedBy->RenderWithName(); ?>
 	        </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
 
                 <?php if ($this->dtgRangConc->Visible) { ?>
                     <div style="margin-bottom: .3em; cursor: pointer">

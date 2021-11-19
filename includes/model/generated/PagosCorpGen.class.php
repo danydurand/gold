@@ -20,7 +20,7 @@
 	 * @property integer $FormaPagoId the value for intFormaPagoId (Not Null)
 	 * @property string $Referencia the value for strReferencia 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
-	 * @property double $Monto the value for fltMonto (Not Null)
+	 * @property double $Monto the value for fltMonto 
 	 * @property string $Estatus the value for strEstatus (Not Null)
 	 * @property string $Observacion the value for strObservacion 
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
@@ -1437,7 +1437,7 @@
 
 				case 'Monto':
 					/**
-					 * Gets the value for fltMonto (Not Null)
+					 * Gets the value for fltMonto 
 					 * @return double
 					 */
 					return $this->fltMonto;
@@ -1683,7 +1683,7 @@
 
 				case 'Monto':
 					/**
-					 * Sets the value for fltMonto (Not Null)
+					 * Sets the value for fltMonto 
 					 * @param double $mixValue
 					 * @return double
 					 */

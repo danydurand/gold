@@ -17,6 +17,7 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property string $Nombre the value for strNombre (Not Null)
+	 * @property boolean $EsPublica the value for blnEsPublica 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
 	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
 	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
@@ -55,6 +56,14 @@
 		protected $strNombre;
 		const NombreMaxLength = 50;
 		const NombreDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column tarifa_agentes.es_publica
+		 * @var boolean blnEsPublica
+		 */
+		protected $blnEsPublica;
+		const EsPublicaDefault = null;
 
 
 		/**
@@ -208,6 +217,7 @@
 		{
 			$this->intId = TarifaAgentes::IdDefault;
 			$this->strNombre = TarifaAgentes::NombreDefault;
+			$this->blnEsPublica = TarifaAgentes::EsPublicaDefault;
 			$this->dttFecha = (TarifaAgentes::FechaDefault === null)?null:new QDateTime(TarifaAgentes::FechaDefault);
 			$this->strCreatedAt = TarifaAgentes::CreatedAtDefault;
 			$this->strUpdatedAt = TarifaAgentes::UpdatedAtDefault;
@@ -558,6 +568,7 @@
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'nombre', $strAliasPrefix . 'nombre');
+			    $objBuilder->AddSelectItem($strTableName, 'es_publica', $strAliasPrefix . 'es_publica');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha', $strAliasPrefix . 'fecha');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -696,6 +707,9 @@
 			$strAlias = $strAliasPrefix . 'nombre';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strNombre = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'es_publica';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnEsPublica = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'fecha';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttFecha = $objDbRow->GetColumn($strAliasName, 'Date');
@@ -935,12 +949,14 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `tarifa_agentes` (
 							`nombre`,
+							`es_publica`,
 							`fecha`,
 							`created_by`,
 							`updated_by`,
 							`deleted_by`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strNombre) . ',
+							' . $objDatabase->SqlVariable($this->blnEsPublica) . ',
 							' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
@@ -1006,6 +1022,7 @@
 							`tarifa_agentes`
 						SET
 							`nombre` = ' . $objDatabase->SqlVariable($this->strNombre) . ',
+							`es_publica` = ' . $objDatabase->SqlVariable($this->blnEsPublica) . ',
 							`fecha` = ' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
@@ -1151,6 +1168,7 @@
 
 			// Update $this's local variables to match
 			$this->strNombre = $objReloaded->strNombre;
+			$this->blnEsPublica = $objReloaded->blnEsPublica;
 			$this->dttFecha = $objReloaded->dttFecha;
 			$this->strCreatedAt = $objReloaded->strCreatedAt;
 			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
@@ -1191,6 +1209,13 @@
 					 * @return string
 					 */
 					return $this->strNombre;
+
+				case 'EsPublica':
+					/**
+					 * Gets the value for blnEsPublica 
+					 * @return boolean
+					 */
+					return $this->blnEsPublica;
 
 				case 'Fecha':
 					/**
@@ -1350,6 +1375,19 @@
 					 */
 					try {
 						return ($this->strNombre = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'EsPublica':
+					/**
+					 * Sets the value for blnEsPublica 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnEsPublica = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2099,6 +2137,7 @@
 			$strToReturn = '<complexType name="TarifaAgentes"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Nombre" type="xsd:string"/>';
+			$strToReturn .= '<element name="EsPublica" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Fecha" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
@@ -2132,6 +2171,8 @@
 				$objToReturn->intId = $objSoapObject->Id;
 			if (property_exists($objSoapObject, 'Nombre'))
 				$objToReturn->strNombre = $objSoapObject->Nombre;
+			if (property_exists($objSoapObject, 'EsPublica'))
+				$objToReturn->blnEsPublica = $objSoapObject->EsPublica;
 			if (property_exists($objSoapObject, 'Fecha'))
 				$objToReturn->dttFecha = new QDateTime($objSoapObject->Fecha);
 			if (property_exists($objSoapObject, 'CreatedAt'))
@@ -2182,6 +2223,7 @@
 			///////////////////
 			$iArray['Id'] = $this->intId;
 			$iArray['Nombre'] = $this->strNombre;
+			$iArray['EsPublica'] = $this->blnEsPublica;
 			$iArray['Fecha'] = $this->dttFecha;
 			$iArray['CreatedAt'] = $this->strCreatedAt;
 			$iArray['UpdatedAt'] = $this->strUpdatedAt;
@@ -2228,6 +2270,7 @@
      *
      * @property-read QQNode $Id
      * @property-read QQNode $Nombre
+     * @property-read QQNode $EsPublica
      * @property-read QQNode $Fecha
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -2254,6 +2297,8 @@
 					return new QQNode('id', 'Id', 'Integer', $this);
 				case 'Nombre':
 					return new QQNode('nombre', 'Nombre', 'VarChar', $this);
+				case 'EsPublica':
+					return new QQNode('es_publica', 'EsPublica', 'Bit', $this);
 				case 'Fecha':
 					return new QQNode('fecha', 'Fecha', 'Date', $this);
 				case 'CreatedAt':
@@ -2293,6 +2338,7 @@
     /**
      * @property-read QQNode $Id
      * @property-read QQNode $Nombre
+     * @property-read QQNode $EsPublica
      * @property-read QQNode $Fecha
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -2319,6 +2365,8 @@
 					return new QQNode('id', 'Id', 'integer', $this);
 				case 'Nombre':
 					return new QQNode('nombre', 'Nombre', 'string', $this);
+				case 'EsPublica':
+					return new QQNode('es_publica', 'EsPublica', 'boolean', $this);
 				case 'Fecha':
 					return new QQNode('fecha', 'Fecha', 'QDateTime', $this);
 				case 'CreatedAt':

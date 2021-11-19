@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'eda71afbc9f054743bdeca5cfde7a9c39728ee1f',
+    'reference' => 'd2b9dbadf304709b4e54e11c565dfc157f6162a1',
     'name' => '__root__',
   ),
   'versions' => 
@@ -44,7 +44,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'eda71afbc9f054743bdeca5cfde7a9c39728ee1f',
+      'reference' => 'd2b9dbadf304709b4e54e11c565dfc157f6162a1',
     ),
     'monolog/monolog' => 
     array (
@@ -75,21 +75,21 @@ private static $installed = array (
     ),
     'shuchkin/simplexls' => 
     array (
-      'pretty_version' => '0.9.13',
-      'version' => '0.9.13.0',
+      'pretty_version' => '0.9.14',
+      'version' => '0.9.14.0',
       'aliases' => 
       array (
       ),
-      'reference' => '1f6be6894a591f476752b508f6c2cdb24c69a68c',
+      'reference' => 'cee16b65253bbcda2858656646ec215dce0c5447',
     ),
     'shuchkin/simplexlsx' => 
     array (
-      'pretty_version' => '0.8.27',
-      'version' => '0.8.27.0',
+      'pretty_version' => '0.8.29',
+      'version' => '0.8.29.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'ffdbfaee68c43f3c2b63a6a3775e3421710e0ec4',
+      'reference' => '3be5dfeb7db1ac57b8e21ccca9a50c16b8692979',
     ),
     'spipu/html2pdf' => 
     array (

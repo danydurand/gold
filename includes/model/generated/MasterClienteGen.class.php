@@ -409,7 +409,7 @@
 		 * @var double fltSaldoExcedente
 		 */
 		protected $fltSaldoExcedente;
-		const SaldoExcedenteDefault = 0;
+		const SaldoExcedenteDefault = null;
 
 
 		/**

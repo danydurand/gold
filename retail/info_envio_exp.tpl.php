@@ -1,13 +1,13 @@
 <div class="row">
-    <div class="col-md-2">
-        <div class="form-group" style="text-align: center">
-            <label for="">Seguro ?</label><br>
-            <?php $this->lstEnviSgro->Render(); ?>
-        </div>
-    </div>
-    <div class="col-md-2">
+    <!--<div class="col-md-2">-->
+    <!--    <div class="form-group" style="text-align: center">-->
+    <!--        <label for="">Seguro ?</label><br>-->
+    <!--        --><?php //$this->lstEnviSgro->Render(); ?>
+    <!--    </div>-->
+    <!--</div>-->
+    <div class="col-md-4">
         <div class="form-group">
-            <label for="">Modo V.D.</label><br>
+            <label for="">Valor Decla. Especificado</label><br>
             <?php $this->lstModoValo->Render(); ?>
         </div>
     </div>

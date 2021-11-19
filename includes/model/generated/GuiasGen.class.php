@@ -45,7 +45,7 @@
 	 * @property string $ModoValor the value for strModoValor 
 	 * @property string $TipoExport the value for strTipoExport 
 	 * @property boolean $Asegurado the value for blnAsegurado (Not Null)
-	 * @property double $Total the value for fltTotal (Not Null)
+	 * @property double $Total the value for fltTotal 
 	 * @property string $Estado the value for strEstado 
 	 * @property string $Ciudad the value for strCiudad 
 	 * @property string $CodigoPostal the value for strCodigoPostal 
@@ -98,6 +98,8 @@
 	 * @property-read FacturaGuias[] $_FacturaGuiasAsGuiaArray the value for the private _objFacturaGuiasAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the factura_guias.guia_id reverse relationship
 	 * @property-read GuiaConceptos $_GuiaConceptosAsGuia the value for the private _objGuiaConceptosAsGuia (Read-Only) if set due to an expansion on the guia_conceptos.guia_id reverse relationship
 	 * @property-read GuiaConceptos[] $_GuiaConceptosAsGuiaArray the value for the private _objGuiaConceptosAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos.guia_id reverse relationship
+	 * @property-read GuiaConceptosOpcionales $_GuiaConceptosOpcionalesAsGuia the value for the private _objGuiaConceptosOpcionalesAsGuia (Read-Only) if set due to an expansion on the guia_conceptos_opcionales.guia_id reverse relationship
+	 * @property-read GuiaConceptosOpcionales[] $_GuiaConceptosOpcionalesAsGuiaArray the value for the private _objGuiaConceptosOpcionalesAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos_opcionales.guia_id reverse relationship
 	 * @property-read GuiaPiezas $_GuiaPiezasAsGuia the value for the private _objGuiaPiezasAsGuia (Read-Only) if set due to an expansion on the guia_piezas.guia_id reverse relationship
 	 * @property-read GuiaPiezas[] $_GuiaPiezasAsGuiaArray the value for the private _objGuiaPiezasAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the guia_piezas.guia_id reverse relationship
 	 * @property-read GuiasManifiesto $_GuiasManifiestoAsGuia the value for the private _objGuiasManifiestoAsGuia (Read-Only) if set due to an expansion on the guias_manifiesto.guia_id reverse relationship
@@ -374,7 +376,7 @@
 		 * @var double fltTotal
 		 */
 		protected $fltTotal;
-		const TotalDefault = 0;
+		const TotalDefault = null;
 
 
 		/**
@@ -680,6 +682,22 @@
 		 * @var GuiaConceptos[] _objGuiaConceptosAsGuiaArray;
 		 */
 		private $_objGuiaConceptosAsGuiaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaConceptosOpcionalesAsGuia object
+		 * (of type GuiaConceptosOpcionales), if this Guias object was restored with
+		 * an expansion on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales _objGuiaConceptosOpcionalesAsGuia;
+		 */
+		private $_objGuiaConceptosOpcionalesAsGuia;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaConceptosOpcionalesAsGuia objects
+		 * (of type GuiaConceptosOpcionales[]), if this Guias object was restored with
+		 * an ExpandAsArray on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales[] _objGuiaConceptosOpcionalesAsGuiaArray;
+		 */
+		private $_objGuiaConceptosOpcionalesAsGuiaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single GuiaPiezasAsGuia object
@@ -1913,6 +1931,21 @@
 					$objToReturn->_objGuiaConceptosAsGuiaArray[] = GuiaConceptos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosasguia__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiaConceptosAsGuia)) {
 					$objToReturn->_objGuiaConceptosAsGuia = GuiaConceptos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosasguia__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiaConceptosOpcionalesAsGuia Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiaconceptosopcionalesasguia__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiaconceptosopcionalesasguia']) ? null : $objExpansionAliasArray['guiaconceptosopcionalesasguia']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaConceptosOpcionalesAsGuiaArray)
+				$objToReturn->_objGuiaConceptosOpcionalesAsGuiaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsGuiaArray[] = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesasguia__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaConceptosOpcionalesAsGuia)) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsGuia = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesasguia__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3265,7 +3298,7 @@
 
 				case 'Total':
 					/**
-					 * Gets the value for fltTotal (Not Null)
+					 * Gets the value for fltTotal 
 					 * @return double
 					 */
 					return $this->fltTotal;
@@ -3763,6 +3796,22 @@
 					 */
 					return $this->_objGuiaConceptosAsGuiaArray;
 
+				case '_GuiaConceptosOpcionalesAsGuia':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsGuia (Read-Only)
+					 * if set due to an expansion on the guia_conceptos_opcionales.guia_id reverse relationship
+					 * @return GuiaConceptosOpcionales
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsGuia;
+
+				case '_GuiaConceptosOpcionalesAsGuiaArray':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsGuiaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_conceptos_opcionales.guia_id reverse relationship
+					 * @return GuiaConceptosOpcionales[]
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsGuiaArray;
+
 				case '_GuiaPiezasAsGuia':
 					/**
 					 * Gets the value for the private _objGuiaPiezasAsGuia (Read-Only)
@@ -4239,7 +4288,7 @@
 
 				case 'Total':
 					/**
-					 * Sets the value for fltTotal (Not Null)
+					 * Sets the value for fltTotal 
 					 * @param double $mixValue
 					 * @return double
 					 */
@@ -5194,6 +5243,9 @@
 			if ($this->CountGuiaConceptosesAsGuia()) {
 				$arrTablRela[] = 'guia_conceptos';
 			}
+			if ($this->CountGuiaConceptosOpcionalesesAsGuia()) {
+				$arrTablRela[] = 'guia_conceptos_opcionales';
+			}
 			if ($this->CountGuiaPiezasesAsGuia()) {
 				$arrTablRela[] = 'guia_piezas';
 			}
@@ -5508,6 +5560,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guia_conceptos`
+				WHERE
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiaConceptosOpcionalesAsGuia
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaConceptosOpcionalesesAsGuia as an array of GuiaConceptosOpcionales objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaConceptosOpcionales[]
+		*/
+		public function GetGuiaConceptosOpcionalesAsGuiaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiaConceptosOpcionales::LoadArrayByGuiaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaConceptosOpcionalesesAsGuia
+		 * @return int
+		*/
+		public function CountGuiaConceptosOpcionalesesAsGuia() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiaConceptosOpcionales::CountByGuiaId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiaConceptosOpcionalesAsGuia
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function AssociateGuiaConceptosOpcionalesAsGuia(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsGuia on this unsaved Guias.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsGuia on this Guias with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaConceptosOpcionalesAsGuia
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function UnassociateGuiaConceptosOpcionalesAsGuia(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsGuia on this unsaved Guias.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsGuia on this Guias with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`guia_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaConceptosOpcionalesesAsGuia
+		 * @return void
+		*/
+		public function UnassociateAllGuiaConceptosOpcionalesesAsGuia() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsGuia on this unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`guia_id` = null
+				WHERE
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaConceptosOpcionalesAsGuia
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaConceptosOpcionalesAsGuia(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsGuia on this unsaved Guias.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsGuia on this Guias with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaConceptosOpcionalesesAsGuia
+		 * @return void
+		*/
+		public function DeleteAllGuiaConceptosOpcionalesesAsGuia() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsGuia on this unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
 				WHERE
 					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -6815,6 +7016,7 @@
      * @property-read QQReverseReferenceNodeEstadisticaDeGuias $EstadisticaDeGuias
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsGuia
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsGuia
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsGuia
      * @property-read QQReverseReferenceNodeGuiaImprimir $GuiaImprimirAsGuia
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
      * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
@@ -6987,6 +7189,8 @@
 					return new QQReverseReferenceNodeFacturaGuias($this, 'facturaguiasasguia', 'reverse_reference', 'guia_id', 'FacturaGuiasAsGuia');
 				case 'GuiaConceptosAsGuia':
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosAsGuia');
+				case 'GuiaConceptosOpcionalesAsGuia':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosOpcionalesAsGuia');
 				case 'GuiaImprimirAsGuia':
 					return new QQReverseReferenceNodeGuiaImprimir($this, 'guiaimprimirasguia', 'reverse_reference', 'guia_id', 'GuiaImprimirAsGuia');
 				case 'GuiaPiezasAsGuia':
@@ -7093,6 +7297,7 @@
      * @property-read QQReverseReferenceNodeEstadisticaDeGuias $EstadisticaDeGuias
      * @property-read QQReverseReferenceNodeFacturaGuias $FacturaGuiasAsGuia
      * @property-read QQReverseReferenceNodeGuiaConceptos $GuiaConceptosAsGuia
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsGuia
      * @property-read QQReverseReferenceNodeGuiaImprimir $GuiaImprimirAsGuia
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
      * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
@@ -7265,6 +7470,8 @@
 					return new QQReverseReferenceNodeFacturaGuias($this, 'facturaguiasasguia', 'reverse_reference', 'guia_id', 'FacturaGuiasAsGuia');
 				case 'GuiaConceptosAsGuia':
 					return new QQReverseReferenceNodeGuiaConceptos($this, 'guiaconceptosasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosAsGuia');
+				case 'GuiaConceptosOpcionalesAsGuia':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasguia', 'reverse_reference', 'guia_id', 'GuiaConceptosOpcionalesAsGuia');
 				case 'GuiaImprimirAsGuia':
 					return new QQReverseReferenceNodeGuiaImprimir($this, 'guiaimprimirasguia', 'reverse_reference', 'guia_id', 'GuiaImprimirAsGuia');
 				case 'GuiaPiezasAsGuia':

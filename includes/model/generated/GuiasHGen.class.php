@@ -39,7 +39,7 @@
 	 * @property double $ValorDeclarado the value for fltValorDeclarado (Not Null)
 	 * @property string $TipoExport the value for strTipoExport 
 	 * @property boolean $Asegurado the value for blnAsegurado (Not Null)
-	 * @property double $Total the value for fltTotal (Not Null)
+	 * @property double $Total the value for fltTotal 
 	 * @property string $Estado the value for strEstado 
 	 * @property string $Ciudad the value for strCiudad 
 	 * @property string $CodigoPostal the value for strCodigoPostal 
@@ -298,7 +298,7 @@
 		 * @var double fltTotal
 		 */
 		protected $fltTotal;
-		const TotalDefault = 0;
+		const TotalDefault = null;
 
 
 		/**
@@ -2787,7 +2787,7 @@
 
 				case 'Total':
 					/**
-					 * Gets the value for fltTotal (Not Null)
+					 * Gets the value for fltTotal 
 					 * @return double
 					 */
 					return $this->fltTotal;
@@ -3537,7 +3537,7 @@
 
 				case 'Total':
 					/**
-					 * Sets the value for fltTotal (Not Null)
+					 * Sets the value for fltTotal 
 					 * @param double $mixValue
 					 * @return double
 					 */

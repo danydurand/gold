@@ -31,9 +31,36 @@
 		    return '/var/www/html/gold/retail/tmp/Guia'.$this->Numero.'.pdf';
         }
 
+
 		public function __medidas() {
 		    return $this->Alto.' x '.$this->Ancho.' x '.$this->Largo;
         }
+
+
+        public function borrarConceptosOpcionales() {
+            $this->DeleteAllGuiaConceptosOpcionalesesAsGuia();
+        }
+
+
+        public function AsociarConceptoOpcional($intConcOpci, $intUsuaIdxx){
+		    try {
+                $objConcOpci = new GuiaConceptosOpcionales();
+                $objConcOpci->GuiaId     = $this->Id;
+                $objConcOpci->ConceptoId = $intConcOpci;
+                $objConcOpci->CreatedBy  = $intUsuaIdxx;
+                $objConcOpci->UpdatedBy  = $intUsuaIdxx;
+                $objConcOpci->CreatedAt  = new QDateTime(QDateTime::Now);
+                $objConcOpci->UpdatedAt  = new QDateTime(QDateTime::Now);
+                $objConcOpci->Save();
+                $objConcOpci->logDeCambios('Creado');
+                $strTextMens = 'OK';
+		    } catch (Exception $e) {
+		        t('Error: '.$e->getMessage());
+		        $strTextMens = $e->getMessage();
+		    }
+		    return $strTextMens;
+        }
+
 
 		public function ResumenDeEntrega() {
             $intTotaPiez = $this->Piezas != 0 ? $this->Piezas : 1;
@@ -206,6 +233,17 @@
             }
         }
 
+        public function __servExportacion() {
+		    switch ($this->Producto->Codigo) {
+                case 'EXA':
+                    return 'AEREO';
+                case 'EXM':
+                    return 'MARITIMO';
+                default:
+                    return 'AEREO';
+            }
+        }
+
         public function NroFactura() {
 		    $strFactGuia = 'N/A';
             if (!is_null($this->FacturaId)) {
@@ -247,7 +285,7 @@
             /* @var $objTariClie TarifaAgentes */
             $objTariClie = $this->ClienteCorp->TarifaAgente;
             $decPesoTari = $this->pesoTarifa();
-            t('El peso usado para calcular la Tarifa sera: '.$decPesoTari);
+            t('Peso usado p/calcular la Tarifa: '.$decPesoTari);
             if (is_null($this->TarifaAgenteId)) {
                 $this->TarifaAgenteId = $objTariClie->Id;
                 $this->Save();
@@ -258,24 +296,92 @@
             $intZonaIdxx = $this->Destino->Zona;
             $strServImpo = $this->__servImportacion();
             t("Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
-            $objPrecTari   = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx,$intZonaIdxx,$strServImpo);
+            $objPrecTari = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx,$intZonaIdxx,$strServImpo);
             if ($objPrecTari) {
-                $precio = $objPrecTari->Precio;
-                $minimo = $objPrecTari->MinimoFacturable;
-                t('El minimo es: '.$minimo);
-                if ( ($minimo > 0) && ($decPesoTari < $minimo) ) {
-                    t('Guia: '.$this->Tracking.' con peso menor al minimo: '.$decPesoTari);
-                    $decPesoTari = $minimo;
-                    t('El peso quedo en: '.$decPesoTari);
-                } else {
-                    if ($minimo == 0) {
-                        $decPesoTari = 0;
-                        t('Minimo en cero, no se debe facturar');
+                if ($decPesoTari > 0) {
+                    $precio = $objPrecTari->Precio;
+                    $minimo = $objPrecTari->MinimoFacturable;
+                    t('El minimo es: '.$minimo);
+                    if ( ($minimo > 0) && ($decPesoTari < $minimo) ) {
+                        t('Guia: '.$this->Tracking.' con peso menor al minimo: '.$decPesoTari);
+                        $decPesoTari = $minimo;
+                        t('El peso quedo en: '.$decPesoTari);
+                    } else {
+                        if ($minimo == 0) {
+                            $decPesoTari = 0;
+                            t('Minimo en cero, no se debe facturar');
+                        }
                     }
+                    $monto  = $precio * $decPesoTari;
+                    $texto  = "Zona:$intZonaIdxx, Servicio:$strServImpo, Tarifa: $precio, Min Facturable: $minimo, ";
+                    $texto .= "con peso: $decPesoTari, totaliza: $monto";
+                    //t($texto);
+                } else {
+                    //t('Peso en Cero. No se factura');
+                    $monto = 0;
+                    $texto  = "Peso en Cero.  No se factura. Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari";
                 }
-                $monto  = $precio * $decPesoTari;
-                $texto  = "Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari: $precio, Min Facturable: $minimo";
-                $texto .= "para un peso de: $decPesoTari, totaliza: $monto";
+            } else {
+                $monto = 0;
+                $texto  = "No hay Tarifa para Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari";
+            }
+            t($texto);
+
+            return array($monto, $texto);
+        }
+
+        public function serv_recolecta(Conceptos $concepto)
+        {
+            t('Rutina: serv_recolecta');
+            $monto = 0;
+            $texto = '';
+            /* @var $objTariClie TarifaAgentes */
+            //------------------------------
+            // Se asigna la tarifa publica
+            //------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::TarifaAgentes()->EsPublica,true);
+            $objTariPubl   = TarifaAgentes::QuerySingle(QQ::AndCondition($objClauWher));
+            if (is_null($objTariPubl)) {
+                $texto = 'No se ha definido la Tarifa Publica';
+                return array($monto, $texto);
+            }
+            $decPesoTari = $this->pesoTarifa();
+            t('El peso usado para calcular la Tarifa sera: '.$decPesoTari);
+            if (is_null($this->TarifaAgenteId)) {
+                $this->TarifaAgenteId = $objTariPubl->Id;
+                $this->Save();
+                t('La guia no tenia tarifa, le acabo de asignar: '.$this->TarifaAgente->Nombre);
+            }
+            $intTariIdxx = $this->TarifaAgenteId;
+            $strNombTari = $this->TarifaAgente->Nombre;
+            $intZonaIdxx = $this->Origen->Zona;
+            $strServImpo = $this->__servExportacion();
+            t("Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
+            $objPrecTari = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx,$intZonaIdxx,$strServImpo);
+            if ($objPrecTari) {
+                if ($decPesoTari > 0) {
+                    $precio = $objPrecTari->Precio;
+                    $minimo = $objPrecTari->MinimoFacturable;
+                    t('El minimo es: '.$minimo);
+                    if ( ($minimo > 0) && ($decPesoTari < $minimo) ) {
+                        t('Guia: '.$this->Tracking.' con peso menor al minimo: '.$decPesoTari);
+                        $decPesoTari = $minimo;
+                        t('El peso quedo en: '.$decPesoTari);
+                    } else {
+                        if ($minimo == 0) {
+                            $decPesoTari = 0;
+                            t('Minimo en cero, no se debe facturar');
+                        }
+                    }
+                    $monto  = $precio * $decPesoTari;
+                    $texto  = "Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari: $precio, Min Facturable: $minimo";
+                    $texto .= "para un peso de: $decPesoTari, totaliza: $monto";
+                } else {
+                    t('Peso en Cero. No se factura');
+                    $monto = 0;
+                    $texto  = "Peso en Cero.  No se factura. Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari";
+                }
             } else {
                 $monto = 0;
                 $texto  = "No hay Tarifa para Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari";
@@ -283,6 +389,7 @@
 
             return array($monto, $texto);
         }
+
 
         public function flete_nac(Conceptos $concepto)
         {
@@ -406,16 +513,20 @@
                 //-------------------------------------------------------------------------
                 // Una vez calculado, se registra el concepto en la tabla correspondiente
                 //-------------------------------------------------------------------------
-                $guia_concepto = new GuiaConceptos();
-                $guia_concepto->GuiaId      = $this->Id;
-                $guia_concepto->ConceptoId  = $objConcFact->Id;
-                $guia_concepto->Tipo        = $objConcFact->AplicaComo;
-                $guia_concepto->Valor       = is_numeric($objConcFact->Valor) ? $objConcFact->Valor : null;
-                $guia_concepto->Monto       = $monto;
-                $guia_concepto->MostrarComo = $objConcFact->MostrarComo;
-                $guia_concepto->Explicacion = $explicacion;
-                $guia_concepto->Save();
-                t('Concepto grabado en la DB');
+                try {
+                    $guia_concepto = new GuiaConceptos();
+                    $guia_concepto->GuiaId      = $this->Id;
+                    $guia_concepto->ConceptoId  = $objConcFact->Id;
+                    $guia_concepto->Tipo        = $objConcFact->AplicaComo;
+                    $guia_concepto->Valor       = is_numeric($objConcFact->Valor) ? $objConcFact->Valor : null;
+                    $guia_concepto->Monto       = $monto;
+                    $guia_concepto->MostrarComo = $objConcFact->MostrarComo;
+                    $guia_concepto->Explicacion = $explicacion;
+                    $guia_concepto->Save();
+                    t('Concepto grabado en la DB');
+                } catch (Exception $e) {
+                    t('Error: '.$e->getMessage());
+                }
                 //--------------------------------------------------------------
                 // Se aplica el monto del concepto al importe total de la guia
                 //--------------------------------------------------------------
@@ -430,7 +541,7 @@
             //----------------------------------------------------
             $this->Total = (float)$total;
             $this->Save();
-            t('Se actualizo el total de la guia con: '.$total);
+            t('El total de la guia quedo con: '.$this->Total);
         }
 
         /**
@@ -629,7 +740,7 @@
                 t('Se debe aplicar la tasa: '.$this->Tasa.' de cambio para llevar a Bs');
                 $monto *= $this->Tasa;
             }
-            t('Saliendo de la Guia, despues de hacer calculado el concepto...');
+            t('Saliendo de la Guia, despues de haber calculado el concepto...');
             return array($monto, $explicacion);
         }
 

@@ -48,10 +48,10 @@ require('inc/header.inc.php');
                     <div class="titulo">Información del Envío</div>
                 </div>
                 <div class="col-md-3" style="border-radius: 3px; padding: 0.1em">
-                    <div class="titulo">Costos del Servicio</div>
+                    <div class="titulo">Datos Adicionales y Conceptos</div>
                 </div>
                 <div class="col-md-3" style="border-radius: 3px; padding: 0.1em">
-                    <div class="titulo">Facturación</div>
+                    <div class="titulo">Costos y Facturación</div>
                 </div>
             </div>
             <div class="row">

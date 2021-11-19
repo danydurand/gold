@@ -349,8 +349,8 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                         //-----------------------------------------------------------------------------------------
                         // Se actualiza el total de la factura con la sumatoria de los totales de sus manifiestos
                         //-----------------------------------------------------------------------------------------
-                        $objFactClie->Total          = $decSumaNota;
-                        $objFactClie->MontoPendiente = $decSumaNota;
+                        $objFactClie->Total          = round($decSumaNota,2);
+                        $objFactClie->MontoPendiente = round($decSumaNota,2);
                         $objFactClie->Save();
                         $intCantFact++;
                         t('Se actualizo el total de la factura con: '.$decSumaNota."\n");

@@ -7,6 +7,25 @@ if (isset($_SESSION['TipoAcci'])) {
 }
 $objFactClie = Facturas::Load($intFactIdxx);
 
+//$objUsuario  = unserialize($_SESSION['User']);
+//if ($objUsuario->LogiUsua == 'ddurand') {
+//    $objDatabase  = Facturas::GetDatabase();
+//    $strCadeSqlx  = "select * ";
+//    $strCadeSqlx .= "  from v_nota_entrega_zona ";
+//    $strCadeSqlx .= " where nota_entrega_id in (select id ";
+//    $strCadeSqlx .= "                             from nota_entrega ";
+//    $strCadeSqlx .= "                            where factura_id = ".$objFactClie->Id.")";
+//    $strCadeSqlx .= " order by zona";
+//    $objDbResult  = $objDatabase->Query($strCadeSqlx);
+//    $decTotaFact  = 0;
+//    while ($mixRegistro = $objDbResult->FetchArray()) {
+//        $decTotaFact  += $mixRegistro['total'];
+//    }
+//    $objFactClie->Total = $decTotaFact;
+//    $objFactClie->Save();
+//}
+
+
 use Spipu\Html2Pdf\Html2Pdf;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;

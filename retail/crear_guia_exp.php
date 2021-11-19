@@ -91,6 +91,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lstProfClie;
     protected $lstSexoClie;
 
+    protected $lstSucuOrig;
     protected $lstSucuDest;
     protected $lstReceDest;
 
@@ -195,6 +196,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $blnAliaCome = false;
     protected $blnPrimInte = true;
 
+    protected $dtgConcOpci;
+    protected $colConcSele;
+    protected $arrOpciToma = [];
+    protected $objProcOpci;
+
     
     protected function SetupGuia() {
         $intIdxxGuia = QApplication::PathInfo(0);
@@ -204,6 +210,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //----------------------------------------------------------
         $strNombProc = 'Piezas Temporales: '.$this->objUsuario->LogiUsua.' '.date('Y-m-d');
         $this->objProcEjec = CrearProceso($strNombProc);
+        //---------------------------------
+        // Manejo de Conceptos Opcionales
+        //---------------------------------
+        $strTextInde = !is_null($intIdxxGuia) ? $intIdxxGuia : date('Y-m-d');
+        $strNombProc = 'Conceptos Opcionales: '.$this->objUsuario->LogiUsua.' (GuiaId: '.$strTextInde.')';
+        $this->objProcOpci = CrearProceso($strNombProc);
 
         if ($intIdxxGuia) {
             $this->objGuia = Guias::Load($intIdxxGuia);
@@ -250,8 +262,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia = new Guias();
             $this->blnEditMode = false;
             PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
+            GcoTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
             t('Se trata de una Guia nueva, así que elimine todas las piezas temporales del Usuario');
         }
+
+        $this->cargarConceptosOpcionales($this->objGuia);
+
         $this->intSucuOrig = $_SESSION['SucursalId'];
         $this->intReceOrig = $_SESSION['ReceptoriaId'];
         $this->objClieNaci = unserialize($_SESSION['ClieNaci']);
@@ -260,13 +276,53 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->decTasaEuro = $_SESSION['TasaEuro'];
     }
 
+    protected function cargarConceptosOpcionales(Guias $objGuiaProc) {
+        /* @var $objConcOpci Conceptos */
+        //---------------------------------------------------------------------
+        // Los Concepto Opcionales de la guia, se graban en la tabla temporal
+        //---------------------------------------------------------------------
+        t('Buscando conceptos opcionales asociados a la guia...');
+        $arrConcOpci = Conceptos::OpcionalesTomadosPorLaGuia($objGuiaProc->Id);
+        t('La guia tiene: '.count($arrConcOpci).' conceptos opcionales asociados');
+        foreach ($arrConcOpci as $objConcOpci) {
+            t('Concepto: '.$objConcOpci->Nombre);
+            $objConcTemp = new GcoTemp();
+            $objConcTemp->ProcesoErrorId = $this->objProcOpci->Id;
+            $objConcTemp->ConceptoId     = $objConcOpci->Id;
+            $objConcTemp->CreatedBy      = $this->objUsuario->CodiUsua;
+            $objConcTemp->CreatedAt      = new QDateTime(QDateTime::Now);
+            $objConcTemp->Save();
+        }
+        //---------------------------------------------------------------------
+        // Ahora se cargan los Concepto Opcionales, no asociados a la guia
+        //---------------------------------------------------------------------
+        t('Buscando conceptos opcionales...');
+        $arrConcOpci   = Conceptos::OpcionalesActivos();
+        foreach ($arrConcOpci as $objConcOpci) {
+            t('Cargando Concepto: '.$objConcOpci->Nombre);
+            try {
+                $objConcTemp = new GcoTemp();
+                $objConcTemp->ProcesoErrorId = $this->objProcOpci->Id;
+                $objConcTemp->ConceptoId     = $objConcOpci->Id;
+                $objConcTemp->CreatedBy      = $this->objUsuario->CodiUsua;
+                $objConcTemp->CreatedAt      = new QDateTime(QDateTime::Now);
+                $objConcTemp->Save();
+                t('Concepto cargado');
+            } catch (Exception $e) {
+                t('Concepto: '.$objConcOpci->Nombre.' posiblemente ya estaba cargado');
+                t('Excepcion: '.$e->getMessage());
+            } catch (Error $e) {
+                t('Error: '.$e->getMessage());
+            }
+        }
+
+    }
+
 
     protected function Form_Create() {
         parent::Form_Create();
 
-        //t('Voy al setup...');
         $this->SetupGuia();
-        //t('Regrese el setup...');
 
         $this->lblTituForm->Text = QApplication::Translate('Guia Exportación');
 
@@ -297,6 +353,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //------------------------
         // Servicio
         //------------------------
+        $this->lstSucuOrig_Create();
         $this->lstSucuDest_Create();
         $this->lstServExpo_Create();
         $this->lstReceDest_Create();
@@ -373,7 +430,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lblPiesPiez_Create();
         $this->lblKiloPiez_Create();
 
-        //t('K8');
         $this->txtContPiez_Create();
         $this->txtKiloEnvi_Create();
         $this->txtAltoEnvi_Create();
@@ -382,7 +438,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtVoluEnvi_Create();
         $this->txtPiesEnvi_Create();
 
-        //$this->txtValoDecl = disableControl($this->txtValoDecl);
         $this->txtKiloEnvi = disableControl($this->txtKiloEnvi);
         $this->txtAltoEnvi = disableControl($this->txtAltoEnvi);
         $this->txtAnchEnvi = disableControl($this->txtAnchEnvi);
@@ -403,17 +458,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->btnCancPiez_Create();
         $this->btnDelePiez_Create();
 
-        //$this->arrDatoFact[] = ['Dato' => 'Tasa Bs/$', 'Valor' => $this->objGuia->Tasa];
-        //$this->arrDatoFact[] = ['Dato' => 'Total',     'Valor' => $this->objGuia->Total];
-        //$this->arrDatoFact[] = ['Dato' => 'PreFact',   'Valor' => $this->objGuia->FacturaId];
-        //
-        //$this->dtgDatoFact_Create();
-
-        //$this->lblBotoPopu_Create();
-        //$this->btnMasxAcci_Create();
-        //$this->btnErroProc_Create();
-        //$this->lblPopuModa_Create();
-
         if ($this->blnEditMode) {
             if (!is_null($this->objGuia->FacturaId)) {
                 $this->warning('La Guia esta Facturada | No se admiten cambios');
@@ -421,10 +465,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             } else {
                 $this->txtNumeCedu->SetFocus();
             }
+            $this->arrOpciToma = Conceptos::OpcionalesTomadosPorLaGuia($this->objGuia->Id);
+            t('En modo edicion.  La guia tiene: '.count($this->arrOpciToma).' concepto opcionales');
         } else {
             $this->txtNumeCedu->SetFocus();
         }
 
+        $this->dtgConcOpci_Create();
         $this->lstModoValo_Change();
 
         $objSucuUsua = Counter::Load($_SESSION['ReceptoriaId']);
@@ -597,9 +644,22 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
 
 
+    protected function lstSucuOrig_Create() {
+        $this->lstSucuOrig = new QListBox($this);
+        $this->lstSucuOrig->Width = 150;
+        if ($this->blnEditMode) {
+            $this->cargarOrigenes($this->objGuia->OrigenId);
+        } else {
+            $this->cargarOrigenes();
+        }
+        if ($this->blnAliaCome) {
+            $this->lstSucuOrig->Enabled = false;
+        }
+    }
+
     protected function lstSucuDest_Create() {
         $this->lstSucuDest = new QListBox($this);
-        $this->lstSucuDest->Width = 200;
+        $this->lstSucuDest->Width = 150;
         if ($this->blnEditMode) {
             $this->cargarDestinos($this->objGuia->DestinoId);
         } else {
@@ -610,7 +670,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function lstServExpo_Create() {
         $this->lstServExpo = new QListBox($this);
         $this->lstServExpo->Name = 'Servicio';
-        $this->lstServExpo->Width = 200;
+        $this->lstServExpo->Width = 150;
         $blnSeleAere = false;
         $blnSeleMari = false;
         if (!$this->blnEditMode) {
@@ -776,6 +836,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function lstModoValo_Create() {
         $this->lstModoValo = new QListBox($this);
         $this->lstModoValo->Name = 'Modo V.D.';
+        $this->lstModoValo->Width = 160;
         if (!$this->blnEditMode) {
             $this->cargarModosValor('PG');
         } else {
@@ -1027,7 +1088,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAltoPiez->Width = 45;
         $this->txtAltoPiez->Placeholder = 'cm';
         $this->txtAltoPiez->Visible = false;
-        $this->txtAltoPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
+        //$this->txtAltoPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
     }
 
     protected function txtAnchPiez_Create() {
@@ -1035,7 +1096,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchPiez->Width = 45;
         $this->txtAnchPiez->Placeholder = 'cm';
         $this->txtAnchPiez->Visible = false;
-        $this->txtAnchPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
+        //$this->txtAnchPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
     }
 
     protected function txtLargPiez_Create() {
@@ -1043,7 +1104,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtLargPiez->Width = 45;
         $this->txtLargPiez->Placeholder = 'cm';
         $this->txtLargPiez->Visible = false;
-        $this->txtLargPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
+        //$this->txtLargPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
     }
 
     protected function txtVoluPiez_Create() {
@@ -1268,15 +1329,20 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $decLargPiez *= 2.54;
                 }
 
+                $decVoluPiez = ($decAltoPiez * $decAnchPiez * $decLargPiez) / 5000;
+                $decPiesPiez = (($decAltoPiez * $decAnchPiez * $decLargPiez) / 1000000) * 35.315;
+
                 $objPiezGuia->EmpaqueId      = $this->lstEmpaPiez->SelectedValue;
                 $objPiezGuia->Descripcion    = substr(strtoupper(limpiarCadena($this->txtContPiez->Text)),0,50);
                 $objPiezGuia->Kilos          = (float)$this->txtKiloPiez->Text;
                 $objPiezGuia->Alto           = $decAltoPiez;
                 $objPiezGuia->Ancho          = $decAnchPiez;
                 $objPiezGuia->Largo          = $decLargPiez;
-                $objPiezGuia->Volumen        = (float)$this->txtVoluPiez->Text;
+                $objPiezGuia->Volumen        = (float)$decVoluPiez;
+                //$objPiezGuia->Volumen        = (float)$this->txtVoluPiez->Text;
                 $objPiezGuia->ValorDeclarado = $decValoDecl;
-                $objPiezGuia->PiesCub        = (float)$this->txtPiesPiez->Text;
+                $objPiezGuia->PiesCub        = (float)$decPiesPiez;
+                //$objPiezGuia->PiesCub        = (float)$this->txtPiesPiez->Text;
                 $objPiezGuia->Save();
                 t('Salve en PiezasTemp');
                 if ($this->lstModoValo->SelectedValue == 'PG') {
@@ -1713,44 +1779,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $colMediPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgPiezTemp->AddColumn($colMediPiez);
 
-        /*
-        $colAltoPiez = new QDataGridColumn($this);
-        $colAltoPiez->Name = 'ALTO';
-        $colAltoPiez->Html = '<?= nf($_ITEM->Alto); ?>';
-        $colAltoPiez->Width = 45;
-        $colAltoPiez->HorizontalAlign = QHorizontalAlign::Right;
-        $this->dtgPiezTemp->AddColumn($colAltoPiez);
-
-        $colAnchPiez = new QDataGridColumn($this);
-        $colAnchPiez->Name = 'ANCH';
-        $colAnchPiez->Html = '<?= nf($_ITEM->Ancho); ?>';
-        $colAnchPiez->Width = 45;
-        $colAnchPiez->HorizontalAlign = QHorizontalAlign::Right;
-        $this->dtgPiezTemp->AddColumn($colAnchPiez);
-
-        $colLargPiez = new QDataGridColumn($this);
-        $colLargPiez->Name = 'LARG';
-        $colLargPiez->Html = '<?= nf($_ITEM->Largo); ?>';
-        $colLargPiez->Width = 45;
-        $colLargPiez->HorizontalAlign = QHorizontalAlign::Right;
-        $this->dtgPiezTemp->AddColumn($colLargPiez);
-        */
-
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = 'KG';
         $colKiloPiez->Html = '<?= nf($_ITEM->Kilos); ?>';
         $colKiloPiez->Width = 30;
         $colKiloPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgPiezTemp->AddColumn($colKiloPiez);
-
-        /*
-        $colVoluPiez = new QDataGridColumn($this);
-        $colVoluPiez->Name = 'VOL.';
-        $colVoluPiez->Html = '<?= nf($_ITEM->Volumen); ?>';
-        $colVoluPiez->Width = 45;
-        $colVoluPiez->HorizontalAlign = QHorizontalAlign::Right;
-        $this->dtgPiezTemp->AddColumn($colVoluPiez);
-        */
 
         $colPiesPiez = new QDataGridColumn($this);
         $colPiesPiez->Name = 'P.CUB';
@@ -1761,10 +1795,86 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     }
 
-    //--------------------------------------------------------------------------------------------------------------
-    // Función que busca y muestra los datos de un cliente remitente existente a través de su cédula. En caso de no
-    // existir, se declara al mismo como nuevo cliente.
-    //--------------------------------------------------------------------------------------------------------------
+    protected function dtgConcOpci_Create() {
+        $this->dtgConcOpci = new QDataGrid($this);
+        $this->dtgConcOpci->FontSize = 12;
+        $this->dtgConcOpci->ShowFilter = false;
+
+        $this->dtgConcOpci->CssClass = 'datagrid';
+        $this->dtgConcOpci->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgConcOpci->UseAjax = true;
+
+        $this->colConcSele = new QCheckBoxColumn('', $this->dtgConcOpci);
+        $this->colConcSele->PrimaryKey = 'ConceptoId';
+        $this->colConcSele->Width = 30;
+        $this->colConcSele->SetCheckboxCallback($this,'colMarcarSeleccion');
+        $this->dtgConcOpci->AddColumn($this->colConcSele);
+        //$this->dtgConcOpci->AddAction(new QClickEvent(), new QAjaxAction('colConcSele_Click'));
+
+        $this->dtgConcOpci->SetDataBinder('dtgConcOpci_Bind');
+
+        $this->createDtgConcOpciColumns();
+    }
+
+
+    public function colMarcarSeleccion(GcoTemp $objConcTemp, QCheckBox $ctl) {
+        /* @var $objConcOpci Conceptos */
+        t('Voy a evaluar si '.$objConcTemp->Concepto->Nombre.' ('.$objConcTemp->ConceptoId.') esta en el vector');
+        foreach ($this->arrOpciToma as $objConcOpci) {
+            t('Comparando con: '.$objConcOpci->Id);
+            if ($objConcOpci->Id == $objConcTemp->ConceptoId) {
+                $ctl->Checked = true;
+                break;
+            }
+        }
+    }
+
+
+    protected function dtgConcOpci_Bind() {
+        $this->dtgConcOpci->DataSource = GcoTemp::LoadArrayByProcesoErrorId($this->objProcOpci->Id);
+    }
+
+
+    protected function createdtgConcOpciColumns() {
+        $colNombConc = new QDataGridColumn($this);
+        $colNombConc->Name = 'CONCEPTOS OPCIONALES';
+        $colNombConc->Html = '<?= $_ITEM->Id ? $_ITEM->Concepto->MostrarComo : null; ?>';
+        $colNombConc->Width = 150;
+        $colNombConc->HorizontalAlign = QHorizontalAlign::Left;
+        $this->dtgConcOpci->AddColumn($colNombConc);
+
+    }
+
+    //protected function colConcSele_Click() {
+    //    if (is_null($this->objGuia->FacturaId)) {
+    //        $this->mensaje();
+    //        $arrIdxxSele = $this->colConcSele->GetChangedIds();
+    //        t('Conceptos seleccionados: '.count($arrIdxxSele));
+    //        //---------------------------------------------------------------
+    //        // Se borran todos los Conceptos-Opcionales asociados a la guia
+    //        //---------------------------------------------------------------
+    //        t('Voy a borrar todos los conceptos previamente asociados a la guia');
+    //        $strTextMens = $this->objGuia->DesAsociarConceptosOpcionales();
+    //        if (count($arrIdxxSele) > 0) {
+    //            t('Hay seleccion de conceptos opcionales, los voy a asociar');
+    //            foreach (array_keys($arrIdxxSele) as $intConcOpci) {
+    //                t('Procesando concepto: '.$intConcOpci);
+    //                $strTextMens = $this->objGuia->AsociarConceptoOpcional($intConcOpci, $this->objUsuario->CodiUsua);
+    //                t('El mensaje de regreso es: '.$strTextMens);
+    //                if ($strTextMens != 'OK') {
+    //                    $this->danger($strTextMens);
+    //                    break;
+    //                }
+    //            }
+    //            t('Todo termino bien, voy a actualizar el datagrid');
+    //            $this->dtgConcOpci->Refresh();
+    //            $this->success('Concepto(s) Opcionales asociados a la Guia');
+    //        }
+    //    }
+    //}
+
+
     protected function txtNumeCedu_Blur() {
         if (!$this->blnEditMode) {
             $strNumeCedu = DejarNumerosVJGuion($this->txtNumeCedu->Text);
@@ -1860,9 +1970,27 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
     }
 
+    protected function cargarOrigenes($strCodiOrig=null) {
+        $this->lstSucuOrig->RemoveAllItems();
+        $this->lstSucuOrig->Width = 180;
+        $arrCodiOrig = Sucursales::LoadSucursalesActivas('Nombre','nac');
+        $intCantOrig = count($arrCodiOrig);
+        $this->lstSucuOrig->AddItem('- Seleccione Uno - ('.$intCantOrig.')', null);
+        if ($arrCodiOrig) {
+            foreach ($arrCodiOrig as $objSucuOrig) {
+                if ($this->blnEditMode) {
+                    $blnSeleRegi = $this->objGuia->OrigenId == $objSucuOrig->Id ? true : false;
+                } else {
+                    $blnSeleRegi = $this->objUsuario->SucursalId == $objSucuOrig->Id ? true : false;
+                }
+                $this->lstSucuOrig->AddItem($objSucuOrig->__toString(), $objSucuOrig->Id, $blnSeleRegi);
+            }
+        }
+    }
+
     protected function cargarDestinos($strCodiDest=null) {
         $this->lstSucuDest->RemoveAllItems();
-        $this->lstSucuDest->Width = 200;
+        $this->lstSucuDest->Width = 180;
         $arrCodiDest = Sucursales::LoadSucursalesActivas('Nombre','exp');
         $intCantDest = count($arrCodiDest);
         $this->lstSucuDest->AddItem('- Seleccione Uno - ('.$intCantDest.')', null);
@@ -2088,8 +2216,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function cargarModosValor($strModoValo=null) {
         $this->lstModoValo->RemoveAllItems();
-        $this->lstModoValo->AddItem('x GUIA','PG',$strModoValo=='PG');
-        $this->lstModoValo->AddItem('x PIEZA','PP',$strModoValo=='PP');
+        $this->lstModoValo->AddItem('Por GUIA','PG',$strModoValo=='PG');
+        $this->lstModoValo->AddItem('Por PIEZA','PP',$strModoValo=='PP');
     }
 
     protected function cargarClientesCorp($intCodiClie=null) {
@@ -2252,6 +2380,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if ($blnTodoOkey) {
             t('Voy a procesar las piezas');
             $this->procesamientoDePiezas();
+            t('Voy a procesar los conceptos');
+            $this->procesamientoDeConceptosOpcionales();
             t('Regresando a la invocacion de la rutina');
             try {
                 $this->txtDescCont->Text = $this->objGuia->Contenido;
@@ -2275,6 +2405,15 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //---------------------------------------
         if ($blnTodoOkey) {
             $arrConcActi = Conceptos::conceptosActivos($this->objGuia->Producto->Codigo);
+            t('Conceptos Fijos a calcular: '.count($arrConcActi));
+            //----------------------------------------------------------
+            // Se agregan los Conceptos Opcionales asociados a la guia
+            //----------------------------------------------------------
+            $arrConcOpci = $this->objGuia->GetGuiaConceptosOpcionalesAsGuiaArray();
+            t('Conceptos Opcionales a calcular: '.count($arrConcOpci));
+            foreach ($arrConcOpci as $objConcOpci) {
+                $arrConcActi[] = $objConcOpci->Concepto;
+            }
             $this->objGuia->calcularTodoLosConceptos($arrConcActi);
             $this->txtTotaGuia->Text = round($this->objGuia->Total,2);
             //-------------------------------------
@@ -2447,6 +2586,34 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         //t('Saliendo del procesamiento de las piezas');
     }
 
+
+    protected function procesamientoDeConceptosOpcionales() {
+        t('===========================================');
+        t('Rutina: Procesando los Conceptos Opcionales');
+        $this->objGuia->borrarConceptosOpcionales();
+        $arrIdxxSele = $this->colConcSele->GetSelectedIds();
+        t('Conceptos seleccionados: '.count($arrIdxxSele));
+        if ( (count($arrIdxxSele) == 0) && (count($this->arrOpciToma) > 0) ) {
+            t('Aja... hay diferencias...');
+            foreach ($this->arrOpciToma as $objConcToma) {
+                $arrIdxxSele[$objConcToma->Id] = 1;
+            }
+        }
+        if (count($arrIdxxSele) > 0) {
+            t('Hay seleccion de conceptos opcionales, los voy a asociar');
+            foreach (array_keys($arrIdxxSele) as $intConcOpci) {
+                t('Procesando concepto: '.$intConcOpci);
+                $strTextMens = $this->objGuia->AsociarConceptoOpcional($intConcOpci, $this->objUsuario->CodiUsua);
+                t('El mensaje de regreso es: '.$strTextMens);
+                if ($strTextMens != 'OK') {
+                    t('Error asociando concepto opcional: '.$strTextMens);
+                }
+            }
+        }
+        t('Saliendo del procesamiento de los conceptos');
+    }
+
+
     protected function sumaPiezas($decValoDecl=null) {
         $intCantPiez = 0;
         $decSumaKilo = 0;
@@ -2527,7 +2694,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->ClienteRetailId = $this->objClieReta->Id;
 
             if (!$this->blnEditSupe || !$this->blnEditMode) {
-                $this->objGuia->OrigenId           = $this->intSucuOrig;
+                //$this->objGuia->OrigenId           = $this->intSucuOrig;
+                $this->objGuia->OrigenId           = $this->lstSucuOrig->SelectedValue;
                 $this->objGuia->ReceptoriaOrigenId = $this->intReceOrig;
             }
             $this->objGuia->ServicioEntrega           = 'DOM';

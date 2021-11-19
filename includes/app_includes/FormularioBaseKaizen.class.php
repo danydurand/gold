@@ -66,9 +66,10 @@ abstract class FormularioBaseKaizen extends QForm {
         $this->btnSave->Text = '<i class="fa fa-cogs fa-lg"></i> Procesar';
         $this->btnSave->AddAction(new QClickEvent(), new QServerAction('btnSave_Click'));
         $this->btnSave->HtmlEntities = false;
-        $this->btnSave->CssClass = 'btn btn-success btn-sm';
+        $this->btnSave->CssClass = 'btn btn-success btn-sm ladda-button';
         $this->btnSave->PrimaryButton = true;
         $this->btnSave->CausesValidation = true;
+        $this->btnSave->SetCustomAttribute('data-style','expand-right');
     }
 
     protected function btnCancel_Create() {

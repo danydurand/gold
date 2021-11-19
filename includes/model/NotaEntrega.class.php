@@ -445,6 +445,41 @@
             }
         }
 
+        public function acumularEnNotaConceptos(Guias $objGuiaNota, ProcesoError $objProcEjec) {
+            $arrConcGuia = $objGuiaNota->GetGuiaConceptosAsGuiaArray();
+            $intManiIdxx = $this->Id;
+            foreach ($arrConcGuia as $objConcGuia) {
+                $intConcIdxx = $objConcGuia->ConceptoId;
+                $strTipoConc = $objConcGuia->Tipo;
+                $mixValoConc = is_numeric($objConcGuia->Valor) ? $objConcGuia->Valor : 0;
+                $decMontConc = $objConcGuia->Monto;
+                $strMostComo = $objConcGuia->MostrarComo;
+                $strExplCalc = 'Acumulando las guias asociadas';
+                //-----------------------------------------------------------------------------------
+                // La tabla nota_conceptos se usa para acumular el importe, de cada concepto
+                // asociado a una nota de entrega
+                //-----------------------------------------------------------------------------------
+                $strCadeSqlx  = "insert ";
+                $strCadeSqlx .= "  into nota_conceptos ";
+                $strCadeSqlx .= "       (nota_entrega_id, concepto_id, tipo, valor, monto,";
+                $strCadeSqlx .= "       mostrar_como, explicacion) ";
+                $strCadeSqlx .= "values ($intManiIdxx,$intConcIdxx,'$strTipoConc',$mixValoConc,$decMontConc,";
+                $strCadeSqlx .= "'$strMostComo','$strExplCalc') ";
+                $strCadeSqlx .= "on duplicate key update monto = monto + $decMontConc";
+                $objDatabase  = self::GetDatabase();
+                try {
+                    $objDatabase->NonQuery($strCadeSqlx);
+                } catch (Exception $e) {
+                    t('SQL Upsert: '.$strCadeSqlx);
+                    t('Error: '.$e->getMessage());
+                    $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                    $arrParaErro['NumeRefe'] = $objGuiaNota->Tracking;
+                    $arrParaErro['MensErro'] = $e->getMessage();
+                    $arrParaErro['ComeErro'] = 'upsert en la tabla nota_concepto';
+                    GrabarError($arrParaErro);
+                }
+            }
+        }
 
         public function calcularTodoLosConceptos($arrConcCalc) {
             t('===============================');
@@ -461,43 +496,43 @@
             foreach ($arrGuiaNota as $objGuiaNota) {
                 t('Procesando la guia: '.$objGuiaNota->Tracking);
                 $objGuiaNota->calcularTodoLosConceptos($arrConcCalc);
-                $decTotaNdex += $objGuiaNota->Total;
                 //-------------------------------------------
                 // Acmulado de la Nota de Entrega por Zona
                 //-------------------------------------------
-                $this->acumularEnLaZona($objGuiaNota,$objProcEjec);
+                $this->acumularEnLaZona($objGuiaNota, $objProcEjec);
                 //--------------------------------------------------------------------
                 // La nde se actualiza con los conceptos recien caculados de la guia
                 //--------------------------------------------------------------------
-                $arrConcGuia = $objGuiaNota->GetGuiaConceptosAsGuiaArray();
-                foreach ($arrConcGuia as $objConcGuia) {
-                    $objConcNota = NotaConceptos::LoadByNotaEntregaIdConceptoId($this->Id,$objConcGuia->ConceptoId);
-                    //t('Concepto de la Nota: '.$objConcNota->Id);
-                    try {
-                        if (!$objConcNota) {
-                            $objConcNota = new NotaConceptos();
-                            $objConcNota->NotaEntregaId = $this->Id;
-                            $objConcNota->ConceptoId    = $objConcGuia->ConceptoId;
-                            $objConcNota->Tipo          = $objConcGuia->Tipo;
-                            $objConcNota->Valor         = is_numeric($objConcGuia->Valor) ? $objConcGuia->Valor : null;
-                            $objConcNota->Monto         = $objConcGuia->Monto;
-                            $objConcNota->MostrarComo   = $objConcGuia->MostrarComo;
-                            $objConcNota->Explicacion   = 'Acumulando las guias asociadas';
-                            t('El concepto: '.$objConcGuia->Concepto->Nombre.' no existia, se acaba de asociar a la nde');
-                        } else {
-                            t('El concepto: '.$objConcNota->Concepto->Nombre.' existia, sumando el monto: '.$objConcGuia->Monto);
-                            $objConcNota->Monto += $objConcGuia->Monto;
-                        }
-                        $objConcNota->Save();
-                    } catch (Exception $e) {
-                        t('Error: '.$e->getMessage());
-                    }
-                }
+                $this->acumularEnNotaConceptos($objGuiaNota, $objProcEjec);
+                //$arrConcGuia = $objGuiaNota->GetGuiaConceptosAsGuiaArray();
+                //foreach ($arrConcGuia as $objConcGuia) {
+                //    $objConcNota = NotaConceptos::LoadByNotaEntregaIdConceptoId($this->Id,$objConcGuia->ConceptoId);
+                //    //t('Concepto de la Nota: '.$objConcNota->Id);
+                //    try {
+                //        if (!$objConcNota) {
+                //            $objConcNota = new NotaConceptos();
+                //            $objConcNota->NotaEntregaId = $this->Id;
+                //            $objConcNota->ConceptoId    = $objConcGuia->ConceptoId;
+                //            $objConcNota->Tipo          = $objConcGuia->Tipo;
+                //            $objConcNota->Valor         = is_numeric($objConcGuia->Valor) ? $objConcGuia->Valor : null;
+                //            $objConcNota->Monto         = $objConcGuia->Monto;
+                //            $objConcNota->MostrarComo   = $objConcGuia->MostrarComo;
+                //            $objConcNota->Explicacion   = 'Acumulando las guias asociadas';
+                //            t('El concepto: '.$objConcGuia->Concepto->Nombre.' no existia, se acaba de asociar a la nde');
+                //        } else {
+                //            t('El concepto: '.$objConcNota->Concepto->Nombre.' existia, sumando el monto: '.$objConcGuia->Monto);
+                //            $objConcNota->Monto += $objConcGuia->Monto;
+                //        }
+                //        $objConcNota->Save();
+                //    } catch (Exception $e) {
+                //        t('Error: '.$e->getMessage());
+                //    }
+                //}
             }
             //-----------------------------------
             // Se actualiza el total de la NDE
             //-----------------------------------
-            $this->Total = $decTotaNdex;
+            $this->Total = NotaEntregaZona::TotalDeLaNota($this->Id);
             $this->Save();
             t('El total de la nde fue actualizado con: '.$decTotaNdex);
         }

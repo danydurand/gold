@@ -274,7 +274,7 @@
 		 * @var double fltTotal
 		 */
 		protected $fltTotal;
-		const TotalDefault = 0;
+		const TotalDefault = null;
 
 
 		/**

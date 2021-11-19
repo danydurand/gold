@@ -33,7 +33,7 @@
 	 * @property double $Volumen the value for fltVolumen (Not Null)
 	 * @property double $Kilos the value for fltKilos 
 	 * @property double $PiesCub the value for fltPiesCub 
-	 * @property double $Valor the value for fltValor (Not Null)
+	 * @property double $Valor the value for fltValor 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
@@ -1688,7 +1688,7 @@
 
 				case 'Valor':
 					/**
-					 * Gets the value for fltValor (Not Null)
+					 * Gets the value for fltValor 
 					 * @return double
 					 */
 					return $this->fltValor;
@@ -2074,7 +2074,7 @@
 
 				case 'Valor':
 					/**
-					 * Sets the value for fltValor (Not Null)
+					 * Sets the value for fltValor 
 					 * @param double $mixValue
 					 * @return double
 					 */

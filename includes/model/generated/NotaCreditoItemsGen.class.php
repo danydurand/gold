@@ -19,7 +19,7 @@
 	 * @property integer $NotaCreditoId the value for intNotaCreditoId (Not Null)
 	 * @property integer $ConceptoId the value for intConceptoId (Not Null)
 	 * @property string $MostrarComo the value for strMostrarComo (Not Null)
-	 * @property double $Monto the value for fltMonto (Not Null)
+	 * @property double $Monto the value for fltMonto 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property NotaCredito $NotaCredito the value for the NotaCredito object referenced by intNotaCreditoId (Not Null)
@@ -1086,7 +1086,7 @@
 
 				case 'Monto':
 					/**
-					 * Gets the value for fltMonto (Not Null)
+					 * Gets the value for fltMonto 
 					 * @return double
 					 */
 					return $this->fltMonto;
@@ -1213,7 +1213,7 @@
 
 				case 'Monto':
 					/**
-					 * Sets the value for fltMonto (Not Null)
+					 * Sets the value for fltMonto 
 					 * @param double $mixValue
 					 * @return double
 					 */

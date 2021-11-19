@@ -20,6 +20,7 @@
             <div class="col-md-4">
                 <?php $this->lblId->RenderWithName(); ?>
                 <?php $this->txtNombre->RenderWithName(); ?>
+                <?php $this->chkEsPublica->RenderWithName(); ?>
                 <?php $this->calFecha->RenderWithName(); ?>
                 <?php $this->txtCreatedBy->RenderWithName(); ?>
                 <?php $this->txtUpdatedBy->RenderWithName(); ?>

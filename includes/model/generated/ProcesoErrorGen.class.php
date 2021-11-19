@@ -26,6 +26,8 @@
 	 * @property boolean $NotificarUsuario Confirmacion de notificacion al usuario del sistema. (Not Null)
 	 * @property-read Cola $_Cola the value for the private _objCola (Read-Only) if set due to an expansion on the cola.proceso_error_id reverse relationship
 	 * @property-read Cola[] $_ColaArray the value for the private _objColaArray (Read-Only) if set due to an ExpandAsArray on the cola.proceso_error_id reverse relationship
+	 * @property-read GcoTemp $_GcoTemp the value for the private _objGcoTemp (Read-Only) if set due to an expansion on the gco_temp.proceso_error_id reverse relationship
+	 * @property-read GcoTemp[] $_GcoTempArray the value for the private _objGcoTempArray (Read-Only) if set due to an ExpandAsArray on the gco_temp.proceso_error_id reverse relationship
 	 * @property-read PiezaRecibida $_PiezaRecibida the value for the private _objPiezaRecibida (Read-Only) if set due to an expansion on the pieza_recibida.proceso_error_id reverse relationship
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaArray the value for the private _objPiezaRecibidaArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.proceso_error_id reverse relationship
 	 * @property-read PiezasTemp $_PiezasTemp the value for the private _objPiezasTemp (Read-Only) if set due to an expansion on the piezas_temp.proceso_error_id reverse relationship
@@ -127,6 +129,22 @@
 		 * @var Cola[] _objColaArray;
 		 */
 		private $_objColaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GcoTemp object
+		 * (of type GcoTemp), if this ProcesoError object was restored with
+		 * an expansion on the gco_temp association table.
+		 * @var GcoTemp _objGcoTemp;
+		 */
+		private $_objGcoTemp;
+
+		/**
+		 * Private member variable that stores a reference to an array of GcoTemp objects
+		 * (of type GcoTemp[]), if this ProcesoError object was restored with
+		 * an ExpandAsArray on the gco_temp association table.
+		 * @var GcoTemp[] _objGcoTempArray;
+		 */
+		private $_objGcoTempArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single PiezaRecibida object
@@ -748,6 +766,21 @@
 				}
 			}
 
+			// Check for GcoTemp Virtual Binding
+			$strAlias = $strAliasPrefix . 'gcotemp__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['gcotemp']) ? null : $objExpansionAliasArray['gcotemp']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGcoTempArray)
+				$objToReturn->_objGcoTempArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGcoTempArray[] = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotemp__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGcoTemp)) {
+					$objToReturn->_objGcoTemp = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotemp__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for PiezaRecibida Virtual Binding
 			$strAlias = $strAliasPrefix . 'piezarecibida__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1163,6 +1196,22 @@
 					 */
 					return $this->_objColaArray;
 
+				case '_GcoTemp':
+					/**
+					 * Gets the value for the private _objGcoTemp (Read-Only)
+					 * if set due to an expansion on the gco_temp.proceso_error_id reverse relationship
+					 * @return GcoTemp
+					 */
+					return $this->_objGcoTemp;
+
+				case '_GcoTempArray':
+					/**
+					 * Gets the value for the private _objGcoTempArray (Read-Only)
+					 * if set due to an ExpandAsArray on the gco_temp.proceso_error_id reverse relationship
+					 * @return GcoTemp[]
+					 */
+					return $this->_objGcoTempArray;
+
 				case '_PiezaRecibida':
 					/**
 					 * Gets the value for the private _objPiezaRecibida (Read-Only)
@@ -1363,6 +1412,9 @@
 			if ($this->CountColas()) {
 				$arrTablRela[] = 'cola';
 			}
+			if ($this->CountGcoTemps()) {
+				$arrTablRela[] = 'gco_temp';
+			}
 			if ($this->CountPiezaRecibidas()) {
 				$arrTablRela[] = 'pieza_recibida';
 			}
@@ -1522,6 +1574,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`cola`
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GcoTemp
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GcoTemps as an array of GcoTemp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GcoTemp[]
+		*/
+		public function GetGcoTempArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GcoTemp::LoadArrayByProcesoErrorId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GcoTemps
+		 * @return int
+		*/
+		public function CountGcoTemps() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GcoTemp::CountByProcesoErrorId($this->intId);
+		}
+
+		/**
+		 * Associates a GcoTemp
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function AssociateGcoTemp(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTemp on this unsaved ProcesoError.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTemp on this ProcesoError with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GcoTemp
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function UnassociateGcoTemp(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTemp on this unsaved ProcesoError.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTemp on this ProcesoError with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GcoTemps
+		 * @return void
+		*/
+		public function UnassociateAllGcoTemps() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTemp on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GcoTemp
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function DeleteAssociatedGcoTemp(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTemp on this unsaved ProcesoError.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTemp on this ProcesoError with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GcoTemps
+		 * @return void
+		*/
+		public function DeleteAllGcoTemps() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTemp on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
 				WHERE
 					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2009,6 +2210,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeCola $Cola
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTemp
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
 
@@ -2040,6 +2242,8 @@
 					return new QQNode('notificar_usuario', 'NotificarUsuario', 'Bit', $this);
 				case 'Cola':
 					return new QQReverseReferenceNodeCola($this, 'cola', 'reverse_reference', 'proceso_error_id', 'Cola');
+				case 'GcoTemp':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotemp', 'reverse_reference', 'proceso_error_id', 'GcoTemp');
 				case 'PiezaRecibida':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':
@@ -2071,6 +2275,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeCola $Cola
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTemp
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
 
@@ -2102,6 +2307,8 @@
 					return new QQNode('notificar_usuario', 'NotificarUsuario', 'boolean', $this);
 				case 'Cola':
 					return new QQReverseReferenceNodeCola($this, 'cola', 'reverse_reference', 'proceso_error_id', 'Cola');
+				case 'GcoTemp':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotemp', 'reverse_reference', 'proceso_error_id', 'GcoTemp');
 				case 'PiezaRecibida':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':

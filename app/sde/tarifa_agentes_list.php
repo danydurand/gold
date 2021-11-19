@@ -66,6 +66,7 @@ class TarifaAgentesListForm extends TarifaAgentesListFormBase {
 		// can traverse down QQN::tarifa_agentes() to display fields that are down the hierarchy)
 		$this->dtgTarifaAgenteses->MetaAddColumn('Id');
 		$this->dtgTarifaAgenteses->MetaAddColumn('Nombre');
+		$this->dtgTarifaAgenteses->MetaAddColumn('EsPublica');
 		//$this->dtgTarifaAgenteses->MetaAddColumn('Fecha');
 
         $colFechTari = new QDataGridColumn('Fecha','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');

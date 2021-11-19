@@ -49,6 +49,7 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
 		// Call MetaControl's methods to create qcontrols based on NotaEntrega's data fields
 		$this->lblId = $this->mctNotaEntrega->lblId_Create();
 		$this->lstClienteCorp = $this->mctNotaEntrega->lstClienteCorp_Create();
+		$this->lstClienteCorp->Width = 240;
 		$this->txtReferencia = $this->mctNotaEntrega->txtReferencia_Create();
 		$this->txtNombreArchivo = $this->mctNotaEntrega->txtNombreArchivo_Create();
 		$this->txtEstatus = $this->mctNotaEntrega->txtEstatus_Create();
@@ -65,11 +66,13 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
 		$this->txtRecibidas->Width = 70;
 		$this->txtLibras = $this->mctNotaEntrega->txtLibras_Create();
 		$this->txtLibras->Width = 70;
+		$this->txtKilos->Width = 70;
 		$this->txtPiesCub = $this->mctNotaEntrega->txtPiesCub_Create();
 		$this->txtPiesCub->Width = 70;
 		$this->txtVolumen = $this->mctNotaEntrega->txtVolumen_Create();
 		$this->txtVolumen->Width = 100;
-		$this->txtPiezas = $this->mctNotaEntrega->txtPiezas_Create();
+        $this->txtTotal->Width = 100;
+        $this->txtPiezas = $this->mctNotaEntrega->txtPiezas_Create();
 		$this->txtPiezas->Width = 100;
 		$this->calFecha = $this->mctNotaEntrega->calFecha_Create();
 		$this->calFecha->Width = 100;
@@ -108,9 +111,11 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
         $this->txtProcesadas          = disableControl($this->txtProcesadas);
         $this->txtRecibidas           = disableControl($this->txtRecibidas);
         $this->txtLibras              = disableControl($this->txtLibras);
+        $this->txtKilos               = disableControl($this->txtKilos);
         $this->txtPiesCub             = disableControl($this->txtPiesCub);
         $this->txtVolumen             = disableControl($this->txtVolumen);
         $this->txtPiezas              = disableControl($this->txtPiezas);
+        $this->txtTotal               = disableControl($this->txtTotal);
         $this->calFecha               = disableControl($this->calFecha);
         $this->txtHora                = disableControl($this->txtHora);
         $this->lstUsuario             = disableControl($this->lstUsuario);
@@ -198,6 +203,11 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
             $this->dtgGuiaNota->AddColumn($colPiesGuia);
         }
 
+        $colTotaGuia = new QDataGridColumn($this);
+        $colTotaGuia->Name = 'Total';
+        $colTotaGuia->Html = '<?= $_ITEM->Total ?>';
+        $colTotaGuia->Width = 60;
+        $this->dtgGuiaNota->AddColumn($colTotaGuia);
     }
 
     public function ZonaGuia_Render() {

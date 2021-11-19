@@ -1,22 +1,22 @@
 <div class="row" id="info-serv">
-    <div class="col-md-6">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="">Origen</label><br>
+            <?php $this->lstSucuOrig->Render(); ?>
+        </div>
+    </div>
+    <div class="col-md-4">
         <div class="form-group">
             <label for="">Destino</label><br>
             <?php $this->lstSucuDest->Render(); ?>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="form-group">
             <label for="">Servicio de Exportacion</label><br>
             <?php $this->lstServExpo->Render(); ?>
         </div>
     </div>
-    <!--<div class="col-md-4">-->
-    <!--    <div class="form-group">-->
-    <!--        <label for="">Receptoría</label><br>-->
-    <!--        --><?php //$this->lstReceDest->Render(); ?>
-    <!--    </div>-->
-    <!--</div>-->
 </div>
 <div class="row" style="line-height: 0.5em; margin-bottom: .3em">
     <div class="col-md-12" style="border-radius: 3px; padding: 0.1em">

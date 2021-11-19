@@ -20,7 +20,7 @@
 	 * @property integer $ConceptoId the value for intConceptoId (Not Null)
 	 * @property string $Tipo the value for strTipo (Not Null)
 	 * @property double $Valor the value for fltValor 
-	 * @property double $Monto the value for fltMonto (Not Null)
+	 * @property double $Monto the value for fltMonto 
 	 * @property string $MostrarComo the value for strMostrarComo (Not Null)
 	 * @property string $Explicacion the value for strExplicacion (Not Null)
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
@@ -1244,7 +1244,7 @@
 
 				case 'Monto':
 					/**
-					 * Gets the value for fltMonto (Not Null)
+					 * Gets the value for fltMonto 
 					 * @return double
 					 */
 					return $this->fltMonto;
@@ -1426,7 +1426,7 @@
 
 				case 'Monto':
 					/**
-					 * Sets the value for fltMonto (Not Null)
+					 * Sets the value for fltMonto 
 					 * @param double $mixValue
 					 * @return double
 					 */

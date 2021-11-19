@@ -559,6 +559,13 @@
 		QApplicationBase::$ClassFile['formapagometacontrol'] = __META_CONTROLS__ . '/FormaPagoMetaControl.class.php';
 		QApplicationBase::$ClassFile['formapagodatagrid'] = __META_CONTROLS__ . '/FormaPagoDataGrid.class.php';
 
+	// ClassPaths for the GcoTemp class
+		QApplicationBase::$ClassFile['gcotemp'] = __MODEL__ . '/GcoTemp.class.php';
+		QApplicationBase::$ClassFile['qqnodegcotemp'] = __MODEL__ . '/GcoTemp.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodegcotemp'] = __MODEL__ . '/GcoTemp.class.php';
+		QApplicationBase::$ClassFile['gcotempmetacontrol'] = __META_CONTROLS__ . '/GcoTempMetaControl.class.php';
+		QApplicationBase::$ClassFile['gcotempdatagrid'] = __META_CONTROLS__ . '/GcoTempDataGrid.class.php';
+
 	// ClassPaths for the Grupo class
 		QApplicationBase::$ClassFile['grupo'] = __MODEL__ . '/Grupo.class.php';
 		QApplicationBase::$ClassFile['qqnodegrupo'] = __MODEL__ . '/Grupo.class.php';
@@ -628,6 +635,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodeguiaconceptos'] = __MODEL__ . '/GuiaConceptos.class.php';
 		QApplicationBase::$ClassFile['guiaconceptosmetacontrol'] = __META_CONTROLS__ . '/GuiaConceptosMetaControl.class.php';
 		QApplicationBase::$ClassFile['guiaconceptosdatagrid'] = __META_CONTROLS__ . '/GuiaConceptosDataGrid.class.php';
+
+	// ClassPaths for the GuiaConceptosOpcionales class
+		QApplicationBase::$ClassFile['guiaconceptosopcionales'] = __MODEL__ . '/GuiaConceptosOpcionales.class.php';
+		QApplicationBase::$ClassFile['qqnodeguiaconceptosopcionales'] = __MODEL__ . '/GuiaConceptosOpcionales.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeguiaconceptosopcionales'] = __MODEL__ . '/GuiaConceptosOpcionales.class.php';
+		QApplicationBase::$ClassFile['guiaconceptosopcionalesmetacontrol'] = __META_CONTROLS__ . '/GuiaConceptosOpcionalesMetaControl.class.php';
+		QApplicationBase::$ClassFile['guiaconceptosopcionalesdatagrid'] = __META_CONTROLS__ . '/GuiaConceptosOpcionalesDataGrid.class.php';
 
 	// ClassPaths for the GuiaConnectPendiente class
 		QApplicationBase::$ClassFile['guiaconnectpendiente'] = __MODEL__ . '/GuiaConnectPendiente.class.php';

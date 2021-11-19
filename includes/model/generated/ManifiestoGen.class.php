@@ -18,7 +18,7 @@
 	 * @property string $Id the value for strId (PK)
 	 * @property integer $ProductoId the value for intProductoId (Not Null)
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
-	 * @property double $MontoFlete the value for fltMontoFlete (Not Null)
+	 * @property double $MontoFlete the value for fltMontoFlete 
 	 * @property FacProducto $Producto the value for the FacProducto object referenced by intProductoId (Not Null)
 	 * @property-read Guias $_GuiasAsManiGuia the value for the private _objGuiasAsManiGuia (Read-Only) if set due to an expansion on the mani_guia_assn association table
 	 * @property-read Guias[] $_GuiasAsManiGuiaArray the value for the private _objGuiasAsManiGuiaArray (Read-Only) if set due to an ExpandAsArray on the mani_guia_assn association table
@@ -67,7 +67,7 @@
 		 * @var double fltMontoFlete
 		 */
 		protected $fltMontoFlete;
-		const MontoFleteDefault = 0;
+		const MontoFleteDefault = null;
 
 
 		/**
@@ -1035,7 +1035,7 @@
 
 				case 'MontoFlete':
 					/**
-					 * Gets the value for fltMontoFlete (Not Null)
+					 * Gets the value for fltMontoFlete 
 					 * @return double
 					 */
 					return $this->fltMontoFlete;
@@ -1149,7 +1149,7 @@
 
 				case 'MontoFlete':
 					/**
-					 * Sets the value for fltMontoFlete (Not Null)
+					 * Sets the value for fltMontoFlete 
 					 * @param double $mixValue
 					 * @return double
 					 */

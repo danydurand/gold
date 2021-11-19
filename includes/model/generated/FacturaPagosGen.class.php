@@ -21,9 +21,9 @@
 	 * @property integer $DivisaId the value for intDivisaId (Not Null)
 	 * @property string $Referencia the value for strReferencia 
 	 * @property integer $BancoId the value for intBancoId 
-	 * @property double $MontoDivisa the value for fltMontoDivisa (Not Null)
-	 * @property double $MontoUsd the value for fltMontoUsd (Not Null)
-	 * @property double $MontoBs the value for fltMontoBs (Not Null)
+	 * @property double $MontoDivisa the value for fltMontoDivisa 
+	 * @property double $MontoUsd the value for fltMontoUsd 
+	 * @property double $MontoBs the value for fltMontoBs 
 	 * @property integer $CajaId the value for intCajaId (Not Null)
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
@@ -1418,21 +1418,21 @@
 
 				case 'MontoDivisa':
 					/**
-					 * Gets the value for fltMontoDivisa (Not Null)
+					 * Gets the value for fltMontoDivisa 
 					 * @return double
 					 */
 					return $this->fltMontoDivisa;
 
 				case 'MontoUsd':
 					/**
-					 * Gets the value for fltMontoUsd (Not Null)
+					 * Gets the value for fltMontoUsd 
 					 * @return double
 					 */
 					return $this->fltMontoUsd;
 
 				case 'MontoBs':
 					/**
-					 * Gets the value for fltMontoBs (Not Null)
+					 * Gets the value for fltMontoBs 
 					 * @return double
 					 */
 					return $this->fltMontoBs;
@@ -1664,7 +1664,7 @@
 
 				case 'MontoDivisa':
 					/**
-					 * Sets the value for fltMontoDivisa (Not Null)
+					 * Sets the value for fltMontoDivisa 
 					 * @param double $mixValue
 					 * @return double
 					 */
@@ -1677,7 +1677,7 @@
 
 				case 'MontoUsd':
 					/**
-					 * Sets the value for fltMontoUsd (Not Null)
+					 * Sets the value for fltMontoUsd 
 					 * @param double $mixValue
 					 * @return double
 					 */
@@ -1690,7 +1690,7 @@
 
 				case 'MontoBs':
 					/**
-					 * Sets the value for fltMontoBs (Not Null)
+					 * Sets the value for fltMontoBs 
 					 * @param double $mixValue
 					 * @return double
 					 */

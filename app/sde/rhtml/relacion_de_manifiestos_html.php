@@ -40,7 +40,6 @@ $strCadeSqlx .= " where nota_entrega_id in (select id ";
 $strCadeSqlx .= "                             from nota_entrega ";
 $strCadeSqlx .= "                            where factura_id = ".$objFactOrig->Id.")";
 $strCadeSqlx .= " order by zona";
-//t('SQL: '.$strCadeSqlx);
 $objDbResult  = $objDatabase->Query($strCadeSqlx);
 $arrFactImpr  = [];
 $decTotaFact  = 0;

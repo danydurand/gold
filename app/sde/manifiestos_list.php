@@ -82,6 +82,7 @@ class ManifiestosList extends NotaEntregaListFormBase {
 
         $this->colManiSele = new QCheckBoxColumn('', $this->dtgNotaEntregas);
         $this->colManiSele->PrimaryKey = 'Id';
+        //$this->colManiSele->SetCheckboxCallback($this,'colMarcarSeleccion');
         $this->dtgNotaEntregas->AddColumn($this->colManiSele);
         $this->dtgNotaEntregas->AddAction(new QClickEvent(), new QAjaxAction('colManiSele_Click'));
 
@@ -123,7 +124,14 @@ class ManifiestosList extends NotaEntregaListFormBase {
         $this->btnErroProc_Create();
 
 
+
     }
+
+    //public function colMarcarSeleccion(NotaEntrega $objNotaEntr, QCheckBox $ctl) {
+    //    if ($objNotaEntr->Id == 643) {
+    //        $ctl->Checked = true;
+    //    }
+    //}
 
     public function colUltiCkpt_Render(NotaEntrega $objManiCarg) {
 	    $objUltiCkpt = $objManiCarg->ultimoCheckpoint();

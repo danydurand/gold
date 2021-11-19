@@ -28,11 +28,11 @@
 	 * @property integer $CajaId the value for intCajaId 
 	 * @property string $Estatus the value for strEstatus (Not Null)
 	 * @property double $Tasa the value for fltTasa (Not Null)
-	 * @property double $Total the value for fltTotal (Not Null)
+	 * @property double $Total the value for fltTotal 
 	 * @property double $MontoDscto the value for fltMontoDscto 
 	 * @property double $MontoAbono the value for fltMontoAbono 
 	 * @property double $MontoCobrado the value for fltMontoCobrado 
-	 * @property double $MontoPendiente the value for fltMontoPendiente (Not Null)
+	 * @property double $MontoPendiente the value for fltMontoPendiente 
 	 * @property string $EstatusPago the value for strEstatusPago (Not Null)
 	 * @property string $Referencia the value for strReferencia 
 	 * @property string $Numero the value for strNumero 
@@ -201,7 +201,7 @@
 		 * @var double fltMontoDscto
 		 */
 		protected $fltMontoDscto;
-		const MontoDsctoDefault = 0;
+		const MontoDsctoDefault = null;
 
 
 		/**
@@ -217,7 +217,7 @@
 		 * @var double fltMontoCobrado
 		 */
 		protected $fltMontoCobrado;
-		const MontoCobradoDefault = 0;
+		const MontoCobradoDefault = null;
 
 
 		/**
@@ -2125,7 +2125,7 @@
 
 				case 'Total':
 					/**
-					 * Gets the value for fltTotal (Not Null)
+					 * Gets the value for fltTotal 
 					 * @return double
 					 */
 					return $this->fltTotal;
@@ -2153,7 +2153,7 @@
 
 				case 'MontoPendiente':
 					/**
-					 * Gets the value for fltMontoPendiente (Not Null)
+					 * Gets the value for fltMontoPendiente 
 					 * @return double
 					 */
 					return $this->fltMontoPendiente;
@@ -2686,7 +2686,7 @@
 
 				case 'Total':
 					/**
-					 * Sets the value for fltTotal (Not Null)
+					 * Sets the value for fltTotal 
 					 * @param double $mixValue
 					 * @return double
 					 */
@@ -2738,7 +2738,7 @@
 
 				case 'MontoPendiente':
 					/**
-					 * Sets the value for fltMontoPendiente (Not Null)
+					 * Sets the value for fltMontoPendiente 
 					 * @param double $mixValue
 					 * @return double
 					 */

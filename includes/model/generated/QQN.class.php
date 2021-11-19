@@ -481,6 +481,12 @@
 			return new QQNodeFormaPago('forma_pago', null, null);
 		}
 		/**
+		 * @return QQNodeGcoTemp
+		 */
+		static public function GcoTemp() {
+			return new QQNodeGcoTemp('gco_temp', null, null);
+		}
+		/**
 		 * @return QQNodeGrupo
 		 */
 		static public function Grupo() {
@@ -539,6 +545,12 @@
 		 */
 		static public function GuiaConceptos() {
 			return new QQNodeGuiaConceptos('guia_conceptos', null, null);
+		}
+		/**
+		 * @return QQNodeGuiaConceptosOpcionales
+		 */
+		static public function GuiaConceptosOpcionales() {
+			return new QQNodeGuiaConceptosOpcionales('guia_conceptos_opcionales', null, null);
 		}
 		/**
 		 * @return QQNodeGuiaConnectPendiente

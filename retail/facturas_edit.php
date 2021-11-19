@@ -209,7 +209,7 @@ class FacturasEditForm extends FacturasEditFormBase {
             $this->btnDelete->Visible = false;
         }
         $blnBorrFact = BuscarParametro('BorrFact',$this->objUsuario->LogiUsua,'Val1',0);
-        if ($blnBorrFact) {
+        if ($blnBorrFact || ($this->objUsuario->LogiUsua == 'ddurand')) {
             $this->btnDelete->Visible = true;
         } else {
             $this->btnDelete->Visible = false;

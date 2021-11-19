@@ -71,8 +71,16 @@
 	 * @property-read FacturaPmn[] $_FacturaPmnAsAnuladaPorArray the value for the private _objFacturaPmnAsAnuladaPorArray (Read-Only) if set due to an ExpandAsArray on the factura_pmn.anulada_por reverse relationship
 	 * @property-read FacturaPmn $_FacturaPmnAsCreadaPor the value for the private _objFacturaPmnAsCreadaPor (Read-Only) if set due to an expansion on the factura_pmn.creada_por reverse relationship
 	 * @property-read FacturaPmn[] $_FacturaPmnAsCreadaPorArray the value for the private _objFacturaPmnAsCreadaPorArray (Read-Only) if set due to an ExpandAsArray on the factura_pmn.creada_por reverse relationship
+	 * @property-read GcoTemp $_GcoTempAsCreatedBy the value for the private _objGcoTempAsCreatedBy (Read-Only) if set due to an expansion on the gco_temp.created_by reverse relationship
+	 * @property-read GcoTemp[] $_GcoTempAsCreatedByArray the value for the private _objGcoTempAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the gco_temp.created_by reverse relationship
+	 * @property-read GcoTemp $_GcoTempAsUpdatedBy the value for the private _objGcoTempAsUpdatedBy (Read-Only) if set due to an expansion on the gco_temp.updated_by reverse relationship
+	 * @property-read GcoTemp[] $_GcoTempAsUpdatedByArray the value for the private _objGcoTempAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the gco_temp.updated_by reverse relationship
 	 * @property-read GuiaCkpt $_GuiaCkptAsCodiUsua the value for the private _objGuiaCkptAsCodiUsua (Read-Only) if set due to an expansion on the guia_ckpt.codi_usua reverse relationship
 	 * @property-read GuiaCkpt[] $_GuiaCkptAsCodiUsuaArray the value for the private _objGuiaCkptAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the guia_ckpt.codi_usua reverse relationship
+	 * @property-read GuiaConceptosOpcionales $_GuiaConceptosOpcionalesAsCreatedBy the value for the private _objGuiaConceptosOpcionalesAsCreatedBy (Read-Only) if set due to an expansion on the guia_conceptos_opcionales.created_by reverse relationship
+	 * @property-read GuiaConceptosOpcionales[] $_GuiaConceptosOpcionalesAsCreatedByArray the value for the private _objGuiaConceptosOpcionalesAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos_opcionales.created_by reverse relationship
+	 * @property-read GuiaConceptosOpcionales $_GuiaConceptosOpcionalesAsUpdatedBy the value for the private _objGuiaConceptosOpcionalesAsUpdatedBy (Read-Only) if set due to an expansion on the guia_conceptos_opcionales.updated_by reverse relationship
+	 * @property-read GuiaConceptosOpcionales[] $_GuiaConceptosOpcionalesAsUpdatedByArray the value for the private _objGuiaConceptosOpcionalesAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos_opcionales.updated_by reverse relationship
 	 * @property-read HistoriaCliente $_HistoriaClienteAsCodiUsua the value for the private _objHistoriaClienteAsCodiUsua (Read-Only) if set due to an expansion on the historia_cliente.codi_usua reverse relationship
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsCodiUsuaArray the value for the private _objHistoriaClienteAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.codi_usua reverse relationship
 	 * @property-read ManifiestoExpCkpt $_ManifiestoExpCkptAsCreatedBy the value for the private _objManifiestoExpCkptAsCreatedBy (Read-Only) if set due to an expansion on the manifiesto_exp_ckpt.created_by reverse relationship
@@ -539,6 +547,38 @@
 		private $_objFacturaPmnAsCreadaPorArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single GcoTempAsCreatedBy object
+		 * (of type GcoTemp), if this Usuario object was restored with
+		 * an expansion on the gco_temp association table.
+		 * @var GcoTemp _objGcoTempAsCreatedBy;
+		 */
+		private $_objGcoTempAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of GcoTempAsCreatedBy objects
+		 * (of type GcoTemp[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the gco_temp association table.
+		 * @var GcoTemp[] _objGcoTempAsCreatedByArray;
+		 */
+		private $_objGcoTempAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GcoTempAsUpdatedBy object
+		 * (of type GcoTemp), if this Usuario object was restored with
+		 * an expansion on the gco_temp association table.
+		 * @var GcoTemp _objGcoTempAsUpdatedBy;
+		 */
+		private $_objGcoTempAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of GcoTempAsUpdatedBy objects
+		 * (of type GcoTemp[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the gco_temp association table.
+		 * @var GcoTemp[] _objGcoTempAsUpdatedByArray;
+		 */
+		private $_objGcoTempAsUpdatedByArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single GuiaCkptAsCodiUsua object
 		 * (of type GuiaCkpt), if this Usuario object was restored with
 		 * an expansion on the guia_ckpt association table.
@@ -553,6 +593,38 @@
 		 * @var GuiaCkpt[] _objGuiaCkptAsCodiUsuaArray;
 		 */
 		private $_objGuiaCkptAsCodiUsuaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaConceptosOpcionalesAsCreatedBy object
+		 * (of type GuiaConceptosOpcionales), if this Usuario object was restored with
+		 * an expansion on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales _objGuiaConceptosOpcionalesAsCreatedBy;
+		 */
+		private $_objGuiaConceptosOpcionalesAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaConceptosOpcionalesAsCreatedBy objects
+		 * (of type GuiaConceptosOpcionales[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales[] _objGuiaConceptosOpcionalesAsCreatedByArray;
+		 */
+		private $_objGuiaConceptosOpcionalesAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaConceptosOpcionalesAsUpdatedBy object
+		 * (of type GuiaConceptosOpcionales), if this Usuario object was restored with
+		 * an expansion on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales _objGuiaConceptosOpcionalesAsUpdatedBy;
+		 */
+		private $_objGuiaConceptosOpcionalesAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaConceptosOpcionalesAsUpdatedBy objects
+		 * (of type GuiaConceptosOpcionales[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the guia_conceptos_opcionales association table.
+		 * @var GuiaConceptosOpcionales[] _objGuiaConceptosOpcionalesAsUpdatedByArray;
+		 */
+		private $_objGuiaConceptosOpcionalesAsUpdatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single HistoriaClienteAsCodiUsua object
@@ -1783,6 +1855,36 @@
 				}
 			}
 
+			// Check for GcoTempAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'gcotempascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['gcotempascreatedby']) ? null : $objExpansionAliasArray['gcotempascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGcoTempAsCreatedByArray)
+				$objToReturn->_objGcoTempAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGcoTempAsCreatedByArray[] = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotempascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGcoTempAsCreatedBy)) {
+					$objToReturn->_objGcoTempAsCreatedBy = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotempascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GcoTempAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'gcotempasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['gcotempasupdatedby']) ? null : $objExpansionAliasArray['gcotempasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGcoTempAsUpdatedByArray)
+				$objToReturn->_objGcoTempAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGcoTempAsUpdatedByArray[] = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotempasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGcoTempAsUpdatedBy)) {
+					$objToReturn->_objGcoTempAsUpdatedBy = GcoTemp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'gcotempasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for GuiaCkptAsCodiUsua Virtual Binding
 			$strAlias = $strAliasPrefix . 'guiackptascodiusua__nume_guia';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1795,6 +1897,36 @@
 					$objToReturn->_objGuiaCkptAsCodiUsuaArray[] = GuiaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiackptascodiusua__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiaCkptAsCodiUsua)) {
 					$objToReturn->_objGuiaCkptAsCodiUsua = GuiaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiackptascodiusua__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiaConceptosOpcionalesAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiaconceptosopcionalesascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiaconceptosopcionalesascreatedby']) ? null : $objExpansionAliasArray['guiaconceptosopcionalesascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaConceptosOpcionalesAsCreatedByArray)
+				$objToReturn->_objGuiaConceptosOpcionalesAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsCreatedByArray[] = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaConceptosOpcionalesAsCreatedBy)) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsCreatedBy = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiaConceptosOpcionalesAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiaconceptosopcionalesasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiaconceptosopcionalesasupdatedby']) ? null : $objExpansionAliasArray['guiaconceptosopcionalesasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaConceptosOpcionalesAsUpdatedByArray)
+				$objToReturn->_objGuiaConceptosOpcionalesAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsUpdatedByArray[] = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaConceptosOpcionalesAsUpdatedBy)) {
+					$objToReturn->_objGuiaConceptosOpcionalesAsUpdatedBy = GuiaConceptosOpcionales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiaconceptosopcionalesasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3090,6 +3222,38 @@
 					 */
 					return $this->_objFacturaPmnAsCreadaPorArray;
 
+				case '_GcoTempAsCreatedBy':
+					/**
+					 * Gets the value for the private _objGcoTempAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the gco_temp.created_by reverse relationship
+					 * @return GcoTemp
+					 */
+					return $this->_objGcoTempAsCreatedBy;
+
+				case '_GcoTempAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objGcoTempAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the gco_temp.created_by reverse relationship
+					 * @return GcoTemp[]
+					 */
+					return $this->_objGcoTempAsCreatedByArray;
+
+				case '_GcoTempAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objGcoTempAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the gco_temp.updated_by reverse relationship
+					 * @return GcoTemp
+					 */
+					return $this->_objGcoTempAsUpdatedBy;
+
+				case '_GcoTempAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objGcoTempAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the gco_temp.updated_by reverse relationship
+					 * @return GcoTemp[]
+					 */
+					return $this->_objGcoTempAsUpdatedByArray;
+
 				case '_GuiaCkptAsCodiUsua':
 					/**
 					 * Gets the value for the private _objGuiaCkptAsCodiUsua (Read-Only)
@@ -3105,6 +3269,38 @@
 					 * @return GuiaCkpt[]
 					 */
 					return $this->_objGuiaCkptAsCodiUsuaArray;
+
+				case '_GuiaConceptosOpcionalesAsCreatedBy':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the guia_conceptos_opcionales.created_by reverse relationship
+					 * @return GuiaConceptosOpcionales
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsCreatedBy;
+
+				case '_GuiaConceptosOpcionalesAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_conceptos_opcionales.created_by reverse relationship
+					 * @return GuiaConceptosOpcionales[]
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsCreatedByArray;
+
+				case '_GuiaConceptosOpcionalesAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the guia_conceptos_opcionales.updated_by reverse relationship
+					 * @return GuiaConceptosOpcionales
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsUpdatedBy;
+
+				case '_GuiaConceptosOpcionalesAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objGuiaConceptosOpcionalesAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_conceptos_opcionales.updated_by reverse relationship
+					 * @return GuiaConceptosOpcionales[]
+					 */
+					return $this->_objGuiaConceptosOpcionalesAsUpdatedByArray;
 
 				case '_HistoriaClienteAsCodiUsua':
 					/**
@@ -3849,8 +4045,20 @@
 			if ($this->CountFacturaPmnsAsCreadaPor()) {
 				$arrTablRela[] = 'factura_pmn';
 			}
+			if ($this->CountGcoTempsAsCreatedBy()) {
+				$arrTablRela[] = 'gco_temp';
+			}
+			if ($this->CountGcoTempsAsUpdatedBy()) {
+				$arrTablRela[] = 'gco_temp';
+			}
 			if ($this->CountGuiaCkptsAsCodiUsua()) {
 				$arrTablRela[] = 'guia_ckpt';
+			}
+			if ($this->CountGuiaConceptosOpcionalesesAsCreatedBy()) {
+				$arrTablRela[] = 'guia_conceptos_opcionales';
+			}
+			if ($this->CountGuiaConceptosOpcionalesesAsUpdatedBy()) {
+				$arrTablRela[] = 'guia_conceptos_opcionales';
 			}
 			if ($this->CountHistoriaClientesAsCodiUsua()) {
 				$arrTablRela[] = 'historia_cliente';
@@ -6446,6 +6654,304 @@
 		}
 
 
+		// Related Objects' Methods for GcoTempAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GcoTempsAsCreatedBy as an array of GcoTemp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GcoTemp[]
+		*/
+		public function GetGcoTempAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return GcoTemp::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GcoTempsAsCreatedBy
+		 * @return int
+		*/
+		public function CountGcoTempsAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return GcoTemp::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a GcoTempAsCreatedBy
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function AssociateGcoTempAsCreatedBy(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTempAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTempAsCreatedBy on this Usuario with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GcoTempAsCreatedBy
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function UnassociateGcoTempAsCreatedBy(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsCreatedBy on this Usuario with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GcoTempsAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllGcoTempsAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GcoTempAsCreatedBy
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function DeleteAssociatedGcoTempAsCreatedBy(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsCreatedBy on this Usuario with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GcoTempsAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllGcoTempsAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GcoTempAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GcoTempsAsUpdatedBy as an array of GcoTemp objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GcoTemp[]
+		*/
+		public function GetGcoTempAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return GcoTemp::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GcoTempsAsUpdatedBy
+		 * @return int
+		*/
+		public function CountGcoTempsAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return GcoTemp::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a GcoTempAsUpdatedBy
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function AssociateGcoTempAsUpdatedBy(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTempAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGcoTempAsUpdatedBy on this Usuario with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GcoTempAsUpdatedBy
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function UnassociateGcoTempAsUpdatedBy(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsUpdatedBy on this Usuario with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GcoTempsAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllGcoTempsAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`gco_temp`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GcoTempAsUpdatedBy
+		 * @param GcoTemp $objGcoTemp
+		 * @return void
+		*/
+		public function DeleteAssociatedGcoTempAsUpdatedBy(GcoTemp $objGcoTemp) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objGcoTemp->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsUpdatedBy on this Usuario with an unsaved GcoTemp.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGcoTemp->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GcoTempsAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllGcoTempsAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGcoTempAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`gco_temp`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for GuiaCkptAsCodiUsua
 		//-------------------------------------------------------------------
 
@@ -6603,6 +7109,304 @@
 					`guia_ckpt`
 				WHERE
 					`codi_usua` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiaConceptosOpcionalesAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaConceptosOpcionalesesAsCreatedBy as an array of GuiaConceptosOpcionales objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaConceptosOpcionales[]
+		*/
+		public function GetGuiaConceptosOpcionalesAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return GuiaConceptosOpcionales::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaConceptosOpcionalesesAsCreatedBy
+		 * @return int
+		*/
+		public function CountGuiaConceptosOpcionalesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return GuiaConceptosOpcionales::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a GuiaConceptosOpcionalesAsCreatedBy
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function AssociateGuiaConceptosOpcionalesAsCreatedBy(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsCreatedBy on this Usuario with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaConceptosOpcionalesAsCreatedBy
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function UnassociateGuiaConceptosOpcionalesAsCreatedBy(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsCreatedBy on this Usuario with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaConceptosOpcionalesesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllGuiaConceptosOpcionalesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaConceptosOpcionalesAsCreatedBy
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaConceptosOpcionalesAsCreatedBy(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsCreatedBy on this Usuario with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaConceptosOpcionalesesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllGuiaConceptosOpcionalesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiaConceptosOpcionalesAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaConceptosOpcionalesesAsUpdatedBy as an array of GuiaConceptosOpcionales objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaConceptosOpcionales[]
+		*/
+		public function GetGuiaConceptosOpcionalesAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return GuiaConceptosOpcionales::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaConceptosOpcionalesesAsUpdatedBy
+		 * @return int
+		*/
+		public function CountGuiaConceptosOpcionalesesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return GuiaConceptosOpcionales::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a GuiaConceptosOpcionalesAsUpdatedBy
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function AssociateGuiaConceptosOpcionalesAsUpdatedBy(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaConceptosOpcionalesAsUpdatedBy on this Usuario with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaConceptosOpcionalesAsUpdatedBy
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function UnassociateGuiaConceptosOpcionalesAsUpdatedBy(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsUpdatedBy on this Usuario with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaConceptosOpcionalesesAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllGuiaConceptosOpcionalesesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_conceptos_opcionales`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaConceptosOpcionalesAsUpdatedBy
+		 * @param GuiaConceptosOpcionales $objGuiaConceptosOpcionales
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaConceptosOpcionalesAsUpdatedBy(GuiaConceptosOpcionales $objGuiaConceptosOpcionales) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objGuiaConceptosOpcionales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsUpdatedBy on this Usuario with an unsaved GuiaConceptosOpcionales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaConceptosOpcionales->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaConceptosOpcionalesesAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllGuiaConceptosOpcionalesesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaConceptosOpcionalesAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_conceptos_opcionales`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
 			');
 		}
 
@@ -9418,7 +10222,11 @@
      * @property-read QQReverseReferenceNodeFactura $FacturaAsAnulacion
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsAnuladaPor
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsCreadaPor
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsCreatedBy
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsUpdatedBy
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsCreatedBy
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsUpdatedBy
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
      * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
      * @property-read QQReverseReferenceNodeMotivoEliminacion $MotivoEliminacionAsUser
@@ -9523,8 +10331,16 @@
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnasanuladapor', 'reverse_reference', 'anulada_por', 'FacturaPmnAsAnuladaPor');
 				case 'FacturaPmnAsCreadaPor':
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnascreadapor', 'reverse_reference', 'creada_por', 'FacturaPmnAsCreadaPor');
+				case 'GcoTempAsCreatedBy':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempascreatedby', 'reverse_reference', 'created_by', 'GcoTempAsCreatedBy');
+				case 'GcoTempAsUpdatedBy':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempasupdatedby', 'reverse_reference', 'updated_by', 'GcoTempAsUpdatedBy');
 				case 'GuiaCkptAsCodiUsua':
 					return new QQReverseReferenceNodeGuiaCkpt($this, 'guiackptascodiusua', 'reverse_reference', 'codi_usua', 'GuiaCkptAsCodiUsua');
+				case 'GuiaConceptosOpcionalesAsCreatedBy':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesascreatedby', 'reverse_reference', 'created_by', 'GuiaConceptosOpcionalesAsCreatedBy');
+				case 'GuiaConceptosOpcionalesAsUpdatedBy':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasupdatedby', 'reverse_reference', 'updated_by', 'GuiaConceptosOpcionalesAsUpdatedBy');
 				case 'HistoriaClienteAsCodiUsua':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
 				case 'ManifiestoExpCkptAsCreatedBy':
@@ -9615,7 +10431,11 @@
      * @property-read QQReverseReferenceNodeFactura $FacturaAsAnulacion
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsAnuladaPor
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsCreadaPor
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsCreatedBy
+     * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsUpdatedBy
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsCreatedBy
+     * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsUpdatedBy
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
      * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
      * @property-read QQReverseReferenceNodeMotivoEliminacion $MotivoEliminacionAsUser
@@ -9720,8 +10540,16 @@
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnasanuladapor', 'reverse_reference', 'anulada_por', 'FacturaPmnAsAnuladaPor');
 				case 'FacturaPmnAsCreadaPor':
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnascreadapor', 'reverse_reference', 'creada_por', 'FacturaPmnAsCreadaPor');
+				case 'GcoTempAsCreatedBy':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempascreatedby', 'reverse_reference', 'created_by', 'GcoTempAsCreatedBy');
+				case 'GcoTempAsUpdatedBy':
+					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempasupdatedby', 'reverse_reference', 'updated_by', 'GcoTempAsUpdatedBy');
 				case 'GuiaCkptAsCodiUsua':
 					return new QQReverseReferenceNodeGuiaCkpt($this, 'guiackptascodiusua', 'reverse_reference', 'codi_usua', 'GuiaCkptAsCodiUsua');
+				case 'GuiaConceptosOpcionalesAsCreatedBy':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesascreatedby', 'reverse_reference', 'created_by', 'GuiaConceptosOpcionalesAsCreatedBy');
+				case 'GuiaConceptosOpcionalesAsUpdatedBy':
+					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasupdatedby', 'reverse_reference', 'updated_by', 'GuiaConceptosOpcionalesAsUpdatedBy');
 				case 'HistoriaClienteAsCodiUsua':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
 				case 'ManifiestoExpCkptAsCreatedBy':

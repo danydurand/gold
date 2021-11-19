@@ -67,6 +67,7 @@
                 <?php $this->lstSucursal->RenderWithName(); ?>
                 <?php $this->txtEstatus->RenderWithName(); ?>
                 <?php $this->txtReferencia->RenderWithName(); ?>
+                <?php $this->calFecha->RenderWithName(); ?>
 	        </div>
             <div class="col-md-4">
                 <?php $this->txtTotal->RenderWithName(); ?>
