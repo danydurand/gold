@@ -20,7 +20,7 @@ require_once(__FORMBASE_CLASSES__ . '/ScanneoListFormBase.class.php');
  * @package My QCubed Application
  * @subpackage Drafts
  */
-class ScanneoListForm extends ScanneoListFormBase {
+class ScanneoMiaListForm extends ScanneoListFormBase {
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -34,6 +34,8 @@ class ScanneoListForm extends ScanneoListFormBase {
 
 	protected function Form_Create() {
 		parent::Form_Create();
+
+		$this->lblTituForm->Text = 'Scanneos Miami';
 
 		// Instantiate the Meta DataGrid
 		$this->dtgScanneos = new ScanneoDataGrid($this);
@@ -52,9 +54,9 @@ class ScanneoListForm extends ScanneoListFormBase {
 		$this->dtgScanneos->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
 		$this->dtgScanneos->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
-        $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::NotEqual(QQN::Scanneo()->CreatedByObject->Sucursal->Iata,'MIA');
-        $this->dtgScanneos->AdditionalConditions = QQ::AndCondition($objClauWher);
+		$objClauWher   = QQ::Clause();
+		$objClauWher[] = QQ::Equal(QQN::Scanneo()->CreatedByObject->Sucursal->Iata,'MIA');
+		$this->dtgScanneos->AdditionalConditions = QQ::AndCondition($objClauWher);
 
 		// Add a click handler for the rows.
 		// We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
@@ -68,7 +70,7 @@ class ScanneoListForm extends ScanneoListFormBase {
 		// can traverse down QQN::scanneo() to display fields that are down the hierarchy)
 		$this->dtgScanneos->MetaAddColumn('Id');
 		$this->dtgScanneos->MetaAddColumn('Descripcion');
-		$colCantSobr = new QDataGridColumn('SOBRANTES','<?= $_FORM->Sobrantes($_ITEM) ?>');
+		$colCantSobr = new QDataGridColumn('PIEZAS','<?= $_FORM->Piezas($_ITEM) ?>');
 		$this->dtgScanneos->AddColumn($colCantSobr);
 		$this->dtgScanneos->MetaAddColumn('CreatedAt','Name=F.Creacion');
 		$this->dtgScanneos->MetaAddColumn(QQN::Scanneo()->CreatedByObject,'Name=Creado Por');
@@ -79,10 +81,14 @@ class ScanneoListForm extends ScanneoListFormBase {
 
     }
 
-    public function Sobrantes(Scanneo $objScaneo) {
+    protected function btnNuevRegi_Click() {
+        QApplication::Redirect(__SIST__.'/scanneo_mia_edit.php');
+    }
+
+    public function Piezas(Scanneo $objScaneo) {
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::ScanneoPiezas()->ScanneoId,$objScaneo->Id);
-        $objClauWher[] = QQ::IsNull(QQN::ScanneoPiezas()->GuiaPiezaId);
+        //$objClauWher[] = QQ::IsNull(QQN::ScanneoPiezas()->GuiaPiezaId);
 
         return ScanneoPiezas::QueryCount(QQ::AndCondition($objClauWher));
 
@@ -90,7 +96,7 @@ class ScanneoListForm extends ScanneoListFormBase {
 
 	public function dtgScanneosRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
-        QApplication::Redirect("scanneo_edit.php/$intId");
+        QApplication::Redirect("scanneo_mia_edit.php/$intId");
 	}		
 
 }
@@ -98,5 +104,5 @@ class ScanneoListForm extends ScanneoListFormBase {
 
 // Go ahead and run this form object to generate the page and event handlers, implicitly using
 // scanneo_list.tpl.php as the included HTML template file
-ScanneoListForm::Run('ScanneoListForm');
+ScanneoMiaListForm::Run('ScanneoMiaListForm');
 ?>
