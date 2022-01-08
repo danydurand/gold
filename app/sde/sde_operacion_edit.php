@@ -78,10 +78,9 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
         $this->dtgSucursalesesAsOperacionDestino = $this->mctSdeOperacion->dtgSucursalesesAsOperacionDestino_Create();
         $this->dtgSucursalesesAsOperacionDestino->Name = 'Sucursales';
 		$this->dtgSucursalesesAsOperacionDestino->ItemsPerPage = $intCantSucu;
-		$this->dtgSucursalesesAsOperacionDestino->Visible = false;
 
 		if ($this->mctSdeOperacion->EditMode) {
-		    $this->lstTipoRuta_Change();
+            $this->lstTipoRuta_Change();
         }
 	}
 
@@ -127,8 +126,8 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
         $objClauWher[] = QQ::IsNull(QQN::Rutas()->DeletedAt);
         $objClauOrde   = QQ::Clause();
         $objClauOrde[] = QQ::OrderBy(QQN::Rutas()->Codigo);
-	    if ($this->lstCodiTipoObject->SelectedName == 'EXTRA-URBANA') {
-	        $this->dtgSucursalesesAsOperacionDestino->Visible = true;
+        if ($this->lstCodiTipoObject->SelectedName == 'EXTRA-URBANA') {
+            $this->dtgSucursalesesAsOperacionDestino->Visible = true;
             //----------------------------------------------------------
             // Si es Extra-Urbana, se muestran solo las Rutas Foraneas
             //----------------------------------------------------------
@@ -152,7 +151,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
                 }
             }
             $this->lstRuta->AddItem($objRutaTipo->__toString(), $objRutaTipo->Id, $blnSeleRegi);
-	    }
+        }
     }
 
     protected function btnLogxCamb_Click() {

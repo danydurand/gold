@@ -37,7 +37,7 @@ $strEmaiAdmi = Parametros::BP('DATOBANC','EMAIADMI','Txt1','auxiliaradm@goldcoas
             </tr>
         </table>
 
-        <table style="margin-top: 24px;">
+        <table style="margin-top: 24px; width: 50%">
             <tr>
                 <td colspan="2">Sres., <?= $strNombClie ?><br><br></td>
             </tr>
@@ -45,13 +45,13 @@ $strEmaiAdmi = Parametros::BP('DATOBANC','EMAIADMI','Txt1','auxiliaradm@goldcoas
                 <td colspan="2">Anexo le hacemos llegar su Estado de Cuenta actualizado a la fecha, por Servicio de Entregas Nacionales.</td>
             </tr>
             <tr>
-                <td colspan="2">Por favor revisar y enviar soporte de pago.<br><br></td>
+                <td colspan="2"><br>Por favor revisar y enviar soporte de pago.<br><br></td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <span style="font-weight: bold; color: #0A246A">IMPORTANTE: Este mensaje se envia desde una
-                        cuenta de correo no monitoreada.Para cualquier comunicación adicional, por favor
-                        escríbanos directamente a:<a href="mailto:<?= $strEmaiAdmi ?>"><?= $strEmaiAdmi ?></a>.
+                    <span style="font-weight: bold; color: #0A246A">IMPORTANTE: Esta es una cuenta de correo no monitoreada.
+                        Para cualquier comunicación adicional, por favor escríbanos directamente a:
+                        <a href="mailto:<?= $strEmaiAdmi ?>"><?= $strEmaiAdmi ?></a>.
                         <br><br>
                     </span>
                 </td>

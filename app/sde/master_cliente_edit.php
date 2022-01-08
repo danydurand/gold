@@ -442,7 +442,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
 
     protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=true, $strDestCorr='U') {
-        $strDireFrom = 'GoldCoast - CxC <cobranza@goldsist.com>';;
+        $strDireFrom = 'GoldCoast - SisCO <noti@goldsist.com>';
         if ($strDestCorr == 'U') {
             $strEnviAxxx = $this->objUsuario->MailUsua;
         } else {
@@ -492,9 +492,9 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             t('Se terminaron de procesar las facturas');
         }
 
+        $objMessage->SetHeader('x-application', 'SisCO');
         try {
             t('Voy a enviar el correo');
-            $objMessage->SetHeader('x-application', 'SisCO');
             QEmailServer::Send($objMessage);
             t('Correo enviado');
         } catch (Exception $e) {

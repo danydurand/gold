@@ -32,6 +32,8 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
     protected $intCantPend;
     protected $intCantSobr;
     protected $btnExpoExce;
+    protected $colSelePiez;
+    protected $btnBorrPiez;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -74,6 +76,7 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
 		$this->dtgPiezSobr_Create();
 		$this->dtgPiezPend_Create();
         $this->btnExpoExce_Create();
+        $this->btnBorrPiez_Create();
 
 		if (!$this->mctScanneo->EditMode) {
 		    $this->calCreatedAt->DateTime = new QDateTime(QDateTime::Now());
@@ -99,9 +102,11 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
             $this->intCantPend = ScanneoPiezas::CountPendientesDelScanneo($this->mctScanneo->Scanneo->Id);
             $this->btnProcPend->Visible = $this->intCantPend;
             $this->intCantSobr = ScanneoPiezas::CountSobrantesDelScanneo($this->mctScanneo->Scanneo->Id);
-            $this->btnExpoExce->Visible = $this->intCantSobr;
+            //$this->btnExpoExce->Visible = $this->intCantPend;
             $this->btnSave->Visible = false;
         }
+
+        $this->btnDelete->Text = TextoIcono('trash-o','Borrar Scanneo','F','lg');
 
 	}
 
@@ -129,19 +134,37 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
         $this->btnErroProc->Visible = false;
     }
 
+    protected function btnBorrPiez_Create() {
+        $this->btnBorrPiez = new QButtonD($this);
+        $this->btnBorrPiez->Text = TextoIcono('trash','Borrar Pieza','F','lg');
+        $this->btnBorrPiez->AddAction(new QClickEvent(), new QServerAction('btnBorrPiez_Click'));
+        $this->btnBorrPiez->Visible = false;
+    }
+
     protected function btnExpoExce_Create() {
         $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgPiezSobr);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = TextoIcono('download','XLS','F','lg');
         $this->btnExpoExce->HtmlEntities = false;
-        $this->btnExpoExce->CssClass = 'btn btn-outline-danger btn-sm';
+        $this->btnExpoExce->CssClass = 'btn btn-outline-primary btn-sm';
         $this->btnExpoExce->ToolTip = 'Exportar Piezas';
-        $this->btnExpoExce->Visible = false;
     }
 
     protected function btnErroProc_Click() {
         unset($_SESSION['PagiBack']);
         QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
+    }
+
+    protected function btnBorrPiez_Click() {
+        $this->mensaje();
+        $arrIdxxSele  = array_keys($this->colSelePiez->GetSelectedIds());
+        $strCadeSqlx  = "delete ";
+        $strCadeSqlx .= "  from scanneo_piezas ";
+        $strCadeSqlx .= " where id in (".implode(',',$arrIdxxSele).")";
+        $objDatabase  = ScanneoPiezas::GetDatabase();
+        $objDatabase->NonQuery($strCadeSqlx);
+        $this->dtgPiezPend->Refresh();
+        $this->success('Piezas Eliminadas !!');
     }
 
     protected function txtNumePiez_Create() {
@@ -195,7 +218,7 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
         $this->dtgPiezPend->Refresh();
 
         $this->btnProcPend->Visible = $this->intCantPend;
-        $this->btnExpoExce->Visible = $this->intCantSobr;
+        //$this->btnExpoExce->Visible = $this->intCantPend;
 
         $this->txtNumePiez->SetFocus();
     }
@@ -242,7 +265,7 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
     }
 
     protected function dtgPiezPend_Create() {
-        $this->dtgPiezPend = new QDataGrid($this);
+        $this->dtgPiezPend = new ScanneoPiezasDataGrid($this);
         $this->dtgPiezPend->FontSize = 12;
         $this->dtgPiezPend->ShowFilter = false;
 
@@ -254,29 +277,77 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
 
         $this->dtgPiezPend->UseAjax = true;
 
-        $this->dtgPiezPend->SetDataBinder('dtgPiezPend_Bind');
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::ScanneoPiezas()->Id, false);
 
-        $this->dtgPiezPendColumns();
-    }
-
-    protected function dtgPiezPend_Bind() {
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::ScanneoPiezas()->ScanneoId,$this->mctScanneo->Scanneo->Id);
-        //$objClauWher[] = QQ::IsNotNull(QQN::ScanneoPiezas()->GuiaPiezaId);
+        $objClauWher[] = QQ::Equal(QQN::ScanneoPiezas()->ScanneoId, $this->mctScanneo->Scanneo->Id);
 
-        $arrPiezPend = ScanneoPiezas::QueryArray(QQ::AndCondition($objClauWher));
-        $this->dtgPiezPend->TotalItemCount = count($arrPiezPend);
+        $this->dtgPiezPend->AdditionalConditions = QQ::AndCondition($objClauWher);
+        $this->dtgPiezPend->AdditionalClauses = $objClauOrde;
 
-        $this->btnProcPend->Visible = count($arrPiezPend) > 0 ? true : false;
+        $this->colSelePiez = new QCheckBoxColumn('', $this->dtgPiezPend);
+        $this->colSelePiez->PrimaryKey = 'Id';
+        $this->colSelePiez->Width = 30;
+        $this->dtgPiezPend->AddColumn($this->colSelePiez);
+        $this->dtgPiezPend->AddAction(new QClickEvent(), new QAjaxAction('colSelePiez_Click'));
 
-        // Bind the datasource to the datagrid
-        $this->dtgPiezPend->DataSource = ScanneoPiezas::QueryArray(
-            QQ::AndCondition($objClauWher),
-            QQ::Clause($this->dtgPiezPend->OrderByClause, $this->dtgPiezPend->LimitClause)
-        );
+        $this->dtgPiezPend->MetaAddColumn('Id');
+        $this->dtgPiezPend->MetaAddColumn('IdPieza');
+
     }
+
+
+    // protected function dtgPiezPend_Create() {
+    //     $this->dtgPiezPend = new QDataGrid($this);
+    //     $this->dtgPiezPend->FontSize = 12;
+    //     $this->dtgPiezPend->ShowFilter = false;
+
+    //     $this->dtgPiezPend->CssClass = 'datagrid';
+    //     $this->dtgPiezPend->AlternateRowStyle->CssClass = 'alternate';
+
+    //     $this->dtgPiezPend->Paginator = new QPaginator($this->dtgPiezPend);
+    //     $this->dtgPiezPend->ItemsPerPage = 20;
+
+    //     $this->dtgPiezPend->UseAjax = true;
+
+    //     $this->dtgPiezPend->SetDataBinder('dtgPiezPend_Bind');
+
+    //     $this->colSelePiez = new QCheckBoxColumn('', $this->dtgPiezPend);
+    //     $this->colSelePiez->PrimaryKey = 'Id';
+    //     $this->colSelePiez->Width = 30;
+    //     $this->dtgPiezPend->AddColumn($this->colSelePiez);
+    //     $this->dtgPiezPend->AddAction(new QClickEvent(), new QAjaxAction('colSelePiez_Click'));
+
+    //     $this->dtgPiezPendColumns();
+    // }
+
+    // protected function dtgPiezPend_Bind() {
+    //     $objClauWher   = QQ::Clause();
+    //     $objClauWher[] = QQ::Equal(QQN::ScanneoPiezas()->ScanneoId,$this->mctScanneo->Scanneo->Id);
+
+    //     $objClauOrde   = QQ::Clause();
+    //     $objClauOrde[] = QQ::OrderBy(QQN::ScanneoPiezas()->Id);
+
+    //     $arrPiezPend = ScanneoPiezas::QueryArray(QQ::AndCondition($objClauWher));
+    //     $this->dtgPiezPend->TotalItemCount = count($arrPiezPend);
+
+    //     $this->btnProcPend->Visible = count($arrPiezPend) > 0 ? true : false;
+
+    //     // Bind the datasource to the datagrid
+    //     $this->dtgPiezPend->DataSource = ScanneoPiezas::QueryArray(
+    //         QQ::AndCondition($objClauWher),
+    //         QQ::Clause($this->dtgPiezPend->OrderByClause, $this->dtgPiezPend->LimitClause)
+    //     );
+    // }
 
     protected function dtgPiezPendColumns() {
+        $colScanIdxx = new QDataGridColumn($this);
+        $colScanIdxx->Name = 'Id';
+        $colScanIdxx->Html = '<?= $_ITEM->Id ?>';
+        $colScanIdxx->Width = 60;
+        $this->dtgPiezPend->AddColumn($colScanIdxx);
+
         $colPiezIdxx = new QDataGridColumn($this);
         $colPiezIdxx->Name = 'IdPieza';
         $colPiezIdxx->Html = '<?= $_ITEM->IdPieza ?>';
@@ -325,6 +396,17 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
     //-----------------------------------
 	// Acciones relativas a los objetos 
 	//-----------------------------------
+
+    protected function colSelePiez_Click() {
+        $this->mensaje();
+        $arrIdxxSele = $this->colSelePiez->GetSelectedIds();
+        $intCantSele = count($arrIdxxSele);
+        if ($intCantSele > 0) {
+            $this->btnBorrPiez->Visible = true;
+        } else {
+            $this->btnBorrPiez->Visible = false;
+        }
+    }
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];

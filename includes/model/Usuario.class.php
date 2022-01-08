@@ -35,6 +35,15 @@
 			return sprintf('%s <%s>',  $this->__nombreApellido(), $this->strMailUsua);
 		}
 
+        public static function CodigoDeUsuarioDeLaSuc($strIataSucu) {
+            $objSucuMiax = Sucursales::LoadByIata($strIataSucu);
+            $arrUsuaSucu = Usuario::LoadArrayBySucursalId($objSucuMiax->Id);
+            $arrCodiUsua = [];
+            foreach ($arrUsuaSucu as $objUsuaSucu) {
+                $arrCodiUsua[] = $objUsuaSucu->CodiUsua;
+            }
+            return $arrCodiUsua;
+        }
 
 		public function resetearClave($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
             $this->PassUsua = md5($strPassUsua);

@@ -26,6 +26,7 @@
             <?php $this->btnExpoExce->Render(); ?>
         <?php } ?>
         <?php $this->btnErroProc->Render(); ?>
+        <?php $this->btnBorrPiez->Render(); ?>
     </div>
     <div class="hidden-xs hidden-sm hidden-md col-lg-4 pull-right" style="text-align: right; padding-right: 3px; margin-top: -0.25em">
         <?php $this->btnPrimRegi->Render(); ?>
@@ -101,18 +102,18 @@
         intro.start();
     }
 </script>
-    <style>
-        .titulo {
-            background-color: #CCCCCC;
-            border-radius: 3px;
-            font-weight: bold;
-            padding: 0.4em;
-            text-align: center;
-        }
-        .renderWithName {
-            padding: 0px 0;
-            width: 100%;
-        }
-    </style>
+<style>
+    .titulo {
+        background-color: #CCCCCC;
+        border-radius: 3px;
+        font-weight: bold;
+        padding: 0.4em;
+        text-align: center;
+    }
+    .renderWithName {
+        padding: 0px 0;
+        width: 100%;
+    }
+</style>
 
 <?php require(__APP_INCLUDES__ .'/footer.inc.php'); ?>

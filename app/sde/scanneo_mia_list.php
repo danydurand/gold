@@ -21,6 +21,9 @@ require_once(__FORMBASE_CLASSES__ . '/ScanneoListFormBase.class.php');
  * @subpackage Drafts
  */
 class ScanneoMiaListForm extends ScanneoListFormBase {
+	protected $objUsuario;
+	protected $btnBuscPiez;
+
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -35,6 +38,7 @@ class ScanneoMiaListForm extends ScanneoListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->objUsuario = unserialize($_SESSION['User']);
 		$this->lblTituForm->Text = 'Scanneos Miami';
 
 		// Instantiate the Meta DataGrid
@@ -55,8 +59,13 @@ class ScanneoMiaListForm extends ScanneoListFormBase {
 		$this->dtgScanneos->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
 		$objClauWher   = QQ::Clause();
-		$objClauWher[] = QQ::Equal(QQN::Scanneo()->CreatedByObject->Sucursal->Iata,'MIA');
+		$objClauWher[] = QQ::Equal(QQN::Scanneo()->CreatedByObject->Sucursal->Iata, 'MIA');
+
+		$objClauOrde   = QQ::Clause();
+		$objClauOrde[] = QQ::OrderBy(QQN::Scanneo()->Id, false);
+
 		$this->dtgScanneos->AdditionalConditions = QQ::AndCondition($objClauWher);
+		$this->dtgScanneos->AdditionalClauses = $objClauOrde;
 
 		// Add a click handler for the rows.
 		// We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
@@ -78,10 +87,22 @@ class ScanneoMiaListForm extends ScanneoListFormBase {
 		$this->dtgScanneos->MetaAddColumn(QQN::Scanneo()->UpdatedByObject,'Name=Editado Por');
 
         $this->btnExpoExce_Create();
+        $this->btnBuscPiez_Create();
+
 
     }
 
-    protected function btnNuevRegi_Click() {
+	protected function btnBuscPiez_Create() {
+		$this->btnBuscPiez = new QButtonI($this);
+		$this->btnBuscPiez->Text = TextoIcono('search','Buscar','F','lg');
+		$this->btnBuscPiez->AddAction(new QClickEvent(), new QServerAction('btnBuscPiez_Click'));
+	}	
+    
+	protected function btnBuscPiez_Click() {
+		QApplication::Redirect(__SIST__.'/buscar_pieza_mia.php');
+	}
+	
+	protected function btnNuevRegi_Click() {
         QApplication::Redirect(__SIST__.'/scanneo_mia_edit.php');
     }
 
