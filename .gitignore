@@ -12,5 +12,4 @@ app/sde/containers_list_online.php
 traza.log
 .idea/workspace.xml
 vendor/phpmailer/phpmailer/COMMITMENT
-
 vendor/shuchkin/simplexls/examples/books.xls
