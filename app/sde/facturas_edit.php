@@ -380,15 +380,15 @@ class FacturasEditForm extends FacturasEditFormBase {
 	//-----------------------------------
 
     protected function lstEstaPago_Change() {
-	    if ($this->lstEstaPago->SelectedValue == 'PENDIENTE') {
-	        $this->txtMontoPendiente->Text = $this->txtTotal->Text;
-	        $this->txtMontoCobrado->Text   = 0;
+        if ($this->lstEstaPago->SelectedValue == 'PENDIENTE') {
+            $this->txtMontoPendiente->Text = $this->txtTotal->Text;
+            $this->txtMontoCobrado->Text   = 0;
         }
     }
 
     protected function btnImprFact_Click() {
-	    $this->mctFacturas->Facturas->Estatus = 'IMPRESA';
-	    $this->mctFacturas->Facturas->Save();
+        $this->mctFacturas->Facturas->Estatus = 'IMPRESA';
+        $this->mctFacturas->Facturas->Save();
         $arrLogxCamb['strNombTabl'] = 'Facturas';
         $arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;
         $arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Referencia;

@@ -22,6 +22,9 @@ class SearchLog extends FormularioBaseKaizen {
 		$this->dtgLogs->CssClass = 'datagrid';
 		$this->dtgLogs->AlternateRowStyle->CssClass = 'alternate';
 
+		$this->dtgLogs->SortColumnIndex = 0;
+		$this->dtgLogs->SortDirection = 1;
+
 		// Add Pagination (if desired)
 		$this->dtgLogs->Paginator = new QPaginator($this->dtgLogs);
 		$this->dtgLogs->ItemsPerPage = 14; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
@@ -50,7 +53,7 @@ class SearchLog extends FormularioBaseKaizen {
 		$colNombCamb->FilterBoxSize = 25;
 		$colNombCamb->Width = 250;
 
-		$this->dtgLogs->MetaAddColumn('Delicado');
+		// $this->dtgLogs->MetaAddColumn('Delicado');
 
 		// $this->dtgLogs->MetaAddColumn('Ip');
 

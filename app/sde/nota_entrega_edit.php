@@ -138,11 +138,11 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
 	//----------------------------
 
     protected function lblObseNota_Create() {
-	    $this->lblObseNota = new QLabel($this);
-	    $this->lblObseNota->Name = 'Observacion';
-	    $this->lblObseNota->Text = $this->mctNotaEntrega->NotaEntrega->Observacion;
-	    $this->lblObseNota->Width = 1095;
-	    $this->lblObseNota->ForeColor = 'blue';
+        $this->lblObseNota = new QLabel($this);
+        $this->lblObseNota->Name = 'Observacion';
+        $this->lblObseNota->Text = $this->mctNotaEntrega->NotaEntrega->Observacion;
+        $this->lblObseNota->Width = 1095;
+        $this->lblObseNota->ForeColor = 'blue';
     }
 
     protected function dtgGuiaNota_Create() {
@@ -428,4 +428,3 @@ class NotaEntregaEditForm extends NotaEntregaEditFormBase {
 // Go ahead and run this form object to render the page and its event handlers, implicitly using
 // nota_entrega_edit.tpl.php as the included HTML template file
 NotaEntregaEditForm::Run('NotaEntregaEditForm');
-?>

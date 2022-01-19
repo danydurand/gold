@@ -20,7 +20,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <div class="hidden-xs hidden-sm col-md-6 col-lg-5" style="text-align: center; margin-top: -0.25em;">
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnEditGuia->Render(); ?>
-            <?php $this->btnImprGuia->Render(); ?>
+            <?php //$this->btnImprGuia->Render(); ?>
             <?php $this->btnInfoPodx->Render(); ?>
             <?php //$this->btnGuiaOrig->Render(); ?>
             <?php $this->btnMasxAcci->Render(); ?>

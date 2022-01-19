@@ -24,6 +24,7 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
     protected $txtNumeCont;  // Numero de Contenedor
     protected $arrListNume;  // Arreglo que contiene los numeros de la lista
     protected $btnExpoExce;
+    protected $lstInteScan;
 
     protected function Form_Create() {
         parent::Form_Create();
@@ -31,9 +32,10 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
 
         $this->rdbTipoEnvi_Create();
         $this->txtListNume_Create();
+        $this->lstInteScan_Create();
         $this->chkMostQuer_Create();
 
-         $this->btnExpoExce_Create();
+        $this->btnExpoExce_Create();
     }
 
     //----------------------------
@@ -71,6 +73,13 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
         $this->txtListNume->Required = true;
     }
 
+    protected function lstInteScan_Create() {
+        $this->lstInteScan = new QListBox($this);
+        $this->lstInteScan->Name = 'Interpretar Scanneo ?';
+        $this->lstInteScan->AddItem('NO', 'N', true);
+        $this->lstInteScan->AddItem('SI', 'S');
+    }
+
     protected function btnSave_Create() {
         $this->btnSave = new QButtonP($this);
         $this->btnSave->Text = TextoIcono('search','Buscar','F','fa-lg');
@@ -102,7 +111,6 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
                    g.receptoria_origen_id,
                    g.destino_id,
                    g.receptoria_destino_id,
-                   g.tipo modalidad_pago,
                    g.nombre_remitente remitente,
                    g.nombre_destinatario,
                    g.kilos,
@@ -136,9 +144,18 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
         //-----------------------------------------------------------------------------
         foreach ($arrListTemp as $strNumeGuia) {
             if (strlen($strNumeGuia) > 0) {
-                if (strpos($strNumeGuia,'-')) {
-                    $strNumeGuia = explode('-',$strNumeGuia)[0];
+                //------------------------------------------------------------------------------------
+                // Los caracteres "." y "/" indican que se trata de un scanneo y como tal, debe ser
+                // interpretado o transformado, antes de hacer la busqueda
+                //------------------------------------------------------------------------------------
+                $intPosiPunt = strpos($strNumeGuia,'.');
+                $intPosiSlas = strpos($strNumeGuia,'/');
+                if ( ($intPosiPunt !== false) || ($intPosiSlas !== false) ) {
+                    $strNumeGuia = transformar($strNumeGuia);
                 }
+                // if (strpos($strNumeGuia,'-')) {
+                //     $strNumeGuia = explode('-',$strNumeGuia)[0];
+                // }
                 $this->arrListNume[] = $strNumeGuia;
             }
         }
@@ -151,15 +168,20 @@ class ConsultaMasivaNew extends FormularioBaseKaizen {
                 $objClausula[] = QQ::In(QQN::Guias()->Numero,$this->arrListNume);
                 $strCadeSqlx .= " and g.numero in ('$strCadeGuia')";
             } else {
-                foreach ($arrListTemp as $strNumeGuia) {
-                    if (strlen($strNumeGuia) > 0) {
-                        $objClausula[] = QQ::In(QQN::Guias()->Tracking,$this->arrListNume);
-                        $strCadeSqlx .= " and g.tracking in ('".$strCadeGuia."')";
-                    }
+                if (count($this->arrListNume) > 0) {
+                    $objClausula[] = QQ::In(QQN::Guias()->Tracking,$this->arrListNume);
+                    $strCadeSqlx .= " and g.tracking in ('".$strCadeGuia."')";
                 }
+                // foreach ($arrListTemp as $strNumeGuia) {
+                //     if (strlen($strNumeGuia) > 0) {
+                //         $objClausula[] = QQ::In(QQN::Guias()->Tracking,$this->arrListNume);
+                //         $strCadeSqlx .= " and g.tracking in ('".$strCadeGuia."')";
+                //     }
+                // }
             }
             if ($this->chkMostQuer->Checked) {
-                echo $strCadeSqlx;
+                // echo $strCadeSqlx;
+                print_r($objClausula);
                 return;
             }
             $_SESSION['CritCons'] = serialize($objClausula);

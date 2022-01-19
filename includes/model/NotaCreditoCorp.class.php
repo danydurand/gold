@@ -32,7 +32,7 @@
 		}
 
 		public function __Monto() {
-		    return str_replace(',','.',nf($this->Monto));
+			return str_replace(',','.',nf($this->Monto));
         }
 
         public static function proxReferencia() {
@@ -52,7 +52,15 @@
             $arrLogxCamb['strNombRegi'] = $this->Referencia;
             $arrLogxCamb['strDescCamb'] = $strMensTran;
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/nota_credito_corp_edit.php/'.$this->Id;
-            LogDeCambios($arrLogxCamb);
+
+			try {
+				LogDeCambios($arrLogxCamb);
+			} catch (Exception $e) {
+				t('Excepcion: ' . $e->getMessage());
+			} catch (Error $e) {
+				t('Error: ' . $e->getMessage());
+			}
+
         }
 
 

@@ -26,6 +26,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <div class="col-md-12 col-lg-5" style="margin-top: 1em;">
                     <?php $this->rdbTipoEnvi->RenderWithName(); ?>
                     <?php $this->txtListNume->RenderWithName(); ?>
+                    <?php //$this->lstInteScan->RenderWithName(); ?>
                     <?php $this->chkMostQuer->RenderWithName(); ?>
                 </div>
                 <div class="col-lg-4 visible-lg" style="margin-top: 1em;"></div>

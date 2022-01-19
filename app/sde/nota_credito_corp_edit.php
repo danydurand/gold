@@ -44,9 +44,12 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->lblId = $this->mctNotaCreditoCorp->lblId_Create();
 		$this->txtReferencia = $this->mctNotaCreditoCorp->txtReferencia_Create();
 		$this->txtTipo = $this->mctNotaCreditoCorp->txtTipo_Create();
-		$this->lstClienteCorp = $this->mctNotaCreditoCorp->lstClienteCorp_Create();
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::MasterCliente()->NombClie);
+		$this->lstClienteCorp = $this->mctNotaCreditoCorp->lstClienteCorp_Create(null,null,$objClauOrde);
 		$this->lstClienteCorp->AddAction(new QChangeEvent(), new QAjaxAction('lstClienteCorp_Change'));
         $this->lstClienteCorp->Name = $this->enlaceCliente();
+        $this->lstClienteCorp->Width = 240;
 
         $this->lstPagoCorp = $this->lstPagoCorp_Create();
 		$this->lstPagoCorp->Name = 'Ref. Pago';
@@ -59,6 +62,7 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->txtObservacion->TextMode = QTextMode::MultiLine;
 		$this->txtObservacion->Rows = 3;
 		$this->txtObservacion->Width = 200;
+		$this->txtEstatus        = $this->mctNotaCreditoCorp->txtEstatus_Create();
 		$this->txtNumero         = $this->mctNotaCreditoCorp->txtNumero_Create();
 		$this->txtMaquinaFiscal  = $this->mctNotaCreditoCorp->txtMaquinaFiscal_Create();
 		$this->txtFechaImpresion = $this->mctNotaCreditoCorp->txtFechaImpresion_Create();
@@ -70,31 +74,35 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 
 		if ($this->txtTipo->Text == 'AUTOMATICA') {
 		    //$this->btnDelete->Visible = false;
-		    $this->txtReferencia     = disableControl($this->txtReferencia);
-		    $this->txtTipo           = disableControl($this->txtTipo);
-		    $this->lstClienteCorp    = disableControl($this->lstClienteCorp);
-		    $this->lstPagoCorp       = disableControl($this->lstPagoCorp);
-		    $this->lstFactura        = disableControl($this->lstFactura);
-		    $this->calFecha          = disableControl($this->calFecha);
-		    $this->txtMonto          = disableControl($this->txtMonto);
-		    $this->txtObservacion    = disableControl($this->txtObservacion);
-		    $this->txtEstatus        = disableControl($this->txtEstatus);
-		    $this->lstAplicadaEnPago = disableControl($this->lstAplicadaEnPago);
-		    if (is_null($this->mctNotaCreditoCorp->NotaCreditoCorp->FacturaId)) {
-		        $this->lstFactura->Visible = false;
+            $this->txtReferencia     = disableControl($this->txtReferencia);
+            $this->txtTipo           = disableControl($this->txtTipo);
+            $this->lstClienteCorp    = disableControl($this->lstClienteCorp);
+            $this->lstPagoCorp       = disableControl($this->lstPagoCorp);
+            $this->lstFactura        = disableControl($this->lstFactura);
+            $this->calFecha          = disableControl($this->calFecha);
+            $this->txtMonto          = disableControl($this->txtMonto);
+            $this->txtObservacion    = disableControl($this->txtObservacion);
+            $this->txtEstatus        = disableControl($this->txtEstatus);
+            $this->lstAplicadaEnPago = disableControl($this->lstAplicadaEnPago);
+            if (is_null($this->mctNotaCreditoCorp->NotaCreditoCorp->FacturaId)) {
+                $this->lstFactura->Visible = false;
             }
         }
 
         if (!$this->mctNotaCreditoCorp->EditMode) {
-		    $this->txtReferencia->Text = NotaCreditoCorp::proxReferencia();
-		    $this->txtTipo->Text       = 'MANUAL';
-		    $this->calFecha->DateTime  = new QDateTime(QDateTime::Now());
-		    $this->txtReferencia       = disableControl($this->txtReferencia);
-		    $this->txtTipo             = disableControl($this->txtTipo);
-		    $this->calFecha            = disableControl($this->calFecha);
-		    $this->lstFactura_Change();
+            $this->txtReferencia->Text = NotaCreditoCorp::proxReferencia();
+            $this->txtTipo->Text       = 'MANUAL';
+            $this->txtEstatus->Text    = 'DISPONIBLE';
+            $this->calFecha->DateTime  = new QDateTime(QDateTime::Now());
+            $this->txtReferencia       = disableControl($this->txtReferencia);
+            $this->txtTipo             = disableControl($this->txtTipo);
+            $this->calFecha            = disableControl($this->calFecha);
+            $this->lstAplicadaEnPago   = disableControl($this->lstAplicadaEnPago);
+            $this->lstFactura_Change();
         }
+        $this->txtEstatus = disableControl($this->txtEstatus);
 
+        $this->lstAplicadaEnPago->Width = 200;
 	}
 
 	//----------------------------
@@ -108,10 +116,10 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
     }
 
     protected function lstPagoCorp_Create() {
-	    $this->lstPagoCorp = new QListBox($this);
-	    $this->lstPagoCorp->Name = 'Ref. Pago';
-	    $this->lstPagoCorp->AddItem('- Seleccione Uno -',null);
-	    if ($this->mctNotaCreditoCorp->EditMode) {
+        $this->lstPagoCorp = new QListBox($this);
+        $this->lstPagoCorp->Name = 'Ref. Pago';
+        $this->lstPagoCorp->AddItem('- Seleccione Uno -',null);
+        if ($this->mctNotaCreditoCorp->EditMode) {
             if (!is_null($this->mctNotaCreditoCorp->NotaCreditoCorp->PagoCorpId)) {
                 $objPagoCorp = $this->mctNotaCreditoCorp->NotaCreditoCorp->PagoCorp;
                 $this->lstPagoCorp->AddItem($objPagoCorp->Referencia, $objPagoCorp->Id, true);
@@ -122,11 +130,11 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
     }
 
     protected function lstFactura_Create() {
-	    $this->lstFactura = new QListBox($this);
-	    $this->lstFactura->Name = 'Factura';
-	    $this->lstFactura->AddItem('- Seleccione Uno -',null);
-	    if ($this->mctNotaCreditoCorp->EditMode) {
-	        if (!is_null($this->mctNotaCreditoCorp->NotaCreditoCorp->FacturaId)) {
+        $this->lstFactura = new QListBox($this);
+        $this->lstFactura->Name = 'Factura';
+        $this->lstFactura->AddItem('- Seleccione Uno -',null);
+        if ($this->mctNotaCreditoCorp->EditMode) {
+            if (!is_null($this->mctNotaCreditoCorp->NotaCreditoCorp->FacturaId)) {
                 $objFactRefe = $this->mctNotaCreditoCorp->NotaCreditoCorp->Factura;
                 $this->lstFactura->AddItem($objFactRefe->Referencia, $objFactRefe->Id, true);
             }
@@ -202,9 +210,9 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
     }
 
     protected function lstFactura_Change() {
-	    $this->objFactSele = null;
-	    if (!is_null($this->lstFactura->SelectedValue)) {
-	        $this->objFactSele = Facturas::Load($this->lstFactura->SelectedValue);
+        $this->objFactSele = null;
+        if (!is_null($this->lstFactura->SelectedValue)) {
+            $this->objFactSele = Facturas::Load($this->lstFactura->SelectedValue);
         }
     }
 
@@ -229,8 +237,7 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
     }
 
 
-    protected function Form_Validate()
-    {
+    protected function Form_Validate() {
         if (is_null($this->lstClienteCorp->SelectedValue)) {
             $this->danger('Cliente Requerido');
             return false;
@@ -259,7 +266,16 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctNotaCreditoCorp->NotaCreditoCorp;
-		$this->mctNotaCreditoCorp->SaveNotaCreditoCorp();
+        try {
+            $this->mctNotaCreditoCorp->SaveNotaCreditoCorp();
+        } catch (Exception $e) {
+            $this->danger('Excepcion: ' . $e->getMessage());
+            return;
+        } catch (Error $e) {
+            $this->danger('Error: ' . $e->getMessage());
+            return;
+        }
+        // t('Efectivo en la base de datos');
 		$this->mctNotaCreditoCorp->NotaCreditoCorp->PagoCorpId = $this->lstPagoCorp->SelectedValue;
 		$this->mctNotaCreditoCorp->NotaCreditoCorp->FacturaId  = $this->lstFactura->SelectedValue;
 		$this->mctNotaCreditoCorp->NotaCreditoCorp->Save();

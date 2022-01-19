@@ -377,9 +377,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $strTextBoto   = TextoIcono('plus','Acciones');
         $arrOpciDrop   = array();
         //$arrOpciDrop[] = OpcionDropDown(__SIST__.'/ver_calculos.php',TextoIcono(__iOJOS__,'Ver Calculos'));
-        if ($this->objGuia->sistema() == 'RET') {
-            $arrOpciDrop[] = OpcionDropDown(__SIST__.'/cambio_sucu_rece_guia.php',TextoIcono(__iEDIT__,'Cambiar Receptoria'));
-        } else {
+        if ($this->objGuia->sistema() != 'RET') {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/cc',
                 TextoIcono(__iEDIT__,'Calcular Conceptos')
@@ -920,10 +918,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
-
-    //protected function btnGuiaOrig_Click($strFormId, $strControlId, $strParameter) {
-    //    QApplication::Redirect(__SIST__.'/consulta_guia.php/'.$strParameter);
-    //}
 
     protected function btnInfoPodx_Click($strFormId, $strControlId, $strParameter) {
         $this->mensaje();

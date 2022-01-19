@@ -1,46 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6174541e-2cf6-4b22-9f86-837a2d1107ff" name="Default" comment="Animaciones al Sistema,">
+    <list default="true" id="6174541e-2cf6-4b22-9f86-837a2d1107ff" name="Default" comment="Vista de Guias y Piezas, Encabezado Local, Combo de Documentos,">
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/deployment.xml" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/webServers.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/repo_guias_facturacion.bkp.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/repo_guias_normal.bkp.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/repo_guias_normal.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/carga_masiva_guias_mia.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/carga_masiva_guias_mia.tpl.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/carga_masiva_mia_instrucciones.tpl.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/containers_list_online.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/containers_list_online.tpl.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/manifiestos_list_mia.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/manifiestos_list_mia.tpl.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/sacar_a_ruta_online.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/sde/sacar_a_ruta_online.tpl.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gold.iml" afterPath="$PROJECT_DIR$/.idea/gold.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/guia_search_new.php" afterPath="$PROJECT_DIR$/app/sde/guia_search_new.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/guia_search_new.tpl.php" afterPath="$PROJECT_DIR$/app/sde/guia_search_new.tpl.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/guias_list.php" afterPath="$PROJECT_DIR$/app/sde/guias_list.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/master_cliente_edit.tpl.php" afterPath="$PROJECT_DIR$/app/sde/master_cliente_edit.tpl.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/master_cliente_edit.php" afterPath="$PROJECT_DIR$/app/sde/master_cliente_edit.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/php_errors.log" afterPath="$PROJECT_DIR$/app/sde/php_errors.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/repo_guias_facturacion.php" afterPath="$PROJECT_DIR$/app/sde/repo_guias_facturacion.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/repo_guias_xls_sql.php" afterPath="$PROJECT_DIR$/app/sde/repo_guias_xls_sql.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/app_includes/funciones_kaizen.php" afterPath="$PROJECT_DIR$/includes/app_includes/funciones_kaizen.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/model/Guias.class.php" afterPath="$PROJECT_DIR$/includes/model/Guias.class.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/consulta_guia_new.php" afterPath="$PROJECT_DIR$/retail/consulta_guia_new.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/crear_guia_exp.php" afterPath="$PROJECT_DIR$/retail/crear_guia_exp.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/crear_guia_nac.php" afterPath="$PROJECT_DIR$/retail/crear_guia_nac.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/facturas_edit.php" afterPath="$PROJECT_DIR$/retail/facturas_edit.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/guias_list.php" afterPath="$PROJECT_DIR$/retail/guias_list.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/index.php" afterPath="$PROJECT_DIR$/retail/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/info_envio.tpl.php" afterPath="$PROJECT_DIR$/retail/info_envio.tpl.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/partials/prefac_datos_fiscales.tpl.php" afterPath="$PROJECT_DIR$/retail/partials/prefac_datos_fiscales.tpl.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/rhtml/acuerdo_lr.php" afterPath="$PROJECT_DIR$/retail/rhtml/acuerdo_lr.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/rhtml/dimensiones_y_peso_exp.php" afterPath="$PROJECT_DIR$/retail/rhtml/dimensiones_y_peso_exp.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/rhtml/factura.php" afterPath="$PROJECT_DIR$/retail/rhtml/factura.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/retail/sacar_a_ruta.php" afterPath="$PROJECT_DIR$/retail/sacar_a_ruta.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/rhtml/estado_de_cuenta.php" afterPath="$PROJECT_DIR$/app/sde/rhtml/estado_de_cuenta.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/scanneo_mia_edit.php" afterPath="$PROJECT_DIR$/app/sde/scanneo_mia_edit.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/scanneo_mia_edit.tpl.php" afterPath="$PROJECT_DIR$/app/sde/scanneo_mia_edit.tpl.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/sde/usuario_list.php" afterPath="$PROJECT_DIR$/app/sde/usuario_list.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/formbase_classes_generated/GuiasEditFormBase.class.php" afterPath="$PROJECT_DIR$/includes/formbase_classes_generated/GuiasEditFormBase.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/formbase_classes_generated/GuiasListFormBase.class.php" afterPath="$PROJECT_DIR$/includes/formbase_classes_generated/GuiasListFormBase.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/model/Usuario.class.php" afterPath="$PROJECT_DIR$/includes/model/Usuario.class.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/model/generated/GuiasGen.class.php" afterPath="$PROJECT_DIR$/includes/model/generated/GuiasGen.class.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/traza.log" afterPath="$PROJECT_DIR$/traza.log" />
     </list>
-    <ignored path="$PROJECT_DIR$/vendor/composer/" />
-    <ignored path="$PROJECT_DIR$/vendor/monolog/monolog/" />
-    <ignored path="$PROJECT_DIR$/vendor/php-console/php-console/" />
-    <ignored path="$PROJECT_DIR$/vendor/phpmailer/phpmailer/" />
-    <ignored path="$PROJECT_DIR$/vendor/shuchkin/simplexls/" />
-    <ignored path="$PROJECT_DIR$/vendor/shuchkin/simplexlsx/" />
-    <ignored path="$PROJECT_DIR$/vendor/spipu/html2pdf/" />
-    <ignored path="$PROJECT_DIR$/vendor/tecnickcom/tcpdf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,55 +50,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="guia_search_new.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/sde/guia_search_new.php">
+      <file leaf-file-name="containers_list_online.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/sde/containers_list_online.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="709" column="60" lean-forward="true" selection-start-line="709" selection-start-column="60" selection-end-line="709" selection-end-column="60" />
-              <folding>
-                <marker date="1629409270207" expanded="true" signature="19340:19349" ph="select * fro... v_info_guia_y_piezas" />
-                <marker date="1629409270207" expanded="true" signature="19379:19404" ph="select * fro... v_info_guia_y_piezas" />
-                <marker date="1629409270207" expanded="true" signature="19490:20721" ph="select g.num... guias" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="repo_guias_xls_sql.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/sde/repo_guias_xls_sql.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="32" column="15" lean-forward="false" selection-start-line="32" selection-start-column="15" selection-end-line="32" selection-end-column="15" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="repo_guias_facturacion.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/sde/repo_guias_facturacion.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="32" column="11" lean-forward="true" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="11" />
+            <state relative-caret-position="2516">
+              <caret line="148" column="55" lean-forward="false" selection-start-line="148" selection-start-column="55" selection-end-line="148" selection-end-column="55" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="console.sql" pinned="false" current-in-tab="true">
-        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/4bdcde1d-36a5-4b29-b7b2-7c690f9c6dff/console.sql">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/9562d2ea-8e5b-4a22-8e76-ca707d728523/console.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="16" lean-forward="true" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+            <state relative-caret-position="17">
+              <caret line="4" column="30" lean-forward="false" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="console.sql" pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/9562d2ea-8e5b-4a22-8e76-ca707d728523/console.sql">
+      <file leaf-file-name="containers_list_online.tpl.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/sde/containers_list_online.tpl.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -122,60 +84,38 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>combo</find>
-      <find>Acuerdo</find>
-      <find>EXP</find>
-      <find>objProdExpo</find>
-      <find>objClieNaci</find>
-      <find>_blur</find>
-      <find>txtNumeCedu_Blur</find>
-      <find>upda</find>
-      <find>lstSer</find>
-      <find>Update</find>
-      <find>dtgGuias_Bind</find>
-      <find>btnBorrPago</find>
-      <find>btnBorrPago_Click</find>
-      <find>dtgPagoFact</find>
-      <find>$this-&gt;intEditPago</find>
-      <find>flete_</find>
-      <find>consulta_guia</find>
-      <find>dele</find>
-      <find>strPagi</find>
-      <find>Dele</find>
-      <find>de</find>
+      <find>CargarArchivo</find>
+      <find>verificarDatosMasivos</find>
+      <find>no tiene</find>
+      <find>dtgGuiaM</find>
+      <find>carga_m</find>
+      <find>carga_masiva_guias</find>
+      <find>enviarme</find>
+      <find>goldsis.com</find>
+      <find>RedactarCorreoEdoCta</find>
+      <find>ScanI</find>
+      <find>sele</find>
+      <find>Borra</find>
+      <find>_click</find>
+      <find>new S</find>
       <find>delete</find>
-      <find>EstaDe</find>
-      <find>save</find>
+      <find>colRegiSele_Click</find>
+      <find>btnBorrPiez_c</find>
+      <find>txtLi</find>
+      <find>txtNumePiez_EnterKey</find>
+      <find>$arrDestinos</find>
+      <find>Enter</find>
       <find>save_</find>
-      <find>Save_</find>
-      <find>masx</find>
-      <find>calcular</find>
-      <find>v_entregadas_del_manifiesto</find>
-      <find>repo_guias_facturacion</find>
+      <find>Procesar</find>
+      <find>lstOperAb</find>
+      <find>lstOperAbie</find>
+      <find>txtResuScan</find>
+      <find>txtPiezScan_EnterKey</find>
+      <find>sacar_a_ruta.php</find>
+      <find>RepoMan</find>
+      <find>blue</find>
     </findStrings>
     <replaceStrings>
-      <replace>CkptMani</replace>
-      <replace>objCkptMani</replace>
-      <replace>TransferirAHistorico</replace>
-      <replace>objProcEjec</replace>
-      <replace>$this-&gt;objProcEjec</replace>
-      <replace>objManiProc</replace>
-      <replace>btnFiltEsta</replace>
-      <replace>strListPiez</replace>
-      <replace>PiezGuia</replace>
-      <replace>QRYRANK</replace>
-      <replace>HtmlFeet</replace>
-      <replace>GuiaFact</replace>
-      <replace>blnVerxPago</replace>
-      <replace>dtgPagoFact</replace>
-      <replace>SavePago</replace>
-      <replace>blnEditPago</replace>
-      <replace>objPagoFact</replace>
-      <replace>intEditPago</replace>
-      <replace>lstReceDomi_Change</replace>
-      <replace>9px</replace>
-      <replace>8.5px</replace>
-      <replace>8</replace>
       <replace>dtgFactPend</replace>
       <replace>RegistrarPagos</replace>
       <replace>&lt;?= $strTamaLetr ?&gt;</replace>
@@ -184,24 +124,48 @@
       <replace>txtPiesEnvi</replace>
       <replace>lstEnviSgro</replace>
       <replace>lstFormPago</replace>
+      <replace>lstOperSist</replace>
+      <replace>ArmarManifExp</replace>
+      <replace>lstDestMani</replace>
+      <replace>lstLineAere</replace>
+      <replace>txtNumeVuel</replace>
+      <replace>txtNumeBlxx</replace>
+      <replace>txtNumeBook</replace>
+      <replace>txtNumeMast</replace>
+      <replace>btnDeleGuia</replace>
+      <replace>objManifies</replace>
+      <replace>txtNumeMani</replace>
+      <replace>ManifiestoExpCkpt</replace>
+      <replace>strPiezReci</replace>
+      <replace>ErroProc</replace>
+      <replace>ClieCorp</replace>
+      <replace>mixRegistro['</replace>
+      <replace>dtgPiezSobr</replace>
+      <replace>txtNumePiez_EnterKey</replace>
+      <replace>OpcionalesActivos()</replace>
+      <replace>scanneo_mia_edit</replace>
+      <replace>carga_masiva_guias_mia</replace>
+      <replace>sacar_a_ruta_online.php</replace>
     </replaceStrings>
     <dirStrings>
-      <dir>$PROJECT_DIR$/corp</dir>
       <dir>$PROJECT_DIR$/includes/qcubed/_core/codegen/templates</dir>
       <dir>$PROJECT_DIR$/includes/qcubed/_core</dir>
       <dir>$PROJECT_DIR$/includes/qcubed</dir>
       <dir>$PROJECT_DIR$/includes</dir>
       <dir>$PROJECT_DIR$/app</dir>
       <dir>$PROJECT_DIR$/app/pmn</dir>
-      <dir>$PROJECT_DIR$/app/sde</dir>
       <dir>$PROJECT_DIR$</dir>
+      <dir>$PROJECT_DIR$/retail</dir>
+      <dir>$PROJECT_DIR$/ruta</dir>
+      <dir>$PROJECT_DIR$/corp</dir>
+      <dir>$PROJECT_DIR$/app/sde</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="CkptMastivoMaster" />
+        <entry key="$PROJECT_DIR$" value="Queues" />
       </map>
     </option>
   </component>
@@ -213,59 +177,66 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/ruta/detalle_de_pieza.bkp.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ruta/lista_de_guias.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/includes/app_includes/funciones_kaizen.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ruta/grabar_pod.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ruta/detalle_de_pieza.php" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/retail/rhtml/relacion_de_manifiestos_html.php" />
-        <option value="$PROJECT_DIR$/app/sde/rhtml/relacion_de_manifiestos_html.php" />
-        <option value="$PROJECT_DIR$/retail/rhtml/guia_exportacion.php" />
-        <option value="$PROJECT_DIR$/retail/rhtml/terminos_y_condiciones_exp.php" />
-        <option value="$PROJECT_DIR$/retail/info_remitente.tpl.php" />
-        <option value="$PROJECT_DIR$/includes/app_includes/funciones_gold.php" />
-        <option value="$PROJECT_DIR$/app/util/test.php" />
-        <option value="$PROJECT_DIR$/retail/test.php" />
-        <option value="$PROJECT_DIR$/retail/inc/header.inc.php" />
-        <option value="$PROJECT_DIR$/retail/crear_guia_exp.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/info_destinatario_exp.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/guias_list.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/inc/footer.inc.php" />
-        <option value="$PROJECT_DIR$/retail/consulta_guia_new.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/facturas_edit.tpl.php" />
-        <option value="$PROJECT_DIR$/includes/meta_controls/generated/FacturasMetaControlGen.class.php" />
-        <option value="$PROJECT_DIR$/retail/factura_html2pdf.php" />
-        <option value="$PROJECT_DIR$/includes/model/Facturas.class.php" />
+        <option value="$PROJECT_DIR$/app/sde/consulta_guia_new.php" />
         <option value="$PROJECT_DIR$/retail/conceptos_edit.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/conceptos_list.tpl.php" />
-        <option value="$PROJECT_DIR$/includes/meta_controls/ClientesRetailMetaControl.class.php" />
-        <option value="$PROJECT_DIR$/retail/clientes_retail_edit.php" />
-        <option value="$PROJECT_DIR$/includes/model/Conceptos.class.php" />
-        <option value="$PROJECT_DIR$/retail/info_envio_exp.tpl.php" />
-        <option value="$PROJECT_DIR$/ruta/qcubed.inc.php" />
-        <option value="$PROJECT_DIR$/includes/model/Containers.class.php" />
-        <option value="$PROJECT_DIR$/ruta/lista_manifiestos.php" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/app/sde/guias_list.php" />
-        <option value="$PROJECT_DIR$/app/sde/guia_search_new.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/rhtml/acuerdo_lr.php" />
-        <option value="$PROJECT_DIR$/retail/info_envio.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/crear_guia_nac.php" />
-        <option value="$PROJECT_DIR$/retail/consulta_guia_new.php" />
-        <option value="$PROJECT_DIR$/app/sde/master_cliente_edit.tpl.php" />
-        <option value="$PROJECT_DIR$/retail/index.php" />
-        <option value="$PROJECT_DIR$/retail/guias_list.php" />
-        <option value="$PROJECT_DIR$/includes/model/Guias.class.php" />
-        <option value="$PROJECT_DIR$/retail/partials/prefac_datos_fiscales.tpl.php" />
+        <option value="$PROJECT_DIR$/retail/conceptos_edit.php" />
+        <option value="$PROJECT_DIR$/retail/conceptos_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/manifiestos_list.php" />
+        <option value="$PROJECT_DIR$/retail/info_facturacion.tpl.php" />
+        <option value="$PROJECT_DIR$/retail/crear_guia_exp.tpl.php" />
+        <option value="$PROJECT_DIR$/retail/info_servicio.tpl.php" />
+        <option value="$PROJECT_DIR$/includes/model/GuiaConceptosOpcionales.class.php" />
         <option value="$PROJECT_DIR$/retail/facturas_edit.php" />
-        <option value="$PROJECT_DIR$/includes/app_includes/funciones_kaizen.php" />
+        <option value="$PROJECT_DIR$/app/sde/tarifa_agentes_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/tarifa_agentes_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/tarifa_agentes_edit.php" />
+        <option value="$PROJECT_DIR$/retail/info_destinatario_exp.tpl.php" />
+        <option value="$PROJECT_DIR$/retail/info_envio_exp.tpl.php" />
+        <option value="$PROJECT_DIR$/includes/model/GcoTemp.class.php" />
+        <option value="$PROJECT_DIR$/includes/model/Conceptos.class.php" />
         <option value="$PROJECT_DIR$/retail/crear_guia_exp.php" />
-        <option value="$PROJECT_DIR$/retail/rhtml/dimensiones_y_peso_exp.php" />
-        <option value="$PROJECT_DIR$/retail/sacar_a_ruta.php" />
-        <option value="$PROJECT_DIR$/retail/rhtml/factura.php" />
+        <option value="$PROJECT_DIR$/app/sde/rhtml/relacion_de_manifiestos_html.php" />
+        <option value="$PROJECT_DIR$/app/sde/factura_html2pdf.php" />
+        <option value="$PROJECT_DIR$/includes/app_includes/header.inc.php" />
+        <option value="$PROJECT_DIR$/includes/app_includes/footer.inc.php" />
+        <option value="$PROJECT_DIR$/includes/app_includes/FormularioBaseKaizen.class.php" />
         <option value="$PROJECT_DIR$/app/sde/guia_search_new.php" />
-        <option value="$PROJECT_DIR$/app/sde/repo_guias_normal.php" />
-        <option value="$PROJECT_DIR$/app/sde/repo_guias_facturacion.php" />
+        <option value="$PROJECT_DIR$/app/sde/facturas_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/facturas_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/facturas_edit.php" />
+        <option value="$PROJECT_DIR$/includes/model/Guias.class.php" />
+        <option value="$PROJECT_DIR$/app/sde/emitir_factura_corp.php" />
+        <option value="$PROJECT_DIR$/app/sde/nota_entrega_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/nota_entrega_edit.php" />
+        <option value="$PROJECT_DIR$/includes/model/NotaEntrega.class.php" />
+        <option value="$PROJECT_DIR$/includes/model/NotaEntregaZona.class.php" />
+        <option value="$PROJECT_DIR$/app/sde/scanneo_mia_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/scanneo_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/carga_masiva_guias_mia.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/carga_masiva_mia_instrucciones.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/manifiestos_list_mia.tpl.php" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/4bdcde1d-36a5-4b29-b7b2-7c690f9c6dff/console.sql" />
-        <option value="$PROJECT_DIR$/app/sde/repo_guias_xls_sql.php" />
+        <option value="$PROJECT_DIR$/includes/model/Usuario.class.php" />
+        <option value="$PROJECT_DIR$/app/sde/manifiestos_list_mia.php" />
+        <option value="$PROJECT_DIR$/app/sde/carga_masiva_guias_mia.php" />
+        <option value="$PROJECT_DIR$/app/sde/usuario_list.php" />
+        <option value="$PROJECT_DIR$/app/sde/rhtml/estado_de_cuenta.php" />
+        <option value="$PROJECT_DIR$/app/sde/master_cliente_edit.php" />
+        <option value="$PROJECT_DIR$/app/sde/scanneo_mia_edit.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/scanneo_mia_edit.php" />
+        <option value="$PROJECT_DIR$/app/sde/sacar_a_ruta_online.tpl.php" />
+        <option value="$PROJECT_DIR$/app/sde/containers_list_online.php" />
+        <option value="$PROJECT_DIR$/app/sde/sacar_a_ruta_online.php" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/9562d2ea-8e5b-4a22-8e76-ca707d728523/console.sql" />
       </list>
     </option>
@@ -288,14 +259,14 @@
       <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="width" value="1366" />
     <option name="height" value="768" />
   </component>
   <component name="ProjectId" id="1u7jvNYt6DLd4nTXMn8ohnOTm3b" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator currentView="ProjectPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -308,37 +279,7 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="gold" type="b2602c69:ProjectViewProjectNode" />
-              <item name="gold" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="gold" type="b2602c69:ProjectViewProjectNode" />
-              <item name="gold" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="gold" type="b2602c69:ProjectViewProjectNode" />
-              <item name="gold" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="retail" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="gold" type="b2602c69:ProjectViewProjectNode" />
-              <item name="gold" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="retail" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="rhtml" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
-    </panes>
+    <panes />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -352,25 +293,27 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
-    <property name="last_opened_file_path" value="/tmp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/retail" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="web.server" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="ReaderModeSettings">
     <option name="showLigatures" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/sde" />
-      <recent name="$PROJECT_DIR$/retail/rhtml" />
-      <recent name="$PROJECT_DIR$/retail" />
-      <recent name="$PROJECT_DIR$/app/sde/rhtml" />
-      <recent name="$PROJECT_DIR$/ruta" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/retail" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/app/sde" />
       <recent name="$PROJECT_DIR$/includes/qcubed/codegen/templates/db_orm/class_subclass" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/sde" />
+      <recent name="$PROJECT_DIR$/assets/js" />
+      <recent name="$PROJECT_DIR$/assets/css" />
+      <recent name="$PROJECT_DIR$/app/sde/rhtml" />
+      <recent name="$PROJECT_DIR$/retail" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -489,224 +432,74 @@
       <workItem from="1628862239008" duration="21438000" />
       <workItem from="1629045205181" duration="4779000" />
       <workItem from="1629114445489" duration="5461000" />
-      <workItem from="1629221355740" duration="52500000" />
-    </task>
-    <task id="LOCAL-00032" summary="Consulta Masiva, Permisos, Saldo Excedente y Mensajes desde la Listas.-&#10;- Se mejoro la consulta masiva de guías, eliminando el Id de la pieza, cuando exista&#10;- Se corrigieron los errores que impedían el uso de los permisos&#10;- Se creo y habilito el campo saldo excedente en el formulario de los clientes&#10;- Se agregaron y mejoraron los permisos en las listas de todo el Sistema">
-      <created>1618677232790</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1618677232790</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Monto Pendiente, Calcular Saldo, Enlace Pagos-Cliente, Log de Transacciones.-&#10;- Cuando se emite una factura, ahora el monto de la misma se guarda como Monto Pendiente y afecta directamente al saldo del Cliente como deuda.&#10;- Se creo una opcion que permite calcular el saldo de un cliente, sumando todas sus facturas y sumando todos sus creditos.&#10;- Se creó un enlace entre los pagos y el Cliente correspondiente, entonces haciendo click en la etiqueta, se puede ver la ficha del Cliente.&#10;- La lista de clientes, ahora muestra el saldo&#10;- Se creo la tabla y la lista de notas de credito para clientes corporativos&#10;- Los pagos en la lista, aparecen ahora en sentido inverso, el ultimo aparece de primero&#10;- Se mejoro la logica de la conciliacion de los pagos, generando de manera automatica la ndc cuando sobre dinero">
-      <created>1618866891284</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1618866891284</updated>
-    </task>
-    <task id="LOCAL-00034" summary="Notas de Credito y Facturas en el Connect.-&#10;- Se crearon las opciones: lista y consulta de las NDCs en el Connect&#10;-">
-      <created>1618885527406</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1618885527406</updated>
-    </task>
-    <task id="LOCAL-00035" summary="Tarifa de los Agentes, Manifiestos&#10;- Se creo el CRUD para las Tarifas de los Agentes, integrando el detalle de las Zonas&#10;- Se creo la opcion que permite cargar los manifiestos de los Clientes, asi como corregir los errores que pueden surgir durante la importacion de los datos.&#10;- En el Connect, ahora los Clientes pueden ver el nombre del archivo que cargaron en el Sistema&#10;- En la tabla master_cliente, los campos codi_esta y codi_sino ahora admiten null&#10;- Al momento de importar un manifiesto, si el servicio de importacion es AEREO, las libras se convierten a kilos&#10;-">
-      <created>1619208108436</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1619208108436</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Manifiesto y Nota de Despacho, Valijas y Masters, Recepcion de Manifiestos.-&#10;- La opcion de Sacar a Ruta, ahora muestra la lista de todos los Manifiestos que se hayan creado&#10;- El formulario de Sacar a Ruta, ahora contempla todos los campos necesarios y muestra listas de guías aptas para manifestar y guías manifestadas&#10;- Se crearon los reporte de Manifiesto de Carga y Nota de Despacho&#10;- Se modifico la base de datos, para distinguir los contenedores entre Valijas y Masters&#10;- La lista de Manifiestos en el Connect, ahora filtra por Cliente.  Antes mostraba todos los registros&#10;-">
-      <created>1619451211998</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1619451211998</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Empresa: GoldCoast, Transportista, En Kilos, Choferes, PODs e Incidencias Masivas&#10;- Todas las menciones a LibertyExpress, fueron cambiadas a GoldCoast&#10;- Se creo la tabla y los programas CRUD correspondientes a los Transportistas&#10;- El manifiesto de los Clientes, ahora puede recibirse en Kilos&#10;- Se simplificó la creación de los Choferes&#10;- Se creo la opcion de Rebaja Masiva de PODs, la cual permite tambien crear las Incidencias&#10;- La lista de facturas, ahora muestra el Estatus del Pago&#10;- Se adapto el footer.inc.php para facilitar la implementación del Sistema en la nube&#10;-">
-      <created>1619884914724</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1619884914724</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Cargar Masiva, Sacar a Ruta, Consulta Masiva, Lista de Facturas, Clientes-Tarifas.-&#10;- Se modifico radicalmente la carga masiva de guías, eliminando columnas innecesarias y tomando la segunda columna como la cantidad de piezas.&#10;- Se modifico la tabla containers para almacenar los datos del chofer y el vehiculo, así mismo se modificaron el reporte del manifiesto y la nota de despacho.&#10;- Se corrigió la consulta masiva de guías, que esta fallando al proporcionar varios numeros de guia&#10;- La lista de facturas ahora muestra los montos debidamente formateados&#10;- Se asociaron las tarifas a los Clientes y ahora se muestra la lista correspondiente, según sea el caso.">
-      <created>1619993165878</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1619993165878</updated>
-    </task>
-    <task id="LOCAL-00039" summary="Carga Masiva, Consulta Detallada.-&#10;- Ahora se puede especificar se la carga esta recibida o no, durante la carga masiva de guías&#10;- La consulta detalla ahora muestra el producto y la tarifa correcta de la guia">
-      <created>1620000580401</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1620000580401</updated>
-    </task>
-    <task id="LOCAL-00040" summary="Carga Masiva de Guias, Calculo de Conceptos en el Manifiesto, Parametros, Ayudas.-&#10;- La carga masiva de guías, ahora hace mejor gestión de los errores y muestra un boton para visualizar la lista de los mismos.&#10;- La opción de calculo de los manifiestos, ha sido corregida usando el codigo de producto IMP&#10;- Se creo la tabla parametros para almacenar las zonas y sus nombres&#10;- Se implementó la librería IntroJS para las ayudas del Sistema">
-      <created>1620255110940</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1620255110940</updated>
-    </task>
-    <task id="LOCAL-00041" summary="Choferes, Manifiestos de Salida, Ruta-Mobile&#10;- La clase Chofer tiene ahora un metodo que porpone el login del mismo&#10;- El login propuesto aparece tanto en la creacion del chofer vía el CRUD, cuando el Chofer se crea desde la opción de Sacar a Ruta.&#10;- El chofer ahora figura como un login posible para grabar checkpoints y la lista de guías asi lo considera&#10;- La lista de Manifestos de salida, ahora muestra los kilos, los pies y el nombre del Chofer, estos campos fueron agregados a la tabla.&#10;- El formulario de Sacar a Ruta funciona mejor y es mas inteligente....&#10;- Se creo el sub-sistema Ruta-Mobile para el manejo de los Manifiestos por parte de los Choferes.">
-      <created>1620405690092</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1620405690092</updated>
-    </task>
-    <task id="LOCAL-00042" summary="Nota de Entrega, Lista de Guias&#10;- Se creo la nota de entrega (aunque falta contemplar multi-piezas9)&#10;- La lista de guias se ordeno de manera ascendente&#10;- Se corregio el insert del containers con campos que no admiten null">
-      <created>1620579312300</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1620579312300</updated>
-    </task>
-    <task id="LOCAL-00043" summary="Impresion de Facturas, Consulta de Guia, Notas de Entrega.-&#10;- La nota de entrega ahora contempla el multi-piezas&#10;- En la consulta de la guia, ahora funcionan búsquedas por Manif de Recepcion y Salida a Ruta&#10;- En la lista de guías ahora se incluye la cantidad de piezas&#10;- La impresión de la factura, ahora incluye un desglose de los manifiestos facturados&#10;- Ahora se emiten facturas por separado para el AEREO y el MARITIMO&#10;- Se crearon metodo que facilitan las busquedas de guías con ciertos checkpoints">
-      <created>1620614142501</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1620614142501</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Creando Chofer desde Sacar a Ruta.-&#10;- Cuando se crea un chofer desde la opción de Sacar a Ruta, ahora el Sistema advierte el login y la clave del chofer para acceder a Ruta-Mobile">
-      <created>1620615333237</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1620615333237</updated>
-    </task>
-    <task id="LOCAL-00045" summary="Reporte Nota de Entrega, Facturas, Opciones de Scanneo, Permisos en los Parametros, Tarifas Agentes, Parametros de Sesion desde el Index.&#10;- La Nota de Entrega ahora incluye todas las piezas&#10;- El proceso de facturación fue corregido para evitar la emisión de facturas en blanco por servicio de importacion.&#10;- Las opciones de scanneo ahora aplican también &quot;la transformacion&quot; que solo habia sido considerada en Sacar a Ruta&#10;- Los parametros del Sistema ahora estan protegidos contra cambios de usuarios diferentes a mperez y ddurand&#10;- Las Tarifas de los Agentes, ahora muestra el nombre de la zona del pais.&#10;- Se elimino una cuantiosa cantidad de parametros en sesion, los cuales se leian y cargaban durante el inicio de sesion en el programa index.php">
-      <created>1620753747859</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1620753747859</updated>
-    </task>
-    <task id="LOCAL-00046" summary="Carga Masiva, Lista de Guias, Rutas, Sacar a Ruta, Edicion de Vehiculos, Ultimo Ckpt&#10;- La carga masiva de guías, ahora muesta la lista de las piezas asociadas&#10;- La lista de guías ahora muestra el ultimo ckpt de cada una y permite exportar a excel&#10;- Se mejoro la interfaz de usuario del formulario de rutas&#10;- En el formulario de Sacar a Ruta, ahora aparece la ubicacion fisica de las piezas&#10;- Se mejoro la intefaz de usuario del formulario de edicion de vehiculos&#10;- Se corrigio un error en la clase Guias en la rutina que devuelve el ultimo checkpoint">
-      <created>1620774371465</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1620774371465</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Desglose de Facturas, Exportar Piezas, Exportar Checkpoints, Login de Choferes y Usuarios, Busqueda por Nro de Factura, Ubicacion Física durante la Recepcion de Manifiesto, Edicion de Precinto, LS-Mobile&#10;- La impresion de la Factura ahora hace desglose por Zona&#10;- En la consulta de manifiestos recibidos, ahora se pueden exportar las piezas&#10;- Desde la lista de checkpoints ahora se puede exportar a excel todo su contenido&#10;- Desde la lista de guías, ahora se puede exportar todo su contenido&#10;- Ahora cuando se crean Choferes y Vehículos, el Sistema asigna logines no repetidos&#10;- Ahora se pueden buscar las guías por Nro de Factura&#10;- En la opcion de sacar a ruta, el precinto trasero, ahora es editable&#10;- Desde la opcion de Recibir Manifiesto, ahora se puede asignar una ubicacion fisica a las piezas&#10;- Se creo el boceto de LS-Mobile">
-      <created>1621027988378</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1621027988378</updated>
-    </task>
-    <task id="LOCAL-00048" summary="Transformacion, Ayuda en el Search, Lista de Errores de los Procesos, Errores en la Recepcion, Sucursales, Ruta Mobile&#10;- Se incorporaron nuevas transformaciones de los scanneos contemplando opciones no previstas&#10;- Se corrigió la ayuda en el formulario de busqueda de guias&#10;- Se incorporo una opcion en el menu de administracion, que permite ver los procesos y los errores generado en cada uno&#10;- Se incorporo la captura de errores durante la recepcion de los manifiestos&#10;- Se mejoro la lista y la creacion de Sucursales&#10;- Se incorporaron nuevas funcionalidades en Ruta-Mobile">
-      <created>1621559414568</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1621559414568</updated>
-    </task>
-    <task id="LOCAL-00049" summary="Carga Masiva con Excel&#10;- La carga masiva de guías, ahora lee archivos con extensión XLS y XLSX">
-      <created>1621697279545</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1621697279545</updated>
-    </task>
-    <task id="LOCAL-00050" summary="Ruta-Mobile Contacto Gold&#10;- Se implemento la opcion de Contacto Gold, en el modulo de Ruta-Mobile">
-      <created>1621701611824</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1621701611826</updated>
-    </task>
-    <task id="LOCAL-00051" summary="Exportar Guias en Carga Masiva, Validacion de Ckpt Repetido&#10;- Desde la opción de Carga Masiva de Guías, ahora se pueden exportar las guías&#10;- Se implementó la validación de Checkpoint Repetidos">
-      <created>1621947646924</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1621947646925</updated>
-    </task>
-    <task id="LOCAL-00052" summary="Carga Masiva, Recepción de Manifiesto&#10;- La carga masiva de guías ahora hace mejor seguimiento de los errores durante la conversion de guías temporales a guías Gold&#10;- La recepción de manifiestos, ahora muestra las piezas aptas para procesar en páginas, en lugar de una sola lista muy larga.">
-      <created>1621990365295</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1621990365295</updated>
-    </task>
-    <task id="LOCAL-00053" summary="Guia-Transportista.-&#10;- Se creo la tabla guia_transportista para trabajar con las Empresas que manejan su consecutivo de guías propio&#10;- Se creo la opcion para cargar la relacion de guías por transportista&#10;- Se modifico la tabla de transportistas, para identificar aquellos que operan con una secuencia propia de guias.">
-      <created>1622208400538</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1622208400539</updated>
-    </task>
-    <task id="LOCAL-00054" summary="Guia-Transportista en Ruta-Mobile y Login en Ruta-Mobile&#10;- En la lista de guía de Ruta-Mobile, ahora aparece el número de la Guia del Transportista, en lugar del número de la Guia Gold.&#10;- Para faciltar el ingreso de los transportistas a la aplicación, el login se convierte a minusculas a la hora de validar la existencia del Chofer.">
-      <created>1622226425198</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1622226425198</updated>
-    </task>
-    <task id="LOCAL-00055" summary="Esportacion, Retail, Manifiestos Facturables&#10;- Se crearon las tablas, programas y opciones de menu para trabajar con el modulo de exportacion&#10;- Se creo el directorio 'retail' para desarrollar dicho SubSistema con QCubed en reemplazo del que ya se habia iniciado con Laravel.  Resultara mas rapido re-hacerlo aqui, que continuar con el desarrollo inicial.&#10;- Ahora los Manifiestos que se cargan en el Sistema, pueden marcarse como Facturables o no&#10;- El modulo de facturacion, solo considerará los que esten marcados como Facturables&#10;- La lista de las guías que se muestra asociadas a un Manifiesto, ahora muestran la Zona de facturacion en lugar del origen.&#10;- Se hizo una modificacion en Ruta-Mobile para retornar al login, cuando se venza la sesion">
-      <created>1622322002262</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1622322002262</updated>
-    </task>
-    <task id="LOCAL-00056" summary="Sistema Retail.-&#10;- Se creo en la base de datos el codigo y las siglas del Sistema Retail&#10;- Se creo un nuevos directorio al estilo del Sistema Connect para el Retail&#10;- Se crearon las opciones de menu y se copiaron desde el SisCO la mayoria de las opciones necesarias para el Retail">
-      <created>1622393832482</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1622393832482</updated>
-    </task>
-    <task id="LOCAL-00057" summary="Match de Scanneo.-&#10;- Se creo la opcion Match Scanneo, para simplificar el proceso de Recepcion de Manifiestos&#10;- Se creo un metodo en la Nota de Entrega, que cuenta y actualiza la cantidad de piezas recibidas&#10;-">
-      <created>1622411336524</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1622411336524</updated>
-    </task>
-    <task id="LOCAL-00058" summary="Manifiesto y Nota de Despacho, Carga Masiva de Guias, Sacar a Ruta, Ruta-Mobile&#10;- Los reportes de Manifiesto de Carga y Nota de Despacho ahora muestran en nombre y el apellido del Chofer&#10;- Los manifiesto de Salida a Ruta, ahora contemplan la Fecha de Despacho&#10;- La carga masiva de guías ahora cuenta y guarda la cantidad de piezas del manifiesto&#10;- El match de scanneo, ahora muestra la cantidad de piezas del manifiesto y la cantidad por recibir&#10;- El login de ruta-mobile ahora elimina los espacio en blanco y pone todo en minuscula">
-      <created>1622735248673</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1622735248674</updated>
-    </task>
-    <task id="LOCAL-00059" summary="Correccion de la Factura, Formatos Retail, Guia Nacional, Ubicacion Retail&#10;- Se corrigieron detalles de la Factura Corporativa&#10;- Se copiaron y adaptaron desde el proyecto Laravel, los formatos de impresión del Retail&#10;- El Retail en QCubed, muestra la lista de las guías y permite crear guías nacionales y facturarlas&#10;- La Ubicación ahora se guarda en la base de datos y solo se solicta la confirmacion&#10;-">
-      <created>1623282483844</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1623282483845</updated>
-    </task>
-    <task id="LOCAL-00060" summary="Guia Transportista, Edicion de Guias, Manifiesto en Excel, Transformacion Stephy ATC, Rastreo, Guia EXP&#10;- La consulta de guia ahora permite consultar por nro de guia transportista&#10;- Se creo un formulario para la edición de la guia y se colocó el botón en la consulta de la guia&#10;- Desde el formulario de Sacar a Ruta, ahora se puede exportar a excel un Manifiesto&#10;- Se creo una rutina para transformar correctamente el scanneo de Stephy de ATC&#10;- Se creo el sub-modulo de rastreo, aunque tiene el detalle de que todavía no consultar por Tracking&#10;- En el Retail, se inicio la creacion de la guia de exportacion">
-      <created>1623597463406</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1623597463407</updated>
-    </task>
-    <task id="LOCAL-00061" summary="Estatus de Manifiestos, Match Scanneo, Recepcion de Manifiesto, Permisos&#10;- Se implemento la opcion que permite asignar masivamente checkpoints a un Manifiesto&#10;- Se creo la tabla que almacena los Checkpoints de los Manifiestos&#10;- La lista de Manifestos ahora muestra el último checkpoint con su fecha y hora&#10;- El Match de Scanneo, ahora considera la secuencia logica de transito de la carga y solo permite procesar los Manifiestos que hayan salido de la Aduana (Custom Release)&#10;- La misma logica recien explicada aplica para la Recepcion de Manifiestos&#10;- Los permisos se optimizaron en funcion de la tabla new_group y new_opcion">
-      <created>1623722576441</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1623722576441</updated>
-    </task>
-    <task id="LOCAL-00062" summary="Consulta de Estatus del Manifiesto, Ckpt Manif de Carga, Ult Ckpt de Manifiesto,&#10;- Se creo la funcionalidad que permite Consultar el historial de estatus de un Manifiesto&#10;- Se centralizo en la clase NotaEntrega, la funcionalidad de grabar checkpoints al Manifiesto&#10;- La lista de Manifiestos ahora permite visualizar los datos el ultimo checkpoint&#10;- Luego de que ha sido Recibido en el Almacen, el Manifiesto podrá marcarse como Entregado">
-      <created>1623802015417</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1623802015418</updated>
+      <workItem from="1629221355740" duration="134497000" />
+      <workItem from="1629983732241" duration="10229000" />
+      <workItem from="1630020644764" duration="7548000" />
+      <workItem from="1630070908046" duration="9012000" />
+      <workItem from="1630084090017" duration="8539000" />
+      <workItem from="1630177702200" duration="38000" />
+      <workItem from="1630181938344" duration="37107000" />
+      <workItem from="1630410288912" duration="74083000" />
+      <workItem from="1631013662532" duration="13788000" />
+      <workItem from="1631121643595" duration="603000" />
+      <workItem from="1631199271384" duration="36181000" />
+      <workItem from="1631537981459" duration="13763000" />
+      <workItem from="1631628192703" duration="1812000" />
+      <workItem from="1631631414978" duration="490000" />
+      <workItem from="1631713815942" duration="661000" />
+      <workItem from="1631714783712" duration="10127000" />
+      <workItem from="1631799144899" duration="674000" />
+      <workItem from="1632155557982" duration="607000" />
+      <workItem from="1632159503276" duration="5248000" />
+      <workItem from="1632323314545" duration="40103000" />
+      <workItem from="1632490304824" duration="6515000" />
+      <workItem from="1632500694766" duration="24204000" />
+      <workItem from="1632739994723" duration="14478000" />
+      <workItem from="1632766546321" duration="1725000" />
+      <workItem from="1632773192821" duration="21711000" />
+      <workItem from="1632846820727" duration="13602000" />
+      <workItem from="1632943813769" duration="23198000" />
+      <workItem from="1633298514728" duration="5806000" />
+      <workItem from="1633360748891" duration="14336000" />
+      <workItem from="1633431772139" duration="17266000" />
+      <workItem from="1633522068298" duration="9391000" />
+      <workItem from="1633616851841" duration="12708000" />
+      <workItem from="1634164082567" duration="4182000" />
+      <workItem from="1634232885851" duration="1925000" />
+      <workItem from="1634300697838" duration="4001000" />
+      <workItem from="1634594999859" duration="5568000" />
+      <workItem from="1634667622205" duration="8789000" />
+      <workItem from="1634750020675" duration="2168000" />
+      <workItem from="1634766189754" duration="29868000" />
+      <workItem from="1635113989262" duration="871000" />
+      <workItem from="1635164907451" duration="1876000" />
+      <workItem from="1635173141254" duration="13165000" />
+      <workItem from="1635245976026" duration="20795000" />
+      <workItem from="1635337171077" duration="6803000" />
+      <workItem from="1635424067162" duration="10554000" />
+      <workItem from="1635449787692" duration="1246000" />
+      <workItem from="1635511227630" duration="5357000" />
+      <workItem from="1635869757022" duration="12000" />
+      <workItem from="1635869873921" duration="7976000" />
+      <workItem from="1635894849700" duration="16731000" />
+      <workItem from="1636389776633" duration="7765000" />
+      <workItem from="1636467549829" duration="13432000" />
+      <workItem from="1636552763449" duration="10005000" />
+      <workItem from="1636898416440" duration="859000" />
+      <workItem from="1637080771535" duration="9637000" />
+      <workItem from="1637156582171" duration="11301000" />
+      <workItem from="1637330269073" duration="11756000" />
+      <workItem from="1637609822918" duration="1054000" />
+      <workItem from="1637704582287" duration="18192000" />
+      <workItem from="1638203330830" duration="731000" />
+      <workItem from="1638453438221" duration="649000" />
+      <workItem from="1638455641984" duration="8410000" />
+      <workItem from="1638749259333" duration="709000" />
+      <workItem from="1638753239028" duration="1249000" />
+      <workItem from="1638755772860" duration="688000" />
+      <workItem from="1638813532746" duration="7764000" />
+      <workItem from="1639076517889" duration="1590000" />
+      <workItem from="1639493723964" duration="594000" />
     </task>
     <task id="LOCAL-00063" summary="Usuarios con Traza.&#10;- Ahora por medio de un parametro, se pueden especificar los Usuarios que dejarán traza de sus acciones">
       <created>1623862322264</created>
@@ -834,28 +627,241 @@
       <option name="project" value="LOCAL" />
       <updated>1629297128326</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="Mejoras a los reportes de las guias, Mejoras a la factura, Ajuste a la guia EXP&#10;- Se creo la vista v_info_guia_y_piezas para mejorar los reportes de las guias&#10;- Se hicieron correcciones a la factura de exportacion&#10;- Se hicieron ajustes a la creacion de la guia de exportacion">
+      <created>1629461021900</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1629461021901</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Conceptos, Tarifa EXP, Mejora a la consulta de guias en el Retail, Ajustes a la Exportacion&#10;- Los conceptos ahora manejan un monto minimo y se puede especificar si aplican la tasa de cambio o no&#10;- La consulta de guias en el Retail, ahora muestra mas y mejores datos de cada guia&#10;- En el Retail cuando una factura haya sido impresa, ya no podra borrarse&#10;- Se habilito la forma de pago CRD &#10;- Las guias CRD podran imprimirse sin pago&#10;- El Manifiesto de salida a ruta ya no exige BL&#10;- Se creo la tabla Tarifa EXP">
+      <created>1629587951737</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1629587951738</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Vista de Guias y Piezas, Encabezado Local, Combo de Documentos, Impresion de Guias&#10;- Se creo una vista llamada v_info_guia_y_piezas la cual facilita la obtencion de datos para los reportes de las guias desde el programa guia_seach_new.php&#10;- Se incluyo un nuevo encabezado para la impresion del Acuerdo de L.R. en la guia de Exportacion&#10;- Se creo la opcion para impresion de documentos en combo para la guia de exportacion&#10;- Se mejoro la impresion de la guia sobre todo en lo referido a las direcciones largas">
+      <created>1629822202530</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1629822202530</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Manifiesto de Exportacion MAR, Auditoria de Carga, Recepcion de Carga, &#10;- Se crearon columnas en la tabla manfiesto_exp, para soportar los campos del maritimo&#10;- Se creo la opcion que permite armar un manfiesto maritimo&#10;- Se creo la vista v_aptas_para_exportar para visualizar las piezas de exportacion area o maritima&#10;- Se creo el reporte del manifiesto de exportacion, aun pendiente por completar&#10;- Se creo un tipo de manifiesto diferente, para identificar los que proceden de las tiendas&#10;- Se mejoro la auditoria de carga&#10;- Se creo el checkpoint de exportacion">
+      <created>1630075770766</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1630075770767</updated>
+    </task>
+    <task id="LOCAL-00085" summary="Manifiesto de Exportacion Maritima y Tiempos de Transito.-&#10;- Se agregaron campos a la tabla manifiesto_exp para considerar los requisitos de la exportacion maritima&#10;- Se crearon lista separadas para los manifiestos maritimos y aereos&#10;- Se creo el reporte de tiempos de transito">
+      <created>1630187935446</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1630187935446</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Reporte de Manif de Exp, Actualizacion de Manif de Exp, Ctrl de cambios en las Pzas, Valor de Piezas&#10;- Se mejoró el reporte del manifiesto de exportacion&#10;- Se creo un campo en la tabla guia_piezas y en la tabla piezas_temp para almacenar el valor de cada pieza&#10;- Se mejoró la rutina de actualizacion de montos en el manifiesto&#10;- Ahora cuando se realiza un cambio en las piezas y el Usuario intenta salir, el sistema advierte la existencia de cambios que no ha sido guardados en la BD&#10;- Cuando las piezas forman parte de un Manifiesto, ya no admiten cambios">
+      <created>1630340864913</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1630340864914</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Reporte de Manif de Exp.-&#10;- Se creo la tabla guias_manifiesto, para controlar mejor la informacion del reporte de manifiesto de exportacion.  Ahora se imprime la info de las piezas que exclusivamente esta relacionadas al manifiesto.">
+      <created>1630349020027</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1630349020027</updated>
+    </task>
+    <task id="LOCAL-00088" summary="Mejores reportes XLS.-&#10;- En la consulta de manifiesto de carga (notas de entrega) se implementaron mejores rutina para exportar a XLS">
+      <created>1630452297288</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1630452297289</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Edo de Cta, Desglose de Facturas, Mejoras al Manif de Exp MAR, Status al Manif de Exp, Manif del Retail, Borrar Guia en el Retail&#10;- El Edo de Cta ahora hace mecion a la cuenta de correo del auxiliar administrativo&#10;- El desglose de la factura corporativa, ahora utiliza la table que fue creada para tales fines&#10;- El proceso de emision de la factura corporativa, ahora registra los datos en la tabla que fue creada para tales fines&#10;- Ahora se puede sacar piezas de un manifiesto de exportacion y se puede cambiar el estatus del mismo&#10;- El Sistema Retail ahora emite el manifiesto de carga&#10;- Ahora se pueden borrar guías en el Retail">
+      <created>1631048755193</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1631048755193</updated>
+    </task>
+    <task id="LOCAL-00090" summary="Armar Manif de Expo MAR y Establecer Ubic&#10;- Ahora hay mejor control de los botones a la hora de armar un manif de expo mar&#10;- La tasa de cambio ahora muestra la fecha y hora en que se establecio">
+      <created>1631054685492</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1631054685492</updated>
+    </task>
+    <task id="LOCAL-00091" summary="Lineas en Comentario&#10;- Se eliminaron lineas en comentario">
+      <created>1631200411502</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1631200411503</updated>
+    </task>
+    <task id="LOCAL-00092" summary="Jobs Queued, Match Scanneo&#10;- Se creo la tabla cola, para almacenar en ella los procesos batch pendientes por ejecutar&#10;- Se creo la tabla pieza_recibida para guardar en ella, las piezas pendientes por recibir&#10;- El proceso de Match Scanneo, ahora se convirtio en un Job Queued: crea un proceso en la cola pendiente por ejecutar y guarda en la tabla piezas_recibidas, las piezas scanneadas.&#10;- Se creo un proceso que, invocando a un metodo de la clase NotaEntrega, procesa las piezas pendientes por recibir, las marca como recibidas y marca el Job como ejecutado.">
+      <created>1631290698388</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1631290698388</updated>
+    </task>
+    <task id="LOCAL-00093" summary="Correos de Notifiación de Procesos Batch.-&#10;- El programa que ejecuta los procesos batch, ahora envia correos al Usuario y el Administrador">
+      <created>1631308740239</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1631308740239</updated>
+    </task>
+    <task id="LOCAL-00094" summary="Procesos Batch, Match Scanneo Batch.-&#10;- Se implemento la opcion de scanneo batch, que permite el procesamiento asincronico de la Recepcion de Piezas en el almacen.&#10;- Se implemento una consulta de los Procesos Batch, que permitira acceder a los resultados de cada proceso">
+      <created>1631551984858</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1631551984859</updated>
+    </task>
+    <task id="LOCAL-00095" summary="Guias del Manifiesto, Borrado de Facturas, Comentarios en los Pagos, Guia de Exportacion, Oociones en el Retail&#10;- La guias del manifiesto ahora se cargan de una manera más eficiente&#10;- Se elimino la opcion de borrado de facturas&#10;- Los comentarios en los pagos, fueron ampliados&#10;- Las guías de exportacion, ahora tienen piezas que se pueden repetir, piezas en pulgadas y ahora se pueden asociar a un Cliente Corporativo&#10;- Alguno de los campos en la pantalla podrán quedar en blanco">
+      <created>1632507426528</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1632507426529</updated>
+    </task>
+    <task id="LOCAL-00096" summary="Campos nuevos en la Guia.-&#10;- La guia de exportacion requirio separse de la tabla de clientes_retail ya que en ocasiones, no se tienen los datos completos del destinatario&#10;- La guia tiene ahora los campos necesarios para ser independiente y admitir valores nulos donde antes había una relación con la tabla cliente_retail">
+      <created>1632512240099</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1632512240100</updated>
+    </task>
+    <task id="LOCAL-00097" summary="Impresion de Guia Retail, Control de longitudes.-&#10;- Cuando se imprime la guia en el Sistema Retail, ahora se cuidan mucho los limites de la direccion y el tamano de las letras, para no sobre-salir del formato&#10;- La creacion/modificacion de la guia Retail, ahora hace mejores calculos sobre el valor declarado de c/pieza, tambien hace un mejor tratamiento de la descripcion de la pieza">
+      <created>1632598993372</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1632598993372</updated>
+    </task>
+    <task id="LOCAL-00098" summary="Factura Comercial y Fechas.-&#10;- Se creo el formato de impresion llamado Factura Comercial&#10;- Para evitar bloqueos en las tablas principales, por comportamiento del framework QCubed, se cambiaron los campos created_at y updated_at a tipo DateTime">
+      <created>1632782989672</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1632782989673</updated>
+    </task>
+    <task id="LOCAL-00099" summary="Nueva Impresion Multi-Piezas.-&#10;- Se creo un nuevo reporte de guia exportacion de multi-piezas">
+      <created>1632792558526</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1632792558526</updated>
+    </task>
+    <task id="LOCAL-00100" summary="Modo del Valor Declarado, Impresion de Guias Multi-Piezas, Factura Comercial, Borrar Facturas Retail.-&#10;- El valor declarado de la guia ahora puede especificarse por guía o por pieza&#10;- Las guías que superen las 5 piezas, ahora se imprimen en grupos de tres&#10;- El formato de factura comercial ahora contempla los items y la impresion multi-pagina&#10;- Ahora se puede borrar una Factura Retail, bajo permisos especiales.">
+      <created>1633474543124</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1633474543125</updated>
+    </task>
+    <task id="LOCAL-00101" summary="Aliado Comercial, Manejo de Multiples Emails, Scanneo, Impresion de TyC&#10;- Se creo el concepto de Aliado Comercial con sus programas de mantenimiento&#10;- Las Receptorias ahora se pueden asociar a los Aliados Comerciales&#10;- El Edo de Cta de Clientes, ahora se puede enviar a más de una cuenta&#10;- Se creo la opción para Scanneo de piezas una por una con detección de Sobrantes&#10;-">
+      <created>1634924430444</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1634924430445</updated>
+    </task>
+    <task id="LOCAL-00102" summary="Factura Retail.-&#10;- Se agregaron datos a la impresion de la factura retail: producto, peso, medidas y condicion de pago">
+      <created>1635008420080</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1635008420080</updated>
+    </task>
+    <task id="LOCAL-00103" summary="Empaques.-&#10;- Se creo la tabla empaques y sus programas de mantenimiento&#10;- Se modificaron las tablas guia_piezas y piezas_temp para incorporar el tipo de empaque">
+      <created>1635080341619</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1635080341619</updated>
+    </task>
+    <task id="LOCAL-00104" summary="Empaques en la Guia.-&#10;- Se incorporo el empaque la guia de exportacion&#10;- Se incorporo el empaque en la factura comercial">
+      <created>1635113709499</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1635113709500</updated>
+    </task>
+    <task id="LOCAL-00105" summary="Facturas con Abono, Actualizacion de Manifiestos post Scanneo.-&#10;- Se implemento la posibilidad de hacer abonos individuales a cada factura, a la hora de registrar los pagos&#10;- Se implemento la actualización de manifiestos posterior al Scanneo Individual.">
+      <created>1635426827874</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1635426827875</updated>
+    </task>
+    <task id="LOCAL-00106" summary="Parametros con Datos Bancarios.-&#10;- En la tabla parametros, se crearon los registros necesarios para almacenar los datos bancarios&#10;- Tanto el Estado de Cuenta con la Factura, toman ahora los datos desde dichos parametros">
+      <created>1635433325996</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1635433325996</updated>
+    </task>
+    <task id="LOCAL-00107" summary="Transf Masiva de Manif al Historico.-&#10;- Ahora se pueden trasnferir manifiestos al Historico directamente desde la lista de Manif.">
+      <created>1635438500902</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1635438500902</updated>
+    </task>
+    <task id="LOCAL-00108" summary="Kilos en los Manifiestos Aereos y Edo de Cta sin footer&#10;- Los Manifiestos Aéreos, ahora muestran los kilos&#10;- El Edo de cuenta ya no muestra el pie de página para permitir que se vean más faccturas">
+      <created>1636035942652</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1636035942653</updated>
+    </task>
+    <task id="LOCAL-00109" summary="Consulta de Guia, Minimo Facturable.-&#10;- La consulta de la guia, ahora muestra la zona de facturacion del Destino del envio&#10;- Se creo e implemento el concepto del minimo facturable por Cliente y por Zona del pais&#10;- El programa de edicion de Tarifas de los Agentes, permite ahora ingresar y editar el Minimo Facturable">
+      <created>1636056790173</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1636056790173</updated>
+    </task>
+    <task id="LOCAL-00110" summary="Facturas y Totales.-&#10;- La lista y el formulario de Facturas, ahora muestran la fecha de emisión de la misma&#10;- La Nota de Entrega, ahora muestra los Kilos y el Total de la misma&#10;- Las Tarifas tienen ahora un campo que permite establecer si es Publica o no&#10;- Los Conceptos ahora pueden ser Fijos u Opcionales&#10;- La Guia EXP, ahora muestra una lista de los Conceptos Opcionales que se pueden elegir&#10;- La Guia EXP, ahora pide el Origen de la guia, para calcular el Serv de Recolecta">
+      <created>1637347410820</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1637347410821</updated>
+    </task>
+    <task id="LOCAL-00111" summary="Scanneo Miami.-&#10;- Se creo una opcion para Scanneos en Miami&#10;- Se modifico la lista de Scanneos de Venezuela, para exlcuir los scanneos de Miami">
+      <created>1637796588285</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1637796588286</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2072642000" />
+    <option name="totallyTimeSpent" value="2838454000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1360" height="732" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1366" height="732" extended-state="7" />
     <layout>
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21838236" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28529412" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23352855" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21838236" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5344" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26397058" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21985294" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -863,10 +869,37 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5776" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21838236" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4976" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23572475" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32956383" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3023426" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -877,499 +910,394 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Sistema Retail.-&#10;- Se creo en la base de datos el codigo y las siglas del Sistema Retail&#10;- Se creo un nuevos directorio al estilo del Sistema Connect para el Retail&#10;- Se crearon las opciones de menu y se copiaron desde el SisCO la mayoria de las opciones necesarias para el Retail" />
-    <MESSAGE value="Match de Scanneo.-&#10;- Se creo la opcion Match Scanneo, para simplificar el proceso de Recepcion de Manifiestos&#10;- Se creo un metodo en la Nota de Entrega, que cuenta y actualiza la cantidad de piezas recibidas&#10;-" />
-    <MESSAGE value="Manifiesto y Nota de Despacho, Carga Masiva de Guias, Sacar a Ruta, Ruta-Mobile&#10;- Los reportes de Manifiesto de Carga y Nota de Despacho ahora muestran en nombre y el apellido del Chofer&#10;- Los manifiesto de Salida a Ruta, ahora contemplan la Fecha de Despacho&#10;- La carga masiva de guías ahora cuenta y guarda la cantidad de piezas del manifiesto&#10;- El match de scanneo, ahora muestra la cantidad de piezas del manifiesto y la cantidad por recibir&#10;- El login de ruta-mobile ahora elimina los espacio en blanco y pone todo en minuscula" />
-    <MESSAGE value="Correccion de la Factura, Formatos Retail, Guia Nacional, Ubicacion Retail&#10;- Se corrigieron detalles de la Factura Corporativa&#10;- Se copiaron y adaptaron desde el proyecto Laravel, los formatos de impresión del Retail&#10;- El Retail en QCubed, muestra la lista de las guías y permite crear guías nacionales y facturarlas&#10;- La Ubicación ahora se guarda en la base de datos y solo se solicta la confirmacion&#10;-" />
-    <MESSAGE value="Guia Transportista, Edicion de Guias, Manifiesto en Excel, Transformacion Stephy ATC, Rastreo, Guia EXP&#10;- La consulta de guia ahora permite consultar por nro de guia transportista&#10;- Se creo un formulario para la edición de la guia y se colocó el botón en la consulta de la guia&#10;- Desde el formulario de Sacar a Ruta, ahora se puede exportar a excel un Manifiesto&#10;- Se creo una rutina para transformar correctamente el scanneo de Stephy de ATC&#10;- Se creo el sub-modulo de rastreo, aunque tiene el detalle de que todavía no consultar por Tracking&#10;- En el Retail, se inicio la creacion de la guia de exportacion" />
-    <MESSAGE value="Estatus de Manifiestos, Match Scanneo, Recepcion de Manifiesto, Permisos&#10;- Se implemento la opcion que permite asignar masivamente checkpoints a un Manifiesto&#10;- Se creo la tabla que almacena los Checkpoints de los Manifiestos&#10;- La lista de Manifestos ahora muestra el último checkpoint con su fecha y hora&#10;- El Match de Scanneo, ahora considera la secuencia logica de transito de la carga y solo permite procesar los Manifiestos que hayan salido de la Aduana (Custom Release)&#10;- La misma logica recien explicada aplica para la Recepcion de Manifiestos&#10;- Los permisos se optimizaron en funcion de la tabla new_group y new_opcion" />
-    <MESSAGE value="Consulta de Estatus del Manifiesto, Ckpt Manif de Carga, Ult Ckpt de Manifiesto,&#10;- Se creo la funcionalidad que permite Consultar el historial de estatus de un Manifiesto&#10;- Se centralizo en la clase NotaEntrega, la funcionalidad de grabar checkpoints al Manifiesto&#10;- La lista de Manifiestos ahora permite visualizar los datos el ultimo checkpoint&#10;- Luego de que ha sido Recibido en el Almacen, el Manifiesto podrá marcarse como Entregado" />
-    <MESSAGE value="Usuarios con Traza.&#10;- Ahora por medio de un parametro, se pueden especificar los Usuarios que dejarán traza de sus acciones" />
-    <MESSAGE value="Transferir Manif a Historicos, Scanneo Stephy ATC&#10;- Se crearon las tablas necesarias para transferir los Manifiestos a Historicos&#10;- Se creo un formulario que permite al Usuario enviar un Manifiesto a Histórico&#10;- Se creo la opción correspondiente en el formulario de Carga de Manifiestos que invoca al formulario recien creado." />
-    <MESSAGE value="Scanneo Citrino.-&#10;- Se implementó la transformacion necesaria para interpretar correctamente el scanneo del Cliente Citrino." />
-    <MESSAGE value="Resumen de Entrega en Mobile, Mejoras de Navegacion.-&#10;- La lista de manifiestos ahora muestra el resumen de entregas y efectividad&#10;- Los botones de navegacion ahora invocan a las paginas, provocando la actualizacion de los datos&#10;- Las guías que se entregan, ahora se mueven de la lista de pendendientes a la lista de entregadas" />
-    <MESSAGE value="Nota de Despacho, Filtro de Manifiesto de Ruta, Incidencias, Filtros en Manifiesto de Carga, Sacar a Ruta, Scanneo multi-piezas, Piezas Ok en Manifiestos, Rastreo Movil, Rastreo en Ruta Mobile&#10;- El encabezado de las Nota de Despacho, ya no muestra la direccion de GC en Miami&#10;- Los Manifiesto de Carga ahora pueden filtrarse por varios criterios&#10;- La opción de Incidencia ahora hace la interpretacion correcta de las piezas&#10;- Los Manifiestos de Salida a Ruta, ahora muestran la cantidad de piezas entregadas&#10;- Se creo e implemento el Rastreo Movil para los Clientes en Instagram&#10;- Se implementó la opción de Rastreo en Ruta-Mobile" />
-    <MESSAGE value="Filtro en Facturacion, Nuevos KPIs en Gerencia-Mobile, Tasa de Cambio, Cambios Retail.-&#10;- En la lista de facturas SisCO, se corrigio el filtro&#10;- La Guia EXP, ahora calcula los conceptos, crea las piezas y crea los checkpoints&#10;- La Consulta de Guias en el Retail, ahora discrimina y opera en funcion del tipo de producto de la guia consultada.&#10;- Las tasas de cambio de las moneda internacionales más usadas, ahora aparecen en la pantalla que permite al Usuario establecer su ubicación.&#10;- La Guia Exp, ahora permite crear nuevas profesiones y actualiza el perfil del remitente&#10;- Se crearon nuevos KPIs en el modulo de Gerencia-Mobile." />
-    <MESSAGE value="Cajero Eliminado, Tasa en el Encabezado, Creacion de Guias NAC y EXP, Cobros de la Factura.-&#10;- Se elimino el concepto de Cajero, ya que existe un campo created_by que cumple las mismas funciones&#10;- Las tasas de cambio se establecen cunjuntamente con la Ubicacion del Usuario y aparecen ahora en el encabezado del Sistema, para facilitar su visulizacion&#10;- Se completaron los programas de creación de guias nacionales y de exportacion&#10;- Se completo la rutina de cobro de las facturas." />
-    <MESSAGE value="Edo de Cuenta, Actualizacion de Manif, Creación e Impr de Guia Exp, Opciones de Retail, Ruta-Mobile.-&#10;- Se creó la opción que permite visualizar el Edo de Cuenta de un Cliente CORP&#10;- Al consultar un manifiesto, se actualizan sus estadísticas&#10;- Se creó el programa que permite emitir una guía de exportación e imprimir las etiquetas para cada pieza&#10;- Se incorporó la paginación a los manifiesto de los choferes en ruta-mobile&#10;- Cuando el chofer accede a sus manifiestos, los mismos se actualizan." />
-    <MESSAGE value="Edo de Cta.-&#10;- La ficha de Clientes Corp, ahora muestra las facturas pendientes, las facturas pagadas y las notas de credito asociadas.&#10;- El formulario de Clientes permite ahora enviar por correo la Estado de Cuenta al Cliente" />
-    <MESSAGE value="Interpretacion de Scanneo, Mejoras Connect.-&#10;- Se mejoró la interpretación del scanneo para procesar correctamente piezas del formato 000194-001&#10;- Se incorporo en el Connect la consulta de detallada de la guia, tal cual como funciona en el SisCO&#10;- Se hicieron mejoras en los filtros de las guias en el Connect&#10;- Se re-hizo la vista de checkpoints publicos para visualizarla en el Connect&#10;- Se corrigio un error en la funcion que muestra el ultimo checkpoint de cada guia en el Connect" />
-    <MESSAGE value="Incidencias en Lote, Envio de Edo de Cta, Vista para Ruta-Mobile, Mejoras en Ruta-Mobile.-&#10;- Se mejoro la carga de incidencias en lote que se realiza desde la carga masiva de pods, ya que solo esta procesando la ultima pieza.&#10;- Se crearon opciones para probar el envio del Edo de Cta al Cliente ya que los correos no estan llegando a su destino.  Esto esta pendiente.&#10;- A nivel de la base de datos, se crearon varias vistas: resumen del manfiesto, piezas entregadas, pendientes y sin gestionar del manifiesto.  Todas ellas pensadas para acelerar el funcionamiento de la app de los choferes.&#10;- Se modificaron los programas de Ruta-Mobile, para aprovechar las vistas recien creadas" />
-    <MESSAGE value="Cierre de Manifiestos en la App.-&#10;- Cuando los Manifiestos hayan sido completamente gestionados serán cerrados automaticamente" />
-    <MESSAGE value="Edo de Cta, Lista y Consulta de Manifiestos&#10;- El Edo de Cuenta ahora muestra el nombre del Cliente&#10;- El programa que envía el correo, estaba usando un nombre de dominio incorrecto y se corrigio&#10;- La lista de Manifiestos, ahora muestra la cantidad de piezas entregadas, devueltas y sin gestionar&#10;- La consulta del Manifiesto, muestra los mismos datos que lista: entregadas, devueltas y sin gestionar." />
-    <MESSAGE value="Edo de Cta, Consulta de Facturas, Lista de Facturas, Notas de Credito, Registrar Pagos, Guias en Ruta-Mobile.-&#10;- El Edo de Cta ahora muestra el saldo a favor del Cliente cuando sea mayor a cero&#10;- La consulta de la factura ahora muestra las notas de credito asociada a la factura&#10;- La lista de factura ahora muestra el monto cobrado y el monto pendiente, así como la cantidad de pagos" />
-    <MESSAGE value="Nombre de Chofer, Edicion de Guias, Buscar Manifiesto por Chofer, Formas de Pago, NDC desde el Cliente, Mejores KPIs en Gerencia-Mobile, Notificacion a pie de pantalla, Rastreo de Guias en Ruta-Mobile&#10;- Se agrego la columna nombre a la tabla chofer, asi que se modificaron los programas de edicion y la lista de choferes.&#10;- Se limito la edición de guias bajo permisos granulares&#10;- Se habilito la busqueda de manifiestos por nombre de chofer&#10;- Se agrego la opcion formas de pago al menu de tablas&#10;- Se optimizaron los Kpis de Gerencia Mobile en base a vistas creadas en la BD&#10;- Todas las pantallas del Sistema ahora contemplan una notificación al pie de la pantalla del lado derecho&#10;- Los choferes ahora pueden buscar una guía entre sus manifiestos a traves de la nueva opcion de rastreo creada para ellos." />
-    <MESSAGE value="Conteo de Factura Pendientes, Aplicacion de NDC&#10;- El conteo de las Factura pendientes ahora contempla también las facturas con PagoParcial&#10;- La consulta de la NDC ahora muestra si fue aplicada o esta disponible y la referencia del pago cuando ha sido aplicada&#10;- Ahora se puede procesar una NDC como forma de pago y el Sistema cambia el estatus de la misma de Disponible a Aplicada&#10;- Se optimizo la rutina que calcula el saldo del Cliente con mejores querys" />
-    <MESSAGE value="Logout&#10;- La pantalla de logout estaba fallando por no comtemplar la nueva notificación al pie de la pantalla" />
-    <MESSAGE value="Animaciones, Factura Retail, Terminos y Condiciones, Conceptos en el Retail, Mejoras en Ruta Mobile.-&#10;- Se agrego la libreria de animacion AOS y se incorporo en la mayoria de los templates&#10;- Se creo una nuevo formato de impresion de factura en el retail en forma libre&#10;- Se terminaron de agregar los terminos y condiciones&#10;- Los conceptos ahora estan visibles desde el Retail&#10;- Se iniciaron las mejoras en el Ruta-Mobile para mejorar los tiempos de respuesta" />
-    <option name="LAST_COMMIT_MESSAGE" value="Animaciones, Factura Retail, Terminos y Condiciones, Conceptos en el Retail, Mejoras en Ruta Mobile.-&#10;- Se agrego la libreria de animacion AOS y se incorporo en la mayoria de los templates&#10;- Se creo una nuevo formato de impresion de factura en el retail en forma libre&#10;- Se terminaron de agregar los terminos y condiciones&#10;- Los conceptos ahora estan visibles desde el Retail&#10;- Se iniciaron las mejoras en el Ruta-Mobile para mejorar los tiempos de respuesta" />
+    <MESSAGE value="Reporte de Manif de Exp.-&#10;- Se creo la tabla guias_manifiesto, para controlar mejor la informacion del reporte de manifiesto de exportacion.  Ahora se imprime la info de las piezas que exclusivamente esta relacionadas al manifiesto." />
+    <MESSAGE value="Mejores reportes XLS.-&#10;- En la consulta de manifiesto de carga (notas de entrega) se implementaron mejores rutina para exportar a XLS" />
+    <MESSAGE value="Edo de Cta, Desglose de Facturas, Mejoras al Manif de Exp MAR, Status al Manif de Exp, Manif del Retail, Borrar Guia en el Retail&#10;- El Edo de Cta ahora hace mecion a la cuenta de correo del auxiliar administrativo&#10;- El desglose de la factura corporativa, ahora utiliza la table que fue creada para tales fines&#10;- El proceso de emision de la factura corporativa, ahora registra los datos en la tabla que fue creada para tales fines&#10;- Ahora se puede sacar piezas de un manifiesto de exportacion y se puede cambiar el estatus del mismo&#10;- El Sistema Retail ahora emite el manifiesto de carga&#10;- Ahora se pueden borrar guías en el Retail" />
+    <MESSAGE value="Armar Manif de Expo MAR y Establecer Ubic&#10;- Ahora hay mejor control de los botones a la hora de armar un manif de expo mar&#10;- La tasa de cambio ahora muestra la fecha y hora en que se establecio" />
+    <MESSAGE value="Lineas en Comentario&#10;- Se eliminaron lineas en comentario" />
+    <MESSAGE value="Jobs Queued, Match Scanneo&#10;- Se creo la tabla cola, para almacenar en ella los procesos batch pendientes por ejecutar&#10;- Se creo la tabla pieza_recibida para guardar en ella, las piezas pendientes por recibir&#10;- El proceso de Match Scanneo, ahora se convirtio en un Job Queued: crea un proceso en la cola pendiente por ejecutar y guarda en la tabla piezas_recibidas, las piezas scanneadas.&#10;- Se creo un proceso que, invocando a un metodo de la clase NotaEntrega, procesa las piezas pendientes por recibir, las marca como recibidas y marca el Job como ejecutado." />
+    <MESSAGE value="Correos de Notifiación de Procesos Batch.-&#10;- El programa que ejecuta los procesos batch, ahora envia correos al Usuario y el Administrador" />
+    <MESSAGE value="Procesos Batch, Match Scanneo Batch.-&#10;- Se implemento la opcion de scanneo batch, que permite el procesamiento asincronico de la Recepcion de Piezas en el almacen.&#10;- Se implemento una consulta de los Procesos Batch, que permitira acceder a los resultados de cada proceso" />
+    <MESSAGE value="Guias del Manifiesto, Borrado de Facturas, Comentarios en los Pagos, Guia de Exportacion, Oociones en el Retail&#10;- La guias del manifiesto ahora se cargan de una manera más eficiente&#10;- Se elimino la opcion de borrado de facturas&#10;- Los comentarios en los pagos, fueron ampliados&#10;- Las guías de exportacion, ahora tienen piezas que se pueden repetir, piezas en pulgadas y ahora se pueden asociar a un Cliente Corporativo&#10;- Alguno de los campos en la pantalla podrán quedar en blanco" />
+    <MESSAGE value="Campos nuevos en la Guia.-&#10;- La guia de exportacion requirio separse de la tabla de clientes_retail ya que en ocasiones, no se tienen los datos completos del destinatario&#10;- La guia tiene ahora los campos necesarios para ser independiente y admitir valores nulos donde antes había una relación con la tabla cliente_retail" />
+    <MESSAGE value="Impresion de Guia Retail, Control de longitudes.-&#10;- Cuando se imprime la guia en el Sistema Retail, ahora se cuidan mucho los limites de la direccion y el tamano de las letras, para no sobre-salir del formato&#10;- La creacion/modificacion de la guia Retail, ahora hace mejores calculos sobre el valor declarado de c/pieza, tambien hace un mejor tratamiento de la descripcion de la pieza" />
+    <MESSAGE value="Factura Comercial y Fechas.-&#10;- Se creo el formato de impresion llamado Factura Comercial&#10;- Para evitar bloqueos en las tablas principales, por comportamiento del framework QCubed, se cambiaron los campos created_at y updated_at a tipo DateTime" />
+    <MESSAGE value="Nueva Impresion Multi-Piezas.-&#10;- Se creo un nuevo reporte de guia exportacion de multi-piezas" />
+    <MESSAGE value="Modo del Valor Declarado, Impresion de Guias Multi-Piezas, Factura Comercial, Borrar Facturas Retail.-&#10;- El valor declarado de la guia ahora puede especificarse por guía o por pieza&#10;- Las guías que superen las 5 piezas, ahora se imprimen en grupos de tres&#10;- El formato de factura comercial ahora contempla los items y la impresion multi-pagina&#10;- Ahora se puede borrar una Factura Retail, bajo permisos especiales." />
+    <MESSAGE value="Aliado Comercial, Manejo de Multiples Emails, Scanneo, Impresion de TyC&#10;- Se creo el concepto de Aliado Comercial con sus programas de mantenimiento&#10;- Las Receptorias ahora se pueden asociar a los Aliados Comerciales&#10;- El Edo de Cta de Clientes, ahora se puede enviar a más de una cuenta&#10;- Se creo la opción para Scanneo de piezas una por una con detección de Sobrantes&#10;-" />
+    <MESSAGE value="Factura Retail.-&#10;- Se agregaron datos a la impresion de la factura retail: producto, peso, medidas y condicion de pago" />
+    <MESSAGE value="Empaques.-&#10;- Se creo la tabla empaques y sus programas de mantenimiento&#10;- Se modificaron las tablas guia_piezas y piezas_temp para incorporar el tipo de empaque" />
+    <MESSAGE value="Empaques en la Guia.-&#10;- Se incorporo el empaque la guia de exportacion&#10;- Se incorporo el empaque en la factura comercial" />
+    <MESSAGE value="Facturas con Abono, Actualizacion de Manifiestos post Scanneo.-&#10;- Se implemento la posibilidad de hacer abonos individuales a cada factura, a la hora de registrar los pagos&#10;- Se implemento la actualización de manifiestos posterior al Scanneo Individual." />
+    <MESSAGE value="Parametros con Datos Bancarios.-&#10;- En la tabla parametros, se crearon los registros necesarios para almacenar los datos bancarios&#10;- Tanto el Estado de Cuenta con la Factura, toman ahora los datos desde dichos parametros" />
+    <MESSAGE value="Transf Masiva de Manif al Historico.-&#10;- Ahora se pueden trasnferir manifiestos al Historico directamente desde la lista de Manif." />
+    <MESSAGE value="Kilos en los Manifiestos Aereos y Edo de Cta sin footer&#10;- Los Manifiestos Aéreos, ahora muestran los kilos&#10;- El Edo de cuenta ya no muestra el pie de página para permitir que se vean más faccturas" />
+    <MESSAGE value="Consulta de Guia, Minimo Facturable.-&#10;- La consulta de la guia, ahora muestra la zona de facturacion del Destino del envio&#10;- Se creo e implemento el concepto del minimo facturable por Cliente y por Zona del pais&#10;- El programa de edicion de Tarifas de los Agentes, permite ahora ingresar y editar el Minimo Facturable" />
+    <MESSAGE value="Facturas y Totales.-&#10;- La lista y el formulario de Facturas, ahora muestran la fecha de emisión de la misma&#10;- La Nota de Entrega, ahora muestra los Kilos y el Total de la misma&#10;- Las Tarifas tienen ahora un campo que permite establecer si es Publica o no&#10;- Los Conceptos ahora pueden ser Fijos u Opcionales&#10;- La Guia EXP, ahora muestra una lista de los Conceptos Opcionales que se pueden elegir&#10;- La Guia EXP, ahora pide el Origen de la guia, para calcular el Serv de Recolecta" />
+    <MESSAGE value="Scanneo Miami.-&#10;- Se creo una opcion para Scanneos en Miami&#10;- Se modifico la lista de Scanneos de Venezuela, para exlcuir los scanneos de Miami" />
+    <option name="LAST_COMMIT_MESSAGE" value="Scanneo Miami.-&#10;- Se creo una opcion para Scanneos en Miami&#10;- Se modifico la lista de Scanneos de Venezuela, para exlcuir los scanneos de Miami" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/includes/model/generated/ContainersGen.class.php">
+    <entry file="file://$PROJECT_DIR$/includes/model/Guias.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="1467" column="31" lean-forward="false" selection-start-line="1467" selection-start-column="31" selection-end-line="1467" selection-end-column="31" />
-          <folding />
+        <state relative-caret-position="129">
+          <caret line="298" column="17" lean-forward="true" selection-start-line="298" selection-start-column="17" selection-end-line="298" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ruta/lista_manifiestos.php">
+    <entry file="file://$PROJECT_DIR$/includes/model/NotaEntregaZona.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <marker date="1629241579816" expanded="true" signature="804:809" ph="..." />
-            <marker date="1629241579816" expanded="true" signature="1926:3074" ph="..." />
-            <marker date="1629241579816" expanded="true" signature="2021:2976" ph="..." />
-            <marker date="1629241579816" expanded="false" signature="2105:2138" ph="..." />
-            <marker date="1629241579816" expanded="false" signature="2171:2204" ph="..." />
-            <marker date="1629241579816" expanded="false" signature="2282:2315" ph="..." />
-            <marker date="1629241579816" expanded="false" signature="2383:2416" ph="..." />
-            <marker date="1629241579816" expanded="false" signature="2533:2566" ph="..." />
-            <marker date="1629241579816" expanded="false" signature="2682:2715" ph="..." />
-            <marker date="1629241579816" expanded="false" signature="2835:2868" ph="..." />
-          </folding>
+        <state relative-caret-position="133">
+          <caret line="25" column="38" lean-forward="true" selection-start-line="25" selection-start-column="38" selection-end-line="25" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/model/Chofer.class.php">
+    <entry file="file://$PROJECT_DIR$/includes/model/NotaEntrega.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="29" column="45" lean-forward="false" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/model/Containers.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="969">
-          <caret line="120" column="36" lean-forward="true" selection-start-line="120" selection-start-column="36" selection-end-line="120" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/app_includes/footer_login.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/configuration/footer.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/app_includes/header.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="56" column="76" lean-forward="true" selection-start-line="56" selection-start-column="76" selection-end-line="56" selection-end-column="76" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/app_includes/footer.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="24" column="33" lean-forward="true" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/inc/header.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-767">
-          <caret line="42" column="87" lean-forward="false" selection-start-line="42" selection-start-column="87" selection-end-line="42" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/rhtml/factura.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="64" column="71" lean-forward="true" selection-start-line="64" selection-start-column="71" selection-end-line="64" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/consulta_guia_new.tpl.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1071">
-          <caret line="45" column="122" lean-forward="false" selection-start-line="45" selection-start-column="122" selection-end-line="45" selection-end-column="122" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/containers_list.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="92" column="26" lean-forward="false" selection-start-line="92" selection-start-column="26" selection-end-line="92" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/guia_search_new.tpl.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="32" lean-forward="false" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/guias_list.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="112" column="66" lean-forward="false" selection-start-line="112" selection-start-column="66" selection-end-line="112" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/rhtml/acuerdo_lr.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="16" column="14" lean-forward="true" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/49fcdc95/4bdcde1d-36a5-4b29-b7b2-7c690f9c6dff/gold.productos">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/49fcdc95/9562d2ea-8e5b-4a22-8e76-ca707d728523/gold.productos">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/master_cliente_edit.tpl.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-340">
-          <caret line="40" column="55" lean-forward="true" selection-start-line="40" selection-start-column="55" selection-end-line="40" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/guias_list.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="225" column="43" lean-forward="true" selection-start-line="225" selection-start-column="43" selection-end-line="225" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="150" column="27" lean-forward="false" selection-start-line="150" selection-start-column="27" selection-end-line="150" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/crear_guia_nac.tpl.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="58" column="45" lean-forward="false" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/info_envio.tpl.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="28" lean-forward="false" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-          <folding />
+        <state relative-caret-position="358">
+          <caret line="534" column="50" lean-forward="false" selection-start-line="534" selection-start-column="50" selection-end-line="534" selection-end-column="50" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/sde/facturas_edit.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="451" column="48" lean-forward="true" selection-start-line="451" selection-start-column="48" selection-end-line="451" selection-end-column="48" />
-          <folding />
+        <state relative-caret-position="222">
+          <caret line="74" column="56" lean-forward="false" selection-start-line="74" selection-start-column="56" selection-end-line="74" selection-end-column="56" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/partials/resumen_cobro_tabla.tpl.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/facturas_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="83" column="50" lean-forward="false" selection-start-line="83" selection-start-column="50" selection-end-line="83" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/nota_entrega_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="511">
+          <caret line="123" column="0" lean-forward="true" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/nota_entrega_edit.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="75" column="37" lean-forward="false" selection-start-line="75" selection-start-column="37" selection-end-line="75" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/facturas_edit.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="69" column="37" lean-forward="false" selection-start-line="69" selection-start-column="37" selection-end-line="69" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_edit.tpl.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/model/Facturas.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="36" column="24" lean-forward="false" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/partials/campos_del_pago_tabla.tpl.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_list.tpl.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/crear_guia_nac.php">
+    <entry file="file://$PROJECT_DIR$/includes/formbase_classes_generated/ScanneoListFormBase.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="1837" column="0" lean-forward="false" selection-start-line="1836" selection-start-column="0" selection-end-line="1837" selection-end-column="0" />
-          <folding>
-            <marker date="1629324820460" expanded="true" signature="45287:45401" ph="..." />
-            <marker date="1629324820460" expanded="true" signature="45614:46031" ph="..." />
-            <marker date="1629324820460" expanded="true" signature="45667:46031" ph="..." />
-            <marker date="1629324820460" expanded="true" signature="45707:46031" ph="..." />
-            <marker date="1629324820460" expanded="true" signature="45748:45992" ph="..." />
-            <marker date="1629324820460" expanded="true" signature="45867:45874" ph="×" />
-            <marker date="1629324820460" expanded="true" signature="46150:46270" ph="..." />
-          </folding>
+        <state relative-caret-position="263">
+          <caret line="142" column="0" lean-forward="true" selection-start-line="139" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/partials/prefac_datos_fiscales.tpl.php">
+    <entry file="file://$PROJECT_DIR$/includes/formbase_classes_generated/ScanneoEditFormBase.class.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="55" column="50" lean-forward="false" selection-start-line="55" selection-start-column="50" selection-end-line="55" selection-end-column="50" />
-          <folding />
+        <state relative-caret-position="272">
+          <caret line="481" column="0" lean-forward="true" selection-start-line="478" selection-start-column="0" selection-end-line="481" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/facturas_edit.tpl.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_mia_list.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="62" column="51" lean-forward="true" selection-start-line="62" selection-start-column="40" selection-end-line="62" selection-end-column="61" />
-          <folding />
+        <state relative-caret-position="289">
+          <caret line="59" column="0" lean-forward="true" selection-start-line="56" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/app_includes/funciones_kaizen.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_list.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="488">
-          <caret line="69" column="1" lean-forward="true" selection-start-line="69" selection-start-column="1" selection-end-line="69" selection-end-column="1" />
-          <folding>
-            <marker date="1629379012619" expanded="true" signature="649:655" ph="..." />
-            <marker date="1629379012619" expanded="true" signature="830:836" ph="..." />
-            <marker date="1629379012619" expanded="true" signature="24038:24282" ph="..." />
-            <marker date="1629379012619" expanded="true" signature="24137:24244" ph="..." />
-            <marker date="1629379012619" expanded="true" signature="25047:25053" ph=" " />
-            <marker date="1629379012619" expanded="true" signature="25053:25059" ph=" " />
-          </folding>
+        <state relative-caret-position="425">
+          <caret line="58" column="38" lean-forward="true" selection-start-line="58" selection-start-column="38" selection-end-line="58" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/facturas_edit.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_mia_list.tpl.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-816">
-          <caret line="93" column="22" lean-forward="false" selection-start-line="93" selection-start-column="22" selection-end-line="93" selection-end-column="22" />
-          <folding />
+        <state relative-caret-position="272">
+          <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/info_servicio.tpl.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/carga_masiva_guias.tpl.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/info_destinatario_exp.tpl.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-561">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/rhtml/dimensiones_y_peso_exp.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="8" lean-forward="true" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
-          <folding>
-            <element signature="n#style#0;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#0;n#tr#0;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#3;n#tr#0;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#0;n#tr#1;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#1;n#tr#1;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#2;n#tr#1;n#table#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#td#3;n#tr#1;n#table#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/rhtml/guia_exportacion.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="81" column="42" lean-forward="true" selection-start-line="81" selection-start-column="35" selection-end-line="81" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/sacar_a_ruta.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/carga_masiva_guias.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="539">
-          <caret line="1253" column="0" lean-forward="true" selection-start-line="1253" selection-start-column="0" selection-end-line="1253" selection-end-column="0" />
-          <folding />
+          <caret line="848" column="31" lean-forward="true" selection-start-line="848" selection-start-column="31" selection-end-line="848" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/sacar_a_ruta.tpl.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/carga_masiva_instrucciones.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/carga_masiva_ajustes.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/manifiestos_list.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/manifiestos_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/carga_masiva_guias_mia.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="83" column="50" lean-forward="true" selection-start-line="83" selection-start-column="50" selection-end-line="83" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/carga_masiva_mia_instrucciones.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="35" column="57" lean-forward="false" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/manifiestos_list_mia.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="250" column="34" lean-forward="false" selection-start-line="250" selection-start-column="32" selection-end-line="250" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/carga_masiva_guias_mia.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="101" column="68" lean-forward="false" selection-start-line="101" selection-start-column="68" selection-end-line="101" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/usuario_list.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="85" column="51" lean-forward="false" selection-start-line="85" selection-start-column="51" selection-end-line="85" selection-end-column="51" />
-          <folding />
+          <caret line="76" column="52" lean-forward="false" selection-start-line="76" selection-start-column="52" selection-end-line="76" selection-end-column="52" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/consulta_guia_new.php">
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/4bdcde1d-36a5-4b29-b7b2-7c690f9c6dff/console.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="548">
-          <caret line="982" column="48" lean-forward="false" selection-start-line="982" selection-start-column="48" selection-end-line="982" selection-end-column="48" />
-          <folding>
-            <element signature="e#406#434#0#PHP" expanded="true" />
-            <marker date="1629327332850" expanded="true" signature="15705:15796" ph="..." />
-            <marker date="1629327332850" expanded="true" signature="16009:16429" ph="..." />
-            <marker date="1629327332850" expanded="true" signature="16062:16429" ph="..." />
-            <marker date="1629327332850" expanded="true" signature="16102:16429" ph="..." />
-            <marker date="1629327332850" expanded="true" signature="16143:16390" ph="..." />
-            <marker date="1629327332850" expanded="false" signature="16262:16269" ph="×" />
-            <marker date="1629327332850" expanded="true" signature="16548:16668" ph="..." />
-          </folding>
+        <state relative-caret-position="51">
+          <caret line="3" column="11" lean-forward="false" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/crear_guia_exp.tpl.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/manifiestos_list_mia.tpl.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="40" column="46" lean-forward="true" selection-start-line="40" selection-start-column="46" selection-end-line="40" selection-end-column="46" />
-          <folding />
+        <state relative-caret-position="17">
+          <caret line="8" column="36" lean-forward="false" selection-start-line="8" selection-start-column="36" selection-end-line="8" selection-end-column="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/retail/crear_guia_exp.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="1001" column="25" lean-forward="true" selection-start-line="1001" selection-start-column="25" selection-end-line="1001" selection-end-column="25" />
-          <folding>
-            <marker date="1629379363578" expanded="true" signature="46180:46294" ph="..." />
-            <marker date="1629379363578" expanded="true" signature="46507:46924" ph="..." />
-            <marker date="1629379363578" expanded="true" signature="46560:46924" ph="..." />
-            <marker date="1629379363578" expanded="true" signature="46600:46924" ph="..." />
-            <marker date="1629379363578" expanded="true" signature="46641:46885" ph="..." />
-            <marker date="1629379363578" expanded="true" signature="46760:46767" ph="×" />
-            <marker date="1629379363578" expanded="true" signature="47043:47163" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/retail/rhtml/factura.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="27" column="41" lean-forward="true" selection-start-line="27" selection-start-column="41" selection-end-line="27" selection-end-column="41" />
-          <folding>
-            <element signature="n#style#0;n#table#0;n#page_header#0;n#page#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/repo_guias_normal.bkp.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/rhtml/factura.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/repo_guias_facturacion.bkp.php">
+    <entry file="file://$PROJECT_DIR$/includes/model/Usuario.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-39">
+          <caret line="62" column="29" lean-forward="false" selection-start-line="62" selection-start-column="29" selection-end-line="62" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/rhtml/estado_de_cuenta.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="47" column="36" lean-forward="true" selection-start-line="47" selection-start-column="36" selection-end-line="47" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/master_cliente_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="405" column="24" lean-forward="true" selection-start-line="405" selection-start-column="24" selection-end-line="405" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/emitir_factura_corp.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="261" column="0" lean-forward="false" selection-start-line="261" selection-start-column="0" selection-end-line="261" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/nota_entrega_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="99" column="0" lean-forward="true" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retail/guias_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="539">
+          <caret line="195" column="0" lean-forward="true" selection-start-line="174" selection-start-column="0" selection-end-line="195" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_mia_edit.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="28" column="32" lean-forward="false" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_mia_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="323" column="52" lean-forward="false" selection-start-line="323" selection-start-column="52" selection-end-line="323" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/configuration/configuration.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/sacar_a_ruta.tpl.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/sacar_a_ruta.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="793" column="0" lean-forward="false" selection-start-line="785" selection-start-column="0" selection-end-line="793" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/app_includes/FormularioBaseKaizen.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="73" column="0" lean-forward="true" selection-start-line="63" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/model/Containers.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="358" column="0" lean-forward="false" selection-start-line="358" selection-start-column="0" selection-end-line="358" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/model/SdeOperacion.class.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="35" column="30" lean-forward="false" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/scanneo_edit.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="152" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/containers_list.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/containers_list.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/sacar_a_ruta_online.tpl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/sacar_a_ruta_online.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="820" column="5" lean-forward="true" selection-start-line="820" selection-start-column="5" selection-end-line="820" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/sde/containers_list_online.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2516">
+          <caret line="148" column="55" lean-forward="false" selection-start-line="148" selection-start-column="55" selection-end-line="148" selection-end-column="55" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/repo_guias_normal.php">
+    <entry file="file://$PROJECT_DIR$/app/sde/containers_list_online.tpl.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="46" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/model/Guias.class.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="209" column="24" lean-forward="false" selection-start-line="209" selection-start-column="24" selection-end-line="209" selection-end-column="24" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/9562d2ea-8e5b-4a22-8e76-ca707d728523/console.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/guia_search_new.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="709" column="60" lean-forward="true" selection-start-line="709" selection-start-column="60" selection-end-line="709" selection-end-column="60" />
-          <folding>
-            <marker date="1629409270207" expanded="true" signature="19340:19349" ph="select * fro... v_info_guia_y_piezas" />
-            <marker date="1629409270207" expanded="true" signature="19379:19404" ph="select * fro... v_info_guia_y_piezas" />
-            <marker date="1629409270207" expanded="true" signature="19490:20721" ph="select g.num... guias" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/repo_guias_xls_sql.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="32" column="15" lean-forward="false" selection-start-line="32" selection-start-column="15" selection-end-line="32" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/sde/repo_guias_facturacion.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="32" column="11" lean-forward="true" selection-start-line="32" selection-start-column="11" selection-end-line="32" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/4bdcde1d-36a5-4b29-b7b2-7c690f9c6dff/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="16" lean-forward="true" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+        <state relative-caret-position="17">
+          <caret line="4" column="30" lean-forward="false" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
           <folding />
         </state>
       </provider>

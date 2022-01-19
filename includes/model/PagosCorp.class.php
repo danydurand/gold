@@ -38,12 +38,12 @@
 
 
         public function conciliarPago() {
-		    t('=====================');
-		    t('Rutina: conciliarPago');
-		    $objDatabase = PagosCorp::GetDatabase();
+            t('=====================');
+            t('Rutina: conciliarPago');
+            $objDatabase = PagosCorp::GetDatabase();
             $objDatabase->TransactionBegin();
             $objUsuario  = unserialize($_SESSION['User']);
-            t('El Saldo del cliente en el arranque es: '.$this->ClienteCorp->SaldoExcedente);
+            t('El Saldo del Cliente en el arranque es: '.$this->ClienteCorp->SaldoExcedente);
             $blnSaldDisp = ($this->ClienteCorp->SaldoExcedente > 0);
             t('El cliente tiene saldo excedente ? '.$blnSaldDisp);
             //------------------------------------------------
@@ -92,8 +92,8 @@
             $this->ClienteCorp->calcularSaldoExcedente();
             t('Termine de procesar los pagos');
             $objDatabase->TransactionCommit();
-            t('El proceso de conciliacion ha terminado');
-            t('***************************************');
+            t('El proceso de conciliacion ha terminado. La funcion retorna con Monto del Pago: '.$decMontPago);
+            t('*******************************************************************************');
             return [$intCantFact,$decMontPago];
         }
 

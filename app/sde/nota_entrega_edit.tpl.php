@@ -59,14 +59,11 @@
                 <?php $this->lblId->RenderWithName(); ?>
                 <?php $this->lstClienteCorp->RenderWithName(); ?>
                 <?php $this->txtReferencia->RenderWithName(); ?>
-                <?php //$this->txtNombreArchivo->RenderWithName(); ?>
                 <?php $this->txtEstatus->RenderWithName(); ?>
                 <?php $this->txtServicioImportacion->RenderWithName(); ?>
             </div>
             <div class="col-md-3" >
                 <?php $this->txtCargadas->RenderWithName(); ?>
-                <?php //$this->txtPorProcesar->RenderWithName(); ?>
-                <?php //$this->txtPorCorregir->RenderWithName(); ?>
                 <?php $this->txtProcesadas->RenderWithName(); ?>
                 <?php $this->txtRecibidas->RenderWithName(); ?>
                 <?php $this->txtKilos->RenderWithName(); ?>
@@ -78,7 +75,6 @@
                 <?php $this->calFecha->RenderWithName(); ?>
                 <?php $this->txtHora->RenderWithName(); ?>
                 <?php $this->lstUsuario->RenderWithName(); ?>
-                <?php //$this->txtValorDeclarado->RenderWithName(); ?>
 	        </div>
         </div>
         <div class="row">

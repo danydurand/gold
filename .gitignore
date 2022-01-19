@@ -4,3 +4,13 @@
 ./corp/tmp??????
 *.json
 /.idea
+app/sde/containers_list_online.php
+.idea/workspace.xml
+.idea/workspace.xml
+*.pdf
+
+traza.log
+.idea/workspace.xml
+vendor/phpmailer/phpmailer/COMMITMENT
+
+vendor/shuchkin/simplexls/examples/books.xls

@@ -202,13 +202,13 @@ class RegistrarPago extends PagosCorpEditFormBase {
     }
 
     protected function dtgFactClie_Bind() {
-	    $objClauWher   = QQ::Clause();
-	    $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objUsuaConn->ClienteId);
-	    $objClauWher[] = QQ::In(QQN::Facturas()->EstatusPago,array('PENDIENTE','PAGOPARCIAL'));
-	    $objClauWher[] = QQ::NotIn(QQN::Facturas()->Id,$this->arrFactIdxx);
-	    $objClauOrde   = QQ::Clause();
-	    $objClauOrde[] = QQ::OrderBy(QQN::Facturas()->Fecha,false);
-	    $this->arrFactPend = Facturas::QueryArray(QQ::AndCondition($objClauWher));
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objUsuaConn->ClienteId);
+        $objClauWher[] = QQ::In(QQN::Facturas()->EstatusPago,array('PENDIENTE','PAGOPARCIAL'));
+        $objClauWher[] = QQ::NotIn(QQN::Facturas()->Id,$this->arrFactIdxx);
+        $objClauOrde   = QQ::Clause();
+        $objClauOrde[] = QQ::OrderBy(QQN::Facturas()->Fecha,false);
+        $this->arrFactPend = Facturas::QueryArray(QQ::AndCondition($objClauWher));
         $this->dtgFactClie->DataSource = $this->arrFactPend;
     }
 
@@ -328,8 +328,8 @@ class RegistrarPago extends PagosCorpEditFormBase {
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctPagosCorp->PagosCorp;
 		if (!$this->mctPagosCorp->EditMode) {
-		    $this->txtEstatus->Text = 'PENDIENTE';
-		    $this->txtCreatedBy->Text = $this->objUsuaConn->Id;
+            $this->txtEstatus->Text = 'PENDIENTE';
+            $this->txtCreatedBy->Text = $this->objUsuaConn->Id;
         } else {
             $this->txtUpdatedBy->Text = $this->objUsuaConn->Id;
         }

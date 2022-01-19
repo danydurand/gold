@@ -652,15 +652,15 @@ class RegistrarPago extends PagosCorpEditFormBase {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-	    t('Salvando el pago de la BD');
+        t('Salvando el pago de la BD');
         /* @var $objFactPaga Facturas */
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctPagosCorp->PagosCorp;
 		if (!$this->mctPagosCorp->EditMode) {
-		    $this->txtEstatus->Text = 'CONCILIADO';
-		    $this->txtCreatedBy->Text = $this->objUsuario->CodiUsua;
+            $this->txtEstatus->Text = 'CONCILIADO';
+            $this->txtCreatedBy->Text = $this->objUsuario->CodiUsua;
         } else {
             $this->txtUpdatedBy->Text = $this->objUsuario->CodiUsua;
         }
@@ -710,7 +710,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $this->success('Transacción Exitosa');
 			}
 		} else {
-		    t('En modo insercion del pago');
+            t('En modo insercion del pago');
             //-----------------------------------
             // Se asocian las facturas, al pago
             //-----------------------------------
@@ -724,6 +724,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $objPagoDeta->FacturaId    = $objFactPaga->Id;
                 $objPagoDeta->MontoAbonado = $objFactPaga->MontoAbono;
                 $objPagoDeta->Save();
+                t('Detalle del pago creado con abono de: '. $objPagoDeta->MontoAbonado);
 
                 $objFactPaga->EstatusPago = 'CONCILIADO';
                 $objFactPaga->Save();
@@ -732,22 +733,22 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 $arrLogxCamb['strNombRegi'] = $objFactPaga->Referencia;
                 $arrLogxCamb['strDescCamb'] = 'Pago '.$this->txtReferencia->Text.' registrado';
                 LogDeCambios($arrLogxCamb);
-                t('Factura asociada, voy a conciliar el pago');
             }
+            t('Factura(s) asociada(s), voy a conciliar el pago');
             list($intCantFact,$decMontPago) = $this->mctPagosCorp->PagosCorp->conciliarPago();
             t('Guardando log de transacciones del pago');
 			$arrLogxCamb['strNombTabl'] = 'PagosCorp';
 			$arrLogxCamb['intRefeRegi'] = $this->mctPagosCorp->PagosCorp->Id;
 			$arrLogxCamb['strNombRegi'] = $this->mctPagosCorp->PagosCorp->Referencia;
-			$arrLogxCamb['strDescCamb'] = "Creado";
+			$arrLogxCamb['strDescCamb'] = "Creado con $intCantFact asociadas";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_edit.php/'.$this->mctPagosCorp->PagosCorp->Id;
 			LogDeCambios($arrLogxCamb);
             //-------------------------------------------------------------------------
-            // Un saldo positivo en este punto significa que ya se cubrio el importe
-            // de todas las facturas y sobro, por lo tanto, se genera una NDC
+            // Un saldo positivo en este punto significa que ya se cubrió el importe
+            // de todas las facturas y sobró, por lo tanto, se genera una NDC
             //-------------------------------------------------------------------------
             if ($decMontPago > 0) {
-                t('El saldo del pago es positivo, eso implica crear una ndc');
+                t('El saldo del pago es positivo ('.$decMontPago.'), eso implica crear una NDC');
                 $strMensTran = 'Saldo excedente por el Pago Referencia: '.$this->mctPagosCorp->PagosCorp->Referencia;
                 try {
                     $objNotaCorp = new NotaCreditoCorp();
@@ -761,7 +762,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
                     $objNotaCorp->Observacion   = strtoupper($strMensTran);
                     $objNotaCorp->CreatedBy     = $this->objUsuario->CodiUsua;
                     $objNotaCorp->Save();
-                    t('Se creo una ndc por un monto de: '.$decMontPago);
+                    t('Se creo una NDC por un monto de: '.$decMontPago);
                     $objNotaCorp->logDeCambios($strMensTran);
                 } catch (Exception $e) {
                     t('Error: '.$e->getMessage());
