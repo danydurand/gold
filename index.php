@@ -166,15 +166,14 @@ class Index extends QForm {
                     $_SESSION['ClavVenc'] = 1;
                     QApplication::Redirect('app/cambiar_clave.php');
                 }
-
                 PilaAcceso::Clean();
                 QApplication::Redirect('app/mg.php');
             } else {
-                $this->txtClavAcce->Warning = ' Contraseña Errada';
-                $this->txtClavAcce->Width   = 100;
                 //--------------------------------------
                 // Esto se cuenta como intento fallido
                 //--------------------------------------
+                $this->txtClavAcce->Warning = ' Contraseña Errada';
+                $this->txtClavAcce->Width   = 100;
                 $objUsuario->CantInte += 1;
                 //------------------------
                 // Log de Transacciones

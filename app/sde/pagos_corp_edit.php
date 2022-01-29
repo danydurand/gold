@@ -231,8 +231,8 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
     }
 
     protected function actualizarEstatusDelPago($strEstaPago) {
-	    $strTipoMens = 'success';
-	    switch ($strEstaPago) {
+        $strTipoMens = 'success';
+        switch ($strEstaPago) {
             case 'CONCILIADO':
                 $intCantFact = $this->mctPagosCorp->PagosCorp->conciliarPago();
                 $strMensTran = "Pago CONCILIADO | $intCantFact Facturas Procesadas";
@@ -317,7 +317,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
                 $this->mostrarSaldoCliente($this->mctPagosCorp->PagosCorp->ClienteCorp);
 			}
 		} else {
-		    $this->mctPagosCorp->PagosCorp->logDeCambios("Creado");
+            $this->mctPagosCorp->PagosCorp->logDeCambios("Creado");
             $this->success('Transacción Exitosa');
 		}
 	}
@@ -358,4 +358,3 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 // Go ahead and run this form object to render the page and its event handlers, implicitly using
 // pagos_corp_edit.tpl.php as the included HTML template file
 PagosCorpEditForm::Run('PagosCorpEditForm');
-?>

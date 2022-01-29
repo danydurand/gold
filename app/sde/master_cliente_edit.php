@@ -361,7 +361,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $this->lstTariClie->Visible = false;
         }
         //----------------------------------------------------------------------------------
-        // Luego de crear todos los elementos del formuario, se ejecuta cualquier acción
+        // Luego de crear todos los elementos del formulario, se ejecuta cualquier acción
         // determinada por el segundo parametro de invocacion del programa (cuando exista)
         //----------------------------------------------------------------------------------
         if (strlen($this->strAcciClie) > 0) {
@@ -372,11 +372,20 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 case 'mostrarEdoCta':
                     $this->enviarEdoCta('M');
                     break;
+                case 'mostrarEdoCtaII':
+                    $this->enviarEdoCta('C');
+                    break;
                 case 'enviarmeEdoCta':
                     $this->enviarEdoCta('E');
                     break;
+                case 'enviarmeEdoCtaII':
+                    $this->enviarEdoCta('I');
+                    break;
                 case 'enviarEdoCta':
                     $this->enviarEdoCta('E','C');
+                    break;
+                case 'enviarEdoCtaII':
+                    $this->enviarEdoCta('C','C');
                     break;
                 default:
                     $this->danger("Accion: ".$this->strAcciClie." no especificada");
@@ -393,14 +402,20 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
         $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
+        $objClauWher   = QQ::Clause();
+        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->ClienteCorpId,$this->objMasterCliente->CodiClie);
+        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->Estatus,'DISPONIBLE');
+        $objClauWher[] = QQ::GreaterThan(QQN::NotaCreditoCorp()->Monto,0);
+        $arrNotaDisp   = NotaCreditoCorp::QueryArray(QQ::AndCondition($objClauWher));
+        t('Existen: '.count($arrNotaDisp).' notas de credito para imprimir');
         $strTextMens   = '';
-        if (count($arrFactPend) == 0) {
-            $this->danger('No hay Facturas Pendientes.  No se puede enviar el Edo de Cta');
+        if ( (count($arrFactPend) == 0) && (count($arrNotaDisp) == 0)) {
+            $this->danger('No hay Facturas Pendientes, ni NDC Disponibles.  No se puede enviar el Edo de Cta');
             return;
         }
         switch ($strTipoAcci) {
             case 'E':
-                $this->RedactarCorreoEdoCta($arrFactPend, true, $strDestCorr);
+                $this->RedactarCorreoEdoCta($arrFactPend, $arrNotaDisp,true, $strDestCorr);
                 if ($strDestCorr == 'U') {
                     $strTextMens = 'El Edo de Cta fue enviado al Usuario solicitante !!!';
                 } else {
@@ -410,6 +425,10 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             case 'M':
                 $this->ImprimirEdoCta($arrFactPend);
                 $strTextMens = 'Mostrando el Edo de Cta !!!';
+                break;
+            case 'C':
+                $this->ImprimirEdoCtaII();
+                $strTextMens = 'Mostrando Edo de Cta II';
                 break;
             default;
                 $this->danger('Opcion de envio no definida');
@@ -440,8 +459,31 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         }
     }
 
+    protected function ImprimirEdoCtaII() {
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+        try {
+            $strNombArch = 'EdoCta'.$this->objMasterCliente->NombClie.'.pdf';
 
-    protected function RedactarCorreoEdoCta($arrFactPend, $blnAgreFact=true, $strDestCorr='U') {
+            $_SESSION['ObjeClie'] = serialize($this->objMasterCliente);
+
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/estado_de_cuenta_completo.php';
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+    }
+
+
+    protected function RedactarCorreoEdoCta($arrFactPend, $arrNotaDisp=null, $blnAgreFact=true, $strDestCorr='U') {
+        t('LLegando a la rutina RedactarCorreoEdoCta con: '.count($arrNotaDisp).' NDCs');
         $strDireFrom = 'GoldCoast - SisCO <noti@goldsist.com>';
         if ($strDestCorr == 'U') {
             $strEnviAxxx = $this->objUsuario->MailUsua;
@@ -454,12 +496,24 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         // El programa /rhtml/estado_de_cuenta.php utiliza el vector de Facturas Pendientes
         // para generar el Estado de Cuenta
         //------------------------------------------------------------------------------------
+
+        // Ahora
+        $_SESSION['ObjeClie'] = serialize($this->objMasterCliente);
+        ob_start();
+        include dirname(__FILE__) . '/rhtml/estado_de_cuenta_completo.php';
+        $strHtmlFact = ob_get_clean();
+        $strHtmlBody = $strHtmlFact;
+
+        // Antes
+        /*
         $_SESSION['FactPend'] = serialize($arrFactPend);
         ob_start();
         include dirname(__FILE__) . '/rhtml/estado_de_cuenta.php';
         $strHtmlFact = ob_get_clean();
         $strHtmlBody = $strHtmlFact;
+        */
         t('Ya se genero el HTML');
+
         //--------------------------
         // Se agrega la coletilla
         //--------------------------
@@ -490,6 +544,24 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 $objMessage->AddAttachment($objFileAtta);
             }
             t('Se terminaron de procesar las facturas');
+        }
+        //-------------------------------------
+        // Se anexan los PDFs de las NDCs
+        //-------------------------------------
+        if ($blnAgreFact) {
+            t('Se ha solicitado el envio de las ndcs');
+            /* @var $objNotaDisp NotaCreditoCorp */
+            foreach ($arrNotaDisp as $objNotaDisp) {
+                t('Procesando la ndc: '.$objNotaDisp->Referencia);
+                //----------------------------------------------------------------------------------
+                // La rutina EmitirNDC, genera un PDF por cada Factura y cada archivo generado
+                // se anexa al correo
+                //----------------------------------------------------------------------------------
+                $strOutxFile = $this->EmitirNDCs($objNotaDisp);
+                $objFileAtta = new QEmailAttachment('/tmp/'.$strOutxFile, QMimeType::Pdf);
+                $objMessage->AddAttachment($objFileAtta);
+            }
+            t('Se terminaron de procesar las ndcs');
         }
 
         $objMessage->SetHeader('x-application', 'SisCO');
@@ -543,9 +615,28 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         return $strNombArch;
     }
 
+    protected function EmitirNDCs(NotaCreditoCorp $objNotaDisp) {
+        $strNombArch = 'NDC_'.$objNotaDisp->Referencia.'.pdf';
+        $strOutxFile = '/tmp/'.$strNombArch;
+
+        $content = '';
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("15", "10", "20", "30"));
+        $html2pdf->pdf->SetDisplayMode('fullpage');
+        $_SESSION['NotaCred'] = serialize($objNotaDisp);
+        ob_start();
+        include dirname(__FILE__).'/rhtml/nota_de_credito.php';
+        $content .= ob_get_clean();
+        //------------------------------------------------
+        // El contenido HTML generado, se exporta a PDF
+        //------------------------------------------------
+        $html2pdf->writeHTML($content);
+        $html2pdf->output($strOutxFile, 'F');
+        return $strNombArch;
+    }
+
     protected function obtenerSaldoDelCliente() {
         $decSaldExce = $this->objMasterCliente->calcularSaldoExcedente();
-        $this->txtSaldExce->Text = $decSaldExce;
+        $this->txtSaldExce->Text = str2num($decSaldExce);
         $this->info("El Saldo del Cliente es: ".$decSaldExce);
     }
 
@@ -2003,18 +2094,30 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/calcularSaldo',
                 TextoIcono('bank','Calcular Saldo')
             );
+            //$arrOpciDrop[] = OpcionDropDown(
+            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCta',
+            //    TextoIcono('eye','Mostrar Edo Cta')
+            //);
             $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCta',
+                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCtaII',
                 TextoIcono('eye','Mostrar Edo Cta')
             );
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCta',
                 TextoIcono('paper-plane-o','Enviarme el Edo Cta')
             );
+            //$arrOpciDrop[] = OpcionDropDown(
+            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCtaII',
+            //    TextoIcono('paper-plane-o','Enviarme el Edo Cta II')
+            //);
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCta',
                 TextoIcono('paper-plane','Enviar Edo Cta al Cliente')
             );
+            //$arrOpciDrop[] = OpcionDropDown(
+            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCtaII',
+            //    TextoIcono('paper-plane','Enviar Edo Cta al Cliente II')
+            //);
         }
 
         $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');

@@ -28,9 +28,9 @@
 		}
 
 		public function _Imprimible() {
-		    $blnSepuImpr = true;
-		    if ($this->MontoPendiente > 0) {
-		        $blnSepuImpr = false;
+            $blnSepuImpr = true;
+            if ($this->MontoPendiente > 0) {
+                $blnSepuImpr = false;
             }
             if (!$blnSepuImpr) {
                 $intGuiaCred = 0;
@@ -51,8 +51,8 @@
         }
 
         public function ActualizarMontos() {
-		    t('========================================');
-		    t('Rutina: ActualizarMontos (en la Factura)');
+            t('========================================');
+            t('Rutina: ActualizarMontos (en la Factura)');
 
             t('Voy a buscar los pagos asociados a la factura');
             $arrPagoFact = $this->GetPagosCorpDetailAsFacturaArray();
@@ -168,15 +168,18 @@
 
 		public static function crearFactura($arrGuiaProc,$intIdxxUsua) {
 
-		    t('=====================');
-		    t('En Facturas.class.php');
-		    $blnTodoOkey = true;
-		    $strTextMens = '';
+            t('=====================');
+            t('En Facturas.class.php');
+            $blnTodoOkey = true;
+            $strTextMens = '';
 
 		    /* @var $objPrimGuia Guias */
-		    $objPrimGuia = $arrGuiaProc[0];
+            $objPrimGuia = $arrGuiaProc[0];
+            $strTeleRemi = strlen($objPrimGuia->TelefonoMovilRemitente) > 0 
+                ? $objPrimGuia->TelefonoMovilRemitente 
+                : $objPrimGuia->TelefonoRemitente;
             t('Creando registro de la factura');
-		    try {
+            try {
                 $objNuevFact = new Facturas();
                 $objNuevFact->ClienteRetailId = $objPrimGuia->ClienteRetailId;
                 $objNuevFact->Fecha           = new QDateTime(QDateTime::Now());
@@ -184,7 +187,7 @@
                 $objNuevFact->CedulaRif       = $objPrimGuia->ClienteRetail->CedulaRif;
                 $objNuevFact->RazonSocial     = $objPrimGuia->NombreRemitente;
                 $objNuevFact->DireccionFiscal = $objPrimGuia->DireccionRemitente;
-                $objNuevFact->Telefono        = $objPrimGuia->TelefonoRemitente;
+                $objNuevFact->Telefono        = $strTeleRemi;
                 $objNuevFact->SucursalId      = $_SESSION['SucursalId'];
                 $objNuevFact->ReceptoriaId    = $_SESSION['ReceptoriaId'];
                 $objNuevFact->CajaId          = $_SESSION['CajaId'];

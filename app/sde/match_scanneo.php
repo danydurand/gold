@@ -109,6 +109,7 @@ class MatchScanneo extends FormularioBaseKaizen {
                 $arrIdxxMani[] = $objManiNaci->ContainerId;
             }
         }
+        $dttFechLimi = SumaRestaDiasAFecha(date('Y-m-d'),60,'-');
         //--------------------------------------------------------------------------------------
         // Adicionalmente, se deben considerar los Manifiestos ya Procesados, con diferencias
         // entre la cantidad de piezas recibidas y la cantidad de piezas total del Manifiesto
@@ -119,6 +120,7 @@ class MatchScanneo extends FormularioBaseKaizen {
         }
         $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
         $objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
+        $objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Fecha,$dttFechLimi);
 
         $this->arrManiPend = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
         $this->dtgManiPend->TotalItemCount = count($this->arrManiPend);

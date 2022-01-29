@@ -152,26 +152,26 @@ class RegistrarPago extends PagosCorpEditFormBase {
     }
 
     protected function btnCancAbon_Create() {
-	    $this->btnCancAbon = new QButtonW($this);
-	    $this->btnCancAbon->Text = TextoIcono('times-circle','','F','lg');
-	    $this->btnCancAbon->Visible = false;
-	    $this->btnCancAbon->AddAction(new QClickEvent(), new QAjaxAction('btnCancAbon_Click'));
+        $this->btnCancAbon = new QButtonW($this);
+        $this->btnCancAbon->Text = TextoIcono('times-circle','','F','lg');
+        $this->btnCancAbon->Visible = false;
+        $this->btnCancAbon->AddAction(new QClickEvent(), new QAjaxAction('btnCancAbon_Click'));
     }
 
     protected function btnExclFact_Create() {
-	    $this->btnExclFact = new QButtonP($this);
-	    $this->btnExclFact->Text = TextoIcono('times-circle','Excl-Fact','F','lg');
-	    //$this->btnExclFact->Visible = false;
-	    $this->btnExclFact->AddAction(new QClickEvent(), new QAjaxAction('btnExclFact_Click'));
+        $this->btnExclFact = new QButtonP($this);
+        $this->btnExclFact->Text = TextoIcono('times-circle','Excl-Fact','F','lg');
+        //$this->btnExclFact->Visible = false;
+        $this->btnExclFact->AddAction(new QClickEvent(), new QAjaxAction('btnExclFact_Click'));
     }
 
     protected function btnCancAbon_Click() {
-	    $this->editarAbono();
+        $this->editarAbono();
     }
 
     protected function btnSaveAbon_Click() {
-	    $decMontAbon = $this->txtMontAbon->Text;
-	    if (is_numeric($decMontAbon) && ($decMontAbon > 0)) {
+        $decMontAbon = $this->txtMontAbon->Text;
+        if (is_numeric($decMontAbon) && ($decMontAbon > 0)) {
             $this->objFactEdit->MontoAbono = $this->txtMontAbon->Text;
             $this->objFactEdit->Save();
             $this->dtgFactPaga->Refresh();
@@ -621,8 +621,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
 
 
 
-    protected function Form_Validate()
-    {
+    protected function Form_Validate() {
         $objClauWher[] = QQ::Equal(QQN::FactPagoTemp()->ProcesoId,$this->objProcEjec->Id);
         $intFactTemp   = FactPagoTemp::QueryCount(QQ::AndCondition($objClauWher));
         if ($intFactTemp == 0) {
@@ -661,8 +660,10 @@ class RegistrarPago extends PagosCorpEditFormBase {
 		if (!$this->mctPagosCorp->EditMode) {
             $this->txtEstatus->Text = 'CONCILIADO';
             $this->txtCreatedBy->Text = $this->objUsuario->CodiUsua;
+            $this->mctPagosCorp->PagosCorp->CreatedAt = new QDateTime(QDateTime::Now());
         } else {
             $this->txtUpdatedBy->Text = $this->objUsuario->CodiUsua;
+            $this->mctPagosCorp->PagosCorp->UpdatedAt = new QDateTime(QDateTime::Now());
         }
 		$this->mctPagosCorp->SavePagosCorp();
         if ($this->mctPagosCorp->EditMode) {
@@ -761,6 +762,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
                     $objNotaCorp->Estatus       = 'DISPONIBLE';
                     $objNotaCorp->Observacion   = strtoupper($strMensTran);
                     $objNotaCorp->CreatedBy     = $this->objUsuario->CodiUsua;
+                    $objNotaCorp->CreatedAt     = new QDateTime(QDateTime::Now());
                     $objNotaCorp->Save();
                     t('Se creo una NDC por un monto de: '.$decMontPago);
                     $objNotaCorp->logDeCambios($strMensTran);
@@ -785,6 +787,8 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 t('Encontre la NDC y la voy a aplicar');
                 $objNotaCred->Estatus = 'APLICADA';
                 $objNotaCred->AplicadaEnPagoId = $this->mctPagosCorp->PagosCorp->Id;
+                $objNotaCred->UpdatedAt        = new QDateTime(QDateTime::Now());
+                $objNotaCred->UpdatedBy        = $this->objUsuario->CodiUsua;
                 $objNotaCred->Save();
                 $strTextMens = 'APLICADA EN PAGO ID: '.$this->mctPagosCorp->PagosCorp->Id;
                 $objNotaCred->logDeCambios($strTextMens);

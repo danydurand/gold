@@ -4,6 +4,10 @@ require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__.'/protected.inc.php');
 require_once(__FORMBASE_CLASSES__ . '/NotaCreditoCorpEditFormBase.class.php');
 
+use Spipu\Html2Pdf\Html2Pdf;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
+use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
  * of the NotaCreditoCorp class.  It uses the code-generated
@@ -22,6 +26,9 @@ require_once(__FORMBASE_CLASSES__ . '/NotaCreditoCorpEditFormBase.class.php');
  */
 class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
     protected $objFactSele;
+    protected $btnMasxAcci;
+    protected $intCantHist;
+    protected $strAcciNota;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -32,15 +39,34 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		QApplication::CheckRemoteAdmin();
 	}
 
+    protected function Setup() {
+        $this->mctNotaCreditoCorp = NotaCreditoCorpMetaControl::CreateFromPathInfo($this);
+        if (!$this->mctNotaCreditoCorp) {
+            throw new Exception('Could not find a NotaCreditoCorp object with PK arguments: ' . QApplication::PathInfo(0));
+        }
+        if (strlen(QApplication::PathInfo(1))) {
+            $this->strAcciNota = QApplication::PathInfo(1);
+        }
+    }
+
     //	protected function Form_Load() {}
 	protected function Form_Create() {
 		parent::Form_Create();
 
+        $this->Setup();
+
+        $this->objUsuario = unserialize($_SESSION['User']);
+
+        $this->lblTituForm->Text = 'Nota Credito';
+        $this->lblTituForm->Text .= ' (' . ($this->intPosiRegi + 1) . '/' . $this->intCantRegi . ')';
+
 		// Use the CreateFromPathInfo shortcut (this can also be done manually using the NotaCreditoCorpMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-		$this->mctNotaCreditoCorp = NotaCreditoCorpMetaControl::CreateFromPathInfo($this);
+
+		// $this->mctNotaCreditoCorp = NotaCreditoCorpMetaControl::CreateFromPathInfo($this);
 
 		// Call MetaControl's methods to create qcontrols based on NotaCreditoCorp's data fields
+
 		$this->lblId = $this->mctNotaCreditoCorp->lblId_Create();
 		$this->txtReferencia = $this->mctNotaCreditoCorp->txtReferencia_Create();
 		$this->txtTipo = $this->mctNotaCreditoCorp->txtTipo_Create();
@@ -60,8 +86,8 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->txtMonto = $this->mctNotaCreditoCorp->txtMonto_Create();
 		$this->txtObservacion = $this->mctNotaCreditoCorp->txtObservacion_Create();
 		$this->txtObservacion->TextMode = QTextMode::MultiLine;
-		$this->txtObservacion->Rows = 3;
-		$this->txtObservacion->Width = 200;
+		$this->txtObservacion->Rows = 7;
+		$this->txtObservacion->Width = 220;
 		$this->txtEstatus        = $this->mctNotaCreditoCorp->txtEstatus_Create();
 		$this->txtNumero         = $this->mctNotaCreditoCorp->txtNumero_Create();
 		$this->txtMaquinaFiscal  = $this->mctNotaCreditoCorp->txtMaquinaFiscal_Create();
@@ -102,12 +128,83 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
         }
         $this->txtEstatus = disableControl($this->txtEstatus);
 
-        $this->lstAplicadaEnPago->Width = 200;
+        $this->lstAplicadaEnPago->Width = 220;
+
+        $this->intCantHist = Log::CountByTablaRef('NotaCreditoCorp', $this->mctNotaCreditoCorp->NotaCreditoCorp->Id);
+        
+        t('4');
+        $this->btnMasxAcci_Create();
+
+        //----------------------------------------------------------------------------------
+        // Luego de crear todos los elementos del formuario, se ejecuta cualquier acción
+        // determinada por el segundo parametro de invocacion del programa (cuando exista)
+        //----------------------------------------------------------------------------------
+        if (strlen($this->strAcciNota) > 0) {
+            switch ($this->strAcciNota) {
+                case 'in':
+                    $this->imprimirNota();
+                    break;
+                default:
+                    $this->danger("Accion: " . $this->strAcciNota . " no especificada");
+            }
+        }
+
+        t('5');
 	}
 
-	//----------------------------
-	// Aqui se crean los objetos 
-	//----------------------------
+    //----------------------------
+    // Aqui se crean los objetos 
+    //----------------------------
+
+    protected function btnMasxAcci_Create()
+    {
+        $this->btnMasxAcci = new QLabel($this);
+        $this->btnMasxAcci->HtmlEntities = false;
+        $this->btnMasxAcci->CssClass = '';
+
+        $strTextBoto   = TextoIcono('cog fa-fw', 'Más');
+        $arrOpciDrop   = array();
+
+        if ($this->intCantHist > 0) {
+            $arrOpciDrop[] = OpcionDropDown(__SIST__ . '/log_list.php', TextoIcono('file-text', 'Histórico'));
+        }
+
+        if ($this->mctNotaCreditoCorp->EditMode) {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__ . '/nota_credito_corp_edit.php/' . $this->mctNotaCreditoCorp->NotaCreditoCorp->Id. '/in',
+                TextoIcono('print fa-lg','Imprimir')
+            );
+        }
+
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
+        $this->btnMasxAcci->Visible  = $this->mctNotaCreditoCorp->EditMode;
+    }
+
+
+    protected function imprimirNota()
+    {
+        $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+        try {
+            $strNombArch = 'NDC' . $this->mctNotaCreditoCorp->NotaCreditoCorp->Referencia . '.pdf';
+
+            $_SESSION['NotaCred'] = serialize($this->mctNotaCreditoCorp->NotaCreditoCorp);
+
+            $html2pdf->pdf->SetDisplayMode('fullpage');
+            ob_start();
+            include dirname(__FILE__) . '/rhtml/nota_de_credito.php';
+            $content = ob_get_clean();
+
+            $html2pdf->writeHTML($content);
+            $html2pdf->output($strNombArch);
+        } catch (Html2PdfException $e) {
+            $html2pdf->clean();
+
+            $formatter = new ExceptionFormatter($e);
+            echo $formatter->getHtmlMessage();
+        }
+    }
+
+
 
     protected function enlaceCliente() {
         $strLinkClie = '<a href='.__SIST__.'/master_cliente_edit.php/'.$this->lstClienteCorp->SelectedValue.' 
@@ -280,6 +377,7 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 		$this->mctNotaCreditoCorp->NotaCreditoCorp->FacturaId  = $this->lstFactura->SelectedValue;
 		$this->mctNotaCreditoCorp->NotaCreditoCorp->Save();
 		if ($this->mctNotaCreditoCorp->EditMode) {
+            t('Modo Edicion de la NDC');
 			//---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
 			// de algun cambio en algun dato 
@@ -287,13 +385,21 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
 			$objRegiNuev = $this->mctNotaCreditoCorp->NotaCreditoCorp;
 			$objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
 			if ($objResuComp->FriendlyComparisonStatus == 'different') {
+                t('Hubo cambios');
 				//------------------------------------------
 				// En caso de que el objeto haya cambiado 
 				//------------------------------------------
+                $this->mctNotaCreditoCorp->NotaCreditoCorp->UpdatedAt = new QDateTime(QDateTime::Now());
+                $this->mctNotaCreditoCorp->NotaCreditoCorp->UpdatedBy = $this->objUsuario->CodiUsua;
+                $this->mctNotaCreditoCorp->NotaCreditoCorp->Save();
                 $this->mctNotaCreditoCorp->NotaCreditoCorp->logDeCambios(implode(',',$objResuComp->DifferentFields));
                 $this->success('Transacción Exitosa !!!');
 			}
 		} else {
+            t('Modo Insercion...');
+            $this->mctNotaCreditoCorp->NotaCreditoCorp->CreatedAt = new QDateTime(QDateTime::Now());
+            $this->mctNotaCreditoCorp->NotaCreditoCorp->CreatedBy = $this->objUsuario->CodiUsua;
+            $this->mctNotaCreditoCorp->NotaCreditoCorp->Save();
             $this->mctNotaCreditoCorp->NotaCreditoCorp->logDeCambios("Creado");
             $this->success('Transacción Exitosa !!!');
 		}

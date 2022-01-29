@@ -98,9 +98,9 @@
         }
 
         public function conciliarPagoOld() {
-		    t('=====================');
-		    t('Rutina: conciliarPago');
-		    $objDatabase = PagosCorp::GetDatabase();
+            t('=====================');
+            t('Rutina: conciliarPago');
+            $objDatabase = PagosCorp::GetDatabase();
             $objDatabase->TransactionBegin();
             $objUsuario  = unserialize($_SESSION['User']);
             t('El Saldo del cliente en el arranque es: '.$this->ClienteCorp->SaldoExcedente);

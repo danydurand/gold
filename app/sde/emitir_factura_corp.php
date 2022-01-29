@@ -234,7 +234,6 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         $objClauWher[] = QQ::In(QQN::Conceptos()->Id,$arrConcIdxx);
         $arrConcFact   = Conceptos::QueryArray(QQ::AndCondition($objClauWher));
         t('Cantidad de Conceptos a facturar: '.count($arrConcIdxx));
-
         //----------------------------------------------------------------------------------------
         // El vector arrNotaEntr contiene los Manifiestos de los Clientes, aptos para facturar
         // que adicionalmente coinciden con el rango de fechas especificado por el Usuario
@@ -282,6 +281,8 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                         $objFactClie->MontoDscto       = 0;
                         $objFactClie->MontoCobrado     = 0;
                         $objFactClie->MontoPendiente   = 0;
+                        $objFactClie->CreatedAt        = new QDateTime(QDateTime::Now());
+                        $objFactClie->CreatedBy        = $this->objUsuario->CodiUsua;
                         $objFactClie->Save();
                         t('Se creo la Factura Id: '.$objFactClie->Id);
                     } catch (Exception $e) {
@@ -331,12 +332,13 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                                     $facturaItem->Monto += $objNotaConc->Monto;
                                 } else {
                                     t('No existia, voy a crearlo');
-                                    $item = new FacturaItems();
-                                    $item->FacturaId   = $objFactClie->Id;
-                                    $item->ConceptoId  = $objNotaConc->ConceptoId;
-                                    $item->MostrarComo = $objNotaConc->Concepto->MostrarComo;
-                                    $item->Monto       = $objNotaConc->Monto;
                                     try {
+                                        $item = new FacturaItems();
+                                        $item->FacturaId   = $objFactClie->Id;
+                                        $item->ConceptoId  = $objNotaConc->ConceptoId;
+                                        $item->MostrarComo = $objNotaConc->Concepto->MostrarComo;
+                                        $item->Monto       = $objNotaConc->Monto;
+                                        $item->CreatedAt   = new QDateTime(QDateTime::Now());
                                         $item->Save();
                                     } catch (Exception $e) {
                                         t('Error creando item de la factura: '.$e->getMessage());
@@ -351,6 +353,8 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                         //-----------------------------------------------------------------------------------------
                         $objFactClie->Total          = round($decSumaNota,2);
                         $objFactClie->MontoPendiente = round($decSumaNota,2);
+                        $objFactClie->UpdatedAt      = new QDateTime(QDateTime::Now());
+                        $objFactClie->UpdatedBy      = $this->objUsuario->CodiUsua;
                         $objFactClie->Save();
                         $intCantFact++;
                         t('Se actualizo el total de la factura con: '.$decSumaNota."\n");

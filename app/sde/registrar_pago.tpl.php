@@ -1,11 +1,11 @@
 <?php
-	// This is the HTML template include file (.tpl.php) for the pagos_corp_edit.php
-	// form DRAFT page.  Remember that this is a DRAFT.  It is MEANT to be altered/modified.
+// This is the HTML template include file (.tpl.php) for the pagos_corp_edit.php
+// form DRAFT page.  Remember that this is a DRAFT.  It is MEANT to be altered/modified.
 
-	// Be sure to move this out of the generated/ subdirectory before modifying to ensure that subsequent
-	// code re-generations do not overwrite your changes.
+// Be sure to move this out of the generated/ subdirectory before modifying to ensure that subsequent
+// code re-generations do not overwrite your changes.
 
-	$strPageTitle = 'PagosCorp' . ' - ' . $this->mctPagosCorp->TitleVerb;
+$strPageTitle = 'PagosCorp' . ' - ' . $this->mctPagosCorp->TitleVerb;
 require(__APP_INCLUDES__ . '/header.inc.php');
 //require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
 ?>
@@ -76,20 +76,6 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="">Nota de Credito</label><br>
-                            <?php $this->lstNotaCred->Render(); ?>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="">Referencia</label><br>
-                            <?php $this->txtReferencia->Render(); ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
                             <label for="">Fecha del Pago</label><br>
                             <?php $this->calFecha->Render(); ?>
                         </div>
@@ -98,6 +84,20 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                         <div class="form-group">
                             <label for="">Monto del Pago</label><br>
                             <?php $this->txtMonto->Render(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Nota de Credito</label><br>
+                            <?php $this->lstNotaCred->Render(); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="">Referencia</label><br>
+                            <?php $this->txtReferencia->Render(); ?>
                         </div>
                     </div>
                 </div>
@@ -136,7 +136,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 </div>
                 <?php $this->dtgFactPaga->Render(); ?>
                 <br>
-	        </div>
+            </div>
         </div>
     </div>
 </div>
@@ -150,4 +150,4 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         margin-bottom: .1em;
     }
 </style>
-<?php require(__APP_INCLUDES__ .'/footer.inc.php'); ?>
+<?php require(__APP_INCLUDES__ . '/footer.inc.php'); ?>

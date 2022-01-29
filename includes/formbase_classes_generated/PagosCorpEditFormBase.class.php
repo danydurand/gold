@@ -61,9 +61,9 @@ abstract class PagosCorpEditFormBase extends QForm {
 	protected $txtMonto;
 	protected $txtEstatus;
 	protected $txtObservacion;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
-	protected $lblDeletedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
+	protected $calDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
 	protected $txtDeletedBy;
@@ -142,9 +142,9 @@ abstract class PagosCorpEditFormBase extends QForm {
 		$this->txtMonto = $this->mctPagosCorp->txtMonto_Create();
 		$this->txtEstatus = $this->mctPagosCorp->txtEstatus_Create();
 		$this->txtObservacion = $this->mctPagosCorp->txtObservacion_Create();
-		$this->lblCreatedAt = $this->mctPagosCorp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctPagosCorp->lblUpdatedAt_Create();
-		$this->lblDeletedAt = $this->mctPagosCorp->lblDeletedAt_Create();
+		$this->calCreatedAt = $this->mctPagosCorp->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctPagosCorp->calUpdatedAt_Create();
+		$this->calDeletedAt = $this->mctPagosCorp->calDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctPagosCorp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctPagosCorp->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctPagosCorp->txtDeletedBy_Create();
