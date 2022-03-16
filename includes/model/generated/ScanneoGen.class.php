@@ -17,6 +17,8 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property string $Descripcion the value for strDescripcion (Unique)
+	 * @property boolean $EstaCerrado the value for blnEstaCerrado (Not Null)
+	 * @property boolean $EstaRecibido the value for blnEstaRecibido (Not Null)
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt (Not Null)
 	 * @property integer $CreatedBy the value for intCreatedBy (Not Null)
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
@@ -48,6 +50,22 @@
 		protected $strDescripcion;
 		const DescripcionMaxLength = 30;
 		const DescripcionDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column scanneo.esta_cerrado
+		 * @var boolean blnEstaCerrado
+		 */
+		protected $blnEstaCerrado;
+		const EstaCerradoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column scanneo.esta_recibido
+		 * @var boolean blnEstaRecibido
+		 */
+		protected $blnEstaRecibido;
+		const EstaRecibidoDefault = null;
 
 
 		/**
@@ -149,6 +167,8 @@
 		{
 			$this->intId = Scanneo::IdDefault;
 			$this->strDescripcion = Scanneo::DescripcionDefault;
+			$this->blnEstaCerrado = Scanneo::EstaCerradoDefault;
+			$this->blnEstaRecibido = Scanneo::EstaRecibidoDefault;
 			$this->dttCreatedAt = (Scanneo::CreatedAtDefault === null)?null:new QDateTime(Scanneo::CreatedAtDefault);
 			$this->intCreatedBy = Scanneo::CreatedByDefault;
 			$this->dttUpdatedAt = (Scanneo::UpdatedAtDefault === null)?null:new QDateTime(Scanneo::UpdatedAtDefault);
@@ -496,6 +516,8 @@
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'descripcion', $strAliasPrefix . 'descripcion');
+			    $objBuilder->AddSelectItem($strTableName, 'esta_cerrado', $strAliasPrefix . 'esta_cerrado');
+			    $objBuilder->AddSelectItem($strTableName, 'esta_recibido', $strAliasPrefix . 'esta_recibido');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'created_by', $strAliasPrefix . 'created_by');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -631,6 +653,12 @@
 			$strAlias = $strAliasPrefix . 'descripcion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDescripcion = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'esta_cerrado';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnEstaCerrado = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'esta_recibido';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnEstaRecibido = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
@@ -910,12 +938,16 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `scanneo` (
 							`descripcion`,
+							`esta_cerrado`,
+							`esta_recibido`,
 							`created_at`,
 							`created_by`,
 							`updated_at`,
 							`updated_by`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strDescripcion) . ',
+							' . $objDatabase->SqlVariable($this->blnEstaCerrado) . ',
+							' . $objDatabase->SqlVariable($this->blnEstaRecibido) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -936,6 +968,8 @@
 							`scanneo`
 						SET
 							`descripcion` = ' . $objDatabase->SqlVariable($this->strDescripcion) . ',
+							`esta_cerrado` = ' . $objDatabase->SqlVariable($this->blnEstaCerrado) . ',
+							`esta_recibido` = ' . $objDatabase->SqlVariable($this->blnEstaRecibido) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -1045,6 +1079,8 @@
 
 			// Update $this's local variables to match
 			$this->strDescripcion = $objReloaded->strDescripcion;
+			$this->blnEstaCerrado = $objReloaded->blnEstaCerrado;
+			$this->blnEstaRecibido = $objReloaded->blnEstaRecibido;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
 			$this->CreatedBy = $objReloaded->CreatedBy;
 			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
@@ -1082,6 +1118,20 @@
 					 * @return string
 					 */
 					return $this->strDescripcion;
+
+				case 'EstaCerrado':
+					/**
+					 * Gets the value for blnEstaCerrado (Not Null)
+					 * @return boolean
+					 */
+					return $this->blnEstaCerrado;
+
+				case 'EstaRecibido':
+					/**
+					 * Gets the value for blnEstaRecibido (Not Null)
+					 * @return boolean
+					 */
+					return $this->blnEstaRecibido;
 
 				case 'CreatedAt':
 					/**
@@ -1200,6 +1250,32 @@
 					 */
 					try {
 						return ($this->strDescripcion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'EstaCerrado':
+					/**
+					 * Sets the value for blnEstaCerrado (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnEstaCerrado = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'EstaRecibido':
+					/**
+					 * Sets the value for blnEstaRecibido (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnEstaRecibido = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1559,6 +1635,8 @@
 			$strToReturn = '<complexType name="Scanneo"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Descripcion" type="xsd:string"/>';
+			$strToReturn .= '<element name="EstaCerrado" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="EstaRecibido" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedByObject" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
@@ -1591,6 +1669,10 @@
 				$objToReturn->intId = $objSoapObject->Id;
 			if (property_exists($objSoapObject, 'Descripcion'))
 				$objToReturn->strDescripcion = $objSoapObject->Descripcion;
+			if (property_exists($objSoapObject, 'EstaCerrado'))
+				$objToReturn->blnEstaCerrado = $objSoapObject->EstaCerrado;
+			if (property_exists($objSoapObject, 'EstaRecibido'))
+				$objToReturn->blnEstaRecibido = $objSoapObject->EstaRecibido;
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if ((property_exists($objSoapObject, 'CreatedByObject')) &&
@@ -1647,6 +1729,8 @@
 			///////////////////
 			$iArray['Id'] = $this->intId;
 			$iArray['Descripcion'] = $this->strDescripcion;
+			$iArray['EstaCerrado'] = $this->blnEstaCerrado;
+			$iArray['EstaRecibido'] = $this->blnEstaRecibido;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
@@ -1690,6 +1774,8 @@
      *
      * @property-read QQNode $Id
      * @property-read QQNode $Descripcion
+     * @property-read QQNode $EstaCerrado
+     * @property-read QQNode $EstaRecibido
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
@@ -1712,6 +1798,10 @@
 					return new QQNode('id', 'Id', 'Integer', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'VarChar', $this);
+				case 'EstaCerrado':
+					return new QQNode('esta_cerrado', 'EstaCerrado', 'Bit', $this);
+				case 'EstaRecibido':
+					return new QQNode('esta_recibido', 'EstaRecibido', 'Bit', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'CreatedBy':
@@ -1743,6 +1833,8 @@
     /**
      * @property-read QQNode $Id
      * @property-read QQNode $Descripcion
+     * @property-read QQNode $EstaCerrado
+     * @property-read QQNode $EstaRecibido
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
@@ -1765,6 +1857,10 @@
 					return new QQNode('id', 'Id', 'integer', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'string', $this);
+				case 'EstaCerrado':
+					return new QQNode('esta_cerrado', 'EstaCerrado', 'boolean', $this);
+				case 'EstaRecibido':
+					return new QQNode('esta_recibido', 'EstaRecibido', 'boolean', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'CreatedBy':

@@ -3,26 +3,33 @@ require_once('qcubed.inc.php');
 
 /* @var $objUsuario Chofer */
 
+
 $strTituPagi = "Manifiestos";
 $strManiChof = '';
 $objUsuario  = unserialize($_SESSION['User']);
-//t('Entrando a Manifiestos del Chofer: '.$objUsuario->NombChof.' ('.$objUsuario->CodiChof.')');
+$objUsuario->grabarLogMobile('Entrando a la Lista de Manifiestos');
 
 $objUsuario->ActualizarManifiestosDelChofer();
+$objUsuario->grabarLogMobile('Manifiestos Actualizados');
 //t('Manifiestos actualizados');
 
 $objClauOrde = QQ::OrderBy(QQN::Containers()->Id,false);
 $objClauWher = QQ::Clause();
 $arrManiChof = Containers::LoadArrayByChoferIdEstatus($objUsuario->CodiChof,'ABIERT@',$objClauOrde);
-//t('Hay '.count($arrManiChof).' manifiestos abiertos...');
+$objUsuario->grabarLogMobile('Hay '.count($arrManiChof).' manifiestos abiertos...');
+
 if ($arrManiChof) {
     $strManiChof = '
     <ul class="ui-nodisc-icon" data-role="listview" data-inset="true" data-split-icon="bullets" data-split-theme="d" data-filter="true" data-filter-placeholder="Buscar...">
     ';
     $strNombImag = __RUTA_IMAGE__.'/manifest2.png';
+    /* @var $objManiChof Containers */
     foreach ($arrManiChof as $objManiChof) {
+
         //t('Procesando: '.$objManiChof->Numero);
+        $objUsuario->grabarLogMobile('Calculando resumen de entrega: '.$objManiChof->Numero);
         $objResuMani = $objManiChof->ResumeDeEntrega();
+        $objUsuario->grabarLogMobile('Termino resumen de entrega: '.$objManiChof->Numero);
 
         $intCantPiez = $objManiChof->Piezas;
         $intCantOkey = $objResuMani->CantOkey;

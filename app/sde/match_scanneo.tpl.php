@@ -10,6 +10,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <?php $this->btnCancel->Render(); ?>
             <?php $this->btnSave->Render(); ?>
             <?php $this->btnErroProc->Render() ?>
+            <?php $this->btnBuscPiez->Render() ?>
         </div>
         <div class="hidden-sm col-md-3 col-lg-4"></div>
     </div>

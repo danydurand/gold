@@ -64,7 +64,6 @@ class RegistrarPago extends PagosCorpEditFormBase {
 		$strNombProc = 'Registrar Pago';
 		$this->objProcEjec = CrearProceso($strNombProc);
 
-
 		// Use the CreateFromPathInfo shortcut (this can also be done manually using the PagosCorpMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
 		$this->mctPagosCorp = PagosCorpMetaControl::CreateFromPathInfo($this);
@@ -98,9 +97,9 @@ class RegistrarPago extends PagosCorpEditFormBase {
 		$this->txtObservacion->TextMode = QTextMode::MultiLine;
 		$this->txtObservacion->Rows = 10;
 		$this->txtObservacion->Width = 450;
-		$this->lblCreatedAt = $this->mctPagosCorp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctPagosCorp->lblUpdatedAt_Create();
-		$this->lblDeletedAt = $this->mctPagosCorp->lblDeletedAt_Create();
+		$this->calCreatedAt = $this->mctPagosCorp->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctPagosCorp->calUpdatedAt_Create();
+		$this->calDeletedAt = $this->mctPagosCorp->calDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctPagosCorp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctPagosCorp->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctPagosCorp->txtDeletedBy_Create();

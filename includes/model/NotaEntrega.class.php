@@ -383,6 +383,25 @@
             $this->Save();
         }
 
+		public function desAsociandoNotaConFactura() {
+		    t('Des-Asociando guias de la nde con la factura');
+            //-----------------------------------------------------------------------------------------
+            // Las guias asociadas a la Nota de Entrega, deben quedar asociadas a la Factura indicada
+            //-----------------------------------------------------------------------------------------
+            $arrGuiaNota = $this->GetGuiasArray();
+            foreach ($arrGuiaNota as $objGuiaNota) {
+                $objGuiaNota->FacturaId = null;
+                $objGuiaNota->Save();
+            }
+            //-------------------------------------------------------------------
+            // La Nota de Entrega como tal, tambien queda enlazada a la Factura
+            //-------------------------------------------------------------------
+            t('Asociando la nde con la factura');
+            $this->FacturaId = null;
+            $this->Estatus = 'RECIBID@';
+            $this->Save();
+        }
+
         public function borrarZonaAcumulada(ProcesoError $objProcEjec) {
             $objDatabase = self::GetDatabase();
             $strCadeSqlx  = "delete ";
@@ -504,30 +523,6 @@
                 // La nde se actualiza con los conceptos recien caculados de la guia
                 //--------------------------------------------------------------------
                 $this->acumularEnNotaConceptos($objGuiaNota, $objProcEjec);
-                //$arrConcGuia = $objGuiaNota->GetGuiaConceptosAsGuiaArray();
-                //foreach ($arrConcGuia as $objConcGuia) {
-                //    $objConcNota = NotaConceptos::LoadByNotaEntregaIdConceptoId($this->Id,$objConcGuia->ConceptoId);
-                //    //t('Concepto de la Nota: '.$objConcNota->Id);
-                //    try {
-                //        if (!$objConcNota) {
-                //            $objConcNota = new NotaConceptos();
-                //            $objConcNota->NotaEntregaId = $this->Id;
-                //            $objConcNota->ConceptoId    = $objConcGuia->ConceptoId;
-                //            $objConcNota->Tipo          = $objConcGuia->Tipo;
-                //            $objConcNota->Valor         = is_numeric($objConcGuia->Valor) ? $objConcGuia->Valor : null;
-                //            $objConcNota->Monto         = $objConcGuia->Monto;
-                //            $objConcNota->MostrarComo   = $objConcGuia->MostrarComo;
-                //            $objConcNota->Explicacion   = 'Acumulando las guias asociadas';
-                //            t('El concepto: '.$objConcGuia->Concepto->Nombre.' no existia, se acaba de asociar a la nde');
-                //        } else {
-                //            t('El concepto: '.$objConcNota->Concepto->Nombre.' existia, sumando el monto: '.$objConcGuia->Monto);
-                //            $objConcNota->Monto += $objConcGuia->Monto;
-                //        }
-                //        $objConcNota->Save();
-                //    } catch (Exception $e) {
-                //        t('Error: '.$e->getMessage());
-                //    }
-                //}
             }
             //-----------------------------------
             // Se actualiza el total de la NDE

@@ -27,6 +27,7 @@
         <?php } ?>
         <?php $this->btnErroProc->Render(); ?>
         <?php $this->btnBorrPiez->Render(); ?>
+        <?php $this->btnOpenCont->Render(); ?>
     </div>
     <div class="hidden-xs hidden-sm hidden-md col-lg-4 pull-right" style="text-align: right; padding-right: 3px; margin-top: -0.25em">
         <?php $this->btnPrimRegi->Render(); ?>
@@ -64,6 +65,8 @@
 				<?php $this->txtDescripcion->RenderWithName(); ?>
 				<?php $this->txtNumePiez->RenderWithName(); ?>
                 <?php $this->txtResuScan->RenderWithName(); ?>
+                <?php $this->chkEstaCerrado->RenderWithName(); ?>
+                <?php $this->chkEstaRecibido->RenderWithName(); ?>
                 <?php $this->calCreatedAt->RenderWithName(); ?>
 				<?php $this->lstCreatedByObject->RenderWithName(); ?>
 				<?php $this->calUpdatedAt->RenderWithName(); ?>

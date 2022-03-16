@@ -45,6 +45,11 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
             $this->objManiPods = Containers::Load($intManiIdxx);
             if (!$this->objManiPods) {
                 $this->danger('Manifiesto no Existe');
+            } else {
+                $strTextMens  = '<b>Manif:</b> '.$this->objManiPods->Numero;
+                $strTextMens .= ' | <b>Chofer:</b> '.$this->objManiPods->Chofer->Nombre;
+                $strTextMens .= ' | <b>Piezas:</b> '.$this->objManiPods->Piezas;
+                $this->info($strTextMens);
             }
         } else {
             $this->danger('Manifiesto sin Referencia');
@@ -56,7 +61,7 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
 
 		$this->SetupValores();
 
-		$this->lblTituForm->Text = 'Piezas Entregadas';
+		$this->lblTituForm->Text = 'Piezas x Entregar';
 
 		// Instantiate the Meta DataGrid
 		$this->dtgGuiaPiezases = new GuiaPiezasDataGrid($this);
@@ -104,8 +109,8 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
         //$this->dtgGuiaPiezases->MetaAddColumn('Id');
 		$this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->Guia->Tracking,'Name=Guia Cliente');
 		$this->dtgGuiaPiezases->MetaAddColumn('IdPieza');
-		$colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint() ?>');
-		$this->dtgGuiaPiezases->AddColumn($colUltiCkpt);
+		/*$colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint() ?>');*/
+		//$this->dtgGuiaPiezases->AddColumn($colUltiCkpt);
 		$colGuiaTran = new QDataGridColumn('G-Tran','<?= $_ITEM->GuiaTransportista() ?>');
 		$this->dtgGuiaPiezases->AddColumn($colGuiaTran);
 		$this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->Guia->Destino->Iata,'Name=Dest');
@@ -160,7 +165,7 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
 			//-------------------------------------------------
 			$arrDatoCkpt             = array();
 			$arrDatoCkpt['NumePiez'] = $objPiezPodx->IdPieza;
-			$arrDatoCkpt['GuiaAnul'] = $objPiezPodx->Guia->Anulada();
+			$arrDatoCkpt['GuiaAnul'] = false; //$objPiezPodx->Guia->Anulada();
 			$arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
 			$arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion;
 			$arrDatoCkpt['CodiRuta'] = ''; //$intCodiRuta;
@@ -174,6 +179,7 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
             }
         }
         $this->dtgGuiaPiezases->Refresh();
+        $this->objManiPods->ActualizarEstadisticasDeEntrega();
         $this->success("Procesadas exitosamente: $intCantGuia | Con Error: $intCantErro");
 	}
 

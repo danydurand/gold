@@ -23,6 +23,8 @@ require_once(__FORMBASE_CLASSES__ . '/ContainersEditFormBase.class.php');
 class ContainersEditForm extends ContainersEditFormBase {
     protected $dtgPiezCont;
     protected $dtgCkptCont;
+    protected $btnTranMobi;
+    protected $lblResuEntr;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -37,6 +39,8 @@ class ContainersEditForm extends ContainersEditFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->lblTituForm->Text = 'Master';
+
 		// Use the CreateFromPathInfo shortcut (this can also be done manually using the ContainersMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
 		$this->mctContainers = ContainersMetaControl::CreateFromPathInfo($this);
@@ -45,7 +49,7 @@ class ContainersEditForm extends ContainersEditFormBase {
 		$this->lblId = $this->mctContainers->lblId_Create();
 		$this->txtNumero = $this->mctContainers->txtNumero_Create();
 		$this->lstOperacion = $this->mctContainers->lstOperacion_Create();
-		$this->lstOperacion->Width = 550;
+		$this->lstOperacion->Width = 350;
 		$this->calFecha = $this->mctContainers->calFecha_Create();
 		$this->calFecha->Enabled = false;
 		$this->calFecha->ForeColor = 'blue';
@@ -56,18 +60,43 @@ class ContainersEditForm extends ContainersEditFormBase {
 		$this->txtEstatus = $this->mctContainers->txtEstatus_Create();
 		$this->txtEstatus->Enabled = false;
 		$this->txtEstatus->ForeColor = 'blue';
-		//$this->lblCreatedAt = $this->mctContainers->lblCreatedAt_Create();
-		//$this->lblUpdatedAt = $this->mctContainers->lblUpdatedAt_Create();
-		//$this->lblDeletedAt = $this->mctContainers->lblDeletedAt_Create();
-		//$this->txtCreatedBy = $this->mctContainers->txtCreatedBy_Create();
-		//$this->txtUpdatedBy = $this->mctContainers->txtUpdatedBy_Create();
-		//$this->txtDeletedBy = $this->mctContainers->txtDeletedBy_Create();
-        //$this->dtgParentContainersesAsContainerContainer = $this->mctContainers->dtgParentContainersesAsContainerContainer_Create();
-        //$this->dtgContainersesAsContainerContainer = $this->mctContainers->dtgContainersesAsContainerContainer_Create();
-        //$this->dtgGuiaPiezasesAsContainerPieza = $this->mctContainers->dtgGuiaPiezasesAsContainerPieza_Create();
+        $this->lstChofer = $this->mctContainers->lstChofer_Create();
+        $this->txtVehiculo = $this->mctContainers->txtVehiculo_Create();
+        $this->txtPlaca = $this->mctContainers->txtPlaca_Create();
+        $this->calFecha = $this->mctContainers->calFecha_Create();
+        $this->txtHora = $this->mctContainers->txtHora_Create();
+        $this->txtEstatus = $this->mctContainers->txtEstatus_Create();
+        $this->txtTipo = $this->mctContainers->txtTipo_Create();
+        $this->lstTransportista = $this->mctContainers->lstTransportista_Create();
+        $this->lstClienteCorp = $this->mctContainers->lstClienteCorp_Create();
+        $this->txtAwb = $this->mctContainers->txtAwb_Create();
+        $this->txtPrecintoLateral = $this->mctContainers->txtPrecintoLateral_Create();
+        $this->txtPiezas = $this->mctContainers->txtPiezas_Create();
+        $this->txtCantidadOk = $this->mctContainers->txtCantidadOk_Create();
+        $this->txtDevueltas = $this->mctContainers->txtDevueltas_Create();
+        $this->txtSinGestionar = $this->mctContainers->txtSinGestionar_Create();
+        $this->txtPendientes = $this->mctContainers->txtPendientes_Create();
+        $this->txtPeso = $this->mctContainers->txtPeso_Create();
+        $this->txtKilos = $this->mctContainers->txtKilos_Create();
+        $this->txtPiesCub = $this->mctContainers->txtPiesCub_Create();
 
+        $this->txtNumero          = disableControl($this->txtNumero);
+        $this->calFecha           = disableControl($this->calFecha);
+        $this->lstOperacion       = disableControl($this->lstOperacion);
+        $this->lstChofer          = disableControl($this->lstChofer);
+        $this->txtEstatus         = disableControl($this->txtEstatus);
+        $this->txtVehiculo        = disableControl($this->txtVehiculo);
+        $this->txtPlaca           = disableControl($this->txtPlaca);
+        $this->txtPrecintoLateral = disableControl($this->txtPrecintoLateral);
+        $this->txtPiezas          = disableControl($this->txtPiezas);
+        $this->txtCantidadOk      = disableControl($this->txtCantidadOk);
+        $this->txtDevueltas       = disableControl($this->txtDevueltas);
+        $this->txtSinGestionar    = disableControl($this->txtSinGestionar);
+        $this->txtPendientes      = disableControl($this->txtPendientes);
+
+        $this->lblResuEntr_Create();
         $this->dtgPiezCont_Create();
-        $this->dtgCkptCont_Create();
+        $this->btnTranMobi_Create();
 
     }
 
@@ -75,51 +104,30 @@ class ContainersEditForm extends ContainersEditFormBase {
 	// Aqui se crean los objetos 
 	//----------------------------
 
-    protected function dtgCkptCont_Create() {
-        $this->dtgCkptCont = new QDataGrid($this);
-        $this->dtgCkptCont->FontSize = 12;
-        $this->dtgCkptCont->ShowFilter = false;
-
-        $this->dtgCkptCont->CssClass = 'datagrid';
-        $this->dtgCkptCont->AlternateRowStyle->CssClass = 'alternate';
-
-        $this->dtgCkptCont->UseAjax = true;
-
-        $this->dtgCkptCont->SetDataBinder('dtgCkptCont_Bind');
-
-        $this->createDtgCkptContColumns();
+    protected function lblResuEntr_Create() {
+        $this->lblResuEntr = new QLabel($this);
+        $strResuEntr = 'Piezas Manifestadas';
+        $strResuEntr .= $this->mctContainers->Containers->__resumenEntrega();
+        $this->lblResuEntr->Text = $strResuEntr;
+        $this->lblResuEntr->HtmlEntities = false;
     }
 
-    protected function dtgCkptCont_Bind() {
-        $this->dtgCkptCont->DataSource = $this->mctContainers->Containers->GetContainerCkptAsContainerArray();
+    protected function btnTranMobi_Create() {
+        $this->btnTranMobi = new QButtonP($this);
+        $this->btnTranMobi->Text = TextoIcono('cogs','Tranf-Mobile');
+        $this->btnTranMobi->AddAction(new QClickEvent(), new QServerAction('btnTranMobi_Click'));
     }
 
-    protected function createDtgCkptContColumns() {
-        $colSucuCkpt = new QDataGridColumn($this);
-        $colSucuCkpt->Name = QApplication::Translate('Suc');
-        $colSucuCkpt->Html = '<?= $_ITEM->Sucursal->Iata ?>';
-        $this->dtgCkptCont->AddColumn($colSucuCkpt);
-
-        $colObseCkpt = new QDataGridColumn($this);
-        $colObseCkpt->Name = QApplication::Translate('Comentario');
-        $colObseCkpt->Html = '<?= $_ITEM->Observacion; ?>';
-        $colObseCkpt->Width = 300;
-        $this->dtgCkptCont->AddColumn($colObseCkpt);
-
-        $colFechHora = new QDataGridColumn($this);
-        $colFechHora->Name = QApplication::Translate('Fecha/Hora');
-        $colFechHora->Html = '<?= $_FORM->dtgCkptCont_FechHora_Render($_ITEM); ?>';
-        $this->dtgCkptCont->AddColumn($colFechHora);
-
-        $colUsuaCkpt = new QDataGridColumn($this);
-        $colUsuaCkpt->Name = QApplication::Translate('Usuario');
-        $colUsuaCkpt->Html = '<?= $_ITEM->Usuario->LogiUsua; ?>';
-        $this->dtgCkptCont->AddColumn($colUsuaCkpt);
-    }
-
-    public function dtgCkptCont_FechHora_Render(ContainerCkpt $objContCkpt) {
-        $strFechHora = $objContCkpt->Fecha->__toString("DD/MM/YYYY").' '.$objContCkpt->Hora;
-        return $strFechHora;
+    protected function btnTranMobi_Click() {
+        list($intCantPiez, $intCantErro, $strTextMens) = $this->mctContainers->Containers->TransferirToMobile();
+        if (strlen($strTextMens) == 0) {
+            $strTextMens = "Piezas Sincronizadas: $intCantPiez | Errores: $intCantErro";
+        }
+        if ($intCantErro == 0) {
+            $this->success($strTextMens);
+        } else {
+            $this->danger($strTextMens);
+        }
     }
 
 
@@ -144,10 +152,22 @@ class ContainersEditForm extends ContainersEditFormBase {
 
     protected function createDtgPiezContColumns() {
         $colIdxxPiez = new QDataGridColumn($this);
-        $colIdxxPiez->Name = QApplication::Translate('Pieza');
+        $colIdxxPiez->Name = QApplication::Translate('IdPieza');
         $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
         $colIdxxPiez->Width = 100;
         $this->dtgPiezCont->AddColumn($colIdxxPiez);
+
+        $colManiGuia = new QDataGridColumn($this);
+        $colManiGuia->Name = QApplication::Translate('Manif.');
+        $colManiGuia->Html = '<?= $_ITEM->Guia->NotaEntrega->Referencia ?>';
+        $colManiGuia->Width = 95;
+        $this->dtgPiezCont->AddColumn($colManiGuia);
+
+        $colServImpo = new QDataGridColumn($this);
+        $colServImpo->Name = QApplication::Translate('S.Impor.');
+        $colServImpo->Html = '<?= $_ITEM->Guia->ServicioImportacion ?>';
+        $colServImpo->Width = 30;
+        $this->dtgPiezCont->AddColumn($colServImpo);
 
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = QApplication::Translate('Kg');
@@ -155,17 +175,19 @@ class ContainersEditForm extends ContainersEditFormBase {
         $colKiloPiez->Width = 60;
         $this->dtgPiezCont->AddColumn($colKiloPiez);
 
-        $colUbicFisi = new QDataGridColumn($this);
-        $colUbicFisi->Name = QApplication::Translate('Ubicacion');
-        $colUbicFisi->Html = '<?= $_ITEM->Ubicacion; ?>';
-        $colUbicFisi->Width = 100;
-        $this->dtgPiezCont->AddColumn($colUbicFisi);
+        $colVoluPiez = new QDataGridColumn($this);
+        $colVoluPiez->Name = QApplication::Translate('PiesCub');
+        $colVoluPiez->Html = '<?= $_ITEM->PiesCub ?>';
+        $colVoluPiez->Width = 30;
+        $this->dtgPiezCont->AddColumn($colVoluPiez);
 
-        $colDescPiez = new QDataGridColumn($this);
-        $colDescPiez->Name = QApplication::Translate('Comentario');
-        $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
-        $colDescPiez->Width = 350;
-        $this->dtgPiezCont->AddColumn($colDescPiez);
+        /*
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $colUltiCkpt->Width = 30;
+        $this->dtgPiezCont->AddColumn($colUltiCkpt);
+        */
     }
 
     public function dtgPiezCont_IdxxPiez_Render(GuiaPiezas $objGuiaPiez) {

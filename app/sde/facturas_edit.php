@@ -26,8 +26,12 @@ class FacturasEditForm extends FacturasEditFormBase {
     protected $dtgNotaCred;
     protected $btnImprFact;
     protected $lstEstaPago;
-    
-	// Override Form Event Handlers as Needed
+    protected $btnMasxAcci;
+    protected $intCantHist;
+    protected $strAcciAdic;
+
+
+    // Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
 
@@ -36,13 +40,26 @@ class FacturasEditForm extends FacturasEditFormBase {
 		QApplication::CheckRemoteAdmin();
 	}
 
+    protected function Setup() {
+        $this->mctFacturas = FacturasMetaControl::CreateFromPathInfo($this);
+        //if (!$this->objMasterCliente) {
+        //    throw new Exception('Could not find a MasterCliente object with PK arguments: ' . $intCodiClie);
+        //}
+        //$this->blnEditMode = true;
+        if (strlen(QApplication::PathInfo(1))) {
+            $this->strAcciAdic = QApplication::PathInfo(1);
+        }
+    }
+
     //	protected function Form_Load() {}
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->Setup();
+
 		// Use the CreateFromPathInfo shortcut (this can also be done manually using the FacturasMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-		$this->mctFacturas = FacturasMetaControl::CreateFromPathInfo($this);
+		//$this->mctFacturas = FacturasMetaControl::CreateFromPathInfo($this);
 
 		// Call MetaControl's methods to create qcontrols based on Facturas's data fields
 		$this->lblId = $this->mctFacturas->lblId_Create();
@@ -109,12 +126,86 @@ class FacturasEditForm extends FacturasEditFormBase {
             $this->txtMontoPendiente = disableControl($this->txtMontoPendiente);
             $this->btnDelete->Visible = false;
         }
+        //----------------------------------------------------------------
+        // Cantidad de Históricos existentes por Tabla y por Referencia.
+        //----------------------------------------------------------------
+        $this->intCantHist = Log::CountByTablaRef('Facturas',$this->mctFacturas->Facturas->Id);
 
+        $this->btnMasxAcci_Create();
+
+        //----------------------------------------------------------------------------------
+        // Luego de crear todos los elementos del formulario, se ejecuta cualquier acción
+        // determinada por el segundo parametro de invocacion del programa (cuando exista)
+        //----------------------------------------------------------------------------------
+        if (strlen($this->strAcciAdic) > 0) {
+            switch ($this->strAcciAdic) {
+                case 'log':
+                    $this->btnLogxCamb_Click();
+                    break;
+                case 'imprimir':
+                    $this->btnImprFact_Click();
+                    break;
+                case 'anular':
+                    $this->anularFactura();
+                    break;
+                default:
+                    $this->danger("Accion: ".$this->strAcciAdic." no especificada");
+            }
+        }
     }
 
 	//----------------------------
 	// Aqui se crean los objetos 
 	//----------------------------
+
+    protected function anularFactura() {
+	    $intCantPago = $this->mctFacturas->Facturas->CountFacturaPagosesAsFactura();
+	    if ($intCantPago) {
+	        $this->warning('Existen pagos relacionados, elimínelos antes de Anular la Factura');
+	        return;
+        }
+        QApplication::Redirect(__SIST__.'/anular_factura.php/'.$this->mctFacturas->Facturas->Id);
+    }
+
+
+    protected function btnMasxAcci_Create() {
+        $this->btnMasxAcci = new QLabel($this);
+        $this->btnMasxAcci->HtmlEntities = false;
+        $this->btnMasxAcci->CssClass = '';
+        $intFactIdxx = $this->mctFacturas->Facturas->Id;
+
+        $strTextBoto   = TextoIcono('cog fa-fw','Más');
+        $arrOpciDrop   = array();
+
+        if ($this->intCantHist > 0) {
+
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/facturas_edit.php/'.$intFactIdxx.'/log',
+                TextoIcono('file-text','Histórico')
+            );
+        }
+
+        if ($this->mctFacturas->EditMode) {
+            if ($this->mctFacturas->Facturas->Estatus != 'ANULADA') {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/facturas_edit.php/'.$intFactIdxx.'/imprimir',
+                    TextoIcono('print fa-lg','Imprimir')
+                );
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/facturas_edit.php/'.$intFactIdxx.'/anular',
+                    TextoIcono('cog','Anular')
+                );
+            } else {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/facturas_edit.php/'.$intFactIdxx.'/anular',
+                    TextoIcono('eye','Consultar Anulación')
+                );
+            }
+        }
+
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
+        $this->btnMasxAcci->Visible  = $this->mctFacturas->EditMode;
+    }
 
 
     protected function lstEstaPago_Create() {
@@ -129,8 +220,8 @@ class FacturasEditForm extends FacturasEditFormBase {
     }
 
     protected function btnVolvList_Click() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        $strPagiReto = __SIST__.'/'.$objUltiAcce->__toString();
+        //$objUltiAcce = PilaAcceso::Pop('D');
+        $strPagiReto = __SIST__.'/facturas_list.php';
         QApplication::Redirect($strPagiReto);
     }
 

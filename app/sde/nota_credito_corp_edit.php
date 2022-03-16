@@ -125,13 +125,18 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
             $this->calFecha            = disableControl($this->calFecha);
             $this->lstAplicadaEnPago   = disableControl($this->lstAplicadaEnPago);
             $this->lstFactura_Change();
+
+        } else {
+            $_SESSION['TablRefe'] = 'NotaCreditoCorp';
+            $_SESSION['RegiRefe'] = $this->mctNotaCreditoCorp->NotaCreditoCorp->Id;
+
         }
         $this->txtEstatus = disableControl($this->txtEstatus);
 
         $this->lstAplicadaEnPago->Width = 220;
 
         $this->intCantHist = Log::CountByTablaRef('NotaCreditoCorp', $this->mctNotaCreditoCorp->NotaCreditoCorp->Id);
-        
+
         t('4');
         $this->btnMasxAcci_Create();
 
@@ -367,9 +372,6 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
             $this->mctNotaCreditoCorp->SaveNotaCreditoCorp();
         } catch (Exception $e) {
             $this->danger('Excepcion: ' . $e->getMessage());
-            return;
-        } catch (Error $e) {
-            $this->danger('Error: ' . $e->getMessage());
             return;
         }
         // t('Efectivo en la base de datos');

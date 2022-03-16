@@ -5,8 +5,6 @@ chmod 777 includes/qcubed/plugins/plugin_includes.php
 chmod 777 includes/qcubed/plugins
 chmod 777 assets/plugins
 chmod 777 includes/tmp/cache
-chmod 777 drafts
-chmod 777 drafts/panels
 chmod 777 includes/formbase_classes_generated
 chmod 777 includes/model
 chmod 777 includes/model/generated

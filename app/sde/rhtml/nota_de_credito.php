@@ -14,8 +14,13 @@ if (!isset($_SESSION['NotaCred'])) {
     return;
 }
 $strLimiDere = '350px';
-/* @var objNotaCred NotaCreditoCorp */
+/* @var $objNotaCred NotaCreditoCorp */
 $objNotaCred = unserialize($_SESSION['NotaCred']);
+
+$strFactRefe = 'N/A';
+if (!(is_null($objNotaCred->FacturaId))) {
+    $strFactRefe = $objNotaCred->Factura->Referencia;
+}
 
 ?>
 
@@ -67,7 +72,7 @@ $objNotaCred = unserialize($_SESSION['NotaCred']);
             </tr>
             <tr>
                 <td style="width: 460px; word-wrap: normal"><?= $objNotaCred->Observacion ?></td>
-                <td style="width: 120px; text-align: center;"><?= $objNotaCred->Factura->Referencia ?></td>
+                <td style="width: 120px; text-align: center;"><?= $strFactRefe ?></td>
                 <td style="width: 80px; text-align: right"><?= nf($objNotaCred->Monto) ?></td>
             </tr>
         </table>

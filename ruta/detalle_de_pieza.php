@@ -1,6 +1,8 @@
 <?php
 require_once('qcubed.inc.php');
 
+/* @var $objChofCone Chofer */
+$objChofCone = unserialize($_SESSION['User']);
 
 /* @var $objOtraPiez GuiaPiezas */
 //t('Entrando al Detalle de la Pieza...');
@@ -22,6 +24,8 @@ if (isset($_GET['id'])) {
     $intManiIdxx = $_GET['mid'];
 
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
+    $objChofCone->grabarLogMobile('Entrando al Detalle de la Pieza: '.$objPiezSele->IdPieza);
+
     $strIdxxPiez = explode('-',$objPiezSele->IdPieza)[1];
 
     $objManiSele = Containers::Load($intManiIdxx);
@@ -293,6 +297,8 @@ if (isset($_GET['id'])) {
     <a data-rel="back" data-role="button" data-theme="b"><i class="fa fa-mail-reply fa-lg pull-left"></i>Volver
     ';
 }
+$objChofCone->grabarLogMobile('Se cargo la informacion de la Pieza');
+
 ?>
 <?php include('layout/header.inc.php'); ?>
 

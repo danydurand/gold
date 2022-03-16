@@ -45,7 +45,14 @@ function buscarCadenas($strCadeOrig,$strNombTabl) {
  */
 function LogDeCambios($arrLogxCamb) {
     $objUsuario  = unserialize($_SESSION['User']);
-    $strLogiUsua = $objUsuario->LogiUsua;
+    $strLogiUsua = 'N/A';
+    if ($objUsuario instanceof Usuario) {
+        $strLogiUsua = $objUsuario->LogiUsua;
+    } else {
+        if ($objUsuario instanceof Chofer) {
+            $strLogiUsua = $objUsuario->Login;
+        }
+    }
     //-----------------------------------------------------------------------
     // Si no se especifica nada diferente, se asume que el Sistema
     // que esta llamando a esta rutina es "SisCO".
@@ -68,6 +75,7 @@ function LogDeCambios($arrLogxCamb) {
     $objLogxTran->Ip          = getRealIP();
     $objLogxTran->Save();
 }
+
 
 function BorrarLineasEnBlanco($arrVectEntr) {
     $arrVectSali = array();
@@ -234,7 +242,7 @@ function t($strTextTraz) {
             $blnTodoOkey = true;
             $strLogiUsua = $objUsuario->LogiUsua;
         } else {
-            if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'scuevas') ) {
+            if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'ealadejo') ) {
                 $blnTodoOkey = true;
                 $strLogiUsua = $objUsuario->Login;
             }
@@ -261,6 +269,42 @@ function t($strTextTraz) {
         }
     }
 }
+
+/**
+ * Traza de actividades de los Choferes
+ * @param $strTextTraz
+ */
+function tc($strTextTraz) {
+    if (isset($_SESSION['User'])) {
+        $objChofer  = unserialize($_SESSION['User']);
+        $blnTodoOkey = false;
+        $strLogiUsua = 'N/A';
+        if ($objChofer instanceof Chofer) {
+            $blnTodoOkey = true;
+            $strLogiUsua = $objChofer->Login;
+        }
+        if ($blnTodoOkey) {
+            $mixManeArch   = fopen(__LOG_DIRECTORY__.'/traza_chofer.log','a');
+            $arrLineAudi   = array();
+            $arrLineAudi[] = date('Y-m-d');
+            $arrLineAudi[] = date('H:i:s');
+            $arrLineAudi[] = $strLogiUsua;
+            if (isset($_SESSION['NombProg'])) {
+                $arrLineAudi[] = str_replace('.php','',basename($_SESSION['NombProg']));
+            }
+            if (!is_array($strTextTraz)) {
+                $arrLineAudi[] = $strTextTraz;
+            } else {
+                foreach ($strTextTraz as $strElemArra) {
+                    $arrLineAudi[] = $strElemArra;
+                }
+            }
+            $strCadeAudi = implode('|',$arrLineAudi);
+            fputs($mixManeArch,$strCadeAudi."|\n");
+        }
+    }
+}
+
 
 function ta($strTextTraz,$mixManeArch) {
     if (isset($_SESSION['User'])) {

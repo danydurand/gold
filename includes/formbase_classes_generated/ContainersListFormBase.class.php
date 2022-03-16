@@ -108,6 +108,7 @@ abstract class ContainersListFormBase extends QForm {
         $this->dtgContainerses->MetaAddColumn('CreatedBy');
         $this->dtgContainerses->MetaAddColumn('UpdatedBy');
         $this->dtgContainerses->MetaAddColumn('DeletedBy');
+        $this->dtgContainerses->MetaAddColumn(QQN::Containers()->ContainerMobileAsContainer);
 
         $this->btnExpoExce_Create();
 

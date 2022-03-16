@@ -79,6 +79,9 @@ abstract class FacturasEditFormBase extends QForm {
 	protected $txtHoraImpresion;
 	protected $chkTieneRetencion;
 	protected $txtNotaCreditoId;
+	protected $lstAnuladaPorObject;
+	protected $txtMotivoAnulacion;
+	protected $calFechaHoraAnulacion;
 	protected $calCreatedAt;
 	protected $calUpdatedAt;
 	protected $lblDeletedAt;
@@ -178,6 +181,9 @@ abstract class FacturasEditFormBase extends QForm {
 		$this->txtHoraImpresion = $this->mctFacturas->txtHoraImpresion_Create();
 		$this->chkTieneRetencion = $this->mctFacturas->chkTieneRetencion_Create();
 		$this->txtNotaCreditoId = $this->mctFacturas->txtNotaCreditoId_Create();
+		$this->lstAnuladaPorObject = $this->mctFacturas->lstAnuladaPorObject_Create();
+		$this->txtMotivoAnulacion = $this->mctFacturas->txtMotivoAnulacion_Create();
+		$this->calFechaHoraAnulacion = $this->mctFacturas->calFechaHoraAnulacion_Create();
 		$this->calCreatedAt = $this->mctFacturas->calCreatedAt_Create();
 		$this->calUpdatedAt = $this->mctFacturas->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctFacturas->lblDeletedAt_Create();

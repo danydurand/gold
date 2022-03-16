@@ -83,6 +83,8 @@ abstract class ScanneoPiezasListFormBase extends QForm {
         $this->dtgScanneoPiezases->MetaAddColumn('IdPieza');
         $this->dtgScanneoPiezases->MetaAddColumn(QQN::ScanneoPiezas()->GuiaPieza);
         $this->dtgScanneoPiezases->MetaAddColumn('IsProcesada');
+        $this->dtgScanneoPiezases->MetaAddColumn('IsRecibida');
+        $this->dtgScanneoPiezases->MetaAddColumn('IsSobrante');
         $this->dtgScanneoPiezases->MetaAddColumn('CreatedAt');
         $this->dtgScanneoPiezases->MetaAddColumn('UpdatedAt');
         $this->dtgScanneoPiezases->MetaAddColumn(QQN::ScanneoPiezas()->CreatedByObject);

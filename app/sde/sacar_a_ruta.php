@@ -60,6 +60,8 @@ class SacarARuta extends FormularioBaseKaizen {
 
     protected $btnBorrMani;
     protected $lblResuEntr;
+    protected $btnTranMobi;
+    protected $btnOpciMobi;
 
 
     protected function SetupValores() {
@@ -69,6 +71,20 @@ class SacarARuta extends FormularioBaseKaizen {
             $this->objContaine = Containers::Load($intIdxxCont);
             if ($this->objContaine) {
                 $this->blnEditMode = true;
+
+                $strAcciAdic = QApplication::PathInfo(1);
+                if (strlen($strAcciAdic)) {
+                    switch ($strAcciAdic) {
+                        case 't2m':
+                            $this->btnTranMobi_Click();
+                            break;
+                        case 'tfm':
+                            $this->btnFromMobi_Click();
+                            break;
+                        default:
+                            $this->danger('Accion adicional no contemplada: '.$strAcciAdic);
+                    }
+                }
             }
         }
     }
@@ -80,9 +96,10 @@ class SacarARuta extends FormularioBaseKaizen {
 
         $this->objDefaultWaitIcon = new QWaitIcon($this);
 
-        $this->lblTituForm->Text = 'Armar Manifiesto';
+        $this->lblTituForm->Text = 'Armar Manif';
 
         $this->dlgMensUsua_Create();
+        t('1');
 
         $this->lstTipoOper_Create();
         $this->lstOperAbie_Create();
@@ -102,28 +119,35 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->dtgPiezMani_Create();
         $this->btnRepoMani_Create();
 
+        t('2');
         $this->txtNuevChof_Create();
         $this->txtNuevCedu_Create();
         $this->btnRegiChof_Create();
         $this->dtgChofSucu_Create();
 
+        t('3');
         $this->lstNuevTipo_Create();
         $this->txtNuevPlac_Create();
         $this->txtNuevDesc_Create();
         $this->btnRegiVehi_Create();
         $this->dtgVehiSucu_Create();
 
+        t('4');
         $this->btnRepoErro_Create();
         $this->btnGestChve_Create();
         $this->btnExpoExce_Create();
         $this->btnBorrMani_Create();
+        //$this->btnTranMobi_Create();
+        $this->btnOpciMobi_Create();
 
+        t('5');
         if ($this->blnEditMode) {
             $this->objContaine->ActualizarEstadisticasDeEntrega();
             $this->lstTipoOper_Change();
         }
         $this->lblResuEntr_Create();
 
+        t('6');
         if (!$this->blnEditMode) {
             $objDescCont = Parametros::LoadByIndiceCodigo('DESCCONT','MANIRUTA');
             if ($objDescCont) {
@@ -132,6 +156,7 @@ class SacarARuta extends FormularioBaseKaizen {
                 $this->txtDescCont->Text = 'ARTICULOS VARIOS';
             }
         }
+        t('7');
 
     }
 
@@ -139,11 +164,37 @@ class SacarARuta extends FormularioBaseKaizen {
     // Aqui se crean los objetos
     //-----------------------------
 
+
+    protected function btnTranMobi_Click() {
+        list($intCantPiez, $intCantErro, $strTextMens) = $this->objContaine->TransferirToMobile();
+        if (strlen($strTextMens) == 0) {
+            $strTextMens = "Piezas Transferidas: $intCantPiez | Errores: $intCantErro";
+        }
+        if ($intCantErro == 0) {
+            $this->success($strTextMens);
+        } else {
+            $this->danger($strTextMens);
+        }
+    }
+
+    protected function btnFromMobi_Click() {
+        list($intCantPiez, $intCantErro, $strTextMens) = $this->objContaine->TransferirFromMobile();
+        if (strlen($strTextMens) == 0) {
+            $strTextMens = "Piezas Transferidas: $intCantPiez | Errores: $intCantErro";
+        }
+        if ($intCantErro == 0) {
+            $this->success($strTextMens);
+        } else {
+            $this->danger($strTextMens);
+        }
+    }
+
     protected function lblResuEntr_Create() {
         $this->lblResuEntr = new QLabel($this);
         $strResuEntr = 'Piezas Manifestadas';
         if ($this->blnEditMode) {
             $strResuEntr .= $this->objContaine->__resumenEntrega();
+            t('Resumen de Entrega: '.$strResuEntr);
         }
         $this->lblResuEntr->Text = $strResuEntr;
         $this->lblResuEntr->HtmlEntities = false;
@@ -228,6 +279,31 @@ class SacarARuta extends FormularioBaseKaizen {
         }
         $strTextBoto = TextoIcono('print','Impr','F','lg');
         $this->btnRepoMani->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
+        return $arrOpciDrop;
+    }
+
+    protected function btnOpciMobi_Create() {
+        $this->btnOpciMobi = new QLabel($this);
+        $this->btnOpciMobi->HtmlEntities = false;
+        $this->btnOpciMobi->CssClass = '';
+        $this->btnOpciMobi->Visible  = $this->blnEditMode;
+        $this->opcionesMobile();
+    }
+
+    protected function opcionesMobile() {
+        $arrOpciDrop   = array();
+        if ($this->blnEditMode) {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/sacar_a_ruta.php/'.$this->objContaine->Id.'/t2m',
+                TextoIcono('share','Transf a Mobile')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/sacar_a_ruta.php/'.$this->objContaine->Id.'/tfm',
+                TextoIcono('reply','Sincro desde Mobile')
+            );
+        }
+        $strTextBoto = TextoIcono('cogs','Mobile','F','lg');
+        $this->btnOpciMobi->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
         return $arrOpciDrop;
     }
 
@@ -663,11 +739,11 @@ class SacarARuta extends FormularioBaseKaizen {
         $colDestGuia->Width = 50;
         $this->dtgPiezApta->AddColumn($colDestGuia);
 
-        $colUltiCkpt = new QDataGridColumn($this);
-        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
-        $colUltiCkpt->Width = 30;
-        $this->dtgPiezApta->AddColumn($colUltiCkpt);
+        //$colUltiCkpt = new QDataGridColumn($this);
+        //$colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        /*$colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';*/
+        //$colUltiCkpt->Width = 30;
+        //$this->dtgPiezApta->AddColumn($colUltiCkpt);
 
     }
 
@@ -742,11 +818,11 @@ class SacarARuta extends FormularioBaseKaizen {
         $colVoluPiez->Width = 30;
         $this->dtgPiezMani->AddColumn($colVoluPiez);
 
-        $colUltiCkpt = new QDataGridColumn($this);
-        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
-        $colUltiCkpt->Width = 30;
-        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+        //$colUltiCkpt = new QDataGridColumn($this);
+        //$colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        /*$colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';*/
+        //$colUltiCkpt->Width = 30;
+        //$this->dtgPiezMani->AddColumn($colUltiCkpt);
 
     }
 
@@ -1265,7 +1341,7 @@ class SacarARuta extends FormularioBaseKaizen {
             } else {
                 $objCheckpoint = Checkpoints::LoadByCodigo('TR');
             }
-            t('El ckpt es: '.$objCheckpoint->Codigo);
+            //t('El ckpt es: '.$objCheckpoint->Codigo);
             $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
             //---------------------------------------------------------------------------
             // Con array_unique se eliminan las guias repetidas en caso de que las haya
@@ -1275,7 +1351,7 @@ class SacarARuta extends FormularioBaseKaizen {
             $this->txtListNume->Text = '';
 
             $arrDestinos = $objContenedor->GetDestinos();
-            t('El contenedor tiene: '.count($arrDestinos).' destinos');
+            //t('El contenedor tiene: '.count($arrDestinos).' destinos');
             $intCodiRuta = $objContenedor->Operacion->RutaId;
             $intContVali = 0;
             $intContGuia = 0;
@@ -1292,10 +1368,10 @@ class SacarARuta extends FormularioBaseKaizen {
                     //-----------------------------------------------------------------------
                     $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
                     if ($objGuiaPiez) {
-                        t('La pieza existe');
+                        //t('La pieza existe');
                         $arrSepuProc = $objGuiaPiez->Guia->SePuedeProcesar();
                         if ($arrSepuProc['TodoOkey']) {
-                            t('La guia se puede procesar');
+                            //t('La guia se puede procesar');
                             if ($strTipoRuta == 'EXTRA-URBANA') {
                                 $blnTienPeso = true;
                                 //----------------------------------------------------------------
@@ -1314,20 +1390,20 @@ class SacarARuta extends FormularioBaseKaizen {
                                 //    }
                                 //}
                                 if ($blnTienPeso) {
-                                    t('La pieza tiene peso');
+                                    //t('La pieza tiene peso');
                                     //--------------------------------------------------------------------------------
                                     // Antes de asociar la Guia al Contenedor, se debe verificar que el destino
                                     // de la Guia, coincida con algunos de los Destinos de la Operacion seleccionada
                                     //---------------------------------------------------------------------------------
                                     if (in_array($objGuiaPiez->Guia->DestinoId,$arrDestinos)) {
-                                        t('Los destinos coinciden');
+                                        //t('Los destinos coinciden');
                                         if (!$objContenedor->IsGuiaPiezasAsContainerPiezaAssociated($objGuiaPiez)) {
-                                            t('La pieza no estaba asociada');
+                                            //t('La pieza no estaba asociada');
                                             //---------------------------------------------
                                             // Se establece la relacion "contenedor-guia"
                                             //---------------------------------------------
                                             $objContenedor->AssociateGuiaPiezasAsContainerPieza($objGuiaPiez);
-                                            t('Ya asocie la pieza');
+                                            //t('Ya asocie la pieza');
                                             //---------------------------------------------
                                             // Se registra el checkpoint correspondiente
                                             //---------------------------------------------
@@ -1343,24 +1419,24 @@ class SacarARuta extends FormularioBaseKaizen {
                                             $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
                                             $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
                                             if ($arrResuGrab['TodoOkey']) {
-                                                t('Se grabo el checkpoint a la pieza');
+                                                //t('Se grabo el checkpoint a la pieza');
                                                 $intContCkpt ++;
                                             } else {
-                                                t('Hubo algun error: '.$arrResuGrab['MotiNook']);
+                                                //t('Hubo algun error: '.$arrResuGrab['MotiNook']);
                                                 $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
                                             }
                                         } else {
-                                            t('La pieza ya estaba asociada al Manifiesto');
+                                            //t('La pieza ya estaba asociada al Manifiesto');
                                             $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
                                             $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'Pieza previamente incluida en el Manifiesto');
                                         }
                                     } else {
-                                        t('El destino no coincide');
+                                        //t('El destino no coincide');
                                         $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
                                         $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'DESTINO ('.$objGuiaPiez->Guia->Destino->Iata.') NO COINCIDE');
                                     }
                                 } else {
-                                    t('La pieza no tiene peso');
+                                    //t('La pieza no tiene peso');
                                     $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
                                     $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,'SIN PESO');
                                 }
@@ -1460,9 +1536,9 @@ class SacarARuta extends FormularioBaseKaizen {
             }
             $this->dtgPiezMani->Refresh();
             $this->dtgPiezApta->Refresh();
-            t('Termine de procesar la piezas');
+            //t('Termine de procesar la piezas');
             $objContenedor->actualizarTotales();
-            t('Se actualizaron los totales en el container');
+            //t('Se actualizaron los totales en el container');
             $objDatabase->TransactionCommit();
             $intCantErro = count($this->arrGuiaErro);
             $strMensUsua = sprintf('Guias Procesadas (%s) | Checkpoints (%s) | Errores (%s)',
@@ -1473,9 +1549,9 @@ class SacarARuta extends FormularioBaseKaizen {
                 $this->warning($strMensUsua);
                 $this->btnRepoErro->Visible = true;
             }
-            t('Voy a actualizar la operacion con el chofer y el vehiculo');
+            //t('Voy a actualizar la operacion con el chofer y el vehiculo');
             $this->actualizarOperacion($objContenedor);
-            t('Operacion actualizada.. TERMINE');
+            //t('Operacion actualizada.. TERMINE');
 
             $this->objContaine = $objContenedor;
             $this->blnEditMode = true;

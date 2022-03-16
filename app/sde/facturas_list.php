@@ -108,6 +108,7 @@ class FacturasListForm extends FacturasListFormBase {
         $colEstaPago->Width = 120;
 
         $this->btnExpoExce_Create();
+        $this->btnExpoExce->Visible = true;
 
     }
 

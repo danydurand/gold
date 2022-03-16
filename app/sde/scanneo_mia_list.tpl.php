@@ -18,6 +18,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <?php $this->btnFiltAvan->Render() ?>
         <?php $this->btnExpoExce->Render() ?>
         <?php $this->btnBuscPiez->Render() ?>
+        <?php $this->btnClosCont->Render() ?>
     </div>
     <div class="col-sm-3 col-md-3 col-lg-3"></div>
 </div>

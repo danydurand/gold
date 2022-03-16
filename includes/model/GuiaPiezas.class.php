@@ -358,6 +358,15 @@
             );
         }
 
+        public function checkpointsDeCierre() {
+            return PiezaCheckpoints::QueryArray(
+                QQ::AndCondition(
+                    QQ::Equal(QQN::PiezaCheckpoints()->PiezaId, $this->Id),
+                    QQ::Equal(QQN::PiezaCheckpoints()->Checkpoint->Terminal,1)
+                )
+            );
+        }
+
         public function tieneCheckpoint($strCodiCkpt) {
             return PiezaCheckpoints::QueryCount(
                 QQ::AndCondition(

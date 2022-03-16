@@ -135,6 +135,7 @@ class Index extends QForm {
                 }
             }
         } else {
+            t('Usuario desconocido: '.$this->txtLogiUsua->Text);
             $strSituUsua = 'Desconocido';
         }
         if ($objUsuario) {
@@ -153,6 +154,7 @@ class Index extends QForm {
 
                 $objUsuario->FechAcce = new QDateTime(QDateTime::Now);
                 $objUsuario->CantInte = 0;
+                $objUsuario->MotiBloq = '';
                 $objUsuario->Save();
 
                 $this->SetupValoresDeSesion($_SESSION['Sistema']);
@@ -213,7 +215,7 @@ class Index extends QForm {
         //---------------------------------------------------------
         $strEnviMail = BuscarParametro('MailAdmi', 'EnviSino', 'Txt1', 'S');
         $strTextMens = "El Usuario: " . $objUser->LogiUsua .
-                       " de la Sucursal (" . $objUser->CodiEsta . ")<br> intento acceder al Sistema pero esta inactivo por: <font color='red'>" .
+                       " de la Sucursal (" . $objUser->Sucursal->Iata . ")<br> intento acceder al Sistema pero esta inactivo por: <font color='red'>" .
                        $objUser->MotiBloq . "</font>";
         $strTituRepo = utf8_decode("Acceso Denegado en GoldCoast");
         $to = array('soporte@lufemansoftware.com');
@@ -223,14 +225,12 @@ class Index extends QForm {
         $mimemail->subject = $strTituRepo;
         $mimemail->body = $strTextMens;
         $mimemail->create();
-        if ($strEnviMail == 'S') {
+        if ($_SERVER['SERVER_NAME'] == 'goldsist.com') {
             $mimemail->send($to);
         }
     }
 
     protected function SetupValoresDeSesion($strSistPath) {
-        t('===========================================');
-        t('Entrando a SetupValoresDeSesion en el Index');
         $_SESSION['NombEmpr'] = 'GOLD COAST';
         $strEmaiSopo = BuscarParametro('CntaSopo','EmaiSopo','Txt1','soporte@lufemansoftware.com');
         $_SESSION['EmaiSopo'] = serialize($strEmaiSopo);

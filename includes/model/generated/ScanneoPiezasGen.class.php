@@ -20,6 +20,8 @@
 	 * @property string $IdPieza the value for strIdPieza (Not Null)
 	 * @property integer $GuiaPiezaId the value for intGuiaPiezaId 
 	 * @property boolean $IsProcesada the value for blnIsProcesada (Not Null)
+	 * @property boolean $IsRecibida the value for blnIsRecibida (Not Null)
+	 * @property boolean $IsSobrante the value for blnIsSobrante (Not Null)
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
@@ -75,6 +77,22 @@
 		 */
 		protected $blnIsProcesada;
 		const IsProcesadaDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column scanneo_piezas.is_recibida
+		 * @var boolean blnIsRecibida
+		 */
+		protected $blnIsRecibida;
+		const IsRecibidaDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column scanneo_piezas.is_sobrante
+		 * @var boolean blnIsSobrante
+		 */
+		protected $blnIsSobrante;
+		const IsSobranteDefault = null;
 
 
 		/**
@@ -183,6 +201,8 @@
 			$this->strIdPieza = ScanneoPiezas::IdPiezaDefault;
 			$this->intGuiaPiezaId = ScanneoPiezas::GuiaPiezaIdDefault;
 			$this->blnIsProcesada = ScanneoPiezas::IsProcesadaDefault;
+			$this->blnIsRecibida = ScanneoPiezas::IsRecibidaDefault;
+			$this->blnIsSobrante = ScanneoPiezas::IsSobranteDefault;
 			$this->dttCreatedAt = (ScanneoPiezas::CreatedAtDefault === null)?null:new QDateTime(ScanneoPiezas::CreatedAtDefault);
 			$this->dttUpdatedAt = (ScanneoPiezas::UpdatedAtDefault === null)?null:new QDateTime(ScanneoPiezas::UpdatedAtDefault);
 			$this->intCreatedBy = ScanneoPiezas::CreatedByDefault;
@@ -533,6 +553,8 @@
 			    $objBuilder->AddSelectItem($strTableName, 'id_pieza', $strAliasPrefix . 'id_pieza');
 			    $objBuilder->AddSelectItem($strTableName, 'guia_pieza_id', $strAliasPrefix . 'guia_pieza_id');
 			    $objBuilder->AddSelectItem($strTableName, 'is_procesada', $strAliasPrefix . 'is_procesada');
+			    $objBuilder->AddSelectItem($strTableName, 'is_recibida', $strAliasPrefix . 'is_recibida');
+			    $objBuilder->AddSelectItem($strTableName, 'is_sobrante', $strAliasPrefix . 'is_sobrante');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'created_by', $strAliasPrefix . 'created_by');
@@ -677,6 +699,12 @@
 			$strAlias = $strAliasPrefix . 'is_procesada';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->blnIsProcesada = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'is_recibida';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnIsRecibida = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'is_sobrante';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnIsSobrante = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
@@ -1056,6 +1084,8 @@
 							`id_pieza`,
 							`guia_pieza_id`,
 							`is_procesada`,
+							`is_recibida`,
+							`is_sobrante`,
 							`created_at`,
 							`updated_at`,
 							`created_by`,
@@ -1065,6 +1095,8 @@
 							' . $objDatabase->SqlVariable($this->strIdPieza) . ',
 							' . $objDatabase->SqlVariable($this->intGuiaPiezaId) . ',
 							' . $objDatabase->SqlVariable($this->blnIsProcesada) . ',
+							' . $objDatabase->SqlVariable($this->blnIsRecibida) . ',
+							' . $objDatabase->SqlVariable($this->blnIsSobrante) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -1088,6 +1120,8 @@
 							`id_pieza` = ' . $objDatabase->SqlVariable($this->strIdPieza) . ',
 							`guia_pieza_id` = ' . $objDatabase->SqlVariable($this->intGuiaPiezaId) . ',
 							`is_procesada` = ' . $objDatabase->SqlVariable($this->blnIsProcesada) . ',
+							`is_recibida` = ' . $objDatabase->SqlVariable($this->blnIsRecibida) . ',
+							`is_sobrante` = ' . $objDatabase->SqlVariable($this->blnIsSobrante) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -1200,6 +1234,8 @@
 			$this->strIdPieza = $objReloaded->strIdPieza;
 			$this->GuiaPiezaId = $objReloaded->GuiaPiezaId;
 			$this->blnIsProcesada = $objReloaded->blnIsProcesada;
+			$this->blnIsRecibida = $objReloaded->blnIsRecibida;
+			$this->blnIsSobrante = $objReloaded->blnIsSobrante;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
 			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->CreatedBy = $objReloaded->CreatedBy;
@@ -1258,6 +1294,20 @@
 					 * @return boolean
 					 */
 					return $this->blnIsProcesada;
+
+				case 'IsRecibida':
+					/**
+					 * Gets the value for blnIsRecibida (Not Null)
+					 * @return boolean
+					 */
+					return $this->blnIsRecibida;
+
+				case 'IsSobrante':
+					/**
+					 * Gets the value for blnIsSobrante (Not Null)
+					 * @return boolean
+					 */
+					return $this->blnIsSobrante;
 
 				case 'CreatedAt':
 					/**
@@ -1429,6 +1479,32 @@
 					 */
 					try {
 						return ($this->blnIsProcesada = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'IsRecibida':
+					/**
+					 * Sets the value for blnIsRecibida (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnIsRecibida = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'IsSobrante':
+					/**
+					 * Sets the value for blnIsSobrante (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnIsSobrante = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1703,6 +1779,8 @@
 			$strToReturn .= '<element name="IdPieza" type="xsd:string"/>';
 			$strToReturn .= '<element name="GuiaPieza" type="xsd1:GuiaPiezas"/>';
 			$strToReturn .= '<element name="IsProcesada" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="IsRecibida" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="IsSobrante" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedByObject" type="xsd1:Usuario"/>';
@@ -1745,6 +1823,10 @@
 				$objToReturn->GuiaPieza = GuiaPiezas::GetObjectFromSoapObject($objSoapObject->GuiaPieza);
 			if (property_exists($objSoapObject, 'IsProcesada'))
 				$objToReturn->blnIsProcesada = $objSoapObject->IsProcesada;
+			if (property_exists($objSoapObject, 'IsRecibida'))
+				$objToReturn->blnIsRecibida = $objSoapObject->IsRecibida;
+			if (property_exists($objSoapObject, 'IsSobrante'))
+				$objToReturn->blnIsSobrante = $objSoapObject->IsSobrante;
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
@@ -1812,6 +1894,8 @@
 			$iArray['IdPieza'] = $this->strIdPieza;
 			$iArray['GuiaPiezaId'] = $this->intGuiaPiezaId;
 			$iArray['IsProcesada'] = $this->blnIsProcesada;
+			$iArray['IsRecibida'] = $this->blnIsRecibida;
+			$iArray['IsSobrante'] = $this->blnIsSobrante;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
 			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
@@ -1860,6 +1944,8 @@
      * @property-read QQNode $GuiaPiezaId
      * @property-read QQNodeGuiaPiezas $GuiaPieza
      * @property-read QQNode $IsProcesada
+     * @property-read QQNode $IsRecibida
+     * @property-read QQNode $IsSobrante
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $CreatedBy
@@ -1891,6 +1977,10 @@
 					return new QQNodeGuiaPiezas('guia_pieza_id', 'GuiaPieza', 'Integer', $this);
 				case 'IsProcesada':
 					return new QQNode('is_procesada', 'IsProcesada', 'Bit', $this);
+				case 'IsRecibida':
+					return new QQNode('is_recibida', 'IsRecibida', 'Bit', $this);
+				case 'IsSobrante':
+					return new QQNode('is_sobrante', 'IsSobrante', 'Bit', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
@@ -1925,6 +2015,8 @@
      * @property-read QQNode $GuiaPiezaId
      * @property-read QQNodeGuiaPiezas $GuiaPieza
      * @property-read QQNode $IsProcesada
+     * @property-read QQNode $IsRecibida
+     * @property-read QQNode $IsSobrante
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $CreatedBy
@@ -1956,6 +2048,10 @@
 					return new QQNodeGuiaPiezas('guia_pieza_id', 'GuiaPieza', 'integer', $this);
 				case 'IsProcesada':
 					return new QQNode('is_procesada', 'IsProcesada', 'boolean', $this);
+				case 'IsRecibida':
+					return new QQNode('is_recibida', 'IsRecibida', 'boolean', $this);
+				case 'IsSobrante':
+					return new QQNode('is_sobrante', 'IsSobrante', 'boolean', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':

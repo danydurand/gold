@@ -47,6 +47,10 @@
 	 * @property-read Cola[] $_ColaAsUpdatedByArray the value for the private _objColaAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the cola.updated_by reverse relationship
 	 * @property-read ContainerCkpt $_ContainerCkpt the value for the private _objContainerCkpt (Read-Only) if set due to an expansion on the container_ckpt.usuario_id reverse relationship
 	 * @property-read ContainerCkpt[] $_ContainerCkptArray the value for the private _objContainerCkptArray (Read-Only) if set due to an ExpandAsArray on the container_ckpt.usuario_id reverse relationship
+	 * @property-read ContainerMobile $_ContainerMobileAsCreatedBy the value for the private _objContainerMobileAsCreatedBy (Read-Only) if set due to an expansion on the container_mobile.created_by reverse relationship
+	 * @property-read ContainerMobile[] $_ContainerMobileAsCreatedByArray the value for the private _objContainerMobileAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the container_mobile.created_by reverse relationship
+	 * @property-read ContainerMobile $_ContainerMobileAsUpdatedBy the value for the private _objContainerMobileAsUpdatedBy (Read-Only) if set due to an expansion on the container_mobile.updated_by reverse relationship
+	 * @property-read ContainerMobile[] $_ContainerMobileAsUpdatedByArray the value for the private _objContainerMobileAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the container_mobile.updated_by reverse relationship
 	 * @property-read ContenedorCkpt $_ContenedorCkpt the value for the private _objContenedorCkpt (Read-Only) if set due to an expansion on the contenedor_ckpt.usuario reverse relationship
 	 * @property-read ContenedorCkpt[] $_ContenedorCkptArray the value for the private _objContenedorCkptArray (Read-Only) if set due to an ExpandAsArray on the contenedor_ckpt.usuario reverse relationship
 	 * @property-read DatosPago $_DatosPago the value for the private _objDatosPago (Read-Only) if set due to an expansion on the datos_pago.usuario_id reverse relationship
@@ -71,6 +75,8 @@
 	 * @property-read FacturaPmn[] $_FacturaPmnAsAnuladaPorArray the value for the private _objFacturaPmnAsAnuladaPorArray (Read-Only) if set due to an ExpandAsArray on the factura_pmn.anulada_por reverse relationship
 	 * @property-read FacturaPmn $_FacturaPmnAsCreadaPor the value for the private _objFacturaPmnAsCreadaPor (Read-Only) if set due to an expansion on the factura_pmn.creada_por reverse relationship
 	 * @property-read FacturaPmn[] $_FacturaPmnAsCreadaPorArray the value for the private _objFacturaPmnAsCreadaPorArray (Read-Only) if set due to an ExpandAsArray on the factura_pmn.creada_por reverse relationship
+	 * @property-read Facturas $_FacturasAsAnuladaPor the value for the private _objFacturasAsAnuladaPor (Read-Only) if set due to an expansion on the facturas.anulada_por reverse relationship
+	 * @property-read Facturas[] $_FacturasAsAnuladaPorArray the value for the private _objFacturasAsAnuladaPorArray (Read-Only) if set due to an ExpandAsArray on the facturas.anulada_por reverse relationship
 	 * @property-read GcoTemp $_GcoTempAsCreatedBy the value for the private _objGcoTempAsCreatedBy (Read-Only) if set due to an expansion on the gco_temp.created_by reverse relationship
 	 * @property-read GcoTemp[] $_GcoTempAsCreatedByArray the value for the private _objGcoTempAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the gco_temp.created_by reverse relationship
 	 * @property-read GcoTemp $_GcoTempAsUpdatedBy the value for the private _objGcoTempAsUpdatedBy (Read-Only) if set due to an expansion on the gco_temp.updated_by reverse relationship
@@ -355,6 +361,38 @@
 		private $_objContainerCkptArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single ContainerMobileAsCreatedBy object
+		 * (of type ContainerMobile), if this Usuario object was restored with
+		 * an expansion on the container_mobile association table.
+		 * @var ContainerMobile _objContainerMobileAsCreatedBy;
+		 */
+		private $_objContainerMobileAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ContainerMobileAsCreatedBy objects
+		 * (of type ContainerMobile[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the container_mobile association table.
+		 * @var ContainerMobile[] _objContainerMobileAsCreatedByArray;
+		 */
+		private $_objContainerMobileAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ContainerMobileAsUpdatedBy object
+		 * (of type ContainerMobile), if this Usuario object was restored with
+		 * an expansion on the container_mobile association table.
+		 * @var ContainerMobile _objContainerMobileAsUpdatedBy;
+		 */
+		private $_objContainerMobileAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ContainerMobileAsUpdatedBy objects
+		 * (of type ContainerMobile[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the container_mobile association table.
+		 * @var ContainerMobile[] _objContainerMobileAsUpdatedByArray;
+		 */
+		private $_objContainerMobileAsUpdatedByArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single ContenedorCkpt object
 		 * (of type ContenedorCkpt), if this Usuario object was restored with
 		 * an expansion on the contenedor_ckpt association table.
@@ -545,6 +583,22 @@
 		 * @var FacturaPmn[] _objFacturaPmnAsCreadaPorArray;
 		 */
 		private $_objFacturaPmnAsCreadaPorArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single FacturasAsAnuladaPor object
+		 * (of type Facturas), if this Usuario object was restored with
+		 * an expansion on the facturas association table.
+		 * @var Facturas _objFacturasAsAnuladaPor;
+		 */
+		private $_objFacturasAsAnuladaPor;
+
+		/**
+		 * Private member variable that stores a reference to an array of FacturasAsAnuladaPor objects
+		 * (of type Facturas[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the facturas association table.
+		 * @var Facturas[] _objFacturasAsAnuladaPorArray;
+		 */
+		private $_objFacturasAsAnuladaPorArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single GcoTempAsCreatedBy object
@@ -1675,6 +1729,36 @@
 				}
 			}
 
+			// Check for ContainerMobileAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'containermobileascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['containermobileascreatedby']) ? null : $objExpansionAliasArray['containermobileascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objContainerMobileAsCreatedByArray)
+				$objToReturn->_objContainerMobileAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objContainerMobileAsCreatedByArray[] = ContainerMobile::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containermobileascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objContainerMobileAsCreatedBy)) {
+					$objToReturn->_objContainerMobileAsCreatedBy = ContainerMobile::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containermobileascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ContainerMobileAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'containermobileasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['containermobileasupdatedby']) ? null : $objExpansionAliasArray['containermobileasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objContainerMobileAsUpdatedByArray)
+				$objToReturn->_objContainerMobileAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objContainerMobileAsUpdatedByArray[] = ContainerMobile::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containermobileasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objContainerMobileAsUpdatedBy)) {
+					$objToReturn->_objContainerMobileAsUpdatedBy = ContainerMobile::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containermobileasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for ContenedorCkpt Virtual Binding
 			$strAlias = $strAliasPrefix . 'contenedorckpt__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1852,6 +1936,21 @@
 					$objToReturn->_objFacturaPmnAsCreadaPorArray[] = FacturaPmn::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturapmnascreadapor__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objFacturaPmnAsCreadaPor)) {
 					$objToReturn->_objFacturaPmnAsCreadaPor = FacturaPmn::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturapmnascreadapor__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for FacturasAsAnuladaPor Virtual Binding
+			$strAlias = $strAliasPrefix . 'facturasasanuladapor__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['facturasasanuladapor']) ? null : $objExpansionAliasArray['facturasasanuladapor']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objFacturasAsAnuladaPorArray)
+				$objToReturn->_objFacturasAsAnuladaPorArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objFacturasAsAnuladaPorArray[] = Facturas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturasasanuladapor__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objFacturasAsAnuladaPor)) {
+					$objToReturn->_objFacturasAsAnuladaPor = Facturas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturasasanuladapor__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3030,6 +3129,38 @@
 					 */
 					return $this->_objContainerCkptArray;
 
+				case '_ContainerMobileAsCreatedBy':
+					/**
+					 * Gets the value for the private _objContainerMobileAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the container_mobile.created_by reverse relationship
+					 * @return ContainerMobile
+					 */
+					return $this->_objContainerMobileAsCreatedBy;
+
+				case '_ContainerMobileAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objContainerMobileAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the container_mobile.created_by reverse relationship
+					 * @return ContainerMobile[]
+					 */
+					return $this->_objContainerMobileAsCreatedByArray;
+
+				case '_ContainerMobileAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objContainerMobileAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the container_mobile.updated_by reverse relationship
+					 * @return ContainerMobile
+					 */
+					return $this->_objContainerMobileAsUpdatedBy;
+
+				case '_ContainerMobileAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objContainerMobileAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the container_mobile.updated_by reverse relationship
+					 * @return ContainerMobile[]
+					 */
+					return $this->_objContainerMobileAsUpdatedByArray;
+
 				case '_ContenedorCkpt':
 					/**
 					 * Gets the value for the private _objContenedorCkpt (Read-Only)
@@ -3221,6 +3352,22 @@
 					 * @return FacturaPmn[]
 					 */
 					return $this->_objFacturaPmnAsCreadaPorArray;
+
+				case '_FacturasAsAnuladaPor':
+					/**
+					 * Gets the value for the private _objFacturasAsAnuladaPor (Read-Only)
+					 * if set due to an expansion on the facturas.anulada_por reverse relationship
+					 * @return Facturas
+					 */
+					return $this->_objFacturasAsAnuladaPor;
+
+				case '_FacturasAsAnuladaPorArray':
+					/**
+					 * Gets the value for the private _objFacturasAsAnuladaPorArray (Read-Only)
+					 * if set due to an ExpandAsArray on the facturas.anulada_por reverse relationship
+					 * @return Facturas[]
+					 */
+					return $this->_objFacturasAsAnuladaPorArray;
 
 				case '_GcoTempAsCreatedBy':
 					/**
@@ -4009,6 +4156,12 @@
 			if ($this->CountContainerCkpts()) {
 				$arrTablRela[] = 'container_ckpt';
 			}
+			if ($this->CountContainerMobilesAsCreatedBy()) {
+				$arrTablRela[] = 'container_mobile';
+			}
+			if ($this->CountContainerMobilesAsUpdatedBy()) {
+				$arrTablRela[] = 'container_mobile';
+			}
 			if ($this->CountContenedorCkpts()) {
 				$arrTablRela[] = 'contenedor_ckpt';
 			}
@@ -4044,6 +4197,9 @@
 			}
 			if ($this->CountFacturaPmnsAsCreadaPor()) {
 				$arrTablRela[] = 'factura_pmn';
+			}
+			if ($this->CountFacturasesAsAnuladaPor()) {
+				$arrTablRela[] = 'facturas';
 			}
 			if ($this->CountGcoTempsAsCreatedBy()) {
 				$arrTablRela[] = 'gco_temp';
@@ -4862,6 +5018,304 @@
 					`container_ckpt`
 				WHERE
 					`usuario_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ContainerMobileAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ContainerMobilesAsCreatedBy as an array of ContainerMobile objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ContainerMobile[]
+		*/
+		public function GetContainerMobileAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return ContainerMobile::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ContainerMobilesAsCreatedBy
+		 * @return int
+		*/
+		public function CountContainerMobilesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return ContainerMobile::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ContainerMobileAsCreatedBy
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function AssociateContainerMobileAsCreatedBy(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainerMobileAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainerMobileAsCreatedBy on this Usuario with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ContainerMobileAsCreatedBy
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function UnassociateContainerMobileAsCreatedBy(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsCreatedBy on this Usuario with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ContainerMobilesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllContainerMobilesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ContainerMobileAsCreatedBy
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function DeleteAssociatedContainerMobileAsCreatedBy(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsCreatedBy on this Usuario with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`container_mobile`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ContainerMobilesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllContainerMobilesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`container_mobile`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ContainerMobileAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ContainerMobilesAsUpdatedBy as an array of ContainerMobile objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ContainerMobile[]
+		*/
+		public function GetContainerMobileAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return ContainerMobile::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ContainerMobilesAsUpdatedBy
+		 * @return int
+		*/
+		public function CountContainerMobilesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return ContainerMobile::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ContainerMobileAsUpdatedBy
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function AssociateContainerMobileAsUpdatedBy(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainerMobileAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainerMobileAsUpdatedBy on this Usuario with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ContainerMobileAsUpdatedBy
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function UnassociateContainerMobileAsUpdatedBy(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsUpdatedBy on this Usuario with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ContainerMobilesAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllContainerMobilesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ContainerMobileAsUpdatedBy
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function DeleteAssociatedContainerMobileAsUpdatedBy(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsUpdatedBy on this Usuario with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`container_mobile`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ContainerMobilesAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllContainerMobilesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobileAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`container_mobile`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
 			');
 		}
 
@@ -6650,6 +7104,155 @@
 					`factura_pmn`
 				WHERE
 					`creada_por` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for FacturasAsAnuladaPor
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated FacturasesAsAnuladaPor as an array of Facturas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Facturas[]
+		*/
+		public function GetFacturasAsAnuladaPorArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Facturas::LoadArrayByAnuladaPor($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated FacturasesAsAnuladaPor
+		 * @return int
+		*/
+		public function CountFacturasesAsAnuladaPor() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Facturas::CountByAnuladaPor($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a FacturasAsAnuladaPor
+		 * @param Facturas $objFacturas
+		 * @return void
+		*/
+		public function AssociateFacturasAsAnuladaPor(Facturas $objFacturas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFacturasAsAnuladaPor on this unsaved Usuario.');
+			if ((is_null($objFacturas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFacturasAsAnuladaPor on this Usuario with an unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`facturas`
+				SET
+					`anulada_por` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFacturas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a FacturasAsAnuladaPor
+		 * @param Facturas $objFacturas
+		 * @return void
+		*/
+		public function UnassociateFacturasAsAnuladaPor(Facturas $objFacturas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAnuladaPor on this unsaved Usuario.');
+			if ((is_null($objFacturas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAnuladaPor on this Usuario with an unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`facturas`
+				SET
+					`anulada_por` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFacturas->Id) . ' AND
+					`anulada_por` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all FacturasesAsAnuladaPor
+		 * @return void
+		*/
+		public function UnassociateAllFacturasesAsAnuladaPor() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAnuladaPor on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`facturas`
+				SET
+					`anulada_por` = null
+				WHERE
+					`anulada_por` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated FacturasAsAnuladaPor
+		 * @param Facturas $objFacturas
+		 * @return void
+		*/
+		public function DeleteAssociatedFacturasAsAnuladaPor(Facturas $objFacturas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAnuladaPor on this unsaved Usuario.');
+			if ((is_null($objFacturas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAnuladaPor on this Usuario with an unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`facturas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFacturas->Id) . ' AND
+					`anulada_por` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated FacturasesAsAnuladaPor
+		 * @return void
+		*/
+		public function DeleteAllFacturasesAsAnuladaPor() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAnuladaPor on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`facturas`
+				WHERE
+					`anulada_por` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
 			');
 		}
 
@@ -10210,6 +10813,8 @@
      * @property-read QQReverseReferenceNodeCola $ColaAsCreatedBy
      * @property-read QQReverseReferenceNodeCola $ColaAsUpdatedBy
      * @property-read QQReverseReferenceNodeContainerCkpt $ContainerCkpt
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobileAsCreatedBy
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobileAsUpdatedBy
      * @property-read QQReverseReferenceNodeContenedorCkpt $ContenedorCkpt
      * @property-read QQReverseReferenceNodeDatosPago $DatosPago
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsCodiUsua
@@ -10222,6 +10827,7 @@
      * @property-read QQReverseReferenceNodeFactura $FacturaAsAnulacion
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsAnuladaPor
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsCreadaPor
+     * @property-read QQReverseReferenceNodeFacturas $FacturasAsAnuladaPor
      * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsCreatedBy
      * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsUpdatedBy
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
@@ -10307,6 +10913,10 @@
 					return new QQReverseReferenceNodeCola($this, 'colaasupdatedby', 'reverse_reference', 'updated_by', 'ColaAsUpdatedBy');
 				case 'ContainerCkpt':
 					return new QQReverseReferenceNodeContainerCkpt($this, 'containerckpt', 'reverse_reference', 'usuario_id', 'ContainerCkpt');
+				case 'ContainerMobileAsCreatedBy':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobileascreatedby', 'reverse_reference', 'created_by', 'ContainerMobileAsCreatedBy');
+				case 'ContainerMobileAsUpdatedBy':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobileasupdatedby', 'reverse_reference', 'updated_by', 'ContainerMobileAsUpdatedBy');
 				case 'ContenedorCkpt':
 					return new QQReverseReferenceNodeContenedorCkpt($this, 'contenedorckpt', 'reverse_reference', 'usuario', 'ContenedorCkpt');
 				case 'DatosPago':
@@ -10331,6 +10941,8 @@
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnasanuladapor', 'reverse_reference', 'anulada_por', 'FacturaPmnAsAnuladaPor');
 				case 'FacturaPmnAsCreadaPor':
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnascreadapor', 'reverse_reference', 'creada_por', 'FacturaPmnAsCreadaPor');
+				case 'FacturasAsAnuladaPor':
+					return new QQReverseReferenceNodeFacturas($this, 'facturasasanuladapor', 'reverse_reference', 'anulada_por', 'FacturasAsAnuladaPor');
 				case 'GcoTempAsCreatedBy':
 					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempascreatedby', 'reverse_reference', 'created_by', 'GcoTempAsCreatedBy');
 				case 'GcoTempAsUpdatedBy':
@@ -10419,6 +11031,8 @@
      * @property-read QQReverseReferenceNodeCola $ColaAsCreatedBy
      * @property-read QQReverseReferenceNodeCola $ColaAsUpdatedBy
      * @property-read QQReverseReferenceNodeContainerCkpt $ContainerCkpt
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobileAsCreatedBy
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobileAsUpdatedBy
      * @property-read QQReverseReferenceNodeContenedorCkpt $ContenedorCkpt
      * @property-read QQReverseReferenceNodeDatosPago $DatosPago
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsCodiUsua
@@ -10431,6 +11045,7 @@
      * @property-read QQReverseReferenceNodeFactura $FacturaAsAnulacion
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsAnuladaPor
      * @property-read QQReverseReferenceNodeFacturaPmn $FacturaPmnAsCreadaPor
+     * @property-read QQReverseReferenceNodeFacturas $FacturasAsAnuladaPor
      * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsCreatedBy
      * @property-read QQReverseReferenceNodeGcoTemp $GcoTempAsUpdatedBy
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
@@ -10516,6 +11131,10 @@
 					return new QQReverseReferenceNodeCola($this, 'colaasupdatedby', 'reverse_reference', 'updated_by', 'ColaAsUpdatedBy');
 				case 'ContainerCkpt':
 					return new QQReverseReferenceNodeContainerCkpt($this, 'containerckpt', 'reverse_reference', 'usuario_id', 'ContainerCkpt');
+				case 'ContainerMobileAsCreatedBy':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobileascreatedby', 'reverse_reference', 'created_by', 'ContainerMobileAsCreatedBy');
+				case 'ContainerMobileAsUpdatedBy':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobileasupdatedby', 'reverse_reference', 'updated_by', 'ContainerMobileAsUpdatedBy');
 				case 'ContenedorCkpt':
 					return new QQReverseReferenceNodeContenedorCkpt($this, 'contenedorckpt', 'reverse_reference', 'usuario', 'ContenedorCkpt');
 				case 'DatosPago':
@@ -10540,6 +11159,8 @@
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnasanuladapor', 'reverse_reference', 'anulada_por', 'FacturaPmnAsAnuladaPor');
 				case 'FacturaPmnAsCreadaPor':
 					return new QQReverseReferenceNodeFacturaPmn($this, 'facturapmnascreadapor', 'reverse_reference', 'creada_por', 'FacturaPmnAsCreadaPor');
+				case 'FacturasAsAnuladaPor':
+					return new QQReverseReferenceNodeFacturas($this, 'facturasasanuladapor', 'reverse_reference', 'anulada_por', 'FacturasAsAnuladaPor');
 				case 'GcoTempAsCreatedBy':
 					return new QQReverseReferenceNodeGcoTemp($this, 'gcotempascreatedby', 'reverse_reference', 'created_by', 'GcoTempAsCreatedBy');
 				case 'GcoTempAsUpdatedBy':

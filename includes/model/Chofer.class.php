@@ -27,6 +27,38 @@
 			return sprintf('%s',$this->Nombre);
 		}
 
+        public function activoMobileHoy() {
+		    $strLogiChof  = $this->Login;
+		    $strFechDhoy  = FechaDeHoy();
+		    $strCadeSqlx  = "select count(*) as cant_regi ";
+		    $strCadeSqlx .= "  from log_mobile ";
+		    $strCadeSqlx .= " where chofer = '$strLogiChof' ";
+		    $strCadeSqlx .= "   and date(fecha) = '$strFechDhoy' ";
+		    $objDatabase  = Chofer::GetDatabase();
+		    $objDbResult  = $objDatabase->Query($strCadeSqlx);
+		    $mixRegistro  = $objDbResult->FetchArray();
+            $intLogxMobi  = $mixRegistro['cant_regi'];
+            //$intLogxMobi  = LogMobile::CountByChoferFecha($this->Login, FechaDeHoy());
+            return $intLogxMobi ? 'SI' : 'NO';
+		}
+
+
+        /*
+         * Esta funcion registra la actividad de los Choferes
+         * en el uso Ruta Mobile
+         */
+        public function grabarLogMobile($strLogxDesc) {
+            try {
+                $objLogxMobi = new LogMobile();
+                $objLogxMobi->Fecha       = new QDateTime(QDateTime::Now);
+                $objLogxMobi->Chofer      = $this->Login;
+                $objLogxMobi->Descripcion = trim($strLogxDesc);
+                $objLogxMobi->Save();
+            } catch (Exception $e) {
+                tc('Error LogMobile: '.$e->getMessage());
+            }
+        }
+
         public function ActualizarManifiestosDelChofer(){
             $objClauOrde = QQ::OrderBy(QQN::Containers()->Id,false);
             $arrManiChof = Containers::LoadArrayByChoferIdEstatus($this->CodiChof,'ABIERT@',$objClauOrde);

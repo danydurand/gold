@@ -3,7 +3,7 @@ $strPageTitle = QApplication::Translate('Sacar a Ruta');
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
     <div class="titulo-formulario">
-        <div class="col-xs-4 col-md-3 col-lg-3 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
+        <div class="col-xs-3 col-md-2 col-lg-2 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">
             <?php $this->lblTituForm->Render(); ?>&nbsp;&nbsp;<?php $this->objDefaultWaitIcon->Render(); ?>
         </div>
         <div class="hidden-xs hidden-sm col-md-7 col-lg-7" style="text-align:left; margin-top: -0.25em; margin-left: 4em">
@@ -14,6 +14,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <?php $this->btnGestChve->Render() ?>
             <?php $this->btnExpoExce->Render() ?>
             <?php $this->btnBorrMani->Render() ?>
+            <?php $this->btnOpciMobi->Render() ?>
         </div>
     </div>
     <div class="form-controls">

@@ -34,6 +34,7 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
     protected $btnExpoExce;
     protected $colSelePiez;
     protected $btnBorrPiez;
+    protected $btnOpenCont;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -56,6 +57,11 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
 		$this->lblId = $this->mctScanneo->lblId_Create();
 		$this->txtDescripcion = $this->mctScanneo->txtDescripcion_Create();
 		$this->txtDescripcion->Width = 180;
+		$this->chkEstaCerrado = $this->mctScanneo->chkEstaCerrado_Create();
+		$this->chkEstaCerrado->Name = 'Cerrado ?';
+		$this->chkEstaCerrado->AddAction(new QChangeEvent(), new QAjaxAction('chkEstaCerrado_Change'));
+		$this->chkEstaRecibido = $this->mctScanneo->chkEstaRecibido_Create();
+		$this->chkEstaRecibido->Name = 'Recibido en Destino ?';
 		$this->txtNumePiez_Create();
 		$this->txtResuScan_Create();
 		$this->calCreatedAt = $this->mctScanneo->calCreatedAt_Create();
@@ -77,6 +83,7 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
 		$this->dtgPiezPend_Create();
         $this->btnExpoExce_Create();
         $this->btnBorrPiez_Create();
+        $this->btnOpenCont_Create();
 
 		if (!$this->mctScanneo->EditMode) {
 		    $this->calCreatedAt->DateTime = new QDateTime(QDateTime::Now());
@@ -93,6 +100,7 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
         $this->lstCreatedByObject = disableControl($this->lstCreatedByObject);
         $this->calUpdatedAt = disableControl($this->calUpdatedAt);
         $this->lstUpdatedByObject = disableControl($this->lstUpdatedByObject);
+        $this->chkEstaRecibido = disableControl($this->chkEstaRecibido);
 
         $this->btnNuevRegi->Visible = false;
         $this->txtNumePiez->SetFocus();
@@ -102,17 +110,65 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
             $this->intCantPend = ScanneoPiezas::CountPendientesDelScanneo($this->mctScanneo->Scanneo->Id);
             $this->btnProcPend->Visible = $this->intCantPend;
             $this->intCantSobr = ScanneoPiezas::CountSobrantesDelScanneo($this->mctScanneo->Scanneo->Id);
-            //$this->btnExpoExce->Visible = $this->intCantPend;
             $this->btnSave->Visible = false;
         }
 
         $this->btnDelete->Text = TextoIcono('trash-o','Borrar Scanneo','F','lg');
+
+        //---------------------------------------------------------------------------------
+        // Si el Contenedor esta "Recibido en Destino", o "Cerrado" ya no se puede editar
+        //---------------------------------------------------------------------------------
+        if ($this->chkEstaCerrado->Checked) {
+            $this->sePuedeEditar(false);
+        }
+        if ($this->chkEstaRecibido->Checked) {
+            $this->sePuedeEditar(false);
+            $this->btnOpenCont->Visible = false;
+        }
 
 	}
 
 	//----------------------------
 	// Aqui se crean los objetos 
 	//----------------------------
+
+    protected function btnOpenCont_Create() {
+        $this->btnOpenCont = new QButtonP($this);
+        $this->btnOpenCont->Text = TextoIcono('unlock','Abrir','F','lg');
+        $this->btnOpenCont->AddAction(new QClickEvent(), new QServerAction('btnOpenCont_Click'));
+        $this->btnOpenCont->Visible = false;
+    }
+
+
+    protected function btnOpenCont_Click() {
+        $this->mctScanneo->Scanneo->Abrir();
+        $this->chkEstaCerrado->Checked = false;
+        $this->sePuedeEditar(true);
+    }
+
+    protected function sePuedeEditar($blnEditar) {
+	    if (!$blnEditar) {
+            $this->txtNumePiez = disableControl($this->txtNumePiez);
+            $this->btnDelete->Visible = false;
+            $this->btnOpenCont->Visible = true;
+            $this->chkEstaCerrado = disableControl($this->chkEstaCerrado);
+        } else {
+            $this->txtNumePiez = enableControl($this->txtNumePiez);
+            $this->btnDelete->Visible = true;
+            $this->btnOpenCont->Visible = false;
+            $this->chkEstaCerrado = enableControl($this->chkEstaCerrado);
+        }
+    }
+
+    protected function chkEstaCerrado_Change(){
+        if ($this->chkEstaCerrado->Checked) {
+            $this->SePuedeEditar(false);
+            $this->mctScanneo->Scanneo->Cerrar();
+        } else {
+            $this->SePuedeEditar(true);
+            $this->mctScanneo->Scanneo->Abrir();
+        }
+    }
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
@@ -193,6 +249,8 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
                 $objScanPiez->ScanneoId = $this->mctScanneo->Scanneo->Id;
                 $objScanPiez->IdPieza = $strNumePiez;
                 $objScanPiez->IsProcesada = false;
+                $objScanPiez->IsRecibida  = false;
+                $objScanPiez->IsSobrante  = false;
                 $objScanPiez->CreatedAt   = new QDateTime(QDateTime::Now());
                 $objScanPiez->CreatedBy   = $this->objUsuario->CodiUsua;
                 $objScanPiez->UpdatedAt   = new QDateTime(QDateTime::Now());
@@ -286,60 +344,19 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
         $this->dtgPiezPend->AdditionalConditions = QQ::AndCondition($objClauWher);
         $this->dtgPiezPend->AdditionalClauses = $objClauOrde;
 
-        $this->colSelePiez = new QCheckBoxColumn('', $this->dtgPiezPend);
-        $this->colSelePiez->PrimaryKey = 'Id';
-        $this->colSelePiez->Width = 30;
-        $this->dtgPiezPend->AddColumn($this->colSelePiez);
-        $this->dtgPiezPend->AddAction(new QClickEvent(), new QAjaxAction('colSelePiez_Click'));
+        if ( (!$this->mctScanneo->Scanneo->EstaRecibido) || ($this->mctScanneo->Scanneo->EstaCerrado)) {
+            $this->colSelePiez = new QCheckBoxColumn('', $this->dtgPiezPend);
+            $this->colSelePiez->PrimaryKey = 'Id';
+            $this->colSelePiez->Width = 30;
+            $this->dtgPiezPend->AddColumn($this->colSelePiez);
+            $this->dtgPiezPend->AddAction(new QClickEvent(), new QAjaxAction('colSelePiez_Click'));
+        }
 
         $this->dtgPiezPend->MetaAddColumn('Id');
         $this->dtgPiezPend->MetaAddColumn('IdPieza');
 
     }
 
-
-    // protected function dtgPiezPend_Create() {
-    //     $this->dtgPiezPend = new QDataGrid($this);
-    //     $this->dtgPiezPend->FontSize = 12;
-    //     $this->dtgPiezPend->ShowFilter = false;
-
-    //     $this->dtgPiezPend->CssClass = 'datagrid';
-    //     $this->dtgPiezPend->AlternateRowStyle->CssClass = 'alternate';
-
-    //     $this->dtgPiezPend->Paginator = new QPaginator($this->dtgPiezPend);
-    //     $this->dtgPiezPend->ItemsPerPage = 20;
-
-    //     $this->dtgPiezPend->UseAjax = true;
-
-    //     $this->dtgPiezPend->SetDataBinder('dtgPiezPend_Bind');
-
-    //     $this->colSelePiez = new QCheckBoxColumn('', $this->dtgPiezPend);
-    //     $this->colSelePiez->PrimaryKey = 'Id';
-    //     $this->colSelePiez->Width = 30;
-    //     $this->dtgPiezPend->AddColumn($this->colSelePiez);
-    //     $this->dtgPiezPend->AddAction(new QClickEvent(), new QAjaxAction('colSelePiez_Click'));
-
-    //     $this->dtgPiezPendColumns();
-    // }
-
-    // protected function dtgPiezPend_Bind() {
-    //     $objClauWher   = QQ::Clause();
-    //     $objClauWher[] = QQ::Equal(QQN::ScanneoPiezas()->ScanneoId,$this->mctScanneo->Scanneo->Id);
-
-    //     $objClauOrde   = QQ::Clause();
-    //     $objClauOrde[] = QQ::OrderBy(QQN::ScanneoPiezas()->Id);
-
-    //     $arrPiezPend = ScanneoPiezas::QueryArray(QQ::AndCondition($objClauWher));
-    //     $this->dtgPiezPend->TotalItemCount = count($arrPiezPend);
-
-    //     $this->btnProcPend->Visible = count($arrPiezPend) > 0 ? true : false;
-
-    //     // Bind the datasource to the datagrid
-    //     $this->dtgPiezPend->DataSource = ScanneoPiezas::QueryArray(
-    //         QQ::AndCondition($objClauWher),
-    //         QQ::Clause($this->dtgPiezPend->OrderByClause, $this->dtgPiezPend->LimitClause)
-    //     );
-    // }
 
     protected function dtgPiezPendColumns() {
         $colScanIdxx = new QDataGridColumn($this);
@@ -399,12 +416,14 @@ class ScanneoMiaEditForm extends ScanneoEditFormBase {
 
     protected function colSelePiez_Click() {
         $this->mensaje();
-        $arrIdxxSele = $this->colSelePiez->GetSelectedIds();
-        $intCantSele = count($arrIdxxSele);
-        if ($intCantSele > 0) {
-            $this->btnBorrPiez->Visible = true;
-        } else {
-            $this->btnBorrPiez->Visible = false;
+        if (!$this->chkEstaCerrado->Checked) {
+            $arrIdxxSele = $this->colSelePiez->GetSelectedIds();
+            $intCantSele = count($arrIdxxSele);
+            if ($intCantSele > 0) {
+                $this->btnBorrPiez->Visible = true;
+            } else {
+                $this->btnBorrPiez->Visible = false;
+            }
         }
     }
 

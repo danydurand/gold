@@ -80,6 +80,8 @@ abstract class ScanneoListFormBase extends QForm {
         // can traverse down QQN::scanneo() to display fields that are down the hierarchy)
         $this->dtgScanneos->MetaAddColumn('Id');
         $this->dtgScanneos->MetaAddColumn('Descripcion');
+        $this->dtgScanneos->MetaAddColumn('EstaCerrado');
+        $this->dtgScanneos->MetaAddColumn('EstaRecibido');
         $this->dtgScanneos->MetaAddColumn('CreatedAt');
         $this->dtgScanneos->MetaAddColumn(QQN::Scanneo()->CreatedByObject);
         $this->dtgScanneos->MetaAddColumn('UpdatedAt');

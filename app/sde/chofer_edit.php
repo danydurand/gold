@@ -20,6 +20,7 @@ require_once(__FORMBASE_CLASSES__ . '/ChoferEditFormBase.class.php');
  * @subpackage Drafts
  */
 class ChoferEditForm extends ChoferEditFormBase {
+    protected $btnLogxChof;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -75,6 +76,9 @@ class ChoferEditForm extends ChoferEditFormBase {
         $this->lstCodiDispObject = $this->mctChofer->lstCodiDispObject_Create();
         $this->lstCodiDispObject->Name = 'Disponible?';
 
+        $this->calAccesoMobile = $this->mctChofer->calAccesoMobile_Create();
+        $this->calAccesoMobile->Name = 'Acce Ruta-Mobile';
+
         $this->lstCodiStatObject = $this->mctChofer->lstCodiStatObject_Create();
 
         if (!$this->mctChofer->EditMode) {
@@ -91,11 +95,22 @@ class ChoferEditForm extends ChoferEditFormBase {
                 }
             }
         }
+
+        $this->btnVolvList->Text = '<i class="fa fa-mail-reply fa-lg"></i>';
+
+        $this->btnLogxChof_Create();
     }
 
 	//----------------------------
 	// Aquí se Crean los Objetos
 	//----------------------------
+
+    protected function btnLogxChof_Create() {
+        $this->btnLogxChof = new QButtonP($this);
+        $this->btnLogxChof->Text = TextoIcono('file-text-o','LogMobile');
+        $this->btnLogxChof->HtmlEntities = false;
+        $this->btnLogxChof->AddAction(new QClickEvent(), new QAjaxAction('btnLogxChof_Click'));
+    }
 
     protected function determinarPosicion() {
         if ($this->mctChofer->Chofer && !isset($_SESSION['DataChofer'])) {
@@ -129,6 +144,20 @@ class ChoferEditForm extends ChoferEditFormBase {
     //-----------------------------------
 	// Acciones Asociadas a los Objetos
 	//-----------------------------------
+
+    protected function btnLogxChof_Click() {
+        $_SESSION['RegiRefe'] = $this->mctChofer->Chofer->CodiChof;
+        $_SESSION['TablRefe'] = 'Chofer';
+        $_SESSION['RegiReto'] = 'chofer_edit.php/'.$this->mctChofer->Chofer->CodiChof;
+        QApplication::Redirect(__SIST__.'/log_mobile_list.php/'.$this->mctChofer->Chofer->Login);
+    }
+
+    protected function btnLogxCamb_Click() {
+        $_SESSION['RegiRefe'] = $this->mctChofer->Chofer->CodiChof;
+        $_SESSION['TablRefe'] = 'Chofer';
+        $_SESSION['RegiReto'] = 'chofer_edit.php/'.$this->mctChofer->Chofer->CodiChof;
+        QApplication::Redirect(__SIST__.'/log_list.php');
+    }
 
     protected function nombreValido($strNombChof) {
         $arrNombChof = explode(' ',$strNombChof);

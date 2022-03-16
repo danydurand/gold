@@ -566,9 +566,12 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
         $objMessage->SetHeader('x-application', 'SisCO');
         try {
-            t('Voy a enviar el correo');
             QEmailServer::Send($objMessage);
-            t('Correo enviado');
+            //--------------------------------------------
+            // Se deja registro del envio del Edo de Cta
+            //--------------------------------------------
+            $strTextMens = 'Edo de Cta enviado a: '.$strEnviAxxx;
+            $this->objMasterCliente->logDeCambios($strTextMens);
         } catch (Exception $e) {
             $strNombProc = 'Envio de Edo de Cuenta al Cliente: '.$this->objMasterCliente->NombClie;
             $objProcEjec = CrearProceso($strNombProc,true);
@@ -926,6 +929,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
+        $objClauWher[] = QQ::NotEqual(QQN::Facturas()->Estatus,'ANULADA');
         $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
         $intCantFact   = count($this->arrFactPend);
         if ($intCantFact > 10) {

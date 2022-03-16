@@ -223,6 +223,18 @@
 			return new QQNodeContainerCkpt('container_ckpt', null, null);
 		}
 		/**
+		 * @return QQNodeContainerMobile
+		 */
+		static public function ContainerMobile() {
+			return new QQNodeContainerMobile('container_mobile', null, null);
+		}
+		/**
+		 * @return QQNodeContainerPiezaMobile
+		 */
+		static public function ContainerPiezaMobile() {
+			return new QQNodeContainerPiezaMobile('container_pieza_mobile', null, null);
+		}
+		/**
 		 * @return QQNodeContainers
 		 */
 		static public function Containers() {
@@ -677,6 +689,12 @@
 		 */
 		static public function LogApi() {
 			return new QQNodeLogApi('log_api', null, null);
+		}
+		/**
+		 * @return QQNodeLogMobile
+		 */
+		static public function LogMobile() {
+			return new QQNodeLogMobile('log_mobile', null, null);
 		}
 		/**
 		 * @return QQNodeLugarIncidencia

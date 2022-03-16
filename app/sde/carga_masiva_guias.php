@@ -1183,7 +1183,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                     //----------------------------------------------------------
                     $intCantCamp = count($arrCampClie);
                     if ($intCantCamp != 7) {
-                        $strMensErro = "La linea $intNumeLine no tiene los 7 campos requeridos";
+                        $strMensErro = "La linea $intNumeLine no tiene los 7 campos requeridos. Tiene: $intCantCamp";
                         t($strMensErro);
                         $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
                         $arrParaErro['NumeRefe'] = $strNombArch;

@@ -49,6 +49,7 @@
 	 * @property Chofer $Chofer the value for the Chofer object referenced by intChoferId 
 	 * @property Transportista $Transportista the value for the Transportista object referenced by intTransportistaId 
 	 * @property MasterCliente $ClienteCorp the value for the MasterCliente object referenced by intClienteCorpId 
+	 * @property ContainerMobile $ContainerMobileAsContainer the value for the ContainerMobile object that uniquely references this Containers
 	 * @property-read Containers $_ParentContainersAsContainerContainer the value for the private _objParentContainersAsContainerContainer (Read-Only) if set due to an expansion on the container_container_assn association table
 	 * @property-read Containers[] $_ParentContainersAsContainerContainerArray the value for the private _objParentContainersAsContainerContainerArray (Read-Only) if set due to an ExpandAsArray on the container_container_assn association table
 	 * @property-read Containers $_ContainersAsContainerContainer the value for the private _objContainersAsContainerContainer (Read-Only) if set due to an expansion on the container_container_assn association table
@@ -438,6 +439,24 @@
 		 * @var MasterCliente objClienteCorp
 		 */
 		protected $objClienteCorp;
+
+		/**
+		 * Protected member variable that contains the object which points to
+		 * this object by the reference in the unique database column container_mobile.container_id.
+		 *
+		 * NOTE: Always use the ContainerMobileAsContainer property getter to correctly retrieve this ContainerMobile object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var ContainerMobile objContainerMobileAsContainer
+		 */
+		protected $objContainerMobileAsContainer;
+
+		/**
+		 * Used internally to manage whether the adjoined ContainerMobileAsContainer object
+		 * needs to be updated on save.
+		 *
+		 * NOTE: Do not manually update this value
+		 */
+		protected $blnDirtyContainerMobileAsContainer;
 
 
 
@@ -1119,6 +1138,21 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['cliente_corp_id']) ? null : $objExpansionAliasArray['cliente_corp_id']);
 				$objToReturn->objClienteCorp = MasterCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cliente_corp_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+
+			// Check for ContainerMobileAsContainer Unique ReverseReference Binding
+			$strAlias = $strAliasPrefix . 'containermobileascontainer__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if ($objDbRow->ColumnExists($strAliasName)) {
+				if (!is_null($objDbRow->GetColumn($strAliasName))) {
+					$objExpansionNode = (empty($objExpansionAliasArray['containermobileascontainer']) ? null : $objExpansionAliasArray['containermobileascontainer']);
+					$objToReturn->objContainerMobileAsContainer = ContainerMobile::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containermobileascontainer__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+				else {
+					// We ATTEMPTED to do an Early Bind but the Object Doesn't Exist
+					// Let's set to FALSE so that the object knows not to try and re-query again
+					$objToReturn->objContainerMobileAsContainer = false;
+				}
 			}
 
 				
@@ -1864,6 +1898,26 @@
 				}
 					
 
+
+
+				// Update the adjoined ContainerMobileAsContainer object (if applicable)
+				// TODO: Make this into hard-coded SQL queries
+				if ($this->blnDirtyContainerMobileAsContainer) {
+					// Unassociate the old one (if applicable)
+					if ($objAssociated = ContainerMobile::LoadByContainerId($this->intId)) {
+						$objAssociated->ContainerId = null;
+						$objAssociated->Save();
+					}
+
+					// Associate the new one (if applicable)
+					if ($this->objContainerMobileAsContainer) {
+						$this->objContainerMobileAsContainer->ContainerId = $this->intId;
+						$this->objContainerMobileAsContainer->Save();
+					}
+
+					// Reset the "Dirty" flag
+					$this->blnDirtyContainerMobileAsContainer = false;
+				}
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -1902,6 +1956,15 @@
 			// Get the Database Object for this Class
 			$objDatabase = Containers::GetDatabase();
 
+
+		
+			// Update the adjoined ContainerMobileAsContainer object (if applicable) and perform a delete
+
+			// Optional -- if you **KNOW** that you do not want to EVER run any level of business logic on the disassocation,
+			// you *could* override Delete() so that this step can be a single hard coded query to optimize performance.
+			if ($objAssociated = ContainerMobile::LoadByContainerId($this->intId)) {
+				$objAssociated->Delete();
+			}
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
@@ -2288,6 +2351,24 @@
 						if ((!$this->objClienteCorp) && (!is_null($this->intClienteCorpId)))
 							$this->objClienteCorp = MasterCliente::Load($this->intClienteCorpId);
 						return $this->objClienteCorp;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ContainerMobileAsContainer':
+					/**
+					 * Gets the value for the ContainerMobile object that uniquely references this Containers
+					 * by objContainerMobileAsContainer (Unique)
+					 * @return ContainerMobile
+					 */
+					try {
+						if ($this->objContainerMobileAsContainer === false)
+							// We've attempted early binding -- and the reverse reference object does not exist
+							return null;
+						if (!$this->objContainerMobileAsContainer)
+							$this->objContainerMobileAsContainer = ContainerMobile::LoadByContainerId($this->intId);
+						return $this->objContainerMobileAsContainer;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2884,6 +2965,45 @@
 						// Update Local Member Variables
 						$this->objClienteCorp = $mixValue;
 						$this->intClienteCorpId = $mixValue->CodiClie;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'ContainerMobileAsContainer':
+					/**
+					 * Sets the value for the ContainerMobile object referenced by objContainerMobileAsContainer (Unique)
+					 * @param ContainerMobile $mixValue
+					 * @return ContainerMobile
+					 */
+					if (is_null($mixValue)) {
+						$this->objContainerMobileAsContainer = null;
+
+						// Make sure we update the adjoined ContainerMobile object the next time we call Save()
+						$this->blnDirtyContainerMobileAsContainer = true;
+
+						return null;
+					} else {
+						// Make sure $mixValue actually is a ContainerMobile object
+						try {
+							$mixValue = QType::Cast($mixValue, 'ContainerMobile');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Are we setting objContainerMobileAsContainer to a DIFFERENT $mixValue?
+						if ((!$this->ContainerMobileAsContainer) || ($this->ContainerMobileAsContainer->Id != $mixValue->Id)) {
+							// Yes -- therefore, set the "Dirty" flag to true
+							// to make sure we update the adjoined ContainerMobile object the next time we call Save()
+							$this->blnDirtyContainerMobileAsContainer = true;
+
+							// Update Local Member Variable
+							$this->objContainerMobileAsContainer = $mixValue;
+						} else {
+							// Nope -- therefore, make no changes
+						}
 
 						// Return $mixValue
 						return $mixValue;
@@ -3875,6 +3995,7 @@
      * @property-read QQNodeContainersGuiaPiezasAsContainerPieza $GuiaPiezasAsContainerPieza
      *
      * @property-read QQReverseReferenceNodeContainerCkpt $ContainerCkptAsContainer
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobileAsContainer
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -3960,6 +4081,8 @@
 					return new QQNodeContainersGuiaPiezasAsContainerPieza($this);
 				case 'ContainerCkptAsContainer':
 					return new QQReverseReferenceNodeContainerCkpt($this, 'containerckptascontainer', 'reverse_reference', 'container_id', 'ContainerCkptAsContainer');
+				case 'ContainerMobileAsContainer':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobileascontainer', 'reverse_reference', 'container_id', 'ContainerMobileAsContainer');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -4015,6 +4138,7 @@
      * @property-read QQNodeContainersGuiaPiezasAsContainerPieza $GuiaPiezasAsContainerPieza
      *
      * @property-read QQReverseReferenceNodeContainerCkpt $ContainerCkptAsContainer
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobileAsContainer
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -4100,6 +4224,8 @@
 					return new QQNodeContainersGuiaPiezasAsContainerPieza($this);
 				case 'ContainerCkptAsContainer':
 					return new QQReverseReferenceNodeContainerCkpt($this, 'containerckptascontainer', 'reverse_reference', 'container_id', 'ContainerCkptAsContainer');
+				case 'ContainerMobileAsContainer':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobileascontainer', 'reverse_reference', 'container_id', 'ContainerMobileAsContainer');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

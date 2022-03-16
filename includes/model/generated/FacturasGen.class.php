@@ -41,6 +41,9 @@
 	 * @property string $HoraImpresion the value for strHoraImpresion 
 	 * @property boolean $TieneRetencion the value for blnTieneRetencion 
 	 * @property integer $NotaCreditoId the value for intNotaCreditoId 
+	 * @property integer $AnuladaPor the value for intAnuladaPor 
+	 * @property string $MotivoAnulacion the value for strMotivoAnulacion 
+	 * @property QDateTime $FechaHoraAnulacion the value for dttFechaHoraAnulacion 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
@@ -52,6 +55,7 @@
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
 	 * @property Counter $Receptoria the value for the Counter object referenced by intReceptoriaId 
 	 * @property Caja $Caja the value for the Caja object referenced by intCajaId 
+	 * @property Usuario $AnuladaPorObject the value for the Usuario object referenced by intAnuladaPor 
 	 * @property-read PagosCorp $_PagosCorpAsFacturaPagoCorp the value for the private _objPagosCorpAsFacturaPagoCorp (Read-Only) if set due to an expansion on the factura_pago_corp_assn association table
 	 * @property-read PagosCorp[] $_PagosCorpAsFacturaPagoCorpArray the value for the private _objPagosCorpAsFacturaPagoCorpArray (Read-Only) if set due to an ExpandAsArray on the factura_pago_corp_assn association table
 	 * @property-read FactPagoTemp $_FactPagoTempAsFactura the value for the private _objFactPagoTempAsFactura (Read-Only) if set due to an expansion on the fact_pago_temp.factura_id reverse relationship
@@ -295,6 +299,31 @@
 		 */
 		protected $intNotaCreditoId;
 		const NotaCreditoIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column facturas.anulada_por
+		 * @var integer intAnuladaPor
+		 */
+		protected $intAnuladaPor;
+		const AnuladaPorDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column facturas.motivo_anulacion
+		 * @var string strMotivoAnulacion
+		 */
+		protected $strMotivoAnulacion;
+		const MotivoAnulacionMaxLength = 250;
+		const MotivoAnulacionDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column facturas.fecha_hora_anulacion
+		 * @var QDateTime dttFechaHoraAnulacion
+		 */
+		protected $dttFechaHoraAnulacion;
+		const FechaHoraAnulacionDefault = null;
 
 
 		/**
@@ -577,6 +606,16 @@
 		 */
 		protected $objCaja;
 
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column facturas.anulada_por.
+		 *
+		 * NOTE: Always use the AnuladaPorObject property getter to correctly retrieve this Usuario object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Usuario objAnuladaPorObject
+		 */
+		protected $objAnuladaPorObject;
+
 
 
 		/**
@@ -610,6 +649,9 @@
 			$this->strHoraImpresion = Facturas::HoraImpresionDefault;
 			$this->blnTieneRetencion = Facturas::TieneRetencionDefault;
 			$this->intNotaCreditoId = Facturas::NotaCreditoIdDefault;
+			$this->intAnuladaPor = Facturas::AnuladaPorDefault;
+			$this->strMotivoAnulacion = Facturas::MotivoAnulacionDefault;
+			$this->dttFechaHoraAnulacion = (Facturas::FechaHoraAnulacionDefault === null)?null:new QDateTime(Facturas::FechaHoraAnulacionDefault);
 			$this->dttCreatedAt = (Facturas::CreatedAtDefault === null)?null:new QDateTime(Facturas::CreatedAtDefault);
 			$this->dttUpdatedAt = (Facturas::UpdatedAtDefault === null)?null:new QDateTime(Facturas::UpdatedAtDefault);
 			$this->strDeletedAt = Facturas::DeletedAtDefault;
@@ -983,6 +1025,9 @@
 			    $objBuilder->AddSelectItem($strTableName, 'hora_impresion', $strAliasPrefix . 'hora_impresion');
 			    $objBuilder->AddSelectItem($strTableName, 'tiene_retencion', $strAliasPrefix . 'tiene_retencion');
 			    $objBuilder->AddSelectItem($strTableName, 'nota_credito_id', $strAliasPrefix . 'nota_credito_id');
+			    $objBuilder->AddSelectItem($strTableName, 'anulada_por', $strAliasPrefix . 'anulada_por');
+			    $objBuilder->AddSelectItem($strTableName, 'motivo_anulacion', $strAliasPrefix . 'motivo_anulacion');
+			    $objBuilder->AddSelectItem($strTableName, 'fecha_hora_anulacion', $strAliasPrefix . 'fecha_hora_anulacion');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'deleted_at', $strAliasPrefix . 'deleted_at');
@@ -1192,6 +1237,15 @@
 			$strAlias = $strAliasPrefix . 'nota_credito_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intNotaCreditoId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'anulada_por';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intAnuladaPor = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'motivo_anulacion';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strMotivoAnulacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'fecha_hora_anulacion';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->dttFechaHoraAnulacion = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
@@ -1274,6 +1328,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['caja_id']) ? null : $objExpansionAliasArray['caja_id']);
 				$objToReturn->objCaja = Caja::InstantiateDbRow($objDbRow, $strAliasPrefix . 'caja_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for AnuladaPorObject Early Binding
+			$strAlias = $strAliasPrefix . 'anulada_por__codi_usua';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['anulada_por']) ? null : $objExpansionAliasArray['anulada_por']);
+				$objToReturn->objAnuladaPorObject = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'anulada_por__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -1682,6 +1743,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of Facturas objects,
+		 * by AnuladaPor Index(es)
+		 * @param integer $intAnuladaPor
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Facturas[]
+		*/
+		public static function LoadArrayByAnuladaPor($intAnuladaPor, $objOptionalClauses = null) {
+			// Call Facturas::QueryArray to perform the LoadArrayByAnuladaPor query
+			try {
+				return Facturas::QueryArray(
+					QQ::Equal(QQN::Facturas()->AnuladaPor, $intAnuladaPor),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Facturases
+		 * by AnuladaPor Index(es)
+		 * @param integer $intAnuladaPor
+		 * @return int
+		*/
+		public static function CountByAnuladaPor($intAnuladaPor) {
+			// Call Facturas::QueryCount to perform the CountByAnuladaPor query
+			return Facturas::QueryCount(
+				QQ::Equal(QQN::Facturas()->AnuladaPor, $intAnuladaPor)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -1769,6 +1862,9 @@
 							`hora_impresion`,
 							`tiene_retencion`,
 							`nota_credito_id`,
+							`anulada_por`,
+							`motivo_anulacion`,
+							`fecha_hora_anulacion`,
 							`created_at`,
 							`updated_at`,
 							`created_by`,
@@ -1800,6 +1896,9 @@
 							' . $objDatabase->SqlVariable($this->strHoraImpresion) . ',
 							' . $objDatabase->SqlVariable($this->blnTieneRetencion) . ',
 							' . $objDatabase->SqlVariable($this->intNotaCreditoId) . ',
+							' . $objDatabase->SqlVariable($this->intAnuladaPor) . ',
+							' . $objDatabase->SqlVariable($this->strMotivoAnulacion) . ',
+							' . $objDatabase->SqlVariable($this->dttFechaHoraAnulacion) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -1860,6 +1959,9 @@
 							`hora_impresion` = ' . $objDatabase->SqlVariable($this->strHoraImpresion) . ',
 							`tiene_retencion` = ' . $objDatabase->SqlVariable($this->blnTieneRetencion) . ',
 							`nota_credito_id` = ' . $objDatabase->SqlVariable($this->intNotaCreditoId) . ',
+							`anulada_por` = ' . $objDatabase->SqlVariable($this->intAnuladaPor) . ',
+							`motivo_anulacion` = ' . $objDatabase->SqlVariable($this->strMotivoAnulacion) . ',
+							`fecha_hora_anulacion` = ' . $objDatabase->SqlVariable($this->dttFechaHoraAnulacion) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -2006,6 +2108,9 @@
 			$this->strHoraImpresion = $objReloaded->strHoraImpresion;
 			$this->blnTieneRetencion = $objReloaded->blnTieneRetencion;
 			$this->intNotaCreditoId = $objReloaded->intNotaCreditoId;
+			$this->AnuladaPor = $objReloaded->AnuladaPor;
+			$this->strMotivoAnulacion = $objReloaded->strMotivoAnulacion;
+			$this->dttFechaHoraAnulacion = $objReloaded->dttFechaHoraAnulacion;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
 			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->strDeletedAt = $objReloaded->strDeletedAt;
@@ -2214,6 +2319,27 @@
 					 */
 					return $this->intNotaCreditoId;
 
+				case 'AnuladaPor':
+					/**
+					 * Gets the value for intAnuladaPor 
+					 * @return integer
+					 */
+					return $this->intAnuladaPor;
+
+				case 'MotivoAnulacion':
+					/**
+					 * Gets the value for strMotivoAnulacion 
+					 * @return string
+					 */
+					return $this->strMotivoAnulacion;
+
+				case 'FechaHoraAnulacion':
+					/**
+					 * Gets the value for dttFechaHoraAnulacion 
+					 * @return QDateTime
+					 */
+					return $this->dttFechaHoraAnulacion;
+
 				case 'CreatedAt':
 					/**
 					 * Gets the value for dttCreatedAt 
@@ -2325,6 +2451,20 @@
 						if ((!$this->objCaja) && (!is_null($this->intCajaId)))
 							$this->objCaja = Caja::Load($this->intCajaId);
 						return $this->objCaja;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'AnuladaPorObject':
+					/**
+					 * Gets the value for the Usuario object referenced by intAnuladaPor 
+					 * @return Usuario
+					 */
+					try {
+						if ((!$this->objAnuladaPorObject) && (!is_null($this->intAnuladaPor)))
+							$this->objAnuladaPorObject = Usuario::Load($this->intAnuladaPor);
+						return $this->objAnuladaPorObject;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2853,6 +2993,46 @@
 						throw $objExc;
 					}
 
+				case 'AnuladaPor':
+					/**
+					 * Sets the value for intAnuladaPor 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objAnuladaPorObject = null;
+						return ($this->intAnuladaPor = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'MotivoAnulacion':
+					/**
+					 * Sets the value for strMotivoAnulacion 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strMotivoAnulacion = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'FechaHoraAnulacion':
+					/**
+					 * Sets the value for dttFechaHoraAnulacion 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttFechaHoraAnulacion = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'CreatedAt':
 					/**
 					 * Sets the value for dttCreatedAt 
@@ -3076,6 +3256,38 @@
 						// Update Local Member Variables
 						$this->objCaja = $mixValue;
 						$this->intCajaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'AnuladaPorObject':
+					/**
+					 * Sets the value for the Usuario object referenced by intAnuladaPor 
+					 * @param Usuario $mixValue
+					 * @return Usuario
+					 */
+					if (is_null($mixValue)) {
+						$this->intAnuladaPor = null;
+						$this->objAnuladaPorObject = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Usuario object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Usuario');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Usuario object
+						if (is_null($mixValue->CodiUsua))
+							throw new QCallerException('Unable to set an unsaved AnuladaPorObject for this Facturas');
+
+						// Update Local Member Variables
+						$this->objAnuladaPorObject = $mixValue;
+						$this->intAnuladaPor = $mixValue->CodiUsua;
 
 						// Return $mixValue
 						return $mixValue;
@@ -4676,6 +4888,9 @@
 			$strToReturn .= '<element name="HoraImpresion" type="xsd:string"/>';
 			$strToReturn .= '<element name="TieneRetencion" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="NotaCreditoId" type="xsd:int"/>';
+			$strToReturn .= '<element name="AnuladaPorObject" type="xsd1:Usuario"/>';
+			$strToReturn .= '<element name="MotivoAnulacion" type="xsd:string"/>';
+			$strToReturn .= '<element name="FechaHoraAnulacion" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
@@ -4695,6 +4910,7 @@
 				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Counter::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Caja::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Usuario::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -4766,6 +4982,13 @@
 				$objToReturn->blnTieneRetencion = $objSoapObject->TieneRetencion;
 			if (property_exists($objSoapObject, 'NotaCreditoId'))
 				$objToReturn->intNotaCreditoId = $objSoapObject->NotaCreditoId;
+			if ((property_exists($objSoapObject, 'AnuladaPorObject')) &&
+				($objSoapObject->AnuladaPorObject))
+				$objToReturn->AnuladaPorObject = Usuario::GetObjectFromSoapObject($objSoapObject->AnuladaPorObject);
+			if (property_exists($objSoapObject, 'MotivoAnulacion'))
+				$objToReturn->strMotivoAnulacion = $objSoapObject->MotivoAnulacion;
+			if (property_exists($objSoapObject, 'FechaHoraAnulacion'))
+				$objToReturn->dttFechaHoraAnulacion = new QDateTime($objSoapObject->FechaHoraAnulacion);
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
@@ -4818,6 +5041,12 @@
 				$objObject->objCaja = Caja::GetSoapObjectFromObject($objObject->objCaja, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intCajaId = null;
+			if ($objObject->objAnuladaPorObject)
+				$objObject->objAnuladaPorObject = Usuario::GetSoapObjectFromObject($objObject->objAnuladaPorObject, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intAnuladaPor = null;
+			if ($objObject->dttFechaHoraAnulacion)
+				$objObject->dttFechaHoraAnulacion = $objObject->dttFechaHoraAnulacion->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttCreatedAt)
 				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttUpdatedAt)
@@ -4862,6 +5091,9 @@
 			$iArray['HoraImpresion'] = $this->strHoraImpresion;
 			$iArray['TieneRetencion'] = $this->blnTieneRetencion;
 			$iArray['NotaCreditoId'] = $this->intNotaCreditoId;
+			$iArray['AnuladaPor'] = $this->intAnuladaPor;
+			$iArray['MotivoAnulacion'] = $this->strMotivoAnulacion;
+			$iArray['FechaHoraAnulacion'] = $this->dttFechaHoraAnulacion;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
 			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['DeletedAt'] = $this->strDeletedAt;
@@ -4972,6 +5204,10 @@
      * @property-read QQNode $HoraImpresion
      * @property-read QQNode $TieneRetencion
      * @property-read QQNode $NotaCreditoId
+     * @property-read QQNode $AnuladaPor
+     * @property-read QQNodeUsuario $AnuladaPorObject
+     * @property-read QQNode $MotivoAnulacion
+     * @property-read QQNode $FechaHoraAnulacion
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -5061,6 +5297,14 @@
 					return new QQNode('tiene_retencion', 'TieneRetencion', 'Bit', $this);
 				case 'NotaCreditoId':
 					return new QQNode('nota_credito_id', 'NotaCreditoId', 'Integer', $this);
+				case 'AnuladaPor':
+					return new QQNode('anulada_por', 'AnuladaPor', 'Integer', $this);
+				case 'AnuladaPorObject':
+					return new QQNodeUsuario('anulada_por', 'AnuladaPorObject', 'Integer', $this);
+				case 'MotivoAnulacion':
+					return new QQNode('motivo_anulacion', 'MotivoAnulacion', 'VarChar', $this);
+				case 'FechaHoraAnulacion':
+					return new QQNode('fecha_hora_anulacion', 'FechaHoraAnulacion', 'DateTime', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
@@ -5139,6 +5383,10 @@
      * @property-read QQNode $HoraImpresion
      * @property-read QQNode $TieneRetencion
      * @property-read QQNode $NotaCreditoId
+     * @property-read QQNode $AnuladaPor
+     * @property-read QQNodeUsuario $AnuladaPorObject
+     * @property-read QQNode $MotivoAnulacion
+     * @property-read QQNode $FechaHoraAnulacion
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -5228,6 +5476,14 @@
 					return new QQNode('tiene_retencion', 'TieneRetencion', 'boolean', $this);
 				case 'NotaCreditoId':
 					return new QQNode('nota_credito_id', 'NotaCreditoId', 'integer', $this);
+				case 'AnuladaPor':
+					return new QQNode('anulada_por', 'AnuladaPor', 'integer', $this);
+				case 'AnuladaPorObject':
+					return new QQNodeUsuario('anulada_por', 'AnuladaPorObject', 'integer', $this);
+				case 'MotivoAnulacion':
+					return new QQNode('motivo_anulacion', 'MotivoAnulacion', 'string', $this);
+				case 'FechaHoraAnulacion':
+					return new QQNode('fecha_hora_anulacion', 'FechaHoraAnulacion', 'QDateTime', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':

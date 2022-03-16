@@ -27,7 +27,201 @@
 			return sprintf('%s',  $this->Numero);
 		}
 
-		public function __resumenEntrega() {
+        public function _Pzas_x_Sync() {
+		    if ($this->__enMobile() == 'SI') {
+                return $this->ContainerMobileAsContainer->_Pzas_x_Sync();
+            } else {
+                return 0;
+            }
+        }
+
+
+        public function __enMobile() {
+            $objClauWher[] = QQ::Equal(QQN::ContainerMobile()->ContainerId,$this->Id);
+            return ContainerMobile::QueryCount(QQ::AndCondition($objClauWher)) ? 'SI' : 'NO';
+		}
+
+
+        public static function CierreForzado($strArchLogx, $intDiasLimi=90) {
+            $dttFechDhoy   = FechaDeHoy();
+            $dttFechLimi   = SumaRestaDiasAFecha($dttFechDhoy,$intDiasLimi,'-');
+            $objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
+            $objClauWher[] = QQ::LessThan(QQN::Containers()->Fecha,$dttFechLimi);
+            $arrContAbie   = Containers::QueryArray(QQ::AndCondition($objClauWher));
+            $intCantMani   = 0;
+            foreach ($arrContAbie as $objContAbie) {
+                fputs($strArchLogx,"Cerrando Container: ".$objContAbie->Numero."\n");
+                $objContAbie->Estatus = 'CERRAD@';
+                $objContAbie->UpdatedAt = new QDateTime(QDateTime::Now);
+                $objContAbie->Save();
+                $intCantMani++;
+            }
+            return $intCantMani;
+        }
+
+
+        public static function Purge($strArchLogx, $intDiasLimi=60) {
+            $dttFechDhoy   = FechaDeHoy();
+            $dttFechLimi   = SumaRestaDiasAFecha($dttFechDhoy,$intDiasLimi,'-');
+            $objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,'CERRAD@');
+            $objClauWher[] = QQ::LessThan(QQN::Containers()->Fecha,$dttFechLimi);
+            $arrContViej   = Containers::QueryArray(QQ::AndCondition($objClauWher));
+            $intCantMani   = 0;
+            foreach ($arrContViej as $objContViej) {
+                fputs($strArchLogx,"Borrando Container: ".$objContViej->Numero."\n");
+                $objContViej->Delete();
+                $intCantMani++;
+            }
+            return $intCantMani;
+        }
+
+
+        public function TransferirToMobile() {
+		    /* @var $objUsuario Usuario */
+		    $objUsuario  = unserialize($_SESSION['User']);
+		    $intCantPiez = 0;
+		    $intCantErro = 0;
+		    $strTextMens = '';
+            $objContMobi = ContainerMobile::LoadByContainerId($this->Id);
+            if (!$objContMobi) {
+                //-----------------------------
+                // Transfiriendo el Container
+                //-----------------------------
+                try {
+                    $objContMobi = new ContainerMobile();
+                    $objContMobi->ChoferId     = $this->ChoferId;
+                    $objContMobi->ContainerId  = $this->Id;
+                    $objContMobi->Abierto      = true;
+                    $objContMobi->CantPiezas   = $this->CountGuiaPiezasesAsContainerPieza();
+                    $objContMobi->Pendientes   = $objContMobi->CantPiezas;
+                    $objContMobi->Entregadas   = 0;
+                    $objContMobi->Devueltas    = 0;
+                    $objContMobi->SinGestionar = $objContMobi->CantPiezas;
+                    $objContMobi->CreatedAt    = new QDateTime(QDateTime::Now());
+                    $objContMobi->UpdatedAt    = new QDateTime(QDateTime::Now());
+                    $objContMobi->CreatedBy    = $objUsuario->CodiUsua;
+                    $objContMobi->UpdatedBy    = $objUsuario->CodiUsua;
+                    $objContMobi->Save();
+                    $objContMobi->logDeCambios('Creado');
+                    $this->logDeCambios('ContainerMobile Creado: '.$objContMobi->Id);
+                } catch (Exception $e) {
+                    $strTextMens = 'Error TransferirToMobile del Container: '.$this->Numero.' | '.$e->getMessage();
+                    t($strTextMens);
+                    $strTextErro = 'Error TransferirToMobile del Container: '.$e->getMessage();
+                    $objContMobi->logDeCambios($strTextErro);
+                    $this->logDeCambios($strTextErro);
+                    return [$intCantPiez, $intCantErro, $strTextErro];
+                }
+                //------------------------------------------
+                // Transfiriendo las piezas del Container
+                //------------------------------------------
+                /* @var $objPiezCont GuiaPiezas */
+                $arrPiezCont = $this->GetGuiaPiezasAsContainerPiezaArray();
+                foreach ($arrPiezCont as $objPiezCont) {
+                    /* @var $objUltiCkpt PiezaCheckpoints */
+                    $arrUltiCkpt = $objPiezCont->ultimoCheckpointTodo();
+                    $strCodiCkpt = '';
+                    $strUltiCome = '';
+                    $strUltiFech = '';
+                    $strUltiHora = '';
+                    if (isset($arrUltiCkpt)) {
+                        $objUltiCkpt = Checkpoints::Load($arrUltiCkpt['checkpoint_id']);
+                        $strCodiCkpt = $objUltiCkpt->Codigo;
+                        $strUltiCome = $arrUltiCkpt['comentario'];
+                        $strUltiFech = $arrUltiCkpt['fecha'];
+                        $strUltiHora = $arrUltiCkpt['hora'];
+                    }
+                    try {
+                        $objPiezMobi = new ContainerPiezaMobile();
+                        $objPiezMobi->ContainerMobileId = $objContMobi->Id;
+                        $objPiezMobi->IdPieza           = $objPiezCont->IdPieza;
+                        if (isset($arrUltiCkpt)) {
+                            $objPiezMobi->Checkpoint    = $strCodiCkpt;
+                            $objPiezMobi->Comentario    = $strUltiCome;
+                            $objPiezMobi->Fecha         = new QDateTime($strUltiFech);
+                            $objPiezMobi->Hora          = $strUltiHora;
+                        }
+                        if ($objPiezMobi->Checkpoint == 'OK') {
+                            $objInfoPodx = $objPiezCont->POD();
+                            $objPiezMobi->EntregadoA = $objInfoPodx->EntregadoA;
+                            $objPiezMobi->Cedula     = $objInfoPodx->Cedula;
+                            $objPiezMobi->FechaPod   = new QDateTime($objInfoPodx->Fecha);
+                            $objPiezMobi->HoraPod    = substr($objInfoPodx->Hora,0,5);
+                        }
+                        $objPiezMobi->CreatedAt         = new QDateTime(QDateTime::Now());
+                        $objPiezMobi->UpdatedAt         = new QDateTime(QDateTime::Now());
+                        $objPiezMobi->IsSync            = true;
+                        $objPiezMobi->Save();
+                        $intCantPiez++;
+                    } catch (Exception $e) {
+                        $strTextErro = 'Error TransferirToMobile de la Pieza del Container: '.$this->Numero.' | '.$e->getMessage();
+                        t($strTextErro);
+                        $intCantErro++;
+                        $strTextErro = 'Error TransferirToMobile de la Pieza: '.$objPiezCont->IdPieza.' | '.$e->getMessage();
+                        $objContMobi->logDeCambios($strTextErro);
+                        $this->logDeCambios($strTextErro);
+                    }
+                }
+                $strTextLogx = "Transferido a Mobile | Piezas: $intCantPiez | Errores: $intCantErro";
+                $this->logDeCambios($strTextLogx);
+            } else {
+                $strTextMens = 'El Manif ya Transferido a Mobile';
+                $intCantNosy = ContainerPiezaMobile::CountByContainerMobileIdIsSync($objContMobi->Id,false);
+                if ($intCantNosy > 0) {
+                    $strTextMens .= ' | Piezas por Sincronizar: '.$intCantNosy;
+                }
+                $this->logDeCambios($strTextMens);
+            }
+            return [$intCantPiez, $intCantErro, $strTextMens];
+		}
+
+
+        public function TransferirFromMobile() {
+            $objContMobi = ContainerMobile::LoadByContainerId($this->Id);
+            $intCantPiez = 0;
+            $intCantErro = 0;
+            $strTextMens = '';
+            if ($objContMobi) {
+                $objClauWher[] = QQ::Equal(QQN::ContainerPiezaMobile()->ContainerMobileId,$objContMobi->Id);
+                $objClauWher[] = QQ::Equal(QQN::ContainerPiezaMobile()->IsSync,false);
+                $arrPiezMobi   = ContainerPiezaMobile::QueryArray(QQ::AndCondition($objClauWher));
+                foreach ($arrPiezMobi as $objPiezMobi) {
+                    $objCkptMobi = Checkpoints::LoadByCodigo($objPiezMobi->Checkpoint);
+                    $objPiezOrig = GuiaPiezas::LoadByIdPieza($objPiezMobi->IdPieza);
+                    $arrDatoCkpt = array();
+                    $arrDatoCkpt['NumePiez'] = $objPiezMobi->IdPieza;
+                    $arrDatoCkpt['GuiaAnul'] = false;
+                    $arrDatoCkpt['CodiCkpt'] = $objCkptMobi->Id;
+                    $arrDatoCkpt['TextCkpt'] = $objPiezMobi->Comentario;
+                    $arrDatoCkpt['CodiRuta'] = $objPiezMobi->ContainerMobile->Container->Operacion->RutaId;
+                    $arrDatoCkpt['CodiSucu'] = $objPiezOrig->Guia->DestinoId;
+                    $arrDatoCkpt['ElimCier'] = true;
+                    $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                    if ($arrResuGrab['TodoOkey']) {
+                        $objPiezMobi->IsSync = true;
+                        $objPiezMobi->Save();
+                        $intCantPiez++;
+                    } else {
+                        $strTextErro = 'Error TransferirFromMobile: Pieza: '.$objPiezMobi->IdPieza.' | '.$arrResuGrab['MotiNook'];
+                        t($strTextErro);
+                        $intCantErro++;
+                        $objContMobi->logDeCambios($strTextErro);
+                        $this->logDeCambios($strTextErro);
+                    }
+                }
+                $strTextLogx = "Sync desde Mobile | Piezas: $intCantPiez | Errores: $intCantErro";
+                $objContMobi->logDeCambios($strTextLogx);
+                $this->logDeCambios($strTextLogx);
+                $this->ActualizarEstadisticasDeEntrega();
+            } else {
+                $strTextMens = 'No existe el equivalente en Mobile';
+                $this->logDeCambios($strTextMens);
+            }
+            return [$intCantPiez, $intCantErro, $strTextMens];
+		}
+
+
+        public function __resumenEntrega() {
 		    return sprintf('&nbsp;&nbsp;(Entregadas: %s | Devueltas: %s | Sin-Gestionar: %s)',$this->CantidadOk,$this->Devueltas,$this->SinGestionar);
         }
 
@@ -69,36 +263,6 @@
                 throw $objExc;
             }
         }
-
-        //public function GetGuiaPiezasDelContainerPorTipo($objClauses = null, $strTipoGuia) {
-		 //   t('Cargando Piezas del tipo: '.$strTipoGuia);
-        //    if (is_null($this->Id)) {
-        //        return array();
-        //    }
-        //    try {
-        //        $arrPiezTipo = [];
-        //        $arrPiezCont = GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
-        //        foreach ($arrPiezCont as $objPiezCont) {
-        //            $strUltiCkpt = $objPiezCont->ultimoCheckpoint();
-        //            if ($strTipoGuia == 'NO') {
-        //                if ($strUltiCkpt != 'OK') {
-        //                    t('Tipo NO y la Pieza no esta entregada');
-        //                    $arrPiezTipo[] = $objPiezCont;
-        //                }
-        //            } else {
-        //                if ($strUltiCkpt == 'OK') {
-        //                    $arrPiezTipo[] = $objPiezCont;
-        //                }
-        //            }
-        //        }
-        //        t('El vector de piezas tiene: '.count($arrPiezTipo).' elementos');
-        //        return $arrPiezTipo;
-        //        //return GuiaPiezas::LoadArrayByContainersAsContainerPieza($this->intId, $objClauses);
-        //    } catch (QCallerException $objExc) {
-        //        $objExc->IncrementOffset();
-        //        throw $objExc;
-        //    }
-        //}
 
 
         public function GrabarCheckpoint(Checkpoints $objCkptMani, ProcesoError $objProcEjec, $strComeAdic=null) {

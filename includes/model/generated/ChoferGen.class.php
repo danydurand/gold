@@ -31,6 +31,8 @@
 	 * @property string $Password Contraseña:: 
 	 * @property QDateTime $AccesoMobile Último acceso Yamato:: 
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
+	 * @property-read ContainerMobile $_ContainerMobile the value for the private _objContainerMobile (Read-Only) if set due to an expansion on the container_mobile.chofer_id reverse relationship
+	 * @property-read ContainerMobile[] $_ContainerMobileArray the value for the private _objContainerMobileArray (Read-Only) if set due to an ExpandAsArray on the container_mobile.chofer_id reverse relationship
 	 * @property-read Containers $_Containers the value for the private _objContainers (Read-Only) if set due to an expansion on the containers.chofer_id reverse relationship
 	 * @property-read Containers[] $_ContainersArray the value for the private _objContainersArray (Read-Only) if set due to an ExpandAsArray on the containers.chofer_id reverse relationship
 	 * @property-read SdeOperacion $_SdeOperacionAsCodiChof the value for the private _objSdeOperacionAsCodiChof (Read-Only) if set due to an expansion on the sde_operacion.codi_chof reverse relationship
@@ -171,6 +173,22 @@
 		protected $dttAccesoMobile;
 		const AccesoMobileDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single ContainerMobile object
+		 * (of type ContainerMobile), if this Chofer object was restored with
+		 * an expansion on the container_mobile association table.
+		 * @var ContainerMobile _objContainerMobile;
+		 */
+		private $_objContainerMobile;
+
+		/**
+		 * Private member variable that stores a reference to an array of ContainerMobile objects
+		 * (of type ContainerMobile[]), if this Chofer object was restored with
+		 * an ExpandAsArray on the container_mobile association table.
+		 * @var ContainerMobile[] _objContainerMobileArray;
+		 */
+		private $_objContainerMobileArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single Containers object
@@ -823,6 +841,21 @@
 			}
 
 				
+
+			// Check for ContainerMobile Virtual Binding
+			$strAlias = $strAliasPrefix . 'containermobile__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['containermobile']) ? null : $objExpansionAliasArray['containermobile']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objContainerMobileArray)
+				$objToReturn->_objContainerMobileArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objContainerMobileArray[] = ContainerMobile::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containermobile__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objContainerMobile)) {
+					$objToReturn->_objContainerMobile = ContainerMobile::InstantiateDbRow($objDbRow, $strAliasPrefix . 'containermobile__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
 
 			// Check for Containers Virtual Binding
 			$strAlias = $strAliasPrefix . 'containers__id';
@@ -1479,6 +1512,22 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
+				case '_ContainerMobile':
+					/**
+					 * Gets the value for the private _objContainerMobile (Read-Only)
+					 * if set due to an expansion on the container_mobile.chofer_id reverse relationship
+					 * @return ContainerMobile
+					 */
+					return $this->_objContainerMobile;
+
+				case '_ContainerMobileArray':
+					/**
+					 * Gets the value for the private _objContainerMobileArray (Read-Only)
+					 * if set due to an ExpandAsArray on the container_mobile.chofer_id reverse relationship
+					 * @return ContainerMobile[]
+					 */
+					return $this->_objContainerMobileArray;
+
 				case '_Containers':
 					/**
 					 * Gets the value for the private _objContainers (Read-Only)
@@ -1787,6 +1836,9 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
+			if ($this->CountContainerMobiles()) {
+				$arrTablRela[] = 'container_mobile';
+			}
 			if ($this->CountContainerses()) {
 				$arrTablRela[] = 'containers';
 			}
@@ -1801,6 +1853,155 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+
+
+		// Related Objects' Methods for ContainerMobile
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ContainerMobiles as an array of ContainerMobile objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ContainerMobile[]
+		*/
+		public function GetContainerMobileArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiChof)))
+				return array();
+
+			try {
+				return ContainerMobile::LoadArrayByChoferId($this->intCodiChof, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ContainerMobiles
+		 * @return int
+		*/
+		public function CountContainerMobiles() {
+			if ((is_null($this->intCodiChof)))
+				return 0;
+
+			return ContainerMobile::CountByChoferId($this->intCodiChof);
+		}
+
+		/**
+		 * Associates a ContainerMobile
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function AssociateContainerMobile(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiChof)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainerMobile on this unsaved Chofer.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateContainerMobile on this Chofer with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Chofer::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`chofer_id` = ' . $objDatabase->SqlVariable($this->intCodiChof) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ContainerMobile
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function UnassociateContainerMobile(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiChof)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobile on this unsaved Chofer.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobile on this Chofer with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Chofer::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`chofer_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . ' AND
+					`chofer_id` = ' . $objDatabase->SqlVariable($this->intCodiChof) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ContainerMobiles
+		 * @return void
+		*/
+		public function UnassociateAllContainerMobiles() {
+			if ((is_null($this->intCodiChof)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobile on this unsaved Chofer.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Chofer::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`container_mobile`
+				SET
+					`chofer_id` = null
+				WHERE
+					`chofer_id` = ' . $objDatabase->SqlVariable($this->intCodiChof) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ContainerMobile
+		 * @param ContainerMobile $objContainerMobile
+		 * @return void
+		*/
+		public function DeleteAssociatedContainerMobile(ContainerMobile $objContainerMobile) {
+			if ((is_null($this->intCodiChof)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobile on this unsaved Chofer.');
+			if ((is_null($objContainerMobile->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobile on this Chofer with an unsaved ContainerMobile.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Chofer::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`container_mobile`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objContainerMobile->Id) . ' AND
+					`chofer_id` = ' . $objDatabase->SqlVariable($this->intCodiChof) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ContainerMobiles
+		 * @return void
+		*/
+		public function DeleteAllContainerMobiles() {
+			if ((is_null($this->intCodiChof)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateContainerMobile on this unsaved Chofer.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Chofer::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`container_mobile`
+				WHERE
+					`chofer_id` = ' . $objDatabase->SqlVariable($this->intCodiChof) . '
+			');
+		}
 
 
 		// Related Objects' Methods for Containers
@@ -2316,6 +2517,7 @@
      * @property-read QQNode $AccesoMobile
      *
      *
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobile
      * @property-read QQReverseReferenceNodeContainers $Containers
      * @property-read QQReverseReferenceNodeSdeOperacion $SdeOperacionAsCodiChof
 
@@ -2359,6 +2561,8 @@
 					return new QQNode('password', 'Password', 'VarChar', $this);
 				case 'AccesoMobile':
 					return new QQNode('acceso_mobile', 'AccesoMobile', 'Date', $this);
+				case 'ContainerMobile':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobile', 'reverse_reference', 'chofer_id', 'ContainerMobile');
 				case 'Containers':
 					return new QQReverseReferenceNodeContainers($this, 'containers', 'reverse_reference', 'chofer_id', 'Containers');
 				case 'SdeOperacionAsCodiChof':
@@ -2396,6 +2600,7 @@
      * @property-read QQNode $AccesoMobile
      *
      *
+     * @property-read QQReverseReferenceNodeContainerMobile $ContainerMobile
      * @property-read QQReverseReferenceNodeContainers $Containers
      * @property-read QQReverseReferenceNodeSdeOperacion $SdeOperacionAsCodiChof
 
@@ -2439,6 +2644,8 @@
 					return new QQNode('password', 'Password', 'string', $this);
 				case 'AccesoMobile':
 					return new QQNode('acceso_mobile', 'AccesoMobile', 'QDateTime', $this);
+				case 'ContainerMobile':
+					return new QQReverseReferenceNodeContainerMobile($this, 'containermobile', 'reverse_reference', 'chofer_id', 'ContainerMobile');
 				case 'Containers':
 					return new QQReverseReferenceNodeContainers($this, 'containers', 'reverse_reference', 'chofer_id', 'Containers');
 				case 'SdeOperacionAsCodiChof':

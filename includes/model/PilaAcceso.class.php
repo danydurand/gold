@@ -65,7 +65,13 @@
                 $strParaProg = '';
             }
             $objUltiAcce = PilaAcceso::Pop();
-            if (!$objUltiAcce || $objUltiAcce->Programa != $strNombProg) {
+            $blnGrabRegi = (!$objUltiAcce || ($objUltiAcce->Programa != $strNombProg));
+            //t('Grabar ? '.$blnGrabRegi);
+            if (!$blnGrabRegi) {
+                $blnGrabRegi = (($objUltiAcce->Programa == $strNombProg) && ($objUltiAcce->Parametros != $strParaProg));
+                //t('Grabar ? '.$blnGrabRegi);
+            }
+            if ($blnGrabRegi) {
                 $strLogiUsua = PilaAcceso::LoginUsuario();
                 $objPilaAcce = new PilaAcceso();
                 $objPilaAcce->Login      = $strLogiUsua;

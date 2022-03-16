@@ -19,6 +19,8 @@ class MatchScanneo extends FormularioBaseKaizen {
     protected $intCantPiez;
     protected $arrManiPend;
     protected $intIdxxMani = null;
+    protected $btnBuscPiez;
+
 
     protected function Form_Create() {
         parent::Form_Create();
@@ -32,11 +34,22 @@ class MatchScanneo extends FormularioBaseKaizen {
         $this->dtgManiPend_Create();
         $this->dtgPiezPend_Create();
         $this->btnErroProc_Create();
+        $this->btnBuscPiez_Create();
     }
 
     //----------------------------
     // Aquí se Crean los Objetos
     //----------------------------
+
+    protected function btnBuscPiez_Create() {
+        $this->btnBuscPiez = new QButtonP($this);
+        $this->btnBuscPiez->Text = TextoIcono('search','Buscar Scanneo MIA','F','lg');
+        $this->btnBuscPiez->AddAction(new QClickEvent(), new QServerAction('btnBuscPiez_Click'));
+    }
+
+    protected function btnBuscPiez_Click() {
+        QApplication::Redirect(__SIST__.'/buscar_pieza_mia.php');
+    }
 
 
     protected function txtNumePiez_Create() {

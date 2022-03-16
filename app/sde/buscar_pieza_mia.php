@@ -56,6 +56,13 @@ class BuscarPiezaMia extends FormularioBaseKaizen {
 
         $this->dtgPiezEnco->UseAjax = true;
 
+        // Higlight the datagrid rows when mousing over them
+        $this->dtgPiezEnco->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgPiezEnco->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        $this->dtgPiezEnco->RowActionParameterHtml = '<?= $_ITEM->Scanneo->Id ?>';
+        $this->dtgPiezEnco->AddRowAction(new QClickEvent(), new QAjaxAction('dtgPiezEncoRow_Click'));
+
         $this->dtgPiezEnco->MetaAddColumn('Id');
         $this->dtgPiezEnco->MetaAddColumn('IdPieza');
         $this->dtgPiezEnco->MetaAddColumn(QQN::ScanneoPiezas()->Scanneo->Descripcion,'Name=Contenedor');
@@ -65,10 +72,13 @@ class BuscarPiezaMia extends FormularioBaseKaizen {
         $this->dtgPiezEnco->SetDataBinder('dtgPiezEnco_Bind');
     }
 
+    public function dtgPiezEncoRow_Click($strFormId, $strControlId, $strParameter) {
+        $intId = intval($strParameter);
+        QApplication::Redirect("scanneo_mia_edit.php/$intId");
+    }
 
     protected function dtgPiezEnco_Bind() {
         if (count($this->objClauWher) > 0) {
-            t('Hay criterios de busqueda');
             $this->dtgPiezEnco->TotalItemCount = ScanneoPiezas::QueryCount(QQ::AndCondition($this->objClauWher));
 
             $this->arrPiezScan = ScanneoPiezas::QueryArray(
@@ -92,9 +102,7 @@ class BuscarPiezaMia extends FormularioBaseKaizen {
                 }
 
                 $intCantFoun = count($arrPiezScan);
-                t('Se encontraron: ' . $intCantFoun);
                 $intCantFind = count($arrNumePiez);
-                t('Se estaban buscando: ' . $intCantFind);
                 if ($intCantFind != $intCantFoun) {
                     t('Hay diferencia');
                     $this->danger('Se encontraron: ' . $intCantFoun . ' de ' . $intCantFind);
@@ -148,15 +156,12 @@ class BuscarPiezaMia extends FormularioBaseKaizen {
 
         $arrPiezScan = array();
         if (count($this->arrPiezScan)) {
-            t('arrPiezScan...');
             foreach ($this->arrPiezScan as $objPiezScan) {
                 $arrPiezScan[] = $objPiezScan->IdPieza;
             }
 
             $intCantFoun = count($arrPiezScan);
-            t('Se encontraron: ' . $intCantFoun);
             $intCantFind = count($arrNumePiez);
-            t('Se estaban buscando: ' . $intCantFind);
             if ($intCantFind != $intCantFoun) {
                 t('Hay diferencia');
                 $this->danger('Se encontraron: ' . $intCantFoun . ' de ' . $intCantFind);

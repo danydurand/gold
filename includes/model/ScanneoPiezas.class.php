@@ -27,12 +27,29 @@
 			return sprintf('ScanneoPiezas Object %s',  $this->intId);
 		}
 
+		public function marcarSobrante($intIdxxUsua) {
+		    $this->IsSobrante = true;
+		    $this->IsRecibida = false;
+		    $this->UpdatedAt   = new QDateTime(QDateTime::Now());
+		    $this->UpdatedBy   = $intIdxxUsua;
+		    $this->Save();
+        }
+
+		public function marcarRecibida($intIdxxUsua) {
+		    $this->IsRecibida = true;
+		    $this->IsSobrante = false;
+		    $this->UpdatedAt   = new QDateTime(QDateTime::Now());
+		    $this->UpdatedBy   = $intIdxxUsua;
+		    $this->Save();
+        }
+
 		public function marcarProcesada($intIdxxUsua) {
 		    $this->IsProcesada = true;
 		    $this->UpdatedAt   = new QDateTime(QDateTime::Now());
 		    $this->UpdatedBy   = $intIdxxUsua;
 		    $this->Save();
         }
+
         /**
         * Esta runtina deja registro de la operacion indicada en
         * el log de transacciones
@@ -62,7 +79,8 @@
             return ScanneoPiezas::QueryCount(
                 QQ::AndCondition(
                     QQ::Equal(QQN::ScanneoPiezas()->ScanneoId, $intIdxxScan),
-                    QQ::IsNull(QQN::ScanneoPiezas()->GuiaPiezaId)
+                    //QQ::IsNull(QQN::ScanneoPiezas()->GuiaPiezaId)
+                    QQ::Equal(QQN::ScanneoPiezas()->IsSobrante,true)
                 ),
                 $objOptionalClauses
             );
@@ -73,7 +91,9 @@
             return ScanneoPiezas::QueryArray(
                 QQ::AndCondition(
                     QQ::Equal(QQN::ScanneoPiezas()->ScanneoId, $intIdxxScan),
-                    QQ::IsNotNull(QQN::ScanneoPiezas()->GuiaPiezaId)
+                    //QQ::IsNotNull(QQN::ScanneoPiezas()->GuiaPiezaId)
+                    QQ::Equal(QQN::ScanneoPiezas()->IsRecibida,true),
+                    QQ::Equal(QQN::ScanneoPiezas()->IsProcesada,false)
                 ),
                 $objOptionalClauses
             );
@@ -84,8 +104,8 @@
             return ScanneoPiezas::QueryCount(
                 QQ::AndCondition(
                     QQ::Equal(QQN::ScanneoPiezas()->ScanneoId, $intIdxxScan),
-                    QQ::Equal(QQN::ScanneoPiezas()->IsProcesada, 0),
-                    QQ::IsNotNull(QQN::ScanneoPiezas()->GuiaPiezaId)
+                    QQ::Equal(QQN::ScanneoPiezas()->IsProcesada, 0)
+                    //QQ::IsNotNull(QQN::ScanneoPiezas()->GuiaPiezaId)
                 ),
                 $objOptionalClauses
             );

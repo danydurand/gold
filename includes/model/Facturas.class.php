@@ -161,13 +161,10 @@
                 $this->Save();
             } catch (Exception $e) {
                 t('Excepcion actualizando la factura: '.$e->getMessage());
-            } catch (Error $e) {
-                t('Error actualizando la factura: '.$e->getMessage());
             }
 		}
 
 		public static function crearFactura($arrGuiaProc,$intIdxxUsua) {
-
             t('=====================');
             t('En Facturas.class.php');
             $blnTodoOkey = true;
@@ -265,6 +262,13 @@
             return nf($this->Total - $this->MontoCobrado);
 		}
 
+		/*
+        public function proxReferenciaAlt() {
+            $strYearDhoy = date('Y');
+            return str_pad($this->Id,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
+        }
+		*/
+
         public static function proxReferencia() {
 		    $intRefeFact   = Facturas::proxConsecutivo();
 		    $strNumeRefe   = Facturas::crearReferencia($intRefeFact);
@@ -288,8 +292,7 @@
             return $strNumeRefe;
         }
 
-        public static function proxConsecutivo()
-        {
+        public static function proxConsecutivo() {
             //------------------------------------------------------------------------------------
             // Para la 1era vez que se emita una factura, la referencia será tomada de la tabla
             // "parametros" bajo la combinacion RefeFact-ProxRefe

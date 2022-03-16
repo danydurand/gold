@@ -69,12 +69,6 @@ class ChoferListForm extends ChoferListFormBase {
 
         $this->dtgChofers->MetaAddColumn('Nombre');
 
-		//$colNombChof = $this->dtgChofers->MetaAddColumn('NombChof');
-		//$colNombChof->Name = 'Nombres';
-        //
-		//$colApelChof = $this->dtgChofers->MetaAddColumn('ApelChof');
-		//$colApelChof->Name = 'Apellidos';
-
 		$colNumeCedu = $this->dtgChofers->MetaAddColumn('NumeCedu');
 		$colNumeCedu->Name = 'Cédula';
 
@@ -82,6 +76,7 @@ class ChoferListForm extends ChoferListFormBase {
 
 		$this->dtgChofers->MetaAddTypeColumn('TipoMens', 'MasTipoMensType');
 		$this->dtgChofers->MetaAddColumn(QQN::Chofer()->Sucursal->Iata,'Name=Suc');
+		$this->dtgChofers->MetaAddColumn(QQN::Chofer()->AccesoMobile,'Name=Acce Ruta-Mob');
 		$this->dtgChofers->MetaAddTypeColumn('CodiStat', 'StatusType');
 
 		$colCodiDisp = $this->dtgChofers->MetaAddTypeColumn('CodiDisp', 'DisponibleType');

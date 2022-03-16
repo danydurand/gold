@@ -57,9 +57,9 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 		$this->txtObservacion->TextMode = QTextMode::MultiLine;
 		$this->txtObservacion->Rows = 9;
 		$this->txtObservacion->Width = 450;
-		$this->lblCreatedAt = $this->mctPagosCorp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctPagosCorp->lblUpdatedAt_Create();
-		$this->lblDeletedAt = $this->mctPagosCorp->lblDeletedAt_Create();
+		$this->calCreatedAt = $this->mctPagosCorp->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctPagosCorp->calUpdatedAt_Create();
+		$this->calDeletedAt = $this->mctPagosCorp->calDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctPagosCorp->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctPagosCorp->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctPagosCorp->txtDeletedBy_Create();

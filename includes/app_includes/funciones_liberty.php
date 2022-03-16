@@ -2099,8 +2099,9 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
     $intCodiRuta = isset($arrDatoCkpt['CodiRuta']) ? $arrDatoCkpt['CodiRuta'] : null;
     $intParaSucu = isset($arrDatoCkpt['CodiSucu']) ? $arrDatoCkpt['CodiSucu'] : '';
     $intNotiCkpt = isset($arrDatoCkpt['NotiCkpt']) ? $arrDatoCkpt['NotiCkpt'] : null;
+    $blnElimCier = isset($arrDatoCkpt['ElimCier']) ? $arrDatoCkpt['ElimCier'] : false;
 
-    //t('Voy a grabar un checkpoint en la pieza: '.$strNumePiez);
+    t('Voy a grabar un checkpoint en la pieza: '.$strNumePiez);
 
     $arrResuGrab = array();
     $arrResuGrab['TodoOkey'] = true;
@@ -2129,10 +2130,18 @@ function GrabarCheckpointOptimizado($arrDatoCkpt) {
             return $arrResuGrab;
         }
         if ($objPiezProc->tieneCheckpointDeCierre()) {
-            //t('La pieza tiene checkpoint de cierre');
-            $arrResuGrab['MotiNook'] = "La Pieza ya cerro su ciclo. No Adtmite Incidencias";
-            $arrResuGrab['TodoOkey'] = false;
-            return $arrResuGrab;
+            if ($blnElimCier) {
+                $arrCkptCier = $objPiezProc->checkpointsDeCierre();
+                foreach ($arrCkptCier as $objCkptCier) {
+                    $objCkptCier->Delete();
+                    t('Checkpoint de cierre eliminado');
+                }
+            } else {
+                //t('La pieza tiene checkpoint de cierre');
+                $arrResuGrab['MotiNook'] = "La Pieza ya cerro su ciclo. No Adtmite Incidencias";
+                $arrResuGrab['TodoOkey'] = false;
+                return $arrResuGrab;
+            }
         }
         $dttFechDhoy = new QDateTime(QDateTime::Now());
         $dttFechDhoy = $dttFechDhoy->__toString("YYYY-MM-DD");

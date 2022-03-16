@@ -68,12 +68,12 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 								  Edo de Cta (<?= $this->intCantFact ?>)
                             </a>
 						</li>
-						<li class="tabs-guias" role="presentation">
-							<a href="#seccion6" aria-controls="seccion6" data-toggle="tab" role="tab">
-								<i class="fa fa-chart fa-lg"></i>
-								  Gráficos
-                            </a>
-						</li>
+<!--						<li class="tabs-guias" role="presentation">-->
+<!--							<a href="#seccion6" aria-controls="seccion6" data-toggle="tab" role="tab">-->
+<!--								<i class="fa fa-chart fa-lg"></i>-->
+<!--								  Gráficos-->
+<!--                            </a>-->
+<!--						</li>-->
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" role="tabpanel" id="seccion1">

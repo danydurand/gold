@@ -85,6 +85,7 @@ abstract class ContainersEditFormBase extends QForm {
 	protected $txtDeletedBy;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
+	protected $lstContainerMobileAsContainer;
 	protected $dtgParentContainersesAsContainerContainer;
 	protected $dtgContainersesAsContainerContainer;
 	protected $dtgGuiaPiezasesAsContainerPieza;
@@ -182,6 +183,7 @@ abstract class ContainersEditFormBase extends QForm {
 		$this->txtCreatedBy = $this->mctContainers->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctContainers->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctContainers->txtDeletedBy_Create();
+			$this->lstContainerMobileAsContainer = $this->mctContainers->lstContainerMobileAsContainer_Create();
 			$this->dtgParentContainersesAsContainerContainer = $this->mctContainers->dtgParentContainersesAsContainerContainer_Create();
 			$this->dtgContainersesAsContainerContainer = $this->mctContainers->dtgContainersesAsContainerContainer_Create();
 			$this->dtgGuiaPiezasesAsContainerPieza = $this->mctContainers->dtgGuiaPiezasesAsContainerPieza_Create();

@@ -2,8 +2,12 @@
 require_once('qcubed.inc.php');
 require_once(__APP_INCLUDES__ . '/funciones_kaizen.php');
 
-t('============');
-t('Grabando POD');
+/* @var $objChofCone Chofer */
+$objChofCone = unserialize($_SESSION['User']);
+$objChofCone->grabarLogMobile('Entrando al Menu Ppal');
+
+tc('============');
+tc('Grabando POD');
 $strTituPagi = "Grabar POD";
 $strTipoGuia = 'PE';
 $intGrupGuia = 1;
@@ -11,7 +15,7 @@ $intManiIdxx = null;
 $blnTodoOkey = true;
 $blnOpciTrad = true;
 if (isset($_POST['nomb'])) {
-    t('Hay datos en el POST del formulario');
+    tc('Hay datos en el POST del formulario');
     $_SESSION['idxx'] = $_POST['idxx'];
     $_SESSION['nomb'] = strtoupper($_POST['nomb']);
     $_SESSION['cedu'] = strtoupper($_POST['cedu']);
@@ -35,7 +39,7 @@ if (isset($_POST['grup'])) {
 } else {
     $blnOpciTrad = false;
 }
-t('Opcion Tradicional: '.$blnOpciTrad);
+tc('Opcion Tradicional: '.$blnOpciTrad);
 $strMultPodx = '';
 $arrOtraProc = [];
 if (isset($_POST['mult_podx'])) {
@@ -46,7 +50,7 @@ if (isset($_POST['mult_podx'])) {
 }
 $strMensErro = '';
 if ($blnTodoOkey) {
-    t('Todo bien hasta ahora');
+    tc('Todo bien hasta ahora');
     if ($blnOpciTrad) {
         $strTipoGuia = $_SESSION['tipo'];
         $intGrupGuia = $_SESSION['grup'];
@@ -54,23 +58,24 @@ if ($blnTodoOkey) {
         t('Id del Manifiesto '.$intManiIdxx);
     }
     $intPiezIdxx = $_SESSION['idxx'];
-    t('Id de la Pieza: '.$intPiezIdxx);
+    tc('Id de la Pieza: '.$intPiezIdxx);
+
     $strNombClie = $_SESSION['nomb'];
     $strCeduRifx = $_SESSION['cedu'];
     $strFechEntr = $_SESSION['fent'];
     $strHoraEntr = $_SESSION['hora'];
 
     $objPiezSele = GuiaPiezas::Load($intPiezIdxx);
+    $objChofCone->grabarLogMobile('Grabando POD de la Pieza: '.$objPiezSele->IdPieza);
     $strResuRegi = '';
 
     $objDatabase = GuiaPiezas::GetDatabase();
     $objDatabase->TransactionBegin();
-    t('Grabando el POD desde Ruta-Mobile...');
 
     if ($blnTodoOkey) {
         $intCantCkpt = 0;
         $objCheckpoint = Checkpoints::LoadByCodigo('OK');
-        t('Grabando Checkpoint a la Pieza desde Ruta-Mobile');
+        tc('Grabando Checkpoint a la Pieza desde Ruta-Mobile');
         //-------------------------------------------------
         // Se registra un Checkpoint "OK" para la pieza
         //-------------------------------------------------
@@ -84,7 +89,7 @@ if ($blnTodoOkey) {
         $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
         if (!$arrResuGrab['TodoOkey']) {
             $strMensErro = $arrResuGrab['MotiNook'];
-            t('Error grabando Checkpoint OK desde Ruta-Mobile:'.$arrResuGrab['MotiNook']);
+            tc('Error grabando Checkpoint OK desde Ruta-Mobile:'.$arrResuGrab['MotiNook']);
             $blnTodoOkey = false;
             $objDatabase->TransactionRollBack();
         } else {
@@ -118,7 +123,9 @@ if ($blnTodoOkey) {
         }
         if ($blnOpciTrad) {
             $objManiProc = Containers::Load($intManiIdxx);
+            $objChofCone->grabarLogMobile('Actualizando Estadisticas del Manifiesto: '.$objManiProc->Numero);
             $objManiProc->ActualizarEstadisticasDeEntrega();
+            $objChofCone->grabarLogMobile('Termino la actualizacion Estadisticas del Manifiesto');
         }
     }
     $objDatabase->TransactionCommit();

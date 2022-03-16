@@ -231,3 +231,39 @@
 [20-Oct-2021 18:25:22 America/Caracas] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /var/www/html/gold/app/sde/scanneo_edit.php on line 241
 [30-Dec-2021 10:22:51 America/Caracas] PHP Parse error:  syntax error, unexpected '(', expecting ',' or ';' in /var/www/html/gold/app/sde/scanneo_mia_list.php on line 24
 [05-Jan-2022 21:18:29 America/Caracas] PHP Parse error:  syntax error, unexpected '(', expecting ',' or ';' in /var/www/html/gold/app/sde/buscar_pieza_mia.php on line 17
+[16-Feb-2022 12:16:00 America/Caracas] PHP Warning:  file(/var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php(457) : eval()'d code): failed to open stream: No such file or directory in /var/www/html/gold/assets/_core/php/error_dump.php on line 21
+[16-Feb-2022 12:16:00 America/Caracas] PHP Stack trace:
+[16-Feb-2022 12:16:00 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/container_mobile_list.php:0
+[16-Feb-2022 12:16:00 America/Caracas] PHP   2. QFormBase::Run() /var/www/html/gold/app/sde/container_mobile_list.php:100
+[16-Feb-2022 12:16:00 America/Caracas] PHP   3. QFormBase->Render() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:468
+[16-Feb-2022 12:16:00 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:1159
+[16-Feb-2022 12:16:00 America/Caracas] PHP   5. QControlBase->Render() /var/www/html/gold/app/sde/container_mobile_list.tpl.php:21
+[16-Feb-2022 12:16:00 America/Caracas] PHP   6. QDataGridBase->GetControlHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1249
+[16-Feb-2022 12:16:00 America/Caracas] PHP   7. QDataGridBase->GetDataGridRowHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:738
+[16-Feb-2022 12:16:00 America/Caracas] PHP   8. QDataGridBase->ParseColumnHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:649
+[16-Feb-2022 12:16:00 America/Caracas] PHP   9. QDataGridBase::ParseHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:430
+[16-Feb-2022 12:16:00 America/Caracas] PHP  10. eval() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:457
+[16-Feb-2022 12:16:00 America/Caracas] PHP  11. DataGridEvalHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:1
+[16-Feb-2022 12:16:00 America/Caracas] PHP  12. QcodoHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:38
+[16-Feb-2022 12:16:00 America/Caracas] PHP  13. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[16-Feb-2022 12:16:00 America/Caracas] PHP  14. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[16-Feb-2022 12:16:00 America/Caracas] PHP  15. file() /var/www/html/gold/assets/_core/php/error_dump.php:21
+[16-Feb-2022 12:22:05 America/Caracas] PHP Warning:  file(/var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php(457) : eval()'d code): failed to open stream: No such file or directory in /var/www/html/gold/assets/_core/php/error_dump.php on line 21
+[16-Feb-2022 12:22:05 America/Caracas] PHP Stack trace:
+[16-Feb-2022 12:22:05 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/container_mobile_list.php:0
+[16-Feb-2022 12:22:05 America/Caracas] PHP   2. QFormBase::Run() /var/www/html/gold/app/sde/container_mobile_list.php:100
+[16-Feb-2022 12:22:05 America/Caracas] PHP   3. QFormBase->Render() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:468
+[16-Feb-2022 12:22:05 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:1159
+[16-Feb-2022 12:22:05 America/Caracas] PHP   5. QControlBase->Render() /var/www/html/gold/app/sde/container_mobile_list.tpl.php:21
+[16-Feb-2022 12:22:05 America/Caracas] PHP   6. QDataGridBase->GetControlHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1249
+[16-Feb-2022 12:22:05 America/Caracas] PHP   7. QDataGridBase->GetDataGridRowHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:738
+[16-Feb-2022 12:22:05 America/Caracas] PHP   8. QDataGridBase->ParseColumnHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:649
+[16-Feb-2022 12:22:05 America/Caracas] PHP   9. QDataGridBase::ParseHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:430
+[16-Feb-2022 12:22:05 America/Caracas] PHP  10. eval() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:457
+[16-Feb-2022 12:22:05 America/Caracas] PHP  11. DataGridEvalHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:1
+[16-Feb-2022 12:22:05 America/Caracas] PHP  12. QcodoHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:38
+[16-Feb-2022 12:22:05 America/Caracas] PHP  13. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[16-Feb-2022 12:22:05 America/Caracas] PHP  14. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[16-Feb-2022 12:22:05 America/Caracas] PHP  15. file() /var/www/html/gold/assets/_core/php/error_dump.php:21
+[15-Mar-2022 17:53:22 America/Caracas] PHP Parse error:  syntax error, unexpected '$strTextMens' (T_VARIABLE) in /var/www/html/gold/app/sde/anular_factura.php on line 148
+[15-Mar-2022 17:53:35 America/Caracas] PHP Parse error:  syntax error, unexpected '$strTextMens' (T_VARIABLE) in /var/www/html/gold/app/sde/anular_factura.php on line 148

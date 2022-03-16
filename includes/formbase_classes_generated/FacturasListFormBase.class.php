@@ -104,6 +104,9 @@ abstract class FacturasListFormBase extends QForm {
         $this->dtgFacturases->MetaAddColumn('HoraImpresion');
         $this->dtgFacturases->MetaAddColumn('TieneRetencion');
         $this->dtgFacturases->MetaAddColumn('NotaCreditoId');
+        $this->dtgFacturases->MetaAddColumn(QQN::Facturas()->AnuladaPorObject);
+        $this->dtgFacturases->MetaAddColumn('MotivoAnulacion');
+        $this->dtgFacturases->MetaAddColumn('FechaHoraAnulacion');
         $this->dtgFacturases->MetaAddColumn('CreatedAt');
         $this->dtgFacturases->MetaAddColumn('UpdatedAt');
         $this->dtgFacturases->MetaAddColumn('DeletedAt');

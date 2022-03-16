@@ -55,6 +55,8 @@ abstract class ScanneoEditFormBase extends QForm {
 	// Controls for Scanneo's Data Fields
 	protected $lblId;
 	protected $txtDescripcion;
+	protected $chkEstaCerrado;
+	protected $chkEstaRecibido;
 	protected $calCreatedAt;
 	protected $lstCreatedByObject;
 	protected $calUpdatedAt;
@@ -127,6 +129,8 @@ abstract class ScanneoEditFormBase extends QForm {
 		// Call MetaControl's methods to create qcontrols based on Scanneo's data fields
 		$this->lblId = $this->mctScanneo->lblId_Create();
 		$this->txtDescripcion = $this->mctScanneo->txtDescripcion_Create();
+		$this->chkEstaCerrado = $this->mctScanneo->chkEstaCerrado_Create();
+		$this->chkEstaRecibido = $this->mctScanneo->chkEstaRecibido_Create();
 		$this->calCreatedAt = $this->mctScanneo->calCreatedAt_Create();
 		$this->lstCreatedByObject = $this->mctScanneo->lstCreatedByObject_Create();
 		$this->calUpdatedAt = $this->mctScanneo->calUpdatedAt_Create();

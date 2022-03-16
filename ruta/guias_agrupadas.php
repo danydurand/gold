@@ -5,7 +5,14 @@ require_once('qcubed.inc.php');
 
 $intIdxxMani = $_GET['id'];
 $objManiSele = Containers::Load($intIdxxMani);
+
+/* @var $objChofCone Chofer */
+$objChofCone = unserialize($_SESSION['User']);
+$objChofCone->grabarLogMobile('Entrando al Grupo de Guias del Manif: '.$objManiSele->Numero);
+$objChofCone->grabarLogMobile('Calculando Resumen de Entrega...');
+
 $objResuMani = $objManiSele->ResumeDeEntrega();
+$objChofCone->grabarLogMobile('Termine el Resumen de Entrega...');
 $intCantTota = $objManiSele->Piezas;
 $intCantOkey = $objResuMani->CantOkey;
 $intCantPend = $objResuMani->CantPend;

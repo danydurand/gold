@@ -258,6 +258,20 @@
 		QApplicationBase::$ClassFile['containerckptmetacontrol'] = __META_CONTROLS__ . '/ContainerCkptMetaControl.class.php';
 		QApplicationBase::$ClassFile['containerckptdatagrid'] = __META_CONTROLS__ . '/ContainerCkptDataGrid.class.php';
 
+	// ClassPaths for the ContainerMobile class
+		QApplicationBase::$ClassFile['containermobile'] = __MODEL__ . '/ContainerMobile.class.php';
+		QApplicationBase::$ClassFile['qqnodecontainermobile'] = __MODEL__ . '/ContainerMobile.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecontainermobile'] = __MODEL__ . '/ContainerMobile.class.php';
+		QApplicationBase::$ClassFile['containermobilemetacontrol'] = __META_CONTROLS__ . '/ContainerMobileMetaControl.class.php';
+		QApplicationBase::$ClassFile['containermobiledatagrid'] = __META_CONTROLS__ . '/ContainerMobileDataGrid.class.php';
+
+	// ClassPaths for the ContainerPiezaMobile class
+		QApplicationBase::$ClassFile['containerpiezamobile'] = __MODEL__ . '/ContainerPiezaMobile.class.php';
+		QApplicationBase::$ClassFile['qqnodecontainerpiezamobile'] = __MODEL__ . '/ContainerPiezaMobile.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodecontainerpiezamobile'] = __MODEL__ . '/ContainerPiezaMobile.class.php';
+		QApplicationBase::$ClassFile['containerpiezamobilemetacontrol'] = __META_CONTROLS__ . '/ContainerPiezaMobileMetaControl.class.php';
+		QApplicationBase::$ClassFile['containerpiezamobiledatagrid'] = __META_CONTROLS__ . '/ContainerPiezaMobileDataGrid.class.php';
+
 	// ClassPaths for the Containers class
 		QApplicationBase::$ClassFile['containers'] = __MODEL__ . '/Containers.class.php';
 		QApplicationBase::$ClassFile['qqnodecontainers'] = __MODEL__ . '/Containers.class.php';
@@ -789,6 +803,13 @@
 		QApplicationBase::$ClassFile['qqreversereferencenodelogapi'] = __MODEL__ . '/LogApi.class.php';
 		QApplicationBase::$ClassFile['logapimetacontrol'] = __META_CONTROLS__ . '/LogApiMetaControl.class.php';
 		QApplicationBase::$ClassFile['logapidatagrid'] = __META_CONTROLS__ . '/LogApiDataGrid.class.php';
+
+	// ClassPaths for the LogMobile class
+		QApplicationBase::$ClassFile['logmobile'] = __MODEL__ . '/LogMobile.class.php';
+		QApplicationBase::$ClassFile['qqnodelogmobile'] = __MODEL__ . '/LogMobile.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodelogmobile'] = __MODEL__ . '/LogMobile.class.php';
+		QApplicationBase::$ClassFile['logmobilemetacontrol'] = __META_CONTROLS__ . '/LogMobileMetaControl.class.php';
+		QApplicationBase::$ClassFile['logmobiledatagrid'] = __META_CONTROLS__ . '/LogMobileDataGrid.class.php';
 
 	// ClassPaths for the LugarIncidencia class
 		QApplicationBase::$ClassFile['lugarincidencia'] = __MODEL__ . '/LugarIncidencia.class.php';

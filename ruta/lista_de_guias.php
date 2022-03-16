@@ -1,6 +1,7 @@
 <?php 
 require_once('qcubed.inc.php');
 
+
 /* @var $objPiezMani GuiaPiezas */
 
 $intIdxxMani = $_GET['id'];
@@ -14,11 +15,20 @@ $intGrupAntr = $intGrupGuia - 1;
 if ($intGrupAntr <= 0) {
     $intGrupAntr = 1;
 }
+
+/* @var $objChofCone Chofer */
+$objChofCone = unserialize($_SESSION['User']);
+$objChofCone->grabarLogMobile('Entrando a la Lista de Guias tipo: '.$strTipoGuia);
+
 $intRegiMost = Parametros::BuscarParametro('RUTAMOBI','GUIAPAGI','Val1',20);
 $intOffxSetx = ($intGrupGuia-1)*$intRegiMost;
 
 $objManiSele = Containers::Load($intIdxxMani);
+
+$objChofCone->grabarLogMobile('Calculando Resumen de Entrega: '.$objManiSele->Numero);
 $objResuMani = $objManiSele->ResumeDeEntrega();
+$objChofCone->grabarLogMobile('Termine Resumen de Entrega: '.$objManiSele->Numero);
+
 $intCantOkey = $objResuMani->CantOkey;
 $intCantPend = $objResuMani->CantPend;
 $intCantDevu = $objResuMani->CantDevu;
@@ -54,7 +64,9 @@ $objClauAdic = QQ::LimitInfo($intRegiMost,$intOffxSetx);
 if ($intCantPiez <= $intRegiMost) {
     $objClauAdic = null;
 }
+$objChofCone->grabarLogMobile('Buscando las Guias del tipo: '.$strTipoGuia);
 $arrPiezMani = $objManiSele->GetGuiaPiezasDelContainerPorTipo($strTipoGuia,$intRegiMost,$intOffxSetx);
+
 $blnMostProx = ($intCantPiez > ($intGrupGuia * $intRegiMost));
 $strLinkProx = "lista_de_guias.php?id=$intIdxxMani&tg=$strTipoGuia&gg=".$intProxGrup;
 $strLinkAnte = "lista_de_guias.php?id=$intIdxxMani&tg=$strTipoGuia&gg=".$intGrupAntr;
@@ -114,6 +126,8 @@ if ($arrPiezMani) {
     </center>
     ';
 }
+$objChofCone->grabarLogMobile('Las Guias han sido cargadas');
+
 ?>
 <?php include('layout/header.inc.php'); ?>
 

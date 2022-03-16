@@ -27,6 +27,17 @@
 			return sprintf('%s',  $this->Descripcion);
 		}
 
+        public function Cerrar() {
+            $this->EstaCerrado = true;
+            $this->Save();
+            $this->logDeCambios('Cerrado');
+        }
+
+        public function Abrir() {
+            $this->EstaCerrado = false;
+            $this->Save();
+            $this->logDeCambios('Abrierto');
+        }
 
         /**
         * Esta runtina deja registro de la operacion indicada en

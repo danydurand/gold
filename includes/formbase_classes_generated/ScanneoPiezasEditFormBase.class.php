@@ -58,6 +58,8 @@ abstract class ScanneoPiezasEditFormBase extends QForm {
 	protected $txtIdPieza;
 	protected $lstGuiaPieza;
 	protected $chkIsProcesada;
+	protected $chkIsRecibida;
+	protected $chkIsSobrante;
 	protected $calCreatedAt;
 	protected $calUpdatedAt;
 	protected $lstCreatedByObject;
@@ -133,6 +135,8 @@ abstract class ScanneoPiezasEditFormBase extends QForm {
 		$this->txtIdPieza = $this->mctScanneoPiezas->txtIdPieza_Create();
 		$this->lstGuiaPieza = $this->mctScanneoPiezas->lstGuiaPieza_Create();
 		$this->chkIsProcesada = $this->mctScanneoPiezas->chkIsProcesada_Create();
+		$this->chkIsRecibida = $this->mctScanneoPiezas->chkIsRecibida_Create();
+		$this->chkIsSobrante = $this->mctScanneoPiezas->chkIsSobrante_Create();
 		$this->calCreatedAt = $this->mctScanneoPiezas->calCreatedAt_Create();
 		$this->calUpdatedAt = $this->mctScanneoPiezas->calUpdatedAt_Create();
 		$this->lstCreatedByObject = $this->mctScanneoPiezas->lstCreatedByObject_Create();

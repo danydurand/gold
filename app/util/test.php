@@ -5,7 +5,22 @@ define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
+//-------------------------
+// Validando datos Mobile
+//-------------------------
+
+$objChofer = Chofer::LoadByLogin('jcastill');
+echo "El chofer es: ".$objChofer->Nombre;
+echo "<br>";
+
+echo "Fecha de hoy: ".FechaDeHoy();
+echo "<br>";
+
+echo "Tiene actividad mobile: ? ".$objChofer->activoMobileHoy();
+
+//--------------------------------
 // Convirtiendo texto a fechas
+//--------------------------------
 
 //$strFechEntr = '2021-08-30';
 //$strFechGuia = '2021-08-20';
@@ -55,6 +70,25 @@ $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 //    $objChofSist->Save();
 //    echo $objChofSist->Nombre.'<br>';
 //}
+
+//------------------------------------------------------------------
+// Actualizacion de Estadísticas de Entrega de Manfiestos ABIERT@S
+//------------------------------------------------------------------
+
+//$objClauWher   = [];
+//$objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,'ABIERT@');
+//$objClauWher[] = QQ::GreaterOrEqual(QQN::Containers()->Fecha,'2021-12-01');
+//$objClauWher[] = QQ::LessOrEqual(QQN::Containers()->Fecha,'2021-12-31');
+//$arrManiOpen   = Containers::QueryArray(QQ::AndCondition($objClauWher));
+//echo "Hay ".count($arrManiOpen).' manifiestos por actualizar<br><br>';
+//foreach ($arrManiOpen as $objManiOpen) {
+//    echo "Procesando: $objManiOpen->Numero<br>";
+//    $objManiOpen->ActualizarEstadisticasDeEntrega();
+//}
+//$objClauWher   = [];
+//$objClauWher[] = QQ::Equal(QQN::Containers()->Estatus,'CERRAD@');
+//$intCantClos   = Containers::QueryCount(QQ::AndCondition($objClauWher));
+//echo "Total Cerrados $intCantClos<br>";
 
 //-------------------------------------------------------
 // Actualizacion de Estadísticas de Entrega por Chofer
@@ -179,33 +213,35 @@ $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 //print_r($arrIdxxMani);
 
 
+//----------------------------------------------------------------------------------
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
+//----------------------------------------------------------------------------------
 
-$strNombProc = 'Match de Scanneo Manual';
-$objProcEjec = CrearProceso($strNombProc);
-$objCkptMani = Checkpoints::LoadByCodigo('RA');
-
-$objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
-$objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
-
-$arrManiSist = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
-foreach ($arrManiSist as $objManiSist) {
-    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
-    $objManiSist->Save();
-    $objManiSist->ContarActualizarRecibidas();
-    //---------------------------------------
-    // Se graba el checkpoint al Manifiesto
-    //---------------------------------------
-    if ($objManiSist->Recibidas > 0) {
-        $arrResuGrab = $objManiSist->GrabarCheckpoint($objCkptMani, $objProcEjec);
-        if (!$arrResuGrab['TodoOkey']) {
-            echo "Error: ".$arrResuGrab['TodoOkey']."<br>";
-        }
-    }
-
-    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
-    echo "<br>";
-}
+//$strNombProc = 'Match de Scanneo Manual';
+//$objProcEjec = CrearProceso($strNombProc);
+//$objCkptMani = Checkpoints::LoadByCodigo('RA');
+//
+//$objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
+//$objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
+//
+//$arrManiSist = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+//foreach ($arrManiSist as $objManiSist) {
+//    $objManiSist->Piezas = $objManiSist->cantidadDePiezas();
+//    $objManiSist->Save();
+//    $objManiSist->ContarActualizarRecibidas();
+//    //---------------------------------------
+//    // Se graba el checkpoint al Manifiesto
+//    //---------------------------------------
+//    if ($objManiSist->Recibidas > 0) {
+//        $arrResuGrab = $objManiSist->GrabarCheckpoint($objCkptMani, $objProcEjec);
+//        if (!$arrResuGrab['TodoOkey']) {
+//            echo "Error: ".$arrResuGrab['TodoOkey']."<br>";
+//        }
+//    }
+//
+//    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
+//    echo "<br>";
+//}
 
 //-------------------
 // Buscar Parametro
