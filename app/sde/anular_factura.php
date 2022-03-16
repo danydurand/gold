@@ -32,17 +32,11 @@ class AnularFactura extends FormularioBaseKaizen {
         $this->lblTituForm->Text = QApplication::Translate('Anular Factura');
 
         $this->txtMotiAnul_Create();
-        t('1');
         $this->txtNombClie_Create();
-        t('2');
         $this->txtRefeFact_Create();
-        t('3');
         $this->txtMontFact_Create();
-        t('4');
         $this->txtAnulPorx_Create();
-        t('5');
         $this->calFechAnul_Create();
-        t('6');
 
         $this->txtNombClie = disableControl($this->txtNombClie);
         $this->txtRefeFact = disableControl($this->txtRefeFact);
@@ -50,11 +44,9 @@ class AnularFactura extends FormularioBaseKaizen {
         $this->txtAnulPorx = disableControl($this->txtAnulPorx);
         $this->calFechAnul = disableControl($this->calFechAnul);
 
-        t('7');
         if ($this->objFactAnul->Estatus == 'ANULADA') {
             $this->mostrarCamposDeAnulacion();
         }
-        t('8');
 
     }
 
