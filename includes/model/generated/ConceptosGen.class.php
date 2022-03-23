@@ -26,8 +26,8 @@
 	 * @property boolean $EsFijo the value for blnEsFijo 
 	 * @property string $Operacion the value for strOperacion (Not Null)
 	 * @property string $AplicaComo the value for strAplicaComo (Not Null)
-	 * @property string $Tipo the value for strTipo (Not Null)
-	 * @property string $ActuaSobre the value for strActuaSobre (Not Null)
+	 * @property string $Tipo the value for strTipo 
+	 * @property string $ActuaSobre the value for strActuaSobre 
 	 * @property string $Valor the value for strValor (Not Null)
 	 * @property string $Dbquery the value for strDbquery 
 	 * @property integer $BaseImponible the value for intBaseImponible 
@@ -1638,14 +1638,14 @@
 
 				case 'Tipo':
 					/**
-					 * Gets the value for strTipo (Not Null)
+					 * Gets the value for strTipo 
 					 * @return string
 					 */
 					return $this->strTipo;
 
 				case 'ActuaSobre':
 					/**
-					 * Gets the value for strActuaSobre (Not Null)
+					 * Gets the value for strActuaSobre 
 					 * @return string
 					 */
 					return $this->strActuaSobre;
@@ -2015,7 +2015,7 @@
 
 				case 'Tipo':
 					/**
-					 * Sets the value for strTipo (Not Null)
+					 * Sets the value for strTipo 
 					 * @param string $mixValue
 					 * @return string
 					 */
@@ -2028,7 +2028,7 @@
 
 				case 'ActuaSobre':
 					/**
-					 * Sets the value for strActuaSobre (Not Null)
+					 * Sets the value for strActuaSobre 
 					 * @param string $mixValue
 					 * @return string
 					 */

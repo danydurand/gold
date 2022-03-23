@@ -58,8 +58,6 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
-		t('c1');
-
 		// Use the CreateFromPathInfo shortcut (this can also be done manually using the ConceptosMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
 		$this->mctConceptos = ConceptosMetaControl::CreateFromPathInfo($this);
@@ -72,6 +70,8 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->txtOrden->Width = 40;
 		$this->txtProductos = $this->mctConceptos->txtProductos_Create();
 		$this->txtProductos->Width = 140;
+		$this->txtProductos->AddAction(new QBlurEvent(), new QAjaxAction('txtProductos_Blur'));
+
 		$this->txtMostrarComo = $this->mctConceptos->txtMostrarComo_Create();
 		$this->txtMostrarComo->Width = 140;
 		$this->chkActivo = $this->mctConceptos->chkActivo_Create();
@@ -83,14 +83,12 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->chkEsFijo = $this->mctConceptos->chkEsFijo_Create();
 		$this->chkEsFijo->Name = 'Es Fijo ?';
 
-		t('c2');
         $this->txtOperacion = $this->mctConceptos->txtOperacion_Create();
         $this->lstOperacion = $this->lstOperacion_Create();
 
         $this->txtAplicaComo = $this->mctConceptos->txtAplicaComo_Create();
         $this->lstAplicaComo = $this->lstAplicaComo_Create();
 
-        t('c3');
 		$this->txtTipo = $this->mctConceptos->txtTipo_Create();
 		$this->lstTipo = $this->lstTipo_Create();
 
@@ -101,13 +99,12 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		$this->txtValor = $this->mctConceptos->txtValor_Create();
 		$this->txtValor->AddAction(new QChangeEvent(), new QAjaxAction('txtValor_Change'));
 
-		t('c4');
 		$this->txtDbquery = $this->mctConceptos->txtDbquery_Create();
 		$this->txtBaseImponible = $this->mctConceptos->txtBaseImponible_Create();
 		$this->txtBaseImponible->Width = 50;
 		$this->txtMetodo = $this->mctConceptos->txtMetodo_Create();
-        t('c5');
         $this->chkAplicarTasa = $this->mctConceptos->chkAplicarTasa_Create();
+        $this->txtCondicion = $this->mctConceptos->txtCondicion_Create();
 		$this->calCreatedAt = $this->mctConceptos->calCreatedAt_Create();
 		$this->calUpdatedAt = $this->mctConceptos->calUpdatedAt_Create();
 		$this->lblDeletedAt = $this->mctConceptos->lblDeletedAt_Create();
@@ -120,7 +117,6 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $this->lstTipo_Change();
         $this->txtValor_Change();
 
-        t('c6');
         $this->lblTituRang_Create();
         $this->txtRangInic_Create();
         $this->txtRangFina_Create();
@@ -128,13 +124,15 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $this->btnSaveRang_Create();
         $this->btnCancRang_Create();
 
-        t('c7');
         $this->lblRangInic_Create();
         $this->lblRangFina_Create();
         $this->lblValoRang_Create();
         $this->lblAcciRang_Create();
 
-        t('c8');
+        if ($this->mctConceptos->EditMode) {
+            $this->lstAplicaComo_Change();
+        }
+
     }
 
 	//----------------------------
@@ -411,6 +409,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $this->lstAplicaComo->AddItem('- Seleccione -',null);
         $this->lstAplicaComo->AddItem('CANT','CANT',$this->mctConceptos->Conceptos->AplicaComo=='CANT');
         $this->lstAplicaComo->AddItem('PORC','PORC',$this->mctConceptos->Conceptos->AplicaComo=='PORC');
+        $this->lstAplicaComo->AddAction(new QChangeEvent(), new QAjaxAction('lstAplicaComo_Change'));
         return $this->lstAplicaComo;
     }
 
@@ -418,7 +417,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $this->lstTipo = new QListBox($this);
         $this->lstTipo->Name = 'Tipo';
         $this->lstTipo->Width = 160;
-        $this->lstTipo->Required = true;
+        //$this->lstTipo->Required = true;
         $this->lstTipo->AddItem('- Seleccione -',null);
         $this->lstTipo->AddItem('CAMPO','CAMPO',$this->mctConceptos->Conceptos->Tipo=='CAMPO');
         $this->lstTipo->AddItem('CONCEPTO','CONCEPTO',$this->mctConceptos->Conceptos->Tipo=='CONCEPTO');
@@ -431,7 +430,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         $this->lstActuaSobre = new QListBox($this);
         $this->lstActuaSobre->Name = 'Actua Sobre';
         $this->lstActuaSobre->Width = 160;
-        $this->lstActuaSobre->Required = true;
+        //$this->lstActuaSobre->Required = true;
         $this->lstActuaSobre->AddItem('- Seleccione -',null);
         return $this->lstActuaSobre;
     }
@@ -468,6 +467,45 @@ class ConceptosEditForm extends ConceptosEditFormBase {
     //-----------------------------------
 	// Acciones relativas a los objetos 
 	//-----------------------------------
+
+    protected function txtProductos_Blur() {
+	    if (!$this->mctConceptos->EditMode) {
+            //------------------------------------------------------------------------------
+            // Se sugiere el orden o posicion del Concepto en funcion del primer producto
+            // de la lista especificada por el Usuario
+            //------------------------------------------------------------------------------
+            if (strlen($this->txtProductos->Text)) {
+                $arrListProd = explode(',', $this->txtProductos->Text);
+                if (count($arrListProd)) {
+                    $strPrimProd   = $arrListProd[0];
+                    $objClauWher[] = QQ::Like(QQN::Conceptos()->Productos,'%'.$strPrimProd.'%');
+                    $objClauOrde[] = QQ::OrderBy(QQN::Conceptos()->Orden, false);
+                    $arrListConc   = Conceptos::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+                    $intOrdeProp   = $arrListConc[0]->Orden;
+                    $this->txtOrden->Text = $intOrdeProp + 1;
+                }
+            }
+        }
+    }
+
+    protected function lstAplicaComo_Change() {
+        if (!is_null($this->lstAplicaComo->SelectedValue)) {
+            $strApliComo = $this->lstAplicaComo->SelectedName;
+            if ($strApliComo == 'CANT') {
+                $this->lstTipo->Required = false;
+                $this->lstTipo->HtmlAfter = ' (Opc)';
+                $this->lstActuaSobre->Required = false;
+                $this->lstActuaSobre->HtmlAfter = ' (Opc)';
+                $this->txtValor->Name = 'Cantidad';
+            } else {
+                $this->lstTipo->Required = true;
+                $this->lstTipo->HtmlAfter = '';
+                $this->lstActuaSobre->Required = true;
+                $this->lstActuaSobre->HtmlAfter = '';
+                $this->txtValor->Name = 'Porcentaje';
+            }
+        }
+    }
 
     protected function agregar_Campos() {
         $this->lstActuaSobre->RemoveAllItems();
@@ -507,9 +545,11 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 
         if ($strValoSele == 'CONCEPTO') {
             $this->agregar_Conceptos();
+            $this->lstActuaSobre->Name = 'Aplica s/el Concepto';
         }
         if ($strValoSele == 'CAMPO') {
             $this->agregar_Campos();
+            $this->lstActuaSobre->Name = 'Aplica s/el Campo';
         }
     }
 
@@ -560,6 +600,7 @@ class ConceptosEditForm extends ConceptosEditFormBase {
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctConceptos->Conceptos;
+
 		$this->txtOperacion->Text  = $this->lstOperacion->SelectedValue;
 		$this->txtAplicaComo->Text = $this->lstAplicaComo->SelectedValue;
 		$this->txtTipo->Text       = $this->lstTipo->SelectedValue;

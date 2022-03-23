@@ -50,8 +50,6 @@
 	 * @property SdeOperacion $Operacion the value for the SdeOperacion object referenced by intOperacionId 
 	 * @property Counter $SeFacturaEnObject the value for the Counter object referenced by intSeFacturaEn 
 	 * @property Estado $Estado the value for the Estado object referenced by intEstadoId 
-	 * @property-read AliadoComercial $_AliadoComercialAsSucursal the value for the private _objAliadoComercialAsSucursal (Read-Only) if set due to an expansion on the aliado_comercial.sucursal_id reverse relationship
-	 * @property-read AliadoComercial[] $_AliadoComercialAsSucursalArray the value for the private _objAliadoComercialAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the aliado_comercial.sucursal_id reverse relationship
 	 * @property-read Asistente $_AsistenteAsCodiEsta the value for the private _objAsistenteAsCodiEsta (Read-Only) if set due to an expansion on the asistente.codi_esta reverse relationship
 	 * @property-read Asistente[] $_AsistenteAsCodiEstaArray the value for the private _objAsistenteAsCodiEstaArray (Read-Only) if set due to an ExpandAsArray on the asistente.codi_esta reverse relationship
 	 * @property-read Ciudad $_CiudadAsSucursal the value for the private _objCiudadAsSucursal (Read-Only) if set due to an expansion on the ciudad.sucursal_id reverse relationship
@@ -357,22 +355,6 @@
 		protected $strPalabraRelacionada;
 		const PalabraRelacionadaDefault = null;
 
-
-		/**
-		 * Private member variable that stores a reference to a single AliadoComercialAsSucursal object
-		 * (of type AliadoComercial), if this Estacion object was restored with
-		 * an expansion on the aliado_comercial association table.
-		 * @var AliadoComercial _objAliadoComercialAsSucursal;
-		 */
-		private $_objAliadoComercialAsSucursal;
-
-		/**
-		 * Private member variable that stores a reference to an array of AliadoComercialAsSucursal objects
-		 * (of type AliadoComercial[]), if this Estacion object was restored with
-		 * an ExpandAsArray on the aliado_comercial association table.
-		 * @var AliadoComercial[] _objAliadoComercialAsSucursalArray;
-		 */
-		private $_objAliadoComercialAsSucursalArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single AsistenteAsCodiEsta object
@@ -1473,21 +1455,6 @@
 			}
 
 				
-
-			// Check for AliadoComercialAsSucursal Virtual Binding
-			$strAlias = $strAliasPrefix . 'aliadocomercialassucursal__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objExpansionNode = (empty($objExpansionAliasArray['aliadocomercialassucursal']) ? null : $objExpansionAliasArray['aliadocomercialassucursal']);
-			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
-			if ($blnExpanded && null === $objToReturn->_objAliadoComercialAsSucursalArray)
-				$objToReturn->_objAliadoComercialAsSucursalArray = array();
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if ($blnExpanded) {
-					$objToReturn->_objAliadoComercialAsSucursalArray[] = AliadoComercial::InstantiateDbRow($objDbRow, $strAliasPrefix . 'aliadocomercialassucursal__', $objExpansionNode, null, $strColumnAliasArray);
-				} elseif (is_null($objToReturn->_objAliadoComercialAsSucursal)) {
-					$objToReturn->_objAliadoComercialAsSucursal = AliadoComercial::InstantiateDbRow($objDbRow, $strAliasPrefix . 'aliadocomercialassucursal__', $objExpansionNode, null, $strColumnAliasArray);
-				}
-			}
 
 			// Check for AsistenteAsCodiEsta Virtual Binding
 			$strAlias = $strAliasPrefix . 'asistenteascodiesta__codi_asis';
@@ -2943,22 +2910,6 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
-				case '_AliadoComercialAsSucursal':
-					/**
-					 * Gets the value for the private _objAliadoComercialAsSucursal (Read-Only)
-					 * if set due to an expansion on the aliado_comercial.sucursal_id reverse relationship
-					 * @return AliadoComercial
-					 */
-					return $this->_objAliadoComercialAsSucursal;
-
-				case '_AliadoComercialAsSucursalArray':
-					/**
-					 * Gets the value for the private _objAliadoComercialAsSucursalArray (Read-Only)
-					 * if set due to an ExpandAsArray on the aliado_comercial.sucursal_id reverse relationship
-					 * @return AliadoComercial[]
-					 */
-					return $this->_objAliadoComercialAsSucursalArray;
-
 				case '_AsistenteAsCodiEsta':
 					/**
 					 * Gets the value for the private _objAsistenteAsCodiEsta (Read-Only)
@@ -3911,9 +3862,6 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
-			if ($this->CountAliadoComercialsAsSucursal()) {
-				$arrTablRela[] = 'aliado_comercial';
-			}
 			if ($this->CountAsistentesAsCodiEsta()) {
 				$arrTablRela[] = 'asistente';
 			}
@@ -3985,155 +3933,6 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
-
-
-		// Related Objects' Methods for AliadoComercialAsSucursal
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated AliadoComercialsAsSucursal as an array of AliadoComercial objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return AliadoComercial[]
-		*/
-		public function GetAliadoComercialAsSucursalArray($objOptionalClauses = null) {
-			if ((is_null($this->strCodiEsta)))
-				return array();
-
-			try {
-				return AliadoComercial::LoadArrayBySucursalId($this->strCodiEsta, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated AliadoComercialsAsSucursal
-		 * @return int
-		*/
-		public function CountAliadoComercialsAsSucursal() {
-			if ((is_null($this->strCodiEsta)))
-				return 0;
-
-			return AliadoComercial::CountBySucursalId($this->strCodiEsta);
-		}
-
-		/**
-		 * Associates a AliadoComercialAsSucursal
-		 * @param AliadoComercial $objAliadoComercial
-		 * @return void
-		*/
-		public function AssociateAliadoComercialAsSucursal(AliadoComercial $objAliadoComercial) {
-			if ((is_null($this->strCodiEsta)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateAliadoComercialAsSucursal on this unsaved Estacion.');
-			if ((is_null($objAliadoComercial->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateAliadoComercialAsSucursal on this Estacion with an unsaved AliadoComercial.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Estacion::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`aliado_comercial`
-				SET
-					`sucursal_id` = ' . $objDatabase->SqlVariable($this->strCodiEsta) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objAliadoComercial->Id) . '
-			');
-		}
-
-		/**
-		 * Unassociates a AliadoComercialAsSucursal
-		 * @param AliadoComercial $objAliadoComercial
-		 * @return void
-		*/
-		public function UnassociateAliadoComercialAsSucursal(AliadoComercial $objAliadoComercial) {
-			if ((is_null($this->strCodiEsta)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAliadoComercialAsSucursal on this unsaved Estacion.');
-			if ((is_null($objAliadoComercial->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAliadoComercialAsSucursal on this Estacion with an unsaved AliadoComercial.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Estacion::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`aliado_comercial`
-				SET
-					`sucursal_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objAliadoComercial->Id) . ' AND
-					`sucursal_id` = ' . $objDatabase->SqlVariable($this->strCodiEsta) . '
-			');
-		}
-
-		/**
-		 * Unassociates all AliadoComercialsAsSucursal
-		 * @return void
-		*/
-		public function UnassociateAllAliadoComercialsAsSucursal() {
-			if ((is_null($this->strCodiEsta)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAliadoComercialAsSucursal on this unsaved Estacion.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Estacion::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`aliado_comercial`
-				SET
-					`sucursal_id` = null
-				WHERE
-					`sucursal_id` = ' . $objDatabase->SqlVariable($this->strCodiEsta) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated AliadoComercialAsSucursal
-		 * @param AliadoComercial $objAliadoComercial
-		 * @return void
-		*/
-		public function DeleteAssociatedAliadoComercialAsSucursal(AliadoComercial $objAliadoComercial) {
-			if ((is_null($this->strCodiEsta)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAliadoComercialAsSucursal on this unsaved Estacion.');
-			if ((is_null($objAliadoComercial->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAliadoComercialAsSucursal on this Estacion with an unsaved AliadoComercial.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Estacion::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`aliado_comercial`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objAliadoComercial->Id) . ' AND
-					`sucursal_id` = ' . $objDatabase->SqlVariable($this->strCodiEsta) . '
-			');
-		}
-
-		/**
-		 * Deletes all associated AliadoComercialsAsSucursal
-		 * @return void
-		*/
-		public function DeleteAllAliadoComercialsAsSucursal() {
-			if ((is_null($this->strCodiEsta)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateAliadoComercialAsSucursal on this unsaved Estacion.');
-
-			// Get the Database Object for this Class
-			$objDatabase = Estacion::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`aliado_comercial`
-				WHERE
-					`sucursal_id` = ' . $objDatabase->SqlVariable($this->strCodiEsta) . '
-			');
-		}
 
 
 		// Related Objects' Methods for AsistenteAsCodiEsta
@@ -7605,7 +7404,6 @@
      * @property-read QQNode $PalabraRelacionada
      *
      *
-     * @property-read QQReverseReferenceNodeAliadoComercial $AliadoComercialAsSucursal
      * @property-read QQReverseReferenceNodeAsistente $AsistenteAsCodiEsta
      * @property-read QQReverseReferenceNodeCiudad $CiudadAsSucursal
      * @property-read QQReverseReferenceNodeClienteI $ClienteIAsSucursal
@@ -7706,8 +7504,6 @@
 					return new QQNode('frecuencia_de_cobertura', 'FrecuenciaDeCobertura', 'VarChar', $this);
 				case 'PalabraRelacionada':
 					return new QQNode('palabra_relacionada', 'PalabraRelacionada', 'Blob', $this);
-				case 'AliadoComercialAsSucursal':
-					return new QQReverseReferenceNodeAliadoComercial($this, 'aliadocomercialassucursal', 'reverse_reference', 'sucursal_id', 'AliadoComercialAsSucursal');
 				case 'AsistenteAsCodiEsta':
 					return new QQReverseReferenceNodeAsistente($this, 'asistenteascodiesta', 'reverse_reference', 'codi_esta', 'AsistenteAsCodiEsta');
 				case 'CiudadAsSucursal':
@@ -7802,7 +7598,6 @@
      * @property-read QQNode $PalabraRelacionada
      *
      *
-     * @property-read QQReverseReferenceNodeAliadoComercial $AliadoComercialAsSucursal
      * @property-read QQReverseReferenceNodeAsistente $AsistenteAsCodiEsta
      * @property-read QQReverseReferenceNodeCiudad $CiudadAsSucursal
      * @property-read QQReverseReferenceNodeClienteI $ClienteIAsSucursal
@@ -7903,8 +7698,6 @@
 					return new QQNode('frecuencia_de_cobertura', 'FrecuenciaDeCobertura', 'string', $this);
 				case 'PalabraRelacionada':
 					return new QQNode('palabra_relacionada', 'PalabraRelacionada', 'string', $this);
-				case 'AliadoComercialAsSucursal':
-					return new QQReverseReferenceNodeAliadoComercial($this, 'aliadocomercialassucursal', 'reverse_reference', 'sucursal_id', 'AliadoComercialAsSucursal');
 				case 'AsistenteAsCodiEsta':
 					return new QQReverseReferenceNodeAsistente($this, 'asistenteascodiesta', 'reverse_reference', 'codi_esta', 'AsistenteAsCodiEsta');
 				case 'CiudadAsSucursal':

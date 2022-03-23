@@ -67,6 +67,7 @@ class TarifaExpListForm extends TarifaExpListFormBase {
 		$this->dtgTarifaExps->MetaAddColumn('Id');
 		$this->dtgTarifaExps->MetaAddColumn('Nombre');
 		$this->dtgTarifaExps->MetaAddColumn(QQN::TarifaExp()->Producto);
+		$this->dtgTarifaExps->MetaAddColumn('IsPublica', 'Name=Publica ?');
 		$this->dtgTarifaExps->MetaAddColumn('Fecha');
 		$this->dtgTarifaExps->MetaAddColumn('Monto');
 		$this->dtgTarifaExps->MetaAddColumn('Minimo');

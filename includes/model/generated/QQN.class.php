@@ -1123,6 +1123,12 @@
 			return new QQNodeTarifaAgentesZonas('tarifa_agentes_zonas', null, null);
 		}
 		/**
+		 * @return QQNodeTarifaAliados
+		 */
+		static public function TarifaAliados() {
+			return new QQNodeTarifaAliados('tarifa_aliados', null, null);
+		}
+		/**
 		 * @return QQNodeTarifaExp
 		 */
 		static public function TarifaExp() {

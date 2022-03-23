@@ -85,7 +85,7 @@ abstract class AliadoComercialListFormBase extends QForm {
         $this->dtgAliadoComercials->MetaAddColumn('Contacto');
         $this->dtgAliadoComercials->MetaAddColumn('Telefono');
         $this->dtgAliadoComercials->MetaAddColumn('Email');
-        $this->dtgAliadoComercials->MetaAddTypeColumn('StatusId', 'StatusType');
+        $this->dtgAliadoComercials->MetaAddColumn('IsActivo');
         $this->dtgAliadoComercials->MetaAddColumn(QQN::AliadoComercial()->Sucursal);
 
         $this->btnExpoExce_Create();

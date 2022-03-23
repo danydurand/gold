@@ -1893,7 +1893,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $this->txtEmaiRemi->Text = $this->objClieReta->Email;
                     $this->calFechNaci->Text = $strFechNaci;
                     $this->lstSexoClie->SelectedIndex = $this->objClieReta->Sexo == 'M' ? 1 : 2;
-                    $this->lstSucuDest->SetFocus();
+                    $this->lstSucuOrig->SetFocus();
                 } else {
                     $this->blnEditClie = false;
                     $this->objClieReta = new ClientesRetail();
@@ -2394,8 +2394,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->txtKiloEnvi->Text = $this->objGuia->Kilos;
             } catch (Exception $e) {
                 t('Excepcion: '.$e->getMessage());
-            } catch (Error $e) {
-                t('Error: '.$e->getMessage());
             }
             t('Regrese el procesamiento de las piezas');
             $this->blnCambPiez = false;
@@ -2602,7 +2600,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if (count($arrIdxxSele) > 0) {
             t('Hay seleccion de conceptos opcionales, los voy a asociar');
             foreach (array_keys($arrIdxxSele) as $intConcOpci) {
-                t('Procesando concepto: '.$intConcOpci);
+                t('Procesando Concepto con el Id: '.$intConcOpci);
                 $strTextMens = $this->objGuia->AsociarConceptoOpcional($intConcOpci, $this->objUsuario->CodiUsua);
                 t('El mensaje de regreso es: '.$strTextMens);
                 if ($strTextMens != 'OK') {
@@ -2610,7 +2608,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 }
             }
         }
-        t('Saliendo del procesamiento de los conceptos');
+        t('Saliendo del procesamiento de los Conceptos Opcionales');
     }
 
 

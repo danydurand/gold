@@ -121,6 +121,10 @@
 	 * @property-read ScanneoPiezas[] $_ScanneoPiezasAsUpdatedByArray the value for the private _objScanneoPiezasAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the scanneo_piezas.updated_by reverse relationship
 	 * @property-read SreGuiaCkpt $_SreGuiaCkptAsCodiUsua the value for the private _objSreGuiaCkptAsCodiUsua (Read-Only) if set due to an expansion on the sre_guia_ckpt.codi_usua reverse relationship
 	 * @property-read SreGuiaCkpt[] $_SreGuiaCkptAsCodiUsuaArray the value for the private _objSreGuiaCkptAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the sre_guia_ckpt.codi_usua reverse relationship
+	 * @property-read TarifaAliados $_TarifaAliadosAsCreatedBy the value for the private _objTarifaAliadosAsCreatedBy (Read-Only) if set due to an expansion on the tarifa_aliados.created_by reverse relationship
+	 * @property-read TarifaAliados[] $_TarifaAliadosAsCreatedByArray the value for the private _objTarifaAliadosAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.created_by reverse relationship
+	 * @property-read TarifaAliados $_TarifaAliadosAsUpdatedBy the value for the private _objTarifaAliadosAsUpdatedBy (Read-Only) if set due to an expansion on the tarifa_aliados.updated_by reverse relationship
+	 * @property-read TarifaAliados[] $_TarifaAliadosAsUpdatedByArray the value for the private _objTarifaAliadosAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.updated_by reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class UsuarioGen extends QBaseClass implements IteratorAggregate {
@@ -951,6 +955,38 @@
 		 * @var SreGuiaCkpt[] _objSreGuiaCkptAsCodiUsuaArray;
 		 */
 		private $_objSreGuiaCkptAsCodiUsuaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaAliadosAsCreatedBy object
+		 * (of type TarifaAliados), if this Usuario object was restored with
+		 * an expansion on the tarifa_aliados association table.
+		 * @var TarifaAliados _objTarifaAliadosAsCreatedBy;
+		 */
+		private $_objTarifaAliadosAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaAliadosAsCreatedBy objects
+		 * (of type TarifaAliados[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the tarifa_aliados association table.
+		 * @var TarifaAliados[] _objTarifaAliadosAsCreatedByArray;
+		 */
+		private $_objTarifaAliadosAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaAliadosAsUpdatedBy object
+		 * (of type TarifaAliados), if this Usuario object was restored with
+		 * an expansion on the tarifa_aliados association table.
+		 * @var TarifaAliados _objTarifaAliadosAsUpdatedBy;
+		 */
+		private $_objTarifaAliadosAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaAliadosAsUpdatedBy objects
+		 * (of type TarifaAliados[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the tarifa_aliados association table.
+		 * @var TarifaAliados[] _objTarifaAliadosAsUpdatedByArray;
+		 */
+		private $_objTarifaAliadosAsUpdatedByArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -2281,6 +2317,36 @@
 					$objToReturn->_objSreGuiaCkptAsCodiUsuaArray[] = SreGuiaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sreguiackptascodiusua__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objSreGuiaCkptAsCodiUsua)) {
 					$objToReturn->_objSreGuiaCkptAsCodiUsua = SreGuiaCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sreguiackptascodiusua__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaAliadosAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaaliadosascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaaliadosascreatedby']) ? null : $objExpansionAliasArray['tarifaaliadosascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaAliadosAsCreatedByArray)
+				$objToReturn->_objTarifaAliadosAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaAliadosAsCreatedByArray[] = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaAliadosAsCreatedBy)) {
+					$objToReturn->_objTarifaAliadosAsCreatedBy = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaAliadosAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaaliadosasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaaliadosasupdatedby']) ? null : $objExpansionAliasArray['tarifaaliadosasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaAliadosAsUpdatedByArray)
+				$objToReturn->_objTarifaAliadosAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaAliadosAsUpdatedByArray[] = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaAliadosAsUpdatedBy)) {
+					$objToReturn->_objTarifaAliadosAsUpdatedBy = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3721,6 +3787,38 @@
 					 */
 					return $this->_objSreGuiaCkptAsCodiUsuaArray;
 
+				case '_TarifaAliadosAsCreatedBy':
+					/**
+					 * Gets the value for the private _objTarifaAliadosAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the tarifa_aliados.created_by reverse relationship
+					 * @return TarifaAliados
+					 */
+					return $this->_objTarifaAliadosAsCreatedBy;
+
+				case '_TarifaAliadosAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objTarifaAliadosAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_aliados.created_by reverse relationship
+					 * @return TarifaAliados[]
+					 */
+					return $this->_objTarifaAliadosAsCreatedByArray;
+
+				case '_TarifaAliadosAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objTarifaAliadosAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the tarifa_aliados.updated_by reverse relationship
+					 * @return TarifaAliados
+					 */
+					return $this->_objTarifaAliadosAsUpdatedBy;
+
+				case '_TarifaAliadosAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objTarifaAliadosAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_aliados.updated_by reverse relationship
+					 * @return TarifaAliados[]
+					 */
+					return $this->_objTarifaAliadosAsUpdatedByArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -4266,6 +4364,12 @@
 			}
 			if ($this->CountSreGuiaCkptsAsCodiUsua()) {
 				$arrTablRela[] = 'sre_guia_ckpt';
+			}
+			if ($this->CountTarifaAliadosesAsCreatedBy()) {
+				$arrTablRela[] = 'tarifa_aliados';
+			}
+			if ($this->CountTarifaAliadosesAsUpdatedBy()) {
+				$arrTablRela[] = 'tarifa_aliados';
 			}
 			
 			return $arrTablRela;
@@ -10559,6 +10663,304 @@
 		}
 
 
+		// Related Objects' Methods for TarifaAliadosAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaAliadosesAsCreatedBy as an array of TarifaAliados objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaAliados[]
+		*/
+		public function GetTarifaAliadosAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return TarifaAliados::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaAliadosesAsCreatedBy
+		 * @return int
+		*/
+		public function CountTarifaAliadosesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return TarifaAliados::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a TarifaAliadosAsCreatedBy
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function AssociateTarifaAliadosAsCreatedBy(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliadosAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliadosAsCreatedBy on this Usuario with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaAliadosAsCreatedBy
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function UnassociateTarifaAliadosAsCreatedBy(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsCreatedBy on this Usuario with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaAliadosesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllTarifaAliadosesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaAliadosAsCreatedBy
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaAliadosAsCreatedBy(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsCreatedBy on this Usuario with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_aliados`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaAliadosesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllTarifaAliadosesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_aliados`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for TarifaAliadosAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaAliadosesAsUpdatedBy as an array of TarifaAliados objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaAliados[]
+		*/
+		public function GetTarifaAliadosAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return TarifaAliados::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaAliadosesAsUpdatedBy
+		 * @return int
+		*/
+		public function CountTarifaAliadosesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return TarifaAliados::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a TarifaAliadosAsUpdatedBy
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function AssociateTarifaAliadosAsUpdatedBy(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliadosAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliadosAsUpdatedBy on this Usuario with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaAliadosAsUpdatedBy
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function UnassociateTarifaAliadosAsUpdatedBy(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsUpdatedBy on this Usuario with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaAliadosesAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllTarifaAliadosesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaAliadosAsUpdatedBy
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaAliadosAsUpdatedBy(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsUpdatedBy on this Usuario with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_aliados`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaAliadosesAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllTarifaAliadosesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_aliados`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -10850,6 +11252,8 @@
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsCreatedBy
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsUpdatedBy
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
+     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsCreatedBy
+     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsUpdatedBy
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -10987,6 +11391,10 @@
 					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasupdatedby', 'reverse_reference', 'updated_by', 'ScanneoPiezasAsUpdatedBy');
 				case 'SreGuiaCkptAsCodiUsua':
 					return new QQReverseReferenceNodeSreGuiaCkpt($this, 'sreguiackptascodiusua', 'reverse_reference', 'codi_usua', 'SreGuiaCkptAsCodiUsua');
+				case 'TarifaAliadosAsCreatedBy':
+					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosascreatedby', 'reverse_reference', 'created_by', 'TarifaAliadosAsCreatedBy');
+				case 'TarifaAliadosAsUpdatedBy':
+					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasupdatedby', 'reverse_reference', 'updated_by', 'TarifaAliadosAsUpdatedBy');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('codi_usua', 'CodiUsua', 'Integer', $this);
@@ -11068,6 +11476,8 @@
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsCreatedBy
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsUpdatedBy
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
+     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsCreatedBy
+     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsUpdatedBy
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -11205,6 +11615,10 @@
 					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasupdatedby', 'reverse_reference', 'updated_by', 'ScanneoPiezasAsUpdatedBy');
 				case 'SreGuiaCkptAsCodiUsua':
 					return new QQReverseReferenceNodeSreGuiaCkpt($this, 'sreguiackptascodiusua', 'reverse_reference', 'codi_usua', 'SreGuiaCkptAsCodiUsua');
+				case 'TarifaAliadosAsCreatedBy':
+					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosascreatedby', 'reverse_reference', 'created_by', 'TarifaAliadosAsCreatedBy');
+				case 'TarifaAliadosAsUpdatedBy':
+					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasupdatedby', 'reverse_reference', 'updated_by', 'TarifaAliadosAsUpdatedBy');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('codi_usua', 'CodiUsua', 'integer', $this);

@@ -1,21 +1,21 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do the List All functionality
- * of the TarifaExp class.  It uses the code-generated
- * TarifaExpDataGrid control which has meta-methods to help with
- * easily creating/defining TarifaExp columns.
+ * of the TarifaAliados class.  It uses the code-generated
+ * TarifaAliadosDataGrid control which has meta-methods to help with
+ * easily creating/defining TarifaAliados columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  *
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_exp_list.php AND
- * tarifa_exp_list.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_aliados_list.php AND
+ * tarifa_aliados_list.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class TarifaExpListFormBase extends QForm {
+abstract class TarifaAliadosListFormBase extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $lblTituForm;
@@ -24,11 +24,11 @@ abstract class TarifaExpListFormBase extends QForm {
     protected $btnExpoExce;
     protected $lblOtraNoti;
 
-    // Local instance of the Meta DataGrid to list TarifaExps
+    // Local instance of the Meta DataGrid to list TarifaAliadoses
     /**
-     * @var TarifaExpDataGrid dtgTarifaExps
+     * @var TarifaAliadosDataGrid dtgTarifaAliadoses
      */
-    protected $dtgTarifaExps;
+    protected $dtgTarifaAliadoses;
 
     // Create QForm Event Handlers as Needed
 
@@ -52,43 +52,41 @@ abstract class TarifaExpListFormBase extends QForm {
         $this->btnFiltAvan_Create();
 
         // Instantiate the Meta DataGrid
-        $this->dtgTarifaExps = new TarifaExpDataGrid($this);
+        $this->dtgTarifaAliadoses = new TarifaAliadosDataGrid($this);
 
         // Style the DataGrid (if desired)
-        $this->dtgTarifaExps->CssClass = 'datagrid';
-        $this->dtgTarifaExps->AlternateRowStyle->CssClass = 'alternate';
-        $this->dtgTarifaExps->FontSize = 13;
-        $this->dtgTarifaExps->ShowFilter = false;
+        $this->dtgTarifaAliadoses->CssClass = 'datagrid';
+        $this->dtgTarifaAliadoses->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgTarifaAliadoses->FontSize = 13;
+        $this->dtgTarifaAliadoses->ShowFilter = false;
 
         // Add Pagination (if desired)
-        $this->dtgTarifaExps->Paginator = new QPaginator($this->dtgTarifaExps);
-        $this->dtgTarifaExps->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgTarifaAliadoses->Paginator = new QPaginator($this->dtgTarifaAliadoses);
+        $this->dtgTarifaAliadoses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         // Higlight the datagrid rows when mousing over them
-        $this->dtgTarifaExps->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgTarifaExps->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgTarifaAliadoses->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgTarifaAliadoses->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         // Add a click handler for the rows.
         // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
         // or $_ITEM->Id to pass the object's id, or any other data grid variable
-        $this->dtgTarifaExps->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-        $this->dtgTarifaExps->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTarifaExpsRow_Click'));
+        $this->dtgTarifaAliadoses->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgTarifaAliadoses->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTarifaAliadosesRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
-        // Create the Other Columns (note that you can use strings for tarifa_exp's properties, or you
-        // can traverse down QQN::tarifa_exp() to display fields that are down the hierarchy)
-        $this->dtgTarifaExps->MetaAddColumn('Id');
-        $this->dtgTarifaExps->MetaAddColumn('Nombre');
-        $this->dtgTarifaExps->MetaAddColumn(QQN::TarifaExp()->Producto);
-        $this->dtgTarifaExps->MetaAddColumn('IsPublica');
-        $this->dtgTarifaExps->MetaAddColumn('Fecha');
-        $this->dtgTarifaExps->MetaAddColumn('Monto');
-        $this->dtgTarifaExps->MetaAddColumn('Minimo');
-        $this->dtgTarifaExps->MetaAddColumn('CreatedAt');
-        $this->dtgTarifaExps->MetaAddColumn('UpdatedAt');
-        $this->dtgTarifaExps->MetaAddColumn('CreatedBy');
-        $this->dtgTarifaExps->MetaAddColumn('UpdatedBy');
+        // Create the Other Columns (note that you can use strings for tarifa_aliados's properties, or you
+        // can traverse down QQN::tarifa_aliados() to display fields that are down the hierarchy)
+        $this->dtgTarifaAliadoses->MetaAddColumn('Id');
+        $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->Aliado);
+        $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->TarifaExp);
+        $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->Producto);
+        $this->dtgTarifaAliadoses->MetaAddColumn('FechaVigencia');
+        $this->dtgTarifaAliadoses->MetaAddColumn('CreatedAt');
+        $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->CreatedByObject);
+        $this->dtgTarifaAliadoses->MetaAddColumn('UpdatedAt');
+        $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->UpdatedByObject);
 
         $this->btnExpoExce_Create();
 
@@ -96,7 +94,7 @@ abstract class TarifaExpListFormBase extends QForm {
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'TarifaExps';
+        $this->lblTituForm->Text = 'TarifaAliadoses';
     }
 
     protected function lblMensUsua_Create() {
@@ -134,7 +132,7 @@ abstract class TarifaExpListFormBase extends QForm {
     }
 
     protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgTarifaExps);
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgTarifaAliadoses);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoExce->HtmlEntities = false;
@@ -143,16 +141,16 @@ abstract class TarifaExpListFormBase extends QForm {
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/tarifa_exp_edit.php');
+        QApplication::Redirect(__SIST__.'/tarifa_aliados_edit.php');
     }
 
     protected function btnFiltAvan_Click() {
-        $this->dtgTarifaExps->ShowFilter = !$this->dtgTarifaExps->ShowFilter;
+        $this->dtgTarifaAliadoses->ShowFilter = !$this->dtgTarifaAliadoses->ShowFilter;
     }
 
-    public function dtgTarifaExpsRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgTarifaAliadosesRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
-      QApplication::Redirect("tarifa_exp_edit.php/$intId");
+      QApplication::Redirect("tarifa_aliados_edit.php/$intId");
     }
 
 

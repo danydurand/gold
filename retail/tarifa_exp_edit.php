@@ -43,6 +43,8 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
 		$this->lblId        = $this->mctTarifaExp->lblId_Create();
 		$this->txtNombre    = $this->mctTarifaExp->txtNombre_Create();
 		$this->lstProducto  = $this->mctTarifaExp->lstProducto_Create();
+		$this->chkIsPublica = $this->mctTarifaExp->chkIsPublica_Create();
+		$this->chkIsPublica->Name = 'Publica ?';
 		$this->calFecha     = $this->mctTarifaExp->calFecha_Create();
 		$this->txtMonto     = $this->mctTarifaExp->txtMonto_Create();
 		$this->txtMinimo    = $this->mctTarifaExp->txtMinimo_Create();
@@ -122,41 +124,95 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
     }
 
 
+    protected function ExisteOtraTarifaPublica() {
+        $blnMarcPubl = $this->chkIsPublica->Checked;
+        if ($blnMarcPubl == true) {
+            $intProdIdxx   = $this->lstProducto->SelectedValue;
+            $objClauWher[] = QQ::Equal(QQN::TarifaExp()->ProductoId, $intProdIdxx);
+            $objClauWher[] = QQ::Equal(QQN::TarifaExp()->IsPublica, true);
+            return TarifaExp::QueryCount(QQ::AndCondition($objClauWher));
+        }
+        return false;
+    }
+
+    protected function Form_Validate() {
+	    $this->mensaje();
+        if (strlen(trim($this->txtNombre->Text)) == 0) {
+            $this->danger('El nombre de la Tarifa es requerido');
+            return false;
+        }
+        if (is_null($this->lstProducto->SelectedValue)) {
+            $this->danger('El Producto es requerido');
+            return false;
+        }
+        if (is_null($this->lstProducto->SelectedValue)) {
+            $this->danger('El Producto es requerido');
+            return false;
+        }
+        if ($this->ExisteOtraTarifaPublica()) {
+            $this->danger('Ya existe una Tarifa Pública para este Producto.  Solo puede haber una !!');
+            return false;
+        }
+        if (is_null($this->calFecha->DateTime)) {
+            $this->danger('La Fecha de Vigencia es requerida');
+            return false;
+        }
+        if (strlen(trim($this->txtMonto->Text)) == 0) {
+            $this->danger('El Monto de la Tarifa es requerido');
+            return false;
+        }
+        if (strlen(trim($this->txtMinimo->Text)) == 0) {
+            $this->danger('El Peso Mínimo es requerido');
+            return false;
+        }
+        t('Sali por el true');
+        return true;
+    }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctTarifaExp->TarifaExp;
-		$this->mctTarifaExp->SaveTarifaExp();
-		if ($this->mctTarifaExp->EditMode) {
-			//---------------------------------------------------------------------
-			// Si estamos en modo Edicion, entonces se verifican la existencia
-			// de algun cambio en algun dato 
-			//---------------------------------------------------------------------
-			$objRegiNuev = $this->mctTarifaExp->TarifaExp;
-			$objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
-			if ($objResuComp->FriendlyComparisonStatus == 'different') {
-				//------------------------------------------
-				// En caso de que el objeto haya cambiado 
-				//------------------------------------------
-				$arrLogxCamb['strNombTabl'] = 'TarifaExp';
-				$arrLogxCamb['intRefeRegi'] = $this->mctTarifaExp->TarifaExp->Id;
-				$arrLogxCamb['strNombRegi'] = $this->mctTarifaExp->TarifaExp->Nombre;
-				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
+        try {
+            //t('Antes de intentar salvar (en pantalla): '.$this->chkIsPublica->Checked);
+            //t('Antes de intentar salvar (metacontrol): '.$this->mctTarifaExp->TarifaExp->IsPublica);
+            $this->mctTarifaExp->SaveTarifaExp();
+            //t('Despues de salvar (metacontrol): '.$this->mctTarifaExp->TarifaExp->IsPublica);
+        } catch (Exception $e) {
+            t('Error: '.$e->getMessage());
+            $this->danger('Error: '.$e->getMessage());
+        }
+        if ($this->mctTarifaExp->EditMode) {
+            //---------------------------------------------------------------------
+            // Si estamos en modo Edicion, entonces se verifican la existencia
+            // de algun cambio en algun dato
+            //---------------------------------------------------------------------
+            $objRegiNuev = $this->mctTarifaExp->TarifaExp;
+            $objResuComp = QObjectDiff::Compare($objRegiViej, $objRegiNuev);
+            if ($objResuComp->FriendlyComparisonStatus == 'different') {
+                //------------------------------------------
+                // En caso de que el objeto haya cambiado
+                //------------------------------------------
+                $arrLogxCamb['strNombTabl'] = 'TarifaExp';
+                $arrLogxCamb['intRefeRegi'] = $this->mctTarifaExp->TarifaExp->Id;
+                $arrLogxCamb['strNombRegi'] = $this->mctTarifaExp->TarifaExp->Nombre;
+                $arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/tarifa_exp_edit.php/'.$this->mctTarifaExp->TarifaExp->Id;
-				LogDeCambios($arrLogxCamb);
+                LogDeCambios($arrLogxCamb);
                 $this->success('Transacción Exitosa !!!');
-			}
-		} else {
-			$arrLogxCamb['strNombTabl'] = 'TarifaExp';
-			$arrLogxCamb['intRefeRegi'] = $this->mctTarifaExp->TarifaExp->Id;
-			$arrLogxCamb['strNombRegi'] = $this->mctTarifaExp->TarifaExp->Nombre;
-			$arrLogxCamb['strDescCamb'] = "Creado";
+            } else {
+                $this->warning('No hay cambios !!!');
+            }
+        } else {
+            $arrLogxCamb['strNombTabl'] = 'TarifaExp';
+            $arrLogxCamb['intRefeRegi'] = $this->mctTarifaExp->TarifaExp->Id;
+            $arrLogxCamb['strNombRegi'] = $this->mctTarifaExp->TarifaExp->Nombre;
+            $arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/tarifa_exp_edit.php/'.$this->mctTarifaExp->TarifaExp->Id;
-			LogDeCambios($arrLogxCamb);
+            LogDeCambios($arrLogxCamb);
             $this->success('Transacción Exitosa !!!');
-		}
+        }
 	}
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
@@ -167,7 +223,7 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
         $arrTablRela = $this->mctTarifaExp->TablasRelacionadasTarifaExp();
         if (count($arrTablRela)) {
             $strTablRela = implode(',',$arrTablRela);
-            $this->warning('Existen registros relacionados en %s',$strTablRela);
+            $this->warning('Existen registros relacionados en '.$strTablRela);
             $blnTodoOkey = false;
         }
         if ($blnTodoOkey) {

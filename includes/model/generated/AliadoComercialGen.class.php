@@ -22,11 +22,13 @@
 	 * @property string $Contacto the value for strContacto (Not Null)
 	 * @property string $Telefono the value for strTelefono (Not Null)
 	 * @property string $Email the value for strEmail (Not Null)
-	 * @property integer $StatusId the value for intStatusId (Not Null)
-	 * @property string $SucursalId the value for strSucursalId (Not Null)
-	 * @property Estacion $Sucursal the value for the Estacion object referenced by strSucursalId (Not Null)
+	 * @property boolean $IsActivo the value for blnIsActivo (Not Null)
+	 * @property integer $SucursalId the value for intSucursalId (Not Null)
+	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
 	 * @property-read Counter $_Counter the value for the private _objCounter (Read-Only) if set due to an expansion on the counter.aliado_comercial_id reverse relationship
 	 * @property-read Counter[] $_CounterArray the value for the private _objCounterArray (Read-Only) if set due to an ExpandAsArray on the counter.aliado_comercial_id reverse relationship
+	 * @property-read TarifaAliados $_TarifaAliadosAsAliado the value for the private _objTarifaAliadosAsAliado (Read-Only) if set due to an expansion on the tarifa_aliados.aliado_id reverse relationship
+	 * @property-read TarifaAliados[] $_TarifaAliadosAsAliadoArray the value for the private _objTarifaAliadosAsAliadoArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.aliado_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class AliadoComercialGen extends QBaseClass implements IteratorAggregate {
@@ -98,19 +100,18 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column aliado_comercial.status_id
-		 * @var integer intStatusId
+		 * Protected member variable that maps to the database column aliado_comercial.is_activo
+		 * @var boolean blnIsActivo
 		 */
-		protected $intStatusId;
-		const StatusIdDefault = null;
+		protected $blnIsActivo;
+		const IsActivoDefault = 1;
 
 
 		/**
 		 * Protected member variable that maps to the database column aliado_comercial.sucursal_id
-		 * @var string strSucursalId
+		 * @var integer intSucursalId
 		 */
-		protected $strSucursalId;
-		const SucursalIdMaxLength = 20;
+		protected $intSucursalId;
 		const SucursalIdDefault = null;
 
 
@@ -129,6 +130,22 @@
 		 * @var Counter[] _objCounterArray;
 		 */
 		private $_objCounterArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaAliadosAsAliado object
+		 * (of type TarifaAliados), if this AliadoComercial object was restored with
+		 * an expansion on the tarifa_aliados association table.
+		 * @var TarifaAliados _objTarifaAliadosAsAliado;
+		 */
+		private $_objTarifaAliadosAsAliado;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaAliadosAsAliado objects
+		 * (of type TarifaAliados[]), if this AliadoComercial object was restored with
+		 * an ExpandAsArray on the tarifa_aliados association table.
+		 * @var TarifaAliados[] _objTarifaAliadosAsAliadoArray;
+		 */
+		private $_objTarifaAliadosAsAliadoArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -156,9 +173,9 @@
 		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column aliado_comercial.sucursal_id.
 		 *
-		 * NOTE: Always use the Sucursal property getter to correctly retrieve this Estacion object.
+		 * NOTE: Always use the Sucursal property getter to correctly retrieve this Sucursales object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var Estacion objSucursal
+		 * @var Sucursales objSucursal
 		 */
 		protected $objSucursal;
 
@@ -176,8 +193,8 @@
 			$this->strContacto = AliadoComercial::ContactoDefault;
 			$this->strTelefono = AliadoComercial::TelefonoDefault;
 			$this->strEmail = AliadoComercial::EmailDefault;
-			$this->intStatusId = AliadoComercial::StatusIdDefault;
-			$this->strSucursalId = AliadoComercial::SucursalIdDefault;
+			$this->blnIsActivo = AliadoComercial::IsActivoDefault;
+			$this->intSucursalId = AliadoComercial::SucursalIdDefault;
 		}
 
 
@@ -526,7 +543,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'contacto', $strAliasPrefix . 'contacto');
 			    $objBuilder->AddSelectItem($strTableName, 'telefono', $strAliasPrefix . 'telefono');
 			    $objBuilder->AddSelectItem($strTableName, 'email', $strAliasPrefix . 'email');
-			    $objBuilder->AddSelectItem($strTableName, 'status_id', $strAliasPrefix . 'status_id');
+			    $objBuilder->AddSelectItem($strTableName, 'is_activo', $strAliasPrefix . 'is_activo');
 			    $objBuilder->AddSelectItem($strTableName, 'sucursal_id', $strAliasPrefix . 'sucursal_id');
             }
 		}
@@ -674,12 +691,12 @@
 			$strAlias = $strAliasPrefix . 'email';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strEmail = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'status_id';
+			$strAlias = $strAliasPrefix . 'is_activo';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intStatusId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$objToReturn->blnIsActivo = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'sucursal_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strSucursalId = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->intSucursalId = $objDbRow->GetColumn($strAliasName, 'Integer');
 
 			if (isset($objPreviousItemArray) && is_array($objPreviousItemArray)) {
 				foreach ($objPreviousItemArray as $objPreviousItem) {
@@ -711,11 +728,11 @@
 				$strAliasPrefix = 'aliado_comercial__';
 
 			// Check for Sucursal Early Binding
-			$strAlias = $strAliasPrefix . 'sucursal_id__codi_esta';
+			$strAlias = $strAliasPrefix . 'sucursal_id__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['sucursal_id']) ? null : $objExpansionAliasArray['sucursal_id']);
-				$objToReturn->objSucursal = Estacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sucursal_id__', $objExpansionNode, null, $strColumnAliasArray);
+				$objToReturn->objSucursal = Sucursales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sucursal_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -732,6 +749,21 @@
 					$objToReturn->_objCounterArray[] = Counter::InstantiateDbRow($objDbRow, $strAliasPrefix . 'counter__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objCounter)) {
 					$objToReturn->_objCounter = Counter::InstantiateDbRow($objDbRow, $strAliasPrefix . 'counter__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaAliadosAsAliado Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaaliadosasaliado__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaaliadosasaliado']) ? null : $objExpansionAliasArray['tarifaaliadosasaliado']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaAliadosAsAliadoArray)
+				$objToReturn->_objTarifaAliadosAsAliadoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaAliadosAsAliadoArray[] = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosasaliado__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaAliadosAsAliado)) {
+					$objToReturn->_objTarifaAliadosAsAliado = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosasaliado__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -830,48 +862,16 @@
 
 		/**
 		 * Load an array of AliadoComercial objects,
-		 * by StatusId Index(es)
-		 * @param integer $intStatusId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return AliadoComercial[]
-		*/
-		public static function LoadArrayByStatusId($intStatusId, $objOptionalClauses = null) {
-			// Call AliadoComercial::QueryArray to perform the LoadArrayByStatusId query
-			try {
-				return AliadoComercial::QueryArray(
-					QQ::Equal(QQN::AliadoComercial()->StatusId, $intStatusId),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count AliadoComercials
-		 * by StatusId Index(es)
-		 * @param integer $intStatusId
-		 * @return int
-		*/
-		public static function CountByStatusId($intStatusId) {
-			// Call AliadoComercial::QueryCount to perform the CountByStatusId query
-			return AliadoComercial::QueryCount(
-				QQ::Equal(QQN::AliadoComercial()->StatusId, $intStatusId)
-			);
-		}
-
-		/**
-		 * Load an array of AliadoComercial objects,
 		 * by SucursalId Index(es)
-		 * @param string $strSucursalId
+		 * @param integer $intSucursalId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
 		 * @return AliadoComercial[]
 		*/
-		public static function LoadArrayBySucursalId($strSucursalId, $objOptionalClauses = null) {
+		public static function LoadArrayBySucursalId($intSucursalId, $objOptionalClauses = null) {
 			// Call AliadoComercial::QueryArray to perform the LoadArrayBySucursalId query
 			try {
 				return AliadoComercial::QueryArray(
-					QQ::Equal(QQN::AliadoComercial()->SucursalId, $strSucursalId),
+					QQ::Equal(QQN::AliadoComercial()->SucursalId, $intSucursalId),
 					$objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
@@ -882,13 +882,13 @@
 		/**
 		 * Count AliadoComercials
 		 * by SucursalId Index(es)
-		 * @param string $strSucursalId
+		 * @param integer $intSucursalId
 		 * @return int
 		*/
-		public static function CountBySucursalId($strSucursalId) {
+		public static function CountBySucursalId($intSucursalId) {
 			// Call AliadoComercial::QueryCount to perform the CountBySucursalId query
 			return AliadoComercial::QueryCount(
-				QQ::Equal(QQN::AliadoComercial()->SucursalId, $strSucursalId)
+				QQ::Equal(QQN::AliadoComercial()->SucursalId, $intSucursalId)
 			);
 		}
 
@@ -929,7 +929,7 @@
 							`contacto`,
 							`telefono`,
 							`email`,
-							`status_id`,
+							`is_activo`,
 							`sucursal_id`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strRazonSocial) . ',
@@ -938,8 +938,8 @@
 							' . $objDatabase->SqlVariable($this->strContacto) . ',
 							' . $objDatabase->SqlVariable($this->strTelefono) . ',
 							' . $objDatabase->SqlVariable($this->strEmail) . ',
-							' . $objDatabase->SqlVariable($this->intStatusId) . ',
-							' . $objDatabase->SqlVariable($this->strSucursalId) . '
+							' . $objDatabase->SqlVariable($this->blnIsActivo) . ',
+							' . $objDatabase->SqlVariable($this->intSucursalId) . '
 						)
 					');
 
@@ -961,8 +961,8 @@
 							`contacto` = ' . $objDatabase->SqlVariable($this->strContacto) . ',
 							`telefono` = ' . $objDatabase->SqlVariable($this->strTelefono) . ',
 							`email` = ' . $objDatabase->SqlVariable($this->strEmail) . ',
-							`status_id` = ' . $objDatabase->SqlVariable($this->intStatusId) . ',
-							`sucursal_id` = ' . $objDatabase->SqlVariable($this->strSucursalId) . '
+							`is_activo` = ' . $objDatabase->SqlVariable($this->blnIsActivo) . ',
+							`sucursal_id` = ' . $objDatabase->SqlVariable($this->intSucursalId) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -1073,7 +1073,7 @@
 			$this->strContacto = $objReloaded->strContacto;
 			$this->strTelefono = $objReloaded->strTelefono;
 			$this->strEmail = $objReloaded->strEmail;
-			$this->StatusId = $objReloaded->StatusId;
+			$this->blnIsActivo = $objReloaded->blnIsActivo;
 			$this->SucursalId = $objReloaded->SucursalId;
 		}
 
@@ -1144,19 +1144,19 @@
 					 */
 					return $this->strEmail;
 
-				case 'StatusId':
+				case 'IsActivo':
 					/**
-					 * Gets the value for intStatusId (Not Null)
-					 * @return integer
+					 * Gets the value for blnIsActivo (Not Null)
+					 * @return boolean
 					 */
-					return $this->intStatusId;
+					return $this->blnIsActivo;
 
 				case 'SucursalId':
 					/**
-					 * Gets the value for strSucursalId (Not Null)
-					 * @return string
+					 * Gets the value for intSucursalId (Not Null)
+					 * @return integer
 					 */
-					return $this->strSucursalId;
+					return $this->intSucursalId;
 
 
 				///////////////////
@@ -1164,12 +1164,12 @@
 				///////////////////
 				case 'Sucursal':
 					/**
-					 * Gets the value for the Estacion object referenced by strSucursalId (Not Null)
-					 * @return Estacion
+					 * Gets the value for the Sucursales object referenced by intSucursalId (Not Null)
+					 * @return Sucursales
 					 */
 					try {
-						if ((!$this->objSucursal) && (!is_null($this->strSucursalId)))
-							$this->objSucursal = Estacion::Load($this->strSucursalId);
+						if ((!$this->objSucursal) && (!is_null($this->intSucursalId)))
+							$this->objSucursal = Sucursales::Load($this->intSucursalId);
 						return $this->objSucursal;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
@@ -1197,6 +1197,22 @@
 					 * @return Counter[]
 					 */
 					return $this->_objCounterArray;
+
+				case '_TarifaAliadosAsAliado':
+					/**
+					 * Gets the value for the private _objTarifaAliadosAsAliado (Read-Only)
+					 * if set due to an expansion on the tarifa_aliados.aliado_id reverse relationship
+					 * @return TarifaAliados
+					 */
+					return $this->_objTarifaAliadosAsAliado;
+
+				case '_TarifaAliadosAsAliadoArray':
+					/**
+					 * Gets the value for the private _objTarifaAliadosAsAliadoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_aliados.aliado_id reverse relationship
+					 * @return TarifaAliados[]
+					 */
+					return $this->_objTarifaAliadosAsAliadoArray;
 
 
 				case '__Restored':
@@ -1303,14 +1319,14 @@
 						throw $objExc;
 					}
 
-				case 'StatusId':
+				case 'IsActivo':
 					/**
-					 * Sets the value for intStatusId (Not Null)
-					 * @param integer $mixValue
-					 * @return integer
+					 * Sets the value for blnIsActivo (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
 					 */
 					try {
-						return ($this->intStatusId = QType::Cast($mixValue, QType::Integer));
+						return ($this->blnIsActivo = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1318,13 +1334,13 @@
 
 				case 'SucursalId':
 					/**
-					 * Sets the value for strSucursalId (Not Null)
-					 * @param string $mixValue
-					 * @return string
+					 * Sets the value for intSucursalId (Not Null)
+					 * @param integer $mixValue
+					 * @return integer
 					 */
 					try {
 						$this->objSucursal = null;
-						return ($this->strSucursalId = QType::Cast($mixValue, QType::String));
+						return ($this->intSucursalId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1336,30 +1352,30 @@
 				///////////////////
 				case 'Sucursal':
 					/**
-					 * Sets the value for the Estacion object referenced by strSucursalId (Not Null)
-					 * @param Estacion $mixValue
-					 * @return Estacion
+					 * Sets the value for the Sucursales object referenced by intSucursalId (Not Null)
+					 * @param Sucursales $mixValue
+					 * @return Sucursales
 					 */
 					if (is_null($mixValue)) {
-						$this->strSucursalId = null;
+						$this->intSucursalId = null;
 						$this->objSucursal = null;
 						return null;
 					} else {
-						// Make sure $mixValue actually is a Estacion object
+						// Make sure $mixValue actually is a Sucursales object
 						try {
-							$mixValue = QType::Cast($mixValue, 'Estacion');
+							$mixValue = QType::Cast($mixValue, 'Sucursales');
 						} catch (QInvalidCastException $objExc) {
 							$objExc->IncrementOffset();
 							throw $objExc;
 						}
 
-						// Make sure $mixValue is a SAVED Estacion object
-						if (is_null($mixValue->CodiEsta))
+						// Make sure $mixValue is a SAVED Sucursales object
+						if (is_null($mixValue->Id))
 							throw new QCallerException('Unable to set an unsaved Sucursal for this AliadoComercial');
 
 						// Update Local Member Variables
 						$this->objSucursal = $mixValue;
-						$this->strSucursalId = $mixValue->CodiEsta;
+						$this->intSucursalId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -1398,6 +1414,9 @@
 			$arrTablRela = array();
 			if ($this->CountCounters()) {
 				$arrTablRela[] = 'counter';
+			}
+			if ($this->CountTarifaAliadosesAsAliado()) {
+				$arrTablRela[] = 'tarifa_aliados';
 			}
 			
 			return $arrTablRela;
@@ -1558,6 +1577,155 @@
 		}
 
 
+		// Related Objects' Methods for TarifaAliadosAsAliado
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaAliadosesAsAliado as an array of TarifaAliados objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaAliados[]
+		*/
+		public function GetTarifaAliadosAsAliadoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return TarifaAliados::LoadArrayByAliadoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaAliadosesAsAliado
+		 * @return int
+		*/
+		public function CountTarifaAliadosesAsAliado() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return TarifaAliados::CountByAliadoId($this->intId);
+		}
+
+		/**
+		 * Associates a TarifaAliadosAsAliado
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function AssociateTarifaAliadosAsAliado(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliadosAsAliado on this unsaved AliadoComercial.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliadosAsAliado on this AliadoComercial with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaAliadosAsAliado
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function UnassociateTarifaAliadosAsAliado(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsAliado on this unsaved AliadoComercial.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsAliado on this AliadoComercial with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`aliado_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaAliadosesAsAliado
+		 * @return void
+		*/
+		public function UnassociateAllTarifaAliadosesAsAliado() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsAliado on this unsaved AliadoComercial.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_aliados`
+				SET
+					`aliado_id` = null
+				WHERE
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaAliadosAsAliado
+		 * @param TarifaAliados $objTarifaAliados
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaAliadosAsAliado(TarifaAliados $objTarifaAliados) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsAliado on this unsaved AliadoComercial.');
+			if ((is_null($objTarifaAliados->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsAliado on this AliadoComercial with an unsaved TarifaAliados.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_aliados`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaAliadosesAsAliado
+		 * @return void
+		*/
+		public function DeleteAllTarifaAliadosesAsAliado() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliadosAsAliado on this unsaved AliadoComercial.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_aliados`
+				WHERE
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -1603,8 +1771,8 @@
 			$strToReturn .= '<element name="Contacto" type="xsd:string"/>';
 			$strToReturn .= '<element name="Telefono" type="xsd:string"/>';
 			$strToReturn .= '<element name="Email" type="xsd:string"/>';
-			$strToReturn .= '<element name="StatusId" type="xsd:int"/>';
-			$strToReturn .= '<element name="Sucursal" type="xsd1:Estacion"/>';
+			$strToReturn .= '<element name="IsActivo" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="Sucursal" type="xsd1:Sucursales"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -1613,7 +1781,7 @@
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
 			if (!array_key_exists('AliadoComercial', $strComplexTypeArray)) {
 				$strComplexTypeArray['AliadoComercial'] = AliadoComercial::GetSoapComplexTypeXml();
-				Estacion::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1642,11 +1810,11 @@
 				$objToReturn->strTelefono = $objSoapObject->Telefono;
 			if (property_exists($objSoapObject, 'Email'))
 				$objToReturn->strEmail = $objSoapObject->Email;
-			if (property_exists($objSoapObject, 'StatusId'))
-				$objToReturn->intStatusId = $objSoapObject->StatusId;
+			if (property_exists($objSoapObject, 'IsActivo'))
+				$objToReturn->blnIsActivo = $objSoapObject->IsActivo;
 			if ((property_exists($objSoapObject, 'Sucursal')) &&
 				($objSoapObject->Sucursal))
-				$objToReturn->Sucursal = Estacion::GetObjectFromSoapObject($objSoapObject->Sucursal);
+				$objToReturn->Sucursal = Sucursales::GetObjectFromSoapObject($objSoapObject->Sucursal);
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1666,9 +1834,9 @@
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
 			if ($objObject->objSucursal)
-				$objObject->objSucursal = Estacion::GetSoapObjectFromObject($objObject->objSucursal, false);
+				$objObject->objSucursal = Sucursales::GetSoapObjectFromObject($objObject->objSucursal, false);
 			else if (!$blnBindRelatedObjects)
-				$objObject->strSucursalId = null;
+				$objObject->intSucursalId = null;
 			return $objObject;
 		}
 
@@ -1690,8 +1858,8 @@
 			$iArray['Contacto'] = $this->strContacto;
 			$iArray['Telefono'] = $this->strTelefono;
 			$iArray['Email'] = $this->strEmail;
-			$iArray['StatusId'] = $this->intStatusId;
-			$iArray['SucursalId'] = $this->strSucursalId;
+			$iArray['IsActivo'] = $this->blnIsActivo;
+			$iArray['SucursalId'] = $this->intSucursalId;
 			return new ArrayIterator($iArray);
 		}
 
@@ -1736,12 +1904,13 @@
      * @property-read QQNode $Contacto
      * @property-read QQNode $Telefono
      * @property-read QQNode $Email
-     * @property-read QQNode $StatusId
+     * @property-read QQNode $IsActivo
      * @property-read QQNode $SucursalId
-     * @property-read QQNodeEstacion $Sucursal
+     * @property-read QQNodeSucursales $Sucursal
      *
      *
      * @property-read QQReverseReferenceNodeCounter $Counter
+     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsAliado
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1765,14 +1934,16 @@
 					return new QQNode('telefono', 'Telefono', 'VarChar', $this);
 				case 'Email':
 					return new QQNode('email', 'Email', 'VarChar', $this);
-				case 'StatusId':
-					return new QQNode('status_id', 'StatusId', 'Integer', $this);
+				case 'IsActivo':
+					return new QQNode('is_activo', 'IsActivo', 'Bit', $this);
 				case 'SucursalId':
-					return new QQNode('sucursal_id', 'SucursalId', 'VarChar', $this);
+					return new QQNode('sucursal_id', 'SucursalId', 'Integer', $this);
 				case 'Sucursal':
-					return new QQNodeEstacion('sucursal_id', 'Sucursal', 'VarChar', $this);
+					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'Integer', $this);
 				case 'Counter':
 					return new QQReverseReferenceNodeCounter($this, 'counter', 'reverse_reference', 'aliado_comercial_id', 'Counter');
+				case 'TarifaAliadosAsAliado':
+					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasaliado', 'reverse_reference', 'aliado_id', 'TarifaAliadosAsAliado');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -1795,12 +1966,13 @@
      * @property-read QQNode $Contacto
      * @property-read QQNode $Telefono
      * @property-read QQNode $Email
-     * @property-read QQNode $StatusId
+     * @property-read QQNode $IsActivo
      * @property-read QQNode $SucursalId
-     * @property-read QQNodeEstacion $Sucursal
+     * @property-read QQNodeSucursales $Sucursal
      *
      *
      * @property-read QQReverseReferenceNodeCounter $Counter
+     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsAliado
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1824,14 +1996,16 @@
 					return new QQNode('telefono', 'Telefono', 'string', $this);
 				case 'Email':
 					return new QQNode('email', 'Email', 'string', $this);
-				case 'StatusId':
-					return new QQNode('status_id', 'StatusId', 'integer', $this);
+				case 'IsActivo':
+					return new QQNode('is_activo', 'IsActivo', 'boolean', $this);
 				case 'SucursalId':
-					return new QQNode('sucursal_id', 'SucursalId', 'string', $this);
+					return new QQNode('sucursal_id', 'SucursalId', 'integer', $this);
 				case 'Sucursal':
-					return new QQNodeEstacion('sucursal_id', 'Sucursal', 'string', $this);
+					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'integer', $this);
 				case 'Counter':
 					return new QQReverseReferenceNodeCounter($this, 'counter', 'reverse_reference', 'aliado_comercial_id', 'Counter');
+				case 'TarifaAliadosAsAliado':
+					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasaliado', 'reverse_reference', 'aliado_id', 'TarifaAliadosAsAliado');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

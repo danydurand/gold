@@ -263,8 +263,7 @@
             return $strFactGuia;
         }
 
-        public function estaAsegurado()
-        {
+        public function estaAsegurado() {
             return $this->Asegurado;
 		}
 
@@ -330,8 +329,7 @@
             return array($monto, $texto);
         }
 
-        public function serv_recolecta(Conceptos $concepto)
-        {
+        public function serv_recolecta(Conceptos $concepto) {
             t('Rutina: serv_recolecta');
             $monto = 0;
             $texto = '';
@@ -356,8 +354,9 @@
             $intTariIdxx = $this->TarifaAgenteId;
             $strNombTari = $this->TarifaAgente->Nombre;
             $intZonaIdxx = $this->Origen->Zona;
+            $strOrigGuia = $this->Origen->Iata;
             $strServImpo = $this->__servExportacion();
-            t("Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
+            t("Origen: $strOrigGuia, Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
             $objPrecTari = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx,$intZonaIdxx,$strServImpo);
             if ($objPrecTari) {
                 if ($decPesoTari > 0) {
@@ -642,19 +641,20 @@
             $total = 0;
             $texto = '';
             $valor = $porc != 0 ? $porc : $concepto->Valor ;
-            if ($concepto->ActuaSobre == 'CANT') {
+            t('AplicaComo: '.$concepto->AplicaComo);
+            if ($concepto->AplicaComo == 'CANT') {
                 //------------------------------------
                 // El concepto aplica como cantidad
                 //------------------------------------
                 t('Aplica como cantidad');
-                $total = $valor_base;
-                $texto = "Se aplico directamente el monto del concepto: $valor_base";
+                $total = $concepto->Valor;
+                $texto = "Se aplico directamente el monto del concepto: $concepto->Valor";
             } else {
                 t('Aplica como porcentaje');
                 $total = $valor * $valor_base / 100;
                 $texto = "Se aplico: $valor% sobre el concepto $valor_base obteniendo: $total";
-                t($texto);
             }
+            t($texto);
             return array($total,$texto);
         }
 

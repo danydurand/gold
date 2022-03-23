@@ -21,6 +21,7 @@
             <?php $this->lblId->RenderWithName(); ?>
 				<?php $this->txtNombre->RenderWithName(); ?>
 				<?php $this->lstProducto->RenderWithName(); ?>
+				<?php $this->chkIsPublica->RenderWithName(); ?>
 				<?php $this->calFecha->RenderWithName(); ?>
 				<?php $this->txtMonto->RenderWithName(); ?>
 				<?php $this->txtMinimo->RenderWithName(); ?>

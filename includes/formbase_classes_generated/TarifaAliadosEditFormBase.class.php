@@ -1,26 +1,26 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the TarifaExp class.  It uses the code-generated
- * TarifaExpMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a TarifaExp columns.
+ * of the TarifaAliados class.  It uses the code-generated
+ * TarifaAliadosMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a TarifaAliados columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_exp_edit.php AND
- * tarifa_exp_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_aliados_edit.php AND
+ * tarifa_aliados_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class TarifaExpEditFormBase extends QForm {
-	// Local instance of the TarifaExpMetaControl
+abstract class TarifaAliadosEditFormBase extends QForm {
+	// Local instance of the TarifaAliadosMetaControl
 	/**
-	 * @var TarifaExpMetaControlGen mctTarifaExp
+	 * @var TarifaAliadosMetaControlGen mctTarifaAliados
 	 */
-	protected $mctTarifaExp;
+	protected $mctTarifaAliados;
 	protected $lblMensUsua;
 	protected $lblNotiUsua;
 	protected $lblTituForm;
@@ -52,18 +52,16 @@ abstract class TarifaExpEditFormBase extends QForm {
     protected $lblOtraNoti;
 
 
-	// Controls for TarifaExp's Data Fields
+	// Controls for TarifaAliados's Data Fields
 	protected $lblId;
-	protected $txtNombre;
+	protected $lstAliado;
+	protected $lstTarifaExp;
 	protected $lstProducto;
-	protected $chkIsPublica;
-	protected $calFecha;
-	protected $txtMonto;
-	protected $txtMinimo;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
-	protected $txtCreatedBy;
-	protected $txtUpdatedBy;
+	protected $calFechaVigencia;
+	protected $calCreatedAt;
+	protected $lstCreatedByObject;
+	protected $calUpdatedAt;
+	protected $lstUpdatedByObject;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -96,9 +94,9 @@ abstract class TarifaExpEditFormBase extends QForm {
 
         $this->objUsuario = unserialize($_SESSION['User']);
 
-        // Use the CreateFromPathInfo shortcut (this can also be done manually using the TarifaExpMetaControl constructor)
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the TarifaAliadosMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctTarifaExp = TarifaExpMetaControl::CreateFromPathInfo($this);
+        $this->mctTarifaAliados = TarifaAliadosMetaControl::CreateFromPathInfo($this);
 
         $this->determinarPosicion();
 
@@ -129,18 +127,16 @@ abstract class TarifaExpEditFormBase extends QForm {
 
         $this->verificarNavegacion();
 
-		// Call MetaControl's methods to create qcontrols based on TarifaExp's data fields
-		$this->lblId = $this->mctTarifaExp->lblId_Create();
-		$this->txtNombre = $this->mctTarifaExp->txtNombre_Create();
-		$this->lstProducto = $this->mctTarifaExp->lstProducto_Create();
-		$this->chkIsPublica = $this->mctTarifaExp->chkIsPublica_Create();
-		$this->calFecha = $this->mctTarifaExp->calFecha_Create();
-		$this->txtMonto = $this->mctTarifaExp->txtMonto_Create();
-		$this->txtMinimo = $this->mctTarifaExp->txtMinimo_Create();
-		$this->lblCreatedAt = $this->mctTarifaExp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctTarifaExp->lblUpdatedAt_Create();
-		$this->txtCreatedBy = $this->mctTarifaExp->txtCreatedBy_Create();
-		$this->txtUpdatedBy = $this->mctTarifaExp->txtUpdatedBy_Create();
+		// Call MetaControl's methods to create qcontrols based on TarifaAliados's data fields
+		$this->lblId = $this->mctTarifaAliados->lblId_Create();
+		$this->lstAliado = $this->mctTarifaAliados->lstAliado_Create();
+		$this->lstTarifaExp = $this->mctTarifaAliados->lstTarifaExp_Create();
+		$this->lstProducto = $this->mctTarifaAliados->lstProducto_Create();
+		$this->calFechaVigencia = $this->mctTarifaAliados->calFechaVigencia_Create();
+		$this->calCreatedAt = $this->mctTarifaAliados->calCreatedAt_Create();
+		$this->lstCreatedByObject = $this->mctTarifaAliados->lstCreatedByObject_Create();
+		$this->calUpdatedAt = $this->mctTarifaAliados->calUpdatedAt_Create();
+		$this->lstUpdatedByObject = $this->mctTarifaAliados->lstUpdatedByObject_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();
@@ -153,17 +149,17 @@ abstract class TarifaExpEditFormBase extends QForm {
 	//-----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctTarifaExp->TarifaExp && !isset($_SESSION['DataTarifaExp'])) {
-            $_SESSION['DataTarifaExp'] = serialize(array($this->mctTarifaExp->TarifaExp));
+        if ($this->mctTarifaAliados->TarifaAliados && !isset($_SESSION['DataTarifaAliados'])) {
+            $_SESSION['DataTarifaAliados'] = serialize(array($this->mctTarifaAliados->TarifaAliados));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataTarifaExp']);
+        $this->arrDataTabl = unserialize($_SESSION['DataTarifaAliados']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctTarifaExp->TarifaExp->Id) {
+            if ($objTable->Id == $this->mctTarifaAliados->TarifaAliados->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -174,7 +170,7 @@ abstract class TarifaExpEditFormBase extends QForm {
 
 	protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'TarifaExp';
+        $this->lblTituForm->Text = 'TarifaAliados';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 	}
 
@@ -206,7 +202,7 @@ abstract class TarifaExpEditFormBase extends QForm {
         $this->btnNuevRegi->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevRegi->HtmlEntities = false;
         $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevRegi->Visible = $this->mctTarifaExp->EditMode;
+        $this->btnNuevRegi->Visible = $this->mctTarifaAliados->EditMode;
     }
 
     protected function btnProxRegi_Create() {
@@ -273,9 +269,9 @@ abstract class TarifaExpEditFormBase extends QForm {
         $this->btnDelete->Text = '<i class="fa fa-trash-o fa-lg"></i> Borrar';
         $this->btnDelete->CssClass = 'btn btn-danger btn-sm';
         $this->btnDelete->HtmlEntities = false;
-		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('TarifaExp'))));
+		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('TarifaAliados'))));
 		$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-		$this->btnDelete->Visible = $this->mctTarifaExp->EditMode;
+		$this->btnDelete->Visible = $this->mctTarifaAliados->EditMode;
 	}
 
     protected function btnLogxCamb_Create() {
@@ -284,7 +280,7 @@ abstract class TarifaExpEditFormBase extends QForm {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('TarifaExp',$this->mctTarifaExp->TarifaExp->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('TarifaAliados',$this->mctTarifaAliados->TarifaAliados->Id);
     }
 
     //-------------------------
@@ -305,7 +301,7 @@ abstract class TarifaExpEditFormBase extends QForm {
         $this->btnNuevSmal->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevSmal->HtmlEntities = false;
         $this->btnNuevSmal->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevSmal->Visible = $this->mctTarifaExp->EditMode;
+        $this->btnNuevSmal->Visible = $this->mctTarifaAliados->EditMode;
     }
 
     protected function btnGuarSmal_Create() {
@@ -325,7 +321,7 @@ abstract class TarifaExpEditFormBase extends QForm {
         $this->btnBorrSmal->HtmlEntities = false;
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiaRoxanne'))));
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-        $this->btnBorrSmal->Visible = $this->mctTarifaExp->EditMode;
+        $this->btnBorrSmal->Visible = $this->mctTarifaAliados->EditMode;
     }
 
     protected function btnHistSmal_Create() {
@@ -385,14 +381,16 @@ abstract class TarifaExpEditFormBase extends QForm {
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
 		// Check for records that may violate Unique Clauses
-			if (($objTarifaExp = TarifaExp::LoadByProductoIdFecha($this->lstProducto->SelectedValue,$this->calFecha->DateTime)) && ($objTarifaExp->Id != $this->mctTarifaExp->TarifaExp->Id )){
+			if (($objTarifaAliados = TarifaAliados::LoadByAliadoIdTarifaExpId($this->lstAliado->SelectedValue,$this->lstTarifaExp->SelectedValue)) && ($objTarifaAliados->Id != $this->mctTarifaAliados->TarifaAliados->Id )){
 				$blnToReturn = false;
-				$this->lstProducto->Warning = QApplication::Translate("Already in Use");
-				$this->calFecha->Warning = QApplication::Translate("Already in Use");
+				$this->lstAliado->Warning = QApplication::Translate("Already in Use");
+				$this->lstTarifaExp->Warning = QApplication::Translate("Already in Use");
 			}
-			if (($objTarifaExp = TarifaExp::LoadByNombre($this->txtNombre->Text)) && ($objTarifaExp->Id != $this->mctTarifaExp->TarifaExp->Id )){
+			if (($objTarifaAliados = TarifaAliados::LoadByAliadoIdProductoIdFechaVigencia($this->lstAliado->SelectedValue,$this->lstProducto->SelectedValue,$this->calFechaVigencia->DateTime)) && ($objTarifaAliados->Id != $this->mctTarifaAliados->TarifaAliados->Id )){
 				$blnToReturn = false;
-				$this->txtNombre->Warning = QApplication::Translate("Already in Use");
+				$this->lstAliado->Warning = QApplication::Translate("Already in Use");
+				$this->lstProducto->Warning = QApplication::Translate("Already in Use");
+				$this->calFechaVigencia->Warning = QApplication::Translate("Already in Use");
 			}
 
 		$blnFocused = false;
@@ -416,26 +414,26 @@ abstract class TarifaExpEditFormBase extends QForm {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/tarifa_exp_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_aliados_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/tarifa_exp_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_aliados_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/tarifa_exp_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_aliados_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/tarifa_exp_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_aliados_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function verificarNavegacion() {
-        if ($this->mctTarifaExp->EditMode) {
+        if ($this->mctTarifaAliados->EditMode) {
             $this->btnRegiAnte->Enabled = !($this->intPosiRegi == 0);
             $this->btnPrimRegi->Enabled = !($this->intPosiRegi == 0);
             $this->btnProxRegi->Enabled = !($this->intPosiRegi == $this->intCantRegi - 1);
@@ -459,8 +457,8 @@ abstract class TarifaExpEditFormBase extends QForm {
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-		// Delegate "Save" processing to the TarifaExpMetaControl
-		$this->mctTarifaExp->SaveTarifaExp();
+		// Delegate "Save" processing to the TarifaAliadosMetaControl
+		$this->mctTarifaAliados->SaveTarifaAliados();
 		$this->RedirectToListPage();
 	}
 
@@ -469,7 +467,7 @@ abstract class TarifaExpEditFormBase extends QForm {
 		// Se verifica la integridad referencial
 		//----------------------------------------
 		$blnTodoOkey = true;
-		$arrTablRela = $this->mctTarifaExp->TablasRelacionadasTarifaExp();
+		$arrTablRela = $this->mctTarifaAliados->TablasRelacionadasTarifaAliados();
 		if (count($arrTablRela)) {
 			$strTablRela = implode(',',$arrTablRela);
 				
@@ -478,25 +476,25 @@ abstract class TarifaExpEditFormBase extends QForm {
 			$blnTodoOkey = false;
 		}
 		if ($blnTodoOkey) {
-			// Delegate "Delete" processing to the TarifaExpMetaControl
-			$this->mctTarifaExp->DeleteTarifaExp();
+			// Delegate "Delete" processing to the TarifaAliadosMetaControl
+			$this->mctTarifaAliados->DeleteTarifaAliados();
 			$this->RedirectToListPage();
 		}
 	}
 
     protected function btnLogxCamb_Click() {
-        $_SESSION['RegiRefe'] = $this->mctTarifaExp->TarifaExp->Id;
-        $_SESSION['TablRefe'] = 'TarifaExp';
-        $_SESSION['RegiReto'] = 'tarifa_exp_edit.php/'.$this->mctTarifaExp->TarifaExp->Id;
+        $_SESSION['RegiRefe'] = $this->mctTarifaAliados->TarifaAliados->Id;
+        $_SESSION['TablRefe'] = 'TarifaAliados';
+        $_SESSION['RegiReto'] = 'tarifa_aliados_edit.php/'.$this->mctTarifaAliados->TarifaAliados->Id;
         QApplication::Redirect(__SIST__.'/log_list.php');
     }
 
     protected function btnVolvList_Click() {
-        QApplication::Redirect(__SIST__.'/tarifa_exp_list.php');
+        QApplication::Redirect(__SIST__.'/tarifa_aliados_list.php');
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/tarifa_exp_edit.php');
+        QApplication::Redirect(__SIST__.'/tarifa_aliados_edit.php');
     }
 
 

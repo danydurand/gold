@@ -157,6 +157,7 @@ class AnularFactura extends FormularioBaseKaizen {
         //-----------------------------------------------------------------------------
         $decMontAbon = $this->objFactAnul->MontoAbono;
         if ($decMontAbon > 0) {
+            t('La factura tiene pagos, voy a crear la NDC');
             try {
                 $objNotaCorp = new NotaCreditoCorp();
                 $objNotaCorp->Referencia    = NotaCreditoCorp::proxReferencia();
@@ -183,6 +184,7 @@ class AnularFactura extends FormularioBaseKaizen {
                 return;
             }
         }
+        t('Voy a anular la factura');
         //-----------------------------------
         // Datos de Anulacion de la Factura
         //-----------------------------------

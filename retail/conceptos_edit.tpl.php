@@ -17,17 +17,17 @@
             </div>
         </div>
         <div class="row" style="margin-top: .5em">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <?php $this->lblId->RenderWithName(); ?>
                 <?php $this->txtNombre->RenderWithName(); ?>
-                <?php $this->txtOrden->RenderWithName(); ?>
                 <?php $this->txtProductos->RenderWithName(); ?>
+                <?php $this->txtOrden->RenderWithName(); ?>
                 <?php $this->txtMostrarComo->RenderWithName(); ?>
                 <?php $this->chkActivo->RenderWithName(); ?>
                 <?php $this->calFechaInicial->RenderWithName(); ?>
                 <?php $this->calFechaFinal->RenderWithName(); ?>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
 				<?php $this->chkEsFijo->RenderWithName(); ?>
 				<?php $this->lstOperacion->RenderWithName(); ?>
 				<?php $this->lstAplicaComo->RenderWithName(); ?>
@@ -38,6 +38,7 @@
 				<?php $this->txtBaseImponible->RenderWithName(); ?>
 				<?php $this->txtMetodo->RenderWithName(); ?>
 				<?php $this->chkAplicarTasa->RenderWithName(); ?>
+				<?php $this->txtCondicion->RenderWithName(); ?>
 	        </div>
             <div class="col-md-4">
 

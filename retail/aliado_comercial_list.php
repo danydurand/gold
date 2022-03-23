@@ -75,7 +75,7 @@ class AliadoComercialListForm extends AliadoComercialListFormBase {
 		$colNombCont->FilterBoxSize = 12;
 		//$this->dtgAliadoComercials->MetaAddColumn('Telefono');
 		//$this->dtgAliadoComercials->MetaAddColumn('Email');
-		$this->dtgAliadoComercials->MetaAddTypeColumn('StatusId', 'StatusType');
+		$this->dtgAliadoComercials->MetaAddColumn('IsActivo', 'Name=Activo ?');
 		$this->dtgAliadoComercials->MetaAddColumn(QQN::AliadoComercial()->Sucursal);
 
         $this->btnExpoExce_Create();

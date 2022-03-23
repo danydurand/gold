@@ -384,22 +384,34 @@
         }
 
 		public function desAsociandoNotaConFactura() {
-		    t('Des-Asociando guias de la nde con la factura');
+		    t('Des-Asociando guias de la nde de la factura');
             //-----------------------------------------------------------------------------------------
             // Las guias asociadas a la Nota de Entrega, deben quedar asociadas a la Factura indicada
             //-----------------------------------------------------------------------------------------
             $arrGuiaNota = $this->GetGuiasArray();
-            foreach ($arrGuiaNota as $objGuiaNota) {
-                $objGuiaNota->FacturaId = null;
-                $objGuiaNota->Save();
+            if (isset($arrGuiaNota)) {
+                t('Hay '.count($arrGuiaNota).' guias para procesar');
+                foreach ($arrGuiaNota as $objGuiaNota) {
+                    try {
+                        $objGuiaNota->FacturaId = null;
+                        $objGuiaNota->Save();
+                    } catch (Exception $e) {
+                        t('Error: '.$e->getMessage());
+                    }
+                }
             }
             //-------------------------------------------------------------------
             // La Nota de Entrega como tal, tambien queda enlazada a la Factura
             //-------------------------------------------------------------------
-            t('Asociando la nde con la factura');
-            $this->FacturaId = null;
-            $this->Estatus = 'RECIBID@';
-            $this->Save();
+            t('Des-Asociando la nde de la factura');
+            try {
+                $this->FacturaId = null;
+                $this->Estatus = 'RECIBID@';
+                $this->Save();
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
+            }
+            t('Terminando la des-asociacion');
         }
 
         public function borrarZonaAcumulada(ProcesoError $objProcEjec) {

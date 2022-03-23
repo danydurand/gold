@@ -60,7 +60,7 @@ abstract class AliadoComercialEditFormBase extends QForm {
 	protected $txtContacto;
 	protected $txtTelefono;
 	protected $txtEmail;
-	protected $lstStatus;
+	protected $chkIsActivo;
 	protected $lstSucursal;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
@@ -135,7 +135,7 @@ abstract class AliadoComercialEditFormBase extends QForm {
 		$this->txtContacto = $this->mctAliadoComercial->txtContacto_Create();
 		$this->txtTelefono = $this->mctAliadoComercial->txtTelefono_Create();
 		$this->txtEmail = $this->mctAliadoComercial->txtEmail_Create();
-		$this->lstStatus = $this->mctAliadoComercial->lstStatus_Create();
+		$this->chkIsActivo = $this->mctAliadoComercial->chkIsActivo_Create();
 		$this->lstSucursal = $this->mctAliadoComercial->lstSucursal_Create();
 
 		$this->btnSave_Create();

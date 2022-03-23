@@ -21,6 +21,15 @@ require_once(__FORMBASE_CLASSES__ . '/AliadoComercialEditFormBase.class.php');
  * @subpackage Drafts
  */
 class AliadoComercialEditForm extends AliadoComercialEditFormBase {
+    protected $dtgTariAlia;
+    protected $lstTariAlia;
+    protected $calFechVige;
+    protected $btnSaveTari;
+    protected $btnCancTari;
+
+    protected $lblTariAlia;
+    protected $lblFechVige;
+    protected $lblAcciAlia;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -54,14 +63,117 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
 		$this->txtTelefono = $this->mctAliadoComercial->txtTelefono_Create();
 		$this->txtEmail = $this->mctAliadoComercial->txtEmail_Create();
 		$this->txtEmail->Width = 250;
-		$this->lstStatus = $this->mctAliadoComercial->lstStatus_Create();
+		$this->chkIsActivo = $this->mctAliadoComercial->chkIsActivo_Create();
+		$this->chkIsActivo->Name = 'Activo ?';
 		$this->lstSucursal = $this->mctAliadoComercial->lstSucursal_Create();
+		
+		if ($this->mctAliadoComercial->EditMode) {
+            $this->dtgTariAlia_Create();
+            $this->lstTariAlia_Create();
+            $this->calFechVige_Create();
+            $this->btnSaveTari_Create();
+
+            $this->lblTariAlia_Create();
+            $this->lblFechVige_Create();
+        }
 
 	}
 
 	//----------------------------
 	// Aqui se crean los objetos 
 	//----------------------------
+
+    protected function lblFechVige_Create() {
+        $this->lblFechVige = new QLabel($this);
+        $this->lblFechVige->Text = 'F.Vigencia';
+    }
+
+    protected function lblTariAlia_Create() {
+        $this->lblTariAlia = new QLabel($this);
+        $this->lblTariAlia->Text = 'Tarifa';
+    }
+
+    protected function btnSaveTari_Create() {
+        $this->btnSaveTari = new QButtonS($this);
+        $this->btnSaveTari->Text = TextoIcono('save','','F','lg');
+        $this->btnSaveTari->AddAction(new QClickEvent(), new QAjaxAction('btnSaveTari_Click'));
+    }
+
+    protected function btnSaveTari_Click() {
+	    try {
+            $objTariAlia = new TarifaAliados();
+            $objTariAlia->AliadoId = $this->mctAliadoComercial->AliadoComercial->Id;
+            $objTariAlia->TarifaExpId = $this->lstTariAlia->SelectedValue;
+            $objTariExpo = TarifaExp::Load($objTariAlia->TarifaExpId);
+            $objTariAlia->ProductoId = $objTariExpo->ProductoId;
+            $objTariAlia->FechaVigencia = new QDateTime(QDateTime::Now);
+            $objTariAlia->CreatedAt = new QDateTime(QDateTime::Now);
+            $objTariAlia->CreatedBy = $this->objUsuario->CodiUsua;
+            $objTariAlia->Save();
+            $this->dtgTariAlia->Refresh();
+	    } catch (Exception $e) {
+	        t('Error: '.$e->getMessage());
+	        $this->danger('Error: '.$e->getMessage());
+	    }
+    }
+
+    protected function calFechVige_Create() {
+        $this->calFechVige = new QCalendar($this);
+    }
+
+    protected function lstTariAlia_Create() {
+        $this->lstTariAlia = new QListBox($this);
+        $this->lstTariAlia->AddItem('- Seleccione -', null);
+        $arrTariExpo = TarifaExp::LoadAll();
+        foreach ($arrTariExpo as $objTariExpo) {
+            $this->lstTariAlia->AddItem($objTariExpo->__toString(), $objTariExpo->Id);
+        }
+        $this->lstTariAlia->Width = 150;
+    }
+
+    protected function dtgTariAlia_Create() {
+
+        // Instantiate the Meta DataGrid
+        $this->dtgTariAlia = new TarifaAliadosDataGrid($this);
+        $this->dtgTariAlia->FontSize = 13;
+        $this->dtgTariAlia->ShowFilter = false;
+
+        // Style the DataGrid (if desired)
+        $this->dtgTariAlia->CssClass = 'datagrid';
+        $this->dtgTariAlia->AlternateRowStyle->CssClass = 'alternate';
+
+        // Add Pagination (if desired)
+        $this->dtgTariAlia->Paginator = new QPaginator($this->dtgTariAlia);
+        $this->dtgTariAlia->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+
+        // Higlight the datagrid rows when mousing over them
+        $this->dtgTariAlia->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgTariAlia->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->AliadoId, $this->mctAliadoComercial->AliadoComercial->Id);
+        $this->dtgTariAlia->AdditionalConditions = QQ::AndCondition($objClauWher);
+
+        // Add a click handler for the rows.
+        // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
+        // or $_ITEM->Id to pass the object's id, or any other data grid variable
+        $this->dtgTariAlia->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgTariAlia->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTariAliaRow_Click'));
+
+        // Use the MetaDataGrid functionality to add Columns for this datagrid
+
+        // Create the Other Columns (note that you can use strings for tarifa_aliados's properties, or you
+        // can traverse down QQN::tarifa_aliados() to display fields that are down the hierarchy)
+        $this->dtgTariAlia->MetaAddColumn('Id');
+        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->Aliado);
+        $this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->TarifaExp);
+        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->Producto);
+        $this->dtgTariAlia->MetaAddColumn('FechaVigencia');
+        //$this->dtgTariAlia->MetaAddColumn('CreatedAt');
+        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->CreatedByObject);
+        //$this->dtgTariAlia->MetaAddColumn('UpdatedAt');
+        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->UpdatedByObject);
+
+    }
 
     protected function determinarPosicion() {
         if ($this->mctAliadoComercial->AliadoComercial && !isset($_SESSION['DataAliadoComercial'])) {
@@ -152,7 +264,8 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/aliado_comercial_edit.php/'.$this->mctAliadoComercial->AliadoComercial->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->success('Transacción Exitosa !!!');
+            //$this->success('Transacción Exitosa !!!');
+            QApplication::Redirect(__SIST__.'/aliado_comercial_edit.php/'.$this->mctAliadoComercial->AliadoComercial->Id);
 		}
 	}
 
