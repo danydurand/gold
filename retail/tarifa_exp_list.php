@@ -71,10 +71,13 @@ class TarifaExpListForm extends TarifaExpListFormBase {
 		$this->dtgTarifaExps->MetaAddColumn('Fecha');
 		$this->dtgTarifaExps->MetaAddColumn('Monto');
 		$this->dtgTarifaExps->MetaAddColumn('Minimo');
-		$this->dtgTarifaExps->MetaAddColumn('CreatedAt');
-		$this->dtgTarifaExps->MetaAddColumn('UpdatedAt');
-		$this->dtgTarifaExps->MetaAddColumn('CreatedBy');
-		$this->dtgTarifaExps->MetaAddColumn('UpdatedBy');
+		$this->dtgTarifaExps->MetaAddColumn('CreatedAt', 'Name=F.Creacion');
+		$this->dtgTarifaExps->MetaAddColumn('UpdatedAt', 'Name=F.Modif');
+
+		$colCreaPorx = new QDataGridColumn('CREAD@ POR', '<?= $_ITEM->CreatedByObject->__toString() ?>');
+		$this->dtgTarifaExps->AddColumn($colCreaPorx);
+		/*$colUpdaPorx = new QDataGridColumn('MODIF. POR', '<?= $_ITEM->UpdatedByObject->__toString() ?>');*/
+		//$this->dtgTarifaExps->AddColumn($colUpdaPorx);
 
         $this->btnExpoExce_Create();
 

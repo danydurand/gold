@@ -36,6 +36,7 @@
             $strCadeSqlx .= "  from tarifa_exp ";
             $strCadeSqlx .= " where producto_id = ".$intCodiProd;
             $strCadeSqlx .= "   and fecha <= '".$dttFechGuia."'";
+            $strCadeSqlx .= "   and is_publica = 1";
             $strCadeSqlx .= " order by fecha desc ";
             $strCadeSqlx .= " limit 1";
             $objDatabase  = TarifaExp::GetDatabase();

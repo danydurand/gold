@@ -57,7 +57,6 @@ abstract class TarifaAliadosEditFormBase extends QForm {
 	protected $lstAliado;
 	protected $lstTarifaExp;
 	protected $lstProducto;
-	protected $calFechaVigencia;
 	protected $calCreatedAt;
 	protected $lstCreatedByObject;
 	protected $calUpdatedAt;
@@ -132,7 +131,6 @@ abstract class TarifaAliadosEditFormBase extends QForm {
 		$this->lstAliado = $this->mctTarifaAliados->lstAliado_Create();
 		$this->lstTarifaExp = $this->mctTarifaAliados->lstTarifaExp_Create();
 		$this->lstProducto = $this->mctTarifaAliados->lstProducto_Create();
-		$this->calFechaVigencia = $this->mctTarifaAliados->calFechaVigencia_Create();
 		$this->calCreatedAt = $this->mctTarifaAliados->calCreatedAt_Create();
 		$this->lstCreatedByObject = $this->mctTarifaAliados->lstCreatedByObject_Create();
 		$this->calUpdatedAt = $this->mctTarifaAliados->calUpdatedAt_Create();
@@ -386,11 +384,10 @@ abstract class TarifaAliadosEditFormBase extends QForm {
 				$this->lstAliado->Warning = QApplication::Translate("Already in Use");
 				$this->lstTarifaExp->Warning = QApplication::Translate("Already in Use");
 			}
-			if (($objTarifaAliados = TarifaAliados::LoadByAliadoIdProductoIdFechaVigencia($this->lstAliado->SelectedValue,$this->lstProducto->SelectedValue,$this->calFechaVigencia->DateTime)) && ($objTarifaAliados->Id != $this->mctTarifaAliados->TarifaAliados->Id )){
+			if (($objTarifaAliados = TarifaAliados::LoadByAliadoIdProductoId($this->lstAliado->SelectedValue,$this->lstProducto->SelectedValue)) && ($objTarifaAliados->Id != $this->mctTarifaAliados->TarifaAliados->Id )){
 				$blnToReturn = false;
 				$this->lstAliado->Warning = QApplication::Translate("Already in Use");
 				$this->lstProducto->Warning = QApplication::Translate("Already in Use");
-				$this->calFechaVigencia->Warning = QApplication::Translate("Already in Use");
 			}
 
 		$blnFocused = false;

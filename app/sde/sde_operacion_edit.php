@@ -77,7 +77,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
 		$intCantSucu = Sucursales::CountSucursalesActivas();
         $this->dtgSucursalesesAsOperacionDestino = $this->mctSdeOperacion->dtgSucursalesesAsOperacionDestino_Create();
         $this->dtgSucursalesesAsOperacionDestino->Name = 'Sucursales';
-		$this->dtgSucursalesesAsOperacionDestino->ItemsPerPage = $intCantSucu;
+		$this->dtgSucursalesesAsOperacionDestino->ItemsPerPage = $intCantSucu + 1;
 
 		if ($this->mctSdeOperacion->EditMode) {
             $this->lstTipoRuta_Change();

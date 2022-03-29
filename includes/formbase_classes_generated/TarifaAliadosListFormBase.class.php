@@ -82,7 +82,6 @@ abstract class TarifaAliadosListFormBase extends QForm {
         $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->Aliado);
         $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->TarifaExp);
         $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->Producto);
-        $this->dtgTarifaAliadoses->MetaAddColumn('FechaVigencia');
         $this->dtgTarifaAliadoses->MetaAddColumn('CreatedAt');
         $this->dtgTarifaAliadoses->MetaAddColumn(QQN::TarifaAliados()->CreatedByObject);
         $this->dtgTarifaAliadoses->MetaAddColumn('UpdatedAt');

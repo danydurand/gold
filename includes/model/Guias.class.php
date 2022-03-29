@@ -454,8 +454,31 @@
             t('Rutina: flete_exp');
             $monto = 0;
             $texto = '';
-
-            $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
+            $intAliaIdxx = $this->AliadoId;
+            if (is_null($intAliaIdxx)) {
+                t('La guia no Aliado');
+                //--------------------------------------------------------
+                // No es una Aliado, se utiliza la Tarifa Publica de EXP
+                //--------------------------------------------------------
+                $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
+            } else {
+                t('La guia pertenece a un Aliado');
+                //---------------------------------------------------------------------------------
+                // Se trata de un Aliado, se utiliza la Tarifa de EXP vigente, asociada al Aliado
+                //---------------------------------------------------------------------------------
+                $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->AliadoId, $intAliaIdxx);
+                $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->ProductoId, $this->ProductoId);
+                $arrTariAlia   = TarifaAliados::QueryArray(QQ::AndCondition($objClauWher));
+                if (isset($arrTariAlia)) {
+                    t('El vector de TarifaAliado tiene: '.count($arrTariAlia).' elementos');
+                    $objTariProd   = $arrTariAlia[0];
+                    $arrTariProd['monto']  = $objTariProd->TarifaExp->Monto;
+                    $arrTariProd['minimo'] = $objTariProd->TarifaExp->Minimo;
+                } else {
+                    t('No se encontro la taifa del aliado');
+                    $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
+                }
+            }
             $decMontTari = $arrTariProd['monto'];
             $decPesoMini = $arrTariProd['minimo'];
             switch ($concepto->ActuaSobre) {
@@ -721,12 +744,13 @@
             }
             if ($concepto->Valor == 'metodo') {
                 t('Se trata de un metodo');
-                $metodo = $concepto->Metodo;
+                $metodo = trim($concepto->Metodo);
                 if (!empty($metodo)) {
                     try {
                         t("Calculando metodo $metodo...");
                         list($monto, $explicacion) = $this->$metodo($concepto);
                     } catch (Exception $e) {
+                        t("Exception:". $e->getMessage());
                         t("El metodo $metodo no existe en la Guia");
                         $explicacion = "Metodo $metodo... Indefinido";
                     }

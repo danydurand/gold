@@ -23,13 +23,13 @@ require_once(__FORMBASE_CLASSES__ . '/AliadoComercialEditFormBase.class.php');
 class AliadoComercialEditForm extends AliadoComercialEditFormBase {
     protected $dtgTariAlia;
     protected $lstTariAlia;
-    protected $calFechVige;
     protected $btnSaveTari;
-    protected $btnCancTari;
+    protected $btnDeleTari;
+    protected $btnAgreTari;
 
     protected $lblTariAlia;
-    protected $lblFechVige;
     protected $lblAcciAlia;
+    protected $intTariIdxx;
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -70,11 +70,12 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
 		if ($this->mctAliadoComercial->EditMode) {
             $this->dtgTariAlia_Create();
             $this->lstTariAlia_Create();
-            $this->calFechVige_Create();
+            $this->btnAgreTari_Create();
             $this->btnSaveTari_Create();
+            $this->btnDeleTari_Create();
 
             $this->lblTariAlia_Create();
-            $this->lblFechVige_Create();
+            $this->lblAcciAlia_Create();
         }
 
 	}
@@ -83,14 +84,20 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
 	// Aqui se crean los objetos 
 	//----------------------------
 
-    protected function lblFechVige_Create() {
-        $this->lblFechVige = new QLabel($this);
-        $this->lblFechVige->Text = 'F.Vigencia';
+    protected function lblAcciAlia_Create() {
+        $this->lblAcciAlia = new QLabel($this);
+        $this->lblAcciAlia->Text = 'Guardar';
     }
 
     protected function lblTariAlia_Create() {
         $this->lblTariAlia = new QLabel($this);
-        $this->lblTariAlia->Text = 'Tarifa';
+        $this->lblTariAlia->Text = 'Tarifa EXP';
+    }
+
+    protected function btnAgreTari_Create() {
+        $this->btnAgreTari = new QButtonP($this);
+        $this->btnAgreTari->Text = TextoIcono('plus-circle','','F','lg');
+        $this->btnAgreTari->AddAction(new QClickEvent(), new QAjaxAction('btnAgreTari_Click'));
     }
 
     protected function btnSaveTari_Create() {
@@ -99,34 +106,26 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
         $this->btnSaveTari->AddAction(new QClickEvent(), new QAjaxAction('btnSaveTari_Click'));
     }
 
-    protected function btnSaveTari_Click() {
-	    try {
-            $objTariAlia = new TarifaAliados();
-            $objTariAlia->AliadoId = $this->mctAliadoComercial->AliadoComercial->Id;
-            $objTariAlia->TarifaExpId = $this->lstTariAlia->SelectedValue;
-            $objTariExpo = TarifaExp::Load($objTariAlia->TarifaExpId);
-            $objTariAlia->ProductoId = $objTariExpo->ProductoId;
-            $objTariAlia->FechaVigencia = new QDateTime(QDateTime::Now);
-            $objTariAlia->CreatedAt = new QDateTime(QDateTime::Now);
-            $objTariAlia->CreatedBy = $this->objUsuario->CodiUsua;
-            $objTariAlia->Save();
-            $this->dtgTariAlia->Refresh();
-	    } catch (Exception $e) {
-	        t('Error: '.$e->getMessage());
-	        $this->danger('Error: '.$e->getMessage());
-	    }
-    }
-
-    protected function calFechVige_Create() {
-        $this->calFechVige = new QCalendar($this);
+    protected function btnDeleTari_Create() {
+        $this->btnDeleTari = new QButtonD($this);
+        $this->btnDeleTari->Text = TextoIcono('trash','','F','lg');
+        $this->btnDeleTari->AddAction(new QClickEvent(), new QAjaxAction('btnDeleTari_Click'));
+        $this->btnDeleTari->Visible = false;
     }
 
     protected function lstTariAlia_Create() {
         $this->lstTariAlia = new QListBox($this);
+        $this->cargarTarifas();
+    }
+
+    protected function cargarTarifas($intTariIdxx=null) {
+	    $this->lstTariAlia->RemoveAllItems();
         $this->lstTariAlia->AddItem('- Seleccione -', null);
-        $arrTariExpo = TarifaExp::LoadAll();
+        $objClauOrde[] = QQ::OrderBy(QQN::TarifaExp()->CreatedAt,false);
+        $arrTariExpo = TarifaExp::LoadAll($objClauOrde);
         foreach ($arrTariExpo as $objTariExpo) {
-            $this->lstTariAlia->AddItem($objTariExpo->__toString(), $objTariExpo->Id);
+            $blnSeleRegi = $intTariIdxx == $objTariExpo->Id;
+            $this->lstTariAlia->AddItem($objTariExpo->__toString(), $objTariExpo->Id, $blnSeleRegi);
         }
         $this->lstTariAlia->Width = 150;
     }
@@ -164,16 +163,15 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
         // Create the Other Columns (note that you can use strings for tarifa_aliados's properties, or you
         // can traverse down QQN::tarifa_aliados() to display fields that are down the hierarchy)
         $this->dtgTariAlia->MetaAddColumn('Id');
-        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->Aliado);
         $this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->TarifaExp);
-        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->Producto);
-        $this->dtgTariAlia->MetaAddColumn('FechaVigencia');
-        //$this->dtgTariAlia->MetaAddColumn('CreatedAt');
-        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->CreatedByObject);
-        //$this->dtgTariAlia->MetaAddColumn('UpdatedAt');
-        //$this->dtgTariAlia->MetaAddColumn(QQN::TarifaAliados()->UpdatedByObject);
+        $colProdExpo = new QDataGridColumn('PRODUCTO','<?= $_ITEM->TarifaExp->Producto->__toString() ?>');
+        $this->dtgTariAlia->AddColumn($colProdExpo);
+        $this->dtgTariAlia->MetaAddColumn('CreatedAt','Name=F.Creacion');
+        $colUsuaCrea = new QDataGridColumn('CREAD@ POR','<?= $_ITEM->CreatedByObject->__toString() ?>');
+        $this->dtgTariAlia->AddColumn($colUsuaCrea);
 
     }
+
 
     protected function determinarPosicion() {
         if ($this->mctAliadoComercial->AliadoComercial && !isset($_SESSION['DataAliadoComercial'])) {
@@ -195,6 +193,11 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
         }
     }
 
+    protected function limpiarCamposTarifa() {
+        $this->cargarTarifas();
+        $this->intTariIdxx = null;
+    }
+
     protected function btnLogxCamb_Create() {
         $this->btnLogxCamb = new QButton($this);
         $this->btnLogxCamb->Text = '<i class="fa fa-file-text-o fa-lg"></i> Hist';
@@ -204,11 +207,91 @@ class AliadoComercialEditForm extends AliadoComercialEditFormBase {
         $this->btnLogxCamb->Visible = Log::CountByTablaRef('AliadoComercial',$this->mctAliadoComercial->AliadoComercial->Id);
     }
 
-
-
     //-----------------------------------
 	// Acciones relativas a los objetos 
 	//-----------------------------------
+
+    protected function dtgTariAliaRow_Click($strFormId, $strControlId, $strParameter) {
+        $this->intTariIdxx = intval($strParameter);
+        $objTariAlia = TarifaAliados::Load($this->intTariIdxx);
+        $this->cargarTarifas($objTariAlia->TarifaExp->Id);
+        $this->btnDeleTari->Visible = true;
+        $this->lblAcciAlia->Text = 'Actualizar';
+    }
+
+    protected function btnAgreTari_Click() {
+	    $this->intTariIdxx = null;
+	    $this->mensaje();
+        $this->limpiarCamposTarifa();
+        $this->btnDeleTari->Visible = false;
+        $this->lblAcciAlia->Text = 'Guardar';
+    }
+
+    protected function btnDeleTari_Click() {
+        $objTariAlia = TarifaAliados::Load($this->intTariIdxx);
+        if (isset($objTariAlia)) {
+            $objTariAlia->Delete();
+            $this->dtgTariAlia->Refresh();
+            $this->btnDeleTari->Visible = false;
+            $this->lblAcciAlia->Text = 'Guardar';
+            $this->limpiarCamposTarifa();
+            $this->mensaje();
+        }
+    }
+
+    protected function estaRepetido($intProdIdxx) {
+        $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->AliadoId, $this->mctAliadoComercial->AliadoComercial->Id);
+        $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->ProductoId, $intProdIdxx);
+        return TarifaAliados::QueryCount(QQ::AndCondition($objClauWher));
+    }
+
+    protected function btnSaveTari_Click() {
+	    $this->mensaje();
+        $intTariIdxx = $this->lstTariAlia->SelectedValue;
+        $objTariExpo = TarifaExp::Load($intTariIdxx);
+        if (is_null($this->intTariIdxx)) {
+            //------------
+            // Insercion
+            //------------
+            if (!$this->estaRepetido($objTariExpo->ProductoId)) {
+                try {
+                    $objTariAlia = new TarifaAliados();
+                    $objTariAlia->AliadoId    = $this->mctAliadoComercial->AliadoComercial->Id;
+                    $objTariAlia->TarifaExpId = $this->lstTariAlia->SelectedValue;
+                    $objTariAlia->ProductoId  = $objTariExpo->ProductoId;
+                    $objTariAlia->CreatedAt   = new QDateTime(QDateTime::Now);
+                    $objTariAlia->CreatedBy   = $this->objUsuario->CodiUsua;
+                    $objTariAlia->Save();
+                    $this->dtgTariAlia->Refresh();
+                } catch (Exception $e) {
+                    t('Error: '.$e->getMessage());
+                    $this->danger('Error: '.$e->getMessage());
+                }
+            } else {
+                $this->danger('Ya existe una Tarifa para Producto seleccionado');
+            }
+        } else {
+            //---------------
+            // Modificacion
+            //---------------
+            try {
+                $objTariAlia = TarifaAliados::Load($this->intTariIdxx);
+                $objTariAlia->AliadoId    = $this->mctAliadoComercial->AliadoComercial->Id;
+                $objTariAlia->TarifaExpId = $this->lstTariAlia->SelectedValue;
+                $objTariAlia->ProductoId  = $objTariExpo->ProductoId;
+                $objTariAlia->UpdatedAt   = new QDateTime(QDateTime::Now);
+                $objTariAlia->UpdatedBy   = $this->objUsuario->CodiUsua;
+                $objTariAlia->Save();
+                $this->btnDeleTari->Visible = false;
+                $this->dtgTariAlia->Refresh();
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
+                $this->danger('Error: '.$e->getMessage());
+            }
+        }
+        $this->limpiarCamposTarifa();
+    }
+
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];

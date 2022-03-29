@@ -19,7 +19,6 @@
 	 * @property integer $AliadoId the value for intAliadoId (Not Null)
 	 * @property integer $TarifaExpId the value for intTarifaExpId (Not Null)
 	 * @property integer $ProductoId the value for intProductoId (Not Null)
-	 * @property QDateTime $FechaVigencia the value for dttFechaVigencia (Not Null)
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt (Not Null)
 	 * @property integer $CreatedBy the value for intCreatedBy (Not Null)
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
@@ -67,14 +66,6 @@
 		 */
 		protected $intProductoId;
 		const ProductoIdDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column tarifa_aliados.fecha_vigencia
-		 * @var QDateTime dttFechaVigencia
-		 */
-		protected $dttFechaVigencia;
-		const FechaVigenciaDefault = null;
 
 
 		/**
@@ -192,7 +183,6 @@
 			$this->intAliadoId = TarifaAliados::AliadoIdDefault;
 			$this->intTarifaExpId = TarifaAliados::TarifaExpIdDefault;
 			$this->intProductoId = TarifaAliados::ProductoIdDefault;
-			$this->dttFechaVigencia = (TarifaAliados::FechaVigenciaDefault === null)?null:new QDateTime(TarifaAliados::FechaVigenciaDefault);
 			$this->dttCreatedAt = (TarifaAliados::CreatedAtDefault === null)?null:new QDateTime(TarifaAliados::CreatedAtDefault);
 			$this->intCreatedBy = TarifaAliados::CreatedByDefault;
 			$this->dttUpdatedAt = (TarifaAliados::UpdatedAtDefault === null)?null:new QDateTime(TarifaAliados::UpdatedAtDefault);
@@ -542,7 +532,6 @@
 			    $objBuilder->AddSelectItem($strTableName, 'aliado_id', $strAliasPrefix . 'aliado_id');
 			    $objBuilder->AddSelectItem($strTableName, 'tarifa_exp_id', $strAliasPrefix . 'tarifa_exp_id');
 			    $objBuilder->AddSelectItem($strTableName, 'producto_id', $strAliasPrefix . 'producto_id');
-			    $objBuilder->AddSelectItem($strTableName, 'fecha_vigencia', $strAliasPrefix . 'fecha_vigencia');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'created_by', $strAliasPrefix . 'created_by');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -684,9 +673,6 @@
 			$strAlias = $strAliasPrefix . 'producto_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intProductoId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'fecha_vigencia';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->dttFechaVigencia = $objDbRow->GetColumn($strAliasName, 'Date');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
@@ -880,19 +866,17 @@
 
 		/**
 		 * Load a single TarifaAliados object,
-		 * by AliadoId, ProductoId, FechaVigencia Index(es)
+		 * by AliadoId, ProductoId Index(es)
 		 * @param integer $intAliadoId
 		 * @param integer $intProductoId
-		 * @param QDateTime $dttFechaVigencia
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
 		 * @return TarifaAliados
 		*/
-		public static function LoadByAliadoIdProductoIdFechaVigencia($intAliadoId, $intProductoId, $dttFechaVigencia, $objOptionalClauses = null) {
+		public static function LoadByAliadoIdProductoId($intAliadoId, $intProductoId, $objOptionalClauses = null) {
 			return TarifaAliados::QuerySingle(
 				QQ::AndCondition(
 					QQ::Equal(QQN::TarifaAliados()->AliadoId, $intAliadoId),
-					QQ::Equal(QQN::TarifaAliados()->ProductoId, $intProductoId),
-					QQ::Equal(QQN::TarifaAliados()->FechaVigencia, $dttFechaVigencia)
+					QQ::Equal(QQN::TarifaAliados()->ProductoId, $intProductoId)
 				),
 				$objOptionalClauses
 			);
@@ -1092,7 +1076,6 @@
 							`aliado_id`,
 							`tarifa_exp_id`,
 							`producto_id`,
-							`fecha_vigencia`,
 							`created_at`,
 							`created_by`,
 							`updated_at`,
@@ -1101,7 +1084,6 @@
 							' . $objDatabase->SqlVariable($this->intAliadoId) . ',
 							' . $objDatabase->SqlVariable($this->intTarifaExpId) . ',
 							' . $objDatabase->SqlVariable($this->intProductoId) . ',
-							' . $objDatabase->SqlVariable($this->dttFechaVigencia) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -1124,7 +1106,6 @@
 							`aliado_id` = ' . $objDatabase->SqlVariable($this->intAliadoId) . ',
 							`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intTarifaExpId) . ',
 							`producto_id` = ' . $objDatabase->SqlVariable($this->intProductoId) . ',
-							`fecha_vigencia` = ' . $objDatabase->SqlVariable($this->dttFechaVigencia) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -1236,7 +1217,6 @@
 			$this->AliadoId = $objReloaded->AliadoId;
 			$this->TarifaExpId = $objReloaded->TarifaExpId;
 			$this->ProductoId = $objReloaded->ProductoId;
-			$this->dttFechaVigencia = $objReloaded->dttFechaVigencia;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
 			$this->CreatedBy = $objReloaded->CreatedBy;
 			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
@@ -1288,13 +1268,6 @@
 					 * @return integer
 					 */
 					return $this->intProductoId;
-
-				case 'FechaVigencia':
-					/**
-					 * Gets the value for dttFechaVigencia (Not Null)
-					 * @return QDateTime
-					 */
-					return $this->dttFechaVigencia;
 
 				case 'CreatedAt':
 					/**
@@ -1468,19 +1441,6 @@
 					try {
 						$this->objProducto = null;
 						return ($this->intProductoId = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'FechaVigencia':
-					/**
-					 * Sets the value for dttFechaVigencia (Not Null)
-					 * @param QDateTime $mixValue
-					 * @return QDateTime
-					 */
-					try {
-						return ($this->dttFechaVigencia = QType::Cast($mixValue, QType::DateTime));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1786,7 +1746,6 @@
 			$strToReturn .= '<element name="Aliado" type="xsd1:AliadoComercial"/>';
 			$strToReturn .= '<element name="TarifaExp" type="xsd1:TarifaExp"/>';
 			$strToReturn .= '<element name="Producto" type="xsd1:Productos"/>';
-			$strToReturn .= '<element name="FechaVigencia" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedByObject" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
@@ -1829,8 +1788,6 @@
 			if ((property_exists($objSoapObject, 'Producto')) &&
 				($objSoapObject->Producto))
 				$objToReturn->Producto = Productos::GetObjectFromSoapObject($objSoapObject->Producto);
-			if (property_exists($objSoapObject, 'FechaVigencia'))
-				$objToReturn->dttFechaVigencia = new QDateTime($objSoapObject->FechaVigencia);
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if ((property_exists($objSoapObject, 'CreatedByObject')) &&
@@ -1871,8 +1828,6 @@
 				$objObject->objProducto = Productos::GetSoapObjectFromObject($objObject->objProducto, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intProductoId = null;
-			if ($objObject->dttFechaVigencia)
-				$objObject->dttFechaVigencia = $objObject->dttFechaVigencia->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttCreatedAt)
 				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objCreatedByObject)
@@ -1903,7 +1858,6 @@
 			$iArray['AliadoId'] = $this->intAliadoId;
 			$iArray['TarifaExpId'] = $this->intTarifaExpId;
 			$iArray['ProductoId'] = $this->intProductoId;
-			$iArray['FechaVigencia'] = $this->dttFechaVigencia;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
@@ -1952,7 +1906,6 @@
      * @property-read QQNodeTarifaExp $TarifaExp
      * @property-read QQNode $ProductoId
      * @property-read QQNodeProductos $Producto
-     * @property-read QQNode $FechaVigencia
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
@@ -1984,8 +1937,6 @@
 					return new QQNode('producto_id', 'ProductoId', 'Integer', $this);
 				case 'Producto':
 					return new QQNodeProductos('producto_id', 'Producto', 'Integer', $this);
-				case 'FechaVigencia':
-					return new QQNode('fecha_vigencia', 'FechaVigencia', 'Date', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'CreatedBy':
@@ -2020,7 +1971,6 @@
      * @property-read QQNodeTarifaExp $TarifaExp
      * @property-read QQNode $ProductoId
      * @property-read QQNodeProductos $Producto
-     * @property-read QQNode $FechaVigencia
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
@@ -2052,8 +2002,6 @@
 					return new QQNode('producto_id', 'ProductoId', 'integer', $this);
 				case 'Producto':
 					return new QQNodeProductos('producto_id', 'Producto', 'integer', $this);
-				case 'FechaVigencia':
-					return new QQNode('fecha_vigencia', 'FechaVigencia', 'QDateTime', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'CreatedBy':

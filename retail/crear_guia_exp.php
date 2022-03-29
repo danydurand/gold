@@ -77,6 +77,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lstServExpo;
     protected $lstFormPago;
     protected $lstModoValo;
+    protected $lstAliaCome;
     protected $lstClieCorp;
 
     protected $txtNumeGuia;
@@ -384,6 +385,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstModoValo_Create();
         $this->lblUnidMedi_Create();
         $this->lstUnidMedi_Create();
+        $this->lstAliaCome_Create();
         $this->lstClieCorp_Create();
         $this->txtCantPiez_Create();
 
@@ -477,6 +479,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $objSucuUsua = Counter::Load($_SESSION['ReceptoriaId']);
         if (!is_null($objSucuUsua->AliadoComercialId)) {
             $this->blnAliaCome = true;
+            $this->cargarAliados($objSucuUsua->AliadoComercialId);
+            $this->lstAliaCome = disableControl($this->lstAliaCome);
             $this->lstClieCorp->Visible = false;
         }
     }
@@ -569,8 +573,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if ($this->blnEditMode && (strlen($this->objGuia->ClienteRetail->FechaNacimiento) > 0)) {
             //t('Aqui estoy. La fecha es: '.$this->objGuia->ClienteRetail->FechaNacimiento);
             $this->calFechNaci->Text = $this->objGuia->ClienteRetail->FechaNacimiento->__toString("DD/MM/YYYY");
-        } else {
-            //t('Estoy aca...');
         }
     }
 
@@ -868,6 +870,17 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstUnidMedi->AddItem('pl','pl');
         $this->lstUnidMedi->Visible = false;
         $this->lstUnidMedi->AddAction(new QChangeEvent(), new QAjaxAction('lstUnidMedi_Change'));
+    }
+
+    protected function lstAliaCome_Create() {
+        $this->lstAliaCome = new QListBox($this);
+        $this->lstAliaCome->Name = 'Aliado';
+        $this->lstAliaCome->Width = 210;
+        if (!$this->blnEditMode) {
+            $this->cargarAliados();
+        } else {
+            $this->cargarAliados($this->objGuia->AliadoId);
+        }
     }
 
     protected function lstClieCorp_Create() {
@@ -1395,7 +1408,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $objPiezGuia->Delete();
 
         $intCantPiez = (int)$this->txtCantPiez->Text;
-        $decValoDecl = $decValoPiez / ($intCantPiez - 1);
+        if ($intCantPiez > 1) {
+            $decValoDecl = $decValoPiez / ($intCantPiez - 1);
+        } else {
+            $decValoDecl = (float)$this->txtValoDecl->Text;
+        }
+
         //t('Pieza borrada');
 
         if ($this->lstModoValo->SelectedValue == 'PG') {
@@ -1846,33 +1864,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     }
 
-    //protected function colConcSele_Click() {
-    //    if (is_null($this->objGuia->FacturaId)) {
-    //        $this->mensaje();
-    //        $arrIdxxSele = $this->colConcSele->GetChangedIds();
-    //        t('Conceptos seleccionados: '.count($arrIdxxSele));
-    //        //---------------------------------------------------------------
-    //        // Se borran todos los Conceptos-Opcionales asociados a la guia
-    //        //---------------------------------------------------------------
-    //        t('Voy a borrar todos los conceptos previamente asociados a la guia');
-    //        $strTextMens = $this->objGuia->DesAsociarConceptosOpcionales();
-    //        if (count($arrIdxxSele) > 0) {
-    //            t('Hay seleccion de conceptos opcionales, los voy a asociar');
-    //            foreach (array_keys($arrIdxxSele) as $intConcOpci) {
-    //                t('Procesando concepto: '.$intConcOpci);
-    //                $strTextMens = $this->objGuia->AsociarConceptoOpcional($intConcOpci, $this->objUsuario->CodiUsua);
-    //                t('El mensaje de regreso es: '.$strTextMens);
-    //                if ($strTextMens != 'OK') {
-    //                    $this->danger($strTextMens);
-    //                    break;
-    //                }
-    //            }
-    //            t('Todo termino bien, voy a actualizar el datagrid');
-    //            $this->dtgConcOpci->Refresh();
-    //            $this->success('Concepto(s) Opcionales asociados a la Guia');
-    //        }
-    //    }
-    //}
 
 
     protected function txtNumeCedu_Blur() {
@@ -2122,7 +2113,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 //----------------------------------------------------------------------------------------------
                 if ($this->blnEditMode) {
 
-                    if (substr_count($this->txtDireDest->Text, 'OFICINA LIBERTY')) {
+                    if (substr_count($this->txtDireDest->Text, 'OFICINA GOLD')) {
                         $blnSeleRegi = true;
                     }
 
@@ -2172,8 +2163,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                         $this->lstReceDest->ForeColor = 'blue';
                         $this->txtDireDest->Enabled = false;
                         $this->txtDireDest->ForeColor = 'blue';
-                        if (substr_count($this->txtDireDest->Text, 'OFICINA LIBERTY')) {
-                            $this->txtDireDest->Text = 'OFICINA LIBERTY (' . $this->strCodiEsta . ')';
+                        if (substr_count($this->txtDireDest->Text, 'OFICINA GOLD')) {
+                            $this->txtDireDest->Text = 'OFICINA GOLD (' . $this->strCodiEsta . ')';
                         }
                     } else {
                         $this->lstReceDest->RemoveAllItems();
@@ -2218,6 +2209,19 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstModoValo->RemoveAllItems();
         $this->lstModoValo->AddItem('Por GUIA','PG',$strModoValo=='PG');
         $this->lstModoValo->AddItem('Por PIEZA','PP',$strModoValo=='PP');
+    }
+
+    protected function cargarAliados($intAliaIdxx=null) {
+        $this->lstAliaCome->RemoveAllItems();
+        $objClauOrde = QQ::OrderBy(QQN::AliadoComercial()->RazonSocial);
+        $arrAliaCome = AliadoComercial::LoadAll($objClauOrde);
+        $intCantAlia = count($arrAliaCome);
+        $this->lstAliaCome->AddItem('- Seleccione - ('.$intCantAlia.')', null);
+        foreach ($arrAliaCome as $objAliaCome) {
+            $blnSeleRegi = $objAliaCome->Id == $intAliaIdxx;
+            $this->lstAliaCome->AddItem($objAliaCome->__toString(), $objAliaCome->Id, $blnSeleRegi);
+        }
+        $this->lstAliaCome->Width = 210;
     }
 
     protected function cargarClientesCorp($intCodiClie=null) {
@@ -2589,14 +2593,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         t('===========================================');
         t('Rutina: Procesando los Conceptos Opcionales');
         $this->objGuia->borrarConceptosOpcionales();
+        $arrIdxxSele = $this->colConcSele->GetChangedIds(true);
         $arrIdxxSele = $this->colConcSele->GetSelectedIds();
-        t('Conceptos seleccionados: '.count($arrIdxxSele));
-        if ( (count($arrIdxxSele) == 0) && (count($this->arrOpciToma) > 0) ) {
-            t('Aja... hay diferencias...');
-            foreach ($this->arrOpciToma as $objConcToma) {
-                $arrIdxxSele[$objConcToma->Id] = 1;
-            }
-        }
+
         if (count($arrIdxxSele) > 0) {
             t('Hay seleccion de conceptos opcionales, los voy a asociar');
             foreach (array_keys($arrIdxxSele) as $intConcOpci) {
@@ -2724,6 +2723,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->CodigoPostal              = $this->txtPostDest->Text;
             $this->objGuia->TipoExport                = 'COURIER';
             $this->objGuia->ProductoId                = $objProdExpo->Id;
+            $this->objGuia->AliadoId                  = $this->lstAliaCome->SelectedValue;
             $this->objGuia->ClienteCorpId             = $this->lstClieCorp->SelectedValue;
             $this->objGuia->ReferenciaExp             = $this->txtRefeExpo->Text;
             $this->objGuia->RazonesExp                = $this->txtRazoExpo->Text;

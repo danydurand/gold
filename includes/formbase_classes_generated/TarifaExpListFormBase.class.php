@@ -87,8 +87,8 @@ abstract class TarifaExpListFormBase extends QForm {
         $this->dtgTarifaExps->MetaAddColumn('Minimo');
         $this->dtgTarifaExps->MetaAddColumn('CreatedAt');
         $this->dtgTarifaExps->MetaAddColumn('UpdatedAt');
-        $this->dtgTarifaExps->MetaAddColumn('CreatedBy');
-        $this->dtgTarifaExps->MetaAddColumn('UpdatedBy');
+        $this->dtgTarifaExps->MetaAddColumn(QQN::TarifaExp()->CreatedByObject);
+        $this->dtgTarifaExps->MetaAddColumn(QQN::TarifaExp()->UpdatedByObject);
 
         $this->btnExpoExce_Create();
 

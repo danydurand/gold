@@ -19,10 +19,8 @@
     </div>
     <div class="col-md-5">
         <div class="form-group">
-            <?php if (!$this->blnAliaCome) { ?>
-            <label for="">Cliente CORP</label><br>
-            <?php $this->lstClieCorp->Render(); ?>
-            <?php } ?>
+            <label for="">Aliado Comercial</label><br>
+            <?php $this->lstAliaCome->Render(); ?>
         </div>
     </div>
 </div>

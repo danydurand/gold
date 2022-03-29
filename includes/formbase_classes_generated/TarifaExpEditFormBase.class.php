@@ -60,10 +60,10 @@ abstract class TarifaExpEditFormBase extends QForm {
 	protected $calFecha;
 	protected $txtMonto;
 	protected $txtMinimo;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
-	protected $txtCreatedBy;
-	protected $txtUpdatedBy;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
+	protected $lstCreatedByObject;
+	protected $lstUpdatedByObject;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -137,10 +137,10 @@ abstract class TarifaExpEditFormBase extends QForm {
 		$this->calFecha = $this->mctTarifaExp->calFecha_Create();
 		$this->txtMonto = $this->mctTarifaExp->txtMonto_Create();
 		$this->txtMinimo = $this->mctTarifaExp->txtMinimo_Create();
-		$this->lblCreatedAt = $this->mctTarifaExp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctTarifaExp->lblUpdatedAt_Create();
-		$this->txtCreatedBy = $this->mctTarifaExp->txtCreatedBy_Create();
-		$this->txtUpdatedBy = $this->mctTarifaExp->txtUpdatedBy_Create();
+		$this->calCreatedAt = $this->mctTarifaExp->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctTarifaExp->calUpdatedAt_Create();
+		$this->lstCreatedByObject = $this->mctTarifaExp->lstCreatedByObject_Create();
+		$this->lstUpdatedByObject = $this->mctTarifaExp->lstUpdatedByObject_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();

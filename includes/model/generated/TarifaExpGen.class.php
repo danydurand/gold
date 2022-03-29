@@ -22,11 +22,13 @@
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
 	 * @property double $Monto the value for fltMonto (Not Null)
 	 * @property double $Minimo the value for fltMinimo (Not Null)
-	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
-	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
+	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
+	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property Productos $Producto the value for the Productos object referenced by intProductoId (Not Null)
+	 * @property Usuario $CreatedByObject the value for the Usuario object referenced by intCreatedBy 
+	 * @property Usuario $UpdatedByObject the value for the Usuario object referenced by intUpdatedBy 
 	 * @property-read TarifaAliados $_TarifaAliados the value for the private _objTarifaAliados (Read-Only) if set due to an expansion on the tarifa_aliados.tarifa_exp_id reverse relationship
 	 * @property-read TarifaAliados[] $_TarifaAliadosArray the value for the private _objTarifaAliadosArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.tarifa_exp_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -96,17 +98,17 @@
 
 		/**
 		 * Protected member variable that maps to the database column tarifa_exp.created_at
-		 * @var string strCreatedAt
+		 * @var QDateTime dttCreatedAt
 		 */
-		protected $strCreatedAt;
+		protected $dttCreatedAt;
 		const CreatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column tarifa_exp.updated_at
-		 * @var string strUpdatedAt
+		 * @var QDateTime dttUpdatedAt
 		 */
-		protected $strUpdatedAt;
+		protected $dttUpdatedAt;
 		const UpdatedAtDefault = null;
 
 
@@ -174,6 +176,26 @@
 		 */
 		protected $objProducto;
 
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column tarifa_exp.created_by.
+		 *
+		 * NOTE: Always use the CreatedByObject property getter to correctly retrieve this Usuario object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Usuario objCreatedByObject
+		 */
+		protected $objCreatedByObject;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column tarifa_exp.updated_by.
+		 *
+		 * NOTE: Always use the UpdatedByObject property getter to correctly retrieve this Usuario object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Usuario objUpdatedByObject
+		 */
+		protected $objUpdatedByObject;
+
 
 
 		/**
@@ -188,8 +210,8 @@
 			$this->dttFecha = (TarifaExp::FechaDefault === null)?null:new QDateTime(TarifaExp::FechaDefault);
 			$this->fltMonto = TarifaExp::MontoDefault;
 			$this->fltMinimo = TarifaExp::MinimoDefault;
-			$this->strCreatedAt = TarifaExp::CreatedAtDefault;
-			$this->strUpdatedAt = TarifaExp::UpdatedAtDefault;
+			$this->dttCreatedAt = (TarifaExp::CreatedAtDefault === null)?null:new QDateTime(TarifaExp::CreatedAtDefault);
+			$this->dttUpdatedAt = (TarifaExp::UpdatedAtDefault === null)?null:new QDateTime(TarifaExp::UpdatedAtDefault);
 			$this->intCreatedBy = TarifaExp::CreatedByDefault;
 			$this->intUpdatedBy = TarifaExp::UpdatedByDefault;
 		}
@@ -692,10 +714,10 @@
 			$objToReturn->fltMinimo = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'updated_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strUpdatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'created_by';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCreatedBy = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -738,6 +760,20 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['producto_id']) ? null : $objExpansionAliasArray['producto_id']);
 				$objToReturn->objProducto = Productos::InstantiateDbRow($objDbRow, $strAliasPrefix . 'producto_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for CreatedByObject Early Binding
+			$strAlias = $strAliasPrefix . 'created_by__codi_usua';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['created_by']) ? null : $objExpansionAliasArray['created_by']);
+				$objToReturn->objCreatedByObject = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'created_by__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for UpdatedByObject Early Binding
+			$strAlias = $strAliasPrefix . 'updated_by__codi_usua';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['updated_by']) ? null : $objExpansionAliasArray['updated_by']);
+				$objToReturn->objUpdatedByObject = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'updated_by__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -916,6 +952,70 @@
 			);
 		}
 
+		/**
+		 * Load an array of TarifaExp objects,
+		 * by UpdatedBy Index(es)
+		 * @param integer $intUpdatedBy
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaExp[]
+		*/
+		public static function LoadArrayByUpdatedBy($intUpdatedBy, $objOptionalClauses = null) {
+			// Call TarifaExp::QueryArray to perform the LoadArrayByUpdatedBy query
+			try {
+				return TarifaExp::QueryArray(
+					QQ::Equal(QQN::TarifaExp()->UpdatedBy, $intUpdatedBy),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count TarifaExps
+		 * by UpdatedBy Index(es)
+		 * @param integer $intUpdatedBy
+		 * @return int
+		*/
+		public static function CountByUpdatedBy($intUpdatedBy) {
+			// Call TarifaExp::QueryCount to perform the CountByUpdatedBy query
+			return TarifaExp::QueryCount(
+				QQ::Equal(QQN::TarifaExp()->UpdatedBy, $intUpdatedBy)
+			);
+		}
+
+		/**
+		 * Load an array of TarifaExp objects,
+		 * by CreatedBy Index(es)
+		 * @param integer $intCreatedBy
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaExp[]
+		*/
+		public static function LoadArrayByCreatedBy($intCreatedBy, $objOptionalClauses = null) {
+			// Call TarifaExp::QueryArray to perform the LoadArrayByCreatedBy query
+			try {
+				return TarifaExp::QueryArray(
+					QQ::Equal(QQN::TarifaExp()->CreatedBy, $intCreatedBy),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count TarifaExps
+		 * by CreatedBy Index(es)
+		 * @param integer $intCreatedBy
+		 * @return int
+		*/
+		public static function CountByCreatedBy($intCreatedBy) {
+			// Call TarifaExp::QueryCount to perform the CountByCreatedBy query
+			return TarifaExp::QueryCount(
+				QQ::Equal(QQN::TarifaExp()->CreatedBy, $intCreatedBy)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -953,6 +1053,8 @@
 							`fecha`,
 							`monto`,
 							`minimo`,
+							`created_at`,
+							`updated_at`,
 							`created_by`,
 							`updated_by`
 						) VALUES (
@@ -962,6 +1064,8 @@
 							' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							' . $objDatabase->SqlVariable($this->fltMonto) . ',
 							' . $objDatabase->SqlVariable($this->fltMinimo) . ',
+							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						)
@@ -973,36 +1077,6 @@
 					// Perform an UPDATE query
 
 					// First checking for Optimistic Locking constraints (if applicable)
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`created_at`
-							FROM
-								`tarifa_exp`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strCreatedAt)
-							throw new QOptimisticLockingException('TarifaExp');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`updated_at`
-							FROM
-								`tarifa_exp`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strUpdatedAt)
-							throw new QOptimisticLockingException('TarifaExp');
-					}
 
 					// Perform the UPDATE query
 					$objDatabase->NonQuery('
@@ -1015,6 +1089,8 @@
 							`fecha` = ' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							`monto` = ' . $objDatabase->SqlVariable($this->fltMonto) . ',
 							`minimo` = ' . $objDatabase->SqlVariable($this->fltMinimo) . ',
+							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						WHERE
@@ -1031,30 +1107,6 @@
 			// Update __blnRestored and any Non-Identity PK Columns (if applicable)
 			$this->__blnRestored = true;
 
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`created_at`
-				FROM
-					`tarifa_exp`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strCreatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`updated_at`
-				FROM
-					`tarifa_exp`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strUpdatedAt = $objRow[0];
 
 			$this->DeleteCache();
 
@@ -1151,10 +1203,10 @@
 			$this->dttFecha = $objReloaded->dttFecha;
 			$this->fltMonto = $objReloaded->fltMonto;
 			$this->fltMinimo = $objReloaded->fltMinimo;
-			$this->strCreatedAt = $objReloaded->strCreatedAt;
-			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
-			$this->intCreatedBy = $objReloaded->intCreatedBy;
-			$this->intUpdatedBy = $objReloaded->intUpdatedBy;
+			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
+			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
+			$this->CreatedBy = $objReloaded->CreatedBy;
+			$this->UpdatedBy = $objReloaded->UpdatedBy;
 		}
 
 
@@ -1226,17 +1278,17 @@
 
 				case 'CreatedAt':
 					/**
-					 * Gets the value for strCreatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttCreatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strCreatedAt;
+					return $this->dttCreatedAt;
 
 				case 'UpdatedAt':
 					/**
-					 * Gets the value for strUpdatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttUpdatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strUpdatedAt;
+					return $this->dttUpdatedAt;
 
 				case 'CreatedBy':
 					/**
@@ -1265,6 +1317,34 @@
 						if ((!$this->objProducto) && (!is_null($this->intProductoId)))
 							$this->objProducto = Productos::Load($this->intProductoId);
 						return $this->objProducto;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'CreatedByObject':
+					/**
+					 * Gets the value for the Usuario object referenced by intCreatedBy 
+					 * @return Usuario
+					 */
+					try {
+						if ((!$this->objCreatedByObject) && (!is_null($this->intCreatedBy)))
+							$this->objCreatedByObject = Usuario::Load($this->intCreatedBy);
+						return $this->objCreatedByObject;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UpdatedByObject':
+					/**
+					 * Gets the value for the Usuario object referenced by intUpdatedBy 
+					 * @return Usuario
+					 */
+					try {
+						if ((!$this->objUpdatedByObject) && (!is_null($this->intUpdatedBy)))
+							$this->objUpdatedByObject = Usuario::Load($this->intUpdatedBy);
+						return $this->objUpdatedByObject;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1398,6 +1478,32 @@
 						throw $objExc;
 					}
 
+				case 'CreatedAt':
+					/**
+					 * Sets the value for dttCreatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttCreatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UpdatedAt':
+					/**
+					 * Sets the value for dttUpdatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttUpdatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'CreatedBy':
 					/**
 					 * Sets the value for intCreatedBy 
@@ -1405,6 +1511,7 @@
 					 * @return integer
 					 */
 					try {
+						$this->objCreatedByObject = null;
 						return ($this->intCreatedBy = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
@@ -1418,6 +1525,7 @@
 					 * @return integer
 					 */
 					try {
+						$this->objUpdatedByObject = null;
 						return ($this->intUpdatedBy = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
@@ -1454,6 +1562,70 @@
 						// Update Local Member Variables
 						$this->objProducto = $mixValue;
 						$this->intProductoId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'CreatedByObject':
+					/**
+					 * Sets the value for the Usuario object referenced by intCreatedBy 
+					 * @param Usuario $mixValue
+					 * @return Usuario
+					 */
+					if (is_null($mixValue)) {
+						$this->intCreatedBy = null;
+						$this->objCreatedByObject = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Usuario object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Usuario');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Usuario object
+						if (is_null($mixValue->CodiUsua))
+							throw new QCallerException('Unable to set an unsaved CreatedByObject for this TarifaExp');
+
+						// Update Local Member Variables
+						$this->objCreatedByObject = $mixValue;
+						$this->intCreatedBy = $mixValue->CodiUsua;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'UpdatedByObject':
+					/**
+					 * Sets the value for the Usuario object referenced by intUpdatedBy 
+					 * @param Usuario $mixValue
+					 * @return Usuario
+					 */
+					if (is_null($mixValue)) {
+						$this->intUpdatedBy = null;
+						$this->objUpdatedByObject = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Usuario object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Usuario');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Usuario object
+						if (is_null($mixValue->CodiUsua))
+							throw new QCallerException('Unable to set an unsaved UpdatedByObject for this TarifaExp');
+
+						// Update Local Member Variables
+						$this->objUpdatedByObject = $mixValue;
+						$this->intUpdatedBy = $mixValue->CodiUsua;
 
 						// Return $mixValue
 						return $mixValue;
@@ -1697,10 +1869,10 @@
 			$strToReturn .= '<element name="Fecha" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="Monto" type="xsd:float"/>';
 			$strToReturn .= '<element name="Minimo" type="xsd:float"/>';
-			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="CreatedBy" type="xsd:int"/>';
-			$strToReturn .= '<element name="UpdatedBy" type="xsd:int"/>';
+			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="CreatedByObject" type="xsd1:Usuario"/>';
+			$strToReturn .= '<element name="UpdatedByObject" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -1710,6 +1882,8 @@
 			if (!array_key_exists('TarifaExp', $strComplexTypeArray)) {
 				$strComplexTypeArray['TarifaExp'] = TarifaExp::GetSoapComplexTypeXml();
 				Productos::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Usuario::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Usuario::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -1740,13 +1914,15 @@
 			if (property_exists($objSoapObject, 'Minimo'))
 				$objToReturn->fltMinimo = $objSoapObject->Minimo;
 			if (property_exists($objSoapObject, 'CreatedAt'))
-				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
+				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
-				$objToReturn->strUpdatedAt = $objSoapObject->UpdatedAt;
-			if (property_exists($objSoapObject, 'CreatedBy'))
-				$objToReturn->intCreatedBy = $objSoapObject->CreatedBy;
-			if (property_exists($objSoapObject, 'UpdatedBy'))
-				$objToReturn->intUpdatedBy = $objSoapObject->UpdatedBy;
+				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
+			if ((property_exists($objSoapObject, 'CreatedByObject')) &&
+				($objSoapObject->CreatedByObject))
+				$objToReturn->CreatedByObject = Usuario::GetObjectFromSoapObject($objSoapObject->CreatedByObject);
+			if ((property_exists($objSoapObject, 'UpdatedByObject')) &&
+				($objSoapObject->UpdatedByObject))
+				$objToReturn->UpdatedByObject = Usuario::GetObjectFromSoapObject($objSoapObject->UpdatedByObject);
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -1771,6 +1947,18 @@
 				$objObject->intProductoId = null;
 			if ($objObject->dttFecha)
 				$objObject->dttFecha = $objObject->dttFecha->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttCreatedAt)
+				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttUpdatedAt)
+				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->objCreatedByObject)
+				$objObject->objCreatedByObject = Usuario::GetSoapObjectFromObject($objObject->objCreatedByObject, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intCreatedBy = null;
+			if ($objObject->objUpdatedByObject)
+				$objObject->objUpdatedByObject = Usuario::GetSoapObjectFromObject($objObject->objUpdatedByObject, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intUpdatedBy = null;
 			return $objObject;
 		}
 
@@ -1792,8 +1980,8 @@
 			$iArray['Fecha'] = $this->dttFecha;
 			$iArray['Monto'] = $this->fltMonto;
 			$iArray['Minimo'] = $this->fltMinimo;
-			$iArray['CreatedAt'] = $this->strCreatedAt;
-			$iArray['UpdatedAt'] = $this->strUpdatedAt;
+			$iArray['CreatedAt'] = $this->dttCreatedAt;
+			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedBy'] = $this->intUpdatedBy;
 			return new ArrayIterator($iArray);
@@ -1844,7 +2032,9 @@
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $CreatedBy
+     * @property-read QQNodeUsuario $CreatedByObject
      * @property-read QQNode $UpdatedBy
+     * @property-read QQNodeUsuario $UpdatedByObject
      *
      *
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliados
@@ -1874,13 +2064,17 @@
 				case 'Minimo':
 					return new QQNode('minimo', 'Minimo', 'Float', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
+					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
+				case 'CreatedByObject':
+					return new QQNodeUsuario('created_by', 'CreatedByObject', 'Integer', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'Integer', $this);
+				case 'UpdatedByObject':
+					return new QQNodeUsuario('updated_by', 'UpdatedByObject', 'Integer', $this);
 				case 'TarifaAliados':
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliados', 'reverse_reference', 'tarifa_exp_id', 'TarifaAliados');
 
@@ -1909,7 +2103,9 @@
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $CreatedBy
+     * @property-read QQNodeUsuario $CreatedByObject
      * @property-read QQNode $UpdatedBy
+     * @property-read QQNodeUsuario $UpdatedByObject
      *
      *
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliados
@@ -1939,13 +2135,17 @@
 				case 'Minimo':
 					return new QQNode('minimo', 'Minimo', 'double', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'string', $this);
+					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
+				case 'CreatedByObject':
+					return new QQNodeUsuario('created_by', 'CreatedByObject', 'integer', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'integer', $this);
+				case 'UpdatedByObject':
+					return new QQNodeUsuario('updated_by', 'UpdatedByObject', 'integer', $this);
 				case 'TarifaAliados':
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliados', 'reverse_reference', 'tarifa_exp_id', 'TarifaAliados');
 

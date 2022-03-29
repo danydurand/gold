@@ -76,6 +76,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected $lblMontCanc;
     protected $txtTextCome;
     protected $lblNotaEntr;
+    protected $lblAliaCome;
     protected $lblClieCorp;
     protected $lblNumeFact;
 
@@ -258,6 +259,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblFechHora_Create();
         $this->txtTextCome_Create();
         $this->lblNotaEntr_Create();
+        $this->lblAliaCome_Create();
         $this->lblClieCorp_Create();
         $this->lblNumeFact_Create();
         $this->lblPesoAlte_Create();
@@ -951,6 +953,16 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblNotaEntr = new QLabel($this);
         $this->lblNotaEntr->Text = $this->objGuia->NotaEntregaId
             ? $this->objGuia->NotaEntrega->Referencia
+            : null;
+    }
+
+    protected function lblAliaCome_Create() {
+        $this->lblAliaCome = new QLabel($this);
+        $this->lblAliaCome->ToolTip = !is_null($this->objGuia->AliadoId)
+            ? $this->objGuia->Aliado->RazonSocial
+            : null;
+        $this->lblAliaCome->Text = !is_null($this->objGuia->AliadoId)
+            ? substr($this->objGuia->Aliado->RazonSocial,0,10)
             : null;
     }
 

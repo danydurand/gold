@@ -49,18 +49,18 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
 		$this->txtMonto     = $this->mctTarifaExp->txtMonto_Create();
 		$this->txtMinimo    = $this->mctTarifaExp->txtMinimo_Create();
 		$this->txtMinimo->Name = 'Peso Mínimo';
-		$this->lblCreatedAt = $this->mctTarifaExp->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctTarifaExp->lblUpdatedAt_Create();
-		$this->txtCreatedBy = $this->mctTarifaExp->txtCreatedBy_Create();
-		$this->txtCreatedBy = disableControl($this->txtCreatedBy);
-        $this->txtUpdatedBy = $this->mctTarifaExp->txtUpdatedBy_Create();
-        $this->txtUpdatedBy = disableControl($this->txtUpdatedBy);
+		//$this->lblCreatedAt = $this->mctTarifaExp->lblCreatedAt_Create();
+		//$this->lblUpdatedAt = $this->mctTarifaExp->lblUpdatedAt_Create();
+		//$this->txtCreatedBy = $this->mctTarifaExp->txtCreatedBy_Create();
+		//$this->txtCreatedBy = disableControl($this->txtCreatedBy);
+        //$this->txtUpdatedBy = $this->mctTarifaExp->txtUpdatedBy_Create();
+        //$this->txtUpdatedBy = disableControl($this->txtUpdatedBy);
 
-        if (!$this->mctTarifaExp->EditMode) {
-		    $this->txtCreatedBy->Text = $this->objUsuario->CodiUsua;
-        } else {
-            $this->txtUpdatedBy->Text = $this->objUsuario->CodiUsua;
-        }
+        //if (!$this->mctTarifaExp->EditMode) {
+		//    $this->txtCreatedBy->Text = $this->objUsuario->CodiUsua;
+        //} else {
+        //    $this->txtUpdatedBy->Text = $this->objUsuario->CodiUsua;
+        //}
 
 	}
 
@@ -170,15 +170,19 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
+        if ($this->mctTarifaExp->EditMode) {
+            $this->mctTarifaExp->TarifaExp->UpdatedAt = new QDateTime(QDateTime::Now);
+            $this->mctTarifaExp->TarifaExp->UpdatedBy = $this->objUsuario->CodiUsua;
+        } else {
+            $this->mctTarifaExp->TarifaExp->CreatedAt = new QDateTime(QDateTime::Now);
+            $this->mctTarifaExp->TarifaExp->CreatedBy = $this->objUsuario->CodiUsua;
+        }
 		//--------------------------------------------
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctTarifaExp->TarifaExp;
         try {
-            //t('Antes de intentar salvar (en pantalla): '.$this->chkIsPublica->Checked);
-            //t('Antes de intentar salvar (metacontrol): '.$this->mctTarifaExp->TarifaExp->IsPublica);
             $this->mctTarifaExp->SaveTarifaExp();
-            //t('Despues de salvar (metacontrol): '.$this->mctTarifaExp->TarifaExp->IsPublica);
         } catch (Exception $e) {
             t('Error: '.$e->getMessage());
             $this->danger('Error: '.$e->getMessage());

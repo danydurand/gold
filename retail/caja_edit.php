@@ -89,6 +89,7 @@ class CajaEditForm extends CajaEditFormBase {
 		$this->txtCajaDesc = $this->mctCaja->txtDescripcion_Create();
 
 		$this->lstCajaRece = $this->mctCaja->lstCounter_Create();
+		$this->lstCajaRece->Name = 'Receptoria';
         if (isset($_SESSION['CodiRece'])) {
             $this->lstCajaRece->RemoveAllItems();
             $objReceSele = Counter::Load($_SESSION['CodiRece']);

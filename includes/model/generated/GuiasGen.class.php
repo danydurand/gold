@@ -22,6 +22,7 @@
 	 * @property integer $ClienteRetailId the value for intClienteRetailId 
 	 * @property integer $ClienteCorpId the value for intClienteCorpId 
 	 * @property integer $ClienteIntId the value for intClienteIntId 
+	 * @property integer $AliadoId the value for intAliadoId 
 	 * @property integer $OrigenId the value for intOrigenId (Not Null)
 	 * @property integer $DestinoId the value for intDestinoId (Not Null)
 	 * @property string $ServicioEntrega the value for strServicioEntrega (Not Null)
@@ -81,6 +82,7 @@
 	 * @property ClientesRetail $ClienteRetail the value for the ClientesRetail object referenced by intClienteRetailId 
 	 * @property MasterCliente $ClienteCorp the value for the MasterCliente object referenced by intClienteCorpId 
 	 * @property ClientesInternacional $ClienteInt the value for the ClientesInternacional object referenced by intClienteIntId 
+	 * @property AliadoComercial $Aliado the value for the AliadoComercial object referenced by intAliadoId 
 	 * @property Sucursales $Origen the value for the Sucursales object referenced by intOrigenId (Not Null)
 	 * @property Sucursales $Destino the value for the Sucursales object referenced by intDestinoId (Not Null)
 	 * @property Productos $Producto the value for the Productos object referenced by intProductoId (Not Null)
@@ -173,6 +175,14 @@
 		 */
 		protected $intClienteIntId;
 		const ClienteIntIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias.aliado_id
+		 * @var integer intAliadoId
+		 */
+		protected $intAliadoId;
+		const AliadoIdDefault = null;
 
 
 		/**
@@ -827,6 +837,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guias.aliado_id.
+		 *
+		 * NOTE: Always use the Aliado property getter to correctly retrieve this AliadoComercial object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var AliadoComercial objAliado
+		 */
+		protected $objAliado;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column guias.origen_id.
 		 *
 		 * NOTE: Always use the Origen property getter to correctly retrieve this Sucursales object.
@@ -975,6 +995,7 @@
 			$this->intClienteRetailId = Guias::ClienteRetailIdDefault;
 			$this->intClienteCorpId = Guias::ClienteCorpIdDefault;
 			$this->intClienteIntId = Guias::ClienteIntIdDefault;
+			$this->intAliadoId = Guias::AliadoIdDefault;
 			$this->intOrigenId = Guias::OrigenIdDefault;
 			$this->intDestinoId = Guias::DestinoIdDefault;
 			$this->strServicioEntrega = Guias::ServicioEntregaDefault;
@@ -1379,6 +1400,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'cliente_retail_id', $strAliasPrefix . 'cliente_retail_id');
 			    $objBuilder->AddSelectItem($strTableName, 'cliente_corp_id', $strAliasPrefix . 'cliente_corp_id');
 			    $objBuilder->AddSelectItem($strTableName, 'cliente_int_id', $strAliasPrefix . 'cliente_int_id');
+			    $objBuilder->AddSelectItem($strTableName, 'aliado_id', $strAliasPrefix . 'aliado_id');
 			    $objBuilder->AddSelectItem($strTableName, 'origen_id', $strAliasPrefix . 'origen_id');
 			    $objBuilder->AddSelectItem($strTableName, 'destino_id', $strAliasPrefix . 'destino_id');
 			    $objBuilder->AddSelectItem($strTableName, 'servicio_entrega', $strAliasPrefix . 'servicio_entrega');
@@ -1581,6 +1603,9 @@
 			$strAlias = $strAliasPrefix . 'cliente_int_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intClienteIntId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'aliado_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intAliadoId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'origen_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intOrigenId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1799,6 +1824,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['cliente_int_id']) ? null : $objExpansionAliasArray['cliente_int_id']);
 				$objToReturn->objClienteInt = ClientesInternacional::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cliente_int_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for Aliado Early Binding
+			$strAlias = $strAliasPrefix . 'aliado_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['aliado_id']) ? null : $objExpansionAliasArray['aliado_id']);
+				$objToReturn->objAliado = AliadoComercial::InstantiateDbRow($objDbRow, $strAliasPrefix . 'aliado_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for Origen Early Binding
 			$strAlias = $strAliasPrefix . 'origen_id__id';
@@ -2597,6 +2629,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of Guias objects,
+		 * by AliadoId Index(es)
+		 * @param integer $intAliadoId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Guias[]
+		*/
+		public static function LoadArrayByAliadoId($intAliadoId, $objOptionalClauses = null) {
+			// Call Guias::QueryArray to perform the LoadArrayByAliadoId query
+			try {
+				return Guias::QueryArray(
+					QQ::Equal(QQN::Guias()->AliadoId, $intAliadoId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Guiases
+		 * by AliadoId Index(es)
+		 * @param integer $intAliadoId
+		 * @return int
+		*/
+		public static function CountByAliadoId($intAliadoId) {
+			// Call Guias::QueryCount to perform the CountByAliadoId query
+			return Guias::QueryCount(
+				QQ::Equal(QQN::Guias()->AliadoId, $intAliadoId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -2665,6 +2729,7 @@
 							`cliente_retail_id`,
 							`cliente_corp_id`,
 							`cliente_int_id`,
+							`aliado_id`,
 							`origen_id`,
 							`destino_id`,
 							`servicio_entrega`,
@@ -2728,6 +2793,7 @@
 							' . $objDatabase->SqlVariable($this->intClienteRetailId) . ',
 							' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
 							' . $objDatabase->SqlVariable($this->intClienteIntId) . ',
+							' . $objDatabase->SqlVariable($this->intAliadoId) . ',
 							' . $objDatabase->SqlVariable($this->intOrigenId) . ',
 							' . $objDatabase->SqlVariable($this->intDestinoId) . ',
 							' . $objDatabase->SqlVariable($this->strServicioEntrega) . ',
@@ -2805,6 +2871,7 @@
 							`cliente_retail_id` = ' . $objDatabase->SqlVariable($this->intClienteRetailId) . ',
 							`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
 							`cliente_int_id` = ' . $objDatabase->SqlVariable($this->intClienteIntId) . ',
+							`aliado_id` = ' . $objDatabase->SqlVariable($this->intAliadoId) . ',
 							`origen_id` = ' . $objDatabase->SqlVariable($this->intOrigenId) . ',
 							`destino_id` = ' . $objDatabase->SqlVariable($this->intDestinoId) . ',
 							`servicio_entrega` = ' . $objDatabase->SqlVariable($this->strServicioEntrega) . ',
@@ -3029,6 +3096,7 @@
 			$this->ClienteRetailId = $objReloaded->ClienteRetailId;
 			$this->ClienteCorpId = $objReloaded->ClienteCorpId;
 			$this->ClienteIntId = $objReloaded->ClienteIntId;
+			$this->AliadoId = $objReloaded->AliadoId;
 			$this->OrigenId = $objReloaded->OrigenId;
 			$this->DestinoId = $objReloaded->DestinoId;
 			$this->strServicioEntrega = $objReloaded->strServicioEntrega;
@@ -3153,6 +3221,13 @@
 					 * @return integer
 					 */
 					return $this->intClienteIntId;
+
+				case 'AliadoId':
+					/**
+					 * Gets the value for intAliadoId 
+					 * @return integer
+					 */
+					return $this->intAliadoId;
 
 				case 'OrigenId':
 					/**
@@ -3592,6 +3667,20 @@
 						throw $objExc;
 					}
 
+				case 'Aliado':
+					/**
+					 * Gets the value for the AliadoComercial object referenced by intAliadoId 
+					 * @return AliadoComercial
+					 */
+					try {
+						if ((!$this->objAliado) && (!is_null($this->intAliadoId)))
+							$this->objAliado = AliadoComercial::Load($this->intAliadoId);
+						return $this->objAliado;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Origen':
 					/**
 					 * Gets the value for the Sucursales object referenced by intOrigenId (Not Null)
@@ -4005,6 +4094,20 @@
 					try {
 						$this->objClienteInt = null;
 						return ($this->intClienteIntId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'AliadoId':
+					/**
+					 * Sets the value for intAliadoId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objAliado = null;
+						return ($this->intAliadoId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4842,6 +4945,38 @@
 						// Update Local Member Variables
 						$this->objClienteInt = $mixValue;
 						$this->intClienteIntId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'Aliado':
+					/**
+					 * Sets the value for the AliadoComercial object referenced by intAliadoId 
+					 * @param AliadoComercial $mixValue
+					 * @return AliadoComercial
+					 */
+					if (is_null($mixValue)) {
+						$this->intAliadoId = null;
+						$this->objAliado = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a AliadoComercial object
+						try {
+							$mixValue = QType::Cast($mixValue, 'AliadoComercial');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED AliadoComercial object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Aliado for this Guias');
+
+						// Update Local Member Variables
+						$this->objAliado = $mixValue;
+						$this->intAliadoId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -6520,6 +6655,7 @@
 			$strToReturn .= '<element name="ClienteRetail" type="xsd1:ClientesRetail"/>';
 			$strToReturn .= '<element name="ClienteCorp" type="xsd1:MasterCliente"/>';
 			$strToReturn .= '<element name="ClienteInt" type="xsd1:ClientesInternacional"/>';
+			$strToReturn .= '<element name="Aliado" type="xsd1:AliadoComercial"/>';
 			$strToReturn .= '<element name="Origen" type="xsd1:Sucursales"/>';
 			$strToReturn .= '<element name="Destino" type="xsd1:Sucursales"/>';
 			$strToReturn .= '<element name="ServicioEntrega" type="xsd:string"/>';
@@ -6587,6 +6723,7 @@
 				ClientesRetail::AlterSoapComplexTypeArray($strComplexTypeArray);
 				MasterCliente::AlterSoapComplexTypeArray($strComplexTypeArray);
 				ClientesInternacional::AlterSoapComplexTypeArray($strComplexTypeArray);
+				AliadoComercial::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Productos::AlterSoapComplexTypeArray($strComplexTypeArray);
@@ -6628,6 +6765,9 @@
 			if ((property_exists($objSoapObject, 'ClienteInt')) &&
 				($objSoapObject->ClienteInt))
 				$objToReturn->ClienteInt = ClientesInternacional::GetObjectFromSoapObject($objSoapObject->ClienteInt);
+			if ((property_exists($objSoapObject, 'Aliado')) &&
+				($objSoapObject->Aliado))
+				$objToReturn->Aliado = AliadoComercial::GetObjectFromSoapObject($objSoapObject->Aliado);
 			if ((property_exists($objSoapObject, 'Origen')) &&
 				($objSoapObject->Origen))
 				$objToReturn->Origen = Sucursales::GetObjectFromSoapObject($objSoapObject->Origen);
@@ -6782,6 +6922,10 @@
 				$objObject->objClienteInt = ClientesInternacional::GetSoapObjectFromObject($objObject->objClienteInt, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intClienteIntId = null;
+			if ($objObject->objAliado)
+				$objObject->objAliado = AliadoComercial::GetSoapObjectFromObject($objObject->objAliado, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intAliadoId = null;
 			if ($objObject->objOrigen)
 				$objObject->objOrigen = Sucursales::GetSoapObjectFromObject($objObject->objOrigen, false);
 			else if (!$blnBindRelatedObjects)
@@ -6849,6 +6993,7 @@
 			$iArray['ClienteRetailId'] = $this->intClienteRetailId;
 			$iArray['ClienteCorpId'] = $this->intClienteCorpId;
 			$iArray['ClienteIntId'] = $this->intClienteIntId;
+			$iArray['AliadoId'] = $this->intAliadoId;
 			$iArray['OrigenId'] = $this->intOrigenId;
 			$iArray['DestinoId'] = $this->intDestinoId;
 			$iArray['ServicioEntrega'] = $this->strServicioEntrega;
@@ -6988,6 +7133,8 @@
      * @property-read QQNodeMasterCliente $ClienteCorp
      * @property-read QQNode $ClienteIntId
      * @property-read QQNodeClientesInternacional $ClienteInt
+     * @property-read QQNode $AliadoId
+     * @property-read QQNodeAliadoComercial $Aliado
      * @property-read QQNode $OrigenId
      * @property-read QQNodeSucursales $Origen
      * @property-read QQNode $DestinoId
@@ -7095,6 +7242,10 @@
 					return new QQNode('cliente_int_id', 'ClienteIntId', 'Integer', $this);
 				case 'ClienteInt':
 					return new QQNodeClientesInternacional('cliente_int_id', 'ClienteInt', 'Integer', $this);
+				case 'AliadoId':
+					return new QQNode('aliado_id', 'AliadoId', 'Integer', $this);
+				case 'Aliado':
+					return new QQNodeAliadoComercial('aliado_id', 'Aliado', 'Integer', $this);
 				case 'OrigenId':
 					return new QQNode('origen_id', 'OrigenId', 'Integer', $this);
 				case 'Origen':
@@ -7272,6 +7423,8 @@
      * @property-read QQNodeMasterCliente $ClienteCorp
      * @property-read QQNode $ClienteIntId
      * @property-read QQNodeClientesInternacional $ClienteInt
+     * @property-read QQNode $AliadoId
+     * @property-read QQNodeAliadoComercial $Aliado
      * @property-read QQNode $OrigenId
      * @property-read QQNodeSucursales $Origen
      * @property-read QQNode $DestinoId
@@ -7379,6 +7532,10 @@
 					return new QQNode('cliente_int_id', 'ClienteIntId', 'integer', $this);
 				case 'ClienteInt':
 					return new QQNodeClientesInternacional('cliente_int_id', 'ClienteInt', 'integer', $this);
+				case 'AliadoId':
+					return new QQNode('aliado_id', 'AliadoId', 'integer', $this);
+				case 'Aliado':
+					return new QQNodeAliadoComercial('aliado_id', 'Aliado', 'integer', $this);
 				case 'OrigenId':
 					return new QQNode('origen_id', 'OrigenId', 'integer', $this);
 				case 'Origen':

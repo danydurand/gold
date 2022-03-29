@@ -30,14 +30,19 @@
 	        </div>
             <div class="col-md-5">
                 <?php if ($this->mctAliadoComercial->EditMode) { ?>
+                    <div class="row" style="margin-bottom: .2em">
+                        <div class="col-md-12 text-center">
+                            <?php //$this->btnAgreTari->Render(); ?>
+                        </div>
+                    </div>
                     <div class="row titulo">
                         <div class="col-md-4">
                             <?php $this->lblTariAlia->Render(); ?>
                         </div>
                         <div class="col-md-4">
-                            <?php $this->lblFechVige->Render(); ?>
                         </div>
                         <div class="col-md-4">
+                            <?php $this->lblAcciAlia->Render(); ?>
                         </div>
                     </div>
                     <div class="row">
@@ -45,10 +50,10 @@
                             <?php $this->lstTariAlia->Render(); ?>
                         </div>
                         <div class="col-md-4">
-                            <?php $this->calFechVige->Render(); ?>
                         </div>
                         <div class="col-md-4 text-center">
                             <?php $this->btnSaveTari->Render(); ?>
+                            <?php $this->btnDeleTari->Render(); ?>
                         </div>
                     </div>
                     <div class="row">

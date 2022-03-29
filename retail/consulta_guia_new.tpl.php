@@ -285,10 +285,10 @@ require('inc/header.inc.php');
                             </div>
                             <div class="row">
                                 <div class="col-md-5">
-                                    <div class="titulo-c">Cliente</div>
+                                    <div class="titulo-c">Aliado</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <?php $this->lblClieCorp->Render(); ?>
+                                    <?php $this->lblAliaCome->Render(); ?>
                                 </div>
                             </div>
                             <div class="row">

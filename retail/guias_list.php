@@ -126,8 +126,8 @@ class GuiasListForm extends GuiasListFormBase {
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->FormaPago,'Name=F.Pag');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteCorp->NombClie,'Name=Cliente');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
-        $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');
-        $this->dtgGuiases->AddColumn($colUltiCkpt);
+        /*$colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');*/
+        //$this->dtgGuiases->AddColumn($colUltiCkpt);
         $this->dtgGuiases->MetaAddColumn('NombreRemitente', 'Name=Remitente');
         $this->dtgGuiases->MetaAddColumn('NombreDestinatario','Name=Destinatario');
         //$this->dtgGuiases->MetaAddColumn('Total');
