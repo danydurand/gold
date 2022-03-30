@@ -41,8 +41,8 @@
             return Sucursales::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
         }
 
-		public static function CountSucursalesActivas() {
-            $arrSucuActi = Sucursales::LoadSucursalesActivas();
+		public static function CountSucursalesActivas($strOrdePorx='Iata',$strTipoSucu='nac') {
+            $arrSucuActi = Sucursales::LoadSucursalesActivas($strOrdePorx='Iata',$strTipoSucu='nac');
             return count($arrSucuActi);
         }
 

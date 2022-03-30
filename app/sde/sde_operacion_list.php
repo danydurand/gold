@@ -73,7 +73,10 @@ class SdeOperacionListForm extends SdeOperacionListFormBase {
 		$colCodiRuta = $this->dtgSdeOperacions->MetaAddColumn(QQN::SdeOperacion()->Ruta);
 		//$colCodiRuta->Name = 'Ruta';
 
-		$colCodiChof = $this->dtgSdeOperacions->MetaAddColumn(QQN::SdeOperacion()->CodiChofObject);
+        $colContDest = new QDataGridColumn('CANT DEST', '<?= $_ITEM->CountSucursalesesAsOperacionDestino(); ?>');
+        $this->dtgSdeOperacions->AddColumn($colContDest);
+
+        $colCodiChof = $this->dtgSdeOperacions->MetaAddColumn(QQN::SdeOperacion()->CodiChofObject);
 		$colCodiChof->Name = 'Chofer';
 
 		$colCodiVehi = $this->dtgSdeOperacions->MetaAddColumn(QQN::SdeOperacion()->CodiVehiObject->DescVehi);
@@ -91,6 +94,7 @@ class SdeOperacionListForm extends SdeOperacionListFormBase {
         $this->btnExpoExce_Create();
     }
 
+    
 	public function dtgSdeOperacionsRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);
         QApplication::Redirect("sde_operacion_edit.php/$intId");

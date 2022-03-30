@@ -26,8 +26,9 @@ require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
                     <?php $this->lstSucursal->RenderWithName(); ?>
                     <?php $this->lstExpresoNacionalObject->RenderWithName(); ?>
                 </div>
-                <div class="col-xs-12 col-md-7" style="margin-top: 1em;">
-                    <?php $this->dtgSucursalesesAsOperacionDestino->Render(true); ?>
+                <div class="col-xs-12 col-md-5" style="margin-top: 1em;">
+                    <?php $this->dtgSucuAsoc->Render(); ?>
+                    <?php //$this->dtgSucursalesesAsOperacionDestino->Render(true); ?>
                 </div>
             </div>
         </div>

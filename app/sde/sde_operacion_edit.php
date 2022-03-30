@@ -21,7 +21,10 @@ require_once(__FORMBASE_CLASSES__ . '/SdeOperacionEditFormBase.class.php');
  * @subpackage Drafts
  */
 class SdeOperacionEditForm extends SdeOperacionEditFormBase {
-
+    protected $dtgSucuAsoc;
+    protected $colSucuSele;
+    protected $arrSucuSele;
+    
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -74,10 +77,15 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
         $this->lstExpresoNacionalObject->Width = 160;
 		$this->lstExpresoNacionalObject->Name = 'Retail';
 
-		$intCantSucu = Sucursales::CountSucursalesActivas();
-        $this->dtgSucursalesesAsOperacionDestino = $this->mctSdeOperacion->dtgSucursalesesAsOperacionDestino_Create();
-        $this->dtgSucursalesesAsOperacionDestino->Name = 'Sucursales';
-		$this->dtgSucursalesesAsOperacionDestino->ItemsPerPage = $intCantSucu + 1;
+		$this->cargarSucursalesSeleccionadas();
+
+		$this->dtgSucuAsoc_Create();
+
+		/*
+        $this->dtgSucuAsoc = $this->mctSdeOperacion->dtgSucuAsoc_Create();
+        $this->dtgSucuAsoc->Name = 'Sucursales';
+		$this->dtgSucuAsoc->ItemsPerPage = $intCantSucu;
+		*/
 
 		if ($this->mctSdeOperacion->EditMode) {
             $this->lstTipoRuta_Change();
@@ -87,6 +95,71 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
 	//----------------------------
 	// Aqui se crean los objetos 
 	//----------------------------
+
+    protected function cargarSucursalesSeleccionadas() {
+        $this->arrSucuSele = $this->mctSdeOperacion->SdeOperacion->GetSucursalesAsOperacionDestinoArray();
+    }
+
+    protected function dtgSucuAsoc_Create() {
+        $this->dtgSucuAsoc = new SucursalesDataGrid($this);
+        $this->dtgSucuAsoc->FontSize = 13;
+        $this->dtgSucuAsoc->ShowFilter = false;
+
+        // Style the DataGrid (if desired)
+        $this->dtgSucuAsoc->CssClass = 'datagrid';
+        $this->dtgSucuAsoc->AlternateRowStyle->CssClass = 'alternate';
+
+        
+        // Add Pagination (if desired)
+        $objClauWher[] = QQ::Equal(QQN::Sucursales()->EsExport,false);
+        $objClauWher[] = QQ::IsNull(QQN::Sucursales()->DeletedAt);
+        //$intCantSucu   = Sucursales::QueryCount(QQ::AndCondition($objClauWher));
+
+        $this->dtgSucuAsoc->Paginator = new QPaginator($this->dtgSucuAsoc);
+        $this->dtgSucuAsoc->ItemsPerPage = 50;
+
+        $this->dtgSucuAsoc->AdditionalConditions = QQ::AndCondition($objClauWher);
+
+        // Higlight the datagrid rows when mousing over them
+        //$this->dtgSucuAsoc->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        //$this->dtgSucuAsoc->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        // Add a click handler for the rows.
+        // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
+        // or $_ITEM->Id to pass the object's id, or any other data grid variable
+        /*$this->dtgSucuAsoc->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
+        //$this->dtgSucuAsoc->AddRowAction(new QClickEvent(), new QAjaxAction('dtgSucuAsocRow_Click'));
+
+        $this->dtgSucuAsoc->SortColumnIndex = 1;
+
+        // Use the MetaDataGrid functionality to add Columns for this datagrid
+
+        $this->colSucuSele = new QCheckBoxColumn('', $this->dtgSucuAsoc);
+        $this->colSucuSele->PrimaryKey = 'Id';
+        $this->colSucuSele->Width = 60;
+        $this->colSucuSele->SetCheckboxCallback($this,'colMarcarSeleccion');
+        $this->dtgSucuAsoc->AddColumn($this->colSucuSele);
+
+        // Create the Other Columns (note that you can use strings for sucursales's properties, or you
+        // can traverse down QQN::sucursales() to display fields that are down the hierarchy)
+        $this->dtgSucuAsoc->MetaAddColumn('Id');
+        //$this->dtgSucuAsoc->MetaAddColumn('Iata');
+        $this->dtgSucuAsoc->MetaAddColumn('Nombre');
+
+    }
+
+    public function colMarcarSeleccion(Sucursales $objSucursal, QCheckBox $ctl) {
+        /* @var $objConcOpci Conceptos */
+        t('Voy a evaluar si '.$objSucursal->Nombre.' ('.$objSucursal->Id.') esta en el vector');
+        foreach ($this->arrSucuSele as $objSucuSele) {
+            t('Comparando con: '.$objSucuSele->Id);
+            if ($objSucuSele->Id == $objSucursal->Id) {
+                $ctl->Checked = true;
+                break;
+            }
+        }
+    }
+
 
     protected function determinarPosicion() {
         if ($this->mctSdeOperacion->SdeOperacion && !isset($_SESSION['DataSdeOperacion'])) {
@@ -127,7 +200,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
         $objClauOrde   = QQ::Clause();
         $objClauOrde[] = QQ::OrderBy(QQN::Rutas()->Codigo);
         if ($this->lstCodiTipoObject->SelectedName == 'EXTRA-URBANA') {
-            $this->dtgSucursalesesAsOperacionDestino->Visible = true;
+            $this->dtgSucuAsoc->Visible = true;
             //----------------------------------------------------------
             // Si es Extra-Urbana, se muestran solo las Rutas Foraneas
             //----------------------------------------------------------
@@ -137,7 +210,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
             // Si es Urbana, se muestran solo las Rutas Locales
             //----------------------------------------------------------
             $objClauWher[] = QQ::Equal(QQN::Rutas()->TipoId,TipoRutaType::LOCAL);
-            $this->dtgSucursalesesAsOperacionDestino->Visible = false;
+            $this->dtgSucuAsoc->Visible = false;
         }
         $this->lstRuta->RemoveAllItems();
         $arrRutaTipo = Rutas::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
@@ -186,7 +259,22 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctSdeOperacion->SdeOperacion;
-		$this->mctSdeOperacion->SaveSdeOperacion();
+		try {
+            $this->mctSdeOperacion->SaveSdeOperacion();
+            //---------------------------------------------
+            // Se guardan también la Sucursales asociadas
+            //---------------------------------------------
+            $this->mctSdeOperacion->SdeOperacion->UnassociateAllSucursalesesAsOperacionDestino();
+            $arrIdxxSele = $this->colSucuSele->GetChangedIds(true);
+            $arrIdxxSele = $this->colSucuSele->GetSelectedIds();
+            $arrSucuSele = Sucursales::QueryArray(QQ::In(QQN::Sucursales()->Id, array_keys($arrIdxxSele)));
+            foreach ($arrSucuSele as $objSucuSele) {
+                $this->mctSdeOperacion->SdeOperacion->AssociateSucursalesAsOperacionDestino($objSucuSele);
+            }
+		} catch (Exception $e) {
+		    $this->danger('Error: '.$e->getMessage());
+		    return;
+		}
         $strDescOper  = $this->mctSdeOperacion->SdeOperacion->Ruta->Codigo.' | ';
         $strDescOper .= $this->mctSdeOperacion->SdeOperacion->CodiTipoObject->DescTipo;
 		if ($this->mctSdeOperacion->EditMode) {
