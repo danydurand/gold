@@ -27,7 +27,30 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
-		public function __printName() {
+        public static function AptasParaFacturarPorAliadoYServicio($intAliaIdxx,$strServImpo,$arrGuiaIdxx,$strFormResp='count') {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Guias()->AliadoId,$intAliaIdxx);
+            $objClauWher[] = QQ::IsNull(QQN::Guias()->FacturaId);
+            $objClauWher[] = QQ::Equal(QQN::Guias()->ServicioImportacion,$strServImpo);
+            $objClauWher[] = QQ::In(QQN::Guias()->Id,$arrGuiaIdxx);
+            if ($strFormResp == 'count') {
+                return Guias::QueryCount(QQ::AndCondition($objClauWher));
+            } else {
+                return Guias::QueryArray(QQ::AndCondition($objClauWher));
+            }
+        }
+
+        public static function AptasParaFacturar($objClauWher,$strFormResp='count') {
+            $objClauWher[] = QQ::IsNull(QQN::Guias()->FacturaId);
+            if ($strFormResp == 'count') {
+                return Guias::QueryCount(QQ::AndCondition($objClauWher));
+            } else {
+                return Guias::QueryArray(QQ::AndCondition($objClauWher));
+            }
+        }
+
+
+        public function __printName() {
 		    return '/var/www/html/gold/retail/tmp/Guia'.$this->Numero.'.pdf';
         }
 
@@ -466,6 +489,7 @@
                 //---------------------------------------------------------------------------------
                 // Se trata de un Aliado, se utiliza la Tarifa de EXP vigente, asociada al Aliado
                 //---------------------------------------------------------------------------------
+                t('Aliado Id: '.$intAliaIdxx.' Producto Id: '.$this->ProductoId);
                 $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->AliadoId, $intAliaIdxx);
                 $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->ProductoId, $this->ProductoId);
                 $arrTariAlia   = TarifaAliados::QueryArray(QQ::AndCondition($objClauWher));
@@ -475,7 +499,7 @@
                     $arrTariProd['monto']  = $objTariProd->TarifaExp->Monto;
                     $arrTariProd['minimo'] = $objTariProd->TarifaExp->Minimo;
                 } else {
-                    t('No se encontro la taifa del aliado');
+                    t('No se encontro la tarifa del aliado');
                     $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
                 }
             }
@@ -603,7 +627,7 @@
             $suma = 0;
             t('Existen: '.count($concBaseImp).' conceptos que forman la base imponible del '.$nombre_conc);
             foreach($concBaseImp as $concBi) {
-                $suma += $concBi->Monto;
+                $suma += $concBi->__montoEnUSD();
             }
             t('La base imponible es: '.$suma);
             return $suma;
@@ -618,7 +642,7 @@
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::GuiaConceptos()->GuiaId,$this->Id);
             $objClauWher[] = QQ::Equal(QQN::GuiaConceptos()->Concepto->Nombre,$actua_sobre);
-            $otro_concepto = NotaConceptos::QuerySingle(QQ::AndCondition($objClauWher));
+            $otro_concepto = GuiaConceptos::QuerySingle(QQ::AndCondition($objClauWher));
             return $otro_concepto;
         }
 
@@ -646,7 +670,7 @@
                 t('Tipo CONCEPTO');
                 $otro_concepto = $this->otroConcepto($concepto);
                 if ($otro_concepto) {
-                    $monto = $otro_concepto->Monto;
+                    $monto = $otro_concepto->__montoEnUSD();
                     t("El monto del otro concepto $actua_sobre es: $monto");
                 } else {
                     t('No se encontro el otro concepto...');
@@ -709,7 +733,7 @@
             // El "valor" del Concepto determina la forma en que se calcula el monto
             //------------------------------------------------------------------------
             if (is_numeric($concepto->Valor)) {
-                t('Se trata de un valor numerico, por lo tanto aplica directamente');
+                t('Se trata de un valor numerico');
                 $valor_base = $this->buscarMontoDelCampoConcepto($concepto);
                 t('El valor del ' . $concepto->Tipo . ' es: ' . $valor_base);
                 list($monto, $explicacion) = $this->aplicaComoCantidadPorcentaje($concepto,$valor_base);

@@ -27,6 +27,8 @@
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
 	 * @property-read Counter $_Counter the value for the private _objCounter (Read-Only) if set due to an expansion on the counter.aliado_comercial_id reverse relationship
 	 * @property-read Counter[] $_CounterArray the value for the private _objCounterArray (Read-Only) if set due to an ExpandAsArray on the counter.aliado_comercial_id reverse relationship
+	 * @property-read Facturas $_FacturasAsAliado the value for the private _objFacturasAsAliado (Read-Only) if set due to an expansion on the facturas.aliado_id reverse relationship
+	 * @property-read Facturas[] $_FacturasAsAliadoArray the value for the private _objFacturasAsAliadoArray (Read-Only) if set due to an ExpandAsArray on the facturas.aliado_id reverse relationship
 	 * @property-read Guias $_GuiasAsAliado the value for the private _objGuiasAsAliado (Read-Only) if set due to an expansion on the guias.aliado_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsAliadoArray the value for the private _objGuiasAsAliadoArray (Read-Only) if set due to an ExpandAsArray on the guias.aliado_id reverse relationship
 	 * @property-read TarifaAliados $_TarifaAliadosAsAliado the value for the private _objTarifaAliadosAsAliado (Read-Only) if set due to an expansion on the tarifa_aliados.aliado_id reverse relationship
@@ -132,6 +134,22 @@
 		 * @var Counter[] _objCounterArray;
 		 */
 		private $_objCounterArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single FacturasAsAliado object
+		 * (of type Facturas), if this AliadoComercial object was restored with
+		 * an expansion on the facturas association table.
+		 * @var Facturas _objFacturasAsAliado;
+		 */
+		private $_objFacturasAsAliado;
+
+		/**
+		 * Private member variable that stores a reference to an array of FacturasAsAliado objects
+		 * (of type Facturas[]), if this AliadoComercial object was restored with
+		 * an ExpandAsArray on the facturas association table.
+		 * @var Facturas[] _objFacturasAsAliadoArray;
+		 */
+		private $_objFacturasAsAliadoArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single GuiasAsAliado object
@@ -770,6 +788,21 @@
 				}
 			}
 
+			// Check for FacturasAsAliado Virtual Binding
+			$strAlias = $strAliasPrefix . 'facturasasaliado__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['facturasasaliado']) ? null : $objExpansionAliasArray['facturasasaliado']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objFacturasAsAliadoArray)
+				$objToReturn->_objFacturasAsAliadoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objFacturasAsAliadoArray[] = Facturas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturasasaliado__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objFacturasAsAliado)) {
+					$objToReturn->_objFacturasAsAliado = Facturas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'facturasasaliado__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for GuiasAsAliado Virtual Binding
 			$strAlias = $strAliasPrefix . 'guiasasaliado__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1231,6 +1264,22 @@
 					 */
 					return $this->_objCounterArray;
 
+				case '_FacturasAsAliado':
+					/**
+					 * Gets the value for the private _objFacturasAsAliado (Read-Only)
+					 * if set due to an expansion on the facturas.aliado_id reverse relationship
+					 * @return Facturas
+					 */
+					return $this->_objFacturasAsAliado;
+
+				case '_FacturasAsAliadoArray':
+					/**
+					 * Gets the value for the private _objFacturasAsAliadoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the facturas.aliado_id reverse relationship
+					 * @return Facturas[]
+					 */
+					return $this->_objFacturasAsAliadoArray;
+
 				case '_GuiasAsAliado':
 					/**
 					 * Gets the value for the private _objGuiasAsAliado (Read-Only)
@@ -1464,6 +1513,9 @@
 			if ($this->CountCounters()) {
 				$arrTablRela[] = 'counter';
 			}
+			if ($this->CountFacturasesAsAliado()) {
+				$arrTablRela[] = 'facturas';
+			}
 			if ($this->CountGuiasesAsAliado()) {
 				$arrTablRela[] = 'guias';
 			}
@@ -1625,6 +1677,155 @@
 					`counter`
 				WHERE
 					`aliado_comercial_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for FacturasAsAliado
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated FacturasesAsAliado as an array of Facturas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Facturas[]
+		*/
+		public function GetFacturasAsAliadoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Facturas::LoadArrayByAliadoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated FacturasesAsAliado
+		 * @return int
+		*/
+		public function CountFacturasesAsAliado() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Facturas::CountByAliadoId($this->intId);
+		}
+
+		/**
+		 * Associates a FacturasAsAliado
+		 * @param Facturas $objFacturas
+		 * @return void
+		*/
+		public function AssociateFacturasAsAliado(Facturas $objFacturas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFacturasAsAliado on this unsaved AliadoComercial.');
+			if ((is_null($objFacturas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateFacturasAsAliado on this AliadoComercial with an unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`facturas`
+				SET
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFacturas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a FacturasAsAliado
+		 * @param Facturas $objFacturas
+		 * @return void
+		*/
+		public function UnassociateFacturasAsAliado(Facturas $objFacturas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAliado on this unsaved AliadoComercial.');
+			if ((is_null($objFacturas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAliado on this AliadoComercial with an unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`facturas`
+				SET
+					`aliado_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFacturas->Id) . ' AND
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all FacturasesAsAliado
+		 * @return void
+		*/
+		public function UnassociateAllFacturasesAsAliado() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAliado on this unsaved AliadoComercial.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`facturas`
+				SET
+					`aliado_id` = null
+				WHERE
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated FacturasAsAliado
+		 * @param Facturas $objFacturas
+		 * @return void
+		*/
+		public function DeleteAssociatedFacturasAsAliado(Facturas $objFacturas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAliado on this unsaved AliadoComercial.');
+			if ((is_null($objFacturas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAliado on this AliadoComercial with an unsaved Facturas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`facturas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objFacturas->Id) . ' AND
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated FacturasesAsAliado
+		 * @return void
+		*/
+		public function DeleteAllFacturasesAsAliado() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateFacturasAsAliado on this unsaved AliadoComercial.');
+
+			// Get the Database Object for this Class
+			$objDatabase = AliadoComercial::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`facturas`
+				WHERE
+					`aliado_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 		}
 
@@ -2111,6 +2312,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeCounter $Counter
+     * @property-read QQReverseReferenceNodeFacturas $FacturasAsAliado
      * @property-read QQReverseReferenceNodeGuias $GuiasAsAliado
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsAliado
 
@@ -2144,6 +2346,8 @@
 					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'Integer', $this);
 				case 'Counter':
 					return new QQReverseReferenceNodeCounter($this, 'counter', 'reverse_reference', 'aliado_comercial_id', 'Counter');
+				case 'FacturasAsAliado':
+					return new QQReverseReferenceNodeFacturas($this, 'facturasasaliado', 'reverse_reference', 'aliado_id', 'FacturasAsAliado');
 				case 'GuiasAsAliado':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasaliado', 'reverse_reference', 'aliado_id', 'GuiasAsAliado');
 				case 'TarifaAliadosAsAliado':
@@ -2176,6 +2380,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeCounter $Counter
+     * @property-read QQReverseReferenceNodeFacturas $FacturasAsAliado
      * @property-read QQReverseReferenceNodeGuias $GuiasAsAliado
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsAliado
 
@@ -2209,6 +2414,8 @@
 					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'integer', $this);
 				case 'Counter':
 					return new QQReverseReferenceNodeCounter($this, 'counter', 'reverse_reference', 'aliado_comercial_id', 'Counter');
+				case 'FacturasAsAliado':
+					return new QQReverseReferenceNodeFacturas($this, 'facturasasaliado', 'reverse_reference', 'aliado_id', 'FacturasAsAliado');
 				case 'GuiasAsAliado':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasaliado', 'reverse_reference', 'aliado_id', 'GuiasAsAliado');
 				case 'TarifaAliadosAsAliado':

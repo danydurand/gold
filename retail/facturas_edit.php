@@ -662,21 +662,24 @@ class FacturasEditForm extends FacturasEditFormBase {
 	    $this->txtTotaDola = new QFloatTextBox($this);
         $this->txtTotaDola->Width = 70;
         $decTasaDola = $_SESSION['TasaDola'];
-        $this->txtTotaDola->Text = nf($this->mctFacturas->Facturas->Total / $decTasaDola);
+        //$this->txtTotaDola->Text = nf($this->mctFacturas->Facturas->Total / $decTasaDola);
+        $this->txtTotaDola->Text = $this->mctFacturas->Facturas->TotaDola();
     }
 
     protected function txtCobrDola_Create() {
 	    $this->txtCobrDola = new QFloatTextBox($this);
         $this->txtCobrDola->Width = 70;
         $decTasaDola = $_SESSION['TasaDola'];
-        $this->txtCobrDola->Text = nf($this->txtMontoCobrado->Text / $decTasaDola,2);
+        //$this->txtCobrDola->Text = nf($this->txtMontoCobrado->Text / $decTasaDola,2);
+        $this->txtCobrDola->Text = $this->mctFacturas->Facturas->CobrDola();
     }
 
     protected function txtPendDola_Create() {
 	    $this->txtPendDola = new QFloatTextBox($this);
         $this->txtPendDola->Width = 70;
         $decTasaDola = $_SESSION['TasaDola'];
-        $this->txtPendDola->Text = nf($this->txtMontoPendiente->Text / $decTasaDola,2);
+        //$this->txtPendDola->Text = nf($this->txtMontoPendiente->Text / $decTasaDola,2);
+        $this->txtPendDola->Text = $this->mctFacturas->Facturas->PendDola();
     }
 
     protected function txtCambDola_Create() {

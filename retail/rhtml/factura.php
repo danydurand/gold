@@ -30,10 +30,14 @@ if (!isset($_SESSION['FactIdxx'])) {
 $strLimiDere = '350px';
 $intFactIdxx = $_SESSION['FactIdxx'];
 $objFactImpr = Facturas::Load($intFactIdxx);
-$arrGuiaFact = $objFactImpr->GetFacturaGuiasAsFacturaArray();
-$objClauOrde = QQ::OrderBy(QQN::FacturaItems()->Concepto->Orden);
-$arrItemFact = $objFactImpr->GetFacturaItemsAsFacturaArray($objClauOrde);
-$arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
+try {
+    $arrGuiaFact = $objFactImpr->GetFacturaGuiasAsFacturaArray();
+    $objClauOrde = QQ::OrderBy(QQN::FacturaItems()->Concepto->Orden);
+    $arrItemFact = $objFactImpr->GetFacturaItemsAsFacturaArray($objClauOrde);
+    $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
+} catch (Exception $e) {
+    t("Error en impresion de Factura (Id: $intFactIdxx): ".$e->getMessage());
+}
 ?>
 
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
@@ -97,23 +101,25 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                     <table style="width: 100%; border: solid .5mm;">
                         <tr style="background-color: #CCC; font-weight: bold">
                             <td style="width: 55px; text-align: center">GUIA</td>
-                            <td style="width: 310px; text-align: left">CONTENIDO</td>
+                            <td style="width: 270px; text-align: left">CONTENIDO</td>
                             <td style="width: 40px; text-align: center">DEST</td>
                             <td style="width: 38px; text-align: center">PRD</td>
                             <td style="width: 35px; text-align: center">KG</td>
                             <td style="width: 35px; text-align: center">PZAS</td>
                             <td style="width: 70px; text-align: center">A x A x L</td>
+                            <td style="width: 32px; text-align: center">PIES3</td>
                             <td style="width: 60px; text-align: right">MONTO</td>
                         </tr>
                         <?php foreach ($arrGuiaFact as $objGuiaFact) { ?>
                         <tr>
                             <td style="width: 55px; text-align: center"><?= $objGuiaFact->Guia->Numero ?></td>
-                            <td style="width: 310px; text-align: left"><?= $objGuiaFact->Guia->Contenido ?></td>
+                            <td style="width: 270px; text-align: left"><?= $objGuiaFact->Guia->Contenido ?></td>
                             <td style="width: 40px; text-align: center"><?= $objGuiaFact->Guia->Destino->Iata ?></td>
                             <td style="width: 38px; text-align: center"><?= $objGuiaFact->Guia->Producto->Codigo ?></td>
                             <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Kilos ?></td>
                             <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Piezas ?></td>
                             <td style="width: 70px; text-align: center"><?= $objGuiaFact->Guia->__medidas() ?></td>
+                            <td style="width: 32px; text-align: center"><?= $objGuiaFact->Guia->PiesCub ?></td>
                             <td style="width: 60px; text-align: right"><?= nf($objGuiaFact->Guia->Total) ?></td>
                         </tr>
                         <?php } ?>
@@ -121,7 +127,7 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                 </td>
             </tr>
         </table>
-        <table style="margin-left:445px; font-size: small">
+        <table style="margin-left:377px; font-size: small">
             <tr>
                 <td style="width: 35%; text-align: right; vertical-align: top">
                     <!------------------>
@@ -129,22 +135,21 @@ $arrPagoFact = $objFactImpr->GetFacturaPagosAsFacturaArray();
                     <!------------------>
                     <table style="width: 100%; border: solid .5mm;">
                         <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="width: 100px; text-align: center">RUBRO</td>
-                            <td style="width: 100px; text-align: right">MONTO</td>
+                            <td style="width: 100px; text-align: center">CONCEPTO</td>
+                            <td style="width: 80px; text-align: right">MONTO USD</td>
+                            <td style="width: 80px; text-align: right">MONTO Bs</td>
                         </tr>
                         <?php foreach ($arrItemFact as $objItemFact) { ?>
                             <tr>
                                 <td class="concepto"><?= $objItemFact->Concepto->MostrarComo ?>:</td>
-                                <td style="width: 100px; text-align: right"><?= nf($objItemFact->Monto) ?></td>
+                                <td style="text-align: right"><?= $objItemFact->MontoEnUSD() ?></td>
+                                <td style="text-align: right"><?= nf($objItemFact->Monto) ?></td>
                             </tr>
                         <?php } ?>
                         <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="width: 100px; text-align: right">TOTAL BSD</td>
-                            <td style="width: 100px; text-align: right"><?= nf($objFactImpr->Total) ?></td>
-                        </tr>
-                        <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="width: 100px; text-align: right;">TOTAL USD</td>
-                            <td style="width: 100px; text-align: right"><?= nf($objFactImpr->Total/$objFactImpr->Tasa) ?></td>
+                            <td style="text-align: center">TOTAL</td>
+                            <td style="text-align: right"><?= $objFactImpr->TotaDola() ?></td>
+                            <td style="text-align: right"><?= nf($objFactImpr->Total) ?></td>
                         </tr>
                     </table>
                 </td>

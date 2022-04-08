@@ -84,7 +84,7 @@ class ContainerMobileListForm extends ContainerMobileListFormBase {
 		$this->dtgContainerMobiles->MetaAddColumn('Pendientes','Name=Pend');
 		$this->dtgContainerMobiles->MetaAddColumn('Entregadas','Name=OKs');
 		$this->dtgContainerMobiles->MetaAddColumn('Devueltas','Name=DVs');
-		$this->dtgContainerMobiles->MetaAddColumn('CreatedAt','Name=F.Creadion');
+		$this->dtgContainerMobiles->MetaAddColumn('CreatedAt','Name=F.Creacion');
 		$this->dtgContainerMobiles->MetaAddColumn('UpdatedAt','Name=F.Actu');
 
         $this->btnExpoExce_Create();

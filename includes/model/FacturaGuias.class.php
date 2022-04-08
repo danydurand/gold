@@ -33,7 +33,7 @@
             $intIdxxRegi = parent::Save($blnForceInsert, $blnForceUpdate);
 
             //-------------------------------------------------------------------------------
-            // Se calcular los conceptos de la Guia y se almacen en los Items de la Factura
+            // Se calculan los conceptos de la Guia y se almacen en los Items de la Factura
             //-------------------------------------------------------------------------------
             t('=========================');
             t('En FacturaGuias.class.php');

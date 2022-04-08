@@ -27,6 +27,18 @@
 			return sprintf('%s',  $this->Referencia);
 		}
 
+        public function TotaDola() {
+            return nf($this->Total / $this->Tasa);
+		}
+
+        public function CobrDola() {
+            return nf($this->MontoCobrado / $this->Tasa);
+		}
+
+        public function PendDola() {
+            return nf($this->MontoPendiente / $this->Tasa);
+		}
+
 		public function _Imprimible() {
             $blnSepuImpr = true;
             if ($this->MontoPendiente > 0) {
@@ -170,26 +182,26 @@
             $blnTodoOkey = true;
             $strTextMens = '';
 
-		    /* @var $objPrimGuia Guias */
-            $objPrimGuia = $arrGuiaProc[0];
-            $strTeleRemi = strlen($objPrimGuia->TelefonoMovilRemitente) > 0 
-                ? $objPrimGuia->TelefonoMovilRemitente 
-                : $objPrimGuia->TelefonoRemitente;
+		    /* @var $objAliaFact Guias */
+            $objAliaFact = $arrGuiaProc[0];
+            $strTeleRemi = strlen($objAliaFact->TelefonoMovilRemitente) > 0 
+                ? $objAliaFact->TelefonoMovilRemitente 
+                : $objAliaFact->TelefonoRemitente;
             t('Creando registro de la factura');
             try {
                 $objNuevFact = new Facturas();
-                $objNuevFact->ClienteRetailId = $objPrimGuia->ClienteRetailId;
+                $objNuevFact->ClienteRetailId = $objAliaFact->ClienteRetailId;
                 $objNuevFact->Fecha           = new QDateTime(QDateTime::Now());
                 $objNuevFact->Referencia      = Facturas::proxReferencia();
-                $objNuevFact->CedulaRif       = $objPrimGuia->ClienteRetail->CedulaRif;
-                $objNuevFact->RazonSocial     = $objPrimGuia->NombreRemitente;
-                $objNuevFact->DireccionFiscal = $objPrimGuia->DireccionRemitente;
+                $objNuevFact->CedulaRif       = $objAliaFact->ClienteRetail->CedulaRif;
+                $objNuevFact->RazonSocial     = $objAliaFact->NombreRemitente;
+                $objNuevFact->DireccionFiscal = $objAliaFact->DireccionRemitente;
                 $objNuevFact->Telefono        = $strTeleRemi;
                 $objNuevFact->SucursalId      = $_SESSION['SucursalId'];
                 $objNuevFact->ReceptoriaId    = $_SESSION['ReceptoriaId'];
                 $objNuevFact->CajaId          = $_SESSION['CajaId'];
                 $objNuevFact->Estatus         = 'CREADA';
-                $objNuevFact->Tasa            = $objPrimGuia->Tasa;
+                $objNuevFact->Tasa            = $objAliaFact->Tasa;
                 $objNuevFact->Total           = 0;
                 $objNuevFact->MontoDscto      = 0;
                 $objNuevFact->MontoCobrado    = 0;
@@ -230,6 +242,80 @@
                     } catch (Exception $e) {
                         $strTextMens = $e->getMessage();
                         t('Error asociado la guia a la factura: '.$strTextMens);
+                        $blnTodoOkey = false;
+                    }
+                }
+                if ($blnTodoOkey) {
+                    $objNuevFact->MontoPendiente = $objNuevFact->Total;
+                    $objNuevFact->Save();
+                }
+            }
+            if ($blnTodoOkey) {
+		        return $objNuevFact;
+            } else {
+                return $strTextMens;
+            }
+        }
+
+		public static function crearFacturaAliado($arrGuiaProc,$intIdxxUsua, AliadoComercial $objAliaFact) {
+            t('=====================');
+            t('En Facturas.class.php');
+            $blnTodoOkey = true;
+            $strTextMens = '';
+
+            t('Creando registro de la factura');
+            try {
+                $objNuevFact = new Facturas();
+                $objNuevFact->AliadoId        = $objAliaFact->Id;
+                $objNuevFact->Fecha           = new QDateTime(QDateTime::Now());
+                $objNuevFact->Referencia      = Facturas::proxReferencia();
+                $objNuevFact->CedulaRif       = $objAliaFact->NroRif;
+                $objNuevFact->RazonSocial     = $objAliaFact->RazonSocial;
+                $objNuevFact->DireccionFiscal = $objAliaFact->DireccionFiscal;
+                $objNuevFact->Telefono        = $objAliaFact->Telefono;
+                $objNuevFact->SucursalId      = $objAliaFact->SucursalId;
+                $objNuevFact->Estatus         = 'CREADA';
+                $objNuevFact->Tasa            = $_SESSION['TasaDola'];
+                $objNuevFact->Total           = 0;
+                $objNuevFact->MontoDscto      = 0;
+                $objNuevFact->MontoCobrado    = 0;
+                $objNuevFact->MontoPendiente  = 0;
+                $objNuevFact->EstatusPago     = 'PENDIENTE';
+                $objNuevFact->CreatedBy       = $intIdxxUsua;
+                $objNuevFact->Save();
+		    } catch (Exception $e) {
+                $strTextMens = $e->getMessage();
+                t('Error creando la factura aliado: '.$strTextMens);
+                $blnTodoOkey = false;
+		    }
+            if ($blnTodoOkey) {
+		        t('Ahora voy a asociada cada guía con la factura recien creada');
+                foreach($arrGuiaProc as $objGuiaProc) {
+                    //------------------------------------
+                    // Se asocian las guias a la factura
+                    //------------------------------------
+                    /* @var $objGuiaProc Guias */
+                    try {
+                        $objGuiaFact = new FacturaGuias();
+                        $objGuiaFact->FacturaId = $objNuevFact->Id;
+                        $objGuiaFact->GuiaId    = $objGuiaProc->Id;
+                        $objGuiaFact->Total     = $objGuiaProc->Total;
+                        //------------------------------------------------------------
+                        // Este Save dispara el calculo de los conceptos de la guia
+                        //------------------------------------------------------------
+                        $objGuiaFact->Save();
+                        //-----------------------------------------------
+                        // Se acumula el total de la guia en la factura
+                        //-----------------------------------------------
+                        $objNuevFact->Total += $objGuiaFact->Total;
+                        //--------------------------------------------------
+                        // Se actualiza la guia asociandola con la factura
+                        //--------------------------------------------------
+                        $objGuiaProc->FacturaId = $objNuevFact->Id;
+                        $objGuiaProc->Save();
+                    } catch (Exception $e) {
+                        $strTextMens = $e->getMessage();
+                        t('Error asociado la guia a la factura aliado: '.$strTextMens);
                         $blnTodoOkey = false;
                     }
                 }

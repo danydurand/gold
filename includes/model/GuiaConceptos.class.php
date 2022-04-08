@@ -27,6 +27,9 @@
 			return sprintf('GuiaConceptos Object %s',  $this->intId);
 		}
 
+        public function __montoEnUSD() {
+            return nf($this->Monto / $this->Guia->Tasa);
+        }
 
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...

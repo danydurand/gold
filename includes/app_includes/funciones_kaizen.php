@@ -229,6 +229,7 @@ function ordenar_array() {
     }
 }
 
+
 function t($strTextTraz) {
     if (isset($_SESSION['User'])) {
         $objUsuario  = unserialize($_SESSION['User']);

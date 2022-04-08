@@ -81,6 +81,7 @@ abstract class FacturasListFormBase extends QForm {
         $this->dtgFacturases->MetaAddColumn('Id');
         $this->dtgFacturases->MetaAddColumn(QQN::Facturas()->ClienteRetail);
         $this->dtgFacturases->MetaAddColumn(QQN::Facturas()->ClienteCorp);
+        $this->dtgFacturases->MetaAddColumn(QQN::Facturas()->Aliado);
         $this->dtgFacturases->MetaAddColumn('Fecha');
         $this->dtgFacturases->MetaAddColumn('CedulaRif');
         $this->dtgFacturases->MetaAddColumn('RazonSocial');

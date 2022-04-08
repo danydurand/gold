@@ -130,6 +130,7 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
             $intProdIdxx   = $this->lstProducto->SelectedValue;
             $objClauWher[] = QQ::Equal(QQN::TarifaExp()->ProductoId, $intProdIdxx);
             $objClauWher[] = QQ::Equal(QQN::TarifaExp()->IsPublica, true);
+            $objClauWher[] = QQ::NotEqual(QQN::TarifaExp()->Id, $this->mctTarifaExp->TarifaExp->Id);
             return TarifaExp::QueryCount(QQ::AndCondition($objClauWher));
         }
         return false;

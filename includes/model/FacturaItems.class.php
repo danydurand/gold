@@ -27,6 +27,9 @@
 			return sprintf('FacturaItems Object %s',  $this->intId);
 		}
 
+        public function MontoEnUSD() {
+            return nf($this->Monto / $this->Factura->Tasa);
+        }
 
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...

@@ -2416,6 +2416,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             foreach ($arrConcOpci as $objConcOpci) {
                 $arrConcActi[] = $objConcOpci->Concepto;
             }
+            //----------------------------------------------------------------------------
+            // Los conceptos deben "calcularse en orden", de tal manera que los impuesto
+            // aplique correctamente sobre aquellos que forma parte de su base imponible
+            //----------------------------------------------------------------------------
+            usort($arrConcActi, function(Conceptos $a, Conceptos $b) {return strcmp($a->Orden, $b->Orden);});
             $this->objGuia->calcularTodoLosConceptos($arrConcActi);
             $this->txtTotaGuia->Text = round($this->objGuia->Total,2);
             //-------------------------------------
