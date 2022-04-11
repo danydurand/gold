@@ -8,7 +8,7 @@ use Spipu\Html2Pdf\Html2Pdf;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 
-class MasterClienteEditForm extends FormularioBaseKaizen {
+class AliadoEditForm extends FormularioBaseKaizen {
     // Objetos del Formulario //
     /* @var $objUsuaSist Usuario */
     protected $objUsuaSist;
@@ -2673,5 +2673,5 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
 // Go ahead and run this form object to render the page and its event handlers, implicitly using
 // master_cliente_edit.tpl.php as the included HTML template file
-MasterClienteEditForm::Run('MasterClienteEditForm');
+AliadoEditForm::Run('AliadoEditForm');
 ?>

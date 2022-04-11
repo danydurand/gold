@@ -5,7 +5,7 @@
 // Be sure to move this out of the generated/ subdirectory before modifying to ensure that subsequent
 // code re-generations do not overwrite your changes.
 
-$strPageTitle = 'Crear/Editar Cliente';
+$strPageTitle = 'Crear/Editar Aliado';
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
 	<div class="titulo-formulario">
@@ -88,8 +88,8 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 										<?php $this->txtNombClie->RenderWithName(); ?>
 										<?php $this->chkCodiEsta->RenderWithName(); ?>
 										<?php $this->lstCodiEsta->RenderWithName(); ?>
-                                        <?php $this->txtNumeDrif->RenderWithName(); ?>
-                                        <?php $this->txtDireFisc->RenderWithName(); ?>
+										<?php $this->txtDireFisc->RenderWithName(); ?>
+										<?php $this->txtNumeDrif->RenderWithName(); ?>
 									</div>
 									<div class="col-md-6">
 										<?php $this->txtSaldExce->RenderWithName(); ?>

@@ -1129,6 +1129,12 @@
 			return new QQNodeTarifaAliados('tarifa_aliados', null, null);
 		}
 		/**
+		 * @return QQNodeTarifaCliente
+		 */
+		static public function TarifaCliente() {
+			return new QQNodeTarifaCliente('tarifa_cliente', null, null);
+		}
+		/**
 		 * @return QQNodeTarifaExp
 		 */
 		static public function TarifaExp() {

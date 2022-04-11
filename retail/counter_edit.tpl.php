@@ -42,31 +42,16 @@
                                     <?php $this->txtSiglas->RenderWithName(); ?>
                                     <?php $this->lstSucursal->RenderWithName(); ?>
                                     <?php $this->lstRuta->RenderWithName(); ?>
-                                    <?php //$this->lstEntregaInmediataObject->RenderWithName(); ?>
-                                    <?php //$this->txtLimiteDePaquetes->RenderWithName(); ?>
-                                    <?php //$this->txtCantidadDePaquetes->RenderWithName(); ?>
-                                    <?php //$this->txtCkptRecepcion->RenderWithName(); ?>
-                                    <?php //$this->txtCkptConfirmacion->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAlmacen->RenderWithName(); ?>
-                                    <?php //$this->txtPaisId->RenderWithName(); ?>
-                                    <?php //$this->txtStatusId->RenderWithName(); ?>
                                     <?php $this->lstStatCoun->RenderWithName(); ?>
                                     <?php $this->txtDireccion->RenderWithName(); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <?php //$this->lstElegirServicioObject->RenderWithName(); ?>
                                     <?php $this->lstEsRutaObject->RenderWithName(); ?>
-                                    <?php //$this->lstSeFacturaObject->RenderWithName(); ?>
-                                    <?php //$this->lstPermitePagoObject->RenderWithName(); ?>
                                     <?php $this->txtEmailJefeAlmacen->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAntiguedad1->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAntiguedad2->RenderWithName(); ?>
-                                    <?php //$this->txtCkptAntiguedad0->RenderWithName(); ?>
-                                    <?php $this->lstAliadoComercial->RenderWithName(); ?>
-                                    <?php $this->txtLimiteKilos->RenderWithName(); ?>
-                                    <?php //$this->txtDependeDe->RenderWithName(); ?>
-                                    <?php $this->chkDomOrigen->RenderWithName(); ?>
-                                    <?php $this->chkDomDestino->RenderWithName(); ?>
+                                    <?php $this->lstCliente->RenderWithName(); ?>
+                                    <?php //$this->txtLimiteKilos->RenderWithName(); ?>
+                                    <?php //$this->chkDomOrigen->RenderWithName(); ?>
+                                    <?php //$this->chkDomDestino->RenderWithName(); ?>
                                 </div>
                             </div>
                         </div>

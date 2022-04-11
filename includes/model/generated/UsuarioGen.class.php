@@ -125,6 +125,10 @@
 	 * @property-read TarifaAliados[] $_TarifaAliadosAsCreatedByArray the value for the private _objTarifaAliadosAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.created_by reverse relationship
 	 * @property-read TarifaAliados $_TarifaAliadosAsUpdatedBy the value for the private _objTarifaAliadosAsUpdatedBy (Read-Only) if set due to an expansion on the tarifa_aliados.updated_by reverse relationship
 	 * @property-read TarifaAliados[] $_TarifaAliadosAsUpdatedByArray the value for the private _objTarifaAliadosAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.updated_by reverse relationship
+	 * @property-read TarifaCliente $_TarifaClienteAsCreatedBy the value for the private _objTarifaClienteAsCreatedBy (Read-Only) if set due to an expansion on the tarifa_cliente.created_by reverse relationship
+	 * @property-read TarifaCliente[] $_TarifaClienteAsCreatedByArray the value for the private _objTarifaClienteAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_cliente.created_by reverse relationship
+	 * @property-read TarifaCliente $_TarifaClienteAsUpdatedBy the value for the private _objTarifaClienteAsUpdatedBy (Read-Only) if set due to an expansion on the tarifa_cliente.updated_by reverse relationship
+	 * @property-read TarifaCliente[] $_TarifaClienteAsUpdatedByArray the value for the private _objTarifaClienteAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_cliente.updated_by reverse relationship
 	 * @property-read TarifaExp $_TarifaExpAsCreatedBy the value for the private _objTarifaExpAsCreatedBy (Read-Only) if set due to an expansion on the tarifa_exp.created_by reverse relationship
 	 * @property-read TarifaExp[] $_TarifaExpAsCreatedByArray the value for the private _objTarifaExpAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_exp.created_by reverse relationship
 	 * @property-read TarifaExp $_TarifaExpAsUpdatedBy the value for the private _objTarifaExpAsUpdatedBy (Read-Only) if set due to an expansion on the tarifa_exp.updated_by reverse relationship
@@ -991,6 +995,38 @@
 		 * @var TarifaAliados[] _objTarifaAliadosAsUpdatedByArray;
 		 */
 		private $_objTarifaAliadosAsUpdatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaClienteAsCreatedBy object
+		 * (of type TarifaCliente), if this Usuario object was restored with
+		 * an expansion on the tarifa_cliente association table.
+		 * @var TarifaCliente _objTarifaClienteAsCreatedBy;
+		 */
+		private $_objTarifaClienteAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaClienteAsCreatedBy objects
+		 * (of type TarifaCliente[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the tarifa_cliente association table.
+		 * @var TarifaCliente[] _objTarifaClienteAsCreatedByArray;
+		 */
+		private $_objTarifaClienteAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaClienteAsUpdatedBy object
+		 * (of type TarifaCliente), if this Usuario object was restored with
+		 * an expansion on the tarifa_cliente association table.
+		 * @var TarifaCliente _objTarifaClienteAsUpdatedBy;
+		 */
+		private $_objTarifaClienteAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaClienteAsUpdatedBy objects
+		 * (of type TarifaCliente[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the tarifa_cliente association table.
+		 * @var TarifaCliente[] _objTarifaClienteAsUpdatedByArray;
+		 */
+		private $_objTarifaClienteAsUpdatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single TarifaExpAsCreatedBy object
@@ -2383,6 +2419,36 @@
 					$objToReturn->_objTarifaAliadosAsUpdatedByArray[] = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objTarifaAliadosAsUpdatedBy)) {
 					$objToReturn->_objTarifaAliadosAsUpdatedBy = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliadosasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaClienteAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaclienteascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaclienteascreatedby']) ? null : $objExpansionAliasArray['tarifaclienteascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaClienteAsCreatedByArray)
+				$objToReturn->_objTarifaClienteAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaClienteAsCreatedByArray[] = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaClienteAsCreatedBy)) {
+					$objToReturn->_objTarifaClienteAsCreatedBy = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaClienteAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaclienteasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaclienteasupdatedby']) ? null : $objExpansionAliasArray['tarifaclienteasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaClienteAsUpdatedByArray)
+				$objToReturn->_objTarifaClienteAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaClienteAsUpdatedByArray[] = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaClienteAsUpdatedBy)) {
+					$objToReturn->_objTarifaClienteAsUpdatedBy = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3885,6 +3951,38 @@
 					 */
 					return $this->_objTarifaAliadosAsUpdatedByArray;
 
+				case '_TarifaClienteAsCreatedBy':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the tarifa_cliente.created_by reverse relationship
+					 * @return TarifaCliente
+					 */
+					return $this->_objTarifaClienteAsCreatedBy;
+
+				case '_TarifaClienteAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_cliente.created_by reverse relationship
+					 * @return TarifaCliente[]
+					 */
+					return $this->_objTarifaClienteAsCreatedByArray;
+
+				case '_TarifaClienteAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the tarifa_cliente.updated_by reverse relationship
+					 * @return TarifaCliente
+					 */
+					return $this->_objTarifaClienteAsUpdatedBy;
+
+				case '_TarifaClienteAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_cliente.updated_by reverse relationship
+					 * @return TarifaCliente[]
+					 */
+					return $this->_objTarifaClienteAsUpdatedByArray;
+
 				case '_TarifaExpAsCreatedBy':
 					/**
 					 * Gets the value for the private _objTarifaExpAsCreatedBy (Read-Only)
@@ -4468,6 +4566,12 @@
 			}
 			if ($this->CountTarifaAliadosesAsUpdatedBy()) {
 				$arrTablRela[] = 'tarifa_aliados';
+			}
+			if ($this->CountTarifaClientesAsCreatedBy()) {
+				$arrTablRela[] = 'tarifa_cliente';
+			}
+			if ($this->CountTarifaClientesAsUpdatedBy()) {
+				$arrTablRela[] = 'tarifa_cliente';
 			}
 			if ($this->CountTarifaExpsAsCreatedBy()) {
 				$arrTablRela[] = 'tarifa_exp';
@@ -11065,6 +11169,304 @@
 		}
 
 
+		// Related Objects' Methods for TarifaClienteAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaClientesAsCreatedBy as an array of TarifaCliente objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaCliente[]
+		*/
+		public function GetTarifaClienteAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return TarifaCliente::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaClientesAsCreatedBy
+		 * @return int
+		*/
+		public function CountTarifaClientesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return TarifaCliente::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a TarifaClienteAsCreatedBy
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function AssociateTarifaClienteAsCreatedBy(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsCreatedBy on this Usuario with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaClienteAsCreatedBy
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function UnassociateTarifaClienteAsCreatedBy(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCreatedBy on this Usuario with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaClientesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllTarifaClientesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaClienteAsCreatedBy
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaClienteAsCreatedBy(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCreatedBy on this Usuario with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaClientesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllTarifaClientesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for TarifaClienteAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaClientesAsUpdatedBy as an array of TarifaCliente objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaCliente[]
+		*/
+		public function GetTarifaClienteAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return TarifaCliente::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaClientesAsUpdatedBy
+		 * @return int
+		*/
+		public function CountTarifaClientesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return TarifaCliente::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a TarifaClienteAsUpdatedBy
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function AssociateTarifaClienteAsUpdatedBy(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsUpdatedBy on this Usuario with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaClienteAsUpdatedBy
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function UnassociateTarifaClienteAsUpdatedBy(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsUpdatedBy on this Usuario with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaClientesAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllTarifaClientesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaClienteAsUpdatedBy
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaClienteAsUpdatedBy(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsUpdatedBy on this Usuario with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaClientesAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllTarifaClientesAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for TarifaExpAsCreatedBy
 		//-------------------------------------------------------------------
 
@@ -11656,6 +12058,8 @@
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsCreatedBy
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsUpdatedBy
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsCreatedBy
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsUpdatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsCreatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsUpdatedBy
 
@@ -11799,6 +12203,10 @@
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosascreatedby', 'reverse_reference', 'created_by', 'TarifaAliadosAsCreatedBy');
 				case 'TarifaAliadosAsUpdatedBy':
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasupdatedby', 'reverse_reference', 'updated_by', 'TarifaAliadosAsUpdatedBy');
+				case 'TarifaClienteAsCreatedBy':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteascreatedby', 'reverse_reference', 'created_by', 'TarifaClienteAsCreatedBy');
+				case 'TarifaClienteAsUpdatedBy':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteasupdatedby', 'reverse_reference', 'updated_by', 'TarifaClienteAsUpdatedBy');
 				case 'TarifaExpAsCreatedBy':
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpascreatedby', 'reverse_reference', 'created_by', 'TarifaExpAsCreatedBy');
 				case 'TarifaExpAsUpdatedBy':
@@ -11886,6 +12294,8 @@
      * @property-read QQReverseReferenceNodeSreGuiaCkpt $SreGuiaCkptAsCodiUsua
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsCreatedBy
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsUpdatedBy
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsCreatedBy
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsUpdatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsCreatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsUpdatedBy
 
@@ -12029,6 +12439,10 @@
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosascreatedby', 'reverse_reference', 'created_by', 'TarifaAliadosAsCreatedBy');
 				case 'TarifaAliadosAsUpdatedBy':
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasupdatedby', 'reverse_reference', 'updated_by', 'TarifaAliadosAsUpdatedBy');
+				case 'TarifaClienteAsCreatedBy':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteascreatedby', 'reverse_reference', 'created_by', 'TarifaClienteAsCreatedBy');
+				case 'TarifaClienteAsUpdatedBy':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteasupdatedby', 'reverse_reference', 'updated_by', 'TarifaClienteAsUpdatedBy');
 				case 'TarifaExpAsCreatedBy':
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpascreatedby', 'reverse_reference', 'created_by', 'TarifaExpAsCreatedBy');
 				case 'TarifaExpAsUpdatedBy':

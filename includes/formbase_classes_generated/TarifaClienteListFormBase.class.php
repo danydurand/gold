@@ -1,21 +1,21 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do the List All functionality
- * of the Counter class.  It uses the code-generated
- * CounterDataGrid control which has meta-methods to help with
- * easily creating/defining Counter columns.
+ * of the TarifaCliente class.  It uses the code-generated
+ * TarifaClienteDataGrid control which has meta-methods to help with
+ * easily creating/defining TarifaCliente columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  *
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both counter_list.php AND
- * counter_list.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_cliente_list.php AND
+ * tarifa_cliente_list.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class CounterListFormBase extends QForm {
+abstract class TarifaClienteListFormBase extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $lblTituForm;
@@ -24,11 +24,11 @@ abstract class CounterListFormBase extends QForm {
     protected $btnExpoExce;
     protected $lblOtraNoti;
 
-    // Local instance of the Meta DataGrid to list Counters
+    // Local instance of the Meta DataGrid to list TarifaClientes
     /**
-     * @var CounterDataGrid dtgCounters
+     * @var TarifaClienteDataGrid dtgTarifaClientes
      */
-    protected $dtgCounters;
+    protected $dtgTarifaClientes;
 
     // Create QForm Event Handlers as Needed
 
@@ -52,65 +52,40 @@ abstract class CounterListFormBase extends QForm {
         $this->btnFiltAvan_Create();
 
         // Instantiate the Meta DataGrid
-        $this->dtgCounters = new CounterDataGrid($this);
+        $this->dtgTarifaClientes = new TarifaClienteDataGrid($this);
 
         // Style the DataGrid (if desired)
-        $this->dtgCounters->CssClass = 'datagrid';
-        $this->dtgCounters->AlternateRowStyle->CssClass = 'alternate';
-        $this->dtgCounters->FontSize = 13;
-        $this->dtgCounters->ShowFilter = false;
+        $this->dtgTarifaClientes->CssClass = 'datagrid';
+        $this->dtgTarifaClientes->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgTarifaClientes->FontSize = 13;
+        $this->dtgTarifaClientes->ShowFilter = false;
 
         // Add Pagination (if desired)
-        $this->dtgCounters->Paginator = new QPaginator($this->dtgCounters);
-        $this->dtgCounters->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgTarifaClientes->Paginator = new QPaginator($this->dtgTarifaClientes);
+        $this->dtgTarifaClientes->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         // Higlight the datagrid rows when mousing over them
-        $this->dtgCounters->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgCounters->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgTarifaClientes->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgTarifaClientes->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         // Add a click handler for the rows.
         // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
         // or $_ITEM->Id to pass the object's id, or any other data grid variable
-        $this->dtgCounters->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-        $this->dtgCounters->AddRowAction(new QClickEvent(), new QAjaxAction('dtgCountersRow_Click'));
+        $this->dtgTarifaClientes->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgTarifaClientes->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTarifaClientesRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
-        // Create the Other Columns (note that you can use strings for counter's properties, or you
-        // can traverse down QQN::counter() to display fields that are down the hierarchy)
-        $this->dtgCounters->MetaAddColumn('Id');
-        $this->dtgCounters->MetaAddColumn('Descripcion');
-        $this->dtgCounters->MetaAddColumn(QQN::Counter()->Sucursal);
-        $this->dtgCounters->MetaAddColumn(QQN::Counter()->Cliente);
-        $this->dtgCounters->MetaAddColumn(QQN::Counter()->Ruta);
-        $this->dtgCounters->MetaAddTypeColumn('EntregaInmediata', 'SinoType');
-        $this->dtgCounters->MetaAddColumn('Siglas');
-        $this->dtgCounters->MetaAddColumn('LimiteDePaquetes');
-        $this->dtgCounters->MetaAddColumn('CantidadDePaquetes');
-        $this->dtgCounters->MetaAddColumn('CkptRecepcion');
-        $this->dtgCounters->MetaAddColumn('CkptConfirmacion');
-        $this->dtgCounters->MetaAddColumn('CkptAlmacen');
-        $this->dtgCounters->MetaAddColumn('PaisId');
-        $this->dtgCounters->MetaAddColumn('StatusId');
-        $this->dtgCounters->MetaAddColumn('Direccion');
-        $this->dtgCounters->MetaAddTypeColumn('ElegirServicio', 'SinoType');
-        $this->dtgCounters->MetaAddTypeColumn('EsRuta', 'SinoType');
-        $this->dtgCounters->MetaAddTypeColumn('SeFactura', 'SinoType');
-        $this->dtgCounters->MetaAddTypeColumn('PermitePago', 'SinoType');
-        $this->dtgCounters->MetaAddColumn('EmailJefeAlmacen');
-        $this->dtgCounters->MetaAddColumn('CkptAntiguedad1');
-        $this->dtgCounters->MetaAddColumn('CkptAntiguedad2');
-        $this->dtgCounters->MetaAddColumn('CkptAntiguedad0');
-        $this->dtgCounters->MetaAddColumn('LimiteKilos');
-        $this->dtgCounters->MetaAddColumn('DependeDe');
-        $this->dtgCounters->MetaAddColumn('DomOrigen');
-        $this->dtgCounters->MetaAddColumn('DomDestino');
-        $this->dtgCounters->MetaAddColumn('CreatedAt');
-        $this->dtgCounters->MetaAddColumn('UpdatedAt');
-        $this->dtgCounters->MetaAddColumn('DeletedAt');
-        $this->dtgCounters->MetaAddColumn('CreatedBy');
-        $this->dtgCounters->MetaAddColumn('UpdatedBy');
-        $this->dtgCounters->MetaAddColumn('DeletedBy');
+        // Create the Other Columns (note that you can use strings for tarifa_cliente's properties, or you
+        // can traverse down QQN::tarifa_cliente() to display fields that are down the hierarchy)
+        $this->dtgTarifaClientes->MetaAddColumn('Id');
+        $this->dtgTarifaClientes->MetaAddColumn(QQN::TarifaCliente()->Cliente);
+        $this->dtgTarifaClientes->MetaAddColumn(QQN::TarifaCliente()->TarifaExp);
+        $this->dtgTarifaClientes->MetaAddColumn(QQN::TarifaCliente()->Producto);
+        $this->dtgTarifaClientes->MetaAddColumn('CreatedAt');
+        $this->dtgTarifaClientes->MetaAddColumn(QQN::TarifaCliente()->CreatedByObject);
+        $this->dtgTarifaClientes->MetaAddColumn('UpdatedAt');
+        $this->dtgTarifaClientes->MetaAddColumn(QQN::TarifaCliente()->UpdatedByObject);
 
         $this->btnExpoExce_Create();
 
@@ -118,7 +93,7 @@ abstract class CounterListFormBase extends QForm {
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'Counters';
+        $this->lblTituForm->Text = 'TarifaClientes';
     }
 
     protected function lblMensUsua_Create() {
@@ -156,7 +131,7 @@ abstract class CounterListFormBase extends QForm {
     }
 
     protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgCounters);
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgTarifaClientes);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoExce->HtmlEntities = false;
@@ -165,16 +140,16 @@ abstract class CounterListFormBase extends QForm {
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/counter_edit.php');
+        QApplication::Redirect(__SIST__.'/tarifa_cliente_edit.php');
     }
 
     protected function btnFiltAvan_Click() {
-        $this->dtgCounters->ShowFilter = !$this->dtgCounters->ShowFilter;
+        $this->dtgTarifaClientes->ShowFilter = !$this->dtgTarifaClientes->ShowFilter;
     }
 
-    public function dtgCountersRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgTarifaClientesRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
-      QApplication::Redirect("counter_edit.php/$intId");
+      QApplication::Redirect("tarifa_cliente_edit.php/$intId");
     }
 
 

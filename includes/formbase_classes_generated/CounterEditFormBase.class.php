@@ -56,6 +56,7 @@ abstract class CounterEditFormBase extends QForm {
 	protected $lblId;
 	protected $txtDescripcion;
 	protected $lstSucursal;
+	protected $lstCliente;
 	protected $lstRuta;
 	protected $lstEntregaInmediataObject;
 	protected $txtSiglas;
@@ -75,7 +76,6 @@ abstract class CounterEditFormBase extends QForm {
 	protected $txtCkptAntiguedad1;
 	protected $txtCkptAntiguedad2;
 	protected $txtCkptAntiguedad0;
-	protected $lstAliadoComercial;
 	protected $txtLimiteKilos;
 	protected $txtDependeDe;
 	protected $chkDomOrigen;
@@ -155,6 +155,7 @@ abstract class CounterEditFormBase extends QForm {
 		$this->lblId = $this->mctCounter->lblId_Create();
 		$this->txtDescripcion = $this->mctCounter->txtDescripcion_Create();
 		$this->lstSucursal = $this->mctCounter->lstSucursal_Create();
+		$this->lstCliente = $this->mctCounter->lstCliente_Create();
 		$this->lstRuta = $this->mctCounter->lstRuta_Create();
 		$this->lstEntregaInmediataObject = $this->mctCounter->lstEntregaInmediataObject_Create();
 		$this->txtSiglas = $this->mctCounter->txtSiglas_Create();
@@ -174,7 +175,6 @@ abstract class CounterEditFormBase extends QForm {
 		$this->txtCkptAntiguedad1 = $this->mctCounter->txtCkptAntiguedad1_Create();
 		$this->txtCkptAntiguedad2 = $this->mctCounter->txtCkptAntiguedad2_Create();
 		$this->txtCkptAntiguedad0 = $this->mctCounter->txtCkptAntiguedad0_Create();
-		$this->lstAliadoComercial = $this->mctCounter->lstAliadoComercial_Create();
 		$this->txtLimiteKilos = $this->mctCounter->txtLimiteKilos_Create();
 		$this->txtDependeDe = $this->mctCounter->txtDependeDe_Create();
 		$this->chkDomOrigen = $this->mctCounter->chkDomOrigen_Create();

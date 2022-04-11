@@ -77,7 +77,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lstServExpo;
     protected $lstFormPago;
     protected $lstModoValo;
-    protected $lstAliaCome;
+    //protected $lstAliaCome;
     protected $lstClieCorp;
 
     protected $txtNumeGuia;
@@ -385,7 +385,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstModoValo_Create();
         $this->lblUnidMedi_Create();
         $this->lstUnidMedi_Create();
-        $this->lstAliaCome_Create();
+        //$this->lstAliaCome_Create();
         $this->lstClieCorp_Create();
         $this->txtCantPiez_Create();
 
@@ -477,11 +477,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstModoValo_Change();
 
         $objSucuUsua = Counter::Load($_SESSION['ReceptoriaId']);
-        if (!is_null($objSucuUsua->AliadoComercialId)) {
+        if (!is_null($objSucuUsua->ClienteId)) {
             $this->blnAliaCome = true;
-            $this->cargarAliados($objSucuUsua->AliadoComercialId);
-            $this->lstAliaCome = disableControl($this->lstAliaCome);
-            $this->lstClieCorp->Visible = false;
+            $this->cargarClientesCorp($objSucuUsua->ClienteId);
+            $this->lstClieCorp = disableControl($this->lstClieCorp);
         }
     }
 
@@ -872,16 +871,16 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstUnidMedi->AddAction(new QChangeEvent(), new QAjaxAction('lstUnidMedi_Change'));
     }
 
-    protected function lstAliaCome_Create() {
-        $this->lstAliaCome = new QListBox($this);
-        $this->lstAliaCome->Name = 'Aliado';
-        $this->lstAliaCome->Width = 210;
-        if (!$this->blnEditMode) {
-            $this->cargarAliados();
-        } else {
-            $this->cargarAliados($this->objGuia->AliadoId);
-        }
-    }
+    //protected function lstAliaCome_Create() {
+    //    $this->lstAliaCome = new QListBox($this);
+    //    $this->lstAliaCome->Name = 'Aliado';
+    //    $this->lstAliaCome->Width = 210;
+    //    if (!$this->blnEditMode) {
+    //        $this->cargarAliados();
+    //    } else {
+    //        $this->cargarAliados($this->objGuia->AliadoId);
+    //    }
+    //}
 
     protected function lstClieCorp_Create() {
         $this->lstClieCorp = new QListBox($this);
@@ -2211,26 +2210,27 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstModoValo->AddItem('Por PIEZA','PP',$strModoValo=='PP');
     }
 
-    protected function cargarAliados($intAliaIdxx=null) {
-        $this->lstAliaCome->RemoveAllItems();
-        $objClauOrde = QQ::OrderBy(QQN::AliadoComercial()->RazonSocial);
-        $arrAliaCome = AliadoComercial::LoadAll($objClauOrde);
-        $intCantAlia = count($arrAliaCome);
-        $this->lstAliaCome->AddItem('- Seleccione - ('.$intCantAlia.')', null);
-        foreach ($arrAliaCome as $objAliaCome) {
-            $blnSeleRegi = $objAliaCome->Id == $intAliaIdxx;
-            $this->lstAliaCome->AddItem($objAliaCome->__toString(), $objAliaCome->Id, $blnSeleRegi);
-        }
-        $this->lstAliaCome->Width = 210;
-    }
+    //protected function cargarAliados($intAliaIdxx=null) {
+    //    $this->lstAliaCome->RemoveAllItems();
+    //    $objClauOrde = QQ::OrderBy(QQN::AliadoComercial()->RazonSocial);
+    //    $arrAliaCome = AliadoComercial::LoadAll($objClauOrde);
+    //    $intCantAlia = count($arrAliaCome);
+    //    $this->lstAliaCome->AddItem('- Seleccione - ('.$intCantAlia.')', null);
+    //    foreach ($arrAliaCome as $objAliaCome) {
+    //        $blnSeleRegi = $objAliaCome->Id == $intAliaIdxx;
+    //        $this->lstAliaCome->AddItem($objAliaCome->__toString(), $objAliaCome->Id, $blnSeleRegi);
+    //    }
+    //    $this->lstAliaCome->Width = 210;
+    //}
 
     protected function cargarClientesCorp($intCodiClie=null) {
         if (is_null($intCodiClie)) {
             $intCodiClie = $this->objClieNaci->CodiClie;
         }
         $this->lstClieCorp->RemoveAllItems();
-        $objClauOrde = QQ::OrderBy(QQN::MasterCliente()->NombClie);
-        $arrClieCorp = MasterCliente::LoadArrayByCodiStat(1,$objClauOrde);
+        $arrClieCorp = MasterCliente::LoadAliadosActivos();
+        $intCantClie = count($arrClieCorp);
+        $this->lstClieCorp->AddItem('- Seleccione - ('.$intCantClie.')',null);
         foreach ($arrClieCorp as $objClieCorp) {
             $blnSeleRegi = $objClieCorp->CodiClie == $intCodiClie;
             $this->lstClieCorp->AddItem($objClieCorp->__toString(), $objClieCorp->CodiClie, $blnSeleRegi);
@@ -2686,6 +2686,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $strServExpo = $this->lstServExpo->SelectedValue;
         $strCodiExpo = $strServExpo == 'AER' ? 'EXA' : 'EXM';
         $objProdExpo = Productos::LoadByCodigo($strCodiExpo);
+        $intClieIdxx = $this->lstClieCorp->SelectedValue
+            ? $this->lstClieCorp->SelectedValue
+            : $this->objClieNaci->CodiClie;
         //-------------------------------------
         // Se suprimen los errores en pantalla
         //-------------------------------------
@@ -2696,7 +2699,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->ClienteRetailId = $this->objClieReta->Id;
 
             if (!$this->blnEditSupe || !$this->blnEditMode) {
-                //$this->objGuia->OrigenId           = $this->intSucuOrig;
                 $this->objGuia->OrigenId           = $this->lstSucuOrig->SelectedValue;
                 $this->objGuia->ReceptoriaOrigenId = $this->intReceOrig;
             }
@@ -2728,8 +2730,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->CodigoPostal              = $this->txtPostDest->Text;
             $this->objGuia->TipoExport                = 'COURIER';
             $this->objGuia->ProductoId                = $objProdExpo->Id;
-            $this->objGuia->AliadoId                  = $this->lstAliaCome->SelectedValue;
-            $this->objGuia->ClienteCorpId             = $this->lstClieCorp->SelectedValue;
+            //$this->objGuia->AliadoId                  = $this->lstAliaCome->SelectedValue;
+            $this->objGuia->ClienteCorpId             = $intClieIdxx;
             $this->objGuia->ReferenciaExp             = $this->txtRefeExpo->Text;
             $this->objGuia->RazonesExp                = $this->txtRazoExpo->Text;
             $this->objGuia->ModoValor                 = $this->lstModoValo->SelectedValue;

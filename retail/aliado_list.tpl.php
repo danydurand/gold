@@ -5,8 +5,8 @@
 // Be sure to move this out of this directory before modifying to ensure that subsequent
 // code re-generations do not overwrite your changes.
 
-$strPageTitle = 'Lista de Clientes';
-require(__APP_INCLUDES__ . '/header.inc.php');
+$strPageTitle = 'Lista de Aliados';
+require('inc/header.inc.php');
 ?>
     <div class="titulo-formulario">
         <div class="col-sm-3 col-md-3 col-lg-4 pull-left" style="text-align: left; margin-top: -0.30em; margin-left: -1em;">

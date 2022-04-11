@@ -8,7 +8,7 @@ use Spipu\Html2Pdf\Html2Pdf;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;
 
-class MasterClienteEditForm extends FormularioBaseKaizen {
+class AliadoEditForm extends FormularioBaseKaizen {
     // Objetos del Formulario //
     /* @var $objUsuaSist Usuario */
     protected $objUsuaSist;
@@ -124,6 +124,16 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected $txtMotiElim;
     protected $strAcciClie;
 
+    protected $dtgTariClie;
+    protected $lstTariExpo;
+    protected $btnSaveTari;
+    protected $btnDeleTari;
+    protected $btnAgreTari;
+
+    protected $lblTariExpo;
+    protected $lblAcciTari;
+    protected $intTariIdxx;
+
     protected function ClienteSetup() {
         $intCodiClie = QApplication::PathInfo(0);
         if ($intCodiClie) {
@@ -157,9 +167,9 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
         $this->FlashMessage();
 
-        $this->objUsuaSist = Usuario::LoadByLogiUsua('liberty');
+        $this->objUsuaSist = Usuario::LoadByLogiUsua('gold');
 
-        $this->lblTituForm->Text  = 'Cliente ';
+        $this->lblTituForm->Text  = 'Aliado ';
         $this->lblTituForm->Text .= '('.$this->intPosiRegi.'/'.$this->intCantRegi.')';
 
         $this->txtCodiInte_Create();
@@ -302,7 +312,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             // Variables de sesión requeridas para el histórico.
             $_SESSION['RegiRefe'] = $this->objMasterCliente->CodiClie;
             $_SESSION['TablRefe'] = 'MasterCliente';
-            $_SESSION['RegiReto'] = 'master_cliente_edit.php/'.$this->objMasterCliente->CodiClie;
+            $_SESSION['RegiReto'] = 'aliado_edit.php/'.$this->objMasterCliente->CodiClie;
             //----------------------------------------------------------------
             // Cantidad de Históricos existentes por Tabla y por Referencia.
             //----------------------------------------------------------------
@@ -401,11 +411,183 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                     $this->danger("Accion: ".$this->strAcciClie." no especificada");
             }
         }
+
+        if ($this->blnEditMode) {
+            $this->dtgTariClie_Create();
+            $this->lstTariExpo_Create();
+            //$this->btnAgreTari_Create();
+            $this->btnSaveTari_Create();
+            $this->btnDeleTari_Create();
+            $this->lblTariExpo_Create();
+            $this->lblAcciTari_Create();
+        }
+
+    }
+
+    protected function dtgTariClie_Create() {
+
+        // Instantiate the Meta DataGrid
+        $this->dtgTariClie = new TarifaClienteDataGrid($this);
+        $this->dtgTariClie->FontSize = 13;
+        $this->dtgTariClie->ShowFilter = false;
+
+        // Style the DataGrid (if desired)
+        $this->dtgTariClie->CssClass = 'datagrid';
+        $this->dtgTariClie->AlternateRowStyle->CssClass = 'alternate';
+
+        // Add Pagination (if desired)
+        $this->dtgTariClie->Paginator = new QPaginator($this->dtgTariClie);
+        $this->dtgTariClie->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+
+        // Higlight the datagrid rows when mousing over them
+        $this->dtgTariClie->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgTariClie->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ClienteId, $this->objMasterCliente->CodiClie);
+        $this->dtgTariClie->AdditionalConditions = QQ::AndCondition($objClauWher);
+
+        // Add a click handler for the rows.
+        // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
+        // or $_ITEM->Id to pass the object's id, or any other data grid variable
+        $this->dtgTariClie->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgTariClie->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTariClieRow_Click'));
+
+        // Use the MetaDataGrid functionality to add Columns for this datagrid
+
+        // Create the Other Columns (note that you can use strings for tarifa_aliados's properties, or you
+        // can traverse down QQN::tarifa_aliados() to display fields that are down the hierarchy)
+        $this->dtgTariClie->MetaAddColumn('Id');
+        $this->dtgTariClie->MetaAddColumn(QQN::TarifaCliente()->TarifaExp);
+        $colProdExpo = new QDataGridColumn('PRODUCTO','<?= $_ITEM->TarifaExp->Producto->__toString() ?>');
+        $this->dtgTariClie->AddColumn($colProdExpo);
+        $this->dtgTariClie->MetaAddColumn('CreatedAt','Name=F.Creacion');
+        $colUsuaCrea = new QDataGridColumn('CREAD@ POR','<?= $_ITEM->CreatedByObject->__toString() ?>');
+        $this->dtgTariClie->AddColumn($colUsuaCrea);
+
+    }
+
+    protected function lstTariExpo_Create() {
+        $this->lstTariExpo = new QListBox($this);
+        $this->cargarTarifas();
+    }
+
+    protected function cargarTarifas($intTariIdxx=null) {
+        $this->lstTariExpo->RemoveAllItems();
+        $this->lstTariExpo->AddItem('- Seleccione -', null);
+        $objClauOrde[] = QQ::OrderBy(QQN::TarifaExp()->CreatedAt,false);
+        $arrTariExpo = TarifaExp::LoadAll($objClauOrde);
+        foreach ($arrTariExpo as $objTariExpo) {
+            $blnSeleRegi = $intTariIdxx == $objTariExpo->Id;
+            $this->lstTariExpo->AddItem($objTariExpo->__toString(), $objTariExpo->Id, $blnSeleRegi);
+        }
+        $this->lstTariExpo->Width = 150;
+    }
+
+    protected function btnSaveTari_Create() {
+        $this->btnSaveTari = new QButtonS($this);
+        $this->btnSaveTari->Text = TextoIcono('save','','F','lg');
+        $this->btnSaveTari->AddAction(new QClickEvent(), new QAjaxAction('btnSaveTari_Click'));
+    }
+
+    protected function btnDeleTari_Create() {
+        $this->btnDeleTari = new QButtonD($this);
+        $this->btnDeleTari->Text = TextoIcono('trash','','F','lg');
+        $this->btnDeleTari->AddAction(new QClickEvent(), new QAjaxAction('btnDeleTari_Click'));
+        $this->btnDeleTari->Visible = false;
+    }
+
+    protected function lblAcciTari_Create() {
+        $this->lblAcciTari = new QLabel($this);
+        $this->lblAcciTari->Text = 'Guardar';
+    }
+
+    protected function lblTariExpo_Create() {
+        $this->lblTariExpo = new QLabel($this);
+        $this->lblTariExpo->Text = 'Tarifa EXP';
     }
 
     //----------------------------------
     // Acciones relativas al Cliente
     //----------------------------------
+
+    protected function dtgTariAliaRow_Click($strFormId, $strControlId, $strParameter) {
+        $this->intTariIdxx = intval($strParameter);
+        $objTariExpo = TarifaCliente::Load($this->intTariIdxx);
+        $this->cargarTarifas($objTariExpo->TarifaExp->Id);
+        $this->btnDeleTari->Visible = true;
+        $this->lblAcciTari->Text = 'Actualizar';
+    }
+
+    protected function btnDeleTari_Click() {
+        $objTariExpo = TarifaCliente::Load($this->intTariIdxx);
+        if (isset($objTariExpo)) {
+            $objTariExpo->Delete();
+            $this->dtgTariClie->Refresh();
+            $this->btnDeleTari->Visible = false;
+            $this->lblAcciTari->Text = 'Guardar';
+            $this->limpiarCamposTarifa();
+            $this->mensaje();
+        }
+    }
+
+    protected function estaRepetido($intProdIdxx) {
+        $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ClienteId, $this->objMasterCliente->CodiClie);
+        $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ProductoId, $intProdIdxx);
+        return TarifaCliente::QueryCount(QQ::AndCondition($objClauWher));
+    }
+
+    protected function btnSaveTari_Click() {
+        $this->mensaje();
+        $intTariIdxx = $this->lstTariExpo->SelectedValue;
+        $objTariExpo = TarifaExp::Load($intTariIdxx);
+        if (is_null($this->intTariIdxx)) {
+            //------------
+            // Insercion
+            //------------
+            if (!$this->estaRepetido($objTariExpo->ProductoId)) {
+                try {
+                    $objTariClie = new TarifaCliente();
+                    $objTariClie->ClienteId   = $this->objMasterCliente->CodiClie;
+                    $objTariClie->TarifaExpId = $this->lstTariExpo->SelectedValue;
+                    $objTariClie->ProductoId  = $objTariExpo->ProductoId;
+                    $objTariClie->CreatedAt   = new QDateTime(QDateTime::Now);
+                    $objTariClie->CreatedBy   = $this->objUsuario->CodiUsua;
+                    $objTariClie->Save();
+                    $this->dtgTariClie->Refresh();
+                } catch (Exception $e) {
+                    t('Error: '.$e->getMessage());
+                    $this->danger('Error: '.$e->getMessage());
+                }
+            } else {
+                $this->danger('Ya existe una Tarifa para Producto seleccionado');
+            }
+        } else {
+            //---------------
+            // Modificacion
+            //---------------
+            try {
+                $objTariClie = TarifaCliente::Load($this->intTariIdxx);
+                $objTariClie->ClienteId   = $this->objMasterCliente->CodiClie;
+                $objTariClie->TarifaExpId = $this->lstTariExpo->SelectedValue;
+                $objTariClie->ProductoId  = $objTariExpo->ProductoId;
+                $objTariClie->UpdatedAt   = new QDateTime(QDateTime::Now);
+                $objTariClie->UpdatedBy   = $this->objUsuario->CodiUsua;
+                $objTariClie->Save();
+                $this->btnDeleTari->Visible = false;
+                $this->dtgTariClie->Refresh();
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
+                $this->danger('Error: '.$e->getMessage());
+            }
+        }
+        $this->limpiarCamposTarifa();
+    }
+
+    protected function limpiarCamposTarifa() {
+        $this->cargarTarifas();
+        $this->intTariIdxx = null;
+    }
+
 
     protected function enviarEdoCta($strTipoAcci='E', $strDestCorr='U') {
         $objClauWher   = QQ::Clause();
@@ -887,7 +1069,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
     public function dtgSubcClieRow_Click($strFormId, $strControlId, $strParameter) {
         $intCodiClie = intval($strParameter);
-        QApplication::Redirect(__SIST__."/master_cliente_edit.php/$intCodiClie");
+        QApplication::Redirect(__SIST__."/aliado_edit.php/$intCodiClie");
     }
 
     protected function dtgSubcClie_Bind() {
@@ -1109,7 +1291,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
     protected function txtCodiInte_Create() {
         $this->txtCodiInte = new QTextBox($this);
-        $this->txtCodiInte->Name = 'Código';
+        $this->txtCodiInte->Name = 'Código Interno';
         //$this->txtCodiInte->Required = true;
         $this->txtCodiInte->Width = 150;
         $this->txtCodiInte->Text = '';
@@ -1199,7 +1381,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtDireFisc->Required = true;
         $this->txtDireFisc->TextMode = QTextMode::MultiLine;
         $this->txtDireFisc->Width = 250;
-        $this->txtDireFisc->Rows = 4;
+        $this->txtDireFisc->Rows = 2;
         if ($this->blnEditMode) {
             $this->txtDireFisc->Text = $this->objMasterCliente->DireFisc;
         }
@@ -1264,7 +1446,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtEntrFact->Required = true;
         $this->txtEntrFact->TextMode = QTextMode::MultiLine;
         $this->txtEntrFact->Width = 250;
-        $this->txtEntrFact->Height = 80;
+        $this->txtEntrFact->Rows = 2;
         if ($this->blnEditMode) {
             $this->txtEntrFact->Text = $this->objMasterCliente->DirEntregaFactura;
         }
@@ -1367,7 +1549,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtDireMail = new QTextBox($this);
         $this->txtDireMail->Name = 'Correo Electronico';
         $this->txtDireMail->Width = 250;
-        $this->txtDireMail->Rows = 4;
+        $this->txtDireMail->Rows = 2;
         $this->txtDireMail->TextMode = QTextMode::MultiLine;
         if ($this->blnEditMode) {
             $this->txtDireMail->Text = $this->objMasterCliente->DireMail;
@@ -1380,7 +1562,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtDireReco->Name = 'Dirección de Recolecta';
         $this->txtDireReco->TextMode = QTextMode::MultiLine;
         $this->txtDireReco->Width = 250;
-        $this->txtDireReco->Height = 80;
+        $this->txtDireReco->Rows = 2;
         if ($this->blnEditMode) {
             $this->txtDireReco->Text = $this->objMasterCliente->DireReco;
         }
@@ -1857,22 +2039,22 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->CodiClie);
+        QApplication::Redirect(__SIST__.'/aliado_edit.php/'.$objRegiTabl->CodiClie);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->CodiClie);
+        QApplication::Redirect(__SIST__.'/aliado_edit.php/'.$objRegiTabl->CodiClie);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->CodiClie);
+        QApplication::Redirect(__SIST__.'/aliado_edit.php/'.$objRegiTabl->CodiClie);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->CodiClie);
+        QApplication::Redirect(__SIST__.'/aliado_edit.php/'.$objRegiTabl->CodiClie);
     }
 
     protected function verificarNavegacion() {
@@ -1906,9 +2088,9 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->txtNombBusc->Visible = $this->chkEsunSubc->Checked;
         $this->lstCodiDepe->Visible = $this->chkEsunSubc->Checked;
         if ($this->chkEsunSubc->Checked) {
-            $this->txtDireFisc->Rows = 3;
+            $this->txtDireFisc->Rows = 2;
         } else {
-            $this->txtDireFisc->Rows = 4;
+            $this->txtDireFisc->Rows = 2;
         }
     }
 
@@ -1973,8 +2155,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected function chkCodiEsta_Change() {
         $this->lstCodiEsta->RemoveAllItems();
         if ($this->chkCodiEsta->Checked) {
-            //$arrSucuClie = Estacion::LoadSucursalesActivasToClients();
-            $arrSucuClie = Sucursales::LoadAll();
+
+            $arrSucuClie = Sucursales::LoadSucursalesActivas('Nombre');
             $intCantSucu = count($arrSucuClie);
             $this->lstCodiEsta->AddItem('- Seleccione Una - ('.$intCantSucu.')', null);
             if ($arrSucuClie) {
@@ -2150,37 +2332,21 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
         if ($this->blnEditMode) {
             $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/carga_masiva_clientes.php/'.$this->objMasterCliente->CodiClie,
-                TextoIcono('briefcase','Carga Sub-Clientes')
-            );
-            $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/calcularSaldo',
+                __SIST__.'/aliado_edit.php/'.$this->objMasterCliente->CodiClie.'/calcularSaldo',
                 TextoIcono('bank','Calcular Saldo')
             );
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCta',
-            //    TextoIcono('eye','Mostrar Edo Cta')
-            //);
             $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCtaII',
+                __SIST__.'/aliado_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCtaII',
                 TextoIcono('eye','Mostrar Edo Cta')
             );
             $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCta',
+                __SIST__.'/aliado_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCta',
                 TextoIcono('paper-plane-o','Enviarme el Edo Cta')
             );
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCtaII',
-            //    TextoIcono('paper-plane-o','Enviarme el Edo Cta II')
-            //);
             $arrOpciDrop[] = OpcionDropDown(
-                __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCta',
-                TextoIcono('paper-plane','Enviar Edo Cta al Cliente')
+                __SIST__.'/aliado_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCta',
+                TextoIcono('paper-plane','Enviar Edo Cta al Aliado')
             );
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCtaII',
-            //    TextoIcono('paper-plane','Enviar Edo Cta al Cliente II')
-            //);
         }
 
         $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
@@ -2218,7 +2384,6 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             //-----------------------------------------------------------------------------------
             // Si tiene un Mensaje de Alerta Yamaguchi asignado, se procede a eliminar el mismo.
             //-----------------------------------------------------------------------------------
-            //$objMensYama = MensajeYamaguchi::LoadMsjAlertByCodigoInterno($objMastClie->CodigoInterno);
             $objMensYama = $objMastClie->LoadMsjAlertByCodigoInterno();
             if ($objMensYama) {
                 $objMensYama->Delete();
@@ -2229,7 +2394,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $arrLogxCamb['strNombTabl'] = 'MensajeCORP';
             $arrLogxCamb['intRefeRegi'] = $objMensYama->Id;
             $arrLogxCamb['strNombRegi'] = $objMensYama->Tipo.' | '.$objMensYama->Texto;
-            $arrLogxCamb['strDescCamb'] = "Borrado mensaje al Cliente: ".$objMastClie->CodigoInterno;
+            $arrLogxCamb['strDescCamb'] = "Borrado mensaje al Cliente-Aliado: ".$objMastClie->CodigoInterno;
             LogDeCambios($arrLogxCamb);
         }
     }
@@ -2259,7 +2424,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             $arrLogxCamb['strNombTabl'] = 'MensajeCORP';
             $arrLogxCamb['intRefeRegi'] = $objMensYama->Id;
             $arrLogxCamb['strNombRegi'] = $objMensYama->Tipo.' | '.$objMensYama->Texto;
-            $arrLogxCamb['strDescCamb'] = "Creado el mensaje al Cliente: ".$objMastClie->CodigoInterno;
+            $arrLogxCamb['strDescCamb'] = "Creado el mensaje al Cliente-Aliado: ".$objMastClie->CodigoInterno;
             LogDeCambios($arrLogxCamb);
         }
     }
@@ -2284,7 +2449,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     }
 
     protected function btnNuevClie_Click() {
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php');
+        QApplication::Redirect(__SIST__.'/aliado_edit.php');
     }
 
 
@@ -2382,7 +2547,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 //------------------------------------------------------------------------------------------------------
                 // El Programa genera el Correlativo correspondiente y se lo asigna automáticamente al Cliente a Crear.
                 //------------------------------------------------------------------------------------------------------
-                $this->txtCodiInte->Text = MasterCliente::generarProxCodigo($intCodiDepe);
+                $this->txtCodiInte->Text = MasterCliente::generarProxCodigoDeAliado();
             }
             t('6');
             //-------------------------------------------------------------------------------------------------
@@ -2390,8 +2555,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             //-------------------------------------------------------------------------------------------------
             $objCliente = MasterCliente::LoadByCodigoInterno($this->txtCodiInte->Text);
             if ($objCliente) {
-                t('ya existe un cliente con ese codigo');
-                $this->mensaje('Ya existe un Cliente con este Código','','d','',__iHAND__);
+                t('ya existe un Cliente-Aliado con ese codigo');
+                $this->mensaje('Ya existe un Cliente-Aliado con este Código','','d','',__iHAND__);
                 $blnTodoOkey = false;
             }
         }
@@ -2459,7 +2624,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                     $arrLogxCamb['intRefeRegi'] = $this->objMasterCliente->CodiClie;
                     $arrLogxCamb['strNombRegi'] = '('.$this->objMasterCliente->CodigoInterno .') - '. $this->objMasterCliente->NombClie;
                     $arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
-                    $arrLogxCamb['strEnlaEnti'] = __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie;
+                    $arrLogxCamb['strEnlaEnti'] = __SIST__.'/aliado_edit.php/'.$this->objMasterCliente->CodiClie;
                     if (buscarCadenas($arrLogxCamb['strDescCamb'],'Cliente')) {
                         $arrLogxCamb['blnCambDeli'] = true;
                     }
@@ -2469,8 +2634,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
             } else {
                 t('16');
                 $this->objMasterCliente->logDeCambios('Creado');
-                $_SESSION['FlashMessage'] = ['success','Cliente Creado Exitosamente !!'];
-                QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie);
+                $_SESSION['FlashMessage'] = ['success','Aliado Creado Exitosamente !!'];
+                QApplication::Redirect(__SIST__.'/aliado_edit.php/'.$this->objMasterCliente->CodiClie);
             }
         }
     }
@@ -2495,7 +2660,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->calFechElim->DateTime = null;
         $this->txtMotiElim->Text = null;
 
-        $strTextMens = 'Transaccion Exitosa. El Cliente '.trim($this->objMasterCliente->CodigoInterno).' ha sido Recuperado.';
+        $strTextMens = 'Transaccion Exitosa. El Cliente-Aliado '.trim($this->objMasterCliente->CodigoInterno).' ha sido Recuperado.';
         $this->mensaje($strTextMens,'','','',__iCHEC__);
     }
 
@@ -2567,6 +2732,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $this->objMasterCliente->CodiDepe = $intCodiDepe;
         $this->objMasterCliente->NombClie = $this->txtNombClie->Text;
         $this->objMasterCliente->SucursalId = $this->lstCodiEsta->SelectedValue;
+        $this->objMasterCliente->EsAliado = true;
         $this->objMasterCliente->DireFisc = $this->txtDireFisc->Text;
         $this->objMasterCliente->NumeDrif = $this->txtNumeDrif->Text;
         $this->objMasterCliente->VendedorId = $this->lstVendClie->SelectedValue;
@@ -2672,6 +2838,6 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 }
 
 // Go ahead and run this form object to render the page and its event handlers, implicitly using
-// master_cliente_edit.tpl.php as the included HTML template file
-MasterClienteEditForm::Run('MasterClienteEditForm');
+// aliado_edit.tpl.php as the included HTML template file
+AliadoEditForm::Run('AliadoEditForm');
 ?>

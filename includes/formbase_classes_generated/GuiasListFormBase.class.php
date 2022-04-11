@@ -85,7 +85,6 @@ abstract class GuiasListFormBase extends QForm {
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteRetail);
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteCorp);
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteInt);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Aliado);
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen);
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino);
         $this->dtgGuiases->MetaAddColumn('ServicioEntrega');

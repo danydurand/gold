@@ -16,60 +16,55 @@
 	 * @package My QCubed Application
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $CodiClie the value for intCodiClie (Read-Only PK)
-	 * @property integer $CodiDepe the value for intCodiDepe (Not Null)
+	 * @property integer $CodiDepe the value for intCodiDepe 
 	 * @property string $NombClie the value for strNombClie (Not Null)
 	 * @property integer $SucursalId the value for intSucursalId (Not Null)
+	 * @property boolean $EsAliado the value for blnEsAliado 
 	 * @property string $CodiEsta the value for strCodiEsta 
 	 * @property string $DireFisc the value for strDireFisc (Not Null)
 	 * @property string $NumeDrif the value for strNumeDrif (Not Null)
-	 * @property integer $VendedorId the value for intVendedorId (Not Null)
+	 * @property integer $VendedorId the value for intVendedorId 
 	 * @property integer $TarifaId the value for intTarifaId 
 	 * @property integer $TarifaAgenteId the value for intTarifaAgenteId 
 	 * @property integer $Facturable the value for intFacturable 
-	 * @property integer $CicloId the value for intCicloId (Not Null)
+	 * @property integer $CicloId the value for intCicloId 
 	 * @property string $NumeDnit the value for strNumeDnit 
-	 * @property string $PersCona the value for strPersCona (Not Null)
-	 * @property string $TeleCona the value for strTeleCona (Not Null)
+	 * @property string $PersCona the value for strPersCona 
+	 * @property string $TeleCona the value for strTeleCona 
 	 * @property string $PersConb the value for strPersConb 
 	 * @property string $TeleConb the value for strTeleConb 
 	 * @property string $DireMail the value for strDireMail 
 	 * @property string $DireReco the value for strDireReco 
-	 * @property string $HoraLune the value for strHoraLune 
-	 * @property string $HoraMart the value for strHoraMart 
-	 * @property string $HoraMier the value for strHoraMier 
-	 * @property string $HoraJuev the value for strHoraJuev 
-	 * @property string $HoraVier the value for strHoraVier 
-	 * @property string $HoraSaba the value for strHoraSaba 
 	 * @property integer $CodiStat the value for intCodiStat (Not Null)
 	 * @property integer $CodiSino the value for intCodiSino 
 	 * @property string $TextObse the value for strTextObse 
 	 * @property string $NumeDfax the value for strNumeDfax 
 	 * @property string $CodigoInterno the value for strCodigoInterno (Unique)
-	 * @property integer $TipoCliente the value for intTipoCliente (Not Null)
+	 * @property integer $TipoCliente the value for intTipoCliente 
 	 * @property double $SaldoExcedente the value for fltSaldoExcedente 
 	 * @property integer $RutaRecolecta the value for intRutaRecolecta 
 	 * @property integer $RutaEntrega the value for intRutaEntrega 
-	 * @property double $PorcentajeDsctoincr the value for fltPorcentajeDsctoincr (Not Null)
+	 * @property double $PorcentajeDsctoincr the value for fltPorcentajeDsctoincr 
 	 * @property string $HoraCierre the value for strHoraCierre 
-	 * @property integer $StatusCreditoId the value for intStatusCreditoId (Not Null)
+	 * @property integer $StatusCreditoId the value for intStatusCreditoId 
 	 * @property double $DsctoPorVolumen the value for fltDsctoPorVolumen 
 	 * @property integer $VolumenParaDscto the value for intVolumenParaDscto 
 	 * @property double $DsctoPorPeso the value for fltDsctoPorPeso 
 	 * @property double $PesoParaDscto the value for fltPesoParaDscto 
 	 * @property QDateTime $DescuentoCaducaEl the value for dttDescuentoCaducaEl 
 	 * @property double $PorcentajeSeguro the value for fltPorcentajeSeguro 
-	 * @property string $DirEntregaFactura the value for strDirEntregaFactura (Not Null)
+	 * @property string $DirEntregaFactura the value for strDirEntregaFactura 
 	 * @property string $ClaveServiciosWeb the value for strClaveServiciosWeb 
 	 * @property integer $CaducidadDeGuias the value for intCaducidadDeGuias 
 	 * @property integer $MostrarGuiaExterna the value for intMostrarGuiaExterna 
-	 * @property boolean $CargaMasiva the value for blnCargaMasiva (Not Null)
-	 * @property boolean $CmGuiasYamaguchi the value for blnCmGuiasYamaguchi (Not Null)
+	 * @property boolean $CargaMasiva the value for blnCargaMasiva 
+	 * @property boolean $CmGuiasYamaguchi the value for blnCmGuiasYamaguchi 
 	 * @property integer $GuiasYamaguchiPorCarga the value for intGuiasYamaguchiPorCarga 
 	 * @property integer $GuiasYamaguchiPorDia the value for intGuiasYamaguchiPorDia 
-	 * @property boolean $PagoPpd the value for blnPagoPpd (Not Null)
-	 * @property boolean $PagoCrd the value for blnPagoCrd (Not Null)
-	 * @property boolean $PagoCod the value for blnPagoCod (Not Null)
-	 * @property boolean $CmDestinatarioFrecuente the value for blnCmDestinatarioFrecuente (Not Null)
+	 * @property boolean $PagoPpd the value for blnPagoPpd 
+	 * @property boolean $PagoCrd the value for blnPagoCrd 
+	 * @property boolean $PagoCod the value for blnPagoCod 
+	 * @property boolean $CmDestinatarioFrecuente the value for blnCmDestinatarioFrecuente 
 	 * @property integer $ClientesPorCarga the value for intClientesPorCarga 
 	 * @property integer $ClientesPorDia the value for intClientesPorDia 
 	 * @property string $UsuarioApi the value for strUsuarioApi 
@@ -80,9 +75,9 @@
 	 * @property integer $ProcesoApi the value for intProcesoApi (Unique)
 	 * @property QDateTime $DeletedAt the value for dttDeletedAt 
 	 * @property integer $MotivoEliminacionId the value for intMotivoEliminacionId 
-	 * @property MasterCliente $CodiDepeObject the value for the MasterCliente object referenced by intCodiDepe (Not Null)
+	 * @property MasterCliente $CodiDepeObject the value for the MasterCliente object referenced by intCodiDepe 
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
-	 * @property FacVendedor $Vendedor the value for the FacVendedor object referenced by intVendedorId (Not Null)
+	 * @property FacVendedor $Vendedor the value for the FacVendedor object referenced by intVendedorId 
 	 * @property FacTarifa $Tarifa the value for the FacTarifa object referenced by intTarifaId 
 	 * @property TarifaAgentes $TarifaAgente the value for the TarifaAgentes object referenced by intTarifaAgenteId 
 	 * @property SdeOperacion $RutaRecolectaObject the value for the SdeOperacion object referenced by intRutaRecolecta 
@@ -96,6 +91,8 @@
 	 * @property-read ConsumoMes[] $_ConsumoMesAsClienteArray the value for the private _objConsumoMesAsClienteArray (Read-Only) if set due to an ExpandAsArray on the consumo_mes.cliente_id reverse relationship
 	 * @property-read Containers $_ContainersAsClienteCorp the value for the private _objContainersAsClienteCorp (Read-Only) if set due to an expansion on the containers.cliente_corp_id reverse relationship
 	 * @property-read Containers[] $_ContainersAsClienteCorpArray the value for the private _objContainersAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the containers.cliente_corp_id reverse relationship
+	 * @property-read Counter $_CounterAsCliente the value for the private _objCounterAsCliente (Read-Only) if set due to an expansion on the counter.cliente_id reverse relationship
+	 * @property-read Counter[] $_CounterAsClienteArray the value for the private _objCounterAsClienteArray (Read-Only) if set due to an ExpandAsArray on the counter.cliente_id reverse relationship
 	 * @property-read Descuentos $_DescuentosAsCliente the value for the private _objDescuentosAsCliente (Read-Only) if set due to an expansion on the descuentos.cliente_id reverse relationship
 	 * @property-read Descuentos[] $_DescuentosAsClienteArray the value for the private _objDescuentosAsClienteArray (Read-Only) if set due to an ExpandAsArray on the descuentos.cliente_id reverse relationship
 	 * @property-read DestinatarioFrecuente $_DestinatarioFrecuenteAsCliente the value for the private _objDestinatarioFrecuenteAsCliente (Read-Only) if set due to an expansion on the destinatario_frecuente.cliente_id reverse relationship
@@ -126,6 +123,8 @@
 	 * @property-read NotaEntregaH[] $_NotaEntregaHAsClienteCorpArray the value for the private _objNotaEntregaHAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the nota_entrega_h.cliente_corp_id reverse relationship
 	 * @property-read PagosCorp $_PagosCorpAsClienteCorp the value for the private _objPagosCorpAsClienteCorp (Read-Only) if set due to an expansion on the pagos_corp.cliente_corp_id reverse relationship
 	 * @property-read PagosCorp[] $_PagosCorpAsClienteCorpArray the value for the private _objPagosCorpAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the pagos_corp.cliente_corp_id reverse relationship
+	 * @property-read TarifaCliente $_TarifaClienteAsCliente the value for the private _objTarifaClienteAsCliente (Read-Only) if set due to an expansion on the tarifa_cliente.cliente_id reverse relationship
+	 * @property-read TarifaCliente[] $_TarifaClienteAsClienteArray the value for the private _objTarifaClienteAsClienteArray (Read-Only) if set due to an ExpandAsArray on the tarifa_cliente.cliente_id reverse relationship
 	 * @property-read UsuarioConnect $_UsuarioConnectAsCliente the value for the private _objUsuarioConnectAsCliente (Read-Only) if set due to an expansion on the usuario_connect.cliente_id reverse relationship
 	 * @property-read UsuarioConnect[] $_UsuarioConnectAsClienteArray the value for the private _objUsuarioConnectAsClienteArray (Read-Only) if set due to an ExpandAsArray on the usuario_connect.cliente_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -167,6 +166,14 @@
 		 */
 		protected $intSucursalId;
 		const SucursalIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column master_cliente.es_aliado
+		 * @var boolean blnEsAliado
+		 */
+		protected $blnEsAliado;
+		const EsAliadoDefault = 0;
 
 
 		/**
@@ -297,60 +304,6 @@
 		protected $strDireReco;
 		const DireRecoMaxLength = 250;
 		const DireRecoDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column master_cliente.hora_lune
-		 * @var string strHoraLune
-		 */
-		protected $strHoraLune;
-		const HoraLuneMaxLength = 5;
-		const HoraLuneDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column master_cliente.hora_mart
-		 * @var string strHoraMart
-		 */
-		protected $strHoraMart;
-		const HoraMartMaxLength = 5;
-		const HoraMartDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column master_cliente.hora_mier
-		 * @var string strHoraMier
-		 */
-		protected $strHoraMier;
-		const HoraMierMaxLength = 5;
-		const HoraMierDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column master_cliente.hora_juev
-		 * @var string strHoraJuev
-		 */
-		protected $strHoraJuev;
-		const HoraJuevMaxLength = 5;
-		const HoraJuevDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column master_cliente.hora_vier
-		 * @var string strHoraVier
-		 */
-		protected $strHoraVier;
-		const HoraVierMaxLength = 5;
-		const HoraVierDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column master_cliente.hora_saba
-		 * @var string strHoraSaba
-		 */
-		protected $strHoraSaba;
-		const HoraSabaMaxLength = 5;
-		const HoraSabaDefault = null;
 
 
 		/**
@@ -731,6 +684,22 @@
 		private $_objContainersAsClienteCorpArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single CounterAsCliente object
+		 * (of type Counter), if this MasterCliente object was restored with
+		 * an expansion on the counter association table.
+		 * @var Counter _objCounterAsCliente;
+		 */
+		private $_objCounterAsCliente;
+
+		/**
+		 * Private member variable that stores a reference to an array of CounterAsCliente objects
+		 * (of type Counter[]), if this MasterCliente object was restored with
+		 * an ExpandAsArray on the counter association table.
+		 * @var Counter[] _objCounterAsClienteArray;
+		 */
+		private $_objCounterAsClienteArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single DescuentosAsCliente object
 		 * (of type Descuentos), if this MasterCliente object was restored with
 		 * an expansion on the descuentos association table.
@@ -971,6 +940,22 @@
 		private $_objPagosCorpAsClienteCorpArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single TarifaClienteAsCliente object
+		 * (of type TarifaCliente), if this MasterCliente object was restored with
+		 * an expansion on the tarifa_cliente association table.
+		 * @var TarifaCliente _objTarifaClienteAsCliente;
+		 */
+		private $_objTarifaClienteAsCliente;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaClienteAsCliente objects
+		 * (of type TarifaCliente[]), if this MasterCliente object was restored with
+		 * an ExpandAsArray on the tarifa_cliente association table.
+		 * @var TarifaCliente[] _objTarifaClienteAsClienteArray;
+		 */
+		private $_objTarifaClienteAsClienteArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single UsuarioConnectAsCliente object
 		 * (of type UsuarioConnect), if this MasterCliente object was restored with
 		 * an expansion on the usuario_connect association table.
@@ -1135,6 +1120,7 @@
 			$this->intCodiDepe = MasterCliente::CodiDepeDefault;
 			$this->strNombClie = MasterCliente::NombClieDefault;
 			$this->intSucursalId = MasterCliente::SucursalIdDefault;
+			$this->blnEsAliado = MasterCliente::EsAliadoDefault;
 			$this->strCodiEsta = MasterCliente::CodiEstaDefault;
 			$this->strDireFisc = MasterCliente::DireFiscDefault;
 			$this->strNumeDrif = MasterCliente::NumeDrifDefault;
@@ -1150,12 +1136,6 @@
 			$this->strTeleConb = MasterCliente::TeleConbDefault;
 			$this->strDireMail = MasterCliente::DireMailDefault;
 			$this->strDireReco = MasterCliente::DireRecoDefault;
-			$this->strHoraLune = MasterCliente::HoraLuneDefault;
-			$this->strHoraMart = MasterCliente::HoraMartDefault;
-			$this->strHoraMier = MasterCliente::HoraMierDefault;
-			$this->strHoraJuev = MasterCliente::HoraJuevDefault;
-			$this->strHoraVier = MasterCliente::HoraVierDefault;
-			$this->strHoraSaba = MasterCliente::HoraSabaDefault;
 			$this->intCodiStat = MasterCliente::CodiStatDefault;
 			$this->intCodiSino = MasterCliente::CodiSinoDefault;
 			$this->strTextObse = MasterCliente::TextObseDefault;
@@ -1541,6 +1521,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'codi_depe', $strAliasPrefix . 'codi_depe');
 			    $objBuilder->AddSelectItem($strTableName, 'nomb_clie', $strAliasPrefix . 'nomb_clie');
 			    $objBuilder->AddSelectItem($strTableName, 'sucursal_id', $strAliasPrefix . 'sucursal_id');
+			    $objBuilder->AddSelectItem($strTableName, 'es_aliado', $strAliasPrefix . 'es_aliado');
 			    $objBuilder->AddSelectItem($strTableName, 'codi_esta', $strAliasPrefix . 'codi_esta');
 			    $objBuilder->AddSelectItem($strTableName, 'dire_fisc', $strAliasPrefix . 'dire_fisc');
 			    $objBuilder->AddSelectItem($strTableName, 'nume_drif', $strAliasPrefix . 'nume_drif');
@@ -1556,12 +1537,6 @@
 			    $objBuilder->AddSelectItem($strTableName, 'tele_conb', $strAliasPrefix . 'tele_conb');
 			    $objBuilder->AddSelectItem($strTableName, 'dire_mail', $strAliasPrefix . 'dire_mail');
 			    $objBuilder->AddSelectItem($strTableName, 'dire_reco', $strAliasPrefix . 'dire_reco');
-			    $objBuilder->AddSelectItem($strTableName, 'hora_lune', $strAliasPrefix . 'hora_lune');
-			    $objBuilder->AddSelectItem($strTableName, 'hora_mart', $strAliasPrefix . 'hora_mart');
-			    $objBuilder->AddSelectItem($strTableName, 'hora_mier', $strAliasPrefix . 'hora_mier');
-			    $objBuilder->AddSelectItem($strTableName, 'hora_juev', $strAliasPrefix . 'hora_juev');
-			    $objBuilder->AddSelectItem($strTableName, 'hora_vier', $strAliasPrefix . 'hora_vier');
-			    $objBuilder->AddSelectItem($strTableName, 'hora_saba', $strAliasPrefix . 'hora_saba');
 			    $objBuilder->AddSelectItem($strTableName, 'codi_stat', $strAliasPrefix . 'codi_stat');
 			    $objBuilder->AddSelectItem($strTableName, 'codi_sino', $strAliasPrefix . 'codi_sino');
 			    $objBuilder->AddSelectItem($strTableName, 'text_obse', $strAliasPrefix . 'text_obse');
@@ -1739,6 +1714,9 @@
 			$strAlias = $strAliasPrefix . 'sucursal_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intSucursalId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'es_aliado';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnEsAliado = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'codi_esta';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strCodiEsta = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1784,24 +1762,6 @@
 			$strAlias = $strAliasPrefix . 'dire_reco';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDireReco = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'hora_lune';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strHoraLune = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'hora_mart';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strHoraMart = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'hora_mier';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strHoraMier = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'hora_juev';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strHoraJuev = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'hora_vier';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strHoraVier = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'hora_saba';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strHoraSaba = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'codi_stat';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCodiStat = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -2086,6 +2046,21 @@
 				}
 			}
 
+			// Check for CounterAsCliente Virtual Binding
+			$strAlias = $strAliasPrefix . 'counterascliente__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['counterascliente']) ? null : $objExpansionAliasArray['counterascliente']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objCounterAsClienteArray)
+				$objToReturn->_objCounterAsClienteArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objCounterAsClienteArray[] = Counter::InstantiateDbRow($objDbRow, $strAliasPrefix . 'counterascliente__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objCounterAsCliente)) {
+					$objToReturn->_objCounterAsCliente = Counter::InstantiateDbRow($objDbRow, $strAliasPrefix . 'counterascliente__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for DescuentosAsCliente Virtual Binding
 			$strAlias = $strAliasPrefix . 'descuentosascliente__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -2308,6 +2283,21 @@
 					$objToReturn->_objPagosCorpAsClienteCorpArray[] = PagosCorp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagoscorpasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPagosCorpAsClienteCorp)) {
 					$objToReturn->_objPagosCorpAsClienteCorp = PagosCorp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pagoscorpasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaClienteAsCliente Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaclienteascliente__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaclienteascliente']) ? null : $objExpansionAliasArray['tarifaclienteascliente']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaClienteAsClienteArray)
+				$objToReturn->_objTarifaClienteAsClienteArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaClienteAsClienteArray[] = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteascliente__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaClienteAsCliente)) {
+					$objToReturn->_objTarifaClienteAsCliente = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteascliente__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2995,6 +2985,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of MasterCliente objects,
+		 * by EsAliado Index(es)
+		 * @param boolean $blnEsAliado
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return MasterCliente[]
+		*/
+		public static function LoadArrayByEsAliado($blnEsAliado, $objOptionalClauses = null) {
+			// Call MasterCliente::QueryArray to perform the LoadArrayByEsAliado query
+			try {
+				return MasterCliente::QueryArray(
+					QQ::Equal(QQN::MasterCliente()->EsAliado, $blnEsAliado),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count MasterClientes
+		 * by EsAliado Index(es)
+		 * @param boolean $blnEsAliado
+		 * @return int
+		*/
+		public static function CountByEsAliado($blnEsAliado) {
+			// Call MasterCliente::QueryCount to perform the CountByEsAliado query
+			return MasterCliente::QueryCount(
+				QQ::Equal(QQN::MasterCliente()->EsAliado, $blnEsAliado)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -3029,6 +3051,7 @@
 							`codi_depe`,
 							`nomb_clie`,
 							`sucursal_id`,
+							`es_aliado`,
 							`codi_esta`,
 							`dire_fisc`,
 							`nume_drif`,
@@ -3044,12 +3067,6 @@
 							`tele_conb`,
 							`dire_mail`,
 							`dire_reco`,
-							`hora_lune`,
-							`hora_mart`,
-							`hora_mier`,
-							`hora_juev`,
-							`hora_vier`,
-							`hora_saba`,
 							`codi_stat`,
 							`codi_sino`,
 							`text_obse`,
@@ -3094,6 +3111,7 @@
 							' . $objDatabase->SqlVariable($this->intCodiDepe) . ',
 							' . $objDatabase->SqlVariable($this->strNombClie) . ',
 							' . $objDatabase->SqlVariable($this->intSucursalId) . ',
+							' . $objDatabase->SqlVariable($this->blnEsAliado) . ',
 							' . $objDatabase->SqlVariable($this->strCodiEsta) . ',
 							' . $objDatabase->SqlVariable($this->strDireFisc) . ',
 							' . $objDatabase->SqlVariable($this->strNumeDrif) . ',
@@ -3109,12 +3127,6 @@
 							' . $objDatabase->SqlVariable($this->strTeleConb) . ',
 							' . $objDatabase->SqlVariable($this->strDireMail) . ',
 							' . $objDatabase->SqlVariable($this->strDireReco) . ',
-							' . $objDatabase->SqlVariable($this->strHoraLune) . ',
-							' . $objDatabase->SqlVariable($this->strHoraMart) . ',
-							' . $objDatabase->SqlVariable($this->strHoraMier) . ',
-							' . $objDatabase->SqlVariable($this->strHoraJuev) . ',
-							' . $objDatabase->SqlVariable($this->strHoraVier) . ',
-							' . $objDatabase->SqlVariable($this->strHoraSaba) . ',
 							' . $objDatabase->SqlVariable($this->intCodiStat) . ',
 							' . $objDatabase->SqlVariable($this->intCodiSino) . ',
 							' . $objDatabase->SqlVariable($this->strTextObse) . ',
@@ -3173,6 +3185,7 @@
 							`codi_depe` = ' . $objDatabase->SqlVariable($this->intCodiDepe) . ',
 							`nomb_clie` = ' . $objDatabase->SqlVariable($this->strNombClie) . ',
 							`sucursal_id` = ' . $objDatabase->SqlVariable($this->intSucursalId) . ',
+							`es_aliado` = ' . $objDatabase->SqlVariable($this->blnEsAliado) . ',
 							`codi_esta` = ' . $objDatabase->SqlVariable($this->strCodiEsta) . ',
 							`dire_fisc` = ' . $objDatabase->SqlVariable($this->strDireFisc) . ',
 							`nume_drif` = ' . $objDatabase->SqlVariable($this->strNumeDrif) . ',
@@ -3188,12 +3201,6 @@
 							`tele_conb` = ' . $objDatabase->SqlVariable($this->strTeleConb) . ',
 							`dire_mail` = ' . $objDatabase->SqlVariable($this->strDireMail) . ',
 							`dire_reco` = ' . $objDatabase->SqlVariable($this->strDireReco) . ',
-							`hora_lune` = ' . $objDatabase->SqlVariable($this->strHoraLune) . ',
-							`hora_mart` = ' . $objDatabase->SqlVariable($this->strHoraMart) . ',
-							`hora_mier` = ' . $objDatabase->SqlVariable($this->strHoraMier) . ',
-							`hora_juev` = ' . $objDatabase->SqlVariable($this->strHoraJuev) . ',
-							`hora_vier` = ' . $objDatabase->SqlVariable($this->strHoraVier) . ',
-							`hora_saba` = ' . $objDatabase->SqlVariable($this->strHoraSaba) . ',
 							`codi_stat` = ' . $objDatabase->SqlVariable($this->intCodiStat) . ',
 							`codi_sino` = ' . $objDatabase->SqlVariable($this->intCodiSino) . ',
 							`text_obse` = ' . $objDatabase->SqlVariable($this->strTextObse) . ',
@@ -3399,6 +3406,7 @@
 			$this->CodiDepe = $objReloaded->CodiDepe;
 			$this->strNombClie = $objReloaded->strNombClie;
 			$this->SucursalId = $objReloaded->SucursalId;
+			$this->blnEsAliado = $objReloaded->blnEsAliado;
 			$this->strCodiEsta = $objReloaded->strCodiEsta;
 			$this->strDireFisc = $objReloaded->strDireFisc;
 			$this->strNumeDrif = $objReloaded->strNumeDrif;
@@ -3414,12 +3422,6 @@
 			$this->strTeleConb = $objReloaded->strTeleConb;
 			$this->strDireMail = $objReloaded->strDireMail;
 			$this->strDireReco = $objReloaded->strDireReco;
-			$this->strHoraLune = $objReloaded->strHoraLune;
-			$this->strHoraMart = $objReloaded->strHoraMart;
-			$this->strHoraMier = $objReloaded->strHoraMier;
-			$this->strHoraJuev = $objReloaded->strHoraJuev;
-			$this->strHoraVier = $objReloaded->strHoraVier;
-			$this->strHoraSaba = $objReloaded->strHoraSaba;
 			$this->CodiStat = $objReloaded->CodiStat;
 			$this->CodiSino = $objReloaded->CodiSino;
 			$this->strTextObse = $objReloaded->strTextObse;
@@ -3489,7 +3491,7 @@
 
 				case 'CodiDepe':
 					/**
-					 * Gets the value for intCodiDepe (Not Null)
+					 * Gets the value for intCodiDepe 
 					 * @return integer
 					 */
 					return $this->intCodiDepe;
@@ -3507,6 +3509,13 @@
 					 * @return integer
 					 */
 					return $this->intSucursalId;
+
+				case 'EsAliado':
+					/**
+					 * Gets the value for blnEsAliado 
+					 * @return boolean
+					 */
+					return $this->blnEsAliado;
 
 				case 'CodiEsta':
 					/**
@@ -3531,7 +3540,7 @@
 
 				case 'VendedorId':
 					/**
-					 * Gets the value for intVendedorId (Not Null)
+					 * Gets the value for intVendedorId 
 					 * @return integer
 					 */
 					return $this->intVendedorId;
@@ -3559,7 +3568,7 @@
 
 				case 'CicloId':
 					/**
-					 * Gets the value for intCicloId (Not Null)
+					 * Gets the value for intCicloId 
 					 * @return integer
 					 */
 					return $this->intCicloId;
@@ -3573,14 +3582,14 @@
 
 				case 'PersCona':
 					/**
-					 * Gets the value for strPersCona (Not Null)
+					 * Gets the value for strPersCona 
 					 * @return string
 					 */
 					return $this->strPersCona;
 
 				case 'TeleCona':
 					/**
-					 * Gets the value for strTeleCona (Not Null)
+					 * Gets the value for strTeleCona 
 					 * @return string
 					 */
 					return $this->strTeleCona;
@@ -3612,48 +3621,6 @@
 					 * @return string
 					 */
 					return $this->strDireReco;
-
-				case 'HoraLune':
-					/**
-					 * Gets the value for strHoraLune 
-					 * @return string
-					 */
-					return $this->strHoraLune;
-
-				case 'HoraMart':
-					/**
-					 * Gets the value for strHoraMart 
-					 * @return string
-					 */
-					return $this->strHoraMart;
-
-				case 'HoraMier':
-					/**
-					 * Gets the value for strHoraMier 
-					 * @return string
-					 */
-					return $this->strHoraMier;
-
-				case 'HoraJuev':
-					/**
-					 * Gets the value for strHoraJuev 
-					 * @return string
-					 */
-					return $this->strHoraJuev;
-
-				case 'HoraVier':
-					/**
-					 * Gets the value for strHoraVier 
-					 * @return string
-					 */
-					return $this->strHoraVier;
-
-				case 'HoraSaba':
-					/**
-					 * Gets the value for strHoraSaba 
-					 * @return string
-					 */
-					return $this->strHoraSaba;
 
 				case 'CodiStat':
 					/**
@@ -3692,7 +3659,7 @@
 
 				case 'TipoCliente':
 					/**
-					 * Gets the value for intTipoCliente (Not Null)
+					 * Gets the value for intTipoCliente 
 					 * @return integer
 					 */
 					return $this->intTipoCliente;
@@ -3720,7 +3687,7 @@
 
 				case 'PorcentajeDsctoincr':
 					/**
-					 * Gets the value for fltPorcentajeDsctoincr (Not Null)
+					 * Gets the value for fltPorcentajeDsctoincr 
 					 * @return double
 					 */
 					return $this->fltPorcentajeDsctoincr;
@@ -3734,7 +3701,7 @@
 
 				case 'StatusCreditoId':
 					/**
-					 * Gets the value for intStatusCreditoId (Not Null)
+					 * Gets the value for intStatusCreditoId 
 					 * @return integer
 					 */
 					return $this->intStatusCreditoId;
@@ -3783,7 +3750,7 @@
 
 				case 'DirEntregaFactura':
 					/**
-					 * Gets the value for strDirEntregaFactura (Not Null)
+					 * Gets the value for strDirEntregaFactura 
 					 * @return string
 					 */
 					return $this->strDirEntregaFactura;
@@ -3811,14 +3778,14 @@
 
 				case 'CargaMasiva':
 					/**
-					 * Gets the value for blnCargaMasiva (Not Null)
+					 * Gets the value for blnCargaMasiva 
 					 * @return boolean
 					 */
 					return $this->blnCargaMasiva;
 
 				case 'CmGuiasYamaguchi':
 					/**
-					 * Gets the value for blnCmGuiasYamaguchi (Not Null)
+					 * Gets the value for blnCmGuiasYamaguchi 
 					 * @return boolean
 					 */
 					return $this->blnCmGuiasYamaguchi;
@@ -3839,28 +3806,28 @@
 
 				case 'PagoPpd':
 					/**
-					 * Gets the value for blnPagoPpd (Not Null)
+					 * Gets the value for blnPagoPpd 
 					 * @return boolean
 					 */
 					return $this->blnPagoPpd;
 
 				case 'PagoCrd':
 					/**
-					 * Gets the value for blnPagoCrd (Not Null)
+					 * Gets the value for blnPagoCrd 
 					 * @return boolean
 					 */
 					return $this->blnPagoCrd;
 
 				case 'PagoCod':
 					/**
-					 * Gets the value for blnPagoCod (Not Null)
+					 * Gets the value for blnPagoCod 
 					 * @return boolean
 					 */
 					return $this->blnPagoCod;
 
 				case 'CmDestinatarioFrecuente':
 					/**
-					 * Gets the value for blnCmDestinatarioFrecuente (Not Null)
+					 * Gets the value for blnCmDestinatarioFrecuente 
 					 * @return boolean
 					 */
 					return $this->blnCmDestinatarioFrecuente;
@@ -3941,7 +3908,7 @@
 				///////////////////
 				case 'CodiDepeObject':
 					/**
-					 * Gets the value for the MasterCliente object referenced by intCodiDepe (Not Null)
+					 * Gets the value for the MasterCliente object referenced by intCodiDepe 
 					 * @return MasterCliente
 					 */
 					try {
@@ -3969,7 +3936,7 @@
 
 				case 'Vendedor':
 					/**
-					 * Gets the value for the FacVendedor object referenced by intVendedorId (Not Null)
+					 * Gets the value for the FacVendedor object referenced by intVendedorId 
 					 * @return FacVendedor
 					 */
 					try {
@@ -4140,6 +4107,22 @@
 					 * @return Containers[]
 					 */
 					return $this->_objContainersAsClienteCorpArray;
+
+				case '_CounterAsCliente':
+					/**
+					 * Gets the value for the private _objCounterAsCliente (Read-Only)
+					 * if set due to an expansion on the counter.cliente_id reverse relationship
+					 * @return Counter
+					 */
+					return $this->_objCounterAsCliente;
+
+				case '_CounterAsClienteArray':
+					/**
+					 * Gets the value for the private _objCounterAsClienteArray (Read-Only)
+					 * if set due to an ExpandAsArray on the counter.cliente_id reverse relationship
+					 * @return Counter[]
+					 */
+					return $this->_objCounterAsClienteArray;
 
 				case '_DescuentosAsCliente':
 					/**
@@ -4381,6 +4364,22 @@
 					 */
 					return $this->_objPagosCorpAsClienteCorpArray;
 
+				case '_TarifaClienteAsCliente':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsCliente (Read-Only)
+					 * if set due to an expansion on the tarifa_cliente.cliente_id reverse relationship
+					 * @return TarifaCliente
+					 */
+					return $this->_objTarifaClienteAsCliente;
+
+				case '_TarifaClienteAsClienteArray':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsClienteArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_cliente.cliente_id reverse relationship
+					 * @return TarifaCliente[]
+					 */
+					return $this->_objTarifaClienteAsClienteArray;
+
 				case '_UsuarioConnectAsCliente':
 					/**
 					 * Gets the value for the private _objUsuarioConnectAsCliente (Read-Only)
@@ -4426,7 +4425,7 @@
 				///////////////////
 				case 'CodiDepe':
 					/**
-					 * Sets the value for intCodiDepe (Not Null)
+					 * Sets the value for intCodiDepe 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
@@ -4460,6 +4459,19 @@
 					try {
 						$this->objSucursal = null;
 						return ($this->intSucursalId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'EsAliado':
+					/**
+					 * Sets the value for blnEsAliado 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnEsAliado = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4506,7 +4518,7 @@
 
 				case 'VendedorId':
 					/**
-					 * Sets the value for intVendedorId (Not Null)
+					 * Sets the value for intVendedorId 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
@@ -4561,7 +4573,7 @@
 
 				case 'CicloId':
 					/**
-					 * Sets the value for intCicloId (Not Null)
+					 * Sets the value for intCicloId 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
@@ -4587,7 +4599,7 @@
 
 				case 'PersCona':
 					/**
-					 * Sets the value for strPersCona (Not Null)
+					 * Sets the value for strPersCona 
 					 * @param string $mixValue
 					 * @return string
 					 */
@@ -4600,7 +4612,7 @@
 
 				case 'TeleCona':
 					/**
-					 * Sets the value for strTeleCona (Not Null)
+					 * Sets the value for strTeleCona 
 					 * @param string $mixValue
 					 * @return string
 					 */
@@ -4658,84 +4670,6 @@
 					 */
 					try {
 						return ($this->strDireReco = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'HoraLune':
-					/**
-					 * Sets the value for strHoraLune 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strHoraLune = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'HoraMart':
-					/**
-					 * Sets the value for strHoraMart 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strHoraMart = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'HoraMier':
-					/**
-					 * Sets the value for strHoraMier 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strHoraMier = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'HoraJuev':
-					/**
-					 * Sets the value for strHoraJuev 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strHoraJuev = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'HoraVier':
-					/**
-					 * Sets the value for strHoraVier 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strHoraVier = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'HoraSaba':
-					/**
-					 * Sets the value for strHoraSaba 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strHoraSaba = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4808,7 +4742,7 @@
 
 				case 'TipoCliente':
 					/**
-					 * Sets the value for intTipoCliente (Not Null)
+					 * Sets the value for intTipoCliente 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
@@ -4862,7 +4796,7 @@
 
 				case 'PorcentajeDsctoincr':
 					/**
-					 * Sets the value for fltPorcentajeDsctoincr (Not Null)
+					 * Sets the value for fltPorcentajeDsctoincr 
 					 * @param double $mixValue
 					 * @return double
 					 */
@@ -4888,7 +4822,7 @@
 
 				case 'StatusCreditoId':
 					/**
-					 * Sets the value for intStatusCreditoId (Not Null)
+					 * Sets the value for intStatusCreditoId 
 					 * @param integer $mixValue
 					 * @return integer
 					 */
@@ -4979,7 +4913,7 @@
 
 				case 'DirEntregaFactura':
 					/**
-					 * Sets the value for strDirEntregaFactura (Not Null)
+					 * Sets the value for strDirEntregaFactura 
 					 * @param string $mixValue
 					 * @return string
 					 */
@@ -5031,7 +4965,7 @@
 
 				case 'CargaMasiva':
 					/**
-					 * Sets the value for blnCargaMasiva (Not Null)
+					 * Sets the value for blnCargaMasiva 
 					 * @param boolean $mixValue
 					 * @return boolean
 					 */
@@ -5044,7 +4978,7 @@
 
 				case 'CmGuiasYamaguchi':
 					/**
-					 * Sets the value for blnCmGuiasYamaguchi (Not Null)
+					 * Sets the value for blnCmGuiasYamaguchi 
 					 * @param boolean $mixValue
 					 * @return boolean
 					 */
@@ -5083,7 +5017,7 @@
 
 				case 'PagoPpd':
 					/**
-					 * Sets the value for blnPagoPpd (Not Null)
+					 * Sets the value for blnPagoPpd 
 					 * @param boolean $mixValue
 					 * @return boolean
 					 */
@@ -5096,7 +5030,7 @@
 
 				case 'PagoCrd':
 					/**
-					 * Sets the value for blnPagoCrd (Not Null)
+					 * Sets the value for blnPagoCrd 
 					 * @param boolean $mixValue
 					 * @return boolean
 					 */
@@ -5109,7 +5043,7 @@
 
 				case 'PagoCod':
 					/**
-					 * Sets the value for blnPagoCod (Not Null)
+					 * Sets the value for blnPagoCod 
 					 * @param boolean $mixValue
 					 * @return boolean
 					 */
@@ -5122,7 +5056,7 @@
 
 				case 'CmDestinatarioFrecuente':
 					/**
-					 * Sets the value for blnCmDestinatarioFrecuente (Not Null)
+					 * Sets the value for blnCmDestinatarioFrecuente 
 					 * @param boolean $mixValue
 					 * @return boolean
 					 */
@@ -5270,7 +5204,7 @@
 				///////////////////
 				case 'CodiDepeObject':
 					/**
-					 * Sets the value for the MasterCliente object referenced by intCodiDepe (Not Null)
+					 * Sets the value for the MasterCliente object referenced by intCodiDepe 
 					 * @param MasterCliente $mixValue
 					 * @return MasterCliente
 					 */
@@ -5334,7 +5268,7 @@
 
 				case 'Vendedor':
 					/**
-					 * Sets the value for the FacVendedor object referenced by intVendedorId (Not Null)
+					 * Sets the value for the FacVendedor object referenced by intVendedorId 
 					 * @param FacVendedor $mixValue
 					 * @return FacVendedor
 					 */
@@ -5641,6 +5575,9 @@
 			if ($this->CountContainersesAsClienteCorp()) {
 				$arrTablRela[] = 'containers';
 			}
+			if ($this->CountCountersAsCliente()) {
+				$arrTablRela[] = 'counter';
+			}
 			if ($this->CountDescuentosesAsCliente()) {
 				$arrTablRela[] = 'descuentos';
 			}
@@ -5685,6 +5622,9 @@
 			}
 			if ($this->CountPagosCorpsAsClienteCorp()) {
 				$arrTablRela[] = 'pagos_corp';
+			}
+			if ($this->CountTarifaClientesAsCliente()) {
+				$arrTablRela[] = 'tarifa_cliente';
 			}
 			if ($this->CountUsuarioConnectsAsCliente()) {
 				$arrTablRela[] = 'usuario_connect';
@@ -6142,6 +6082,155 @@
 					`containers`
 				WHERE
 					`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+
+		// Related Objects' Methods for CounterAsCliente
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated CountersAsCliente as an array of Counter objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Counter[]
+		*/
+		public function GetCounterAsClienteArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiClie)))
+				return array();
+
+			try {
+				return Counter::LoadArrayByClienteId($this->intCodiClie, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated CountersAsCliente
+		 * @return int
+		*/
+		public function CountCountersAsCliente() {
+			if ((is_null($this->intCodiClie)))
+				return 0;
+
+			return Counter::CountByClienteId($this->intCodiClie);
+		}
+
+		/**
+		 * Associates a CounterAsCliente
+		 * @param Counter $objCounter
+		 * @return void
+		*/
+		public function AssociateCounterAsCliente(Counter $objCounter) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateCounterAsCliente on this unsaved MasterCliente.');
+			if ((is_null($objCounter->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateCounterAsCliente on this MasterCliente with an unsaved Counter.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`counter`
+				SET
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCounter->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a CounterAsCliente
+		 * @param Counter $objCounter
+		 * @return void
+		*/
+		public function UnassociateCounterAsCliente(Counter $objCounter) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCounterAsCliente on this unsaved MasterCliente.');
+			if ((is_null($objCounter->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCounterAsCliente on this MasterCliente with an unsaved Counter.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`counter`
+				SET
+					`cliente_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCounter->Id) . ' AND
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Unassociates all CountersAsCliente
+		 * @return void
+		*/
+		public function UnassociateAllCountersAsCliente() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCounterAsCliente on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`counter`
+				SET
+					`cliente_id` = null
+				WHERE
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated CounterAsCliente
+		 * @param Counter $objCounter
+		 * @return void
+		*/
+		public function DeleteAssociatedCounterAsCliente(Counter $objCounter) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCounterAsCliente on this unsaved MasterCliente.');
+			if ((is_null($objCounter->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCounterAsCliente on this MasterCliente with an unsaved Counter.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`counter`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objCounter->Id) . ' AND
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated CountersAsCliente
+		 * @return void
+		*/
+		public function DeleteAllCountersAsCliente() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateCounterAsCliente on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`counter`
+				WHERE
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
 			');
 		}
 
@@ -8387,6 +8476,155 @@
 		}
 
 
+		// Related Objects' Methods for TarifaClienteAsCliente
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaClientesAsCliente as an array of TarifaCliente objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaCliente[]
+		*/
+		public function GetTarifaClienteAsClienteArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiClie)))
+				return array();
+
+			try {
+				return TarifaCliente::LoadArrayByClienteId($this->intCodiClie, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaClientesAsCliente
+		 * @return int
+		*/
+		public function CountTarifaClientesAsCliente() {
+			if ((is_null($this->intCodiClie)))
+				return 0;
+
+			return TarifaCliente::CountByClienteId($this->intCodiClie);
+		}
+
+		/**
+		 * Associates a TarifaClienteAsCliente
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function AssociateTarifaClienteAsCliente(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsCliente on this unsaved MasterCliente.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsCliente on this MasterCliente with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaClienteAsCliente
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function UnassociateTarifaClienteAsCliente(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCliente on this unsaved MasterCliente.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCliente on this MasterCliente with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`cliente_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaClientesAsCliente
+		 * @return void
+		*/
+		public function UnassociateAllTarifaClientesAsCliente() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCliente on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`cliente_id` = null
+				WHERE
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaClienteAsCliente
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaClienteAsCliente(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCliente on this unsaved MasterCliente.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCliente on this MasterCliente with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaClientesAsCliente
+		 * @return void
+		*/
+		public function DeleteAllTarifaClientesAsCliente() {
+			if ((is_null($this->intCodiClie)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsCliente on this unsaved MasterCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = MasterCliente::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`cliente_id` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
+			');
+		}
+
+
 		// Related Objects' Methods for UsuarioConnectAsCliente
 		//-------------------------------------------------------------------
 
@@ -8578,6 +8816,7 @@
 			$strToReturn .= '<element name="CodiDepeObject" type="xsd1:MasterCliente"/>';
 			$strToReturn .= '<element name="NombClie" type="xsd:string"/>';
 			$strToReturn .= '<element name="Sucursal" type="xsd1:Sucursales"/>';
+			$strToReturn .= '<element name="EsAliado" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="CodiEsta" type="xsd:string"/>';
 			$strToReturn .= '<element name="DireFisc" type="xsd:string"/>';
 			$strToReturn .= '<element name="NumeDrif" type="xsd:string"/>';
@@ -8593,12 +8832,6 @@
 			$strToReturn .= '<element name="TeleConb" type="xsd:string"/>';
 			$strToReturn .= '<element name="DireMail" type="xsd:string"/>';
 			$strToReturn .= '<element name="DireReco" type="xsd:string"/>';
-			$strToReturn .= '<element name="HoraLune" type="xsd:string"/>';
-			$strToReturn .= '<element name="HoraMart" type="xsd:string"/>';
-			$strToReturn .= '<element name="HoraMier" type="xsd:string"/>';
-			$strToReturn .= '<element name="HoraJuev" type="xsd:string"/>';
-			$strToReturn .= '<element name="HoraVier" type="xsd:string"/>';
-			$strToReturn .= '<element name="HoraSaba" type="xsd:string"/>';
 			$strToReturn .= '<element name="CodiStat" type="xsd:int"/>';
 			$strToReturn .= '<element name="CodiSino" type="xsd:int"/>';
 			$strToReturn .= '<element name="TextObse" type="xsd:string"/>';
@@ -8679,6 +8912,8 @@
 			if ((property_exists($objSoapObject, 'Sucursal')) &&
 				($objSoapObject->Sucursal))
 				$objToReturn->Sucursal = Sucursales::GetObjectFromSoapObject($objSoapObject->Sucursal);
+			if (property_exists($objSoapObject, 'EsAliado'))
+				$objToReturn->blnEsAliado = $objSoapObject->EsAliado;
 			if (property_exists($objSoapObject, 'CodiEsta'))
 				$objToReturn->strCodiEsta = $objSoapObject->CodiEsta;
 			if (property_exists($objSoapObject, 'DireFisc'))
@@ -8712,18 +8947,6 @@
 				$objToReturn->strDireMail = $objSoapObject->DireMail;
 			if (property_exists($objSoapObject, 'DireReco'))
 				$objToReturn->strDireReco = $objSoapObject->DireReco;
-			if (property_exists($objSoapObject, 'HoraLune'))
-				$objToReturn->strHoraLune = $objSoapObject->HoraLune;
-			if (property_exists($objSoapObject, 'HoraMart'))
-				$objToReturn->strHoraMart = $objSoapObject->HoraMart;
-			if (property_exists($objSoapObject, 'HoraMier'))
-				$objToReturn->strHoraMier = $objSoapObject->HoraMier;
-			if (property_exists($objSoapObject, 'HoraJuev'))
-				$objToReturn->strHoraJuev = $objSoapObject->HoraJuev;
-			if (property_exists($objSoapObject, 'HoraVier'))
-				$objToReturn->strHoraVier = $objSoapObject->HoraVier;
-			if (property_exists($objSoapObject, 'HoraSaba'))
-				$objToReturn->strHoraSaba = $objSoapObject->HoraSaba;
 			if (property_exists($objSoapObject, 'CodiStat'))
 				$objToReturn->intCodiStat = $objSoapObject->CodiStat;
 			if (property_exists($objSoapObject, 'CodiSino'))
@@ -8879,6 +9102,7 @@
 			$iArray['CodiDepe'] = $this->intCodiDepe;
 			$iArray['NombClie'] = $this->strNombClie;
 			$iArray['SucursalId'] = $this->intSucursalId;
+			$iArray['EsAliado'] = $this->blnEsAliado;
 			$iArray['CodiEsta'] = $this->strCodiEsta;
 			$iArray['DireFisc'] = $this->strDireFisc;
 			$iArray['NumeDrif'] = $this->strNumeDrif;
@@ -8894,12 +9118,6 @@
 			$iArray['TeleConb'] = $this->strTeleConb;
 			$iArray['DireMail'] = $this->strDireMail;
 			$iArray['DireReco'] = $this->strDireReco;
-			$iArray['HoraLune'] = $this->strHoraLune;
-			$iArray['HoraMart'] = $this->strHoraMart;
-			$iArray['HoraMier'] = $this->strHoraMier;
-			$iArray['HoraJuev'] = $this->strHoraJuev;
-			$iArray['HoraVier'] = $this->strHoraVier;
-			$iArray['HoraSaba'] = $this->strHoraSaba;
 			$iArray['CodiStat'] = $this->intCodiStat;
 			$iArray['CodiSino'] = $this->intCodiSino;
 			$iArray['TextObse'] = $this->strTextObse;
@@ -8983,6 +9201,7 @@
      * @property-read QQNode $NombClie
      * @property-read QQNode $SucursalId
      * @property-read QQNodeSucursales $Sucursal
+     * @property-read QQNode $EsAliado
      * @property-read QQNode $CodiEsta
      * @property-read QQNode $DireFisc
      * @property-read QQNode $NumeDrif
@@ -9001,12 +9220,6 @@
      * @property-read QQNode $TeleConb
      * @property-read QQNode $DireMail
      * @property-read QQNode $DireReco
-     * @property-read QQNode $HoraLune
-     * @property-read QQNode $HoraMart
-     * @property-read QQNode $HoraMier
-     * @property-read QQNode $HoraJuev
-     * @property-read QQNode $HoraVier
-     * @property-read QQNode $HoraSaba
      * @property-read QQNode $CodiStat
      * @property-read QQNode $CodiSino
      * @property-read QQNode $TextObse
@@ -9055,6 +9268,7 @@
      * @property-read QQReverseReferenceNodeConsumoDia $ConsumoDiaAsCliente
      * @property-read QQReverseReferenceNodeConsumoMes $ConsumoMesAsCliente
      * @property-read QQReverseReferenceNodeContainers $ContainersAsClienteCorp
+     * @property-read QQReverseReferenceNodeCounter $CounterAsCliente
      * @property-read QQReverseReferenceNodeDescuentos $DescuentosAsCliente
      * @property-read QQReverseReferenceNodeDestinatarioFrecuente $DestinatarioFrecuenteAsCliente
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsCodiClie
@@ -9072,6 +9286,7 @@
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsClienteCorp
      * @property-read QQReverseReferenceNodePagosCorp $PagosCorpAsClienteCorp
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsCliente
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsCliente
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -9094,6 +9309,8 @@
 					return new QQNode('sucursal_id', 'SucursalId', 'Integer', $this);
 				case 'Sucursal':
 					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'Integer', $this);
+				case 'EsAliado':
+					return new QQNode('es_aliado', 'EsAliado', 'Bit', $this);
 				case 'CodiEsta':
 					return new QQNode('codi_esta', 'CodiEsta', 'VarChar', $this);
 				case 'DireFisc':
@@ -9130,18 +9347,6 @@
 					return new QQNode('dire_mail', 'DireMail', 'VarChar', $this);
 				case 'DireReco':
 					return new QQNode('dire_reco', 'DireReco', 'VarChar', $this);
-				case 'HoraLune':
-					return new QQNode('hora_lune', 'HoraLune', 'VarChar', $this);
-				case 'HoraMart':
-					return new QQNode('hora_mart', 'HoraMart', 'VarChar', $this);
-				case 'HoraMier':
-					return new QQNode('hora_mier', 'HoraMier', 'VarChar', $this);
-				case 'HoraJuev':
-					return new QQNode('hora_juev', 'HoraJuev', 'VarChar', $this);
-				case 'HoraVier':
-					return new QQNode('hora_vier', 'HoraVier', 'VarChar', $this);
-				case 'HoraSaba':
-					return new QQNode('hora_saba', 'HoraSaba', 'VarChar', $this);
 				case 'CodiStat':
 					return new QQNode('codi_stat', 'CodiStat', 'Integer', $this);
 				case 'CodiSino':
@@ -9234,6 +9439,8 @@
 					return new QQReverseReferenceNodeConsumoMes($this, 'consumomesascliente', 'reverse_reference', 'cliente_id', 'ConsumoMesAsCliente');
 				case 'ContainersAsClienteCorp':
 					return new QQReverseReferenceNodeContainers($this, 'containersasclientecorp', 'reverse_reference', 'cliente_corp_id', 'ContainersAsClienteCorp');
+				case 'CounterAsCliente':
+					return new QQReverseReferenceNodeCounter($this, 'counterascliente', 'reverse_reference', 'cliente_id', 'CounterAsCliente');
 				case 'DescuentosAsCliente':
 					return new QQReverseReferenceNodeDescuentos($this, 'descuentosascliente', 'reverse_reference', 'cliente_id', 'DescuentosAsCliente');
 				case 'DestinatarioFrecuenteAsCliente':
@@ -9268,6 +9475,8 @@
 					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaHAsClienteCorp');
 				case 'PagosCorpAsClienteCorp':
 					return new QQReverseReferenceNodePagosCorp($this, 'pagoscorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'PagosCorpAsClienteCorp');
+				case 'TarifaClienteAsCliente':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteascliente', 'reverse_reference', 'cliente_id', 'TarifaClienteAsCliente');
 				case 'UsuarioConnectAsCliente':
 					return new QQReverseReferenceNodeUsuarioConnect($this, 'usuarioconnectascliente', 'reverse_reference', 'cliente_id', 'UsuarioConnectAsCliente');
 
@@ -9291,6 +9500,7 @@
      * @property-read QQNode $NombClie
      * @property-read QQNode $SucursalId
      * @property-read QQNodeSucursales $Sucursal
+     * @property-read QQNode $EsAliado
      * @property-read QQNode $CodiEsta
      * @property-read QQNode $DireFisc
      * @property-read QQNode $NumeDrif
@@ -9309,12 +9519,6 @@
      * @property-read QQNode $TeleConb
      * @property-read QQNode $DireMail
      * @property-read QQNode $DireReco
-     * @property-read QQNode $HoraLune
-     * @property-read QQNode $HoraMart
-     * @property-read QQNode $HoraMier
-     * @property-read QQNode $HoraJuev
-     * @property-read QQNode $HoraVier
-     * @property-read QQNode $HoraSaba
      * @property-read QQNode $CodiStat
      * @property-read QQNode $CodiSino
      * @property-read QQNode $TextObse
@@ -9363,6 +9567,7 @@
      * @property-read QQReverseReferenceNodeConsumoDia $ConsumoDiaAsCliente
      * @property-read QQReverseReferenceNodeConsumoMes $ConsumoMesAsCliente
      * @property-read QQReverseReferenceNodeContainers $ContainersAsClienteCorp
+     * @property-read QQReverseReferenceNodeCounter $CounterAsCliente
      * @property-read QQReverseReferenceNodeDescuentos $DescuentosAsCliente
      * @property-read QQReverseReferenceNodeDestinatarioFrecuente $DestinatarioFrecuenteAsCliente
      * @property-read QQReverseReferenceNodeDspDespacho $DspDespachoAsCodiClie
@@ -9380,6 +9585,7 @@
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntregaH $NotaEntregaHAsClienteCorp
      * @property-read QQReverseReferenceNodePagosCorp $PagosCorpAsClienteCorp
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsCliente
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsCliente
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -9402,6 +9608,8 @@
 					return new QQNode('sucursal_id', 'SucursalId', 'integer', $this);
 				case 'Sucursal':
 					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'integer', $this);
+				case 'EsAliado':
+					return new QQNode('es_aliado', 'EsAliado', 'boolean', $this);
 				case 'CodiEsta':
 					return new QQNode('codi_esta', 'CodiEsta', 'string', $this);
 				case 'DireFisc':
@@ -9438,18 +9646,6 @@
 					return new QQNode('dire_mail', 'DireMail', 'string', $this);
 				case 'DireReco':
 					return new QQNode('dire_reco', 'DireReco', 'string', $this);
-				case 'HoraLune':
-					return new QQNode('hora_lune', 'HoraLune', 'string', $this);
-				case 'HoraMart':
-					return new QQNode('hora_mart', 'HoraMart', 'string', $this);
-				case 'HoraMier':
-					return new QQNode('hora_mier', 'HoraMier', 'string', $this);
-				case 'HoraJuev':
-					return new QQNode('hora_juev', 'HoraJuev', 'string', $this);
-				case 'HoraVier':
-					return new QQNode('hora_vier', 'HoraVier', 'string', $this);
-				case 'HoraSaba':
-					return new QQNode('hora_saba', 'HoraSaba', 'string', $this);
 				case 'CodiStat':
 					return new QQNode('codi_stat', 'CodiStat', 'integer', $this);
 				case 'CodiSino':
@@ -9542,6 +9738,8 @@
 					return new QQReverseReferenceNodeConsumoMes($this, 'consumomesascliente', 'reverse_reference', 'cliente_id', 'ConsumoMesAsCliente');
 				case 'ContainersAsClienteCorp':
 					return new QQReverseReferenceNodeContainers($this, 'containersasclientecorp', 'reverse_reference', 'cliente_corp_id', 'ContainersAsClienteCorp');
+				case 'CounterAsCliente':
+					return new QQReverseReferenceNodeCounter($this, 'counterascliente', 'reverse_reference', 'cliente_id', 'CounterAsCliente');
 				case 'DescuentosAsCliente':
 					return new QQReverseReferenceNodeDescuentos($this, 'descuentosascliente', 'reverse_reference', 'cliente_id', 'DescuentosAsCliente');
 				case 'DestinatarioFrecuenteAsCliente':
@@ -9576,6 +9774,8 @@
 					return new QQReverseReferenceNodeNotaEntregaH($this, 'notaentregahasclientecorp', 'reverse_reference', 'cliente_corp_id', 'NotaEntregaHAsClienteCorp');
 				case 'PagosCorpAsClienteCorp':
 					return new QQReverseReferenceNodePagosCorp($this, 'pagoscorpasclientecorp', 'reverse_reference', 'cliente_corp_id', 'PagosCorpAsClienteCorp');
+				case 'TarifaClienteAsCliente':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteascliente', 'reverse_reference', 'cliente_id', 'TarifaClienteAsCliente');
 				case 'UsuarioConnectAsCliente':
 					return new QQReverseReferenceNodeUsuarioConnect($this, 'usuarioconnectascliente', 'reverse_reference', 'cliente_id', 'UsuarioConnectAsCliente');
 

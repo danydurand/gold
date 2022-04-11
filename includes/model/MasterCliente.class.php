@@ -35,6 +35,13 @@ class MasterCliente extends MasterClienteGen {
         return sprintf('%s - %s', $this->strCodigoInterno, $this->strNombClie);
     }
 
+    public static function LoadAliadosActivos() {
+        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
+        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CodiStat,StatusType::ACTIVO);
+        $objClauOrde[] = QQ::OrderBy(QQN::MasterCliente()->NombClie);
+        return MasterCliente::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+    }
+
     public function calcularSaldoExcedente() {
         /* @var $objFactClie Facturas  */
         /* @var $objPagoClie PagosCorp */
@@ -222,7 +229,7 @@ class MasterCliente extends MasterClienteGen {
             //-----------------------------------------------------------------------------------------------
             // En este caso, el Cliente a quien se le asignará el nuevo Correlativo, es un Cliente Genérico.
             //-----------------------------------------------------------------------------------------------
-            $objParaGene = BuscarParametro('CorrGene','ClieMast','TODO');
+            $objParaGene = BuscarParametro('CorrGene','ClieMast','TODO',0);
             //---------------------------------------------------
             // Se Cargan los Valores del Parámetro en Variables.
             //---------------------------------------------------
@@ -243,6 +250,12 @@ class MasterCliente extends MasterClienteGen {
         // Finalmente, se retorna el nuevo Correlativo creado.
         //-----------------------------------------------------
         return $strProxCorr;
+    }
+
+    public static function generarProxCodigoDeAliado() {
+        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
+        $intCantAlia   = MasterCliente::QueryCount(QQ::AndCondition($objClauWher));
+        return 'AL-'.str_pad($intCantAlia+1,5,'0',STR_PAD_LEFT);
     }
 
     // Override or Create New Load/Count methods

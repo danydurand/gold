@@ -18,6 +18,7 @@
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property string $Descripcion the value for strDescripcion (Not Null)
 	 * @property integer $SucursalId the value for intSucursalId (Not Null)
+	 * @property integer $ClienteId the value for intClienteId 
 	 * @property integer $RutaId the value for intRutaId (Not Null)
 	 * @property integer $EntregaInmediata the value for intEntregaInmediata 
 	 * @property string $Siglas the value for strSiglas (Unique)
@@ -37,7 +38,6 @@
 	 * @property string $CkptAntiguedad1 the value for strCkptAntiguedad1 
 	 * @property string $CkptAntiguedad2 the value for strCkptAntiguedad2 
 	 * @property string $CkptAntiguedad0 the value for strCkptAntiguedad0 
-	 * @property integer $AliadoComercialId the value for intAliadoComercialId 
 	 * @property double $LimiteKilos the value for fltLimiteKilos 
 	 * @property integer $DependeDe the value for intDependeDe 
 	 * @property boolean $DomOrigen the value for blnDomOrigen 
@@ -49,8 +49,8 @@
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
+	 * @property MasterCliente $Cliente the value for the MasterCliente object referenced by intClienteId 
 	 * @property Rutas $Ruta the value for the Rutas object referenced by intRutaId (Not Null)
-	 * @property AliadoComercial $AliadoComercial the value for the AliadoComercial object referenced by intAliadoComercialId 
 	 * @property-read Caja $_Caja the value for the private _objCaja (Read-Only) if set due to an expansion on the caja.counter_id reverse relationship
 	 * @property-read Caja[] $_CajaArray the value for the private _objCajaArray (Read-Only) if set due to an ExpandAsArray on the caja.counter_id reverse relationship
 	 * @property-read Cajero $_Cajero the value for the private _objCajero (Read-Only) if set due to an expansion on the cajero.counter_id reverse relationship
@@ -100,6 +100,14 @@
 		 */
 		protected $intSucursalId;
 		const SucursalIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column counter.cliente_id
+		 * @var integer intClienteId
+		 */
+		protected $intClienteId;
+		const ClienteIdDefault = null;
 
 
 		/**
@@ -261,14 +269,6 @@
 		protected $strCkptAntiguedad0;
 		const CkptAntiguedad0MaxLength = 2;
 		const CkptAntiguedad0Default = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.aliado_comercial_id
-		 * @var integer intAliadoComercialId
-		 */
-		protected $intAliadoComercialId;
-		const AliadoComercialIdDefault = null;
 
 
 		/**
@@ -529,6 +529,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column counter.cliente_id.
+		 *
+		 * NOTE: Always use the Cliente property getter to correctly retrieve this MasterCliente object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var MasterCliente objCliente
+		 */
+		protected $objCliente;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column counter.ruta_id.
 		 *
 		 * NOTE: Always use the Ruta property getter to correctly retrieve this Rutas object.
@@ -536,16 +546,6 @@
 		 * @var Rutas objRuta
 		 */
 		protected $objRuta;
-
-		/**
-		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column counter.aliado_comercial_id.
-		 *
-		 * NOTE: Always use the AliadoComercial property getter to correctly retrieve this AliadoComercial object.
-		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var AliadoComercial objAliadoComercial
-		 */
-		protected $objAliadoComercial;
 
 
 
@@ -557,6 +557,7 @@
 			$this->intId = Counter::IdDefault;
 			$this->strDescripcion = Counter::DescripcionDefault;
 			$this->intSucursalId = Counter::SucursalIdDefault;
+			$this->intClienteId = Counter::ClienteIdDefault;
 			$this->intRutaId = Counter::RutaIdDefault;
 			$this->intEntregaInmediata = Counter::EntregaInmediataDefault;
 			$this->strSiglas = Counter::SiglasDefault;
@@ -576,7 +577,6 @@
 			$this->strCkptAntiguedad1 = Counter::CkptAntiguedad1Default;
 			$this->strCkptAntiguedad2 = Counter::CkptAntiguedad2Default;
 			$this->strCkptAntiguedad0 = Counter::CkptAntiguedad0Default;
-			$this->intAliadoComercialId = Counter::AliadoComercialIdDefault;
 			$this->fltLimiteKilos = Counter::LimiteKilosDefault;
 			$this->intDependeDe = Counter::DependeDeDefault;
 			$this->blnDomOrigen = Counter::DomOrigenDefault;
@@ -931,6 +931,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'descripcion', $strAliasPrefix . 'descripcion');
 			    $objBuilder->AddSelectItem($strTableName, 'sucursal_id', $strAliasPrefix . 'sucursal_id');
+			    $objBuilder->AddSelectItem($strTableName, 'cliente_id', $strAliasPrefix . 'cliente_id');
 			    $objBuilder->AddSelectItem($strTableName, 'ruta_id', $strAliasPrefix . 'ruta_id');
 			    $objBuilder->AddSelectItem($strTableName, 'entrega_inmediata', $strAliasPrefix . 'entrega_inmediata');
 			    $objBuilder->AddSelectItem($strTableName, 'siglas', $strAliasPrefix . 'siglas');
@@ -950,7 +951,6 @@
 			    $objBuilder->AddSelectItem($strTableName, 'ckpt_antiguedad1', $strAliasPrefix . 'ckpt_antiguedad1');
 			    $objBuilder->AddSelectItem($strTableName, 'ckpt_antiguedad2', $strAliasPrefix . 'ckpt_antiguedad2');
 			    $objBuilder->AddSelectItem($strTableName, 'ckpt_antiguedad0', $strAliasPrefix . 'ckpt_antiguedad0');
-			    $objBuilder->AddSelectItem($strTableName, 'aliado_comercial_id', $strAliasPrefix . 'aliado_comercial_id');
 			    $objBuilder->AddSelectItem($strTableName, 'limite_kilos', $strAliasPrefix . 'limite_kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'depende_de', $strAliasPrefix . 'depende_de');
 			    $objBuilder->AddSelectItem($strTableName, 'dom_origen', $strAliasPrefix . 'dom_origen');
@@ -1095,6 +1095,9 @@
 			$strAlias = $strAliasPrefix . 'sucursal_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intSucursalId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'cliente_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intClienteId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'ruta_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intRutaId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1152,9 +1155,6 @@
 			$strAlias = $strAliasPrefix . 'ckpt_antiguedad0';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strCkptAntiguedad0 = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'aliado_comercial_id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intAliadoComercialId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'limite_kilos';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltLimiteKilos = $objDbRow->GetColumn($strAliasName, 'Float');
@@ -1222,19 +1222,19 @@
 				$objExpansionNode = (empty($objExpansionAliasArray['sucursal_id']) ? null : $objExpansionAliasArray['sucursal_id']);
 				$objToReturn->objSucursal = Sucursales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sucursal_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
+			// Check for Cliente Early Binding
+			$strAlias = $strAliasPrefix . 'cliente_id__codi_clie';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['cliente_id']) ? null : $objExpansionAliasArray['cliente_id']);
+				$objToReturn->objCliente = MasterCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cliente_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
 			// Check for Ruta Early Binding
 			$strAlias = $strAliasPrefix . 'ruta_id__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['ruta_id']) ? null : $objExpansionAliasArray['ruta_id']);
 				$objToReturn->objRuta = Rutas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ruta_id__', $objExpansionNode, null, $strColumnAliasArray);
-			}
-			// Check for AliadoComercial Early Binding
-			$strAlias = $strAliasPrefix . 'aliado_comercial_id__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				$objExpansionNode = (empty($objExpansionAliasArray['aliado_comercial_id']) ? null : $objExpansionAliasArray['aliado_comercial_id']);
-				$objToReturn->objAliadoComercial = AliadoComercial::InstantiateDbRow($objDbRow, $strAliasPrefix . 'aliado_comercial_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -1901,16 +1901,16 @@
 
 		/**
 		 * Load an array of Counter objects,
-		 * by AliadoComercialId Index(es)
-		 * @param integer $intAliadoComercialId
+		 * by ClienteId Index(es)
+		 * @param integer $intClienteId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
 		 * @return Counter[]
 		*/
-		public static function LoadArrayByAliadoComercialId($intAliadoComercialId, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByAliadoComercialId query
+		public static function LoadArrayByClienteId($intClienteId, $objOptionalClauses = null) {
+			// Call Counter::QueryArray to perform the LoadArrayByClienteId query
 			try {
 				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->AliadoComercialId, $intAliadoComercialId),
+					QQ::Equal(QQN::Counter()->ClienteId, $intClienteId),
 					$objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
@@ -1920,14 +1920,14 @@
 
 		/**
 		 * Count Counters
-		 * by AliadoComercialId Index(es)
-		 * @param integer $intAliadoComercialId
+		 * by ClienteId Index(es)
+		 * @param integer $intClienteId
 		 * @return int
 		*/
-		public static function CountByAliadoComercialId($intAliadoComercialId) {
-			// Call Counter::QueryCount to perform the CountByAliadoComercialId query
+		public static function CountByClienteId($intClienteId) {
+			// Call Counter::QueryCount to perform the CountByClienteId query
 			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->AliadoComercialId, $intAliadoComercialId)
+				QQ::Equal(QQN::Counter()->ClienteId, $intClienteId)
 			);
 		}
 
@@ -1964,6 +1964,7 @@
 						INSERT INTO `counter` (
 							`descripcion`,
 							`sucursal_id`,
+							`cliente_id`,
 							`ruta_id`,
 							`entrega_inmediata`,
 							`siglas`,
@@ -1983,7 +1984,6 @@
 							`ckpt_antiguedad1`,
 							`ckpt_antiguedad2`,
 							`ckpt_antiguedad0`,
-							`aliado_comercial_id`,
 							`limite_kilos`,
 							`depende_de`,
 							`dom_origen`,
@@ -1996,6 +1996,7 @@
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							' . $objDatabase->SqlVariable($this->intSucursalId) . ',
+							' . $objDatabase->SqlVariable($this->intClienteId) . ',
 							' . $objDatabase->SqlVariable($this->intRutaId) . ',
 							' . $objDatabase->SqlVariable($this->intEntregaInmediata) . ',
 							' . $objDatabase->SqlVariable($this->strSiglas) . ',
@@ -2015,7 +2016,6 @@
 							' . $objDatabase->SqlVariable($this->strCkptAntiguedad1) . ',
 							' . $objDatabase->SqlVariable($this->strCkptAntiguedad2) . ',
 							' . $objDatabase->SqlVariable($this->strCkptAntiguedad0) . ',
-							' . $objDatabase->SqlVariable($this->intAliadoComercialId) . ',
 							' . $objDatabase->SqlVariable($this->fltLimiteKilos) . ',
 							' . $objDatabase->SqlVariable($this->intDependeDe) . ',
 							' . $objDatabase->SqlVariable($this->blnDomOrigen) . ',
@@ -2057,6 +2057,7 @@
 						SET
 							`descripcion` = ' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							`sucursal_id` = ' . $objDatabase->SqlVariable($this->intSucursalId) . ',
+							`cliente_id` = ' . $objDatabase->SqlVariable($this->intClienteId) . ',
 							`ruta_id` = ' . $objDatabase->SqlVariable($this->intRutaId) . ',
 							`entrega_inmediata` = ' . $objDatabase->SqlVariable($this->intEntregaInmediata) . ',
 							`siglas` = ' . $objDatabase->SqlVariable($this->strSiglas) . ',
@@ -2076,7 +2077,6 @@
 							`ckpt_antiguedad1` = ' . $objDatabase->SqlVariable($this->strCkptAntiguedad1) . ',
 							`ckpt_antiguedad2` = ' . $objDatabase->SqlVariable($this->strCkptAntiguedad2) . ',
 							`ckpt_antiguedad0` = ' . $objDatabase->SqlVariable($this->strCkptAntiguedad0) . ',
-							`aliado_comercial_id` = ' . $objDatabase->SqlVariable($this->intAliadoComercialId) . ',
 							`limite_kilos` = ' . $objDatabase->SqlVariable($this->fltLimiteKilos) . ',
 							`depende_de` = ' . $objDatabase->SqlVariable($this->intDependeDe) . ',
 							`dom_origen` = ' . $objDatabase->SqlVariable($this->blnDomOrigen) . ',
@@ -2204,6 +2204,7 @@
 			// Update $this's local variables to match
 			$this->strDescripcion = $objReloaded->strDescripcion;
 			$this->SucursalId = $objReloaded->SucursalId;
+			$this->ClienteId = $objReloaded->ClienteId;
 			$this->RutaId = $objReloaded->RutaId;
 			$this->EntregaInmediata = $objReloaded->EntregaInmediata;
 			$this->strSiglas = $objReloaded->strSiglas;
@@ -2223,7 +2224,6 @@
 			$this->strCkptAntiguedad1 = $objReloaded->strCkptAntiguedad1;
 			$this->strCkptAntiguedad2 = $objReloaded->strCkptAntiguedad2;
 			$this->strCkptAntiguedad0 = $objReloaded->strCkptAntiguedad0;
-			$this->AliadoComercialId = $objReloaded->AliadoComercialId;
 			$this->fltLimiteKilos = $objReloaded->fltLimiteKilos;
 			$this->intDependeDe = $objReloaded->intDependeDe;
 			$this->blnDomOrigen = $objReloaded->blnDomOrigen;
@@ -2274,6 +2274,13 @@
 					 * @return integer
 					 */
 					return $this->intSucursalId;
+
+				case 'ClienteId':
+					/**
+					 * Gets the value for intClienteId 
+					 * @return integer
+					 */
+					return $this->intClienteId;
 
 				case 'RutaId':
 					/**
@@ -2408,13 +2415,6 @@
 					 */
 					return $this->strCkptAntiguedad0;
 
-				case 'AliadoComercialId':
-					/**
-					 * Gets the value for intAliadoComercialId 
-					 * @return integer
-					 */
-					return $this->intAliadoComercialId;
-
 				case 'LimiteKilos':
 					/**
 					 * Gets the value for fltLimiteKilos 
@@ -2503,6 +2503,20 @@
 						throw $objExc;
 					}
 
+				case 'Cliente':
+					/**
+					 * Gets the value for the MasterCliente object referenced by intClienteId 
+					 * @return MasterCliente
+					 */
+					try {
+						if ((!$this->objCliente) && (!is_null($this->intClienteId)))
+							$this->objCliente = MasterCliente::Load($this->intClienteId);
+						return $this->objCliente;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Ruta':
 					/**
 					 * Gets the value for the Rutas object referenced by intRutaId (Not Null)
@@ -2512,20 +2526,6 @@
 						if ((!$this->objRuta) && (!is_null($this->intRutaId)))
 							$this->objRuta = Rutas::Load($this->intRutaId);
 						return $this->objRuta;
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'AliadoComercial':
-					/**
-					 * Gets the value for the AliadoComercial object referenced by intAliadoComercialId 
-					 * @return AliadoComercial
-					 */
-					try {
-						if ((!$this->objAliadoComercial) && (!is_null($this->intAliadoComercialId)))
-							$this->objAliadoComercial = AliadoComercial::Load($this->intAliadoComercialId);
-						return $this->objAliadoComercial;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2730,6 +2730,20 @@
 					try {
 						$this->objSucursal = null;
 						return ($this->intSucursalId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ClienteId':
+					/**
+					 * Sets the value for intClienteId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objCliente = null;
+						return ($this->intClienteId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2983,20 +2997,6 @@
 						throw $objExc;
 					}
 
-				case 'AliadoComercialId':
-					/**
-					 * Sets the value for intAliadoComercialId 
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						$this->objAliadoComercial = null;
-						return ($this->intAliadoComercialId = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
 				case 'LimiteKilos':
 					/**
 					 * Sets the value for fltLimiteKilos 
@@ -3150,6 +3150,38 @@
 					}
 					break;
 
+				case 'Cliente':
+					/**
+					 * Sets the value for the MasterCliente object referenced by intClienteId 
+					 * @param MasterCliente $mixValue
+					 * @return MasterCliente
+					 */
+					if (is_null($mixValue)) {
+						$this->intClienteId = null;
+						$this->objCliente = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a MasterCliente object
+						try {
+							$mixValue = QType::Cast($mixValue, 'MasterCliente');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED MasterCliente object
+						if (is_null($mixValue->CodiClie))
+							throw new QCallerException('Unable to set an unsaved Cliente for this Counter');
+
+						// Update Local Member Variables
+						$this->objCliente = $mixValue;
+						$this->intClienteId = $mixValue->CodiClie;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				case 'Ruta':
 					/**
 					 * Sets the value for the Rutas object referenced by intRutaId (Not Null)
@@ -3176,38 +3208,6 @@
 						// Update Local Member Variables
 						$this->objRuta = $mixValue;
 						$this->intRutaId = $mixValue->Id;
-
-						// Return $mixValue
-						return $mixValue;
-					}
-					break;
-
-				case 'AliadoComercial':
-					/**
-					 * Sets the value for the AliadoComercial object referenced by intAliadoComercialId 
-					 * @param AliadoComercial $mixValue
-					 * @return AliadoComercial
-					 */
-					if (is_null($mixValue)) {
-						$this->intAliadoComercialId = null;
-						$this->objAliadoComercial = null;
-						return null;
-					} else {
-						// Make sure $mixValue actually is a AliadoComercial object
-						try {
-							$mixValue = QType::Cast($mixValue, 'AliadoComercial');
-						} catch (QInvalidCastException $objExc) {
-							$objExc->IncrementOffset();
-							throw $objExc;
-						}
-
-						// Make sure $mixValue is a SAVED AliadoComercial object
-						if (is_null($mixValue->Id))
-							throw new QCallerException('Unable to set an unsaved AliadoComercial for this Counter');
-
-						// Update Local Member Variables
-						$this->objAliadoComercial = $mixValue;
-						$this->intAliadoComercialId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -4663,6 +4663,7 @@
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Descripcion" type="xsd:string"/>';
 			$strToReturn .= '<element name="Sucursal" type="xsd1:Sucursales"/>';
+			$strToReturn .= '<element name="Cliente" type="xsd1:MasterCliente"/>';
 			$strToReturn .= '<element name="Ruta" type="xsd1:Rutas"/>';
 			$strToReturn .= '<element name="EntregaInmediata" type="xsd:int"/>';
 			$strToReturn .= '<element name="Siglas" type="xsd:string"/>';
@@ -4682,7 +4683,6 @@
 			$strToReturn .= '<element name="CkptAntiguedad1" type="xsd:string"/>';
 			$strToReturn .= '<element name="CkptAntiguedad2" type="xsd:string"/>';
 			$strToReturn .= '<element name="CkptAntiguedad0" type="xsd:string"/>';
-			$strToReturn .= '<element name="AliadoComercial" type="xsd1:AliadoComercial"/>';
 			$strToReturn .= '<element name="LimiteKilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="DependeDe" type="xsd:int"/>';
 			$strToReturn .= '<element name="DomOrigen" type="xsd:boolean"/>';
@@ -4702,8 +4702,8 @@
 			if (!array_key_exists('Counter', $strComplexTypeArray)) {
 				$strComplexTypeArray['Counter'] = Counter::GetSoapComplexTypeXml();
 				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
+				MasterCliente::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Rutas::AlterSoapComplexTypeArray($strComplexTypeArray);
-				AliadoComercial::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -4725,6 +4725,9 @@
 			if ((property_exists($objSoapObject, 'Sucursal')) &&
 				($objSoapObject->Sucursal))
 				$objToReturn->Sucursal = Sucursales::GetObjectFromSoapObject($objSoapObject->Sucursal);
+			if ((property_exists($objSoapObject, 'Cliente')) &&
+				($objSoapObject->Cliente))
+				$objToReturn->Cliente = MasterCliente::GetObjectFromSoapObject($objSoapObject->Cliente);
 			if ((property_exists($objSoapObject, 'Ruta')) &&
 				($objSoapObject->Ruta))
 				$objToReturn->Ruta = Rutas::GetObjectFromSoapObject($objSoapObject->Ruta);
@@ -4764,9 +4767,6 @@
 				$objToReturn->strCkptAntiguedad2 = $objSoapObject->CkptAntiguedad2;
 			if (property_exists($objSoapObject, 'CkptAntiguedad0'))
 				$objToReturn->strCkptAntiguedad0 = $objSoapObject->CkptAntiguedad0;
-			if ((property_exists($objSoapObject, 'AliadoComercial')) &&
-				($objSoapObject->AliadoComercial))
-				$objToReturn->AliadoComercial = AliadoComercial::GetObjectFromSoapObject($objSoapObject->AliadoComercial);
 			if (property_exists($objSoapObject, 'LimiteKilos'))
 				$objToReturn->fltLimiteKilos = $objSoapObject->LimiteKilos;
 			if (property_exists($objSoapObject, 'DependeDe'))
@@ -4809,14 +4809,14 @@
 				$objObject->objSucursal = Sucursales::GetSoapObjectFromObject($objObject->objSucursal, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intSucursalId = null;
+			if ($objObject->objCliente)
+				$objObject->objCliente = MasterCliente::GetSoapObjectFromObject($objObject->objCliente, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intClienteId = null;
 			if ($objObject->objRuta)
 				$objObject->objRuta = Rutas::GetSoapObjectFromObject($objObject->objRuta, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intRutaId = null;
-			if ($objObject->objAliadoComercial)
-				$objObject->objAliadoComercial = AliadoComercial::GetSoapObjectFromObject($objObject->objAliadoComercial, false);
-			else if (!$blnBindRelatedObjects)
-				$objObject->intAliadoComercialId = null;
 			if ($objObject->dttCreatedAt)
 				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttUpdatedAt)
@@ -4838,6 +4838,7 @@
 			$iArray['Id'] = $this->intId;
 			$iArray['Descripcion'] = $this->strDescripcion;
 			$iArray['SucursalId'] = $this->intSucursalId;
+			$iArray['ClienteId'] = $this->intClienteId;
 			$iArray['RutaId'] = $this->intRutaId;
 			$iArray['EntregaInmediata'] = $this->intEntregaInmediata;
 			$iArray['Siglas'] = $this->strSiglas;
@@ -4857,7 +4858,6 @@
 			$iArray['CkptAntiguedad1'] = $this->strCkptAntiguedad1;
 			$iArray['CkptAntiguedad2'] = $this->strCkptAntiguedad2;
 			$iArray['CkptAntiguedad0'] = $this->strCkptAntiguedad0;
-			$iArray['AliadoComercialId'] = $this->intAliadoComercialId;
 			$iArray['LimiteKilos'] = $this->fltLimiteKilos;
 			$iArray['DependeDe'] = $this->intDependeDe;
 			$iArray['DomOrigen'] = $this->blnDomOrigen;
@@ -4909,6 +4909,8 @@
      * @property-read QQNode $Descripcion
      * @property-read QQNode $SucursalId
      * @property-read QQNodeSucursales $Sucursal
+     * @property-read QQNode $ClienteId
+     * @property-read QQNodeMasterCliente $Cliente
      * @property-read QQNode $RutaId
      * @property-read QQNodeRutas $Ruta
      * @property-read QQNode $EntregaInmediata
@@ -4929,8 +4931,6 @@
      * @property-read QQNode $CkptAntiguedad1
      * @property-read QQNode $CkptAntiguedad2
      * @property-read QQNode $CkptAntiguedad0
-     * @property-read QQNode $AliadoComercialId
-     * @property-read QQNodeAliadoComercial $AliadoComercial
      * @property-read QQNode $LimiteKilos
      * @property-read QQNode $DependeDe
      * @property-read QQNode $DomOrigen
@@ -4969,6 +4969,10 @@
 					return new QQNode('sucursal_id', 'SucursalId', 'Integer', $this);
 				case 'Sucursal':
 					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'Integer', $this);
+				case 'ClienteId':
+					return new QQNode('cliente_id', 'ClienteId', 'Integer', $this);
+				case 'Cliente':
+					return new QQNodeMasterCliente('cliente_id', 'Cliente', 'Integer', $this);
 				case 'RutaId':
 					return new QQNode('ruta_id', 'RutaId', 'Integer', $this);
 				case 'Ruta':
@@ -5009,10 +5013,6 @@
 					return new QQNode('ckpt_antiguedad2', 'CkptAntiguedad2', 'VarChar', $this);
 				case 'CkptAntiguedad0':
 					return new QQNode('ckpt_antiguedad0', 'CkptAntiguedad0', 'VarChar', $this);
-				case 'AliadoComercialId':
-					return new QQNode('aliado_comercial_id', 'AliadoComercialId', 'Integer', $this);
-				case 'AliadoComercial':
-					return new QQNodeAliadoComercial('aliado_comercial_id', 'AliadoComercial', 'Integer', $this);
 				case 'LimiteKilos':
 					return new QQNode('limite_kilos', 'LimiteKilos', 'Float', $this);
 				case 'DependeDe':
@@ -5070,6 +5070,8 @@
      * @property-read QQNode $Descripcion
      * @property-read QQNode $SucursalId
      * @property-read QQNodeSucursales $Sucursal
+     * @property-read QQNode $ClienteId
+     * @property-read QQNodeMasterCliente $Cliente
      * @property-read QQNode $RutaId
      * @property-read QQNodeRutas $Ruta
      * @property-read QQNode $EntregaInmediata
@@ -5090,8 +5092,6 @@
      * @property-read QQNode $CkptAntiguedad1
      * @property-read QQNode $CkptAntiguedad2
      * @property-read QQNode $CkptAntiguedad0
-     * @property-read QQNode $AliadoComercialId
-     * @property-read QQNodeAliadoComercial $AliadoComercial
      * @property-read QQNode $LimiteKilos
      * @property-read QQNode $DependeDe
      * @property-read QQNode $DomOrigen
@@ -5130,6 +5130,10 @@
 					return new QQNode('sucursal_id', 'SucursalId', 'integer', $this);
 				case 'Sucursal':
 					return new QQNodeSucursales('sucursal_id', 'Sucursal', 'integer', $this);
+				case 'ClienteId':
+					return new QQNode('cliente_id', 'ClienteId', 'integer', $this);
+				case 'Cliente':
+					return new QQNodeMasterCliente('cliente_id', 'Cliente', 'integer', $this);
 				case 'RutaId':
 					return new QQNode('ruta_id', 'RutaId', 'integer', $this);
 				case 'Ruta':
@@ -5170,10 +5174,6 @@
 					return new QQNode('ckpt_antiguedad2', 'CkptAntiguedad2', 'string', $this);
 				case 'CkptAntiguedad0':
 					return new QQNode('ckpt_antiguedad0', 'CkptAntiguedad0', 'string', $this);
-				case 'AliadoComercialId':
-					return new QQNode('aliado_comercial_id', 'AliadoComercialId', 'integer', $this);
-				case 'AliadoComercial':
-					return new QQNodeAliadoComercial('aliado_comercial_id', 'AliadoComercial', 'integer', $this);
 				case 'LimiteKilos':
 					return new QQNode('limite_kilos', 'LimiteKilos', 'double', $this);
 				case 'DependeDe':

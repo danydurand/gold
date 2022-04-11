@@ -82,6 +82,7 @@ abstract class MasterClienteListFormBase extends QForm {
         $this->dtgMasterClientes->MetaAddColumn(QQN::MasterCliente()->CodiDepeObject);
         $this->dtgMasterClientes->MetaAddColumn('NombClie');
         $this->dtgMasterClientes->MetaAddColumn(QQN::MasterCliente()->Sucursal);
+        $this->dtgMasterClientes->MetaAddColumn('EsAliado');
         $this->dtgMasterClientes->MetaAddColumn('CodiEsta');
         $this->dtgMasterClientes->MetaAddColumn('DireFisc');
         $this->dtgMasterClientes->MetaAddColumn('NumeDrif');
@@ -97,12 +98,6 @@ abstract class MasterClienteListFormBase extends QForm {
         $this->dtgMasterClientes->MetaAddColumn('TeleConb');
         $this->dtgMasterClientes->MetaAddColumn('DireMail');
         $this->dtgMasterClientes->MetaAddColumn('DireReco');
-        $this->dtgMasterClientes->MetaAddColumn('HoraLune');
-        $this->dtgMasterClientes->MetaAddColumn('HoraMart');
-        $this->dtgMasterClientes->MetaAddColumn('HoraMier');
-        $this->dtgMasterClientes->MetaAddColumn('HoraJuev');
-        $this->dtgMasterClientes->MetaAddColumn('HoraVier');
-        $this->dtgMasterClientes->MetaAddColumn('HoraSaba');
         $this->dtgMasterClientes->MetaAddTypeColumn('CodiStat', 'StatusType');
         $this->dtgMasterClientes->MetaAddTypeColumn('CodiSino', 'SinoType');
         $this->dtgMasterClientes->MetaAddColumn('TextObse');

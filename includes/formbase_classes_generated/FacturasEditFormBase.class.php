@@ -56,7 +56,6 @@ abstract class FacturasEditFormBase extends QForm {
 	protected $lblId;
 	protected $lstClienteRetail;
 	protected $lstClienteCorp;
-	protected $lstAliado;
 	protected $calFecha;
 	protected $txtCedulaRif;
 	protected $txtRazonSocial;
@@ -159,7 +158,6 @@ abstract class FacturasEditFormBase extends QForm {
 		$this->lblId = $this->mctFacturas->lblId_Create();
 		$this->lstClienteRetail = $this->mctFacturas->lstClienteRetail_Create();
 		$this->lstClienteCorp = $this->mctFacturas->lstClienteCorp_Create();
-		$this->lstAliado = $this->mctFacturas->lstAliado_Create();
 		$this->calFecha = $this->mctFacturas->calFecha_Create();
 		$this->txtCedulaRif = $this->mctFacturas->txtCedulaRif_Create();
 		$this->txtRazonSocial = $this->mctFacturas->txtRazonSocial_Create();

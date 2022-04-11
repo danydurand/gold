@@ -60,7 +60,6 @@ abstract class GuiasEditFormBase extends QForm {
 	protected $lstClienteRetail;
 	protected $lstClienteCorp;
 	protected $lstClienteInt;
-	protected $lstAliado;
 	protected $lstOrigen;
 	protected $lstDestino;
 	protected $txtServicioEntrega;
@@ -193,7 +192,6 @@ abstract class GuiasEditFormBase extends QForm {
 		$this->lstClienteRetail = $this->mctGuias->lstClienteRetail_Create();
 		$this->lstClienteCorp = $this->mctGuias->lstClienteCorp_Create();
 		$this->lstClienteInt = $this->mctGuias->lstClienteInt_Create();
-		$this->lstAliado = $this->mctGuias->lstAliado_Create();
 		$this->lstOrigen = $this->mctGuias->lstOrigen_Create();
 		$this->lstDestino = $this->mctGuias->lstDestino_Create();
 		$this->txtServicioEntrega = $this->mctGuias->txtServicioEntrega_Create();

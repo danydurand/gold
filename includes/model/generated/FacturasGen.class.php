@@ -18,7 +18,6 @@
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property integer $ClienteRetailId the value for intClienteRetailId 
 	 * @property integer $ClienteCorpId the value for intClienteCorpId 
-	 * @property integer $AliadoId the value for intAliadoId 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
 	 * @property string $CedulaRif the value for strCedulaRif (Not Null)
 	 * @property string $RazonSocial the value for strRazonSocial (Not Null)
@@ -53,7 +52,6 @@
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property ClientesRetail $ClienteRetail the value for the ClientesRetail object referenced by intClienteRetailId 
 	 * @property MasterCliente $ClienteCorp the value for the MasterCliente object referenced by intClienteCorpId 
-	 * @property AliadoComercial $Aliado the value for the AliadoComercial object referenced by intAliadoId 
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
 	 * @property Counter $Receptoria the value for the Counter object referenced by intReceptoriaId 
 	 * @property Caja $Caja the value for the Caja object referenced by intCajaId 
@@ -108,14 +106,6 @@
 		 */
 		protected $intClienteCorpId;
 		const ClienteCorpIdDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column facturas.aliado_id
-		 * @var integer intAliadoId
-		 */
-		protected $intAliadoId;
-		const AliadoIdDefault = null;
 
 
 		/**
@@ -588,16 +578,6 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column facturas.aliado_id.
-		 *
-		 * NOTE: Always use the Aliado property getter to correctly retrieve this AliadoComercial object.
-		 * (Because this class implements late binding, this variable reference MAY be null.)
-		 * @var AliadoComercial objAliado
-		 */
-		protected $objAliado;
-
-		/**
-		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column facturas.sucursal_id.
 		 *
 		 * NOTE: Always use the Sucursal property getter to correctly retrieve this Sucursales object.
@@ -646,7 +626,6 @@
 			$this->intId = Facturas::IdDefault;
 			$this->intClienteRetailId = Facturas::ClienteRetailIdDefault;
 			$this->intClienteCorpId = Facturas::ClienteCorpIdDefault;
-			$this->intAliadoId = Facturas::AliadoIdDefault;
 			$this->dttFecha = (Facturas::FechaDefault === null)?null:new QDateTime(Facturas::FechaDefault);
 			$this->strCedulaRif = Facturas::CedulaRifDefault;
 			$this->strRazonSocial = Facturas::RazonSocialDefault;
@@ -1023,7 +1002,6 @@
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'cliente_retail_id', $strAliasPrefix . 'cliente_retail_id');
 			    $objBuilder->AddSelectItem($strTableName, 'cliente_corp_id', $strAliasPrefix . 'cliente_corp_id');
-			    $objBuilder->AddSelectItem($strTableName, 'aliado_id', $strAliasPrefix . 'aliado_id');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha', $strAliasPrefix . 'fecha');
 			    $objBuilder->AddSelectItem($strTableName, 'cedula_rif', $strAliasPrefix . 'cedula_rif');
 			    $objBuilder->AddSelectItem($strTableName, 'razon_social', $strAliasPrefix . 'razon_social');
@@ -1190,9 +1168,6 @@
 			$strAlias = $strAliasPrefix . 'cliente_corp_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intClienteCorpId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'aliado_id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intAliadoId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'fecha';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttFecha = $objDbRow->GetColumn($strAliasName, 'Date');
@@ -1332,13 +1307,6 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['cliente_corp_id']) ? null : $objExpansionAliasArray['cliente_corp_id']);
 				$objToReturn->objClienteCorp = MasterCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cliente_corp_id__', $objExpansionNode, null, $strColumnAliasArray);
-			}
-			// Check for Aliado Early Binding
-			$strAlias = $strAliasPrefix . 'aliado_id__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				$objExpansionNode = (empty($objExpansionAliasArray['aliado_id']) ? null : $objExpansionAliasArray['aliado_id']);
-				$objToReturn->objAliado = AliadoComercial::InstantiateDbRow($objDbRow, $strAliasPrefix . 'aliado_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for Sucursal Early Binding
 			$strAlias = $strAliasPrefix . 'sucursal_id__id';
@@ -1807,38 +1775,6 @@
 			);
 		}
 
-		/**
-		 * Load an array of Facturas objects,
-		 * by AliadoId Index(es)
-		 * @param integer $intAliadoId
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Facturas[]
-		*/
-		public static function LoadArrayByAliadoId($intAliadoId, $objOptionalClauses = null) {
-			// Call Facturas::QueryArray to perform the LoadArrayByAliadoId query
-			try {
-				return Facturas::QueryArray(
-					QQ::Equal(QQN::Facturas()->AliadoId, $intAliadoId),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Facturases
-		 * by AliadoId Index(es)
-		 * @param integer $intAliadoId
-		 * @return int
-		*/
-		public static function CountByAliadoId($intAliadoId) {
-			// Call Facturas::QueryCount to perform the CountByAliadoId query
-			return Facturas::QueryCount(
-				QQ::Equal(QQN::Facturas()->AliadoId, $intAliadoId)
-			);
-		}
-
 
 
 		////////////////////////////////////////////////////
@@ -1903,7 +1839,6 @@
 						INSERT INTO `facturas` (
 							`cliente_retail_id`,
 							`cliente_corp_id`,
-							`aliado_id`,
 							`fecha`,
 							`cedula_rif`,
 							`razon_social`,
@@ -1938,7 +1873,6 @@
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intClienteRetailId) . ',
 							' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
-							' . $objDatabase->SqlVariable($this->intAliadoId) . ',
 							' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							' . $objDatabase->SqlVariable($this->strCedulaRif) . ',
 							' . $objDatabase->SqlVariable($this->strRazonSocial) . ',
@@ -2002,7 +1936,6 @@
 						SET
 							`cliente_retail_id` = ' . $objDatabase->SqlVariable($this->intClienteRetailId) . ',
 							`cliente_corp_id` = ' . $objDatabase->SqlVariable($this->intClienteCorpId) . ',
-							`aliado_id` = ' . $objDatabase->SqlVariable($this->intAliadoId) . ',
 							`fecha` = ' . $objDatabase->SqlVariable($this->dttFecha) . ',
 							`cedula_rif` = ' . $objDatabase->SqlVariable($this->strCedulaRif) . ',
 							`razon_social` = ' . $objDatabase->SqlVariable($this->strRazonSocial) . ',
@@ -2152,7 +2085,6 @@
 			// Update $this's local variables to match
 			$this->ClienteRetailId = $objReloaded->ClienteRetailId;
 			$this->ClienteCorpId = $objReloaded->ClienteCorpId;
-			$this->AliadoId = $objReloaded->AliadoId;
 			$this->dttFecha = $objReloaded->dttFecha;
 			$this->strCedulaRif = $objReloaded->strCedulaRif;
 			$this->strRazonSocial = $objReloaded->strRazonSocial;
@@ -2225,13 +2157,6 @@
 					 * @return integer
 					 */
 					return $this->intClienteCorpId;
-
-				case 'AliadoId':
-					/**
-					 * Gets the value for intAliadoId 
-					 * @return integer
-					 */
-					return $this->intAliadoId;
 
 				case 'Fecha':
 					/**
@@ -2484,20 +2409,6 @@
 						if ((!$this->objClienteCorp) && (!is_null($this->intClienteCorpId)))
 							$this->objClienteCorp = MasterCliente::Load($this->intClienteCorpId);
 						return $this->objClienteCorp;
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Aliado':
-					/**
-					 * Gets the value for the AliadoComercial object referenced by intAliadoId 
-					 * @return AliadoComercial
-					 */
-					try {
-						if ((!$this->objAliado) && (!is_null($this->intAliadoId)))
-							$this->objAliado = AliadoComercial::Load($this->intAliadoId);
-						return $this->objAliado;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2775,20 +2686,6 @@
 					try {
 						$this->objClienteCorp = null;
 						return ($this->intClienteCorpId = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'AliadoId':
-					/**
-					 * Sets the value for intAliadoId 
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						$this->objAliado = null;
-						return ($this->intAliadoId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3263,38 +3160,6 @@
 						// Update Local Member Variables
 						$this->objClienteCorp = $mixValue;
 						$this->intClienteCorpId = $mixValue->CodiClie;
-
-						// Return $mixValue
-						return $mixValue;
-					}
-					break;
-
-				case 'Aliado':
-					/**
-					 * Sets the value for the AliadoComercial object referenced by intAliadoId 
-					 * @param AliadoComercial $mixValue
-					 * @return AliadoComercial
-					 */
-					if (is_null($mixValue)) {
-						$this->intAliadoId = null;
-						$this->objAliado = null;
-						return null;
-					} else {
-						// Make sure $mixValue actually is a AliadoComercial object
-						try {
-							$mixValue = QType::Cast($mixValue, 'AliadoComercial');
-						} catch (QInvalidCastException $objExc) {
-							$objExc->IncrementOffset();
-							throw $objExc;
-						}
-
-						// Make sure $mixValue is a SAVED AliadoComercial object
-						if (is_null($mixValue->Id))
-							throw new QCallerException('Unable to set an unsaved Aliado for this Facturas');
-
-						// Update Local Member Variables
-						$this->objAliado = $mixValue;
-						$this->intAliadoId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -5000,7 +4865,6 @@
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="ClienteRetail" type="xsd1:ClientesRetail"/>';
 			$strToReturn .= '<element name="ClienteCorp" type="xsd1:MasterCliente"/>';
-			$strToReturn .= '<element name="Aliado" type="xsd1:AliadoComercial"/>';
 			$strToReturn .= '<element name="Fecha" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CedulaRif" type="xsd:string"/>';
 			$strToReturn .= '<element name="RazonSocial" type="xsd:string"/>';
@@ -5043,7 +4907,6 @@
 				$strComplexTypeArray['Facturas'] = Facturas::GetSoapComplexTypeXml();
 				ClientesRetail::AlterSoapComplexTypeArray($strComplexTypeArray);
 				MasterCliente::AlterSoapComplexTypeArray($strComplexTypeArray);
-				AliadoComercial::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Counter::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Caja::AlterSoapComplexTypeArray($strComplexTypeArray);
@@ -5070,9 +4933,6 @@
 			if ((property_exists($objSoapObject, 'ClienteCorp')) &&
 				($objSoapObject->ClienteCorp))
 				$objToReturn->ClienteCorp = MasterCliente::GetObjectFromSoapObject($objSoapObject->ClienteCorp);
-			if ((property_exists($objSoapObject, 'Aliado')) &&
-				($objSoapObject->Aliado))
-				$objToReturn->Aliado = AliadoComercial::GetObjectFromSoapObject($objSoapObject->Aliado);
 			if (property_exists($objSoapObject, 'Fecha'))
 				$objToReturn->dttFecha = new QDateTime($objSoapObject->Fecha);
 			if (property_exists($objSoapObject, 'CedulaRif'))
@@ -5167,10 +5027,6 @@
 				$objObject->objClienteCorp = MasterCliente::GetSoapObjectFromObject($objObject->objClienteCorp, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intClienteCorpId = null;
-			if ($objObject->objAliado)
-				$objObject->objAliado = AliadoComercial::GetSoapObjectFromObject($objObject->objAliado, false);
-			else if (!$blnBindRelatedObjects)
-				$objObject->intAliadoId = null;
 			if ($objObject->dttFecha)
 				$objObject->dttFecha = $objObject->dttFecha->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objSucursal)
@@ -5212,7 +5068,6 @@
 			$iArray['Id'] = $this->intId;
 			$iArray['ClienteRetailId'] = $this->intClienteRetailId;
 			$iArray['ClienteCorpId'] = $this->intClienteCorpId;
-			$iArray['AliadoId'] = $this->intAliadoId;
 			$iArray['Fecha'] = $this->dttFecha;
 			$iArray['CedulaRif'] = $this->strCedulaRif;
 			$iArray['RazonSocial'] = $this->strRazonSocial;
@@ -5323,8 +5178,6 @@
      * @property-read QQNodeClientesRetail $ClienteRetail
      * @property-read QQNode $ClienteCorpId
      * @property-read QQNodeMasterCliente $ClienteCorp
-     * @property-read QQNode $AliadoId
-     * @property-read QQNodeAliadoComercial $Aliado
      * @property-read QQNode $Fecha
      * @property-read QQNode $CedulaRif
      * @property-read QQNode $RazonSocial
@@ -5392,10 +5245,6 @@
 					return new QQNode('cliente_corp_id', 'ClienteCorpId', 'Integer', $this);
 				case 'ClienteCorp':
 					return new QQNodeMasterCliente('cliente_corp_id', 'ClienteCorp', 'Integer', $this);
-				case 'AliadoId':
-					return new QQNode('aliado_id', 'AliadoId', 'Integer', $this);
-				case 'Aliado':
-					return new QQNodeAliadoComercial('aliado_id', 'Aliado', 'Integer', $this);
 				case 'Fecha':
 					return new QQNode('fecha', 'Fecha', 'Date', $this);
 				case 'CedulaRif':
@@ -5508,8 +5357,6 @@
      * @property-read QQNodeClientesRetail $ClienteRetail
      * @property-read QQNode $ClienteCorpId
      * @property-read QQNodeMasterCliente $ClienteCorp
-     * @property-read QQNode $AliadoId
-     * @property-read QQNodeAliadoComercial $Aliado
      * @property-read QQNode $Fecha
      * @property-read QQNode $CedulaRif
      * @property-read QQNode $RazonSocial
@@ -5577,10 +5424,6 @@
 					return new QQNode('cliente_corp_id', 'ClienteCorpId', 'integer', $this);
 				case 'ClienteCorp':
 					return new QQNodeMasterCliente('cliente_corp_id', 'ClienteCorp', 'integer', $this);
-				case 'AliadoId':
-					return new QQNode('aliado_id', 'AliadoId', 'integer', $this);
-				case 'Aliado':
-					return new QQNodeAliadoComercial('aliado_id', 'Aliado', 'integer', $this);
 				case 'Fecha':
 					return new QQNode('fecha', 'Fecha', 'QDateTime', $this);
 				case 'CedulaRif':

@@ -19,7 +19,7 @@ require_once(__FORMBASE_CLASSES__ . '/MasterClienteListFormBase.class.php');
  * @package My QCubed Application
  * @subpackage Drafts
  */
-class MasterClienteListForm extends MasterClienteListFormBase {
+class AliadosListForm extends MasterClienteListFormBase {
 	protected $objUsuario;
 	protected $objClauWher;
 	protected $blnHayxCond;
@@ -56,7 +56,7 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 
 		$this->objUsuario = unserialize($_SESSION['User']);
 
-		$this->lblTituForm->Text = 'Clientes';
+		$this->lblTituForm->Text = 'Aliados';
 
 		//-----------------------
 		// Criterios de búsqueda
@@ -100,7 +100,7 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 		$this->dtgMasterClientes->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
 		$this->dtgMasterClientes->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
-		$objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,false);
+		$objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
 		$this->dtgMasterClientes->AdditionalConditions = QQ::AndCondition($objClauWher);
 
 		// Add a click handler for the rows.
@@ -367,7 +367,7 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 
 	public function dtgMasterClientesRow_Click($strFormId, $strControlId, $strParameter) {
         $intCodiClie = intval($strParameter);
-        QApplication::Redirect("master_cliente_edit.php/$intCodiClie");
+        QApplication::Redirect("aliado_edit.php/$intCodiClie");
 	}
 
 	protected function dtgMasterClientes_Bind() {
@@ -379,6 +379,7 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 				$this->objClauWher[] = QQ::IsNull(QQN::MasterCliente()->DeletedAt);
 			}
 		}
+        $this->objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
 		$this->dtgMasterClientes->TotalItemCount = MasterCliente::QueryCount(QQ::AndCondition($this->objClauWher));
 		$this->dtgMasterClientes->DataSource = MasterCliente::QueryArray(
 			QQ::AndCondition($this->objClauWher),
@@ -405,7 +406,9 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 
 	protected function btnBuscRegi_Click() {
 		$this->objClauWher = QQ::Clause();
-		$this->blnHayxCond = false;
+        $this->objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
+
+        $this->blnHayxCond = false;
 		$this->strSqlxComp = '';
 
 		$this->dtgMasterClientes->Refresh();
@@ -487,5 +490,5 @@ class MasterClienteListForm extends MasterClienteListFormBase {
 
 // Go ahead and run this form object to generate the page and event handlers, implicitly using
 // master_cliente_list.tpl.php as the included HTML template file
-MasterClienteListForm::Run('MasterClienteListForm');
+AliadosListForm::Run('AliadosListForm');
 ?>

@@ -32,6 +32,8 @@
 	 * @property-read GuiasH[] $_GuiasHAsProductoArray the value for the private _objGuiasHAsProductoArray (Read-Only) if set due to an ExpandAsArray on the guias_h.producto_id reverse relationship
 	 * @property-read TarifaAliados $_TarifaAliadosAsProducto the value for the private _objTarifaAliadosAsProducto (Read-Only) if set due to an expansion on the tarifa_aliados.producto_id reverse relationship
 	 * @property-read TarifaAliados[] $_TarifaAliadosAsProductoArray the value for the private _objTarifaAliadosAsProductoArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.producto_id reverse relationship
+	 * @property-read TarifaCliente $_TarifaClienteAsProducto the value for the private _objTarifaClienteAsProducto (Read-Only) if set due to an expansion on the tarifa_cliente.producto_id reverse relationship
+	 * @property-read TarifaCliente[] $_TarifaClienteAsProductoArray the value for the private _objTarifaClienteAsProductoArray (Read-Only) if set due to an ExpandAsArray on the tarifa_cliente.producto_id reverse relationship
 	 * @property-read TarifaExp $_TarifaExpAsProducto the value for the private _objTarifaExpAsProducto (Read-Only) if set due to an expansion on the tarifa_exp.producto_id reverse relationship
 	 * @property-read TarifaExp[] $_TarifaExpAsProductoArray the value for the private _objTarifaExpAsProductoArray (Read-Only) if set due to an ExpandAsArray on the tarifa_exp.producto_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -180,6 +182,22 @@
 		 * @var TarifaAliados[] _objTarifaAliadosAsProductoArray;
 		 */
 		private $_objTarifaAliadosAsProductoArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaClienteAsProducto object
+		 * (of type TarifaCliente), if this Productos object was restored with
+		 * an expansion on the tarifa_cliente association table.
+		 * @var TarifaCliente _objTarifaClienteAsProducto;
+		 */
+		private $_objTarifaClienteAsProducto;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaClienteAsProducto objects
+		 * (of type TarifaCliente[]), if this Productos object was restored with
+		 * an ExpandAsArray on the tarifa_cliente association table.
+		 * @var TarifaCliente[] _objTarifaClienteAsProductoArray;
+		 */
+		private $_objTarifaClienteAsProductoArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single TarifaExpAsProducto object
@@ -825,6 +843,21 @@
 				}
 			}
 
+			// Check for TarifaClienteAsProducto Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaclienteasproducto__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaclienteasproducto']) ? null : $objExpansionAliasArray['tarifaclienteasproducto']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaClienteAsProductoArray)
+				$objToReturn->_objTarifaClienteAsProductoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaClienteAsProductoArray[] = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteasproducto__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaClienteAsProducto)) {
+					$objToReturn->_objTarifaClienteAsProducto = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaclienteasproducto__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for TarifaExpAsProducto Virtual Binding
 			$strAlias = $strAliasPrefix . 'tarifaexpasproducto__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1335,6 +1368,22 @@
 					 */
 					return $this->_objTarifaAliadosAsProductoArray;
 
+				case '_TarifaClienteAsProducto':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsProducto (Read-Only)
+					 * if set due to an expansion on the tarifa_cliente.producto_id reverse relationship
+					 * @return TarifaCliente
+					 */
+					return $this->_objTarifaClienteAsProducto;
+
+				case '_TarifaClienteAsProductoArray':
+					/**
+					 * Gets the value for the private _objTarifaClienteAsProductoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_cliente.producto_id reverse relationship
+					 * @return TarifaCliente[]
+					 */
+					return $this->_objTarifaClienteAsProductoArray;
+
 				case '_TarifaExpAsProducto':
 					/**
 					 * Gets the value for the private _objTarifaExpAsProducto (Read-Only)
@@ -1537,6 +1586,9 @@
 			}
 			if ($this->CountTarifaAliadosesAsProducto()) {
 				$arrTablRela[] = 'tarifa_aliados';
+			}
+			if ($this->CountTarifaClientesAsProducto()) {
+				$arrTablRela[] = 'tarifa_cliente';
 			}
 			if ($this->CountTarifaExpsAsProducto()) {
 				$arrTablRela[] = 'tarifa_exp';
@@ -1998,6 +2050,155 @@
 		}
 
 
+		// Related Objects' Methods for TarifaClienteAsProducto
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaClientesAsProducto as an array of TarifaCliente objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaCliente[]
+		*/
+		public function GetTarifaClienteAsProductoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return TarifaCliente::LoadArrayByProductoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaClientesAsProducto
+		 * @return int
+		*/
+		public function CountTarifaClientesAsProducto() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return TarifaCliente::CountByProductoId($this->intId);
+		}
+
+		/**
+		 * Associates a TarifaClienteAsProducto
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function AssociateTarifaClienteAsProducto(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsProducto on this unsaved Productos.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaClienteAsProducto on this Productos with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaClienteAsProducto
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function UnassociateTarifaClienteAsProducto(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsProducto on this unsaved Productos.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsProducto on this Productos with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`producto_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaClientesAsProducto
+		 * @return void
+		*/
+		public function UnassociateAllTarifaClientesAsProducto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsProducto on this unsaved Productos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_cliente`
+				SET
+					`producto_id` = null
+				WHERE
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaClienteAsProducto
+		 * @param TarifaCliente $objTarifaCliente
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaClienteAsProducto(TarifaCliente $objTarifaCliente) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsProducto on this unsaved Productos.');
+			if ((is_null($objTarifaCliente->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsProducto on this Productos with an unsaved TarifaCliente.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaClientesAsProducto
+		 * @return void
+		*/
+		public function DeleteAllTarifaClientesAsProducto() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaClienteAsProducto on this unsaved Productos.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Productos::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_cliente`
+				WHERE
+					`producto_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for TarifaExpAsProducto
 		//-------------------------------------------------------------------
 
@@ -2340,6 +2541,7 @@
      * @property-read QQReverseReferenceNodeGuias $GuiasAsProducto
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsProducto
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsProducto
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsProducto
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsProducto
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2378,6 +2580,8 @@
 					return new QQReverseReferenceNodeGuiasH($this, 'guiashasproducto', 'reverse_reference', 'producto_id', 'GuiasHAsProducto');
 				case 'TarifaAliadosAsProducto':
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasproducto', 'reverse_reference', 'producto_id', 'TarifaAliadosAsProducto');
+				case 'TarifaClienteAsProducto':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteasproducto', 'reverse_reference', 'producto_id', 'TarifaClienteAsProducto');
 				case 'TarifaExpAsProducto':
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpasproducto', 'reverse_reference', 'producto_id', 'TarifaExpAsProducto');
 
@@ -2411,6 +2615,7 @@
      * @property-read QQReverseReferenceNodeGuias $GuiasAsProducto
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsProducto
      * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliadosAsProducto
+     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsProducto
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsProducto
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -2449,6 +2654,8 @@
 					return new QQReverseReferenceNodeGuiasH($this, 'guiashasproducto', 'reverse_reference', 'producto_id', 'GuiasHAsProducto');
 				case 'TarifaAliadosAsProducto':
 					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliadosasproducto', 'reverse_reference', 'producto_id', 'TarifaAliadosAsProducto');
+				case 'TarifaClienteAsProducto':
+					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifaclienteasproducto', 'reverse_reference', 'producto_id', 'TarifaClienteAsProducto');
 				case 'TarifaExpAsProducto':
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpasproducto', 'reverse_reference', 'producto_id', 'TarifaExpAsProducto');
 

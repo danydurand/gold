@@ -20,7 +20,7 @@
     <div class="col-md-5">
         <div class="form-group">
             <label for="">Aliado Comercial</label><br>
-            <?php $this->lstAliaCome->Render(); ?>
+            <?php $this->lstClieCorp->Render(); ?>
         </div>
     </div>
 </div>

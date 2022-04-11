@@ -1315,6 +1315,13 @@
 		QApplicationBase::$ClassFile['tarifaaliadosmetacontrol'] = __META_CONTROLS__ . '/TarifaAliadosMetaControl.class.php';
 		QApplicationBase::$ClassFile['tarifaaliadosdatagrid'] = __META_CONTROLS__ . '/TarifaAliadosDataGrid.class.php';
 
+	// ClassPaths for the TarifaCliente class
+		QApplicationBase::$ClassFile['tarifacliente'] = __MODEL__ . '/TarifaCliente.class.php';
+		QApplicationBase::$ClassFile['qqnodetarifacliente'] = __MODEL__ . '/TarifaCliente.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodetarifacliente'] = __MODEL__ . '/TarifaCliente.class.php';
+		QApplicationBase::$ClassFile['tarifaclientemetacontrol'] = __META_CONTROLS__ . '/TarifaClienteMetaControl.class.php';
+		QApplicationBase::$ClassFile['tarifaclientedatagrid'] = __META_CONTROLS__ . '/TarifaClienteDataGrid.class.php';
+
 	// ClassPaths for the TarifaExp class
 		QApplicationBase::$ClassFile['tarifaexp'] = __MODEL__ . '/TarifaExp.class.php';
 		QApplicationBase::$ClassFile['qqnodetarifaexp'] = __MODEL__ . '/TarifaExp.class.php';

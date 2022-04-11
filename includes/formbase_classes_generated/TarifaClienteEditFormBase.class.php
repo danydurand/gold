@@ -1,26 +1,26 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the MasterCliente class.  It uses the code-generated
- * MasterClienteMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a MasterCliente columns.
+ * of the TarifaCliente class.  It uses the code-generated
+ * TarifaClienteMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a TarifaCliente columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both master_cliente_edit.php AND
- * master_cliente_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_cliente_edit.php AND
+ * tarifa_cliente_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class MasterClienteEditFormBase extends QForm {
-	// Local instance of the MasterClienteMetaControl
+abstract class TarifaClienteEditFormBase extends QForm {
+	// Local instance of the TarifaClienteMetaControl
 	/**
-	 * @var MasterClienteMetaControlGen mctMasterCliente
+	 * @var TarifaClienteMetaControlGen mctTarifaCliente
 	 */
-	protected $mctMasterCliente;
+	protected $mctTarifaCliente;
 	protected $lblMensUsua;
 	protected $lblNotiUsua;
 	protected $lblTituForm;
@@ -52,71 +52,17 @@ abstract class MasterClienteEditFormBase extends QForm {
     protected $lblOtraNoti;
 
 
-	// Controls for MasterCliente's Data Fields
-	protected $lblCodiClie;
-	protected $lstCodiDepeObject;
-	protected $txtNombClie;
-	protected $lstSucursal;
-	protected $chkEsAliado;
-	protected $txtCodiEsta;
-	protected $txtDireFisc;
-	protected $txtNumeDrif;
-	protected $lstVendedor;
-	protected $lstTarifa;
-	protected $lstTarifaAgente;
-	protected $txtFacturable;
-	protected $lstCiclo;
-	protected $txtNumeDnit;
-	protected $txtPersCona;
-	protected $txtTeleCona;
-	protected $txtPersConb;
-	protected $txtTeleConb;
-	protected $txtDireMail;
-	protected $txtDireReco;
-	protected $lstCodiStatObject;
-	protected $lstCodiSinoObject;
-	protected $txtTextObse;
-	protected $txtNumeDfax;
-	protected $txtCodigoInterno;
-	protected $lstTipoClienteObject;
-	protected $txtSaldoExcedente;
-	protected $lstRutaRecolectaObject;
-	protected $lstRutaEntregaObject;
-	protected $txtPorcentajeDsctoincr;
-	protected $txtHoraCierre;
-	protected $lstStatusCredito;
-	protected $txtDsctoPorVolumen;
-	protected $txtVolumenParaDscto;
-	protected $txtDsctoPorPeso;
-	protected $txtPesoParaDscto;
-	protected $calDescuentoCaducaEl;
-	protected $txtPorcentajeSeguro;
-	protected $txtDirEntregaFactura;
-	protected $txtClaveServiciosWeb;
-	protected $txtCaducidadDeGuias;
-	protected $lstMostrarGuiaExternaObject;
-	protected $chkCargaMasiva;
-	protected $chkCmGuiasYamaguchi;
-	protected $txtGuiasYamaguchiPorCarga;
-	protected $txtGuiasYamaguchiPorDia;
-	protected $chkPagoPpd;
-	protected $chkPagoCrd;
-	protected $chkPagoCod;
-	protected $chkCmDestinatarioFrecuente;
-	protected $txtClientesPorCarga;
-	protected $txtClientesPorDia;
-	protected $txtUsuarioApi;
-	protected $txtPasswordApi;
-	protected $chkManejaApi;
-	protected $txtTokenApi;
-	protected $chkGuiaRetorno;
-	protected $txtProcesoApi;
-	protected $calDeletedAt;
-	protected $lstMotivoEliminacion;
+	// Controls for TarifaCliente's Data Fields
+	protected $lblId;
+	protected $lstCliente;
+	protected $lstTarifaExp;
+	protected $lstProducto;
+	protected $calCreatedAt;
+	protected $lstCreatedByObject;
+	protected $calUpdatedAt;
+	protected $lstUpdatedByObject;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
-	protected $lstEstadisticaDeClientes;
-	protected $lstFechaUltimaGuiaAsCliente;
 
 	// Other Controls
 	/**
@@ -147,9 +93,9 @@ abstract class MasterClienteEditFormBase extends QForm {
 
         $this->objUsuario = unserialize($_SESSION['User']);
 
-        // Use the CreateFromPathInfo shortcut (this can also be done manually using the MasterClienteMetaControl constructor)
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the TarifaClienteMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctMasterCliente = MasterClienteMetaControl::CreateFromPathInfo($this);
+        $this->mctTarifaCliente = TarifaClienteMetaControl::CreateFromPathInfo($this);
 
         $this->determinarPosicion();
 
@@ -180,69 +126,15 @@ abstract class MasterClienteEditFormBase extends QForm {
 
         $this->verificarNavegacion();
 
-		// Call MetaControl's methods to create qcontrols based on MasterCliente's data fields
-		$this->lblCodiClie = $this->mctMasterCliente->lblCodiClie_Create();
-		$this->lstCodiDepeObject = $this->mctMasterCliente->lstCodiDepeObject_Create();
-		$this->txtNombClie = $this->mctMasterCliente->txtNombClie_Create();
-		$this->lstSucursal = $this->mctMasterCliente->lstSucursal_Create();
-		$this->chkEsAliado = $this->mctMasterCliente->chkEsAliado_Create();
-		$this->txtCodiEsta = $this->mctMasterCliente->txtCodiEsta_Create();
-		$this->txtDireFisc = $this->mctMasterCliente->txtDireFisc_Create();
-		$this->txtNumeDrif = $this->mctMasterCliente->txtNumeDrif_Create();
-		$this->lstVendedor = $this->mctMasterCliente->lstVendedor_Create();
-		$this->lstTarifa = $this->mctMasterCliente->lstTarifa_Create();
-		$this->lstTarifaAgente = $this->mctMasterCliente->lstTarifaAgente_Create();
-		$this->txtFacturable = $this->mctMasterCliente->txtFacturable_Create();
-		$this->lstCiclo = $this->mctMasterCliente->lstCiclo_Create();
-		$this->txtNumeDnit = $this->mctMasterCliente->txtNumeDnit_Create();
-		$this->txtPersCona = $this->mctMasterCliente->txtPersCona_Create();
-		$this->txtTeleCona = $this->mctMasterCliente->txtTeleCona_Create();
-		$this->txtPersConb = $this->mctMasterCliente->txtPersConb_Create();
-		$this->txtTeleConb = $this->mctMasterCliente->txtTeleConb_Create();
-		$this->txtDireMail = $this->mctMasterCliente->txtDireMail_Create();
-		$this->txtDireReco = $this->mctMasterCliente->txtDireReco_Create();
-		$this->lstCodiStatObject = $this->mctMasterCliente->lstCodiStatObject_Create();
-		$this->lstCodiSinoObject = $this->mctMasterCliente->lstCodiSinoObject_Create();
-		$this->txtTextObse = $this->mctMasterCliente->txtTextObse_Create();
-		$this->txtNumeDfax = $this->mctMasterCliente->txtNumeDfax_Create();
-		$this->txtCodigoInterno = $this->mctMasterCliente->txtCodigoInterno_Create();
-		$this->lstTipoClienteObject = $this->mctMasterCliente->lstTipoClienteObject_Create();
-		$this->txtSaldoExcedente = $this->mctMasterCliente->txtSaldoExcedente_Create();
-		$this->lstRutaRecolectaObject = $this->mctMasterCliente->lstRutaRecolectaObject_Create();
-		$this->lstRutaEntregaObject = $this->mctMasterCliente->lstRutaEntregaObject_Create();
-		$this->txtPorcentajeDsctoincr = $this->mctMasterCliente->txtPorcentajeDsctoincr_Create();
-		$this->txtHoraCierre = $this->mctMasterCliente->txtHoraCierre_Create();
-		$this->lstStatusCredito = $this->mctMasterCliente->lstStatusCredito_Create();
-		$this->txtDsctoPorVolumen = $this->mctMasterCliente->txtDsctoPorVolumen_Create();
-		$this->txtVolumenParaDscto = $this->mctMasterCliente->txtVolumenParaDscto_Create();
-		$this->txtDsctoPorPeso = $this->mctMasterCliente->txtDsctoPorPeso_Create();
-		$this->txtPesoParaDscto = $this->mctMasterCliente->txtPesoParaDscto_Create();
-		$this->calDescuentoCaducaEl = $this->mctMasterCliente->calDescuentoCaducaEl_Create();
-		$this->txtPorcentajeSeguro = $this->mctMasterCliente->txtPorcentajeSeguro_Create();
-		$this->txtDirEntregaFactura = $this->mctMasterCliente->txtDirEntregaFactura_Create();
-		$this->txtClaveServiciosWeb = $this->mctMasterCliente->txtClaveServiciosWeb_Create();
-		$this->txtCaducidadDeGuias = $this->mctMasterCliente->txtCaducidadDeGuias_Create();
-		$this->lstMostrarGuiaExternaObject = $this->mctMasterCliente->lstMostrarGuiaExternaObject_Create();
-		$this->chkCargaMasiva = $this->mctMasterCliente->chkCargaMasiva_Create();
-		$this->chkCmGuiasYamaguchi = $this->mctMasterCliente->chkCmGuiasYamaguchi_Create();
-		$this->txtGuiasYamaguchiPorCarga = $this->mctMasterCliente->txtGuiasYamaguchiPorCarga_Create();
-		$this->txtGuiasYamaguchiPorDia = $this->mctMasterCliente->txtGuiasYamaguchiPorDia_Create();
-		$this->chkPagoPpd = $this->mctMasterCliente->chkPagoPpd_Create();
-		$this->chkPagoCrd = $this->mctMasterCliente->chkPagoCrd_Create();
-		$this->chkPagoCod = $this->mctMasterCliente->chkPagoCod_Create();
-		$this->chkCmDestinatarioFrecuente = $this->mctMasterCliente->chkCmDestinatarioFrecuente_Create();
-		$this->txtClientesPorCarga = $this->mctMasterCliente->txtClientesPorCarga_Create();
-		$this->txtClientesPorDia = $this->mctMasterCliente->txtClientesPorDia_Create();
-		$this->txtUsuarioApi = $this->mctMasterCliente->txtUsuarioApi_Create();
-		$this->txtPasswordApi = $this->mctMasterCliente->txtPasswordApi_Create();
-		$this->chkManejaApi = $this->mctMasterCliente->chkManejaApi_Create();
-		$this->txtTokenApi = $this->mctMasterCliente->txtTokenApi_Create();
-		$this->chkGuiaRetorno = $this->mctMasterCliente->chkGuiaRetorno_Create();
-		$this->txtProcesoApi = $this->mctMasterCliente->txtProcesoApi_Create();
-		$this->calDeletedAt = $this->mctMasterCliente->calDeletedAt_Create();
-		$this->lstMotivoEliminacion = $this->mctMasterCliente->lstMotivoEliminacion_Create();
-			$this->lstEstadisticaDeClientes = $this->mctMasterCliente->lstEstadisticaDeClientes_Create();
-			$this->lstFechaUltimaGuiaAsCliente = $this->mctMasterCliente->lstFechaUltimaGuiaAsCliente_Create();
+		// Call MetaControl's methods to create qcontrols based on TarifaCliente's data fields
+		$this->lblId = $this->mctTarifaCliente->lblId_Create();
+		$this->lstCliente = $this->mctTarifaCliente->lstCliente_Create();
+		$this->lstTarifaExp = $this->mctTarifaCliente->lstTarifaExp_Create();
+		$this->lstProducto = $this->mctTarifaCliente->lstProducto_Create();
+		$this->calCreatedAt = $this->mctTarifaCliente->calCreatedAt_Create();
+		$this->lstCreatedByObject = $this->mctTarifaCliente->lstCreatedByObject_Create();
+		$this->calUpdatedAt = $this->mctTarifaCliente->calUpdatedAt_Create();
+		$this->lstUpdatedByObject = $this->mctTarifaCliente->lstUpdatedByObject_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();
@@ -255,17 +147,17 @@ abstract class MasterClienteEditFormBase extends QForm {
 	//-----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctMasterCliente->MasterCliente && !isset($_SESSION['DataMasterCliente'])) {
-            $_SESSION['DataMasterCliente'] = serialize(array($this->mctMasterCliente->MasterCliente));
+        if ($this->mctTarifaCliente->TarifaCliente && !isset($_SESSION['DataTarifaCliente'])) {
+            $_SESSION['DataTarifaCliente'] = serialize(array($this->mctTarifaCliente->TarifaCliente));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataMasterCliente']);
+        $this->arrDataTabl = unserialize($_SESSION['DataTarifaCliente']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctMasterCliente->MasterCliente->Id) {
+            if ($objTable->Id == $this->mctTarifaCliente->TarifaCliente->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -276,7 +168,7 @@ abstract class MasterClienteEditFormBase extends QForm {
 
 	protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'MasterCliente';
+        $this->lblTituForm->Text = 'TarifaCliente';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 	}
 
@@ -308,7 +200,7 @@ abstract class MasterClienteEditFormBase extends QForm {
         $this->btnNuevRegi->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevRegi->HtmlEntities = false;
         $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevRegi->Visible = $this->mctMasterCliente->EditMode;
+        $this->btnNuevRegi->Visible = $this->mctTarifaCliente->EditMode;
     }
 
     protected function btnProxRegi_Create() {
@@ -375,9 +267,9 @@ abstract class MasterClienteEditFormBase extends QForm {
         $this->btnDelete->Text = '<i class="fa fa-trash-o fa-lg"></i> Borrar';
         $this->btnDelete->CssClass = 'btn btn-danger btn-sm';
         $this->btnDelete->HtmlEntities = false;
-		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('MasterCliente'))));
+		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('TarifaCliente'))));
 		$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-		$this->btnDelete->Visible = $this->mctMasterCliente->EditMode;
+		$this->btnDelete->Visible = $this->mctTarifaCliente->EditMode;
 	}
 
     protected function btnLogxCamb_Create() {
@@ -386,7 +278,7 @@ abstract class MasterClienteEditFormBase extends QForm {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('MasterCliente',$this->mctMasterCliente->MasterCliente->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('TarifaCliente',$this->mctTarifaCliente->TarifaCliente->Id);
     }
 
     //-------------------------
@@ -407,7 +299,7 @@ abstract class MasterClienteEditFormBase extends QForm {
         $this->btnNuevSmal->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevSmal->HtmlEntities = false;
         $this->btnNuevSmal->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevSmal->Visible = $this->mctMasterCliente->EditMode;
+        $this->btnNuevSmal->Visible = $this->mctTarifaCliente->EditMode;
     }
 
     protected function btnGuarSmal_Create() {
@@ -427,7 +319,7 @@ abstract class MasterClienteEditFormBase extends QForm {
         $this->btnBorrSmal->HtmlEntities = false;
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiaRoxanne'))));
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-        $this->btnBorrSmal->Visible = $this->mctMasterCliente->EditMode;
+        $this->btnBorrSmal->Visible = $this->mctTarifaCliente->EditMode;
     }
 
     protected function btnHistSmal_Create() {
@@ -487,13 +379,15 @@ abstract class MasterClienteEditFormBase extends QForm {
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
 		// Check for records that may violate Unique Clauses
-			if (($objMasterCliente = MasterCliente::LoadByCodigoInterno($this->txtCodigoInterno->Text)) && ($objMasterCliente->CodiClie != $this->mctMasterCliente->MasterCliente->CodiClie )){
+			if (($objTarifaCliente = TarifaCliente::LoadByClienteIdTarifaExpId($this->lstCliente->SelectedValue,$this->lstTarifaExp->SelectedValue)) && ($objTarifaCliente->Id != $this->mctTarifaCliente->TarifaCliente->Id )){
 				$blnToReturn = false;
-				$this->txtCodigoInterno->Warning = QApplication::Translate("Already in Use");
+				$this->lstCliente->Warning = QApplication::Translate("Already in Use");
+				$this->lstTarifaExp->Warning = QApplication::Translate("Already in Use");
 			}
-			if (($objMasterCliente = MasterCliente::LoadByProcesoApi($this->txtProcesoApi->Text)) && ($objMasterCliente->CodiClie != $this->mctMasterCliente->MasterCliente->CodiClie )){
+			if (($objTarifaCliente = TarifaCliente::LoadByClienteIdProductoId($this->lstCliente->SelectedValue,$this->lstProducto->SelectedValue)) && ($objTarifaCliente->Id != $this->mctTarifaCliente->TarifaCliente->Id )){
 				$blnToReturn = false;
-				$this->txtProcesoApi->Warning = QApplication::Translate("Already in Use");
+				$this->lstCliente->Warning = QApplication::Translate("Already in Use");
+				$this->lstProducto->Warning = QApplication::Translate("Already in Use");
 			}
 
 		$blnFocused = false;
@@ -517,26 +411,26 @@ abstract class MasterClienteEditFormBase extends QForm {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_cliente_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_cliente_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_cliente_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_cliente_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function verificarNavegacion() {
-        if ($this->mctMasterCliente->EditMode) {
+        if ($this->mctTarifaCliente->EditMode) {
             $this->btnRegiAnte->Enabled = !($this->intPosiRegi == 0);
             $this->btnPrimRegi->Enabled = !($this->intPosiRegi == 0);
             $this->btnProxRegi->Enabled = !($this->intPosiRegi == $this->intCantRegi - 1);
@@ -560,8 +454,8 @@ abstract class MasterClienteEditFormBase extends QForm {
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-		// Delegate "Save" processing to the MasterClienteMetaControl
-		$this->mctMasterCliente->SaveMasterCliente();
+		// Delegate "Save" processing to the TarifaClienteMetaControl
+		$this->mctTarifaCliente->SaveTarifaCliente();
 		$this->RedirectToListPage();
 	}
 
@@ -570,34 +464,34 @@ abstract class MasterClienteEditFormBase extends QForm {
 		// Se verifica la integridad referencial
 		//----------------------------------------
 		$blnTodoOkey = true;
-		$arrTablRela = $this->mctMasterCliente->TablasRelacionadasMasterCliente();
+		$arrTablRela = $this->mctTarifaCliente->TablasRelacionadasTarifaCliente();
 		if (count($arrTablRela)) {
 			$strTablRela = implode(',',$arrTablRela);
 				
-			//$this->lblCodiClie->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
+			//$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
             $this->mensaje(sprintf('Existen registros relacionados en %s',$strTablRela),'m','d','hand-stop-o');
 			$blnTodoOkey = false;
 		}
 		if ($blnTodoOkey) {
-			// Delegate "Delete" processing to the MasterClienteMetaControl
-			$this->mctMasterCliente->DeleteMasterCliente();
+			// Delegate "Delete" processing to the TarifaClienteMetaControl
+			$this->mctTarifaCliente->DeleteTarifaCliente();
 			$this->RedirectToListPage();
 		}
 	}
 
     protected function btnLogxCamb_Click() {
-        $_SESSION['RegiRefe'] = $this->mctMasterCliente->MasterCliente->Id;
-        $_SESSION['TablRefe'] = 'MasterCliente';
-        $_SESSION['RegiReto'] = 'master_cliente_edit.php/'.$this->mctMasterCliente->MasterCliente->Id;
+        $_SESSION['RegiRefe'] = $this->mctTarifaCliente->TarifaCliente->Id;
+        $_SESSION['TablRefe'] = 'TarifaCliente';
+        $_SESSION['RegiReto'] = 'tarifa_cliente_edit.php/'.$this->mctTarifaCliente->TarifaCliente->Id;
         QApplication::Redirect(__SIST__.'/log_list.php');
     }
 
     protected function btnVolvList_Click() {
-        QApplication::Redirect(__SIST__.'/master_cliente_list.php');
+        QApplication::Redirect(__SIST__.'/tarifa_cliente_list.php');
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/master_cliente_edit.php');
+        QApplication::Redirect(__SIST__.'/tarifa_cliente_edit.php');
     }
 
 

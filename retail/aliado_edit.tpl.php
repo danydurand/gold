@@ -5,8 +5,8 @@
 // Be sure to move this out of the generated/ subdirectory before modifying to ensure that subsequent
 // code re-generations do not overwrite your changes.
 
-$strPageTitle = 'Crear/Editar Cliente';
-require(__APP_INCLUDES__ . '/header.inc.php');
+$strPageTitle = 'Crear/Editar Aliado';
+require('inc/header.inc.php');
 ?>
 	<div class="titulo-formulario">
         <div class="col-xs-4 col-md-4 col-lg-3" style="text-align: left; margin-left: -0.8em; margin-top: -0.30em">
@@ -47,7 +47,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 						<li class="active" role="presentation" data-aos="fade-in">
 							<a href="#seccion1" aria-controls="seccion1" data-toggle="tab" role="tab">
 								<i class="fa fa-user fa-lg"></i>
-								  Cliente <?php echo $this->intRankClie ?>
+								  Aliado
                             </a>
 						</li>
 						<li class="tabs-guias" role="presentation">
@@ -81,7 +81,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 								<div class="media-body"><br>
 									<div class="col-md-6">
 										<?php $this->txtCodiInte->RenderWithName(); ?>
-										<?php $this->chkEsunSubc->RenderWithName(); ?>
+										<?php //$this->chkEsunSubc->RenderWithName(); ?>
 										<?php $this->txtBuscCodi->RenderWithName(); ?>
 										<?php $this->txtNombBusc->RenderWithName(); ?>
 										<?php $this->lstCodiDepe->RenderWithName(); ?>
@@ -90,18 +90,53 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 										<?php $this->lstCodiEsta->RenderWithName(); ?>
                                         <?php $this->txtNumeDrif->RenderWithName(); ?>
                                         <?php $this->txtDireFisc->RenderWithName(); ?>
+                                        <?php $this->txtSaldExce->RenderWithName(); ?>
+                                        <?php $this->txtPersCona->RenderWithName(); ?>
 									</div>
 									<div class="col-md-6">
-										<?php $this->txtSaldExce->RenderWithName(); ?>
-										<?php $this->txtEntrFact->RenderWithName(); ?>
-										<?php $this->chkTariClie->RenderWithName(); ?>
-										<?php $this->lstTariClie->RenderWithName(); ?>
-										<?php $this->chkTariAgen->RenderWithName(); ?>
-										<?php $this->lstTariAgen->RenderWithName(); ?>
-										<?php $this->txtPersCona->RenderWithName(); ?>
-										<?php $this->txtTeleCona->RenderWithName(); ?>
+                                        <?php $this->txtTeleCona->RenderWithName(); ?>
+                                        <?php $this->chkVendClie->RenderWithName(); ?>
+                                        <?php $this->lstVendClie->RenderWithName(); ?>
+										<?php //$this->chkTariClie->RenderWithName(); ?>
+										<?php //$this->lstTariClie->RenderWithName(); ?>
+										<?php //$this->chkTariAgen->RenderWithName(); ?>
+										<?php //$this->lstTariAgen->RenderWithName(); ?>
 										<?php $this->txtDireMail->RenderWithName(); ?>
-									</div>
+                                        <div class="row" style="margin-top: .2em">
+                                            <div class="col-md-1"></div>
+                                            <div class="col-md-10">
+                                                <?php if ($this->blnEditMode) { ?>
+                                                    <div class="row titulo">
+                                                        <div class="col-md-4">
+                                                            <?php $this->lblTariExpo->Render(); ?>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <?php $this->lblAcciTari->Render(); ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-top: .3em">
+                                                        <div class="col-md-4">
+                                                            <?php $this->lstTariExpo->Render(); ?>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                        </div>
+                                                        <div class="col-md-4 text-center">
+                                                            <?php $this->btnSaveTari->Render(); ?>
+                                                            <?php $this->btnDeleTari->Render(); ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <?php $this->dtgTariClie->Render(); ?>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+
+                                    </div>
 								</div>
 							</div>
 						</div>
@@ -109,11 +144,10 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 							<div class="media">
 								<div class="media-body"><br>
 									<div class="col-md-6">
-                                        <?php $this->chkVendClie->RenderWithName(); ?>
-                                        <?php $this->lstVendClie->RenderWithName(); ?>
                                         <?php $this->txtPersConb->RenderWithName(); ?>
                                         <?php $this->txtTeleConb->RenderWithName(); ?>
-										<?php $this->txtDireReco->RenderWithName(); ?>
+                                        <?php $this->txtEntrFact->RenderWithName(); ?>
+                                        <?php $this->txtDireReco->RenderWithName(); ?>
 										<?php //$this->chkRutaReco->RenderWithName(); ?>
 										<?php //$this->lstRutaReco->RenderWithName(); ?>
 										<?php //$this->chkRutaEntr->RenderWithName(); ?>
@@ -128,7 +162,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
 										<?php //$this->txtClavSweb->RenderWithName(); ?>
 										<?php //$this->txtCaduGuia->RenderWithName(); ?>
 										<?php //$this->lstMostExte->RenderWithName(); ?>
-										<?php $this->chkCargMasi->RenderWithName(); ?>
+										<?php //$this->chkCargMasi->RenderWithName(); ?>
 										<?php $this->calFechElim->RenderWithName(); ?>
 										<?php $this->txtMotiElim->RenderWithName(); ?>
 									</div>

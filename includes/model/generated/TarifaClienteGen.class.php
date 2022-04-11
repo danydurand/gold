@@ -1,48 +1,43 @@
 <?php
 	/**
-	 * The abstract TarifaExpGen class defined here is
+	 * The abstract TarifaClienteGen class defined here is
 	 * code-generated and contains all the basic CRUD-type functionality as well as
 	 * basic methods to handle relationships and index-based loading.
 	 *
-	 * To use, you should use the TarifaExp subclass which
-	 * extends this TarifaExpGen class.
+	 * To use, you should use the TarifaCliente subclass which
+	 * extends this TarifaClienteGen class.
 	 *
 	 * Because subsequent re-code generations will overwrite any changes to this
 	 * file, you should leave this file unaltered to prevent yourself from losing
 	 * any information or code changes.  All customizations should be done by
 	 * overriding existing or implementing new methods, properties and variables
-	 * in the TarifaExp class.
+	 * in the TarifaCliente class.
 	 *
 	 * @package My QCubed Application
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
-	 * @property string $Nombre the value for strNombre (Unique)
+	 * @property integer $ClienteId the value for intClienteId (Not Null)
+	 * @property integer $TarifaExpId the value for intTarifaExpId (Not Null)
 	 * @property integer $ProductoId the value for intProductoId (Not Null)
-	 * @property boolean $IsPublica the value for blnIsPublica 
-	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
-	 * @property double $Monto the value for fltMonto (Not Null)
-	 * @property double $Minimo the value for fltMinimo (Not Null)
-	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
+	 * @property QDateTime $CreatedAt the value for dttCreatedAt (Not Null)
+	 * @property integer $CreatedBy the value for intCreatedBy (Not Null)
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
-	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
+	 * @property MasterCliente $Cliente the value for the MasterCliente object referenced by intClienteId (Not Null)
+	 * @property TarifaExp $TarifaExp the value for the TarifaExp object referenced by intTarifaExpId (Not Null)
 	 * @property Productos $Producto the value for the Productos object referenced by intProductoId (Not Null)
-	 * @property Usuario $CreatedByObject the value for the Usuario object referenced by intCreatedBy 
+	 * @property Usuario $CreatedByObject the value for the Usuario object referenced by intCreatedBy (Not Null)
 	 * @property Usuario $UpdatedByObject the value for the Usuario object referenced by intUpdatedBy 
-	 * @property-read TarifaAliados $_TarifaAliados the value for the private _objTarifaAliados (Read-Only) if set due to an expansion on the tarifa_aliados.tarifa_exp_id reverse relationship
-	 * @property-read TarifaAliados[] $_TarifaAliadosArray the value for the private _objTarifaAliadosArray (Read-Only) if set due to an ExpandAsArray on the tarifa_aliados.tarifa_exp_id reverse relationship
-	 * @property-read TarifaCliente $_TarifaCliente the value for the private _objTarifaCliente (Read-Only) if set due to an expansion on the tarifa_cliente.tarifa_exp_id reverse relationship
-	 * @property-read TarifaCliente[] $_TarifaClienteArray the value for the private _objTarifaClienteArray (Read-Only) if set due to an ExpandAsArray on the tarifa_cliente.tarifa_exp_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
-	class TarifaExpGen extends QBaseClass implements IteratorAggregate {
+	class TarifaClienteGen extends QBaseClass implements IteratorAggregate {
 
 		///////////////////////////////////////////////////////////////////////
 		// PROTECTED MEMBER VARIABLES and TEXT FIELD MAXLENGTHS (if applicable)
 		///////////////////////////////////////////////////////////////////////
 
 		/**
-		 * Protected member variable that maps to the database PK Identity column tarifa_exp.id
+		 * Protected member variable that maps to the database PK Identity column tarifa_cliente.id
 		 * @var integer intId
 		 */
 		protected $intId;
@@ -50,16 +45,23 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column tarifa_exp.nombre
-		 * @var string strNombre
+		 * Protected member variable that maps to the database column tarifa_cliente.cliente_id
+		 * @var integer intClienteId
 		 */
-		protected $strNombre;
-		const NombreMaxLength = 50;
-		const NombreDefault = null;
+		protected $intClienteId;
+		const ClienteIdDefault = null;
 
 
 		/**
-		 * Protected member variable that maps to the database column tarifa_exp.producto_id
+		 * Protected member variable that maps to the database column tarifa_cliente.tarifa_exp_id
+		 * @var integer intTarifaExpId
+		 */
+		protected $intTarifaExpId;
+		const TarifaExpIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column tarifa_cliente.producto_id
 		 * @var integer intProductoId
 		 */
 		protected $intProductoId;
@@ -67,39 +69,7 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column tarifa_exp.is_publica
-		 * @var boolean blnIsPublica
-		 */
-		protected $blnIsPublica;
-		const IsPublicaDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column tarifa_exp.fecha
-		 * @var QDateTime dttFecha
-		 */
-		protected $dttFecha;
-		const FechaDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column tarifa_exp.monto
-		 * @var double fltMonto
-		 */
-		protected $fltMonto;
-		const MontoDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column tarifa_exp.minimo
-		 * @var double fltMinimo
-		 */
-		protected $fltMinimo;
-		const MinimoDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column tarifa_exp.created_at
+		 * Protected member variable that maps to the database column tarifa_cliente.created_at
 		 * @var QDateTime dttCreatedAt
 		 */
 		protected $dttCreatedAt;
@@ -107,15 +77,7 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column tarifa_exp.updated_at
-		 * @var QDateTime dttUpdatedAt
-		 */
-		protected $dttUpdatedAt;
-		const UpdatedAtDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column tarifa_exp.created_by
+		 * Protected member variable that maps to the database column tarifa_cliente.created_by
 		 * @var integer intCreatedBy
 		 */
 		protected $intCreatedBy;
@@ -123,44 +85,20 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column tarifa_exp.updated_by
+		 * Protected member variable that maps to the database column tarifa_cliente.updated_at
+		 * @var QDateTime dttUpdatedAt
+		 */
+		protected $dttUpdatedAt;
+		const UpdatedAtDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column tarifa_cliente.updated_by
 		 * @var integer intUpdatedBy
 		 */
 		protected $intUpdatedBy;
 		const UpdatedByDefault = null;
 
-
-		/**
-		 * Private member variable that stores a reference to a single TarifaAliados object
-		 * (of type TarifaAliados), if this TarifaExp object was restored with
-		 * an expansion on the tarifa_aliados association table.
-		 * @var TarifaAliados _objTarifaAliados;
-		 */
-		private $_objTarifaAliados;
-
-		/**
-		 * Private member variable that stores a reference to an array of TarifaAliados objects
-		 * (of type TarifaAliados[]), if this TarifaExp object was restored with
-		 * an ExpandAsArray on the tarifa_aliados association table.
-		 * @var TarifaAliados[] _objTarifaAliadosArray;
-		 */
-		private $_objTarifaAliadosArray = null;
-
-		/**
-		 * Private member variable that stores a reference to a single TarifaCliente object
-		 * (of type TarifaCliente), if this TarifaExp object was restored with
-		 * an expansion on the tarifa_cliente association table.
-		 * @var TarifaCliente _objTarifaCliente;
-		 */
-		private $_objTarifaCliente;
-
-		/**
-		 * Private member variable that stores a reference to an array of TarifaCliente objects
-		 * (of type TarifaCliente[]), if this TarifaExp object was restored with
-		 * an ExpandAsArray on the tarifa_cliente association table.
-		 * @var TarifaCliente[] _objTarifaClienteArray;
-		 */
-		private $_objTarifaClienteArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -186,7 +124,27 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column tarifa_exp.producto_id.
+		 * in the database column tarifa_cliente.cliente_id.
+		 *
+		 * NOTE: Always use the Cliente property getter to correctly retrieve this MasterCliente object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var MasterCliente objCliente
+		 */
+		protected $objCliente;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column tarifa_cliente.tarifa_exp_id.
+		 *
+		 * NOTE: Always use the TarifaExp property getter to correctly retrieve this TarifaExp object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var TarifaExp objTarifaExp
+		 */
+		protected $objTarifaExp;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column tarifa_cliente.producto_id.
 		 *
 		 * NOTE: Always use the Producto property getter to correctly retrieve this Productos object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
@@ -196,7 +154,7 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column tarifa_exp.created_by.
+		 * in the database column tarifa_cliente.created_by.
 		 *
 		 * NOTE: Always use the CreatedByObject property getter to correctly retrieve this Usuario object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
@@ -206,7 +164,7 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
-		 * in the database column tarifa_exp.updated_by.
+		 * in the database column tarifa_cliente.updated_by.
 		 *
 		 * NOTE: Always use the UpdatedByObject property getter to correctly retrieve this Usuario object.
 		 * (Because this class implements late binding, this variable reference MAY be null.)
@@ -221,17 +179,14 @@
 		 */
 		public function Initialize()
 		{
-			$this->intId = TarifaExp::IdDefault;
-			$this->strNombre = TarifaExp::NombreDefault;
-			$this->intProductoId = TarifaExp::ProductoIdDefault;
-			$this->blnIsPublica = TarifaExp::IsPublicaDefault;
-			$this->dttFecha = (TarifaExp::FechaDefault === null)?null:new QDateTime(TarifaExp::FechaDefault);
-			$this->fltMonto = TarifaExp::MontoDefault;
-			$this->fltMinimo = TarifaExp::MinimoDefault;
-			$this->dttCreatedAt = (TarifaExp::CreatedAtDefault === null)?null:new QDateTime(TarifaExp::CreatedAtDefault);
-			$this->dttUpdatedAt = (TarifaExp::UpdatedAtDefault === null)?null:new QDateTime(TarifaExp::UpdatedAtDefault);
-			$this->intCreatedBy = TarifaExp::CreatedByDefault;
-			$this->intUpdatedBy = TarifaExp::UpdatedByDefault;
+			$this->intId = TarifaCliente::IdDefault;
+			$this->intClienteId = TarifaCliente::ClienteIdDefault;
+			$this->intTarifaExpId = TarifaCliente::TarifaExpIdDefault;
+			$this->intProductoId = TarifaCliente::ProductoIdDefault;
+			$this->dttCreatedAt = (TarifaCliente::CreatedAtDefault === null)?null:new QDateTime(TarifaCliente::CreatedAtDefault);
+			$this->intCreatedBy = TarifaCliente::CreatedByDefault;
+			$this->dttUpdatedAt = (TarifaCliente::UpdatedAtDefault === null)?null:new QDateTime(TarifaCliente::UpdatedAtDefault);
+			$this->intUpdatedBy = TarifaCliente::UpdatedByDefault;
 		}
 
 
@@ -248,24 +203,24 @@
 		}
 
 		/**
-		 * Load a TarifaExp from PK Info
+		 * Load a TarifaCliente from PK Info
 		 * @param integer $intId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp
+		 * @return TarifaCliente
 		 */
 		public static function Load($intId, $objOptionalClauses = null) {
 			$strCacheKey = false;
 			if (QApplication::$objCacheProvider && !$objOptionalClauses && QApplication::$Database[1]->Caching) {
-				$strCacheKey = QApplication::$objCacheProvider->CreateKey(QApplication::$Database[1]->Database, 'TarifaExp', $intId);
+				$strCacheKey = QApplication::$objCacheProvider->CreateKey(QApplication::$Database[1]->Database, 'TarifaCliente', $intId);
 				$objCachedObject = QApplication::$objCacheProvider->Get($strCacheKey);
 				if ($objCachedObject !== false) {
 					return $objCachedObject;
 				}
 			}
 			// Use QuerySingle to Perform the Query
-			$objToReturn = TarifaExp::QuerySingle(
+			$objToReturn = TarifaCliente::QuerySingle(
 				QQ::AndCondition(
-					QQ::Equal(QQN::TarifaExp()->Id, $intId)
+					QQ::Equal(QQN::TarifaCliente()->Id, $intId)
 				),
 				$objOptionalClauses
 			);
@@ -276,17 +231,17 @@
 		}
 
 		/**
-		 * Load all TarifaExps
+		 * Load all TarifaClientes
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp[]
+		 * @return TarifaCliente[]
 		 */
 		public static function LoadAll($objOptionalClauses = null) {
 			if (func_num_args() > 1) {
 				throw new QCallerException("LoadAll must be called with an array of optional clauses as a single argument");
 			}
-			// Call TarifaExp::QueryArray to perform the LoadAll query
+			// Call TarifaCliente::QueryArray to perform the LoadAll query
 			try {
-				return TarifaExp::QueryArray(QQ::All(), $objOptionalClauses);
+				return TarifaCliente::QueryArray(QQ::All(), $objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -294,12 +249,12 @@
 		}
 
 		/**
-		 * Count all TarifaExps
+		 * Count all TarifaClientes
 		 * @return int
 		 */
 		public static function CountAll() {
-			// Call TarifaExp::QueryCount to perform the CountAll query
-			return TarifaExp::QueryCount(QQ::All());
+			// Call TarifaCliente::QueryCount to perform the CountAll query
+			return TarifaCliente::QueryCount(QQ::All());
 		}
 
 
@@ -321,10 +276,10 @@
 		 */
 		protected static function BuildQueryStatement(&$objQueryBuilder, QQCondition $objConditions, $objOptionalClauses, $mixParameterArray, $blnCountOnly) {
 			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
+			$objDatabase = TarifaCliente::GetDatabase();
 
-			// Create/Build out the QueryBuilder object with TarifaExp-specific SELET and FROM fields
-			$objQueryBuilder = new QQueryBuilder($objDatabase, 'tarifa_exp');
+			// Create/Build out the QueryBuilder object with TarifaCliente-specific SELET and FROM fields
+			$objQueryBuilder = new QQueryBuilder($objDatabase, 'tarifa_cliente');
 
 			$blnAddAllFieldsToSelect = true;
 			if ($objDatabase->OnlyFullGroupBy) {
@@ -343,9 +298,9 @@
 				}
 			}
 			if ($blnAddAllFieldsToSelect) {
-				TarifaExp::GetSelectFields($objQueryBuilder, null, QQuery::extractSelectClause($objOptionalClauses));
+				TarifaCliente::GetSelectFields($objQueryBuilder, null, QQuery::extractSelectClause($objOptionalClauses));
 			}
-			$objQueryBuilder->AddFromItem('tarifa_exp');
+			$objQueryBuilder->AddFromItem('tarifa_cliente');
 
 			// Set "CountOnly" option (if applicable)
 			if ($blnCountOnly)
@@ -392,23 +347,23 @@
 		}
 
 		/**
-		 * Static Qcubed Query method to query for a single TarifaExp object.
+		 * Static Qcubed Query method to query for a single TarifaCliente object.
 		 * Uses BuildQueryStatment to perform most of the work.
 		 * @param QQCondition $objConditions any conditions on the query, itself
 		 * @param QQClause[] $objOptionalClausees additional optional QQClause objects for this query
 		 * @param mixed[] $mixParameterArray a array of name-value pairs to perform PrepareStatement with
-		 * @return TarifaExp the queried object
+		 * @return TarifaCliente the queried object
 		 */
 		public static function QuerySingle(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the Query Statement
 			try {
-				$strQuery = TarifaExp::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
+				$strQuery = TarifaCliente::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
 			}
 
-			// Perform the Query, Get the First Row, and Instantiate a new TarifaExp object
+			// Perform the Query, Get the First Row, and Instantiate a new TarifaCliente object
 			$objDbResult = $objQueryBuilder->Database->Query($strQuery);
 
 			// Do we have to expand anything?
@@ -416,7 +371,7 @@
 				$objToReturn = array();
 				$objPrevItemArray = array();
 				while ($objDbRow = $objDbResult->GetNextRow()) {
-					$objItem = TarifaExp::InstantiateDbRow($objDbRow, null, $objQueryBuilder->ExpandAsArrayNode, $objPrevItemArray, $objQueryBuilder->ColumnAliasArray);
+					$objItem = TarifaCliente::InstantiateDbRow($objDbRow, null, $objQueryBuilder->ExpandAsArrayNode, $objPrevItemArray, $objQueryBuilder->ColumnAliasArray);
 					if ($objItem) {
 						$objToReturn[] = $objItem;
 						$objPrevItemArray[$objItem->intId][] = $objItem;
@@ -434,22 +389,22 @@
 				$objDbRow = $objDbResult->GetNextRow();
 				if(null === $objDbRow)
 					return null;
-				return TarifaExp::InstantiateDbRow($objDbRow, null, null, null, $objQueryBuilder->ColumnAliasArray);
+				return TarifaCliente::InstantiateDbRow($objDbRow, null, null, null, $objQueryBuilder->ColumnAliasArray);
 			}
 		}
 
 		/**
-		 * Static Qcubed Query method to query for an array of TarifaExp objects.
+		 * Static Qcubed Query method to query for an array of TarifaCliente objects.
 		 * Uses BuildQueryStatment to perform most of the work.
 		 * @param QQCondition $objConditions any conditions on the query, itself
 		 * @param QQClause[] $objOptionalClausees additional optional QQClause objects for this query
 		 * @param mixed[] $mixParameterArray a array of name-value pairs to perform PrepareStatement with
-		 * @return TarifaExp[] the queried objects as an array
+		 * @return TarifaCliente[] the queried objects as an array
 		 */
 		public static function QueryArray(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the Query Statement
 			try {
-				$strQuery = TarifaExp::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
+				$strQuery = TarifaCliente::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -457,7 +412,7 @@
 
 			// Perform the Query and Instantiate the Array Result
 			$objDbResult = $objQueryBuilder->Database->Query($strQuery);
-			return TarifaExp::InstantiateDbResult($objDbResult, $objQueryBuilder->ExpandAsArrayNode, $objQueryBuilder->ColumnAliasArray);
+			return TarifaCliente::InstantiateDbResult($objDbResult, $objQueryBuilder->ExpandAsArrayNode, $objQueryBuilder->ColumnAliasArray);
 		}
 
 		/**
@@ -471,7 +426,7 @@
 		public static function QueryCursor(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the query statement
 			try {
-				$strQuery = TarifaExp::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
+				$strQuery = TarifaCliente::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -486,7 +441,7 @@
 		}
 
 		/**
-		 * Static Qcubed Query method to query for a count of TarifaExp objects.
+		 * Static Qcubed Query method to query for a count of TarifaCliente objects.
 		 * Uses BuildQueryStatment to perform most of the work.
 		 * @param QQCondition $objConditions any conditions on the query, itself
 		 * @param QQClause[] $objOptionalClausees additional optional QQClause objects for this query
@@ -496,7 +451,7 @@
 		public static function QueryCount(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null) {
 			// Get the Query Statement
 			try {
-				$strQuery = TarifaExp::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, true);
+				$strQuery = TarifaCliente::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, true);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
 				throw $objExc;
@@ -537,16 +492,16 @@
 
 		public static function QueryArrayCached(QQCondition $objConditions, $objOptionalClauses = null, $mixParameterArray = null, $blnForceUpdate = false) {
 			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
+			$objDatabase = TarifaCliente::GetDatabase();
 
-			$strQuery = TarifaExp::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
+			$strQuery = TarifaCliente::BuildQueryStatement($objQueryBuilder, $objConditions, $objOptionalClauses, $mixParameterArray, false);
 
-			$objCache = new QCache('qquery/tarifaexp', $strQuery);
+			$objCache = new QCache('qquery/tarifacliente', $strQuery);
 			$cacheData = $objCache->GetData();
 
 			if (!$cacheData || $blnForceUpdate) {
 				$objDbResult = $objQueryBuilder->Database->Query($strQuery);
-				$arrResult = TarifaExp::InstantiateDbResult($objDbResult, $objQueryBuilder->ExpandAsArrayNode, $objQueryBuilder->ColumnAliasArray);
+				$arrResult = TarifaCliente::InstantiateDbResult($objDbResult, $objQueryBuilder->ExpandAsArrayNode, $objQueryBuilder->ColumnAliasArray);
 				$objCache->SaveData(serialize($arrResult));
 			} else {
 				$arrResult = unserialize($cacheData);
@@ -556,7 +511,7 @@
 		}
 
 		/**
-		 * Updates a QQueryBuilder with the SELECT fields for this TarifaExp
+		 * Updates a QQueryBuilder with the SELECT fields for this TarifaCliente
 		 * @param QQueryBuilder $objBuilder the Query Builder object to update
 		 * @param string $strPrefix optional prefix to add to the SELECT fields
 		 */
@@ -565,7 +520,7 @@
 				$strTableName = $strPrefix;
 				$strAliasPrefix = $strPrefix . '__';
 			} else {
-				$strTableName = 'tarifa_exp';
+				$strTableName = 'tarifa_cliente';
 				$strAliasPrefix = '';
 			}
 
@@ -574,15 +529,12 @@
                 $objSelect->AddSelectItems($objBuilder, $strTableName, $strAliasPrefix);
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
-			    $objBuilder->AddSelectItem($strTableName, 'nombre', $strAliasPrefix . 'nombre');
+			    $objBuilder->AddSelectItem($strTableName, 'cliente_id', $strAliasPrefix . 'cliente_id');
+			    $objBuilder->AddSelectItem($strTableName, 'tarifa_exp_id', $strAliasPrefix . 'tarifa_exp_id');
 			    $objBuilder->AddSelectItem($strTableName, 'producto_id', $strAliasPrefix . 'producto_id');
-			    $objBuilder->AddSelectItem($strTableName, 'is_publica', $strAliasPrefix . 'is_publica');
-			    $objBuilder->AddSelectItem($strTableName, 'fecha', $strAliasPrefix . 'fecha');
-			    $objBuilder->AddSelectItem($strTableName, 'monto', $strAliasPrefix . 'monto');
-			    $objBuilder->AddSelectItem($strTableName, 'minimo', $strAliasPrefix . 'minimo');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
-			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'created_by', $strAliasPrefix . 'created_by');
+			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_by', $strAliasPrefix . 'updated_by');
             }
 		}
@@ -671,16 +623,16 @@
 		}
 		
 		/**
-		 * Instantiate a TarifaExp from a Database Row.
+		 * Instantiate a TarifaCliente from a Database Row.
 		 * Takes in an optional strAliasPrefix, used in case another Object::InstantiateDbRow
-		 * is calling this TarifaExp::InstantiateDbRow in order to perform
+		 * is calling this TarifaCliente::InstantiateDbRow in order to perform
 		 * early binding on referenced objects.
 		 * @param DatabaseRowBase $objDbRow
 		 * @param string $strAliasPrefix
 		 * @param QQBaseNode $objExpandAsArrayNode
 		 * @param QBaseClass $arrPreviousItem
 		 * @param string[] $strColumnAliasArray
-		 * @return mixed Either a TarifaExp, or false to indicate the dbrow was used in an expansion, or null to indicate that this leaf is a duplicate.
+		 * @return mixed Either a TarifaCliente, or false to indicate the dbrow was used in an expansion, or null to indicate that this leaf is a duplicate.
 		*/
 		public static function InstantiateDbRow($objDbRow, $strAliasPrefix = null, $objExpandAsArrayNode = null, $objPreviousItemArray = null, $strColumnAliasArray = array()) {
 			// If blank row, return null
@@ -700,45 +652,36 @@
 					is_array($objPreviousItemArray) && 
 					count($objPreviousItemArray)) {
 
-				if (TarifaExp::ExpandArray ($objDbRow, $strAliasPrefix, $objExpandAsArrayNode, $objPreviousItemArray, $strColumnAliasArray)) {
+				if (TarifaCliente::ExpandArray ($objDbRow, $strAliasPrefix, $objExpandAsArrayNode, $objPreviousItemArray, $strColumnAliasArray)) {
 					return false; // db row was used but no new object was created
 				}
 			}
 
-			// Create a new instance of the TarifaExp object
-			$objToReturn = new TarifaExp();
+			// Create a new instance of the TarifaCliente object
+			$objToReturn = new TarifaCliente();
 			$objToReturn->__blnRestored = true;
 
 			$strAlias = $strAliasPrefix . 'id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'nombre';
+			$strAlias = $strAliasPrefix . 'cliente_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strNombre = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->intClienteId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'tarifa_exp_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intTarifaExpId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'producto_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intProductoId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'is_publica';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->blnIsPublica = $objDbRow->GetColumn($strAliasName, 'Bit');
-			$strAlias = $strAliasPrefix . 'fecha';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->dttFecha = $objDbRow->GetColumn($strAliasName, 'Date');
-			$strAlias = $strAliasPrefix . 'monto';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->fltMonto = $objDbRow->GetColumn($strAliasName, 'Float');
-			$strAlias = $strAliasPrefix . 'minimo';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->fltMinimo = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
-			$strAlias = $strAliasPrefix . 'updated_at';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'created_by';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCreatedBy = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'updated_at';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'updated_by';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intUpdatedBy = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -770,8 +713,22 @@
 			}
 
 			if (!$strAliasPrefix)
-				$strAliasPrefix = 'tarifa_exp__';
+				$strAliasPrefix = 'tarifa_cliente__';
 
+			// Check for Cliente Early Binding
+			$strAlias = $strAliasPrefix . 'cliente_id__codi_clie';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['cliente_id']) ? null : $objExpansionAliasArray['cliente_id']);
+				$objToReturn->objCliente = MasterCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'cliente_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for TarifaExp Early Binding
+			$strAlias = $strAliasPrefix . 'tarifa_exp_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['tarifa_exp_id']) ? null : $objExpansionAliasArray['tarifa_exp_id']);
+				$objToReturn->objTarifaExp = TarifaExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifa_exp_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
 			// Check for Producto Early Binding
 			$strAlias = $strAliasPrefix . 'producto_id__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -796,45 +753,15 @@
 
 				
 
-			// Check for TarifaAliados Virtual Binding
-			$strAlias = $strAliasPrefix . 'tarifaaliados__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objExpansionNode = (empty($objExpansionAliasArray['tarifaaliados']) ? null : $objExpansionAliasArray['tarifaaliados']);
-			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
-			if ($blnExpanded && null === $objToReturn->_objTarifaAliadosArray)
-				$objToReturn->_objTarifaAliadosArray = array();
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if ($blnExpanded) {
-					$objToReturn->_objTarifaAliadosArray[] = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliados__', $objExpansionNode, null, $strColumnAliasArray);
-				} elseif (is_null($objToReturn->_objTarifaAliados)) {
-					$objToReturn->_objTarifaAliados = TarifaAliados::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaaliados__', $objExpansionNode, null, $strColumnAliasArray);
-				}
-			}
-
-			// Check for TarifaCliente Virtual Binding
-			$strAlias = $strAliasPrefix . 'tarifacliente__id';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objExpansionNode = (empty($objExpansionAliasArray['tarifacliente']) ? null : $objExpansionAliasArray['tarifacliente']);
-			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
-			if ($blnExpanded && null === $objToReturn->_objTarifaClienteArray)
-				$objToReturn->_objTarifaClienteArray = array();
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if ($blnExpanded) {
-					$objToReturn->_objTarifaClienteArray[] = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifacliente__', $objExpansionNode, null, $strColumnAliasArray);
-				} elseif (is_null($objToReturn->_objTarifaCliente)) {
-					$objToReturn->_objTarifaCliente = TarifaCliente::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifacliente__', $objExpansionNode, null, $strColumnAliasArray);
-				}
-			}
-
 			return $objToReturn;
 		}
 		
 		/**
-		 * Instantiate an array of TarifaExps from a Database Result
+		 * Instantiate an array of TarifaClientes from a Database Result
 		 * @param DatabaseResultBase $objDbResult
 		 * @param QQBaseNode $objExpandAsArrayNode
 		 * @param string[] $strColumnAliasArray
-		 * @return TarifaExp[]
+		 * @return TarifaCliente[]
 		 */
 		public static function InstantiateDbResult(QDatabaseResultBase $objDbResult, $objExpandAsArrayNode = null, $strColumnAliasArray = null) {
 			$objToReturn = array();
@@ -851,7 +778,7 @@
 				$objToReturn = array();
 				$objPrevItemArray = array();
 				while ($objDbRow = $objDbResult->GetNextRow()) {
-					$objItem = TarifaExp::InstantiateDbRow($objDbRow, null, $objExpandAsArrayNode, $objPrevItemArray, $strColumnAliasArray);
+					$objItem = TarifaCliente::InstantiateDbRow($objDbRow, null, $objExpandAsArrayNode, $objPrevItemArray, $strColumnAliasArray);
 					if ($objItem) {
 						$objToReturn[] = $objItem;
 						$objPrevItemArray[$objItem->intId][] = $objItem;
@@ -860,7 +787,7 @@
 				}
 			} else {
 				while ($objDbRow = $objDbResult->GetNextRow())
-					$objToReturn[] = TarifaExp::InstantiateDbRow($objDbRow, null, null, null, $strColumnAliasArray);
+					$objToReturn[] = TarifaCliente::InstantiateDbRow($objDbRow, null, null, null, $strColumnAliasArray);
 			}
 
 			return $objToReturn;
@@ -868,11 +795,11 @@
 
 
 		/**
-		 * Instantiate a single TarifaExp object from a query cursor (e.g. a DB ResultSet).
+		 * Instantiate a single TarifaCliente object from a query cursor (e.g. a DB ResultSet).
 		 * Cursor is automatically moved to the "next row" of the result set.
 		 * Will return NULL if no cursor or if the cursor has no more rows in the resultset.
 		 * @param QDatabaseResultBase $objDbResult cursor resource
-		 * @return TarifaExp next row resulting from the query
+		 * @return TarifaCliente next row resulting from the query
 		 */
 		public static function InstantiateCursor(QDatabaseResultBase $objDbResult) {
 			// If blank resultset, then return empty result
@@ -893,7 +820,7 @@
 			}
 
 			// Load up the return result with a row and return it
-			return TarifaExp::InstantiateDbRow($objDbRow, null, null, null, $strColumnAliasArray);
+			return TarifaCliente::InstantiateDbRow($objDbRow, null, null, null, $strColumnAliasArray);
 		}
 
 
@@ -904,67 +831,69 @@
 		///////////////////////////////////////////////////
 
 		/**
-		 * Load a single TarifaExp object,
+		 * Load a single TarifaCliente object,
 		 * by Id Index(es)
 		 * @param integer $intId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp
+		 * @return TarifaCliente
 		*/
 		public static function LoadById($intId, $objOptionalClauses = null) {
-			return TarifaExp::QuerySingle(
+			return TarifaCliente::QuerySingle(
 				QQ::AndCondition(
-					QQ::Equal(QQN::TarifaExp()->Id, $intId)
+					QQ::Equal(QQN::TarifaCliente()->Id, $intId)
 				),
 				$objOptionalClauses
 			);
 		}
 
 		/**
-		 * Load a single TarifaExp object,
-		 * by ProductoId, Fecha Index(es)
-		 * @param integer $intProductoId
-		 * @param QDateTime $dttFecha
+		 * Load a single TarifaCliente object,
+		 * by ClienteId, TarifaExpId Index(es)
+		 * @param integer $intClienteId
+		 * @param integer $intTarifaExpId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp
+		 * @return TarifaCliente
 		*/
-		public static function LoadByProductoIdFecha($intProductoId, $dttFecha, $objOptionalClauses = null) {
-			return TarifaExp::QuerySingle(
+		public static function LoadByClienteIdTarifaExpId($intClienteId, $intTarifaExpId, $objOptionalClauses = null) {
+			return TarifaCliente::QuerySingle(
 				QQ::AndCondition(
-					QQ::Equal(QQN::TarifaExp()->ProductoId, $intProductoId),
-					QQ::Equal(QQN::TarifaExp()->Fecha, $dttFecha)
+					QQ::Equal(QQN::TarifaCliente()->ClienteId, $intClienteId),
+					QQ::Equal(QQN::TarifaCliente()->TarifaExpId, $intTarifaExpId)
 				),
 				$objOptionalClauses
 			);
 		}
 
 		/**
-		 * Load a single TarifaExp object,
-		 * by Nombre Index(es)
-		 * @param string $strNombre
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp
-		*/
-		public static function LoadByNombre($strNombre, $objOptionalClauses = null) {
-			return TarifaExp::QuerySingle(
-				QQ::AndCondition(
-					QQ::Equal(QQN::TarifaExp()->Nombre, $strNombre)
-				),
-				$objOptionalClauses
-			);
-		}
-
-		/**
-		 * Load an array of TarifaExp objects,
-		 * by ProductoId Index(es)
+		 * Load a single TarifaCliente object,
+		 * by ClienteId, ProductoId Index(es)
+		 * @param integer $intClienteId
 		 * @param integer $intProductoId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp[]
+		 * @return TarifaCliente
 		*/
-		public static function LoadArrayByProductoId($intProductoId, $objOptionalClauses = null) {
-			// Call TarifaExp::QueryArray to perform the LoadArrayByProductoId query
+		public static function LoadByClienteIdProductoId($intClienteId, $intProductoId, $objOptionalClauses = null) {
+			return TarifaCliente::QuerySingle(
+				QQ::AndCondition(
+					QQ::Equal(QQN::TarifaCliente()->ClienteId, $intClienteId),
+					QQ::Equal(QQN::TarifaCliente()->ProductoId, $intProductoId)
+				),
+				$objOptionalClauses
+			);
+		}
+
+		/**
+		 * Load an array of TarifaCliente objects,
+		 * by TarifaExpId Index(es)
+		 * @param integer $intTarifaExpId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaCliente[]
+		*/
+		public static function LoadArrayByTarifaExpId($intTarifaExpId, $objOptionalClauses = null) {
+			// Call TarifaCliente::QueryArray to perform the LoadArrayByTarifaExpId query
 			try {
-				return TarifaExp::QueryArray(
-					QQ::Equal(QQN::TarifaExp()->ProductoId, $intProductoId),
+				return TarifaCliente::QueryArray(
+					QQ::Equal(QQN::TarifaCliente()->TarifaExpId, $intTarifaExpId),
 					$objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
@@ -973,30 +902,62 @@
 		}
 
 		/**
-		 * Count TarifaExps
+		 * Count TarifaClientes
+		 * by TarifaExpId Index(es)
+		 * @param integer $intTarifaExpId
+		 * @return int
+		*/
+		public static function CountByTarifaExpId($intTarifaExpId) {
+			// Call TarifaCliente::QueryCount to perform the CountByTarifaExpId query
+			return TarifaCliente::QueryCount(
+				QQ::Equal(QQN::TarifaCliente()->TarifaExpId, $intTarifaExpId)
+			);
+		}
+
+		/**
+		 * Load an array of TarifaCliente objects,
+		 * by ProductoId Index(es)
+		 * @param integer $intProductoId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaCliente[]
+		*/
+		public static function LoadArrayByProductoId($intProductoId, $objOptionalClauses = null) {
+			// Call TarifaCliente::QueryArray to perform the LoadArrayByProductoId query
+			try {
+				return TarifaCliente::QueryArray(
+					QQ::Equal(QQN::TarifaCliente()->ProductoId, $intProductoId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count TarifaClientes
 		 * by ProductoId Index(es)
 		 * @param integer $intProductoId
 		 * @return int
 		*/
 		public static function CountByProductoId($intProductoId) {
-			// Call TarifaExp::QueryCount to perform the CountByProductoId query
-			return TarifaExp::QueryCount(
-				QQ::Equal(QQN::TarifaExp()->ProductoId, $intProductoId)
+			// Call TarifaCliente::QueryCount to perform the CountByProductoId query
+			return TarifaCliente::QueryCount(
+				QQ::Equal(QQN::TarifaCliente()->ProductoId, $intProductoId)
 			);
 		}
 
 		/**
-		 * Load an array of TarifaExp objects,
+		 * Load an array of TarifaCliente objects,
 		 * by UpdatedBy Index(es)
 		 * @param integer $intUpdatedBy
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp[]
+		 * @return TarifaCliente[]
 		*/
 		public static function LoadArrayByUpdatedBy($intUpdatedBy, $objOptionalClauses = null) {
-			// Call TarifaExp::QueryArray to perform the LoadArrayByUpdatedBy query
+			// Call TarifaCliente::QueryArray to perform the LoadArrayByUpdatedBy query
 			try {
-				return TarifaExp::QueryArray(
-					QQ::Equal(QQN::TarifaExp()->UpdatedBy, $intUpdatedBy),
+				return TarifaCliente::QueryArray(
+					QQ::Equal(QQN::TarifaCliente()->UpdatedBy, $intUpdatedBy),
 					$objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
@@ -1005,30 +966,30 @@
 		}
 
 		/**
-		 * Count TarifaExps
+		 * Count TarifaClientes
 		 * by UpdatedBy Index(es)
 		 * @param integer $intUpdatedBy
 		 * @return int
 		*/
 		public static function CountByUpdatedBy($intUpdatedBy) {
-			// Call TarifaExp::QueryCount to perform the CountByUpdatedBy query
-			return TarifaExp::QueryCount(
-				QQ::Equal(QQN::TarifaExp()->UpdatedBy, $intUpdatedBy)
+			// Call TarifaCliente::QueryCount to perform the CountByUpdatedBy query
+			return TarifaCliente::QueryCount(
+				QQ::Equal(QQN::TarifaCliente()->UpdatedBy, $intUpdatedBy)
 			);
 		}
 
 		/**
-		 * Load an array of TarifaExp objects,
+		 * Load an array of TarifaCliente objects,
 		 * by CreatedBy Index(es)
 		 * @param integer $intCreatedBy
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaExp[]
+		 * @return TarifaCliente[]
 		*/
 		public static function LoadArrayByCreatedBy($intCreatedBy, $objOptionalClauses = null) {
-			// Call TarifaExp::QueryArray to perform the LoadArrayByCreatedBy query
+			// Call TarifaCliente::QueryArray to perform the LoadArrayByCreatedBy query
 			try {
-				return TarifaExp::QueryArray(
-					QQ::Equal(QQN::TarifaExp()->CreatedBy, $intCreatedBy),
+				return TarifaCliente::QueryArray(
+					QQ::Equal(QQN::TarifaCliente()->CreatedBy, $intCreatedBy),
 					$objOptionalClauses);
 			} catch (QCallerException $objExc) {
 				$objExc->IncrementOffset();
@@ -1037,15 +998,47 @@
 		}
 
 		/**
-		 * Count TarifaExps
+		 * Count TarifaClientes
 		 * by CreatedBy Index(es)
 		 * @param integer $intCreatedBy
 		 * @return int
 		*/
 		public static function CountByCreatedBy($intCreatedBy) {
-			// Call TarifaExp::QueryCount to perform the CountByCreatedBy query
-			return TarifaExp::QueryCount(
-				QQ::Equal(QQN::TarifaExp()->CreatedBy, $intCreatedBy)
+			// Call TarifaCliente::QueryCount to perform the CountByCreatedBy query
+			return TarifaCliente::QueryCount(
+				QQ::Equal(QQN::TarifaCliente()->CreatedBy, $intCreatedBy)
+			);
+		}
+
+		/**
+		 * Load an array of TarifaCliente objects,
+		 * by ClienteId Index(es)
+		 * @param integer $intClienteId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaCliente[]
+		*/
+		public static function LoadArrayByClienteId($intClienteId, $objOptionalClauses = null) {
+			// Call TarifaCliente::QueryArray to perform the LoadArrayByClienteId query
+			try {
+				return TarifaCliente::QueryArray(
+					QQ::Equal(QQN::TarifaCliente()->ClienteId, $intClienteId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count TarifaClientes
+		 * by ClienteId Index(es)
+		 * @param integer $intClienteId
+		 * @return int
+		*/
+		public static function CountByClienteId($intClienteId) {
+			// Call TarifaCliente::QueryCount to perform the CountByClienteId query
+			return TarifaCliente::QueryCount(
+				QQ::Equal(QQN::TarifaCliente()->ClienteId, $intClienteId)
 			);
 		}
 
@@ -1064,14 +1057,14 @@
 		//////////////////////////
 
 		/**
-		 * Save this TarifaExp
+		 * Save this TarifaCliente
 		 * @param bool $blnForceInsert
 		 * @param bool $blnForceUpdate
 		 * @return int
 		 */
 		public function Save($blnForceInsert = false, $blnForceUpdate = false) {
 			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
+			$objDatabase = TarifaCliente::GetDatabase();
 
 			$mixToReturn = null;
 
@@ -1079,33 +1072,27 @@
 				if ((!$this->__blnRestored) || ($blnForceInsert)) {
 					// Perform an INSERT query
 					$objDatabase->NonQuery('
-						INSERT INTO `tarifa_exp` (
-							`nombre`,
+						INSERT INTO `tarifa_cliente` (
+							`cliente_id`,
+							`tarifa_exp_id`,
 							`producto_id`,
-							`is_publica`,
-							`fecha`,
-							`monto`,
-							`minimo`,
 							`created_at`,
-							`updated_at`,
 							`created_by`,
+							`updated_at`,
 							`updated_by`
 						) VALUES (
-							' . $objDatabase->SqlVariable($this->strNombre) . ',
+							' . $objDatabase->SqlVariable($this->intClienteId) . ',
+							' . $objDatabase->SqlVariable($this->intTarifaExpId) . ',
 							' . $objDatabase->SqlVariable($this->intProductoId) . ',
-							' . $objDatabase->SqlVariable($this->blnIsPublica) . ',
-							' . $objDatabase->SqlVariable($this->dttFecha) . ',
-							' . $objDatabase->SqlVariable($this->fltMonto) . ',
-							' . $objDatabase->SqlVariable($this->fltMinimo) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
-							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
+							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						)
 					');
 
 					// Update Identity column and return its value
-					$mixToReturn = $this->intId = $objDatabase->InsertId('tarifa_exp', 'id');
+					$mixToReturn = $this->intId = $objDatabase->InsertId('tarifa_cliente', 'id');
 				} else {
 					// Perform an UPDATE query
 
@@ -1114,17 +1101,14 @@
 					// Perform the UPDATE query
 					$objDatabase->NonQuery('
 						UPDATE
-							`tarifa_exp`
+							`tarifa_cliente`
 						SET
-							`nombre` = ' . $objDatabase->SqlVariable($this->strNombre) . ',
+							`cliente_id` = ' . $objDatabase->SqlVariable($this->intClienteId) . ',
+							`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intTarifaExpId) . ',
 							`producto_id` = ' . $objDatabase->SqlVariable($this->intProductoId) . ',
-							`is_publica` = ' . $objDatabase->SqlVariable($this->blnIsPublica) . ',
-							`fecha` = ' . $objDatabase->SqlVariable($this->dttFecha) . ',
-							`monto` = ' . $objDatabase->SqlVariable($this->fltMonto) . ',
-							`minimo` = ' . $objDatabase->SqlVariable($this->fltMinimo) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
-							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
+							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
@@ -1148,21 +1132,21 @@
 		}
 
 		/**
-		 * Delete this TarifaExp
+		 * Delete this TarifaCliente
 		 * @return void
 		 */
 		public function Delete() {
 			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Cannot delete this TarifaExp with an unset primary key.');
+				throw new QUndefinedPrimaryKeyException('Cannot delete this TarifaCliente with an unset primary key.');
 
 			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
+			$objDatabase = TarifaCliente::GetDatabase();
 
 
 			// Perform the SQL Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`tarifa_exp`
+					`tarifa_cliente`
 				WHERE
 					`id` = ' . $objDatabase->SqlVariable($this->intId) . '');
 
@@ -1170,28 +1154,28 @@
 		}
 
         /**
- 	     * Delete this TarifaExp ONLY from the cache
+ 	     * Delete this TarifaCliente ONLY from the cache
  		 * @return void
 		 */
 		public function DeleteCache() {
 			if (QApplication::$objCacheProvider && QApplication::$Database[1]->Caching) {
-				$strCacheKey = QApplication::$objCacheProvider->CreateKey(QApplication::$Database[1]->Database, 'TarifaExp', $this->intId);
+				$strCacheKey = QApplication::$objCacheProvider->CreateKey(QApplication::$Database[1]->Database, 'TarifaCliente', $this->intId);
 				QApplication::$objCacheProvider->Delete($strCacheKey);
 			}
 		}
 
 		/**
-		 * Delete all TarifaExps
+		 * Delete all TarifaClientes
 		 * @return void
 		 */
 		public static function DeleteAll() {
 			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
+			$objDatabase = TarifaCliente::GetDatabase();
 
 			// Perform the Query
 			$objDatabase->NonQuery('
 				DELETE FROM
-					`tarifa_exp`');
+					`tarifa_cliente`');
 
 			if (QApplication::$objCacheProvider && QApplication::$Database[1]->Caching) {
 				QApplication::$objCacheProvider->DeleteAll();
@@ -1199,16 +1183,16 @@
 		}
 
 		/**
-		 * Truncate tarifa_exp table
+		 * Truncate tarifa_cliente table
 		 * @return void
 		 */
 		public static function Truncate() {
 			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
+			$objDatabase = TarifaCliente::GetDatabase();
 
 			// Perform the Query
 			$objDatabase->NonQuery('
-				TRUNCATE `tarifa_exp`');
+				TRUNCATE `tarifa_cliente`');
 
 			if (QApplication::$objCacheProvider && QApplication::$Database[1]->Caching) {
 				QApplication::$objCacheProvider->DeleteAll();
@@ -1216,29 +1200,26 @@
 		}
 
 		/**
-		 * Reload this TarifaExp from the database.
+		 * Reload this TarifaCliente from the database.
 		 * @return void
 		 */
 		public function Reload() {
 			// Make sure we are actually Restored from the database
 			if (!$this->__blnRestored)
-				throw new QCallerException('Cannot call Reload() on a new, unsaved TarifaExp object.');
+				throw new QCallerException('Cannot call Reload() on a new, unsaved TarifaCliente object.');
 
 			$this->DeleteCache();
 
 			// Reload the Object
-			$objReloaded = TarifaExp::Load($this->intId);
+			$objReloaded = TarifaCliente::Load($this->intId);
 
 			// Update $this's local variables to match
-			$this->strNombre = $objReloaded->strNombre;
+			$this->ClienteId = $objReloaded->ClienteId;
+			$this->TarifaExpId = $objReloaded->TarifaExpId;
 			$this->ProductoId = $objReloaded->ProductoId;
-			$this->blnIsPublica = $objReloaded->blnIsPublica;
-			$this->dttFecha = $objReloaded->dttFecha;
-			$this->fltMonto = $objReloaded->fltMonto;
-			$this->fltMinimo = $objReloaded->fltMinimo;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
-			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->CreatedBy = $objReloaded->CreatedBy;
+			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->UpdatedBy = $objReloaded->UpdatedBy;
 		}
 
@@ -1267,12 +1248,19 @@
 					 */
 					return $this->intId;
 
-				case 'Nombre':
+				case 'ClienteId':
 					/**
-					 * Gets the value for strNombre (Unique)
-					 * @return string
+					 * Gets the value for intClienteId (Not Null)
+					 * @return integer
 					 */
-					return $this->strNombre;
+					return $this->intClienteId;
+
+				case 'TarifaExpId':
+					/**
+					 * Gets the value for intTarifaExpId (Not Null)
+					 * @return integer
+					 */
+					return $this->intTarifaExpId;
 
 				case 'ProductoId':
 					/**
@@ -1281,40 +1269,19 @@
 					 */
 					return $this->intProductoId;
 
-				case 'IsPublica':
-					/**
-					 * Gets the value for blnIsPublica 
-					 * @return boolean
-					 */
-					return $this->blnIsPublica;
-
-				case 'Fecha':
-					/**
-					 * Gets the value for dttFecha (Not Null)
-					 * @return QDateTime
-					 */
-					return $this->dttFecha;
-
-				case 'Monto':
-					/**
-					 * Gets the value for fltMonto (Not Null)
-					 * @return double
-					 */
-					return $this->fltMonto;
-
-				case 'Minimo':
-					/**
-					 * Gets the value for fltMinimo (Not Null)
-					 * @return double
-					 */
-					return $this->fltMinimo;
-
 				case 'CreatedAt':
 					/**
-					 * Gets the value for dttCreatedAt 
+					 * Gets the value for dttCreatedAt (Not Null)
 					 * @return QDateTime
 					 */
 					return $this->dttCreatedAt;
+
+				case 'CreatedBy':
+					/**
+					 * Gets the value for intCreatedBy (Not Null)
+					 * @return integer
+					 */
+					return $this->intCreatedBy;
 
 				case 'UpdatedAt':
 					/**
@@ -1322,13 +1289,6 @@
 					 * @return QDateTime
 					 */
 					return $this->dttUpdatedAt;
-
-				case 'CreatedBy':
-					/**
-					 * Gets the value for intCreatedBy 
-					 * @return integer
-					 */
-					return $this->intCreatedBy;
 
 				case 'UpdatedBy':
 					/**
@@ -1341,6 +1301,34 @@
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Cliente':
+					/**
+					 * Gets the value for the MasterCliente object referenced by intClienteId (Not Null)
+					 * @return MasterCliente
+					 */
+					try {
+						if ((!$this->objCliente) && (!is_null($this->intClienteId)))
+							$this->objCliente = MasterCliente::Load($this->intClienteId);
+						return $this->objCliente;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'TarifaExp':
+					/**
+					 * Gets the value for the TarifaExp object referenced by intTarifaExpId (Not Null)
+					 * @return TarifaExp
+					 */
+					try {
+						if ((!$this->objTarifaExp) && (!is_null($this->intTarifaExpId)))
+							$this->objTarifaExp = TarifaExp::Load($this->intTarifaExpId);
+						return $this->objTarifaExp;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Producto':
 					/**
 					 * Gets the value for the Productos object referenced by intProductoId (Not Null)
@@ -1357,7 +1345,7 @@
 
 				case 'CreatedByObject':
 					/**
-					 * Gets the value for the Usuario object referenced by intCreatedBy 
+					 * Gets the value for the Usuario object referenced by intCreatedBy (Not Null)
 					 * @return Usuario
 					 */
 					try {
@@ -1389,38 +1377,6 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
-				case '_TarifaAliados':
-					/**
-					 * Gets the value for the private _objTarifaAliados (Read-Only)
-					 * if set due to an expansion on the tarifa_aliados.tarifa_exp_id reverse relationship
-					 * @return TarifaAliados
-					 */
-					return $this->_objTarifaAliados;
-
-				case '_TarifaAliadosArray':
-					/**
-					 * Gets the value for the private _objTarifaAliadosArray (Read-Only)
-					 * if set due to an ExpandAsArray on the tarifa_aliados.tarifa_exp_id reverse relationship
-					 * @return TarifaAliados[]
-					 */
-					return $this->_objTarifaAliadosArray;
-
-				case '_TarifaCliente':
-					/**
-					 * Gets the value for the private _objTarifaCliente (Read-Only)
-					 * if set due to an expansion on the tarifa_cliente.tarifa_exp_id reverse relationship
-					 * @return TarifaCliente
-					 */
-					return $this->_objTarifaCliente;
-
-				case '_TarifaClienteArray':
-					/**
-					 * Gets the value for the private _objTarifaClienteArray (Read-Only)
-					 * if set due to an ExpandAsArray on the tarifa_cliente.tarifa_exp_id reverse relationship
-					 * @return TarifaCliente[]
-					 */
-					return $this->_objTarifaClienteArray;
-
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1448,14 +1404,29 @@
 				///////////////////
 				// Member Variables
 				///////////////////
-				case 'Nombre':
+				case 'ClienteId':
 					/**
-					 * Sets the value for strNombre (Unique)
-					 * @param string $mixValue
-					 * @return string
+					 * Sets the value for intClienteId (Not Null)
+					 * @param integer $mixValue
+					 * @return integer
 					 */
 					try {
-						return ($this->strNombre = QType::Cast($mixValue, QType::String));
+						$this->objCliente = null;
+						return ($this->intClienteId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'TarifaExpId':
+					/**
+					 * Sets the value for intTarifaExpId (Not Null)
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objTarifaExp = null;
+						return ($this->intTarifaExpId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1475,66 +1446,28 @@
 						throw $objExc;
 					}
 
-				case 'IsPublica':
-					/**
-					 * Sets the value for blnIsPublica 
-					 * @param boolean $mixValue
-					 * @return boolean
-					 */
-					try {
-						return ($this->blnIsPublica = QType::Cast($mixValue, QType::Boolean));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Fecha':
-					/**
-					 * Sets the value for dttFecha (Not Null)
-					 * @param QDateTime $mixValue
-					 * @return QDateTime
-					 */
-					try {
-						return ($this->dttFecha = QType::Cast($mixValue, QType::DateTime));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Monto':
-					/**
-					 * Sets the value for fltMonto (Not Null)
-					 * @param double $mixValue
-					 * @return double
-					 */
-					try {
-						return ($this->fltMonto = QType::Cast($mixValue, QType::Float));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'Minimo':
-					/**
-					 * Sets the value for fltMinimo (Not Null)
-					 * @param double $mixValue
-					 * @return double
-					 */
-					try {
-						return ($this->fltMinimo = QType::Cast($mixValue, QType::Float));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
 				case 'CreatedAt':
 					/**
-					 * Sets the value for dttCreatedAt 
+					 * Sets the value for dttCreatedAt (Not Null)
 					 * @param QDateTime $mixValue
 					 * @return QDateTime
 					 */
 					try {
 						return ($this->dttCreatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'CreatedBy':
+					/**
+					 * Sets the value for intCreatedBy (Not Null)
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objCreatedByObject = null;
+						return ($this->intCreatedBy = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1548,20 +1481,6 @@
 					 */
 					try {
 						return ($this->dttUpdatedAt = QType::Cast($mixValue, QType::DateTime));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CreatedBy':
-					/**
-					 * Sets the value for intCreatedBy 
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						$this->objCreatedByObject = null;
-						return ($this->intCreatedBy = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1585,6 +1504,70 @@
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Cliente':
+					/**
+					 * Sets the value for the MasterCliente object referenced by intClienteId (Not Null)
+					 * @param MasterCliente $mixValue
+					 * @return MasterCliente
+					 */
+					if (is_null($mixValue)) {
+						$this->intClienteId = null;
+						$this->objCliente = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a MasterCliente object
+						try {
+							$mixValue = QType::Cast($mixValue, 'MasterCliente');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED MasterCliente object
+						if (is_null($mixValue->CodiClie))
+							throw new QCallerException('Unable to set an unsaved Cliente for this TarifaCliente');
+
+						// Update Local Member Variables
+						$this->objCliente = $mixValue;
+						$this->intClienteId = $mixValue->CodiClie;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'TarifaExp':
+					/**
+					 * Sets the value for the TarifaExp object referenced by intTarifaExpId (Not Null)
+					 * @param TarifaExp $mixValue
+					 * @return TarifaExp
+					 */
+					if (is_null($mixValue)) {
+						$this->intTarifaExpId = null;
+						$this->objTarifaExp = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a TarifaExp object
+						try {
+							$mixValue = QType::Cast($mixValue, 'TarifaExp');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED TarifaExp object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved TarifaExp for this TarifaCliente');
+
+						// Update Local Member Variables
+						$this->objTarifaExp = $mixValue;
+						$this->intTarifaExpId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				case 'Producto':
 					/**
 					 * Sets the value for the Productos object referenced by intProductoId (Not Null)
@@ -1606,7 +1589,7 @@
 
 						// Make sure $mixValue is a SAVED Productos object
 						if (is_null($mixValue->Id))
-							throw new QCallerException('Unable to set an unsaved Producto for this TarifaExp');
+							throw new QCallerException('Unable to set an unsaved Producto for this TarifaCliente');
 
 						// Update Local Member Variables
 						$this->objProducto = $mixValue;
@@ -1619,7 +1602,7 @@
 
 				case 'CreatedByObject':
 					/**
-					 * Sets the value for the Usuario object referenced by intCreatedBy 
+					 * Sets the value for the Usuario object referenced by intCreatedBy (Not Null)
 					 * @param Usuario $mixValue
 					 * @return Usuario
 					 */
@@ -1638,7 +1621,7 @@
 
 						// Make sure $mixValue is a SAVED Usuario object
 						if (is_null($mixValue->CodiUsua))
-							throw new QCallerException('Unable to set an unsaved CreatedByObject for this TarifaExp');
+							throw new QCallerException('Unable to set an unsaved CreatedByObject for this TarifaCliente');
 
 						// Update Local Member Variables
 						$this->objCreatedByObject = $mixValue;
@@ -1670,7 +1653,7 @@
 
 						// Make sure $mixValue is a SAVED Usuario object
 						if (is_null($mixValue->CodiUsua))
-							throw new QCallerException('Unable to set an unsaved UpdatedByObject for this TarifaExp');
+							throw new QCallerException('Unable to set an unsaved UpdatedByObject for this TarifaCliente');
 
 						// Update Local Member Variables
 						$this->objUpdatedByObject = $mixValue;
@@ -1711,12 +1694,6 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
-			if ($this->CountTarifaAliadoses()) {
-				$arrTablRela[] = 'tarifa_aliados';
-			}
-			if ($this->CountTarifaClientes()) {
-				$arrTablRela[] = 'tarifa_cliente';
-			}
 			
 			return $arrTablRela;
 		}
@@ -1725,304 +1702,6 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
-
-
-		// Related Objects' Methods for TarifaAliados
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated TarifaAliadoses as an array of TarifaAliados objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaAliados[]
-		*/
-		public function GetTarifaAliadosArray($objOptionalClauses = null) {
-			if ((is_null($this->intId)))
-				return array();
-
-			try {
-				return TarifaAliados::LoadArrayByTarifaExpId($this->intId, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated TarifaAliadoses
-		 * @return int
-		*/
-		public function CountTarifaAliadoses() {
-			if ((is_null($this->intId)))
-				return 0;
-
-			return TarifaAliados::CountByTarifaExpId($this->intId);
-		}
-
-		/**
-		 * Associates a TarifaAliados
-		 * @param TarifaAliados $objTarifaAliados
-		 * @return void
-		*/
-		public function AssociateTarifaAliados(TarifaAliados $objTarifaAliados) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliados on this unsaved TarifaExp.');
-			if ((is_null($objTarifaAliados->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaAliados on this TarifaExp with an unsaved TarifaAliados.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`tarifa_aliados`
-				SET
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . '
-			');
-		}
-
-		/**
-		 * Unassociates a TarifaAliados
-		 * @param TarifaAliados $objTarifaAliados
-		 * @return void
-		*/
-		public function UnassociateTarifaAliados(TarifaAliados $objTarifaAliados) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliados on this unsaved TarifaExp.');
-			if ((is_null($objTarifaAliados->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliados on this TarifaExp with an unsaved TarifaAliados.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`tarifa_aliados`
-				SET
-					`tarifa_exp_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Unassociates all TarifaAliadoses
-		 * @return void
-		*/
-		public function UnassociateAllTarifaAliadoses() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliados on this unsaved TarifaExp.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`tarifa_aliados`
-				SET
-					`tarifa_exp_id` = null
-				WHERE
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated TarifaAliados
-		 * @param TarifaAliados $objTarifaAliados
-		 * @return void
-		*/
-		public function DeleteAssociatedTarifaAliados(TarifaAliados $objTarifaAliados) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliados on this unsaved TarifaExp.');
-			if ((is_null($objTarifaAliados->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliados on this TarifaExp with an unsaved TarifaAliados.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`tarifa_aliados`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objTarifaAliados->Id) . ' AND
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes all associated TarifaAliadoses
-		 * @return void
-		*/
-		public function DeleteAllTarifaAliadoses() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaAliados on this unsaved TarifaExp.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`tarifa_aliados`
-				WHERE
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-
-		// Related Objects' Methods for TarifaCliente
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated TarifaClientes as an array of TarifaCliente objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return TarifaCliente[]
-		*/
-		public function GetTarifaClienteArray($objOptionalClauses = null) {
-			if ((is_null($this->intId)))
-				return array();
-
-			try {
-				return TarifaCliente::LoadArrayByTarifaExpId($this->intId, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated TarifaClientes
-		 * @return int
-		*/
-		public function CountTarifaClientes() {
-			if ((is_null($this->intId)))
-				return 0;
-
-			return TarifaCliente::CountByTarifaExpId($this->intId);
-		}
-
-		/**
-		 * Associates a TarifaCliente
-		 * @param TarifaCliente $objTarifaCliente
-		 * @return void
-		*/
-		public function AssociateTarifaCliente(TarifaCliente $objTarifaCliente) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaCliente on this unsaved TarifaExp.');
-			if ((is_null($objTarifaCliente->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaCliente on this TarifaExp with an unsaved TarifaCliente.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`tarifa_cliente`
-				SET
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . '
-			');
-		}
-
-		/**
-		 * Unassociates a TarifaCliente
-		 * @param TarifaCliente $objTarifaCliente
-		 * @return void
-		*/
-		public function UnassociateTarifaCliente(TarifaCliente $objTarifaCliente) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaCliente on this unsaved TarifaExp.');
-			if ((is_null($objTarifaCliente->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaCliente on this TarifaExp with an unsaved TarifaCliente.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`tarifa_cliente`
-				SET
-					`tarifa_exp_id` = null
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Unassociates all TarifaClientes
-		 * @return void
-		*/
-		public function UnassociateAllTarifaClientes() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaCliente on this unsaved TarifaExp.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`tarifa_cliente`
-				SET
-					`tarifa_exp_id` = null
-				WHERE
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated TarifaCliente
-		 * @param TarifaCliente $objTarifaCliente
-		 * @return void
-		*/
-		public function DeleteAssociatedTarifaCliente(TarifaCliente $objTarifaCliente) {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaCliente on this unsaved TarifaExp.');
-			if ((is_null($objTarifaCliente->Id)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaCliente on this TarifaExp with an unsaved TarifaCliente.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`tarifa_cliente`
-				WHERE
-					`id` = ' . $objDatabase->SqlVariable($objTarifaCliente->Id) . ' AND
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
-
-		/**
-		 * Deletes all associated TarifaClientes
-		 * @return void
-		*/
-		public function DeleteAllTarifaClientes() {
-			if ((is_null($this->intId)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaCliente on this unsaved TarifaExp.');
-
-			// Get the Database Object for this Class
-			$objDatabase = TarifaExp::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`tarifa_cliente`
-				WHERE
-					`tarifa_exp_id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-		}
 
 
 		
@@ -2035,7 +1714,7 @@
 		 * @return string Name of the table from which this class has been created.
 		 */
 		public static function GetTableName() {
-			return "tarifa_exp";
+			return "tarifa_cliente";
 		}
 
 		/**
@@ -2043,7 +1722,7 @@
 		 * @return string Name of the table from which this class has been created.
 		 */
 		public static function GetDatabaseName() {
-			return QApplication::$Database[TarifaExp::GetDatabaseIndex()]->Database;
+			return QApplication::$Database[TarifaCliente::GetDatabaseIndex()]->Database;
 		}
 
 		/**
@@ -2062,17 +1741,14 @@
 		////////////////////////////////////////
 
 		public static function GetSoapComplexTypeXml() {
-			$strToReturn = '<complexType name="TarifaExp"><sequence>';
+			$strToReturn = '<complexType name="TarifaCliente"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
-			$strToReturn .= '<element name="Nombre" type="xsd:string"/>';
+			$strToReturn .= '<element name="Cliente" type="xsd1:MasterCliente"/>';
+			$strToReturn .= '<element name="TarifaExp" type="xsd1:TarifaExp"/>';
 			$strToReturn .= '<element name="Producto" type="xsd1:Productos"/>';
-			$strToReturn .= '<element name="IsPublica" type="xsd:boolean"/>';
-			$strToReturn .= '<element name="Fecha" type="xsd:dateTime"/>';
-			$strToReturn .= '<element name="Monto" type="xsd:float"/>';
-			$strToReturn .= '<element name="Minimo" type="xsd:float"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
-			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedByObject" type="xsd1:Usuario"/>';
+			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="UpdatedByObject" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
@@ -2080,8 +1756,10 @@
 		}
 
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
-			if (!array_key_exists('TarifaExp', $strComplexTypeArray)) {
-				$strComplexTypeArray['TarifaExp'] = TarifaExp::GetSoapComplexTypeXml();
+			if (!array_key_exists('TarifaCliente', $strComplexTypeArray)) {
+				$strComplexTypeArray['TarifaCliente'] = TarifaCliente::GetSoapComplexTypeXml();
+				MasterCliente::AlterSoapComplexTypeArray($strComplexTypeArray);
+				TarifaExp::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Productos::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Usuario::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Usuario::AlterSoapComplexTypeArray($strComplexTypeArray);
@@ -2092,35 +1770,31 @@
 			$objArrayToReturn = array();
 
 			foreach ($objSoapArray as $objSoapObject)
-				array_push($objArrayToReturn, TarifaExp::GetObjectFromSoapObject($objSoapObject));
+				array_push($objArrayToReturn, TarifaCliente::GetObjectFromSoapObject($objSoapObject));
 
 			return $objArrayToReturn;
 		}
 
 		public static function GetObjectFromSoapObject($objSoapObject) {
-			$objToReturn = new TarifaExp();
+			$objToReturn = new TarifaCliente();
 			if (property_exists($objSoapObject, 'Id'))
 				$objToReturn->intId = $objSoapObject->Id;
-			if (property_exists($objSoapObject, 'Nombre'))
-				$objToReturn->strNombre = $objSoapObject->Nombre;
+			if ((property_exists($objSoapObject, 'Cliente')) &&
+				($objSoapObject->Cliente))
+				$objToReturn->Cliente = MasterCliente::GetObjectFromSoapObject($objSoapObject->Cliente);
+			if ((property_exists($objSoapObject, 'TarifaExp')) &&
+				($objSoapObject->TarifaExp))
+				$objToReturn->TarifaExp = TarifaExp::GetObjectFromSoapObject($objSoapObject->TarifaExp);
 			if ((property_exists($objSoapObject, 'Producto')) &&
 				($objSoapObject->Producto))
 				$objToReturn->Producto = Productos::GetObjectFromSoapObject($objSoapObject->Producto);
-			if (property_exists($objSoapObject, 'IsPublica'))
-				$objToReturn->blnIsPublica = $objSoapObject->IsPublica;
-			if (property_exists($objSoapObject, 'Fecha'))
-				$objToReturn->dttFecha = new QDateTime($objSoapObject->Fecha);
-			if (property_exists($objSoapObject, 'Monto'))
-				$objToReturn->fltMonto = $objSoapObject->Monto;
-			if (property_exists($objSoapObject, 'Minimo'))
-				$objToReturn->fltMinimo = $objSoapObject->Minimo;
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
-			if (property_exists($objSoapObject, 'UpdatedAt'))
-				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
 			if ((property_exists($objSoapObject, 'CreatedByObject')) &&
 				($objSoapObject->CreatedByObject))
 				$objToReturn->CreatedByObject = Usuario::GetObjectFromSoapObject($objSoapObject->CreatedByObject);
+			if (property_exists($objSoapObject, 'UpdatedAt'))
+				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
 			if ((property_exists($objSoapObject, 'UpdatedByObject')) &&
 				($objSoapObject->UpdatedByObject))
 				$objToReturn->UpdatedByObject = Usuario::GetObjectFromSoapObject($objSoapObject->UpdatedByObject);
@@ -2136,26 +1810,32 @@
 			$objArrayToReturn = array();
 
 			foreach ($objArray as $objObject)
-				array_push($objArrayToReturn, TarifaExp::GetSoapObjectFromObject($objObject, true));
+				array_push($objArrayToReturn, TarifaCliente::GetSoapObjectFromObject($objObject, true));
 
 			return unserialize(serialize($objArrayToReturn));
 		}
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
+			if ($objObject->objCliente)
+				$objObject->objCliente = MasterCliente::GetSoapObjectFromObject($objObject->objCliente, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intClienteId = null;
+			if ($objObject->objTarifaExp)
+				$objObject->objTarifaExp = TarifaExp::GetSoapObjectFromObject($objObject->objTarifaExp, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intTarifaExpId = null;
 			if ($objObject->objProducto)
 				$objObject->objProducto = Productos::GetSoapObjectFromObject($objObject->objProducto, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intProductoId = null;
-			if ($objObject->dttFecha)
-				$objObject->dttFecha = $objObject->dttFecha->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttCreatedAt)
 				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
-			if ($objObject->dttUpdatedAt)
-				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objCreatedByObject)
 				$objObject->objCreatedByObject = Usuario::GetSoapObjectFromObject($objObject->objCreatedByObject, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intCreatedBy = null;
+			if ($objObject->dttUpdatedAt)
+				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objUpdatedByObject)
 				$objObject->objUpdatedByObject = Usuario::GetSoapObjectFromObject($objObject->objUpdatedByObject, false);
 			else if (!$blnBindRelatedObjects)
@@ -2175,15 +1855,12 @@
 			// Member Variables
 			///////////////////
 			$iArray['Id'] = $this->intId;
-			$iArray['Nombre'] = $this->strNombre;
+			$iArray['ClienteId'] = $this->intClienteId;
+			$iArray['TarifaExpId'] = $this->intTarifaExpId;
 			$iArray['ProductoId'] = $this->intProductoId;
-			$iArray['IsPublica'] = $this->blnIsPublica;
-			$iArray['Fecha'] = $this->dttFecha;
-			$iArray['Monto'] = $this->fltMonto;
-			$iArray['Minimo'] = $this->fltMinimo;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
-			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
+			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['UpdatedBy'] = $this->intUpdatedBy;
 			return new ArrayIterator($iArray);
 		}
@@ -2223,64 +1900,55 @@
      * @uses QQNode
      *
      * @property-read QQNode $Id
-     * @property-read QQNode $Nombre
+     * @property-read QQNode $ClienteId
+     * @property-read QQNodeMasterCliente $Cliente
+     * @property-read QQNode $TarifaExpId
+     * @property-read QQNodeTarifaExp $TarifaExp
      * @property-read QQNode $ProductoId
      * @property-read QQNodeProductos $Producto
-     * @property-read QQNode $IsPublica
-     * @property-read QQNode $Fecha
-     * @property-read QQNode $Monto
-     * @property-read QQNode $Minimo
      * @property-read QQNode $CreatedAt
-     * @property-read QQNode $UpdatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
+     * @property-read QQNode $UpdatedAt
      * @property-read QQNode $UpdatedBy
      * @property-read QQNodeUsuario $UpdatedByObject
      *
      *
-     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliados
-     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaCliente
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
-	class QQNodeTarifaExp extends QQNode {
-		protected $strTableName = 'tarifa_exp';
+	class QQNodeTarifaCliente extends QQNode {
+		protected $strTableName = 'tarifa_cliente';
 		protected $strPrimaryKey = 'id';
-		protected $strClassName = 'TarifaExp';
+		protected $strClassName = 'TarifaCliente';
 		public function __get($strName) {
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'Integer', $this);
-				case 'Nombre':
-					return new QQNode('nombre', 'Nombre', 'VarChar', $this);
+				case 'ClienteId':
+					return new QQNode('cliente_id', 'ClienteId', 'Integer', $this);
+				case 'Cliente':
+					return new QQNodeMasterCliente('cliente_id', 'Cliente', 'Integer', $this);
+				case 'TarifaExpId':
+					return new QQNode('tarifa_exp_id', 'TarifaExpId', 'Integer', $this);
+				case 'TarifaExp':
+					return new QQNodeTarifaExp('tarifa_exp_id', 'TarifaExp', 'Integer', $this);
 				case 'ProductoId':
 					return new QQNode('producto_id', 'ProductoId', 'Integer', $this);
 				case 'Producto':
 					return new QQNodeProductos('producto_id', 'Producto', 'Integer', $this);
-				case 'IsPublica':
-					return new QQNode('is_publica', 'IsPublica', 'Bit', $this);
-				case 'Fecha':
-					return new QQNode('fecha', 'Fecha', 'Date', $this);
-				case 'Monto':
-					return new QQNode('monto', 'Monto', 'Float', $this);
-				case 'Minimo':
-					return new QQNode('minimo', 'Minimo', 'Float', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
-				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
 				case 'CreatedByObject':
 					return new QQNodeUsuario('created_by', 'CreatedByObject', 'Integer', $this);
+				case 'UpdatedAt':
+					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'Integer', $this);
 				case 'UpdatedByObject':
 					return new QQNodeUsuario('updated_by', 'UpdatedByObject', 'Integer', $this);
-				case 'TarifaAliados':
-					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliados', 'reverse_reference', 'tarifa_exp_id', 'TarifaAliados');
-				case 'TarifaCliente':
-					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifacliente', 'reverse_reference', 'tarifa_exp_id', 'TarifaCliente');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2297,64 +1965,55 @@
 
     /**
      * @property-read QQNode $Id
-     * @property-read QQNode $Nombre
+     * @property-read QQNode $ClienteId
+     * @property-read QQNodeMasterCliente $Cliente
+     * @property-read QQNode $TarifaExpId
+     * @property-read QQNodeTarifaExp $TarifaExp
      * @property-read QQNode $ProductoId
      * @property-read QQNodeProductos $Producto
-     * @property-read QQNode $IsPublica
-     * @property-read QQNode $Fecha
-     * @property-read QQNode $Monto
-     * @property-read QQNode $Minimo
      * @property-read QQNode $CreatedAt
-     * @property-read QQNode $UpdatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
+     * @property-read QQNode $UpdatedAt
      * @property-read QQNode $UpdatedBy
      * @property-read QQNodeUsuario $UpdatedByObject
      *
      *
-     * @property-read QQReverseReferenceNodeTarifaAliados $TarifaAliados
-     * @property-read QQReverseReferenceNodeTarifaCliente $TarifaCliente
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
-	class QQReverseReferenceNodeTarifaExp extends QQReverseReferenceNode {
-		protected $strTableName = 'tarifa_exp';
+	class QQReverseReferenceNodeTarifaCliente extends QQReverseReferenceNode {
+		protected $strTableName = 'tarifa_cliente';
 		protected $strPrimaryKey = 'id';
-		protected $strClassName = 'TarifaExp';
+		protected $strClassName = 'TarifaCliente';
 		public function __get($strName) {
 			switch ($strName) {
 				case 'Id':
 					return new QQNode('id', 'Id', 'integer', $this);
-				case 'Nombre':
-					return new QQNode('nombre', 'Nombre', 'string', $this);
+				case 'ClienteId':
+					return new QQNode('cliente_id', 'ClienteId', 'integer', $this);
+				case 'Cliente':
+					return new QQNodeMasterCliente('cliente_id', 'Cliente', 'integer', $this);
+				case 'TarifaExpId':
+					return new QQNode('tarifa_exp_id', 'TarifaExpId', 'integer', $this);
+				case 'TarifaExp':
+					return new QQNodeTarifaExp('tarifa_exp_id', 'TarifaExp', 'integer', $this);
 				case 'ProductoId':
 					return new QQNode('producto_id', 'ProductoId', 'integer', $this);
 				case 'Producto':
 					return new QQNodeProductos('producto_id', 'Producto', 'integer', $this);
-				case 'IsPublica':
-					return new QQNode('is_publica', 'IsPublica', 'boolean', $this);
-				case 'Fecha':
-					return new QQNode('fecha', 'Fecha', 'QDateTime', $this);
-				case 'Monto':
-					return new QQNode('monto', 'Monto', 'double', $this);
-				case 'Minimo':
-					return new QQNode('minimo', 'Minimo', 'double', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
-				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
 				case 'CreatedByObject':
 					return new QQNodeUsuario('created_by', 'CreatedByObject', 'integer', $this);
+				case 'UpdatedAt':
+					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'integer', $this);
 				case 'UpdatedByObject':
 					return new QQNodeUsuario('updated_by', 'UpdatedByObject', 'integer', $this);
-				case 'TarifaAliados':
-					return new QQReverseReferenceNodeTarifaAliados($this, 'tarifaaliados', 'reverse_reference', 'tarifa_exp_id', 'TarifaAliados');
-				case 'TarifaCliente':
-					return new QQReverseReferenceNodeTarifaCliente($this, 'tarifacliente', 'reverse_reference', 'tarifa_exp_id', 'TarifaCliente');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

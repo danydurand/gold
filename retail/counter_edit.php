@@ -50,16 +50,6 @@ class CounterEditForm extends CounterEditFormBase {
 		$this->lblId = $this->mctCounter->lblId_Create();
 		$this->txtDescripcion = $this->mctCounter->txtDescripcion_Create();
         $this->lstSucursal = $this->mctCounter->lstSucursal_Create();
-        //if (isset($_SESSION['CodiSucu'])) {
-        //    $this->lstSucursal->RemoveAllItems();
-        //    $objSucuSele = Estacion::Load($_SESSION['CodiSucu']);
-        //    if ($objSucuSele) {
-        //        $this->lstSucursal->AddItem($objSucuSele->__toString(),$objSucuSele->CodiEsta,true);
-        //    }
-        //    $this->lstSucursal->Enabled = false;
-        //    $this->lstSucursal->ForeColor = 'blue';
-        //    unset($_SESSION['CodiSucu']);
-        //}
 		$this->lstRuta = $this->mctCounter->lstRuta_Create();
 		$this->lstRuta->Width = 350;
 		$this->lstEntregaInmediataObject = $this->mctCounter->lstEntregaInmediataObject_Create();
@@ -86,7 +76,10 @@ class CounterEditForm extends CounterEditFormBase {
 		$this->txtCkptAntiguedad1 = $this->mctCounter->txtCkptAntiguedad1_Create();
 		$this->txtCkptAntiguedad2 = $this->mctCounter->txtCkptAntiguedad2_Create();
 		$this->txtCkptAntiguedad0 = $this->mctCounter->txtCkptAntiguedad0_Create();
-		$this->lstAliadoComercial = $this->mctCounter->lstAliadoComercial_Create();
+		$objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
+		$objClauOrde[] = QQ::OrderBy(QQN::MasterCliente()->NombClie);
+		$this->lstCliente = $this->mctCounter->lstCliente_Create(null,QQ::AndCondition($objClauWher), $objClauOrde);
+		$this->lstCliente->Name = 'Aliado';
 		$this->txtLimiteKilos = $this->mctCounter->txtLimiteKilos_Create();
 		$this->txtDependeDe = $this->mctCounter->txtDependeDe_Create();
 		$this->chkDomOrigen = $this->mctCounter->chkDomOrigen_Create();

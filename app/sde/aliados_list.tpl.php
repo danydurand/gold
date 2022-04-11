@@ -5,7 +5,7 @@
 // Be sure to move this out of this directory before modifying to ensure that subsequent
 // code re-generations do not overwrite your changes.
 
-$strPageTitle = 'Lista de Clientes';
+$strPageTitle = 'Lista de Aliados';
 require(__APP_INCLUDES__ . '/header.inc.php');
 ?>
     <div class="titulo-formulario">

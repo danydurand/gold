@@ -29,7 +29,7 @@
 
         public static function AptasParaFacturarPorAliadoYServicio($intAliaIdxx,$strServImpo,$arrGuiaIdxx,$strFormResp='count') {
             $objClauWher   = QQ::Clause();
-            $objClauWher[] = QQ::Equal(QQN::Guias()->AliadoId,$intAliaIdxx);
+            $objClauWher[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$intAliaIdxx);
             $objClauWher[] = QQ::IsNull(QQN::Guias()->FacturaId);
             $objClauWher[] = QQ::Equal(QQN::Guias()->ServicioImportacion,$strServImpo);
             $objClauWher[] = QQ::In(QQN::Guias()->Id,$arrGuiaIdxx);
@@ -477,9 +477,10 @@
             t('Rutina: flete_exp');
             $monto = 0;
             $texto = '';
-            $intAliaIdxx = $this->AliadoId;
-            if (is_null($intAliaIdxx)) {
-                t('La guia no Aliado');
+            /* @var $objClieNaci MasterCliente */
+            $objClieNaci = unserialize($_SESSION['ClieNaci']);
+            if ($this->ClienteCorpId == $objClieNaci->CodiClie) {
+                t('La guia no pertenece a un Aliado');
                 //--------------------------------------------------------
                 // No es una Aliado, se utiliza la Tarifa Publica de EXP
                 //--------------------------------------------------------
@@ -489,17 +490,17 @@
                 //---------------------------------------------------------------------------------
                 // Se trata de un Aliado, se utiliza la Tarifa de EXP vigente, asociada al Aliado
                 //---------------------------------------------------------------------------------
-                t('Aliado Id: '.$intAliaIdxx.' Producto Id: '.$this->ProductoId);
-                $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->AliadoId, $intAliaIdxx);
-                $objClauWher[] = QQ::Equal(QQN::TarifaAliados()->ProductoId, $this->ProductoId);
-                $arrTariAlia   = TarifaAliados::QueryArray(QQ::AndCondition($objClauWher));
-                if (isset($arrTariAlia)) {
-                    t('El vector de TarifaAliado tiene: '.count($arrTariAlia).' elementos');
-                    $objTariProd   = $arrTariAlia[0];
+                t('Aliado Id: '.$this->ClienteCorpId.' Producto Id: '.$this->ProductoId);
+                $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ClienteId, $this->ClienteCorpId);
+                $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ProductoId, $this->ProductoId);
+                $arrTariClie   = TarifaCliente::QueryArray(QQ::AndCondition($objClauWher));
+                if (isset($arrTariClie)) {
+                    t('El vector de TarifaCliente tiene: '.count($arrTariClie).' elementos');
+                    $objTariProd   = $arrTariClie[0];
                     $arrTariProd['monto']  = $objTariProd->TarifaExp->Monto;
                     $arrTariProd['minimo'] = $objTariProd->TarifaExp->Minimo;
                 } else {
-                    t('No se encontro la tarifa del aliado');
+                    t('No se encontro la tarifa del Cliente-Aliado, se aplica tarifa publica');
                     $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
                 }
             }

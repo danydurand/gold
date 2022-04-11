@@ -68,31 +68,10 @@ class CounterListForm extends CounterListFormBase {
 		$this->dtgCounters->MetaAddColumn('Descripcion');
 		$this->dtgCounters->MetaAddColumn(QQN::Counter()->Sucursal->Iata,'Name=Suc');
 		$this->dtgCounters->MetaAddColumn(QQN::Counter()->Ruta);
-		//$this->dtgCounters->MetaAddTypeColumn('EntregaInmediata', 'SinoType');
 		$this->dtgCounters->MetaAddColumn('Siglas');
-		//$this->dtgCounters->MetaAddColumn('LimiteDePaquetes');
-		//$this->dtgCounters->MetaAddColumn('CantidadDePaquetes');
-		//$this->dtgCounters->MetaAddColumn('CkptRecepcion');
-		//$this->dtgCounters->MetaAddColumn('CkptConfirmacion');
-		//$this->dtgCounters->MetaAddColumn('CkptAlmacen');
-		//$this->dtgCounters->MetaAddColumn('PaisId');
-		//$this->dtgCounters->MetaAddColumn('StatusId');
 		$colStatRece = new QDataGridColumn('Status','<?= $_ITEM->__status() ?>');
 		$this->dtgCounters->AddColumn($colStatRece);
-		//$this->dtgCounters->MetaAddColumn('Direccion');
-		//$this->dtgCounters->MetaAddTypeColumn('ElegirServicio', 'SinoType');
-		//$this->dtgCounters->MetaAddTypeColumn('EsRuta', 'SinoType');
-		//$this->dtgCounters->MetaAddTypeColumn('SeFactura', 'SinoType');
-		//$this->dtgCounters->MetaAddTypeColumn('PermitePago', 'SinoType');
-		//$this->dtgCounters->MetaAddColumn('EmailJefeAlmacen');
-		//$this->dtgCounters->MetaAddColumn('CkptAntiguedad1');
-		//$this->dtgCounters->MetaAddColumn('CkptAntiguedad2');
-		//$this->dtgCounters->MetaAddColumn('CkptAntiguedad0');
-		$this->dtgCounters->MetaAddColumn(QQN::Counter()->AliadoComercial);
-		//$this->dtgCounters->MetaAddColumn('LimiteKilos');
-		//$this->dtgCounters->MetaAddColumn('DependeDe');
-		//$this->dtgCounters->MetaAddColumn('DomOrigen');
-		//$this->dtgCounters->MetaAddColumn('DomDestino');
+		$this->dtgCounters->MetaAddColumn(QQN::Counter()->Cliente, 'Name=Aliado');
 
         $this->btnExpoExce_Create();
 

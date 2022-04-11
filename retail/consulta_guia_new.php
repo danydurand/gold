@@ -958,11 +958,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function lblAliaCome_Create() {
         $this->lblAliaCome = new QLabel($this);
-        $this->lblAliaCome->ToolTip = !is_null($this->objGuia->AliadoId)
-            ? $this->objGuia->Aliado->RazonSocial
+        $this->lblAliaCome->ToolTip = !is_null($this->objGuia->ClienteCorpId)
+            ? $this->objGuia->ClienteCorp->NombClie
             : null;
-        $this->lblAliaCome->Text = !is_null($this->objGuia->AliadoId)
-            ? substr($this->objGuia->Aliado->RazonSocial,0,10)
+        $this->lblAliaCome->Text = !is_null($this->objGuia->ClienteCorpId)
+            ? substr($this->objGuia->ClienteCorp->NombClie,0,10)
             : null;
     }
 
