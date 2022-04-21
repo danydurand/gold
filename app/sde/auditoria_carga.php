@@ -13,6 +13,7 @@ require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 class AuditoriaCarga extends FormularioBaseKaizen {
     protected $objDataBase;
 
+    protected $lstTipoOper;
     protected $lstOperSist;  // Combo de Operaciones Abiertas
     protected $lstNumeCont;  // Lista de Contenedores
     protected $txtListNume;  // Lista de Guías
@@ -24,7 +25,6 @@ class AuditoriaCarga extends FormularioBaseKaizen {
     protected $dtgPiezMani;
 
     protected $strCadeSqlx;
-    protected $lstTipoOper;
     protected $blnExisCont;
     protected $btnRepoDisc;
     /* @var $objContaine Containers */
@@ -43,6 +43,7 @@ class AuditoriaCarga extends FormularioBaseKaizen {
             t('Voy a validar Ckpt repetidos');
         }
 
+        $this->lstTipoOper_Create();
         $this->lstOperSist_Create();
         $this->lstNumeCont_Create();
         $this->txtListNume_Create();
@@ -54,6 +55,18 @@ class AuditoriaCarga extends FormularioBaseKaizen {
     //----------------------------
     // Aquí se Crean los Objetos
     //----------------------------
+
+    protected function lstTipoOper_Create() {
+        $this->lstTipoOper = new QListBox($this);
+        $this->lstTipoOper->Name = QApplication::Translate("Tipo Operación/Ruta");
+        $this->lstTipoOper->Required = true;
+        $this->lstTipoOper->AddItem(QApplication::Translate("- Seleccione Uno -"),null);
+        foreach (SdeTipoOper::LoadAll() as $objTipoOper) {
+            $this->lstTipoOper->AddItem($objTipoOper->__toString(),$objTipoOper->CodiTipo);
+        }
+        $this->lstTipoOper->AddAction(new QChangeEvent(), new QAjaxAction('lstTipoOper_Change'));
+    }
+
 
     protected function btnErroProc_Create() {
         $this->btnErroProc = new QButtonD($this);
@@ -134,12 +147,12 @@ class AuditoriaCarga extends FormularioBaseKaizen {
         $this->lstOperSist->AddItem(QApplication::Translate('- Seleccione Uno -'),null);
         $this->lstOperSist->Name = QApplication::Translate('Operación/Ruta');
         $this->lstOperSist->Width = 280;
-        $this->lstOperSist->AddAction(new QChangeEvent(), new QAjaxAction('lstOperSist_Change'));
         $objClausula   = QQ::Clause();
         $objClausula[] = QQ::OrderBy(QQN::SdeOperacion()->RutaId);
         foreach (SdeOperacion::LoadArrayByCodiTipo(1,$objClausula) as $objOperacion) {
             $this->lstOperSist->AddItem($objOperacion->__toString(),$objOperacion->CodiOper);
         }
+        $this->lstOperSist->AddAction(new QChangeEvent(), new QAjaxAction('lstOperSist_Change'));
     }
 
     protected function lstNumeCont_Create() {
@@ -162,6 +175,23 @@ class AuditoriaCarga extends FormularioBaseKaizen {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    protected function lstTipoOper_Change() {
+        $this->lstOperSist->RemoveAllItems();
+        if (!is_null($this->lstTipoOper->SelectedValue)) {
+            $objClausula   = QQ::Clause();
+            $objClausula[] = QQ::OrderBy(QQN::SdeOperacion()->RutaId);
+            $intCodiTipo   = $this->lstTipoOper->SelectedValue;
+            $objClauWher[] = QQ::Equal(QQN::SdeOperacion()->CodiTipo,$intCodiTipo);
+            $objClauWher[] = QQ::IsNull(QQN::SdeOperacion()->DeletedAt);
+            $arrSdexOper   = SdeOperacion::QueryArray(QQ::AndCondition($objClauWher));
+            $intCantOper   = count($arrSdexOper);
+            $this->lstOperSist->AddItem('- Seleccione Uno - ('.$intCantOper.')',null);
+            foreach ($arrSdexOper as $objOperacion) {
+                $this->lstOperSist->AddItem(substr($objOperacion->__toString(),0,50),$objOperacion->CodiOper);
+            }
+        }
+    }
 
     protected function btnErroProc_Click() {
         $_SESSION['PagiBack'] = "/auditoria_carga.php/";

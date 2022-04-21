@@ -18,7 +18,7 @@
     <!-------------------------- -->
     <div class="hidden-xs hidden-sm col-md-7 col-lg-5" style="text-align: center; margin-top: -0.25em;">
         <?php $this->btnVolvList->Render(); ?>
-        <?php $this->btnNuevRegi->Render(); ?>
+        <?php //$this->btnNuevRegi->Render(); ?>
         <?php $this->btnSave->Render(); ?>
         <?php $this->btnDelete->Render(); ?>
         <?php $this->btnMasxAcci->Render(); ?>
@@ -36,7 +36,7 @@
     <!-------------------------------------->
     <div class="col-xs-5 hidden-md hidden-lg" style="text-align: left; margin-top: -0.25em;">
         <?php $this->btnVolvSmal->Render(); ?>
-        <?php $this->btnNuevSmal->Render(); ?>
+        <?php //$this->btnNuevSmal->Render(); ?>
         <?php $this->btnGuarSmal->Render(); ?>
         <?php $this->btnBorrSmal->Render(); ?>
         <?php $this->btnHistSmal->Render(); ?>
@@ -72,37 +72,41 @@
 	        </div>
             <div class="col-md-4">
                 <?php $this->txtTotal->RenderWithName(); ?>
-                <?php //$this->txtEstatusPago->RenderWithName(); ?>
                 <?php $this->lstEstaPago->RenderWithName(); ?>
-				<?php //$this->txtMontoDscto->RenderWithName(); ?>
 				<?php $this->txtMontoCobrado->RenderWithName(); ?>
 				<?php $this->txtMontoPendiente->RenderWithName(); ?>
-				<?php //$this->txtNumero->RenderWithName(); ?>
-				<?php //$this->txtMaquinaFiscal->RenderWithName(); ?>
-				<?php //$this->txtFechaImpresion->RenderWithName(); ?>
-				<?php //$this->txtHoraImpresion->RenderWithName(); ?>
-				<?php //$this->chkTieneRetencion->RenderWithName(); ?>
-				<?php //$this->txtNotaCreditoId->RenderWithName(); ?>
 	        </div>
         </div>
-        <?php if ($this->mctFacturas->Facturas->CountNotaEntregasAsFactura() > 0) { ?>
-            <div class="row" style="margin-top: 1em">
-                <div class="col-md-6">
-                    <div class="titulo">Manifiestos (click p/info detallada)</div>
-                </div>
-                <div class="col-md-6">
-                    <div class="titulo">Pagos (click p/info detallada)</div>
-                </div>
+        <div class="row" style="margin-top: 1em">
+            <?php if ($this->mctFacturas->Facturas->CountNotaEntregasAsFactura() > 0) { ?>
+            <div class="col-md-6">
+                <div class="titulo">Manifiestos (click p/info detallada)</div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <?php $this->dtgNotaFact->Render(); ?>
-                </div>
-                <div class="col-md-6">
-                    <?php $this->dtgPagoFact->Render(); ?>
-                </div>
+            <?php } ?>
+            <?php if ($this->mctFacturas->Facturas->ClienteCorp->EsAliado) { ?>
+            <div class="col-md-6">
+                <div class="titulo">Guías</div>
             </div>
-        <?php } ?>
+            <?php } ?>
+            <div class="col-md-6">
+                <div class="titulo">Pagos (click p/info detallada)</div>
+            </div>
+        </div>
+        <div class="row">
+            <?php if ($this->mctFacturas->Facturas->CountNotaEntregasAsFactura() > 0) { ?>
+            <div class="col-md-6">
+                <?php $this->dtgNotaFact->Render(); ?>
+            </div>
+            <?php } ?>
+            <?php if ($this->mctFacturas->Facturas->ClienteCorp->EsAliado) { ?>
+                <div class="col-md-6">
+                    <?php $this->dtgGuiaFact->Render(); ?>
+                </div>
+            <?php } ?>
+            <div class="col-md-6">
+                <?php $this->dtgPagoFact->Render(); ?>
+            </div>
+        </div>
         <?php if ($this->mctFacturas->Facturas->CountNotaCreditoCorpsAsFactura() > 0) { ?>
             <div class="row" style="margin-top: 1em">
                 <div class="col-md-6">

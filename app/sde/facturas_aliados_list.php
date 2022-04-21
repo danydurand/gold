@@ -51,7 +51,7 @@ class FacturasAliadosListForm extends FacturasListFormBase {
 		$this->dtgFacturases->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::IsNotNull(QQN::Facturas()->AliadoId);
+        $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorp->EsAliado,true);
         $this->dtgFacturases->AdditionalConditions = QQ::AndCondition($objClauWher);
 
         $objClauOrde   = QQ::Clause();
@@ -75,16 +75,16 @@ class FacturasAliadosListForm extends FacturasListFormBase {
 		$this->dtgFacturases->MetaAddColumn('Id');
 		$this->dtgFacturases->MetaAddColumn('Referencia');
 
-		$colNombAlia = $this->dtgFacturases->MetaAddColumn(QQN::Facturas()->Aliado->RazonSocial,'Name=ALIADO');
-        $colNombAlia->OrderByClause = QQ::OrderBy(QQN::Facturas()->Aliado->RazonSocial);
-        $colNombAlia->ReverseOrderByClause = QQ::OrderBy(QQN::Facturas()->Aliado->RazonSocial,false);
-        $colNombAlia->Filter = QQ::Like(QQN::Facturas()->Aliado->RazonSocial,null);
+		$colNombAlia = $this->dtgFacturases->MetaAddColumn(QQN::Facturas()->ClienteCorp->NombClie,'Name=ALIADO');
+        $colNombAlia->OrderByClause = QQ::OrderBy(QQN::Facturas()->ClienteCorp->NombClie);
+        $colNombAlia->ReverseOrderByClause = QQ::OrderBy(QQN::Facturas()->ClienteCorp->NombClie,false);
+        $colNombAlia->Filter = QQ::Like(QQN::Facturas()->ClienteCorp->NombClie,null);
         $colNombAlia->FilterType = QFilterType::TextFilter;
 
-		$this->dtgFacturases->MetaAddColumn('Fecha');
-		$this->dtgFacturases->MetaAddColumn('Estatus');
+        $this->dtgFacturases->MetaAddColumn('Fecha');
+        $this->dtgFacturases->MetaAddColumn('Estatus');
 
-        $colCantMani = new QDataGridColumn('Cant. Manif','<?= $_FORM->CantGuias($_ITEM) ?>');
+        $colCantMani = new QDataGridColumn('Cant. Guias','<?= $_FORM->CantGuias($_ITEM) ?>');
         $colCantMani->HorizontalAlign = QHorizontalAlign::Center;
         $this->dtgFacturases->AddColumn($colCantMani);
 
@@ -112,7 +112,7 @@ class FacturasAliadosListForm extends FacturasListFormBase {
 
     }
 
-    public function CantMani(Facturas $objFactClie) {
+    public function CantGuias(Facturas $objFactClie) {
 		return $objFactClie->CountFacturaGuiasesAsFactura();
 	}
 

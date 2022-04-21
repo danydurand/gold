@@ -901,15 +901,9 @@ class FacturasEditForm extends FacturasEditFormBase {
         // Se verifica la integridad referencial
         //----------------------------------------
         $blnTodoOkey = true;
-        //if ($this->objUsuario->LogiUsua != 'ddurand') {
-        //    $arrTablRela = $this->mctFacturas->TablasRelacionadasFacturas();
-        //    if (count($arrTablRela)) {
-        //        $strTablRela = implode(',',$arrTablRela);
-        //        $this->warning('Existen registros relacionados en '.$strTablRela);
-        //        $blnTodoOkey = false;
-        //    }
-        //}
         if ($blnTodoOkey) {
+            $arrGuiaFact = $this->mctFacturas->Facturas->GetFacturaGuiasAsFacturaArray();
+            $intGuiaFact = $arrGuiaFact[0]->Guia->Id;
             Guias::RomperRelacionConFactura($this->mctFacturas->Facturas->Id);
             $this->mctFacturas->DeleteFacturas();
             $arrLogxCamb['strNombTabl'] = 'Facturas';
@@ -917,7 +911,8 @@ class FacturasEditForm extends FacturasEditFormBase {
             $arrLogxCamb['strNombRegi'] = $this->mctFacturas->Facturas->Referencia;
             $arrLogxCamb['strDescCamb'] = "Borrado";
             LogDeCambios($arrLogxCamb);
-            $this->RedirectToListPage();
+            QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$intGuiaFact);
+            //$this->RedirectToListPage();
         }
     }
 

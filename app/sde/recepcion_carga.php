@@ -14,11 +14,8 @@ class RecepcionCarga extends FormularioBaseKaizen {
     protected $lstOperAbie;
     protected $lstNumeCont;
     protected $arrListNume;
-    protected $arrMotiDisc;
     protected $lstTipoOper;
-    protected $lstNombAlma;
     protected $strCadeSqlx;
-    protected $strNumeVali;
     protected $objProcEjec;
     protected $btnErroProc;
 
@@ -29,7 +26,8 @@ class RecepcionCarga extends FormularioBaseKaizen {
 
         $this->objDefaultWaitIcon = new QWaitIcon($this);
 
-        $this->lstOperAbier_Create();
+        $this->lstTipoOper_Create();
+        $this->lstOperAbie_Create();
         $this->lstNumeCont_Create();
         $this->btnErroProc_Create();
     }
@@ -45,16 +43,27 @@ class RecepcionCarga extends FormularioBaseKaizen {
         $this->btnErroProc->Visible = false;
     }
 
-    protected function lstOperAbier_Create() {
+    protected function lstTipoOper_Create() {
+        $this->lstTipoOper = new QListBox($this);
+        $this->lstTipoOper->Name = QApplication::Translate("Tipo Operación/Ruta");
+        $this->lstTipoOper->Required = true;
+        $this->lstTipoOper->AddItem(QApplication::Translate("- Seleccione Uno -"),null);
+        foreach (SdeTipoOper::LoadAll() as $objTipoOper) {
+            $this->lstTipoOper->AddItem($objTipoOper->__toString(),$objTipoOper->CodiTipo);
+        }
+        $this->lstTipoOper->AddAction(new QChangeEvent(), new QAjaxAction('lstTipoOper_Change'));
+    }
+
+    protected function lstOperAbie_Create() {
         $this->lstOperAbie = new QListBox($this);
         $this->lstOperAbie->AddItem(QApplication::Translate('- Seleccione Uno -'), null);
         $this->lstOperAbie->Name = QApplication::Translate('Operación/Ruta');
         $this->lstOperAbie->Required = true;
         $this->lstOperAbie->Width = 260;
         $this->lstOperAbie->AddAction(new QChangeEvent(), new QAjaxAction('lstOperAbie_Change'));
-        foreach (SdeOperacion::LoadArrayByCodiTipo(1, QQ::Clause(QQ::OrderBy(QQN::SdeOperacion()->RutaId))) as $objOperacion) {
-            $this->lstOperAbie->AddItem($objOperacion->__toString(), $objOperacion->CodiOper);
-        }
+        //foreach (SdeOperacion::LoadArrayByCodiTipo(1, QQ::Clause(QQ::OrderBy(QQN::SdeOperacion()->RutaId))) as $objOperacion) {
+        //    $this->lstOperAbie->AddItem($objOperacion->__toString(), $objOperacion->CodiOper);
+        //}
     }
 
     protected function lstNumeCont_Create() {
@@ -86,6 +95,23 @@ class RecepcionCarga extends FormularioBaseKaizen {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    protected function lstTipoOper_Change() {
+        $this->lstOperAbie->RemoveAllItems();
+        if (!is_null($this->lstTipoOper->SelectedValue)) {
+            $objClausula   = QQ::Clause();
+            $objClausula[] = QQ::OrderBy(QQN::SdeOperacion()->RutaId);
+            $intCodiTipo   = $this->lstTipoOper->SelectedValue;
+            $objClauWher[] = QQ::Equal(QQN::SdeOperacion()->CodiTipo,$intCodiTipo);
+            $objClauWher[] = QQ::IsNull(QQN::SdeOperacion()->DeletedAt);
+            $arrSdexOper   = SdeOperacion::QueryArray(QQ::AndCondition($objClauWher));
+            $intCantOper   = count($arrSdexOper);
+            $this->lstOperAbie->AddItem('- Seleccione Uno - ('.$intCantOper.')',null);
+            foreach ($arrSdexOper as $objOperacion) {
+                $this->lstOperAbie->AddItem(substr($objOperacion->__toString(),0,50),$objOperacion->CodiOper);
+            }
+        }
+    }
 
     protected function btnErroProc_Click() {
         QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);

@@ -564,7 +564,7 @@ class SacarARuta extends FormularioBaseKaizen {
         $objClauOrde[] = QQ::OrderBy(QQN::Transportista()->Nombre);
         $arrEmprTran   = Transportista::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
         $intCantClie   = count($arrEmprTran);
-        $this->lstEmprTran->AddItem('- Seleccione Uno - ('.$intCantClie.')',null);
+        $this->lstEmprTran->AddItem('- Seleccione - ('.$intCantClie.')',null);
         foreach ($arrEmprTran as $objEmprTran) {
             $blnSeleRegi = false;
             if ($this->blnEditMode) {
@@ -609,7 +609,6 @@ class SacarARuta extends FormularioBaseKaizen {
     }
 
     protected function dtgPiezAptaRow_Click($strFormId, $strControlId, $strParameter) {
-        //t('strParameter:'.$strParameter);
         $intGuiaIdxx = explode('|',$strParameter)[1];
         QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$intGuiaIdxx);
     }
@@ -617,14 +616,15 @@ class SacarARuta extends FormularioBaseKaizen {
     protected function dtgPiezApta_Bind() {
         $intCodiOper = $this->lstOperAbie->SelectedValue;
         if (!is_null($intCodiOper)) {
-            $objOperSele  = SdeOperacion::Load($intCodiOper);
+            //$objOperSele  = SdeOperacion::Load($intCodiOper);
             //$strDestIdxx  = $objOperSele->GetDestinosIds('string');
             $strCadeSqlx  = "select id ";
             $strCadeSqlx .= "  from v_aptas_para_trasladar_receptoria ";
             $strCadeSqlx .= " where receptoria_origen_id = ".$_SESSION['ReceptoriaId'];
             $strCadeSqlx .= "   and created_by = ".$this->objUsuario->CodiUsua;
+            $strCadeSqlx .= " order by fecha desc";
             //$strCadeSqlx .= "   and fecha = ".date('Y-m-d');
-            t('SQL: '.$strCadeSqlx);
+            //t('SQL: '.$strCadeSqlx);
             $objDatabase  = GuiaPiezas::GetDatabase();
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $arrIdxxPiez  = [];
@@ -645,38 +645,38 @@ class SacarARuta extends FormularioBaseKaizen {
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('IdPieza');
         $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
-        $colIdxxPiez->Width = 55;
+        $colIdxxPiez->Width = 70;
         $this->dtgPiezApta->AddColumn($colIdxxPiez);
-
-        //$colManiGuia = new QDataGridColumn($this);
-        //$colManiGuia->Name = QApplication::Translate('Ubicacion');
-        /*$colManiGuia->Html = '<?= $_ITEM->Ubicacion ?>';*/
-        //$colManiGuia->Width = 70;
-        //$this->dtgPiezApta->AddColumn($colManiGuia);
 
         $colDescCont = new QDataGridColumn($this);
         $colDescCont->Name = QApplication::Translate('Contenido');
         $colDescCont->Html = '<?= $_ITEM->Descripcion ?>';
-        $colDescCont->Width = 130;
+        $colDescCont->Width = 140;
         $this->dtgPiezApta->AddColumn($colDescCont);
 
         $colDestGuia = new QDataGridColumn($this);
         $colDestGuia->Name = QApplication::Translate('Dest');
         $colDestGuia->Html = '<?= $_ITEM->Guia->Destino->Iata ?>';
-        $colDestGuia->Width = 50;
+        $colDestGuia->Width = 30;
         $this->dtgPiezApta->AddColumn($colDestGuia);
 
         $colProdGuia = new QDataGridColumn($this);
         $colProdGuia->Name = QApplication::Translate('Prod');
         $colProdGuia->Html = '<?= $_ITEM->Guia->Producto->Codigo ?>';
-        $colProdGuia->Width = 50;
+        $colProdGuia->Width = 30;
         $this->dtgPiezApta->AddColumn($colProdGuia);
 
-        $colUltiCkpt = new QDataGridColumn($this);
-        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
-        $colUltiCkpt->Width = 30;
-        $this->dtgPiezApta->AddColumn($colUltiCkpt);
+        //$colUltiCkpt = new QDataGridColumn($this);
+        //$colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        /*$colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';*/
+        //$colUltiCkpt->Width = 30;
+        //$this->dtgPiezApta->AddColumn($colUltiCkpt);
+
+        $colFechGuia = new QDataGridColumn($this);
+        $colFechGuia->Name = 'F.Creacion';
+        $colFechGuia->Html = '<?= $_ITEM->Guia->Fecha ?>';
+        $colFechGuia->Width = 30;
+        $this->dtgPiezApta->AddColumn($colFechGuia);
 
     }
 
@@ -728,16 +728,10 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->dtgPiezMani->AddColumn($colDescCont);
 
         $colServImpo = new QDataGridColumn($this);
-        $colServImpo->Name = QApplication::Translate('S.Impor.');
-        $colServImpo->Html = '<?= $_ITEM->Guia->ServicioImportacion ?>';
+        $colServImpo->Name = 'Prod';
+        $colServImpo->Html = '<?= $_ITEM->Guia->Producto->Codigo ?>';
         $colServImpo->Width = 30;
         $this->dtgPiezMani->AddColumn($colServImpo);
-
-        //$colDescCont = new QDataGridColumn($this);
-        //$colDescCont->Name = QApplication::Translate('Descripcion');
-        /*$colDescCont->Html = '<?= substr($_ITEM->Descripcion,0,25) ?>';*/
-        //$colDescCont->Width = 130;
-        //$this->dtgPiezMani->AddColumn($colDescCont);
 
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = QApplication::Translate('Kilos');
@@ -745,17 +739,17 @@ class SacarARuta extends FormularioBaseKaizen {
         $colKiloPiez->Width = 30;
         $this->dtgPiezMani->AddColumn($colKiloPiez);
 
-        //$colVoluPiez = new QDataGridColumn($this);
-        //$colVoluPiez->Name = QApplication::Translate('PiesCub');
-        /*$colVoluPiez->Html = '<?= $_ITEM->PiesCub ?>';*/
-        //$colVoluPiez->Width = 30;
-        //$this->dtgPiezMani->AddColumn($colVoluPiez);
+        $colVoluPiez = new QDataGridColumn($this);
+        $colVoluPiez->Name = QApplication::Translate('PiesCub');
+        $colVoluPiez->Html = '<?= $_ITEM->PiesCub ?>';
+        $colVoluPiez->Width = 30;
+        $this->dtgPiezMani->AddColumn($colVoluPiez);
 
-        $colUltiCkpt = new QDataGridColumn($this);
-        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
-        $colUltiCkpt->Width = 30;
-        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+        //$colUltiCkpt = new QDataGridColumn($this);
+        //$colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        /*$colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';*/
+        //$colUltiCkpt->Width = 30;
+        //$this->dtgPiezMani->AddColumn($colUltiCkpt);
 
     }
 
@@ -1143,7 +1137,11 @@ class SacarARuta extends FormularioBaseKaizen {
             $objClausula   = QQ::Clause();
             $objClausula[] = QQ::OrderBy(QQN::SdeOperacion()->RutaId);
             $intCodiTipo   = $this->lstTipoOper->SelectedValue;
-            $arrSdexOper   = SdeOperacion::LoadArrayByCodiTipoSucursalId($intCodiTipo,$intCodiSucu,$objClausula);
+            $objClauWher[] = QQ::Equal(QQN::SdeOperacion()->CodiTipo,$intCodiTipo);
+            $objClauWher[] = QQ::Equal(QQN::SdeOperacion()->SucursalId,$intCodiSucu);
+            $objClauWher[] = QQ::IsNull(QQN::SdeOperacion()->DeletedAt);
+            $arrSdexOper   = SdeOperacion::QueryArray(QQ::AndCondition($objClauWher));
+            //$arrSdexOper   = SdeOperacion::LoadArrayByCodiTipoSucursalId($intCodiTipo,$intCodiSucu);
             $intCantOper   = count($arrSdexOper);
             $this->lstOperAbie->AddItem('- Seleccione Uno - ('.$intCantOper.')',null);
             foreach ($arrSdexOper as $objOperacion) {
@@ -1157,24 +1155,11 @@ class SacarARuta extends FormularioBaseKaizen {
                 }
             }
         }
-        //if ($this->lstTipoOper->SelectedValue == 0) {
-        //    //-----------------------------------
-        //    // Ruta Urbana
-        //    //-----------------------------------
-        //    $this->txtNumeCont->Enabled = false;
-        //    $this->txtNumeCont->ForeColor = 'blue';
-        //} else {
-        //    //-----------------------------------
-        //    // Ruta Extra-Urbana
-        //    //-----------------------------------
-        //    $this->txtNumeCont->Enabled = true;
-        //    $this->txtNumeCont->ForeColor = 'black';
-        //}
     }
 
 
     protected function mensajeInicial() {
-        $strTextMens  = 'Los <b>Choferes</b> están ordenados alfebéticamente y los <b>Vehículos</b> por placa. ';
+        $strTextMens  = 'Los <b>Choferes</b> están ordenados alfabéticamente y los <b>Vehículos</b> por placa. ';
         $strTextMens .= 'Utilice "<b>Anterior</b>" o "<b>Siguiente</b>", hasta encontrar lo deseado ';
         $this->mensaje($strTextMens,'','i','',__iINFO__);
     }

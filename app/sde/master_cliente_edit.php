@@ -157,7 +157,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
         $this->FlashMessage();
 
-        $this->objUsuaSist = Usuario::LoadByLogiUsua('liberty');
+        $this->objUsuaSist = Usuario::LoadByLogiUsua('gold');
 
         $this->lblTituForm->Text  = 'Cliente ';
         $this->lblTituForm->Text .= '('.$this->intPosiRegi.'/'.$this->intCantRegi.')';
@@ -411,6 +411,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->objMasterCliente->CodiClie);
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
+        $objClauWher[] = QQ::NotEqual(QQN::Facturas()->Estatus,'ANULADA');
         $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->ClienteCorpId,$this->objMasterCliente->CodiClie);

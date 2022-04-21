@@ -24,6 +24,7 @@ class FacturasEditForm extends FacturasEditFormBase {
     protected $dtgNotaFact;
     protected $dtgPagoFact;
     protected $dtgNotaCred;
+    protected $dtgGuiaFact;
     protected $btnImprFact;
     protected $lstEstaPago;
     protected $btnMasxAcci;
@@ -68,6 +69,9 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->lstClienteCorp = $this->mctFacturas->lstClienteCorp_Create();
 		$this->lstClienteCorp->Width = 192;
 		$this->lstClienteCorp = disableControl($this->lstClienteCorp);
+		if ($this->mctFacturas->Facturas->ClienteCorp->EsAliado) {
+		    $this->lstClienteCorp->Name = 'Aliado';
+        }
 
 		$this->txtCedulaRif = $this->mctFacturas->txtCedulaRif_Create();
 		$this->txtCedulaRif->Name = 'RIF';
@@ -95,12 +99,6 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->txtHoraImpresion = $this->mctFacturas->txtHoraImpresion_Create();
 		$this->chkTieneRetencion = $this->mctFacturas->chkTieneRetencion_Create();
 		$this->txtNotaCreditoId = $this->mctFacturas->txtNotaCreditoId_Create();
-		//$this->calCreatedAt = $this->mctFacturas->calCreatedAt_Create();
-		//$this->calUpdatedAt = $this->mctFacturas->calUpdatedAt_Create();
-		//$this->lblDeletedAt = $this->mctFacturas->lblDeletedAt_Create();
-		//$this->txtCreatedBy = $this->mctFacturas->txtCreatedBy_Create();
-		//$this->txtUpdatedBy = $this->mctFacturas->txtUpdatedBy_Create();
-		//$this->txtDeletedBy = $this->mctFacturas->txtDeletedBy_Create();
 
         if ($this->mctFacturas->EditMode) {
             if ($this->mctFacturas->Facturas->CountNotaEntregasAsFactura() > 0) {
@@ -117,7 +115,12 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->lstSucursal      = disableControl($this->lstSucursal);
 
         $this->dtgPagoFact_Create();
-        $this->dtgNotaCred_Create();
+        if ($this->mctFacturas->Facturas->ClienteCorp->EsAliado) {
+            t('Es un aliado, voy a crear el datagrid de las guias');
+            $this->dtgGuiaFact_Create();
+        } else {
+            $this->dtgNotaCred_Create();
+        }
         $this->btnImprFact_Create();
 
         if ($this->objUsuario->LogiUsua != 'ddurand') {
@@ -433,6 +436,56 @@ class FacturasEditForm extends FacturasEditFormBase {
         $colMontNota->Name = 'Monto';
         $colMontNota->Html = '<?= nf($_ITEM->Monto) ?>';
         $this->dtgNotaCred->AddColumn($colMontNota);
+    }
+
+    protected function dtgGuiaFact_Create() {
+        $this->dtgGuiaFact = new QDataGrid($this);
+        $this->dtgGuiaFact->FontSize = 12;
+        $this->dtgGuiaFact->ShowFilter = false;
+
+        $this->dtgGuiaFact->CssClass = 'datagrid';
+        $this->dtgGuiaFact->AlternateRowStyle->CssClass = 'alternate';
+
+        $this->dtgGuiaFact->UseAjax = true;
+
+        $this->dtgGuiaFact->SetDataBinder('dtgGuiaFact_Bind');
+
+        $this->dtgGuiaFactColumns();
+    }
+
+    protected function dtgGuiaFact_Bind() {
+        $this->dtgGuiaFact->DataSource = $this->mctFacturas->Facturas->GetFacturaGuiasAsFacturaArray();
+    }
+
+    protected function dtgGuiaFactColumns() {
+        $colNumeGuia = new QDataGridColumn($this);
+        $colNumeGuia->Name = 'Referencia';
+        $colNumeGuia->Html = '<?= $_ITEM->Guia->Numero ?>';
+        $colNumeGuia->Width = 150;
+        $this->dtgGuiaFact->AddColumn($colNumeGuia);
+
+        $colFechGuia = new QDataGridColumn($this);
+        $colFechGuia->Name = 'Fecha';
+        $colFechGuia->Html = '<?= $_ITEM->Guia->Fecha ?>';
+        $colFechGuia->Width = 110;
+        $this->dtgGuiaFact->AddColumn($colFechGuia);
+
+        $colDestGuia = new QDataGridColumn($this);
+        $colDestGuia->Name = 'Dest';
+        $colDestGuia->Html = '<?= $_ITEM->Guia->Destino->Iata ?>';
+        $colDestGuia->Width = 110;
+        $this->dtgGuiaFact->AddColumn($colDestGuia);
+
+        $colPiesCubi = new QDataGridColumn($this);
+        $colPiesCubi->Name = 'Pies3';
+        $colPiesCubi->Html = '<?= $_ITEM->Guia->PiesCub ?>';
+        $colPiesCubi->Width = 110;
+        $this->dtgGuiaFact->AddColumn($colPiesCubi);
+
+        $colTotaGuia = new QDataGridColumn($this);
+        $colTotaGuia->Name = 'Monto';
+        $colTotaGuia->Html = '<?= nf($_ITEM->Guia->Total) ?>';
+        $this->dtgGuiaFact->AddColumn($colTotaGuia);
     }
 
     protected function determinarPosicion() {

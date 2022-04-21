@@ -27,8 +27,23 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
 
-        public function pesoTarifa()
-        {
+        public function __AltoPl() {
+            return ($this->Alto / 2.54);
+		}
+
+        public function __AnchoPl() {
+            return ($this->Ancho / 2.54);
+		}
+
+        public function __LargoPl() {
+            return ($this->Largo / 2.54);
+		}
+
+        public function __medidasPl() {
+            return nf($this->__AltoPl()).' x '.nf($this->__AnchoPl()).' x '.nf($this->__LargoPl());
+        }
+
+        public function pesoTarifa() {
             if ($this->Guia->ServicioImportacion == 'AER') {
                 $decPesoComp = $this->Kilos;
             } else {

@@ -77,10 +77,9 @@ class CambiarEstatusManifiestoExp extends FormularioBaseKaizen {
         $this->lstCkptMani->Name = 'Estatus';
         $this->lstCkptMani->Required = true;
         $this->lstCkptMani->AddItem('- Seleccione Uno -',null);
-        //--------------------------------------------------------------------------
-        // Aqui se controla la gestion de los Checkpoints, en funcion del estatus
-        // del Manifiesto
-        //--------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        // Aqui se controla la gestion de los Checkpoints, en funcion del estatus del Manifiesto
+        //----------------------------------------------------------------------------------------
         if ($this->blnTodoOkey) {
             $this->cargarCheckpints();
         }

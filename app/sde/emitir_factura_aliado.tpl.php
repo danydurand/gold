@@ -24,7 +24,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->calFechInic->RenderWithName(); ?>
                 <?php $this->calFechFina->RenderWithName(); ?>
                 <?php $this->chkSeleAlia->RenderWithName(); ?>
-                <?php $this->lstCodiAlia->RenderWithName(); ?>
+                <?php $this->lstCodiClie->RenderWithName(); ?>
                 <?php $this->chkSeleConc->RenderWithName(); ?>
                 <?php $this->lstConcFact->RenderWithName(); ?>
             </div>

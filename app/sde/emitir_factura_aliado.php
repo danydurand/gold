@@ -6,7 +6,7 @@ require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 class EmitirFacturaAliado extends FormularioBaseKaizen {
 
     protected $chkSeleAlia;
-    protected $lstCodiAlia;
+    protected $lstCodiClie;
     protected $calFechInic;
     protected $calFechFina;
     protected $chkSeleConc;
@@ -23,7 +23,7 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
 
         t('1');
         $this->chkSeleAlia_Create();
-        $this->lstCodiAlia_Create();
+        $this->lstCodiClie_Create();
         t('2');
         $this->calFechInic_Create();
         $this->calFechFina_Create();
@@ -33,7 +33,7 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
         t('4');
         $this->dtgGuiaApta_Create();
 
-        $this->lstCodiAlia = disableControl($this->lstCodiAlia);
+        $this->lstCodiClie = disableControl($this->lstCodiClie);
         $this->lstConcFact = disableControl($this->lstConcFact);
         $this->btnSave->Text = TextoIcono('cogs','Emitir Facturas');
 
@@ -75,7 +75,7 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
     protected function dtgGuiaAptaColumns() {
         $colNombAlia = new QDataGridColumn($this);
         $colNombAlia->Name = QApplication::Translate('Aliado');
-        $colNombAlia->Html = '<?= $_ITEM->Aliado->RazonSocial ?>';
+        $colNombAlia->Html = '<?= $_ITEM->ClienteCorp->NombClie ?>';
         $colNombAlia->Width = 100;
         $this->dtgGuiaApta->AddColumn($colNombAlia);
 
@@ -130,12 +130,12 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
         $this->chkSeleAlia->AddAction(new QChangeEvent(), new QAjaxAction('chkSeleAlia_Change'));
     }
 
-    protected function lstCodiAlia_Create() {
-        $this->lstCodiAlia = new QListBox($this);
-        $this->lstCodiAlia->Name = QApplication::Translate('Aliados(s) Facturable(s)');
-        $this->lstCodiAlia->Width = 200;
-        $this->lstCodiAlia->SelectionMode = QSelectionMode::Multiple;
-        $this->lstCodiAlia->Rows = 5;
+    protected function lstCodiClie_Create() {
+        $this->lstCodiClie = new QListBox($this);
+        $this->lstCodiClie->Name = QApplication::Translate('Aliados(s) Facturable(s)');
+        $this->lstCodiClie->Width = 200;
+        $this->lstCodiClie->SelectionMode = QSelectionMode::Multiple;
+        $this->lstCodiClie->Rows = 5;
     }
 
     protected function calFechInic_Create() {
@@ -180,24 +180,28 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
     }
 
     protected function cargarAliados() {
-        $this->lstCodiAlia->RemoveAllItems();
-        $arrAliaFact   = [];
+        $this->lstCodiClie->RemoveAllItems();
+        $arrCodiAlia   = MasterCliente::LoadAliadosActivos('codigos');
+        t('Codigos de Clientes-Aliados:');
+        t($arrCodiAlia);
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::IsNotNull(QQN::Guias()->AliadoId);
+        $objClauWher[] = QQ::In(QQN::Guias()->ClienteCorpId,$arrCodiAlia);
         if (!is_null($this->calFechInic->DateTime)) {
             $objClauWher[] = QQ::GreaterOrEqual(QQN::Guias()->Fecha,$this->calFechInic->DateTime->__toString("YYYY-MM-DD"));
         }
         if (!is_null($this->calFechFina->DateTime)) {
             $objClauWher[] = QQ::LessOrEqual(QQN::Guias()->Fecha,$this->calFechFina->DateTime->__toString("YYYY-MM-DD"));
         }
+        $arrAliaFact = [];
         $this->arrGuiaFact = Guias::AptasParaFacturar($objClauWher,'array');
+        t('Guias aptas para facturar: '.count($this->arrGuiaFact));
         foreach ($this->arrGuiaFact as $objGuiaFact) {
-            if (!in_array($objGuiaFact->AliadoId,$arrAliaFact)) {
-                $arrAliaFact[$objGuiaFact->AliadoId] = $objGuiaFact->Aliado->RazonSocial;
+            if (!in_array($objGuiaFact->ClienteCorpId,$arrAliaFact)) {
+                $arrAliaFact[$objGuiaFact->ClienteCorpId] = $objGuiaFact->ClienteCorp->NombClie;
             }
         }
         foreach ($arrAliaFact as $key => $value) {
-            $this->lstCodiAlia->AddItem($value,$key,true);
+            $this->lstCodiClie->AddItem($value,$key,true);
         }
         $this->dtgGuiaApta->Refresh();
         $this->mensaje();
@@ -205,11 +209,11 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
 
     protected function chkSeleAlia_Change() {
         if ($this->chkSeleAlia->Checked) {
-            $this->lstCodiAlia = enableControl($this->lstCodiAlia);
+            $this->lstCodiClie = enableControl($this->lstCodiClie);
             $strTextMens = 'Presione <b>CTRL</b> mientras hace <b>CLICK</b> en los Aliados que desea facturar !!!';
             $this->info($strTextMens);
         } else {
-            $this->lstCodiAlia = disableControl($this->lstCodiAlia);
+            $this->lstCodiClie = disableControl($this->lstCodiClie);
             $this->mensaje();
         }
     }
@@ -228,14 +232,13 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         t('*****************************************');
         t('Comenzando la Emision de Facturas Aliados');
-        /* @var $objAliaSele AliadoComercial */
         //----------------------
         // Aliados a Facturar
         //----------------------
-        $arrAliaIdxx   = $this->lstCodiAlia->SelectedValues;
+        $arrAliaIdxx   = $this->lstCodiClie->SelectedValues;
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::In(QQN::AliadoComercial()->Id,$arrAliaIdxx);
-        $arrAliaSele   = AliadoComercial::QueryArray(QQ::AndCondition($objClauWher));
+        $objClauWher[] = QQ::In(QQN::MasterCliente()->CodiClie,$arrAliaIdxx);
+        $arrAliaSele   = MasterCliente::QueryArray(QQ::AndCondition($objClauWher));
         t('Cantidad de Aliados a procesar: '.count($arrAliaSele));
         //------------------------------------------------
         // Conceptos que seran facturados a los Aliados
@@ -265,13 +268,13 @@ class EmitirFacturaAliado extends FormularioBaseKaizen {
 
         $intCantGuia = 0;
         $intCantFact = 0;
-        $arrServImpo = ['AER','MAR'];
+        $arrServImpo = ['EXA','EXM'];
 
         t('Emitiendo Facturas...');
         foreach ($arrAliaSele as $objAliaSele) {
-            t('Creando factura para el Aliado: '.$objAliaSele->RazonSocial);
+            t('Creando factura para el Aliado: '.$objAliaSele->NombClie);
             foreach ($arrServImpo as $strServImpo) {
-                $arrGuiaServ = Guias::AptasParaFacturarPorAliadoYServicio($objAliaSele->Id,$strServImpo,$arrGuiaIdxx,'array');
+                $arrGuiaServ = Guias::AptasParaFacturarPorAliadoYServicio($objAliaSele->CodiClie,$strServImpo,$arrGuiaIdxx,'array');
                 t('Guias aptas para facturar del Servicio '.$strServImpo.': '.count($arrGuiaServ));
                 if (count($arrGuiaServ) > 0) {
                     $blnTodoOkey = true;

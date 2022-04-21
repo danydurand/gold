@@ -118,7 +118,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
             $objUltiCkpt = $this->objManifies->ultimoCheckpoint();
             if ($objUltiCkpt instanceof ManifiestoExpCkpt) {
                 t('Ckpt: '.$objUltiCkpt->Checkpoint->Codigo);
-                if ( ($objUltiCkpt->Checkpoint->Codigo == 'DF') && ($this->objUsuario->LogiUsua != 'ddurand') ) {
+                if ( ($objUltiCkpt->Checkpoint->Codigo != 'EX') && ($this->objUsuario->LogiUsua != 'ddurand') ) {
                     $this->btnSacaMani->Visible = false;
                     $this->btnSave->Visible     = false;
                     $this->btnBorrMani->Visible = false;
@@ -506,11 +506,13 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $colPiesCubi->Width = 50;
         $this->dtgPiezApta->AddColumn($colPiesCubi);
 
+        /*
         $colUltiCkpt = new QDataGridColumn($this);
         $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
         $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
         $colUltiCkpt->Width = 30;
         $this->dtgPiezApta->AddColumn($colUltiCkpt);
+        */
 
     }
 
@@ -827,18 +829,18 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->objProcEjec = CrearProceso($strNombProc);
 
         $objCheckpoint = Checkpoints::LoadByCodigo('EX');
-        t('El ckpt es: '.$objCheckpoint->Codigo);
         if (!($objCheckpoint instanceof Checkpoints)) {
-            $strTextMens = 'El checkpoint de exportacion no existe';
+            $strTextMens = 'El checkpoint de exportacion <b>DF</b> No Existe !!!';
             t($strTextMens);
             $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
             $arrParaErro['NumeRefe'] = 'EX';
-            $arrParaErro['MensErro'] = 'EL CCKPT NO EXISTE';
+            $arrParaErro['MensErro'] = 'EL CKPT DF NO EXISTE';
             $arrParaErro['ComeErro'] = $strTextMens;
             GrabarError($arrParaErro);
             $this->danger($strTextMens);
             return;
         }
+        t('El ckpt es: '.$objCheckpoint->Codigo);
 
         if (!$this->blnEditMode) {
             t('Creando el manifiesto');
@@ -999,6 +1001,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->objManifies = $objContenedor;
         $this->blnEditMode = true;
         $this->btnRepoMani->Visible = true;
+        QApplication::Redirect(__SIST__.'/armar_manif_exp_mar.php/'.$objContenedor->Id);
         $this->opcionesDeImpresion();
     }
 

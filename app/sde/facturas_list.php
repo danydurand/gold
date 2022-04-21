@@ -21,7 +21,10 @@ require_once(__FORMBASE_CLASSES__ . '/FacturasListFormBase.class.php');
  * @subpackage Drafts
  */
 class FacturasListForm extends FacturasListFormBase {
-	// Override Form Event Handlers as Needed
+    protected $btnMasxAcci;
+
+
+    // Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
 
@@ -84,7 +87,7 @@ class FacturasListForm extends FacturasListFormBase {
 		$this->dtgFacturases->MetaAddColumn('Fecha');
 		$this->dtgFacturases->MetaAddColumn('Estatus');
 
-        $colCantMani = new QDataGridColumn('Cant. Manif','<?= $_FORM->CantMani($_ITEM) ?>');
+        $colCantMani = new QDataGridColumn('Manif/Guias','<?= $_FORM->CantManiGuia($_ITEM) ?>');
         $colCantMani->HorizontalAlign = QHorizontalAlign::Center;
         $this->dtgFacturases->AddColumn($colCantMani);
 
@@ -107,10 +110,40 @@ class FacturasListForm extends FacturasListFormBase {
         $colEstaPago->HorizontalAlign = QHorizontalAlign::Center;
         $colEstaPago->Width = 120;
 
+        $this->btnMasxAcci_Create();
+
         $this->btnExpoExce_Create();
         $this->btnExpoExce->Visible = true;
 
     }
+
+    protected function btnMasxAcci_Create() {
+        $this->btnMasxAcci = new QLabel($this);
+        $this->btnMasxAcci->HtmlEntities = false;
+        $this->btnMasxAcci->CssClass = '';
+
+        $strTextBoto   = TextoIcono('plus-circle','Crear', 'F', 'lg');
+        $arrOpciDrop   = array();
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/emitir_factura_corp.php',
+            TextoIcono('print', 'Factura CORP IMP')
+        );
+        $arrOpciDrop[] = OpcionDropDown(
+            __SIST__.'/emitir_factura_aliado.php',
+            TextoIcono('print', 'Factura Aliado EXP')
+        );
+
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'p');
+
+    }
+
+    public function CantManiGuia(Facturas $objFactClie) {
+	    if ($objFactClie->ClienteCorp->EsAliado) {
+            return $objFactClie->CountFacturaGuiasesAsFactura();
+        } else {
+            return $objFactClie->CountNotaEntregasAsFactura();
+        }
+	}
 
     public function CantMani(Facturas $objFactClie) {
 		return $objFactClie->CountNotaEntregasAsFactura();

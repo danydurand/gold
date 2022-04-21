@@ -22,6 +22,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             </div>
             <div class="row">
                 <div class="col-md-6" style="margin-top: 0.7em;">
+                    <?php $this->lstTipoOper->RenderWithName(); ?>
                     <?php $this->lstOperSist->RenderWithName(); ?>
                     <?php $this->lstNumeCont->RenderWithName(); ?>
                     <?php $this->txtListNume->RenderWithName(); ?>

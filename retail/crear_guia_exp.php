@@ -1247,17 +1247,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->intEditPiez = $id;
         $objPiezGuia = PiezasTemp::Load($id);
         if (!is_null($objPiezGuia->PiezaId)) {
-            t('El Id de la pieza es: '.$objPiezGuia->PiezaId);
             $objPiezOrig = GuiaPiezas::Load($objPiezGuia->PiezaId);
 
             $strCodiCkpt = $objPiezOrig->ultimoCheckpoint();
-            t('El Ultimo Ckpt es: '.$strCodiCkpt);
             if ($strCodiCkpt != 'PU') {
-                t('No se puede cambiar');
                 $this->danger('Pieza no disponible para ser modificada');
                 return;
             }
-            t('Si admite cambios');
         }
         $this->mostrarCampos('edit');
 
@@ -1319,12 +1315,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
         for ($i = 0; $i < $intCantRepe; $i++) {
             if (!$this->blnEditPiez) {
-                t('Estoy en modo insercion');
+                //t('Estoy en modo insercion');
                 $objPiezGuia = new PiezasTemp();
                 $objPiezGuia->ProcesoErrorId = $this->objProcEjec->Id;
                 $objPiezGuia->CreatedBy      = $this->objUsuario->CodiUsua;
             } else {
-                t('Estoy en modo edicion');
+                //t('Estoy en modo edicion');
                 $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
             }
             try {

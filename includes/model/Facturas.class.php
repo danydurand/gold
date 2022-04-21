@@ -183,25 +183,25 @@
             $strTextMens = '';
 
 		    /* @var $objAliaFact Guias */
-            $objAliaFact = $arrGuiaProc[0];
-            $strTeleRemi = strlen($objAliaFact->TelefonoMovilRemitente) > 0 
-                ? $objAliaFact->TelefonoMovilRemitente 
-                : $objAliaFact->TelefonoRemitente;
+            $objGuiaFact = $arrGuiaProc[0];
+            $strTeleRemi = strlen($objGuiaFact->TelefonoMovilRemitente) > 0
+                ? $objGuiaFact->TelefonoMovilRemitente
+                : $objGuiaFact->TelefonoRemitente;
             t('Creando registro de la factura');
             try {
                 $objNuevFact = new Facturas();
-                $objNuevFact->ClienteRetailId = $objAliaFact->ClienteRetailId;
+                $objNuevFact->ClienteRetailId = $objGuiaFact->ClienteRetailId;
                 $objNuevFact->Fecha           = new QDateTime(QDateTime::Now());
                 $objNuevFact->Referencia      = Facturas::proxReferencia();
-                $objNuevFact->CedulaRif       = $objAliaFact->ClienteRetail->CedulaRif;
-                $objNuevFact->RazonSocial     = $objAliaFact->NombreRemitente;
-                $objNuevFact->DireccionFiscal = $objAliaFact->DireccionRemitente;
+                $objNuevFact->CedulaRif       = $objGuiaFact->ClienteRetail->CedulaRif;
+                $objNuevFact->RazonSocial     = $objGuiaFact->NombreRemitente;
+                $objNuevFact->DireccionFiscal = $objGuiaFact->DireccionRemitente;
                 $objNuevFact->Telefono        = $strTeleRemi;
                 $objNuevFact->SucursalId      = $_SESSION['SucursalId'];
                 $objNuevFact->ReceptoriaId    = $_SESSION['ReceptoriaId'];
                 $objNuevFact->CajaId          = $_SESSION['CajaId'];
                 $objNuevFact->Estatus         = 'CREADA';
-                $objNuevFact->Tasa            = $objAliaFact->Tasa;
+                $objNuevFact->Tasa            = $objGuiaFact->Tasa;
                 $objNuevFact->Total           = 0;
                 $objNuevFact->MontoDscto      = 0;
                 $objNuevFact->MontoCobrado    = 0;
@@ -257,25 +257,28 @@
             }
         }
 
-		public static function crearFacturaAliado($arrGuiaProc,$intIdxxUsua, AliadoComercial $objAliaFact) {
+		public static function crearFacturaAliado($arrGuiaProc,$intIdxxUsua, MasterCliente $objAliaFact) {
             t('=====================');
             t('En Facturas.class.php');
+            /* @var $objUltiGuia Guias */
             $blnTodoOkey = true;
             $strTextMens = '';
 
+            $objUltiGuia = $arrGuiaProc[0];
+            $decTasaDola = $objUltiGuia->Tasa;
             t('Creando registro de la factura');
             try {
                 $objNuevFact = new Facturas();
-                $objNuevFact->AliadoId        = $objAliaFact->Id;
+                $objNuevFact->ClienteCorpId   = $objAliaFact->CodiClie;
                 $objNuevFact->Fecha           = new QDateTime(QDateTime::Now());
                 $objNuevFact->Referencia      = Facturas::proxReferencia();
-                $objNuevFact->CedulaRif       = $objAliaFact->NroRif;
-                $objNuevFact->RazonSocial     = $objAliaFact->RazonSocial;
-                $objNuevFact->DireccionFiscal = $objAliaFact->DireccionFiscal;
-                $objNuevFact->Telefono        = $objAliaFact->Telefono;
+                $objNuevFact->CedulaRif       = $objAliaFact->NumeDrif;
+                $objNuevFact->RazonSocial     = $objAliaFact->NombClie;
+                $objNuevFact->DireccionFiscal = $objAliaFact->DireFisc;
+                $objNuevFact->Telefono        = $objAliaFact->TeleCona;
                 $objNuevFact->SucursalId      = $objAliaFact->SucursalId;
                 $objNuevFact->Estatus         = 'CREADA';
-                $objNuevFact->Tasa            = $_SESSION['TasaDola'];
+                $objNuevFact->Tasa            = $decTasaDola;
                 $objNuevFact->Total           = 0;
                 $objNuevFact->MontoDscto      = 0;
                 $objNuevFact->MontoCobrado    = 0;
@@ -301,7 +304,8 @@
                         $objGuiaFact->GuiaId    = $objGuiaProc->Id;
                         $objGuiaFact->Total     = $objGuiaProc->Total;
                         //------------------------------------------------------------
-                        // Este Save dispara el calculo de los conceptos de la guia
+                        // Este Save acumula los montos de los conceptos de la
+                        // guia y va creando los items de la factura
                         //------------------------------------------------------------
                         $objGuiaFact->Save();
                         //-----------------------------------------------
@@ -347,13 +351,6 @@
         public function __montoPendiente() {
             return nf($this->Total - $this->MontoCobrado);
 		}
-
-		/*
-        public function proxReferenciaAlt() {
-            $strYearDhoy = date('Y');
-            return str_pad($this->Id,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
-        }
-		*/
 
         public static function proxReferencia() {
 		    $intRefeFact   = Facturas::proxConsecutivo();

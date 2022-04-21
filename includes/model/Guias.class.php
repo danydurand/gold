@@ -31,7 +31,7 @@
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$intAliaIdxx);
             $objClauWher[] = QQ::IsNull(QQN::Guias()->FacturaId);
-            $objClauWher[] = QQ::Equal(QQN::Guias()->ServicioImportacion,$strServImpo);
+            $objClauWher[] = QQ::Equal(QQN::Guias()->Producto->Codigo,$strServImpo);
             $objClauWher[] = QQ::In(QQN::Guias()->Id,$arrGuiaIdxx);
             if ($strFormResp == 'count') {
                 return Guias::QueryCount(QQ::AndCondition($objClauWher));
@@ -45,7 +45,8 @@
             if ($strFormResp == 'count') {
                 return Guias::QueryCount(QQ::AndCondition($objClauWher));
             } else {
-                return Guias::QueryArray(QQ::AndCondition($objClauWher));
+                $objClauOrde = QQ::OrderBy(QQN::Guias()->Id,false);
+                return Guias::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
             }
         }
 
@@ -54,8 +55,25 @@
 		    return '/var/www/html/gold/retail/tmp/Guia'.$this->Numero.'.pdf';
         }
 
+        public function __AltoPl() {
+            return ($this->Alto / 2.54);
+        }
 
-		public function __medidas() {
+        public function __AnchoPl() {
+            return ($this->Ancho / 2.54);
+        }
+
+        public function __LargoPl() {
+            return ($this->Largo / 2.54);
+        }
+
+        public function __medidasPl() {
+            return nf($this->__AltoPl()).' x '.nf($this->__AnchoPl()).' x '.nf($this->__LargoPl());
+        }
+
+
+
+        public function __medidas() {
 		    return $this->Alto.' x '.$this->Ancho.' x '.$this->Largo;
         }
 

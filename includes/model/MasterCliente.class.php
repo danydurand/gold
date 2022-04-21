@@ -35,14 +35,24 @@ class MasterCliente extends MasterClienteGen {
         return sprintf('%s - %s', $this->strCodigoInterno, $this->strNombClie);
     }
 
-    public static function LoadAliadosActivos() {
+    public static function LoadAliadosActivos($strFormResp='objects') {
         $objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
-        $objClauWher[] = QQ::Equal(QQN::MasterCliente()->CodiStat,StatusType::ACTIVO);
+        //$objClauWher[] = QQ::Equal(QQN::MasterCliente()->CodiStat,StatusType::ACTIVO);
         $objClauOrde[] = QQ::OrderBy(QQN::MasterCliente()->NombClie);
-        return MasterCliente::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+        $arrClieAlia   = MasterCliente::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+        if ($strFormResp == 'objects') {
+            return $arrClieAlia;
+        }
+        if ($strFormResp == 'codigos') {
+            $arrCodiAlia = [];
+            foreach ($arrClieAlia as $objClieAlia) {
+                $arrCodiAlia[] = $objClieAlia->CodiClie;
+            }
+            return $arrCodiAlia;
+        }
     }
 
-    public function calcularSaldoExcedente() {
+        public function calcularSaldoExcedente() {
         /* @var $objFactClie Facturas  */
         /* @var $objPagoClie PagosCorp */
         $arrTodoFact = $this->GetFacturasAsClienteCorpArray();
