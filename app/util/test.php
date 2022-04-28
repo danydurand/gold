@@ -5,18 +5,47 @@ define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
+//--------------------------------------
+// Actualizando montos de las Facturas
+//--------------------------------------
+
+m("Iniciando actualización de las facturas");
+m("=======================================",2);
+$objClauWher = QQ::NotEqual(QQN::Facturas()->Estatus,"ANULADA");
+$objClauWher = QQ::IsNull(QQN::Facturas()->ClienteRetailId);
+$objClauWher = QQ::IsNotNull(QQN::Facturas()->ClienteCorpId);
+$objClauOrde = QQ::OrderBy(QQN::Facturas()->Id,false);
+$arrFactSist = Facturas::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+$intCantFact = count($arrFactSist);
+$intFactProc = 0;
+$intFactCamb = 0;
+m("Se van a procesar $intCantFact facturas",2);
+foreach ($arrFactSist as $objFactSist) {
+    $intFactProc++;
+    $objFactAnte = clone $objFactSist;
+    $objFactSist->ActualizarMontos();
+    $objResuComp = QObjectDiff::Compare($objFactAnte, $objFactSist);
+    if ($objResuComp->FriendlyComparisonStatus == 'different') {
+        m("Factura: $objFactSist->Referencia (Id: $objFactSist->Id)");
+        $intFactCamb++;
+        m(implode(', ',$objResuComp->DifferentFields),2);
+        //break;
+    }
+}
+m("Procesadas: $intFactProc, con Cambios: $intFactCamb");
+
 //-------------------------
 // Validando datos Mobile
 //-------------------------
 
-$objChofer = Chofer::LoadByLogin('jcastill');
-echo "El chofer es: ".$objChofer->Nombre;
-echo "<br>";
-
-echo "Fecha de hoy: ".FechaDeHoy();
-echo "<br>";
-
-echo "Tiene actividad mobile: ? ".$objChofer->activoMobileHoy();
+//$objChofer = Chofer::LoadByLogin('jcastill');
+//echo "El chofer es: ".$objChofer->Nombre;
+//echo "<br>";
+//
+//echo "Fecha de hoy: ".FechaDeHoy();
+//echo "<br>";
+//
+//echo "Tiene actividad mobile: ? ".$objChofer->activoMobileHoy();
 
 //--------------------------------
 // Convirtiendo texto a fechas

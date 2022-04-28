@@ -221,7 +221,7 @@
                 $objClauWher[] = QQ::IsNotNull(QQN::ManifiestoExp()->Id);
                 $arrUltiFact   = ManifiestoExp::QueryArray(QQ::AndCondition($objClauWher),$objAdicClau);
                 $objUltiFact   = $arrUltiFact[0];
-                $intRefeFact   = (int)explode('-',$objUltiFact->Referencia)[0];
+                $intRefeFact   = (int)explode('-',$objUltiFact->Numero)[0];
             }
             $strYearDhoy = date('Y');
             $strNumeRefe = str_pad($intRefeFact+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;

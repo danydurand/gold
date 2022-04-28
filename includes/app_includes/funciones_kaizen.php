@@ -2,6 +2,16 @@
 require_once('mimemail.inc.php');
 
 
+function m($strTextMost, $intCantSalt=1) {
+    $strSaltLine = '<br>';
+    if ($intCantSalt > 1) {
+        for ($i=1; $i<=$intCantSalt-1; $i++) {
+          $strSaltLine .= '<br>';
+        }
+    }
+    echo $strTextMost.$strSaltLine;
+}
+
 function TextoIconoColor($strNombIcon, $strTextAcom, $strPosiText='F', $strTamaIcon='', $strColoIcon='') {
     //--------------------------------------------------------------------------
     // Esta rutina devuelve un string que sirve para asignarlo a texto de los

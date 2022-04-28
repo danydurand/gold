@@ -20,28 +20,15 @@
 	 * @property integer $SucursalId the value for intSucursalId (Not Null)
 	 * @property integer $ClienteId the value for intClienteId 
 	 * @property integer $RutaId the value for intRutaId (Not Null)
-	 * @property integer $EntregaInmediata the value for intEntregaInmediata 
 	 * @property string $Siglas the value for strSiglas (Unique)
-	 * @property integer $LimiteDePaquetes the value for intLimiteDePaquetes 
-	 * @property integer $CantidadDePaquetes the value for intCantidadDePaquetes 
-	 * @property string $CkptRecepcion the value for strCkptRecepcion 
-	 * @property string $CkptConfirmacion the value for strCkptConfirmacion 
-	 * @property string $CkptAlmacen the value for strCkptAlmacen 
+	 * @property boolean $EsAlmacen the value for blnEsAlmacen 
 	 * @property integer $PaisId the value for intPaisId 
 	 * @property integer $StatusId the value for intStatusId 
 	 * @property string $Direccion the value for strDireccion 
-	 * @property integer $ElegirServicio the value for intElegirServicio 
 	 * @property integer $EsRuta the value for intEsRuta 
 	 * @property integer $SeFactura the value for intSeFactura 
-	 * @property integer $PermitePago the value for intPermitePago 
 	 * @property string $EmailJefeAlmacen the value for strEmailJefeAlmacen 
-	 * @property string $CkptAntiguedad1 the value for strCkptAntiguedad1 
-	 * @property string $CkptAntiguedad2 the value for strCkptAntiguedad2 
-	 * @property string $CkptAntiguedad0 the value for strCkptAntiguedad0 
-	 * @property double $LimiteKilos the value for fltLimiteKilos 
 	 * @property integer $DependeDe the value for intDependeDe 
-	 * @property boolean $DomOrigen the value for blnDomOrigen 
-	 * @property boolean $DomDestino the value for blnDomDestino 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
@@ -119,14 +106,6 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column counter.entrega_inmediata
-		 * @var integer intEntregaInmediata
-		 */
-		protected $intEntregaInmediata;
-		const EntregaInmediataDefault = null;
-
-
-		/**
 		 * Protected member variable that maps to the database column counter.siglas
 		 * @var string strSiglas
 		 */
@@ -136,46 +115,11 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column counter.limite_de_paquetes
-		 * @var integer intLimiteDePaquetes
+		 * Protected member variable that maps to the database column counter.es_almacen
+		 * @var boolean blnEsAlmacen
 		 */
-		protected $intLimiteDePaquetes;
-		const LimiteDePaquetesDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.cantidad_de_paquetes
-		 * @var integer intCantidadDePaquetes
-		 */
-		protected $intCantidadDePaquetes;
-		const CantidadDePaquetesDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.ckpt_recepcion
-		 * @var string strCkptRecepcion
-		 */
-		protected $strCkptRecepcion;
-		const CkptRecepcionMaxLength = 2;
-		const CkptRecepcionDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.ckpt_confirmacion
-		 * @var string strCkptConfirmacion
-		 */
-		protected $strCkptConfirmacion;
-		const CkptConfirmacionMaxLength = 2;
-		const CkptConfirmacionDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.ckpt_almacen
-		 * @var string strCkptAlmacen
-		 */
-		protected $strCkptAlmacen;
-		const CkptAlmacenMaxLength = 2;
-		const CkptAlmacenDefault = null;
+		protected $blnEsAlmacen;
+		const EsAlmacenDefault = null;
 
 
 		/**
@@ -204,14 +148,6 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column counter.elegir_servicio
-		 * @var integer intElegirServicio
-		 */
-		protected $intElegirServicio;
-		const ElegirServicioDefault = null;
-
-
-		/**
 		 * Protected member variable that maps to the database column counter.es_ruta
 		 * @var integer intEsRuta
 		 */
@@ -228,14 +164,6 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column counter.permite_pago
-		 * @var integer intPermitePago
-		 */
-		protected $intPermitePago;
-		const PermitePagoDefault = null;
-
-
-		/**
 		 * Protected member variable that maps to the database column counter.email_jefe_almacen
 		 * @var string strEmailJefeAlmacen
 		 */
@@ -245,62 +173,11 @@
 
 
 		/**
-		 * Protected member variable that maps to the database column counter.ckpt_antiguedad1
-		 * @var string strCkptAntiguedad1
-		 */
-		protected $strCkptAntiguedad1;
-		const CkptAntiguedad1MaxLength = 2;
-		const CkptAntiguedad1Default = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.ckpt_antiguedad2
-		 * @var string strCkptAntiguedad2
-		 */
-		protected $strCkptAntiguedad2;
-		const CkptAntiguedad2MaxLength = 2;
-		const CkptAntiguedad2Default = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.ckpt_antiguedad0
-		 * @var string strCkptAntiguedad0
-		 */
-		protected $strCkptAntiguedad0;
-		const CkptAntiguedad0MaxLength = 2;
-		const CkptAntiguedad0Default = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.limite_kilos
-		 * @var double fltLimiteKilos
-		 */
-		protected $fltLimiteKilos;
-		const LimiteKilosDefault = null;
-
-
-		/**
 		 * Protected member variable that maps to the database column counter.depende_de
 		 * @var integer intDependeDe
 		 */
 		protected $intDependeDe;
 		const DependeDeDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.dom_origen
-		 * @var boolean blnDomOrigen
-		 */
-		protected $blnDomOrigen;
-		const DomOrigenDefault = null;
-
-
-		/**
-		 * Protected member variable that maps to the database column counter.dom_destino
-		 * @var boolean blnDomDestino
-		 */
-		protected $blnDomDestino;
-		const DomDestinoDefault = null;
 
 
 		/**
@@ -559,28 +436,15 @@
 			$this->intSucursalId = Counter::SucursalIdDefault;
 			$this->intClienteId = Counter::ClienteIdDefault;
 			$this->intRutaId = Counter::RutaIdDefault;
-			$this->intEntregaInmediata = Counter::EntregaInmediataDefault;
 			$this->strSiglas = Counter::SiglasDefault;
-			$this->intLimiteDePaquetes = Counter::LimiteDePaquetesDefault;
-			$this->intCantidadDePaquetes = Counter::CantidadDePaquetesDefault;
-			$this->strCkptRecepcion = Counter::CkptRecepcionDefault;
-			$this->strCkptConfirmacion = Counter::CkptConfirmacionDefault;
-			$this->strCkptAlmacen = Counter::CkptAlmacenDefault;
+			$this->blnEsAlmacen = Counter::EsAlmacenDefault;
 			$this->intPaisId = Counter::PaisIdDefault;
 			$this->intStatusId = Counter::StatusIdDefault;
 			$this->strDireccion = Counter::DireccionDefault;
-			$this->intElegirServicio = Counter::ElegirServicioDefault;
 			$this->intEsRuta = Counter::EsRutaDefault;
 			$this->intSeFactura = Counter::SeFacturaDefault;
-			$this->intPermitePago = Counter::PermitePagoDefault;
 			$this->strEmailJefeAlmacen = Counter::EmailJefeAlmacenDefault;
-			$this->strCkptAntiguedad1 = Counter::CkptAntiguedad1Default;
-			$this->strCkptAntiguedad2 = Counter::CkptAntiguedad2Default;
-			$this->strCkptAntiguedad0 = Counter::CkptAntiguedad0Default;
-			$this->fltLimiteKilos = Counter::LimiteKilosDefault;
 			$this->intDependeDe = Counter::DependeDeDefault;
-			$this->blnDomOrigen = Counter::DomOrigenDefault;
-			$this->blnDomDestino = Counter::DomDestinoDefault;
 			$this->dttCreatedAt = (Counter::CreatedAtDefault === null)?null:new QDateTime(Counter::CreatedAtDefault);
 			$this->dttUpdatedAt = (Counter::UpdatedAtDefault === null)?null:new QDateTime(Counter::UpdatedAtDefault);
 			$this->strDeletedAt = Counter::DeletedAtDefault;
@@ -933,28 +797,15 @@
 			    $objBuilder->AddSelectItem($strTableName, 'sucursal_id', $strAliasPrefix . 'sucursal_id');
 			    $objBuilder->AddSelectItem($strTableName, 'cliente_id', $strAliasPrefix . 'cliente_id');
 			    $objBuilder->AddSelectItem($strTableName, 'ruta_id', $strAliasPrefix . 'ruta_id');
-			    $objBuilder->AddSelectItem($strTableName, 'entrega_inmediata', $strAliasPrefix . 'entrega_inmediata');
 			    $objBuilder->AddSelectItem($strTableName, 'siglas', $strAliasPrefix . 'siglas');
-			    $objBuilder->AddSelectItem($strTableName, 'limite_de_paquetes', $strAliasPrefix . 'limite_de_paquetes');
-			    $objBuilder->AddSelectItem($strTableName, 'cantidad_de_paquetes', $strAliasPrefix . 'cantidad_de_paquetes');
-			    $objBuilder->AddSelectItem($strTableName, 'ckpt_recepcion', $strAliasPrefix . 'ckpt_recepcion');
-			    $objBuilder->AddSelectItem($strTableName, 'ckpt_confirmacion', $strAliasPrefix . 'ckpt_confirmacion');
-			    $objBuilder->AddSelectItem($strTableName, 'ckpt_almacen', $strAliasPrefix . 'ckpt_almacen');
+			    $objBuilder->AddSelectItem($strTableName, 'es_almacen', $strAliasPrefix . 'es_almacen');
 			    $objBuilder->AddSelectItem($strTableName, 'pais_id', $strAliasPrefix . 'pais_id');
 			    $objBuilder->AddSelectItem($strTableName, 'status_id', $strAliasPrefix . 'status_id');
 			    $objBuilder->AddSelectItem($strTableName, 'direccion', $strAliasPrefix . 'direccion');
-			    $objBuilder->AddSelectItem($strTableName, 'elegir_servicio', $strAliasPrefix . 'elegir_servicio');
 			    $objBuilder->AddSelectItem($strTableName, 'es_ruta', $strAliasPrefix . 'es_ruta');
 			    $objBuilder->AddSelectItem($strTableName, 'se_factura', $strAliasPrefix . 'se_factura');
-			    $objBuilder->AddSelectItem($strTableName, 'permite_pago', $strAliasPrefix . 'permite_pago');
 			    $objBuilder->AddSelectItem($strTableName, 'email_jefe_almacen', $strAliasPrefix . 'email_jefe_almacen');
-			    $objBuilder->AddSelectItem($strTableName, 'ckpt_antiguedad1', $strAliasPrefix . 'ckpt_antiguedad1');
-			    $objBuilder->AddSelectItem($strTableName, 'ckpt_antiguedad2', $strAliasPrefix . 'ckpt_antiguedad2');
-			    $objBuilder->AddSelectItem($strTableName, 'ckpt_antiguedad0', $strAliasPrefix . 'ckpt_antiguedad0');
-			    $objBuilder->AddSelectItem($strTableName, 'limite_kilos', $strAliasPrefix . 'limite_kilos');
 			    $objBuilder->AddSelectItem($strTableName, 'depende_de', $strAliasPrefix . 'depende_de');
-			    $objBuilder->AddSelectItem($strTableName, 'dom_origen', $strAliasPrefix . 'dom_origen');
-			    $objBuilder->AddSelectItem($strTableName, 'dom_destino', $strAliasPrefix . 'dom_destino');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
 			    $objBuilder->AddSelectItem($strTableName, 'deleted_at', $strAliasPrefix . 'deleted_at');
@@ -1101,27 +952,12 @@
 			$strAlias = $strAliasPrefix . 'ruta_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intRutaId = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'entrega_inmediata';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intEntregaInmediata = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'siglas';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strSiglas = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'limite_de_paquetes';
+			$strAlias = $strAliasPrefix . 'es_almacen';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intLimiteDePaquetes = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'cantidad_de_paquetes';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intCantidadDePaquetes = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'ckpt_recepcion';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCkptRecepcion = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'ckpt_confirmacion';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCkptConfirmacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'ckpt_almacen';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCkptAlmacen = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->blnEsAlmacen = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'pais_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intPaisId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1131,42 +967,18 @@
 			$strAlias = $strAliasPrefix . 'direccion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDireccion = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'elegir_servicio';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intElegirServicio = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'es_ruta';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intEsRuta = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'se_factura';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intSeFactura = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'permite_pago';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->intPermitePago = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'email_jefe_almacen';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strEmailJefeAlmacen = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'ckpt_antiguedad1';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCkptAntiguedad1 = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'ckpt_antiguedad2';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCkptAntiguedad2 = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'ckpt_antiguedad0';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCkptAntiguedad0 = $objDbRow->GetColumn($strAliasName, 'VarChar');
-			$strAlias = $strAliasPrefix . 'limite_kilos';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->fltLimiteKilos = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'depende_de';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intDependeDe = $objDbRow->GetColumn($strAliasName, 'Integer');
-			$strAlias = $strAliasPrefix . 'dom_origen';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->blnDomOrigen = $objDbRow->GetColumn($strAliasName, 'Bit');
-			$strAlias = $strAliasPrefix . 'dom_destino';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->blnDomDestino = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
@@ -1549,134 +1361,6 @@
 
 		/**
 		 * Load an array of Counter objects,
-		 * by EntregaInmediata Index(es)
-		 * @param integer $intEntregaInmediata
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Counter[]
-		*/
-		public static function LoadArrayByEntregaInmediata($intEntregaInmediata, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByEntregaInmediata query
-			try {
-				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->EntregaInmediata, $intEntregaInmediata),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Counters
-		 * by EntregaInmediata Index(es)
-		 * @param integer $intEntregaInmediata
-		 * @return int
-		*/
-		public static function CountByEntregaInmediata($intEntregaInmediata) {
-			// Call Counter::QueryCount to perform the CountByEntregaInmediata query
-			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->EntregaInmediata, $intEntregaInmediata)
-			);
-		}
-
-		/**
-		 * Load an array of Counter objects,
-		 * by CkptRecepcion Index(es)
-		 * @param string $strCkptRecepcion
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Counter[]
-		*/
-		public static function LoadArrayByCkptRecepcion($strCkptRecepcion, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByCkptRecepcion query
-			try {
-				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->CkptRecepcion, $strCkptRecepcion),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Counters
-		 * by CkptRecepcion Index(es)
-		 * @param string $strCkptRecepcion
-		 * @return int
-		*/
-		public static function CountByCkptRecepcion($strCkptRecepcion) {
-			// Call Counter::QueryCount to perform the CountByCkptRecepcion query
-			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->CkptRecepcion, $strCkptRecepcion)
-			);
-		}
-
-		/**
-		 * Load an array of Counter objects,
-		 * by CkptConfirmacion Index(es)
-		 * @param string $strCkptConfirmacion
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Counter[]
-		*/
-		public static function LoadArrayByCkptConfirmacion($strCkptConfirmacion, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByCkptConfirmacion query
-			try {
-				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->CkptConfirmacion, $strCkptConfirmacion),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Counters
-		 * by CkptConfirmacion Index(es)
-		 * @param string $strCkptConfirmacion
-		 * @return int
-		*/
-		public static function CountByCkptConfirmacion($strCkptConfirmacion) {
-			// Call Counter::QueryCount to perform the CountByCkptConfirmacion query
-			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->CkptConfirmacion, $strCkptConfirmacion)
-			);
-		}
-
-		/**
-		 * Load an array of Counter objects,
-		 * by CkptAlmacen Index(es)
-		 * @param string $strCkptAlmacen
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Counter[]
-		*/
-		public static function LoadArrayByCkptAlmacen($strCkptAlmacen, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByCkptAlmacen query
-			try {
-				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->CkptAlmacen, $strCkptAlmacen),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Counters
-		 * by CkptAlmacen Index(es)
-		 * @param string $strCkptAlmacen
-		 * @return int
-		*/
-		public static function CountByCkptAlmacen($strCkptAlmacen) {
-			// Call Counter::QueryCount to perform the CountByCkptAlmacen query
-			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->CkptAlmacen, $strCkptAlmacen)
-			);
-		}
-
-		/**
-		 * Load an array of Counter objects,
 		 * by PaisId Index(es)
 		 * @param integer $intPaisId
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -1741,38 +1425,6 @@
 
 		/**
 		 * Load an array of Counter objects,
-		 * by ElegirServicio Index(es)
-		 * @param integer $intElegirServicio
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Counter[]
-		*/
-		public static function LoadArrayByElegirServicio($intElegirServicio, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByElegirServicio query
-			try {
-				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->ElegirServicio, $intElegirServicio),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Counters
-		 * by ElegirServicio Index(es)
-		 * @param integer $intElegirServicio
-		 * @return int
-		*/
-		public static function CountByElegirServicio($intElegirServicio) {
-			// Call Counter::QueryCount to perform the CountByElegirServicio query
-			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->ElegirServicio, $intElegirServicio)
-			);
-		}
-
-		/**
-		 * Load an array of Counter objects,
 		 * by EsRuta Index(es)
 		 * @param integer $intEsRuta
 		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
@@ -1832,70 +1484,6 @@
 			// Call Counter::QueryCount to perform the CountBySeFactura query
 			return Counter::QueryCount(
 				QQ::Equal(QQN::Counter()->SeFactura, $intSeFactura)
-			);
-		}
-
-		/**
-		 * Load an array of Counter objects,
-		 * by PermitePago Index(es)
-		 * @param integer $intPermitePago
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Counter[]
-		*/
-		public static function LoadArrayByPermitePago($intPermitePago, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByPermitePago query
-			try {
-				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->PermitePago, $intPermitePago),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Counters
-		 * by PermitePago Index(es)
-		 * @param integer $intPermitePago
-		 * @return int
-		*/
-		public static function CountByPermitePago($intPermitePago) {
-			// Call Counter::QueryCount to perform the CountByPermitePago query
-			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->PermitePago, $intPermitePago)
-			);
-		}
-
-		/**
-		 * Load an array of Counter objects,
-		 * by CkptAntiguedad0 Index(es)
-		 * @param string $strCkptAntiguedad0
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return Counter[]
-		*/
-		public static function LoadArrayByCkptAntiguedad0($strCkptAntiguedad0, $objOptionalClauses = null) {
-			// Call Counter::QueryArray to perform the LoadArrayByCkptAntiguedad0 query
-			try {
-				return Counter::QueryArray(
-					QQ::Equal(QQN::Counter()->CkptAntiguedad0, $strCkptAntiguedad0),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count Counters
-		 * by CkptAntiguedad0 Index(es)
-		 * @param string $strCkptAntiguedad0
-		 * @return int
-		*/
-		public static function CountByCkptAntiguedad0($strCkptAntiguedad0) {
-			// Call Counter::QueryCount to perform the CountByCkptAntiguedad0 query
-			return Counter::QueryCount(
-				QQ::Equal(QQN::Counter()->CkptAntiguedad0, $strCkptAntiguedad0)
 			);
 		}
 
@@ -1966,28 +1554,15 @@
 							`sucursal_id`,
 							`cliente_id`,
 							`ruta_id`,
-							`entrega_inmediata`,
 							`siglas`,
-							`limite_de_paquetes`,
-							`cantidad_de_paquetes`,
-							`ckpt_recepcion`,
-							`ckpt_confirmacion`,
-							`ckpt_almacen`,
+							`es_almacen`,
 							`pais_id`,
 							`status_id`,
 							`direccion`,
-							`elegir_servicio`,
 							`es_ruta`,
 							`se_factura`,
-							`permite_pago`,
 							`email_jefe_almacen`,
-							`ckpt_antiguedad1`,
-							`ckpt_antiguedad2`,
-							`ckpt_antiguedad0`,
-							`limite_kilos`,
 							`depende_de`,
-							`dom_origen`,
-							`dom_destino`,
 							`created_at`,
 							`updated_at`,
 							`created_by`,
@@ -1998,28 +1573,15 @@
 							' . $objDatabase->SqlVariable($this->intSucursalId) . ',
 							' . $objDatabase->SqlVariable($this->intClienteId) . ',
 							' . $objDatabase->SqlVariable($this->intRutaId) . ',
-							' . $objDatabase->SqlVariable($this->intEntregaInmediata) . ',
 							' . $objDatabase->SqlVariable($this->strSiglas) . ',
-							' . $objDatabase->SqlVariable($this->intLimiteDePaquetes) . ',
-							' . $objDatabase->SqlVariable($this->intCantidadDePaquetes) . ',
-							' . $objDatabase->SqlVariable($this->strCkptRecepcion) . ',
-							' . $objDatabase->SqlVariable($this->strCkptConfirmacion) . ',
-							' . $objDatabase->SqlVariable($this->strCkptAlmacen) . ',
+							' . $objDatabase->SqlVariable($this->blnEsAlmacen) . ',
 							' . $objDatabase->SqlVariable($this->intPaisId) . ',
 							' . $objDatabase->SqlVariable($this->intStatusId) . ',
 							' . $objDatabase->SqlVariable($this->strDireccion) . ',
-							' . $objDatabase->SqlVariable($this->intElegirServicio) . ',
 							' . $objDatabase->SqlVariable($this->intEsRuta) . ',
 							' . $objDatabase->SqlVariable($this->intSeFactura) . ',
-							' . $objDatabase->SqlVariable($this->intPermitePago) . ',
 							' . $objDatabase->SqlVariable($this->strEmailJefeAlmacen) . ',
-							' . $objDatabase->SqlVariable($this->strCkptAntiguedad1) . ',
-							' . $objDatabase->SqlVariable($this->strCkptAntiguedad2) . ',
-							' . $objDatabase->SqlVariable($this->strCkptAntiguedad0) . ',
-							' . $objDatabase->SqlVariable($this->fltLimiteKilos) . ',
 							' . $objDatabase->SqlVariable($this->intDependeDe) . ',
-							' . $objDatabase->SqlVariable($this->blnDomOrigen) . ',
-							' . $objDatabase->SqlVariable($this->blnDomDestino) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -2059,28 +1621,15 @@
 							`sucursal_id` = ' . $objDatabase->SqlVariable($this->intSucursalId) . ',
 							`cliente_id` = ' . $objDatabase->SqlVariable($this->intClienteId) . ',
 							`ruta_id` = ' . $objDatabase->SqlVariable($this->intRutaId) . ',
-							`entrega_inmediata` = ' . $objDatabase->SqlVariable($this->intEntregaInmediata) . ',
 							`siglas` = ' . $objDatabase->SqlVariable($this->strSiglas) . ',
-							`limite_de_paquetes` = ' . $objDatabase->SqlVariable($this->intLimiteDePaquetes) . ',
-							`cantidad_de_paquetes` = ' . $objDatabase->SqlVariable($this->intCantidadDePaquetes) . ',
-							`ckpt_recepcion` = ' . $objDatabase->SqlVariable($this->strCkptRecepcion) . ',
-							`ckpt_confirmacion` = ' . $objDatabase->SqlVariable($this->strCkptConfirmacion) . ',
-							`ckpt_almacen` = ' . $objDatabase->SqlVariable($this->strCkptAlmacen) . ',
+							`es_almacen` = ' . $objDatabase->SqlVariable($this->blnEsAlmacen) . ',
 							`pais_id` = ' . $objDatabase->SqlVariable($this->intPaisId) . ',
 							`status_id` = ' . $objDatabase->SqlVariable($this->intStatusId) . ',
 							`direccion` = ' . $objDatabase->SqlVariable($this->strDireccion) . ',
-							`elegir_servicio` = ' . $objDatabase->SqlVariable($this->intElegirServicio) . ',
 							`es_ruta` = ' . $objDatabase->SqlVariable($this->intEsRuta) . ',
 							`se_factura` = ' . $objDatabase->SqlVariable($this->intSeFactura) . ',
-							`permite_pago` = ' . $objDatabase->SqlVariable($this->intPermitePago) . ',
 							`email_jefe_almacen` = ' . $objDatabase->SqlVariable($this->strEmailJefeAlmacen) . ',
-							`ckpt_antiguedad1` = ' . $objDatabase->SqlVariable($this->strCkptAntiguedad1) . ',
-							`ckpt_antiguedad2` = ' . $objDatabase->SqlVariable($this->strCkptAntiguedad2) . ',
-							`ckpt_antiguedad0` = ' . $objDatabase->SqlVariable($this->strCkptAntiguedad0) . ',
-							`limite_kilos` = ' . $objDatabase->SqlVariable($this->fltLimiteKilos) . ',
 							`depende_de` = ' . $objDatabase->SqlVariable($this->intDependeDe) . ',
-							`dom_origen` = ' . $objDatabase->SqlVariable($this->blnDomOrigen) . ',
-							`dom_destino` = ' . $objDatabase->SqlVariable($this->blnDomDestino) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
@@ -2206,28 +1755,15 @@
 			$this->SucursalId = $objReloaded->SucursalId;
 			$this->ClienteId = $objReloaded->ClienteId;
 			$this->RutaId = $objReloaded->RutaId;
-			$this->EntregaInmediata = $objReloaded->EntregaInmediata;
 			$this->strSiglas = $objReloaded->strSiglas;
-			$this->intLimiteDePaquetes = $objReloaded->intLimiteDePaquetes;
-			$this->intCantidadDePaquetes = $objReloaded->intCantidadDePaquetes;
-			$this->strCkptRecepcion = $objReloaded->strCkptRecepcion;
-			$this->strCkptConfirmacion = $objReloaded->strCkptConfirmacion;
-			$this->strCkptAlmacen = $objReloaded->strCkptAlmacen;
+			$this->blnEsAlmacen = $objReloaded->blnEsAlmacen;
 			$this->intPaisId = $objReloaded->intPaisId;
 			$this->intStatusId = $objReloaded->intStatusId;
 			$this->strDireccion = $objReloaded->strDireccion;
-			$this->ElegirServicio = $objReloaded->ElegirServicio;
 			$this->EsRuta = $objReloaded->EsRuta;
 			$this->SeFactura = $objReloaded->SeFactura;
-			$this->PermitePago = $objReloaded->PermitePago;
 			$this->strEmailJefeAlmacen = $objReloaded->strEmailJefeAlmacen;
-			$this->strCkptAntiguedad1 = $objReloaded->strCkptAntiguedad1;
-			$this->strCkptAntiguedad2 = $objReloaded->strCkptAntiguedad2;
-			$this->strCkptAntiguedad0 = $objReloaded->strCkptAntiguedad0;
-			$this->fltLimiteKilos = $objReloaded->fltLimiteKilos;
 			$this->intDependeDe = $objReloaded->intDependeDe;
-			$this->blnDomOrigen = $objReloaded->blnDomOrigen;
-			$this->blnDomDestino = $objReloaded->blnDomDestino;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
 			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
 			$this->strDeletedAt = $objReloaded->strDeletedAt;
@@ -2289,13 +1825,6 @@
 					 */
 					return $this->intRutaId;
 
-				case 'EntregaInmediata':
-					/**
-					 * Gets the value for intEntregaInmediata 
-					 * @return integer
-					 */
-					return $this->intEntregaInmediata;
-
 				case 'Siglas':
 					/**
 					 * Gets the value for strSiglas (Unique)
@@ -2303,40 +1832,12 @@
 					 */
 					return $this->strSiglas;
 
-				case 'LimiteDePaquetes':
+				case 'EsAlmacen':
 					/**
-					 * Gets the value for intLimiteDePaquetes 
-					 * @return integer
+					 * Gets the value for blnEsAlmacen 
+					 * @return boolean
 					 */
-					return $this->intLimiteDePaquetes;
-
-				case 'CantidadDePaquetes':
-					/**
-					 * Gets the value for intCantidadDePaquetes 
-					 * @return integer
-					 */
-					return $this->intCantidadDePaquetes;
-
-				case 'CkptRecepcion':
-					/**
-					 * Gets the value for strCkptRecepcion 
-					 * @return string
-					 */
-					return $this->strCkptRecepcion;
-
-				case 'CkptConfirmacion':
-					/**
-					 * Gets the value for strCkptConfirmacion 
-					 * @return string
-					 */
-					return $this->strCkptConfirmacion;
-
-				case 'CkptAlmacen':
-					/**
-					 * Gets the value for strCkptAlmacen 
-					 * @return string
-					 */
-					return $this->strCkptAlmacen;
+					return $this->blnEsAlmacen;
 
 				case 'PaisId':
 					/**
@@ -2359,13 +1860,6 @@
 					 */
 					return $this->strDireccion;
 
-				case 'ElegirServicio':
-					/**
-					 * Gets the value for intElegirServicio 
-					 * @return integer
-					 */
-					return $this->intElegirServicio;
-
 				case 'EsRuta':
 					/**
 					 * Gets the value for intEsRuta 
@@ -2380,13 +1874,6 @@
 					 */
 					return $this->intSeFactura;
 
-				case 'PermitePago':
-					/**
-					 * Gets the value for intPermitePago 
-					 * @return integer
-					 */
-					return $this->intPermitePago;
-
 				case 'EmailJefeAlmacen':
 					/**
 					 * Gets the value for strEmailJefeAlmacen 
@@ -2394,54 +1881,12 @@
 					 */
 					return $this->strEmailJefeAlmacen;
 
-				case 'CkptAntiguedad1':
-					/**
-					 * Gets the value for strCkptAntiguedad1 
-					 * @return string
-					 */
-					return $this->strCkptAntiguedad1;
-
-				case 'CkptAntiguedad2':
-					/**
-					 * Gets the value for strCkptAntiguedad2 
-					 * @return string
-					 */
-					return $this->strCkptAntiguedad2;
-
-				case 'CkptAntiguedad0':
-					/**
-					 * Gets the value for strCkptAntiguedad0 
-					 * @return string
-					 */
-					return $this->strCkptAntiguedad0;
-
-				case 'LimiteKilos':
-					/**
-					 * Gets the value for fltLimiteKilos 
-					 * @return double
-					 */
-					return $this->fltLimiteKilos;
-
 				case 'DependeDe':
 					/**
 					 * Gets the value for intDependeDe 
 					 * @return integer
 					 */
 					return $this->intDependeDe;
-
-				case 'DomOrigen':
-					/**
-					 * Gets the value for blnDomOrigen 
-					 * @return boolean
-					 */
-					return $this->blnDomOrigen;
-
-				case 'DomDestino':
-					/**
-					 * Gets the value for blnDomDestino 
-					 * @return boolean
-					 */
-					return $this->blnDomDestino;
 
 				case 'CreatedAt':
 					/**
@@ -2763,19 +2208,6 @@
 						throw $objExc;
 					}
 
-				case 'EntregaInmediata':
-					/**
-					 * Sets the value for intEntregaInmediata 
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						return ($this->intEntregaInmediata = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
 				case 'Siglas':
 					/**
 					 * Sets the value for strSiglas (Unique)
@@ -2789,66 +2221,14 @@
 						throw $objExc;
 					}
 
-				case 'LimiteDePaquetes':
+				case 'EsAlmacen':
 					/**
-					 * Sets the value for intLimiteDePaquetes 
-					 * @param integer $mixValue
-					 * @return integer
+					 * Sets the value for blnEsAlmacen 
+					 * @param boolean $mixValue
+					 * @return boolean
 					 */
 					try {
-						return ($this->intLimiteDePaquetes = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CantidadDePaquetes':
-					/**
-					 * Sets the value for intCantidadDePaquetes 
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						return ($this->intCantidadDePaquetes = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CkptRecepcion':
-					/**
-					 * Sets the value for strCkptRecepcion 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCkptRecepcion = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CkptConfirmacion':
-					/**
-					 * Sets the value for strCkptConfirmacion 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCkptConfirmacion = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CkptAlmacen':
-					/**
-					 * Sets the value for strCkptAlmacen 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCkptAlmacen = QType::Cast($mixValue, QType::String));
+						return ($this->blnEsAlmacen = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2893,19 +2273,6 @@
 						throw $objExc;
 					}
 
-				case 'ElegirServicio':
-					/**
-					 * Sets the value for intElegirServicio 
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						return ($this->intElegirServicio = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
 				case 'EsRuta':
 					/**
 					 * Sets the value for intEsRuta 
@@ -2932,19 +2299,6 @@
 						throw $objExc;
 					}
 
-				case 'PermitePago':
-					/**
-					 * Sets the value for intPermitePago 
-					 * @param integer $mixValue
-					 * @return integer
-					 */
-					try {
-						return ($this->intPermitePago = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
 				case 'EmailJefeAlmacen':
 					/**
 					 * Sets the value for strEmailJefeAlmacen 
@@ -2958,58 +2312,6 @@
 						throw $objExc;
 					}
 
-				case 'CkptAntiguedad1':
-					/**
-					 * Sets the value for strCkptAntiguedad1 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCkptAntiguedad1 = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CkptAntiguedad2':
-					/**
-					 * Sets the value for strCkptAntiguedad2 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCkptAntiguedad2 = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'CkptAntiguedad0':
-					/**
-					 * Sets the value for strCkptAntiguedad0 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strCkptAntiguedad0 = QType::Cast($mixValue, QType::String));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'LimiteKilos':
-					/**
-					 * Sets the value for fltLimiteKilos 
-					 * @param double $mixValue
-					 * @return double
-					 */
-					try {
-						return ($this->fltLimiteKilos = QType::Cast($mixValue, QType::Float));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
 				case 'DependeDe':
 					/**
 					 * Sets the value for intDependeDe 
@@ -3018,32 +2320,6 @@
 					 */
 					try {
 						return ($this->intDependeDe = QType::Cast($mixValue, QType::Integer));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'DomOrigen':
-					/**
-					 * Sets the value for blnDomOrigen 
-					 * @param boolean $mixValue
-					 * @return boolean
-					 */
-					try {
-						return ($this->blnDomOrigen = QType::Cast($mixValue, QType::Boolean));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'DomDestino':
-					/**
-					 * Sets the value for blnDomDestino 
-					 * @param boolean $mixValue
-					 * @return boolean
-					 */
-					try {
-						return ($this->blnDomDestino = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4665,28 +3941,15 @@
 			$strToReturn .= '<element name="Sucursal" type="xsd1:Sucursales"/>';
 			$strToReturn .= '<element name="Cliente" type="xsd1:MasterCliente"/>';
 			$strToReturn .= '<element name="Ruta" type="xsd1:Rutas"/>';
-			$strToReturn .= '<element name="EntregaInmediata" type="xsd:int"/>';
 			$strToReturn .= '<element name="Siglas" type="xsd:string"/>';
-			$strToReturn .= '<element name="LimiteDePaquetes" type="xsd:int"/>';
-			$strToReturn .= '<element name="CantidadDePaquetes" type="xsd:int"/>';
-			$strToReturn .= '<element name="CkptRecepcion" type="xsd:string"/>';
-			$strToReturn .= '<element name="CkptConfirmacion" type="xsd:string"/>';
-			$strToReturn .= '<element name="CkptAlmacen" type="xsd:string"/>';
+			$strToReturn .= '<element name="EsAlmacen" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="PaisId" type="xsd:int"/>';
 			$strToReturn .= '<element name="StatusId" type="xsd:int"/>';
 			$strToReturn .= '<element name="Direccion" type="xsd:string"/>';
-			$strToReturn .= '<element name="ElegirServicio" type="xsd:int"/>';
 			$strToReturn .= '<element name="EsRuta" type="xsd:int"/>';
 			$strToReturn .= '<element name="SeFactura" type="xsd:int"/>';
-			$strToReturn .= '<element name="PermitePago" type="xsd:int"/>';
 			$strToReturn .= '<element name="EmailJefeAlmacen" type="xsd:string"/>';
-			$strToReturn .= '<element name="CkptAntiguedad1" type="xsd:string"/>';
-			$strToReturn .= '<element name="CkptAntiguedad2" type="xsd:string"/>';
-			$strToReturn .= '<element name="CkptAntiguedad0" type="xsd:string"/>';
-			$strToReturn .= '<element name="LimiteKilos" type="xsd:float"/>';
 			$strToReturn .= '<element name="DependeDe" type="xsd:int"/>';
-			$strToReturn .= '<element name="DomOrigen" type="xsd:boolean"/>';
-			$strToReturn .= '<element name="DomDestino" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
@@ -4731,50 +3994,24 @@
 			if ((property_exists($objSoapObject, 'Ruta')) &&
 				($objSoapObject->Ruta))
 				$objToReturn->Ruta = Rutas::GetObjectFromSoapObject($objSoapObject->Ruta);
-			if (property_exists($objSoapObject, 'EntregaInmediata'))
-				$objToReturn->intEntregaInmediata = $objSoapObject->EntregaInmediata;
 			if (property_exists($objSoapObject, 'Siglas'))
 				$objToReturn->strSiglas = $objSoapObject->Siglas;
-			if (property_exists($objSoapObject, 'LimiteDePaquetes'))
-				$objToReturn->intLimiteDePaquetes = $objSoapObject->LimiteDePaquetes;
-			if (property_exists($objSoapObject, 'CantidadDePaquetes'))
-				$objToReturn->intCantidadDePaquetes = $objSoapObject->CantidadDePaquetes;
-			if (property_exists($objSoapObject, 'CkptRecepcion'))
-				$objToReturn->strCkptRecepcion = $objSoapObject->CkptRecepcion;
-			if (property_exists($objSoapObject, 'CkptConfirmacion'))
-				$objToReturn->strCkptConfirmacion = $objSoapObject->CkptConfirmacion;
-			if (property_exists($objSoapObject, 'CkptAlmacen'))
-				$objToReturn->strCkptAlmacen = $objSoapObject->CkptAlmacen;
+			if (property_exists($objSoapObject, 'EsAlmacen'))
+				$objToReturn->blnEsAlmacen = $objSoapObject->EsAlmacen;
 			if (property_exists($objSoapObject, 'PaisId'))
 				$objToReturn->intPaisId = $objSoapObject->PaisId;
 			if (property_exists($objSoapObject, 'StatusId'))
 				$objToReturn->intStatusId = $objSoapObject->StatusId;
 			if (property_exists($objSoapObject, 'Direccion'))
 				$objToReturn->strDireccion = $objSoapObject->Direccion;
-			if (property_exists($objSoapObject, 'ElegirServicio'))
-				$objToReturn->intElegirServicio = $objSoapObject->ElegirServicio;
 			if (property_exists($objSoapObject, 'EsRuta'))
 				$objToReturn->intEsRuta = $objSoapObject->EsRuta;
 			if (property_exists($objSoapObject, 'SeFactura'))
 				$objToReturn->intSeFactura = $objSoapObject->SeFactura;
-			if (property_exists($objSoapObject, 'PermitePago'))
-				$objToReturn->intPermitePago = $objSoapObject->PermitePago;
 			if (property_exists($objSoapObject, 'EmailJefeAlmacen'))
 				$objToReturn->strEmailJefeAlmacen = $objSoapObject->EmailJefeAlmacen;
-			if (property_exists($objSoapObject, 'CkptAntiguedad1'))
-				$objToReturn->strCkptAntiguedad1 = $objSoapObject->CkptAntiguedad1;
-			if (property_exists($objSoapObject, 'CkptAntiguedad2'))
-				$objToReturn->strCkptAntiguedad2 = $objSoapObject->CkptAntiguedad2;
-			if (property_exists($objSoapObject, 'CkptAntiguedad0'))
-				$objToReturn->strCkptAntiguedad0 = $objSoapObject->CkptAntiguedad0;
-			if (property_exists($objSoapObject, 'LimiteKilos'))
-				$objToReturn->fltLimiteKilos = $objSoapObject->LimiteKilos;
 			if (property_exists($objSoapObject, 'DependeDe'))
 				$objToReturn->intDependeDe = $objSoapObject->DependeDe;
-			if (property_exists($objSoapObject, 'DomOrigen'))
-				$objToReturn->blnDomOrigen = $objSoapObject->DomOrigen;
-			if (property_exists($objSoapObject, 'DomDestino'))
-				$objToReturn->blnDomDestino = $objSoapObject->DomDestino;
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
@@ -4840,28 +4077,15 @@
 			$iArray['SucursalId'] = $this->intSucursalId;
 			$iArray['ClienteId'] = $this->intClienteId;
 			$iArray['RutaId'] = $this->intRutaId;
-			$iArray['EntregaInmediata'] = $this->intEntregaInmediata;
 			$iArray['Siglas'] = $this->strSiglas;
-			$iArray['LimiteDePaquetes'] = $this->intLimiteDePaquetes;
-			$iArray['CantidadDePaquetes'] = $this->intCantidadDePaquetes;
-			$iArray['CkptRecepcion'] = $this->strCkptRecepcion;
-			$iArray['CkptConfirmacion'] = $this->strCkptConfirmacion;
-			$iArray['CkptAlmacen'] = $this->strCkptAlmacen;
+			$iArray['EsAlmacen'] = $this->blnEsAlmacen;
 			$iArray['PaisId'] = $this->intPaisId;
 			$iArray['StatusId'] = $this->intStatusId;
 			$iArray['Direccion'] = $this->strDireccion;
-			$iArray['ElegirServicio'] = $this->intElegirServicio;
 			$iArray['EsRuta'] = $this->intEsRuta;
 			$iArray['SeFactura'] = $this->intSeFactura;
-			$iArray['PermitePago'] = $this->intPermitePago;
 			$iArray['EmailJefeAlmacen'] = $this->strEmailJefeAlmacen;
-			$iArray['CkptAntiguedad1'] = $this->strCkptAntiguedad1;
-			$iArray['CkptAntiguedad2'] = $this->strCkptAntiguedad2;
-			$iArray['CkptAntiguedad0'] = $this->strCkptAntiguedad0;
-			$iArray['LimiteKilos'] = $this->fltLimiteKilos;
 			$iArray['DependeDe'] = $this->intDependeDe;
-			$iArray['DomOrigen'] = $this->blnDomOrigen;
-			$iArray['DomDestino'] = $this->blnDomDestino;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
 			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
 			$iArray['DeletedAt'] = $this->strDeletedAt;
@@ -4913,28 +4137,15 @@
      * @property-read QQNodeMasterCliente $Cliente
      * @property-read QQNode $RutaId
      * @property-read QQNodeRutas $Ruta
-     * @property-read QQNode $EntregaInmediata
      * @property-read QQNode $Siglas
-     * @property-read QQNode $LimiteDePaquetes
-     * @property-read QQNode $CantidadDePaquetes
-     * @property-read QQNode $CkptRecepcion
-     * @property-read QQNode $CkptConfirmacion
-     * @property-read QQNode $CkptAlmacen
+     * @property-read QQNode $EsAlmacen
      * @property-read QQNode $PaisId
      * @property-read QQNode $StatusId
      * @property-read QQNode $Direccion
-     * @property-read QQNode $ElegirServicio
      * @property-read QQNode $EsRuta
      * @property-read QQNode $SeFactura
-     * @property-read QQNode $PermitePago
      * @property-read QQNode $EmailJefeAlmacen
-     * @property-read QQNode $CkptAntiguedad1
-     * @property-read QQNode $CkptAntiguedad2
-     * @property-read QQNode $CkptAntiguedad0
-     * @property-read QQNode $LimiteKilos
      * @property-read QQNode $DependeDe
-     * @property-read QQNode $DomOrigen
-     * @property-read QQNode $DomDestino
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -4977,50 +4188,24 @@
 					return new QQNode('ruta_id', 'RutaId', 'Integer', $this);
 				case 'Ruta':
 					return new QQNodeRutas('ruta_id', 'Ruta', 'Integer', $this);
-				case 'EntregaInmediata':
-					return new QQNode('entrega_inmediata', 'EntregaInmediata', 'Integer', $this);
 				case 'Siglas':
 					return new QQNode('siglas', 'Siglas', 'VarChar', $this);
-				case 'LimiteDePaquetes':
-					return new QQNode('limite_de_paquetes', 'LimiteDePaquetes', 'Integer', $this);
-				case 'CantidadDePaquetes':
-					return new QQNode('cantidad_de_paquetes', 'CantidadDePaquetes', 'Integer', $this);
-				case 'CkptRecepcion':
-					return new QQNode('ckpt_recepcion', 'CkptRecepcion', 'VarChar', $this);
-				case 'CkptConfirmacion':
-					return new QQNode('ckpt_confirmacion', 'CkptConfirmacion', 'VarChar', $this);
-				case 'CkptAlmacen':
-					return new QQNode('ckpt_almacen', 'CkptAlmacen', 'VarChar', $this);
+				case 'EsAlmacen':
+					return new QQNode('es_almacen', 'EsAlmacen', 'Bit', $this);
 				case 'PaisId':
 					return new QQNode('pais_id', 'PaisId', 'Integer', $this);
 				case 'StatusId':
 					return new QQNode('status_id', 'StatusId', 'Integer', $this);
 				case 'Direccion':
 					return new QQNode('direccion', 'Direccion', 'VarChar', $this);
-				case 'ElegirServicio':
-					return new QQNode('elegir_servicio', 'ElegirServicio', 'Integer', $this);
 				case 'EsRuta':
 					return new QQNode('es_ruta', 'EsRuta', 'Integer', $this);
 				case 'SeFactura':
 					return new QQNode('se_factura', 'SeFactura', 'Integer', $this);
-				case 'PermitePago':
-					return new QQNode('permite_pago', 'PermitePago', 'Integer', $this);
 				case 'EmailJefeAlmacen':
 					return new QQNode('email_jefe_almacen', 'EmailJefeAlmacen', 'VarChar', $this);
-				case 'CkptAntiguedad1':
-					return new QQNode('ckpt_antiguedad1', 'CkptAntiguedad1', 'VarChar', $this);
-				case 'CkptAntiguedad2':
-					return new QQNode('ckpt_antiguedad2', 'CkptAntiguedad2', 'VarChar', $this);
-				case 'CkptAntiguedad0':
-					return new QQNode('ckpt_antiguedad0', 'CkptAntiguedad0', 'VarChar', $this);
-				case 'LimiteKilos':
-					return new QQNode('limite_kilos', 'LimiteKilos', 'Float', $this);
 				case 'DependeDe':
 					return new QQNode('depende_de', 'DependeDe', 'Integer', $this);
-				case 'DomOrigen':
-					return new QQNode('dom_origen', 'DomOrigen', 'Bit', $this);
-				case 'DomDestino':
-					return new QQNode('dom_destino', 'DomDestino', 'Bit', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
@@ -5074,28 +4259,15 @@
      * @property-read QQNodeMasterCliente $Cliente
      * @property-read QQNode $RutaId
      * @property-read QQNodeRutas $Ruta
-     * @property-read QQNode $EntregaInmediata
      * @property-read QQNode $Siglas
-     * @property-read QQNode $LimiteDePaquetes
-     * @property-read QQNode $CantidadDePaquetes
-     * @property-read QQNode $CkptRecepcion
-     * @property-read QQNode $CkptConfirmacion
-     * @property-read QQNode $CkptAlmacen
+     * @property-read QQNode $EsAlmacen
      * @property-read QQNode $PaisId
      * @property-read QQNode $StatusId
      * @property-read QQNode $Direccion
-     * @property-read QQNode $ElegirServicio
      * @property-read QQNode $EsRuta
      * @property-read QQNode $SeFactura
-     * @property-read QQNode $PermitePago
      * @property-read QQNode $EmailJefeAlmacen
-     * @property-read QQNode $CkptAntiguedad1
-     * @property-read QQNode $CkptAntiguedad2
-     * @property-read QQNode $CkptAntiguedad0
-     * @property-read QQNode $LimiteKilos
      * @property-read QQNode $DependeDe
-     * @property-read QQNode $DomOrigen
-     * @property-read QQNode $DomDestino
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
      * @property-read QQNode $DeletedAt
@@ -5138,50 +4310,24 @@
 					return new QQNode('ruta_id', 'RutaId', 'integer', $this);
 				case 'Ruta':
 					return new QQNodeRutas('ruta_id', 'Ruta', 'integer', $this);
-				case 'EntregaInmediata':
-					return new QQNode('entrega_inmediata', 'EntregaInmediata', 'integer', $this);
 				case 'Siglas':
 					return new QQNode('siglas', 'Siglas', 'string', $this);
-				case 'LimiteDePaquetes':
-					return new QQNode('limite_de_paquetes', 'LimiteDePaquetes', 'integer', $this);
-				case 'CantidadDePaquetes':
-					return new QQNode('cantidad_de_paquetes', 'CantidadDePaquetes', 'integer', $this);
-				case 'CkptRecepcion':
-					return new QQNode('ckpt_recepcion', 'CkptRecepcion', 'string', $this);
-				case 'CkptConfirmacion':
-					return new QQNode('ckpt_confirmacion', 'CkptConfirmacion', 'string', $this);
-				case 'CkptAlmacen':
-					return new QQNode('ckpt_almacen', 'CkptAlmacen', 'string', $this);
+				case 'EsAlmacen':
+					return new QQNode('es_almacen', 'EsAlmacen', 'boolean', $this);
 				case 'PaisId':
 					return new QQNode('pais_id', 'PaisId', 'integer', $this);
 				case 'StatusId':
 					return new QQNode('status_id', 'StatusId', 'integer', $this);
 				case 'Direccion':
 					return new QQNode('direccion', 'Direccion', 'string', $this);
-				case 'ElegirServicio':
-					return new QQNode('elegir_servicio', 'ElegirServicio', 'integer', $this);
 				case 'EsRuta':
 					return new QQNode('es_ruta', 'EsRuta', 'integer', $this);
 				case 'SeFactura':
 					return new QQNode('se_factura', 'SeFactura', 'integer', $this);
-				case 'PermitePago':
-					return new QQNode('permite_pago', 'PermitePago', 'integer', $this);
 				case 'EmailJefeAlmacen':
 					return new QQNode('email_jefe_almacen', 'EmailJefeAlmacen', 'string', $this);
-				case 'CkptAntiguedad1':
-					return new QQNode('ckpt_antiguedad1', 'CkptAntiguedad1', 'string', $this);
-				case 'CkptAntiguedad2':
-					return new QQNode('ckpt_antiguedad2', 'CkptAntiguedad2', 'string', $this);
-				case 'CkptAntiguedad0':
-					return new QQNode('ckpt_antiguedad0', 'CkptAntiguedad0', 'string', $this);
-				case 'LimiteKilos':
-					return new QQNode('limite_kilos', 'LimiteKilos', 'double', $this);
 				case 'DependeDe':
 					return new QQNode('depende_de', 'DependeDe', 'integer', $this);
-				case 'DomOrigen':
-					return new QQNode('dom_origen', 'DomOrigen', 'boolean', $this);
-				case 'DomDestino':
-					return new QQNode('dom_destino', 'DomDestino', 'boolean', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':

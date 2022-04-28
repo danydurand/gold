@@ -151,6 +151,9 @@ class FacturasEditForm extends FacturasEditFormBase {
                 case 'anular':
                     $this->anularFactura();
                     break;
+                case 'recalculo':
+                    $this->recalculo();
+                    break;
                 default:
                     $this->danger("Accion: ".$this->strAcciAdic." no especificada");
             }
@@ -160,6 +163,11 @@ class FacturasEditForm extends FacturasEditFormBase {
 	//----------------------------
 	// Aqui se crean los objetos 
 	//----------------------------
+
+    protected function recalculo() {
+        $this->mctFacturas->Facturas->ActualizarMontos();
+        QApplication::Redirect(__SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id);
+    }
 
     protected function anularFactura() {
 	    $intCantPago = $this->mctFacturas->Facturas->CountFacturaPagosesAsFactura();
@@ -197,6 +205,10 @@ class FacturasEditForm extends FacturasEditFormBase {
                 $arrOpciDrop[] = OpcionDropDown(
                     __SIST__.'/facturas_edit.php/'.$intFactIdxx.'/anular',
                     TextoIcono('cog','Anular')
+                );
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/facturas_edit.php/'.$intFactIdxx.'/recalculo',
+                    TextoIcono('cogs','Recalculo')
                 );
             } else {
                 $arrOpciDrop[] = OpcionDropDown(

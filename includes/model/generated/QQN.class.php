@@ -1141,6 +1141,12 @@
 			return new QQNodeTarifaExp('tarifa_exp', null, null);
 		}
 		/**
+		 * @return QQNodeTarifaExpDestino
+		 */
+		static public function TarifaExpDestino() {
+			return new QQNodeTarifaExpDestino('tarifa_exp_destino', null, null);
+		}
+		/**
 		 * @return QQNodeTarifaI
 		 */
 		static public function TarifaI() {

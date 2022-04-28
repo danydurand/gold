@@ -97,6 +97,8 @@
 	 * @property-read Rutas[] $_RutasAsSucursalArray the value for the private _objRutasAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the rutas.sucursal_id reverse relationship
 	 * @property-read SdeOperacion $_SdeOperacionAsSucursal the value for the private _objSdeOperacionAsSucursal (Read-Only) if set due to an expansion on the sde_operacion.sucursal_id reverse relationship
 	 * @property-read SdeOperacion[] $_SdeOperacionAsSucursalArray the value for the private _objSdeOperacionAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the sde_operacion.sucursal_id reverse relationship
+	 * @property-read TarifaExpDestino $_TarifaExpDestinoAsDestino the value for the private _objTarifaExpDestinoAsDestino (Read-Only) if set due to an expansion on the tarifa_exp_destino.destino_id reverse relationship
+	 * @property-read TarifaExpDestino[] $_TarifaExpDestinoAsDestinoArray the value for the private _objTarifaExpDestinoAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the tarifa_exp_destino.destino_id reverse relationship
 	 * @property-read Usuario $_UsuarioAsSucursal the value for the private _objUsuarioAsSucursal (Read-Only) if set due to an expansion on the usuario.sucursal_id reverse relationship
 	 * @property-read Usuario[] $_UsuarioAsSucursalArray the value for the private _objUsuarioAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the usuario.sucursal_id reverse relationship
 	 * @property-read UsuarioConnect $_UsuarioConnectAsSucursal the value for the private _objUsuarioConnectAsSucursal (Read-Only) if set due to an expansion on the usuario_connect.sucursal_id reverse relationship
@@ -763,6 +765,22 @@
 		 * @var SdeOperacion[] _objSdeOperacionAsSucursalArray;
 		 */
 		private $_objSdeOperacionAsSucursalArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaExpDestinoAsDestino object
+		 * (of type TarifaExpDestino), if this Sucursales object was restored with
+		 * an expansion on the tarifa_exp_destino association table.
+		 * @var TarifaExpDestino _objTarifaExpDestinoAsDestino;
+		 */
+		private $_objTarifaExpDestinoAsDestino;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaExpDestinoAsDestino objects
+		 * (of type TarifaExpDestino[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the tarifa_exp_destino association table.
+		 * @var TarifaExpDestino[] _objTarifaExpDestinoAsDestinoArray;
+		 */
+		private $_objTarifaExpDestinoAsDestinoArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single UsuarioAsSucursal object
@@ -1905,6 +1923,21 @@
 					$objToReturn->_objSdeOperacionAsSucursalArray[] = SdeOperacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sdeoperacionassucursal__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objSdeOperacionAsSucursal)) {
 					$objToReturn->_objSdeOperacionAsSucursal = SdeOperacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sdeoperacionassucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaExpDestinoAsDestino Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaexpdestinoasdestino__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaexpdestinoasdestino']) ? null : $objExpansionAliasArray['tarifaexpdestinoasdestino']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaExpDestinoAsDestinoArray)
+				$objToReturn->_objTarifaExpDestinoAsDestinoArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaExpDestinoAsDestinoArray[] = TarifaExpDestino::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpdestinoasdestino__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaExpDestinoAsDestino)) {
+					$objToReturn->_objTarifaExpDestinoAsDestino = TarifaExpDestino::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpdestinoasdestino__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3121,6 +3154,22 @@
 					 */
 					return $this->_objSdeOperacionAsSucursalArray;
 
+				case '_TarifaExpDestinoAsDestino':
+					/**
+					 * Gets the value for the private _objTarifaExpDestinoAsDestino (Read-Only)
+					 * if set due to an expansion on the tarifa_exp_destino.destino_id reverse relationship
+					 * @return TarifaExpDestino
+					 */
+					return $this->_objTarifaExpDestinoAsDestino;
+
+				case '_TarifaExpDestinoAsDestinoArray':
+					/**
+					 * Gets the value for the private _objTarifaExpDestinoAsDestinoArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_exp_destino.destino_id reverse relationship
+					 * @return TarifaExpDestino[]
+					 */
+					return $this->_objTarifaExpDestinoAsDestinoArray;
+
 				case '_UsuarioAsSucursal':
 					/**
 					 * Gets the value for the private _objUsuarioAsSucursal (Read-Only)
@@ -3593,6 +3642,9 @@
 			}
 			if ($this->CountSdeOperacionsAsSucursal()) {
 				$arrTablRela[] = 'sde_operacion';
+			}
+			if ($this->CountTarifaExpDestinosAsDestino()) {
+				$arrTablRela[] = 'tarifa_exp_destino';
 			}
 			if ($this->CountUsuariosAsSucursal()) {
 				$arrTablRela[] = 'usuario';
@@ -7791,6 +7843,155 @@
 		}
 
 
+		// Related Objects' Methods for TarifaExpDestinoAsDestino
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaExpDestinosAsDestino as an array of TarifaExpDestino objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaExpDestino[]
+		*/
+		public function GetTarifaExpDestinoAsDestinoArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return TarifaExpDestino::LoadArrayByDestinoId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaExpDestinosAsDestino
+		 * @return int
+		*/
+		public function CountTarifaExpDestinosAsDestino() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return TarifaExpDestino::CountByDestinoId($this->intId);
+		}
+
+		/**
+		 * Associates a TarifaExpDestinoAsDestino
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function AssociateTarifaExpDestinoAsDestino(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaExpDestinoAsDestino on this unsaved Sucursales.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaExpDestinoAsDestino on this Sucursales with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaExpDestinoAsDestino
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function UnassociateTarifaExpDestinoAsDestino(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsDestino on this unsaved Sucursales.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsDestino on this Sucursales with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`destino_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaExpDestinosAsDestino
+		 * @return void
+		*/
+		public function UnassociateAllTarifaExpDestinosAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`destino_id` = null
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaExpDestinoAsDestino
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaExpDestinoAsDestino(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsDestino on this unsaved Sucursales.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsDestino on this Sucursales with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_exp_destino`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . ' AND
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaExpDestinosAsDestino
+		 * @return void
+		*/
+		public function DeleteAllTarifaExpDestinosAsDestino() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsDestino on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_exp_destino`
+				WHERE
+					`destino_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for UsuarioAsSucursal
 		//-------------------------------------------------------------------
 
@@ -8678,6 +8879,7 @@
      * @property-read QQReverseReferenceNodeRuta $RutaAsSucursal
      * @property-read QQReverseReferenceNodeRutas $RutasAsSucursal
      * @property-read QQReverseReferenceNodeSdeOperacion $SdeOperacionAsSucursal
+     * @property-read QQReverseReferenceNodeTarifaExpDestino $TarifaExpDestinoAsDestino
      * @property-read QQReverseReferenceNodeUsuario $UsuarioAsSucursal
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsSucursal
      * @property-read QQReverseReferenceNodeVehiculo $VehiculoAsSucursal
@@ -8796,6 +8998,8 @@
 					return new QQReverseReferenceNodeRutas($this, 'rutasassucursal', 'reverse_reference', 'sucursal_id', 'RutasAsSucursal');
 				case 'SdeOperacionAsSucursal':
 					return new QQReverseReferenceNodeSdeOperacion($this, 'sdeoperacionassucursal', 'reverse_reference', 'sucursal_id', 'SdeOperacionAsSucursal');
+				case 'TarifaExpDestinoAsDestino':
+					return new QQReverseReferenceNodeTarifaExpDestino($this, 'tarifaexpdestinoasdestino', 'reverse_reference', 'destino_id', 'TarifaExpDestinoAsDestino');
 				case 'UsuarioAsSucursal':
 					return new QQReverseReferenceNodeUsuario($this, 'usuarioassucursal', 'reverse_reference', 'sucursal_id', 'UsuarioAsSucursal');
 				case 'UsuarioConnectAsSucursal':
@@ -8872,6 +9076,7 @@
      * @property-read QQReverseReferenceNodeRuta $RutaAsSucursal
      * @property-read QQReverseReferenceNodeRutas $RutasAsSucursal
      * @property-read QQReverseReferenceNodeSdeOperacion $SdeOperacionAsSucursal
+     * @property-read QQReverseReferenceNodeTarifaExpDestino $TarifaExpDestinoAsDestino
      * @property-read QQReverseReferenceNodeUsuario $UsuarioAsSucursal
      * @property-read QQReverseReferenceNodeUsuarioConnect $UsuarioConnectAsSucursal
      * @property-read QQReverseReferenceNodeVehiculo $VehiculoAsSucursal
@@ -8990,6 +9195,8 @@
 					return new QQReverseReferenceNodeRutas($this, 'rutasassucursal', 'reverse_reference', 'sucursal_id', 'RutasAsSucursal');
 				case 'SdeOperacionAsSucursal':
 					return new QQReverseReferenceNodeSdeOperacion($this, 'sdeoperacionassucursal', 'reverse_reference', 'sucursal_id', 'SdeOperacionAsSucursal');
+				case 'TarifaExpDestinoAsDestino':
+					return new QQReverseReferenceNodeTarifaExpDestino($this, 'tarifaexpdestinoasdestino', 'reverse_reference', 'destino_id', 'TarifaExpDestinoAsDestino');
 				case 'UsuarioAsSucursal':
 					return new QQReverseReferenceNodeUsuario($this, 'usuarioassucursal', 'reverse_reference', 'sucursal_id', 'UsuarioAsSucursal');
 				case 'UsuarioConnectAsSucursal':

@@ -1,21 +1,21 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do the List All functionality
- * of the Counter class.  It uses the code-generated
- * CounterDataGrid control which has meta-methods to help with
- * easily creating/defining Counter columns.
+ * of the TarifaExpDestino class.  It uses the code-generated
+ * TarifaExpDestinoDataGrid control which has meta-methods to help with
+ * easily creating/defining TarifaExpDestino columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  *
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both counter_list.php AND
- * counter_list.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_exp_destino_list.php AND
+ * tarifa_exp_destino_list.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class CounterListFormBase extends QForm {
+abstract class TarifaExpDestinoListFormBase extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $lblTituForm;
@@ -24,11 +24,11 @@ abstract class CounterListFormBase extends QForm {
     protected $btnExpoExce;
     protected $lblOtraNoti;
 
-    // Local instance of the Meta DataGrid to list Counters
+    // Local instance of the Meta DataGrid to list TarifaExpDestinos
     /**
-     * @var CounterDataGrid dtgCounters
+     * @var TarifaExpDestinoDataGrid dtgTarifaExpDestinos
      */
-    protected $dtgCounters;
+    protected $dtgTarifaExpDestinos;
 
     // Create QForm Event Handlers as Needed
 
@@ -52,52 +52,41 @@ abstract class CounterListFormBase extends QForm {
         $this->btnFiltAvan_Create();
 
         // Instantiate the Meta DataGrid
-        $this->dtgCounters = new CounterDataGrid($this);
+        $this->dtgTarifaExpDestinos = new TarifaExpDestinoDataGrid($this);
 
         // Style the DataGrid (if desired)
-        $this->dtgCounters->CssClass = 'datagrid';
-        $this->dtgCounters->AlternateRowStyle->CssClass = 'alternate';
-        $this->dtgCounters->FontSize = 13;
-        $this->dtgCounters->ShowFilter = false;
+        $this->dtgTarifaExpDestinos->CssClass = 'datagrid';
+        $this->dtgTarifaExpDestinos->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgTarifaExpDestinos->FontSize = 13;
+        $this->dtgTarifaExpDestinos->ShowFilter = false;
 
         // Add Pagination (if desired)
-        $this->dtgCounters->Paginator = new QPaginator($this->dtgCounters);
-        $this->dtgCounters->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgTarifaExpDestinos->Paginator = new QPaginator($this->dtgTarifaExpDestinos);
+        $this->dtgTarifaExpDestinos->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         // Higlight the datagrid rows when mousing over them
-        $this->dtgCounters->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgCounters->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgTarifaExpDestinos->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgTarifaExpDestinos->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         // Add a click handler for the rows.
         // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
         // or $_ITEM->Id to pass the object's id, or any other data grid variable
-        $this->dtgCounters->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-        $this->dtgCounters->AddRowAction(new QClickEvent(), new QAjaxAction('dtgCountersRow_Click'));
+        $this->dtgTarifaExpDestinos->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgTarifaExpDestinos->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTarifaExpDestinosRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
-        // Create the Other Columns (note that you can use strings for counter's properties, or you
-        // can traverse down QQN::counter() to display fields that are down the hierarchy)
-        $this->dtgCounters->MetaAddColumn('Id');
-        $this->dtgCounters->MetaAddColumn('Descripcion');
-        $this->dtgCounters->MetaAddColumn(QQN::Counter()->Sucursal);
-        $this->dtgCounters->MetaAddColumn(QQN::Counter()->Cliente);
-        $this->dtgCounters->MetaAddColumn(QQN::Counter()->Ruta);
-        $this->dtgCounters->MetaAddColumn('Siglas');
-        $this->dtgCounters->MetaAddColumn('EsAlmacen');
-        $this->dtgCounters->MetaAddColumn('PaisId');
-        $this->dtgCounters->MetaAddColumn('StatusId');
-        $this->dtgCounters->MetaAddColumn('Direccion');
-        $this->dtgCounters->MetaAddTypeColumn('EsRuta', 'SinoType');
-        $this->dtgCounters->MetaAddTypeColumn('SeFactura', 'SinoType');
-        $this->dtgCounters->MetaAddColumn('EmailJefeAlmacen');
-        $this->dtgCounters->MetaAddColumn('DependeDe');
-        $this->dtgCounters->MetaAddColumn('CreatedAt');
-        $this->dtgCounters->MetaAddColumn('UpdatedAt');
-        $this->dtgCounters->MetaAddColumn('DeletedAt');
-        $this->dtgCounters->MetaAddColumn('CreatedBy');
-        $this->dtgCounters->MetaAddColumn('UpdatedBy');
-        $this->dtgCounters->MetaAddColumn('DeletedBy');
+        // Create the Other Columns (note that you can use strings for tarifa_exp_destino's properties, or you
+        // can traverse down QQN::tarifa_exp_destino() to display fields that are down the hierarchy)
+        $this->dtgTarifaExpDestinos->MetaAddColumn('Id');
+        $this->dtgTarifaExpDestinos->MetaAddColumn(QQN::TarifaExpDestino()->Tarifa);
+        $this->dtgTarifaExpDestinos->MetaAddColumn(QQN::TarifaExpDestino()->Destino);
+        $this->dtgTarifaExpDestinos->MetaAddColumn('Monto');
+        $this->dtgTarifaExpDestinos->MetaAddColumn('Minimo');
+        $this->dtgTarifaExpDestinos->MetaAddColumn('CreatedAt');
+        $this->dtgTarifaExpDestinos->MetaAddColumn(QQN::TarifaExpDestino()->CreatedByObject);
+        $this->dtgTarifaExpDestinos->MetaAddColumn('UpdatedAt');
+        $this->dtgTarifaExpDestinos->MetaAddColumn(QQN::TarifaExpDestino()->UpdatedByObject);
 
         $this->btnExpoExce_Create();
 
@@ -105,7 +94,7 @@ abstract class CounterListFormBase extends QForm {
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'Counters';
+        $this->lblTituForm->Text = 'TarifaExpDestinos';
     }
 
     protected function lblMensUsua_Create() {
@@ -143,7 +132,7 @@ abstract class CounterListFormBase extends QForm {
     }
 
     protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgCounters);
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgTarifaExpDestinos);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoExce->HtmlEntities = false;
@@ -152,16 +141,16 @@ abstract class CounterListFormBase extends QForm {
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/counter_edit.php');
+        QApplication::Redirect(__SIST__.'/tarifa_exp_destino_edit.php');
     }
 
     protected function btnFiltAvan_Click() {
-        $this->dtgCounters->ShowFilter = !$this->dtgCounters->ShowFilter;
+        $this->dtgTarifaExpDestinos->ShowFilter = !$this->dtgTarifaExpDestinos->ShowFilter;
     }
 
-    public function dtgCountersRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgTarifaExpDestinosRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
-      QApplication::Redirect("counter_edit.php/$intId");
+      QApplication::Redirect("tarifa_exp_destino_edit.php/$intId");
     }
 
 

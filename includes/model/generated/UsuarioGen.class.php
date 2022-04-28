@@ -133,6 +133,10 @@
 	 * @property-read TarifaExp[] $_TarifaExpAsCreatedByArray the value for the private _objTarifaExpAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_exp.created_by reverse relationship
 	 * @property-read TarifaExp $_TarifaExpAsUpdatedBy the value for the private _objTarifaExpAsUpdatedBy (Read-Only) if set due to an expansion on the tarifa_exp.updated_by reverse relationship
 	 * @property-read TarifaExp[] $_TarifaExpAsUpdatedByArray the value for the private _objTarifaExpAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_exp.updated_by reverse relationship
+	 * @property-read TarifaExpDestino $_TarifaExpDestinoAsCreatedBy the value for the private _objTarifaExpDestinoAsCreatedBy (Read-Only) if set due to an expansion on the tarifa_exp_destino.created_by reverse relationship
+	 * @property-read TarifaExpDestino[] $_TarifaExpDestinoAsCreatedByArray the value for the private _objTarifaExpDestinoAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_exp_destino.created_by reverse relationship
+	 * @property-read TarifaExpDestino $_TarifaExpDestinoAsUpdatedBy the value for the private _objTarifaExpDestinoAsUpdatedBy (Read-Only) if set due to an expansion on the tarifa_exp_destino.updated_by reverse relationship
+	 * @property-read TarifaExpDestino[] $_TarifaExpDestinoAsUpdatedByArray the value for the private _objTarifaExpDestinoAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the tarifa_exp_destino.updated_by reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class UsuarioGen extends QBaseClass implements IteratorAggregate {
@@ -1059,6 +1063,38 @@
 		 * @var TarifaExp[] _objTarifaExpAsUpdatedByArray;
 		 */
 		private $_objTarifaExpAsUpdatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaExpDestinoAsCreatedBy object
+		 * (of type TarifaExpDestino), if this Usuario object was restored with
+		 * an expansion on the tarifa_exp_destino association table.
+		 * @var TarifaExpDestino _objTarifaExpDestinoAsCreatedBy;
+		 */
+		private $_objTarifaExpDestinoAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaExpDestinoAsCreatedBy objects
+		 * (of type TarifaExpDestino[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the tarifa_exp_destino association table.
+		 * @var TarifaExpDestino[] _objTarifaExpDestinoAsCreatedByArray;
+		 */
+		private $_objTarifaExpDestinoAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single TarifaExpDestinoAsUpdatedBy object
+		 * (of type TarifaExpDestino), if this Usuario object was restored with
+		 * an expansion on the tarifa_exp_destino association table.
+		 * @var TarifaExpDestino _objTarifaExpDestinoAsUpdatedBy;
+		 */
+		private $_objTarifaExpDestinoAsUpdatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of TarifaExpDestinoAsUpdatedBy objects
+		 * (of type TarifaExpDestino[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the tarifa_exp_destino association table.
+		 * @var TarifaExpDestino[] _objTarifaExpDestinoAsUpdatedByArray;
+		 */
+		private $_objTarifaExpDestinoAsUpdatedByArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -2479,6 +2515,36 @@
 					$objToReturn->_objTarifaExpAsUpdatedByArray[] = TarifaExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objTarifaExpAsUpdatedBy)) {
 					$objToReturn->_objTarifaExpAsUpdatedBy = TarifaExp::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaExpDestinoAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaexpdestinoascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaexpdestinoascreatedby']) ? null : $objExpansionAliasArray['tarifaexpdestinoascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaExpDestinoAsCreatedByArray)
+				$objToReturn->_objTarifaExpDestinoAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaExpDestinoAsCreatedByArray[] = TarifaExpDestino::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpdestinoascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaExpDestinoAsCreatedBy)) {
+					$objToReturn->_objTarifaExpDestinoAsCreatedBy = TarifaExpDestino::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpdestinoascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for TarifaExpDestinoAsUpdatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'tarifaexpdestinoasupdatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['tarifaexpdestinoasupdatedby']) ? null : $objExpansionAliasArray['tarifaexpdestinoasupdatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objTarifaExpDestinoAsUpdatedByArray)
+				$objToReturn->_objTarifaExpDestinoAsUpdatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objTarifaExpDestinoAsUpdatedByArray[] = TarifaExpDestino::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpdestinoasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objTarifaExpDestinoAsUpdatedBy)) {
+					$objToReturn->_objTarifaExpDestinoAsUpdatedBy = TarifaExpDestino::InstantiateDbRow($objDbRow, $strAliasPrefix . 'tarifaexpdestinoasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -4015,6 +4081,38 @@
 					 */
 					return $this->_objTarifaExpAsUpdatedByArray;
 
+				case '_TarifaExpDestinoAsCreatedBy':
+					/**
+					 * Gets the value for the private _objTarifaExpDestinoAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the tarifa_exp_destino.created_by reverse relationship
+					 * @return TarifaExpDestino
+					 */
+					return $this->_objTarifaExpDestinoAsCreatedBy;
+
+				case '_TarifaExpDestinoAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objTarifaExpDestinoAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_exp_destino.created_by reverse relationship
+					 * @return TarifaExpDestino[]
+					 */
+					return $this->_objTarifaExpDestinoAsCreatedByArray;
+
+				case '_TarifaExpDestinoAsUpdatedBy':
+					/**
+					 * Gets the value for the private _objTarifaExpDestinoAsUpdatedBy (Read-Only)
+					 * if set due to an expansion on the tarifa_exp_destino.updated_by reverse relationship
+					 * @return TarifaExpDestino
+					 */
+					return $this->_objTarifaExpDestinoAsUpdatedBy;
+
+				case '_TarifaExpDestinoAsUpdatedByArray':
+					/**
+					 * Gets the value for the private _objTarifaExpDestinoAsUpdatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the tarifa_exp_destino.updated_by reverse relationship
+					 * @return TarifaExpDestino[]
+					 */
+					return $this->_objTarifaExpDestinoAsUpdatedByArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -4578,6 +4676,12 @@
 			}
 			if ($this->CountTarifaExpsAsUpdatedBy()) {
 				$arrTablRela[] = 'tarifa_exp';
+			}
+			if ($this->CountTarifaExpDestinosAsCreatedBy()) {
+				$arrTablRela[] = 'tarifa_exp_destino';
+			}
+			if ($this->CountTarifaExpDestinosAsUpdatedBy()) {
+				$arrTablRela[] = 'tarifa_exp_destino';
 			}
 			
 			return $arrTablRela;
@@ -11765,6 +11869,304 @@
 		}
 
 
+		// Related Objects' Methods for TarifaExpDestinoAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaExpDestinosAsCreatedBy as an array of TarifaExpDestino objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaExpDestino[]
+		*/
+		public function GetTarifaExpDestinoAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return TarifaExpDestino::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaExpDestinosAsCreatedBy
+		 * @return int
+		*/
+		public function CountTarifaExpDestinosAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return TarifaExpDestino::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a TarifaExpDestinoAsCreatedBy
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function AssociateTarifaExpDestinoAsCreatedBy(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaExpDestinoAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaExpDestinoAsCreatedBy on this Usuario with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaExpDestinoAsCreatedBy
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function UnassociateTarifaExpDestinoAsCreatedBy(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsCreatedBy on this Usuario with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaExpDestinosAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllTarifaExpDestinosAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaExpDestinoAsCreatedBy
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaExpDestinoAsCreatedBy(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsCreatedBy on this Usuario with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_exp_destino`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaExpDestinosAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllTarifaExpDestinosAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_exp_destino`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for TarifaExpDestinoAsUpdatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated TarifaExpDestinosAsUpdatedBy as an array of TarifaExpDestino objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return TarifaExpDestino[]
+		*/
+		public function GetTarifaExpDestinoAsUpdatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return TarifaExpDestino::LoadArrayByUpdatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated TarifaExpDestinosAsUpdatedBy
+		 * @return int
+		*/
+		public function CountTarifaExpDestinosAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return TarifaExpDestino::CountByUpdatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a TarifaExpDestinoAsUpdatedBy
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function AssociateTarifaExpDestinoAsUpdatedBy(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaExpDestinoAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateTarifaExpDestinoAsUpdatedBy on this Usuario with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a TarifaExpDestinoAsUpdatedBy
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function UnassociateTarifaExpDestinoAsUpdatedBy(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsUpdatedBy on this Usuario with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`updated_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all TarifaExpDestinosAsUpdatedBy
+		 * @return void
+		*/
+		public function UnassociateAllTarifaExpDestinosAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`tarifa_exp_destino`
+				SET
+					`updated_by` = null
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated TarifaExpDestinoAsUpdatedBy
+		 * @param TarifaExpDestino $objTarifaExpDestino
+		 * @return void
+		*/
+		public function DeleteAssociatedTarifaExpDestinoAsUpdatedBy(TarifaExpDestino $objTarifaExpDestino) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsUpdatedBy on this unsaved Usuario.');
+			if ((is_null($objTarifaExpDestino->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsUpdatedBy on this Usuario with an unsaved TarifaExpDestino.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_exp_destino`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objTarifaExpDestino->Id) . ' AND
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated TarifaExpDestinosAsUpdatedBy
+		 * @return void
+		*/
+		public function DeleteAllTarifaExpDestinosAsUpdatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateTarifaExpDestinoAsUpdatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`tarifa_exp_destino`
+				WHERE
+					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -12062,6 +12464,8 @@
      * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsUpdatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsCreatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsUpdatedBy
+     * @property-read QQReverseReferenceNodeTarifaExpDestino $TarifaExpDestinoAsCreatedBy
+     * @property-read QQReverseReferenceNodeTarifaExpDestino $TarifaExpDestinoAsUpdatedBy
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -12211,6 +12615,10 @@
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpascreatedby', 'reverse_reference', 'created_by', 'TarifaExpAsCreatedBy');
 				case 'TarifaExpAsUpdatedBy':
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpasupdatedby', 'reverse_reference', 'updated_by', 'TarifaExpAsUpdatedBy');
+				case 'TarifaExpDestinoAsCreatedBy':
+					return new QQReverseReferenceNodeTarifaExpDestino($this, 'tarifaexpdestinoascreatedby', 'reverse_reference', 'created_by', 'TarifaExpDestinoAsCreatedBy');
+				case 'TarifaExpDestinoAsUpdatedBy':
+					return new QQReverseReferenceNodeTarifaExpDestino($this, 'tarifaexpdestinoasupdatedby', 'reverse_reference', 'updated_by', 'TarifaExpDestinoAsUpdatedBy');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('codi_usua', 'CodiUsua', 'Integer', $this);
@@ -12298,6 +12706,8 @@
      * @property-read QQReverseReferenceNodeTarifaCliente $TarifaClienteAsUpdatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsCreatedBy
      * @property-read QQReverseReferenceNodeTarifaExp $TarifaExpAsUpdatedBy
+     * @property-read QQReverseReferenceNodeTarifaExpDestino $TarifaExpDestinoAsCreatedBy
+     * @property-read QQReverseReferenceNodeTarifaExpDestino $TarifaExpDestinoAsUpdatedBy
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -12447,6 +12857,10 @@
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpascreatedby', 'reverse_reference', 'created_by', 'TarifaExpAsCreatedBy');
 				case 'TarifaExpAsUpdatedBy':
 					return new QQReverseReferenceNodeTarifaExp($this, 'tarifaexpasupdatedby', 'reverse_reference', 'updated_by', 'TarifaExpAsUpdatedBy');
+				case 'TarifaExpDestinoAsCreatedBy':
+					return new QQReverseReferenceNodeTarifaExpDestino($this, 'tarifaexpdestinoascreatedby', 'reverse_reference', 'created_by', 'TarifaExpDestinoAsCreatedBy');
+				case 'TarifaExpDestinoAsUpdatedBy':
+					return new QQReverseReferenceNodeTarifaExpDestino($this, 'tarifaexpdestinoasupdatedby', 'reverse_reference', 'updated_by', 'TarifaExpDestinoAsUpdatedBy');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('codi_usua', 'CodiUsua', 'integer', $this);

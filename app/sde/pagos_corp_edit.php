@@ -318,8 +318,9 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 			}
 		} else {
             $this->mctPagosCorp->PagosCorp->logDeCambios("Creado");
-            $this->success('Transacción Exitosa');
-		}
+        }
+        $this->mctPagosCorp->PagosCorp->ActualizarMontosDeLasFacturas();
+        $this->success('Transacción Exitosa');
 	}
 
 
@@ -327,7 +328,7 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         //--------------------------------------------
         // Se obtiene las Facturas asociadas al Pago
         //--------------------------------------------
-        $arrFactAsoc = $this->mctPagosCorp->PagosCorp->GetFacturasAsFacturaPagoCorpArray();
+        //$arrFactAsoc = $this->mctPagosCorp->PagosCorp->GetFacturasAsFacturaPagoCorpArray();
         //------------------------------------------------------
         // Se borra cualquier nota de credito asociada al pago
         //------------------------------------------------------
@@ -343,9 +344,10 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         //---------------------------------------------------------------------
         // Se actualiza el monto cobrado de la facturas asociadas
         //---------------------------------------------------------------------
-        foreach ($arrFactAsoc as $objFactAsoc) {
-            $objFactAsoc->ActualizarMontos();
-        }
+        $this->mctPagosCorp->PagosCorp->ActualizarMontosDeLasFacturas();
+        //foreach ($arrFactAsoc as $objFactAsoc) {
+        //    $objFactAsoc->ActualizarMontos();
+        //}
         //-----------------------------------------
         // Se actaliza ahora el saldo del Cliente
         //-----------------------------------------

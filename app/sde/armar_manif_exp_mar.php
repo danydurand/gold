@@ -830,7 +830,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
 
         $objCheckpoint = Checkpoints::LoadByCodigo('EX');
         if (!($objCheckpoint instanceof Checkpoints)) {
-            $strTextMens = 'El checkpoint de exportacion <b>DF</b> No Existe !!!';
+            $strTextMens = 'El checkpoint de exportacion <b>EX</b> No Existe !!!';
             t($strTextMens);
             $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
             $arrParaErro['NumeRefe'] = 'EX';

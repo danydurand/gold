@@ -27,6 +27,20 @@
 			return sprintf('%s',  $this->Referencia);
 		}
 
+        public function ActualizarMontosDeLasFacturas() {
+            //--------------------------------------------
+            // Se obtiene las Facturas asociadas al Pago
+            //--------------------------------------------
+            $arrFactAsoc = $this->GetFacturasAsFacturaPagoCorpArray();
+            //---------------------------------------------------------------------
+            // Se actualiza el monto cobrado de la facturas asociadas
+            //---------------------------------------------------------------------
+            foreach ($arrFactAsoc as $objFactAsoc) {
+                $objFactAsoc->ActualizarMontos();
+            }
+
+        }
+
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'PagosCorp';
             $arrLogxCamb['intRefeRegi'] = $this->Id;

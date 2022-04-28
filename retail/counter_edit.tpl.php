@@ -46,12 +46,9 @@
                                     <?php $this->txtDireccion->RenderWithName(); ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <?php $this->lstEsRutaObject->RenderWithName(); ?>
                                     <?php $this->txtEmailJefeAlmacen->RenderWithName(); ?>
                                     <?php $this->lstCliente->RenderWithName(); ?>
-                                    <?php //$this->txtLimiteKilos->RenderWithName(); ?>
-                                    <?php //$this->chkDomOrigen->RenderWithName(); ?>
-                                    <?php //$this->chkDomDestino->RenderWithName(); ?>
+                                    <?php $this->chkEsAlmacen->RenderWithName(); ?>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +56,8 @@
                     <div class="tab-pane" role="tabpanel" id="seccion2">
                         <div class="media">
                             <div class="media-body"><br>
-                                <div class="col-md-12">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8">
                                     <div class="text-center" style="margin-bottom: .8em">
                                         <?php $this->btnNuevCaja->Render(); ?>
                                     </div>

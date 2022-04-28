@@ -53,42 +53,28 @@ class CounterEditForm extends CounterEditFormBase {
 
 		$this->lstRuta = $this->mctCounter->lstRuta_Create();
 		$this->lstRuta->Width = 350;
-		$this->lstEntregaInmediataObject = $this->mctCounter->lstEntregaInmediataObject_Create();
 		$this->txtSiglas = $this->mctCounter->txtSiglas_Create();
-		$this->txtLimiteDePaquetes = $this->mctCounter->txtLimiteDePaquetes_Create();
-		$this->txtCantidadDePaquetes = $this->mctCounter->txtCantidadDePaquetes_Create();
-		$this->txtCkptRecepcion = $this->mctCounter->txtCkptRecepcion_Create();
-		$this->txtCkptConfirmacion = $this->mctCounter->txtCkptConfirmacion_Create();
-		$this->txtCkptAlmacen = $this->mctCounter->txtCkptAlmacen_Create();
 		$this->txtPaisId = $this->mctCounter->txtPaisId_Create();
 		$this->txtStatusId = $this->mctCounter->txtStatusId_Create();
 		$this->txtStatusId->Name = 'Estatus';
 		$this->txtStatusId->Width = 30;
 		$this->lstStatCoun_Create();
 		$this->txtDireccion = $this->mctCounter->txtDireccion_Create();
-		$this->lstElegirServicioObject = $this->mctCounter->lstElegirServicioObject_Create();
 		$this->lstEsRutaObject = $this->mctCounter->lstEsRutaObject_Create();
 		$this->lstEsRutaObject->Name = 'Es Ruta ?';
 		$this->lstSeFacturaObject = $this->mctCounter->lstSeFacturaObject_Create();
 		$this->lstSeFacturaObject->Name = 'Se Factua ?';
-		$this->lstPermitePagoObject = $this->mctCounter->lstPermitePagoObject_Create();
 		$this->txtEmailJefeAlmacen = $this->mctCounter->txtEmailJefeAlmacen_Create();
 		$this->txtEmailJefeAlmacen->Width = 300;
-		$this->txtCkptAntiguedad1 = $this->mctCounter->txtCkptAntiguedad1_Create();
-		$this->txtCkptAntiguedad2 = $this->mctCounter->txtCkptAntiguedad2_Create();
-		$this->txtCkptAntiguedad0 = $this->mctCounter->txtCkptAntiguedad0_Create();
-		$this->lstAliadoComercial = $this->mctCounter->lstAliadoComercial_Create();
-		$this->txtLimiteKilos = $this->mctCounter->txtLimiteKilos_Create();
 		$this->txtDependeDe = $this->mctCounter->txtDependeDe_Create();
-		$this->chkDomOrigen = $this->mctCounter->chkDomOrigen_Create();
-		$this->chkDomOrigen->Name = 'Serv. Domic. Origen ?';
-		$this->chkDomDestino = $this->mctCounter->chkDomDestino_Create();
-		$this->chkDomDestino->Name = 'Serv. Domic. Destino ?';
+		$this->chkEsAlmacen = $this->mctCounter->chkEsAlmacen_Create();
+		$this->chkEsAlmacen->Name = 'Es Almacén ?';
+		$this->lstCliente = $this->mctCounter->lstCliente_Create();
+		$this->lstCliente->Name = 'Aliado';
 
         $this->intCantCaja = Caja::CountByCounterId($this->mctCounter->Counter->Id);
         $this->btnNuevCaja_Create();
         $this->dtgCajaRece_Create();
-
     }
 
 	//----------------------------

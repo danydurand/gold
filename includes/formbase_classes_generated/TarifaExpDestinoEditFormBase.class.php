@@ -1,26 +1,26 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the Counter class.  It uses the code-generated
- * CounterMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a Counter columns.
+ * of the TarifaExpDestino class.  It uses the code-generated
+ * TarifaExpDestinoMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a TarifaExpDestino columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both counter_edit.php AND
- * counter_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both tarifa_exp_destino_edit.php AND
+ * tarifa_exp_destino_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class CounterEditFormBase extends QForm {
-	// Local instance of the CounterMetaControl
+abstract class TarifaExpDestinoEditFormBase extends QForm {
+	// Local instance of the TarifaExpDestinoMetaControl
 	/**
-	 * @var CounterMetaControlGen mctCounter
+	 * @var TarifaExpDestinoMetaControlGen mctTarifaExpDestino
 	 */
-	protected $mctCounter;
+	protected $mctTarifaExpDestino;
 	protected $lblMensUsua;
 	protected $lblNotiUsua;
 	protected $lblTituForm;
@@ -52,27 +52,16 @@ abstract class CounterEditFormBase extends QForm {
     protected $lblOtraNoti;
 
 
-	// Controls for Counter's Data Fields
+	// Controls for TarifaExpDestino's Data Fields
 	protected $lblId;
-	protected $txtDescripcion;
-	protected $lstSucursal;
-	protected $lstCliente;
-	protected $lstRuta;
-	protected $txtSiglas;
-	protected $chkEsAlmacen;
-	protected $txtPaisId;
-	protected $txtStatusId;
-	protected $txtDireccion;
-	protected $lstEsRutaObject;
-	protected $lstSeFacturaObject;
-	protected $txtEmailJefeAlmacen;
-	protected $txtDependeDe;
+	protected $lstTarifa;
+	protected $lstDestino;
+	protected $txtMonto;
+	protected $txtMinimo;
 	protected $calCreatedAt;
+	protected $lstCreatedByObject;
 	protected $calUpdatedAt;
-	protected $lblDeletedAt;
-	protected $txtCreatedBy;
-	protected $txtUpdatedBy;
-	protected $txtDeletedBy;
+	protected $lstUpdatedByObject;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -105,9 +94,9 @@ abstract class CounterEditFormBase extends QForm {
 
         $this->objUsuario = unserialize($_SESSION['User']);
 
-        // Use the CreateFromPathInfo shortcut (this can also be done manually using the CounterMetaControl constructor)
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the TarifaExpDestinoMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctCounter = CounterMetaControl::CreateFromPathInfo($this);
+        $this->mctTarifaExpDestino = TarifaExpDestinoMetaControl::CreateFromPathInfo($this);
 
         $this->determinarPosicion();
 
@@ -138,27 +127,16 @@ abstract class CounterEditFormBase extends QForm {
 
         $this->verificarNavegacion();
 
-		// Call MetaControl's methods to create qcontrols based on Counter's data fields
-		$this->lblId = $this->mctCounter->lblId_Create();
-		$this->txtDescripcion = $this->mctCounter->txtDescripcion_Create();
-		$this->lstSucursal = $this->mctCounter->lstSucursal_Create();
-		$this->lstCliente = $this->mctCounter->lstCliente_Create();
-		$this->lstRuta = $this->mctCounter->lstRuta_Create();
-		$this->txtSiglas = $this->mctCounter->txtSiglas_Create();
-		$this->chkEsAlmacen = $this->mctCounter->chkEsAlmacen_Create();
-		$this->txtPaisId = $this->mctCounter->txtPaisId_Create();
-		$this->txtStatusId = $this->mctCounter->txtStatusId_Create();
-		$this->txtDireccion = $this->mctCounter->txtDireccion_Create();
-		$this->lstEsRutaObject = $this->mctCounter->lstEsRutaObject_Create();
-		$this->lstSeFacturaObject = $this->mctCounter->lstSeFacturaObject_Create();
-		$this->txtEmailJefeAlmacen = $this->mctCounter->txtEmailJefeAlmacen_Create();
-		$this->txtDependeDe = $this->mctCounter->txtDependeDe_Create();
-		$this->calCreatedAt = $this->mctCounter->calCreatedAt_Create();
-		$this->calUpdatedAt = $this->mctCounter->calUpdatedAt_Create();
-		$this->lblDeletedAt = $this->mctCounter->lblDeletedAt_Create();
-		$this->txtCreatedBy = $this->mctCounter->txtCreatedBy_Create();
-		$this->txtUpdatedBy = $this->mctCounter->txtUpdatedBy_Create();
-		$this->txtDeletedBy = $this->mctCounter->txtDeletedBy_Create();
+		// Call MetaControl's methods to create qcontrols based on TarifaExpDestino's data fields
+		$this->lblId = $this->mctTarifaExpDestino->lblId_Create();
+		$this->lstTarifa = $this->mctTarifaExpDestino->lstTarifa_Create();
+		$this->lstDestino = $this->mctTarifaExpDestino->lstDestino_Create();
+		$this->txtMonto = $this->mctTarifaExpDestino->txtMonto_Create();
+		$this->txtMinimo = $this->mctTarifaExpDestino->txtMinimo_Create();
+		$this->calCreatedAt = $this->mctTarifaExpDestino->calCreatedAt_Create();
+		$this->lstCreatedByObject = $this->mctTarifaExpDestino->lstCreatedByObject_Create();
+		$this->calUpdatedAt = $this->mctTarifaExpDestino->calUpdatedAt_Create();
+		$this->lstUpdatedByObject = $this->mctTarifaExpDestino->lstUpdatedByObject_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();
@@ -171,17 +149,17 @@ abstract class CounterEditFormBase extends QForm {
 	//-----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctCounter->Counter && !isset($_SESSION['DataCounter'])) {
-            $_SESSION['DataCounter'] = serialize(array($this->mctCounter->Counter));
+        if ($this->mctTarifaExpDestino->TarifaExpDestino && !isset($_SESSION['DataTarifaExpDestino'])) {
+            $_SESSION['DataTarifaExpDestino'] = serialize(array($this->mctTarifaExpDestino->TarifaExpDestino));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataCounter']);
+        $this->arrDataTabl = unserialize($_SESSION['DataTarifaExpDestino']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctCounter->Counter->Id) {
+            if ($objTable->Id == $this->mctTarifaExpDestino->TarifaExpDestino->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -192,7 +170,7 @@ abstract class CounterEditFormBase extends QForm {
 
 	protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'Counter';
+        $this->lblTituForm->Text = 'TarifaExpDestino';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 	}
 
@@ -224,7 +202,7 @@ abstract class CounterEditFormBase extends QForm {
         $this->btnNuevRegi->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevRegi->HtmlEntities = false;
         $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevRegi->Visible = $this->mctCounter->EditMode;
+        $this->btnNuevRegi->Visible = $this->mctTarifaExpDestino->EditMode;
     }
 
     protected function btnProxRegi_Create() {
@@ -291,9 +269,9 @@ abstract class CounterEditFormBase extends QForm {
         $this->btnDelete->Text = '<i class="fa fa-trash-o fa-lg"></i> Borrar';
         $this->btnDelete->CssClass = 'btn btn-danger btn-sm';
         $this->btnDelete->HtmlEntities = false;
-		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('Counter'))));
+		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('TarifaExpDestino'))));
 		$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-		$this->btnDelete->Visible = $this->mctCounter->EditMode;
+		$this->btnDelete->Visible = $this->mctTarifaExpDestino->EditMode;
 	}
 
     protected function btnLogxCamb_Create() {
@@ -302,7 +280,7 @@ abstract class CounterEditFormBase extends QForm {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('Counter',$this->mctCounter->Counter->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('TarifaExpDestino',$this->mctTarifaExpDestino->TarifaExpDestino->Id);
     }
 
     //-------------------------
@@ -323,7 +301,7 @@ abstract class CounterEditFormBase extends QForm {
         $this->btnNuevSmal->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevSmal->HtmlEntities = false;
         $this->btnNuevSmal->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevSmal->Visible = $this->mctCounter->EditMode;
+        $this->btnNuevSmal->Visible = $this->mctTarifaExpDestino->EditMode;
     }
 
     protected function btnGuarSmal_Create() {
@@ -343,7 +321,7 @@ abstract class CounterEditFormBase extends QForm {
         $this->btnBorrSmal->HtmlEntities = false;
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiaRoxanne'))));
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-        $this->btnBorrSmal->Visible = $this->mctCounter->EditMode;
+        $this->btnBorrSmal->Visible = $this->mctTarifaExpDestino->EditMode;
     }
 
     protected function btnHistSmal_Create() {
@@ -402,12 +380,7 @@ abstract class CounterEditFormBase extends QForm {
 
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
-		// Check for records that may violate Unique Clauses
-			if (($objCounter = Counter::LoadBySiglas($this->txtSiglas->Text)) && ($objCounter->Id != $this->mctCounter->Counter->Id )){
-				$blnToReturn = false;
-				$this->txtSiglas->Warning = QApplication::Translate("Already in Use");
-			}
-
+		
 		$blnFocused = false;
 		foreach ($this->GetErrorControls() as $objControl) {
 			// Set Focus to the top-most invalid control
@@ -429,26 +402,26 @@ abstract class CounterEditFormBase extends QForm {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/counter_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_exp_destino_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/counter_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_exp_destino_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/counter_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_exp_destino_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/counter_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/tarifa_exp_destino_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function verificarNavegacion() {
-        if ($this->mctCounter->EditMode) {
+        if ($this->mctTarifaExpDestino->EditMode) {
             $this->btnRegiAnte->Enabled = !($this->intPosiRegi == 0);
             $this->btnPrimRegi->Enabled = !($this->intPosiRegi == 0);
             $this->btnProxRegi->Enabled = !($this->intPosiRegi == $this->intCantRegi - 1);
@@ -472,8 +445,8 @@ abstract class CounterEditFormBase extends QForm {
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-		// Delegate "Save" processing to the CounterMetaControl
-		$this->mctCounter->SaveCounter();
+		// Delegate "Save" processing to the TarifaExpDestinoMetaControl
+		$this->mctTarifaExpDestino->SaveTarifaExpDestino();
 		$this->RedirectToListPage();
 	}
 
@@ -482,7 +455,7 @@ abstract class CounterEditFormBase extends QForm {
 		// Se verifica la integridad referencial
 		//----------------------------------------
 		$blnTodoOkey = true;
-		$arrTablRela = $this->mctCounter->TablasRelacionadasCounter();
+		$arrTablRela = $this->mctTarifaExpDestino->TablasRelacionadasTarifaExpDestino();
 		if (count($arrTablRela)) {
 			$strTablRela = implode(',',$arrTablRela);
 				
@@ -491,25 +464,25 @@ abstract class CounterEditFormBase extends QForm {
 			$blnTodoOkey = false;
 		}
 		if ($blnTodoOkey) {
-			// Delegate "Delete" processing to the CounterMetaControl
-			$this->mctCounter->DeleteCounter();
+			// Delegate "Delete" processing to the TarifaExpDestinoMetaControl
+			$this->mctTarifaExpDestino->DeleteTarifaExpDestino();
 			$this->RedirectToListPage();
 		}
 	}
 
     protected function btnLogxCamb_Click() {
-        $_SESSION['RegiRefe'] = $this->mctCounter->Counter->Id;
-        $_SESSION['TablRefe'] = 'Counter';
-        $_SESSION['RegiReto'] = 'counter_edit.php/'.$this->mctCounter->Counter->Id;
+        $_SESSION['RegiRefe'] = $this->mctTarifaExpDestino->TarifaExpDestino->Id;
+        $_SESSION['TablRefe'] = 'TarifaExpDestino';
+        $_SESSION['RegiReto'] = 'tarifa_exp_destino_edit.php/'.$this->mctTarifaExpDestino->TarifaExpDestino->Id;
         QApplication::Redirect(__SIST__.'/log_list.php');
     }
 
     protected function btnVolvList_Click() {
-        QApplication::Redirect(__SIST__.'/counter_list.php');
+        QApplication::Redirect(__SIST__.'/tarifa_exp_destino_list.php');
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/counter_edit.php');
+        QApplication::Redirect(__SIST__.'/tarifa_exp_destino_edit.php');
     }
 
 
