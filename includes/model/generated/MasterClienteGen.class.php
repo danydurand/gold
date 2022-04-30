@@ -111,8 +111,6 @@
 	 * @property-read Guias[] $_GuiasAsClienteCorpArray the value for the private _objGuiasAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the guias.cliente_corp_id reverse relationship
 	 * @property-read GuiasH $_GuiasHAsClienteCorp the value for the private _objGuiasHAsClienteCorp (Read-Only) if set due to an expansion on the guias_h.cliente_corp_id reverse relationship
 	 * @property-read GuiasH[] $_GuiasHAsClienteCorpArray the value for the private _objGuiasHAsClienteCorpArray (Read-Only) if set due to an ExpandAsArray on the guias_h.cliente_corp_id reverse relationship
-	 * @property-read MasCartaDevo $_MasCartaDevoAsCodiClie the value for the private _objMasCartaDevoAsCodiClie (Read-Only) if set due to an expansion on the mas_carta_devo.codi_clie reverse relationship
-	 * @property-read MasCartaDevo[] $_MasCartaDevoAsCodiClieArray the value for the private _objMasCartaDevoAsCodiClieArray (Read-Only) if set due to an ExpandAsArray on the mas_carta_devo.codi_clie reverse relationship
 	 * @property-read MasterCliente $_MasterClienteAsCodiDepe the value for the private _objMasterClienteAsCodiDepe (Read-Only) if set due to an expansion on the master_cliente.codi_depe reverse relationship
 	 * @property-read MasterCliente[] $_MasterClienteAsCodiDepeArray the value for the private _objMasterClienteAsCodiDepeArray (Read-Only) if set due to an ExpandAsArray on the master_cliente.codi_depe reverse relationship
 	 * @property-read NotaCreditoCorp $_NotaCreditoCorpAsClienteCorp the value for the private _objNotaCreditoCorpAsClienteCorp (Read-Only) if set due to an expansion on the nota_credito_corp.cliente_corp_id reverse relationship
@@ -842,22 +840,6 @@
 		 * @var GuiasH[] _objGuiasHAsClienteCorpArray;
 		 */
 		private $_objGuiasHAsClienteCorpArray = null;
-
-		/**
-		 * Private member variable that stores a reference to a single MasCartaDevoAsCodiClie object
-		 * (of type MasCartaDevo), if this MasterCliente object was restored with
-		 * an expansion on the mas_carta_devo association table.
-		 * @var MasCartaDevo _objMasCartaDevoAsCodiClie;
-		 */
-		private $_objMasCartaDevoAsCodiClie;
-
-		/**
-		 * Private member variable that stores a reference to an array of MasCartaDevoAsCodiClie objects
-		 * (of type MasCartaDevo[]), if this MasterCliente object was restored with
-		 * an ExpandAsArray on the mas_carta_devo association table.
-		 * @var MasCartaDevo[] _objMasCartaDevoAsCodiClieArray;
-		 */
-		private $_objMasCartaDevoAsCodiClieArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MasterClienteAsCodiDepe object
@@ -2193,21 +2175,6 @@
 					$objToReturn->_objGuiasHAsClienteCorpArray[] = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiasHAsClienteCorp)) {
 					$objToReturn->_objGuiasHAsClienteCorp = GuiasH::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiashasclientecorp__', $objExpansionNode, null, $strColumnAliasArray);
-				}
-			}
-
-			// Check for MasCartaDevoAsCodiClie Virtual Binding
-			$strAlias = $strAliasPrefix . 'mascartadevoascodiclie__nume_cart';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objExpansionNode = (empty($objExpansionAliasArray['mascartadevoascodiclie']) ? null : $objExpansionAliasArray['mascartadevoascodiclie']);
-			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
-			if ($blnExpanded && null === $objToReturn->_objMasCartaDevoAsCodiClieArray)
-				$objToReturn->_objMasCartaDevoAsCodiClieArray = array();
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if ($blnExpanded) {
-					$objToReturn->_objMasCartaDevoAsCodiClieArray[] = MasCartaDevo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'mascartadevoascodiclie__', $objExpansionNode, null, $strColumnAliasArray);
-				} elseif (is_null($objToReturn->_objMasCartaDevoAsCodiClie)) {
-					$objToReturn->_objMasCartaDevoAsCodiClie = MasCartaDevo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'mascartadevoascodiclie__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -4268,22 +4235,6 @@
 					 */
 					return $this->_objGuiasHAsClienteCorpArray;
 
-				case '_MasCartaDevoAsCodiClie':
-					/**
-					 * Gets the value for the private _objMasCartaDevoAsCodiClie (Read-Only)
-					 * if set due to an expansion on the mas_carta_devo.codi_clie reverse relationship
-					 * @return MasCartaDevo
-					 */
-					return $this->_objMasCartaDevoAsCodiClie;
-
-				case '_MasCartaDevoAsCodiClieArray':
-					/**
-					 * Gets the value for the private _objMasCartaDevoAsCodiClieArray (Read-Only)
-					 * if set due to an ExpandAsArray on the mas_carta_devo.codi_clie reverse relationship
-					 * @return MasCartaDevo[]
-					 */
-					return $this->_objMasCartaDevoAsCodiClieArray;
-
 				case '_MasterClienteAsCodiDepe':
 					/**
 					 * Gets the value for the private _objMasterClienteAsCodiDepe (Read-Only)
@@ -5604,9 +5555,6 @@
 			}
 			if ($this->CountGuiasHsAsClienteCorp()) {
 				$arrTablRela[] = 'guias_h';
-			}
-			if ($this->CountMasCartaDevosAsCodiClie()) {
-				$arrTablRela[] = 'mas_carta_devo';
 			}
 			if ($this->CountMasterClientesAsCodiDepe()) {
 				$arrTablRela[] = 'master_cliente';
@@ -7582,155 +7530,6 @@
 		}
 
 
-		// Related Objects' Methods for MasCartaDevoAsCodiClie
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated MasCartaDevosAsCodiClie as an array of MasCartaDevo objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return MasCartaDevo[]
-		*/
-		public function GetMasCartaDevoAsCodiClieArray($objOptionalClauses = null) {
-			if ((is_null($this->intCodiClie)))
-				return array();
-
-			try {
-				return MasCartaDevo::LoadArrayByCodiClie($this->intCodiClie, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated MasCartaDevosAsCodiClie
-		 * @return int
-		*/
-		public function CountMasCartaDevosAsCodiClie() {
-			if ((is_null($this->intCodiClie)))
-				return 0;
-
-			return MasCartaDevo::CountByCodiClie($this->intCodiClie);
-		}
-
-		/**
-		 * Associates a MasCartaDevoAsCodiClie
-		 * @param MasCartaDevo $objMasCartaDevo
-		 * @return void
-		*/
-		public function AssociateMasCartaDevoAsCodiClie(MasCartaDevo $objMasCartaDevo) {
-			if ((is_null($this->intCodiClie)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMasCartaDevoAsCodiClie on this unsaved MasterCliente.');
-			if ((is_null($objMasCartaDevo->NumeCart)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMasCartaDevoAsCodiClie on this MasterCliente with an unsaved MasCartaDevo.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterCliente::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`mas_carta_devo`
-				SET
-					`codi_clie` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
-				WHERE
-					`nume_cart` = ' . $objDatabase->SqlVariable($objMasCartaDevo->NumeCart) . '
-			');
-		}
-
-		/**
-		 * Unassociates a MasCartaDevoAsCodiClie
-		 * @param MasCartaDevo $objMasCartaDevo
-		 * @return void
-		*/
-		public function UnassociateMasCartaDevoAsCodiClie(MasCartaDevo $objMasCartaDevo) {
-			if ((is_null($this->intCodiClie)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiClie on this unsaved MasterCliente.');
-			if ((is_null($objMasCartaDevo->NumeCart)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiClie on this MasterCliente with an unsaved MasCartaDevo.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterCliente::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`mas_carta_devo`
-				SET
-					`codi_clie` = null
-				WHERE
-					`nume_cart` = ' . $objDatabase->SqlVariable($objMasCartaDevo->NumeCart) . ' AND
-					`codi_clie` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
-			');
-		}
-
-		/**
-		 * Unassociates all MasCartaDevosAsCodiClie
-		 * @return void
-		*/
-		public function UnassociateAllMasCartaDevosAsCodiClie() {
-			if ((is_null($this->intCodiClie)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiClie on this unsaved MasterCliente.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterCliente::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`mas_carta_devo`
-				SET
-					`codi_clie` = null
-				WHERE
-					`codi_clie` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated MasCartaDevoAsCodiClie
-		 * @param MasCartaDevo $objMasCartaDevo
-		 * @return void
-		*/
-		public function DeleteAssociatedMasCartaDevoAsCodiClie(MasCartaDevo $objMasCartaDevo) {
-			if ((is_null($this->intCodiClie)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiClie on this unsaved MasterCliente.');
-			if ((is_null($objMasCartaDevo->NumeCart)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiClie on this MasterCliente with an unsaved MasCartaDevo.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterCliente::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`mas_carta_devo`
-				WHERE
-					`nume_cart` = ' . $objDatabase->SqlVariable($objMasCartaDevo->NumeCart) . ' AND
-					`codi_clie` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
-			');
-		}
-
-		/**
-		 * Deletes all associated MasCartaDevosAsCodiClie
-		 * @return void
-		*/
-		public function DeleteAllMasCartaDevosAsCodiClie() {
-			if ((is_null($this->intCodiClie)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiClie on this unsaved MasterCliente.');
-
-			// Get the Database Object for this Class
-			$objDatabase = MasterCliente::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`mas_carta_devo`
-				WHERE
-					`codi_clie` = ' . $objDatabase->SqlVariable($this->intCodiClie) . '
-			');
-		}
-
-
 		// Related Objects' Methods for MasterClienteAsCodiDepe
 		//-------------------------------------------------------------------
 
@@ -9280,7 +9079,6 @@
      * @property-read QQReverseReferenceNodeGuiaCacesa $GuiaCacesaAsCliente
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteCorp
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsClienteCorp
-     * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiClie
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsCodiDepe
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
@@ -9463,8 +9261,6 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasAsClienteCorp');
 				case 'GuiasHAsClienteCorp':
 					return new QQReverseReferenceNodeGuiasH($this, 'guiashasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasHAsClienteCorp');
-				case 'MasCartaDevoAsCodiClie':
-					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodiclie', 'reverse_reference', 'codi_clie', 'MasCartaDevoAsCodiClie');
 				case 'MasterClienteAsCodiDepe':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteascodidepe', 'reverse_reference', 'codi_depe', 'MasterClienteAsCodiDepe');
 				case 'NotaCreditoCorpAsClienteCorp':
@@ -9579,7 +9375,6 @@
      * @property-read QQReverseReferenceNodeGuiaCacesa $GuiaCacesaAsCliente
      * @property-read QQReverseReferenceNodeGuias $GuiasAsClienteCorp
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsClienteCorp
-     * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiClie
      * @property-read QQReverseReferenceNodeMasterCliente $MasterClienteAsCodiDepe
      * @property-read QQReverseReferenceNodeNotaCreditoCorp $NotaCreditoCorpAsClienteCorp
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntregaAsClienteCorp
@@ -9762,8 +9557,6 @@
 					return new QQReverseReferenceNodeGuias($this, 'guiasasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasAsClienteCorp');
 				case 'GuiasHAsClienteCorp':
 					return new QQReverseReferenceNodeGuiasH($this, 'guiashasclientecorp', 'reverse_reference', 'cliente_corp_id', 'GuiasHAsClienteCorp');
-				case 'MasCartaDevoAsCodiClie':
-					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodiclie', 'reverse_reference', 'codi_clie', 'MasCartaDevoAsCodiClie');
 				case 'MasterClienteAsCodiDepe':
 					return new QQReverseReferenceNodeMasterCliente($this, 'masterclienteascodidepe', 'reverse_reference', 'codi_depe', 'MasterClienteAsCodiDepe');
 				case 'NotaCreditoCorpAsClienteCorp':

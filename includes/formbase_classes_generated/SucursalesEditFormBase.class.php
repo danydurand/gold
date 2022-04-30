@@ -60,6 +60,7 @@ abstract class SucursalesEditFormBase extends QForm {
 	protected $lstEstado;
 	protected $txtZona;
 	protected $chkEsExport;
+	protected $lstPais;
 	protected $chkEsExenta;
 	protected $chkEsPrincipal;
 	protected $chkEsAreaMetropolitana;
@@ -70,9 +71,9 @@ abstract class SucursalesEditFormBase extends QForm {
 	protected $txtZonaNc;
 	protected $txtComisionVenta;
 	protected $txtComisionEntrega;
-	protected $lblCreatedAt;
-	protected $lblUpdatedAt;
-	protected $lblDeletedAt;
+	protected $calCreatedAt;
+	protected $calUpdatedAt;
+	protected $calDeletedAt;
 	protected $txtCreatedBy;
 	protected $txtUpdatedBy;
 	protected $txtDeletedBy;
@@ -150,6 +151,7 @@ abstract class SucursalesEditFormBase extends QForm {
 		$this->lstEstado = $this->mctSucursales->lstEstado_Create();
 		$this->txtZona = $this->mctSucursales->txtZona_Create();
 		$this->chkEsExport = $this->mctSucursales->chkEsExport_Create();
+		$this->lstPais = $this->mctSucursales->lstPais_Create();
 		$this->chkEsExenta = $this->mctSucursales->chkEsExenta_Create();
 		$this->chkEsPrincipal = $this->mctSucursales->chkEsPrincipal_Create();
 		$this->chkEsAreaMetropolitana = $this->mctSucursales->chkEsAreaMetropolitana_Create();
@@ -160,9 +162,9 @@ abstract class SucursalesEditFormBase extends QForm {
 		$this->txtZonaNc = $this->mctSucursales->txtZonaNc_Create();
 		$this->txtComisionVenta = $this->mctSucursales->txtComisionVenta_Create();
 		$this->txtComisionEntrega = $this->mctSucursales->txtComisionEntrega_Create();
-		$this->lblCreatedAt = $this->mctSucursales->lblCreatedAt_Create();
-		$this->lblUpdatedAt = $this->mctSucursales->lblUpdatedAt_Create();
-		$this->lblDeletedAt = $this->mctSucursales->lblDeletedAt_Create();
+		$this->calCreatedAt = $this->mctSucursales->calCreatedAt_Create();
+		$this->calUpdatedAt = $this->mctSucursales->calUpdatedAt_Create();
+		$this->calDeletedAt = $this->mctSucursales->calDeletedAt_Create();
 		$this->txtCreatedBy = $this->mctSucursales->txtCreatedBy_Create();
 		$this->txtUpdatedBy = $this->mctSucursales->txtUpdatedBy_Create();
 		$this->txtDeletedBy = $this->mctSucursales->txtDeletedBy_Create();

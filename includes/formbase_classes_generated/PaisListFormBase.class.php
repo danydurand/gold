@@ -80,7 +80,9 @@ abstract class PaisListFormBase extends QForm {
         // can traverse down QQN::pais() to display fields that are down the hierarchy)
         $this->dtgPaises->MetaAddColumn('Id');
         $this->dtgPaises->MetaAddColumn('Nombre');
+        $this->dtgPaises->MetaAddColumn(QQN::Pais()->Divisa);
         $this->dtgPaises->MetaAddColumn('Siglas');
+        $this->dtgPaises->MetaAddColumn('EsPrincipal');
 
         $this->btnExpoExce_Create();
 

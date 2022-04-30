@@ -31,9 +31,20 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 		QApplication::CheckRemoteAdmin();
 	}
 
+    protected function FlashMessage() {
+        if (isset($_SESSION['FlashMessage'])) {
+            list($strTipoMens, $strTextMens) = $_SESSION['FlashMessage'];
+            $this->$strTipoMens($strTextMens);
+            unset($_SESSION['FlashMessage']);
+        }
+    }
+
     //	protected function Form_Load() {}
+
 	protected function Form_Create() {
 		parent::Form_Create();
+
+        $this->FlashMessage();
 
         // Use the CreateFromPathInfo shortcut (this can also be done manually using the NewOpcionMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
@@ -236,6 +247,11 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 				$arrLogxCamb['strNombRegi'] = $this->mctNewOpcion->NewOpcion->Nombre;
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
 				LogDeCambios($arrLogxCamb);
+                $_SESSION['FlashMessage'] = ['success','Registro Actualizado Exitosamente !!'];
+                QApplication::Redirect(__COM__.'/new_opcion_edit.php/'.$this->mctNewOpcion->NewOpcion->Id);
+            } else {
+                $_SESSION['FlashMessage'] = ['warning','No se realizaron cambios al registro !!'];
+                QApplication::Redirect(__COM__.'/new_opcion_edit.php/'.$this->mctNewOpcion->NewOpcion->Id);
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'NewOpcion';
@@ -243,8 +259,11 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
 			$arrLogxCamb['strNombRegi'] = $this->mctNewOpcion->NewOpcion->Nombre;
 			$arrLogxCamb['strDescCamb'] = "Creado";
 			LogDeCambios($arrLogxCamb);
+            $_SESSION['FlashMessage'] = ['success','Registro Ingresado Exitosamente !!'];
+            QApplication::Redirect(__COM__.'/new_opcion_edit.php/'.$this->mctNewOpcion->NewOpcion->Id);
             $this->btnNuevRegi->Visible = true;
 		}
+		/*
 		if ($this->mctNewOpcion->NewOpcion->UsoGeneral) {
             $intCantGrup = $this->agregarATodosLosGrupos();
             if ($intCantGrup > 0) {
@@ -256,6 +275,7 @@ class NewOpcionEditForm extends NewOpcionEditFormBase {
             $strTextMens = 'Transacción Exitosa';
         }
         $this->success($strTextMens);
+		*/
     }
 
     public function agregarATodosLosGrupos() {

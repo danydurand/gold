@@ -85,6 +85,7 @@ abstract class SucursalesListFormBase extends QForm {
         $this->dtgSucursaleses->MetaAddColumn(QQN::Sucursales()->Estado);
         $this->dtgSucursaleses->MetaAddColumn('Zona');
         $this->dtgSucursaleses->MetaAddColumn('EsExport');
+        $this->dtgSucursaleses->MetaAddColumn(QQN::Sucursales()->Pais);
         $this->dtgSucursaleses->MetaAddColumn('EsExenta');
         $this->dtgSucursaleses->MetaAddColumn('EsPrincipal');
         $this->dtgSucursaleses->MetaAddColumn('EsAreaMetropolitana');

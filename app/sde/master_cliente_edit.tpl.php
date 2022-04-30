@@ -114,20 +114,12 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                                         <?php $this->txtPersConb->RenderWithName(); ?>
                                         <?php $this->txtTeleConb->RenderWithName(); ?>
 										<?php $this->txtDireReco->RenderWithName(); ?>
-										<?php //$this->chkRutaReco->RenderWithName(); ?>
-										<?php //$this->lstRutaReco->RenderWithName(); ?>
-										<?php //$this->chkRutaEntr->RenderWithName(); ?>
-										<?php //$this->lstRutaEntr->RenderWithName(); ?>
 										<?php $this->rdbCodiStat->RenderWithName(); ?>
 									</div>
                                     <div class="col-md-6">
                                         <?php $this->rdbEsxxFact->RenderWithName(); ?>
                                         <?php $this->lstTipoClie->RenderWithName(); ?>
-                                        <?php //$this->txtPorcSgro->RenderWithName(); ?>
 										<?php $this->rdbStatCred->RenderWithName(); ?>
-										<?php //$this->txtClavSweb->RenderWithName(); ?>
-										<?php //$this->txtCaduGuia->RenderWithName(); ?>
-										<?php //$this->lstMostExte->RenderWithName(); ?>
 										<?php $this->chkCargMasi->RenderWithName(); ?>
 										<?php $this->calFechElim->RenderWithName(); ?>
 										<?php $this->txtMotiElim->RenderWithName(); ?>

@@ -26,6 +26,7 @@
                 <?php $this->lstEstado->RenderWithName(); ?>
                 <?php $this->txtZona->RenderWithName(); ?>
                 <?php $this->chkEsExport->RenderWithName(); ?>
+                <?php $this->lstPais->RenderWithName(); ?>
                 <?php $this->chkEsExenta->RenderWithName(); ?>
                 <?php $this->chkEsPrincipal->RenderWithName(); ?>
             </div>

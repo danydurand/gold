@@ -1225,53 +1225,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
     }
 
-    //protected function ImprimirGuiaExportacion($intGrupPiez=0)
-    //{
-    //    $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
-    //    try {
-    //        $strNombArch = 'GuiaExp' . $this->objGuia->Numero . '.pdf';
-    //
-    //        $_SESSION['GuiaImpr'] = serialize($this->objGuia);
-    //
-    //        $arrPiezProc = [];
-    //        if ($intGrupPiez == 0) {
-    //            $arrPiezProc = $this->arrPiezGuia;
-    //        } else {
-    //            $arrRangPiez = [];
-    //            $intLimiFina = $intGrupPiez * $this->intPiezGrup;
-    //            for ($i = 1; $i <= $this->intPiezGrup; $i++) {
-    //                $arrRangPiez[] = $intLimiFina - ($i-1);
-    //            }
-    //            /* @var $objPiezGuia GuiaPiezas */
-    //            foreach ($this->arrPiezGuia as $objPiezGuia) {
-    //                if (in_array($objPiezGuia->__ordinal(),$arrRangPiez)) {
-    //                    $arrPiezProc[] = $objPiezGuia;
-    //                }
-    //            }
-    //        }
-    //        ob_start();
-    //        foreach ($arrPiezProc as $objPiezGuia) {
-    //            $_SESSION['PiezGuia'] = serialize($objPiezGuia);
-    //            include dirname(__FILE__) . '/rhtml/guia_exportacion.php';
-    //        }
-    //        $content = ob_get_clean();
-    //
-    //        //$html2pdf->setModeDebug();
-    //        $html2pdf->pdf->SetDisplayMode('fullpage');
-    //        $html2pdf->writeHTML($content);
-    //        $html2pdf->output($strNombArch);
-    //    } catch (Html2PdfException $e) {
-    //        $html2pdf->clean();
-    //        $formatter = new ExceptionFormatter($e);
-    //        echo $formatter->getHtmlMessage();
-    //    } catch (Exception $e) {
-    //        $html2pdf->clean();
-    //        echo $e->getMessage();
-    //    } catch (Error $e) {
-    //        $html2pdf->clean();
-    //        echo $e->getMessage();
-    //    }
-    //}
 
 
     protected function ImprimirGuiaExportacionMP()

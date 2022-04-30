@@ -11,14 +11,16 @@ $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
 m("Iniciando actualización de las facturas");
 m("=======================================",2);
-$objClauWher = QQ::NotEqual(QQN::Facturas()->Estatus,"ANULADA");
-$objClauWher = QQ::IsNull(QQN::Facturas()->ClienteRetailId);
-$objClauWher = QQ::IsNotNull(QQN::Facturas()->ClienteCorpId);
-$objClauOrde = QQ::OrderBy(QQN::Facturas()->Id,false);
-$arrFactSist = Facturas::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
-$intCantFact = count($arrFactSist);
-$intFactProc = 0;
-$intFactCamb = 0;
+$objClauWher   = QQ::Clause();
+$objClauWher[] = QQ::NotEqual(QQN::Facturas()->Estatus,"ANULADA");
+$objClauWher[] = QQ::IsNull(QQN::Facturas()->ClienteRetailId);
+$objClauWher[] = QQ::NotEqual(QQN::Facturas()->ClienteCorpId, 1702);
+$objClauWher[] = QQ::GreaterOrEqual(QQN::Facturas()->Fecha, '2022-01-01');
+$objClauOrde   = QQ::OrderBy(QQN::Facturas()->Id,false);
+$arrFactSist   = Facturas::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+$intCantFact   = count($arrFactSist);
+$intFactProc   = 0;
+$intFactCamb   = 0;
 m("Se van a procesar $intCantFact facturas",2);
 foreach ($arrFactSist as $objFactSist) {
     $intFactProc++;

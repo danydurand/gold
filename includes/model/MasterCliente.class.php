@@ -52,21 +52,35 @@ class MasterCliente extends MasterClienteGen {
         }
     }
 
-        public function calcularSaldoExcedente() {
+    public function SumaMontosPendientes() {
+        $strCadeSqlx  = "select sum(monto_pendiente) as monto_pendiente ";
+        $strCadeSqlx .= "  from facturas ";
+        $strCadeSqlx .= " where cliente_corp_id = $this->CodiClie ";
+        $strCadeSqlx .= "   and estatus_pago in ('PENDIENTE','PAGOPARCIAL') ";
+        $strCadeSqlx .= "   and estatus != 'ANULADA' ";
+        $objDatabase  = $this::GetDatabase();
+        $objDbResult  = $objDatabase->Query($strCadeSqlx);
+        $mixRegistro  = $objDbResult->FetchArray();
+        return $mixRegistro['monto_pendiente'];
+    }
+
+    public function SumaNotasDeCreditoDisponibles() {
+        $strCadeSqlx  = "select sum(monto) as monto ";
+        $strCadeSqlx .= "  from nota_credito_corp ";
+        $strCadeSqlx .= " where cliente_corp_id = $this->CodiClie ";
+        $strCadeSqlx .= "   and estatus = 'DISPONIBLE' ";
+        $objDatabase  = $this::GetDatabase();
+        $objDbResult  = $objDatabase->Query($strCadeSqlx);
+        $mixRegistro  = $objDbResult->FetchArray();
+        return $mixRegistro['monto'];
+    }
+
+    public function calcularSaldoExcedente() {
         /* @var $objFactClie Facturas  */
         /* @var $objPagoClie PagosCorp */
-        $arrTodoFact = $this->GetFacturasAsClienteCorpArray();
-        $decDeudTota = 0;
-        foreach ($arrTodoFact as $objFactClie) {
-            $decDeudTota += $objFactClie->MontoPendiente;
-        }
-        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->ClienteCorpId,$this->CodiClie);
-        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->Estatus,'DISPONIBLE');
-        $arrTodoNota   = NotaCreditoCorp::QueryArray(QQ::AndCondition($objClauWher));
-        $decCredTota   = 0;
-        foreach ($arrTodoNota as $objNotaClie) {
-            $decCredTota += $objNotaClie->Monto;
-        }
+
+        $decDeudTota = $this->SumaMontosPendientes();
+        $decCredTota = $this->SumaNotasDeCreditoDisponibles();
         $decDeudTota = $decCredTota - $decDeudTota;
         //------------------------------------
         // Se actualiza el saldo del Cliente
@@ -77,7 +91,6 @@ class MasterCliente extends MasterClienteGen {
         // Se deja registro en el log de transacciones
         //----------------------------------------------
         $this->logDeCambios("Se actualiza el Saldo Excedente a: ".$decDeudTota);
-        //return nf($decDeudTota);
         return $decDeudTota;
     }
 

@@ -30,11 +30,22 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 		// To allow access REGARDLESS of ALLOW_REMOTE_ADMIN, simply remove the line below
 		QApplication::CheckRemoteAdmin();
 	}
+    protected function FlashMessage() {
+        if (isset($_SESSION['FlashMessage'])) {
+            list($strTipoMens, $strTextMens) = $_SESSION['FlashMessage'];
+            $this->$strTipoMens($strTextMens);
+            unset($_SESSION['FlashMessage']);
+        }
+    }
 
     //	protected function Form_Load() {}
-	protected function Form_Create() {
+
+    protected function Form_Create() {
 		parent::Form_Create();
-		// Use the CreateFromPathInfo shortcut (this can also be done manually using the SucursalesMetaControl constructor)
+
+        $this->FlashMessage();
+
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the SucursalesMetaControl constructor)
 		// MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
 		$this->mctSucursales = SucursalesMetaControl::CreateFromPathInfo($this);
 
@@ -48,6 +59,10 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 		$this->txtZona = $this->mctSucursales->txtZona_Create();
 		$this->txtZona->Width = 40;
 		$this->chkEsExport = $this->mctSucursales->chkEsExport_Create();
+		$this->chkEsExport->AddAction(new QChangeEvent(), new QAjaxAction('chkEsExport_Change'));
+		$this->lstPais = $this->mctSucursales->lstPais_Create();
+		$this->lstPais->Visible = false;
+		$this->lstPais->Required = true;
 		$this->chkEsExenta = $this->mctSucursales->chkEsExenta_Create();
 		$this->chkEsPrincipal = $this->mctSucursales->chkEsPrincipal_Create();
 		$this->chkEsAreaMetropolitana = $this->mctSucursales->chkEsAreaMetropolitana_Create();
@@ -69,7 +84,6 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 		//$this->txtCreatedBy = $this->mctSucursales->txtCreatedBy_Create();
 		//$this->txtUpdatedBy = $this->mctSucursales->txtUpdatedBy_Create();
 		//$this->txtDeletedBy = $this->mctSucursales->txtDeletedBy_Create();
-        //$this->dtgSdeOperacionsAsOperacionDestino = $this->mctSucursales->dtgSdeOperacionsAsOperacionDestino_Create();
 
         if (!$this->mctSucursales->EditMode) {
             $this->chkEsTienda->Checked = true;
@@ -77,6 +91,7 @@ class SucursalesEditForm extends SucursalesEditFormBase {
             $this->txtTelefono->Text = '5555555';
         }
 
+        $this->chkEsExport_Change();
 	}
 
 	//----------------------------
@@ -118,6 +133,25 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 	// Acciones relativas a los objetos 
 	//-----------------------------------
 
+    protected function chkEsExport_Change() {
+        if ($this->chkEsExport->Checked) {
+            // Sucursal de Exportacion
+            $this->lstPais->Visible = true;
+        } else {
+            // Sucursal Nacional
+            $this->lstPais->Visible = false;
+        }
+        $this->chkEsExenta->Visible            = !$this->lstPais->Visible;
+        $this->chkEsPrincipal->Visible         = !$this->lstPais->Visible;
+        $this->chkEsAreaMetropolitana->Visible = !$this->lstPais->Visible;
+        $this->chkEsAlmacen->Visible           = !$this->lstPais->Visible;
+        $this->chkEsTienda->Visible            = !$this->lstPais->Visible;
+        $this->txtZonaNc->Visible              = !$this->lstPais->Visible;
+        $this->txtComisionEntrega->Visible     = !$this->lstPais->Visible;
+        $this->txtComisionVenta->Visible       = !$this->lstPais->Visible;
+        $this->txtEmailAlmacen->Visible        = !$this->lstPais->Visible;
+    }
+
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
         QApplication::Redirect(__SIST__.'/sucursales_edit.php/'.$objRegiTabl->Id);
@@ -145,7 +179,26 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 		// Se clona el objeto para verificar cambios 
 		//--------------------------------------------
 		$objRegiViej = clone $this->mctSucursales->Sucursales;
-		$this->mctSucursales->SaveSucursales();
+        if ($this->mctSucursales->EditMode) {
+            $this->mctSucursales->Sucursales->UpdatedAt = new QDateTime(QDateTime::Now);
+            $this->mctSucursales->Sucursales->UpdatedBy = $this->objUsuario->CodiUsua;
+        } else {
+            $this->mctSucursales->Sucursales->CreatedAt = new QDateTime(QDateTime::Now);
+            $this->mctSucursales->Sucursales->CreatedBy = $this->objUsuario->CodiUsua;
+        }
+        $this->mctSucursales->SaveSucursales();
+        if (!$this->chkEsExport->Checked) {
+            t("No es de Exportacion");
+            // Las Sucursales Nacionales estan asociadas al Pais Principal
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Pais()->EsPrincipal,true);
+            $objPaisPrin   = Pais::QuerySingle(QQ::AndCondition($objClauWher));
+            if ($objPaisPrin instanceof Pais) {
+                t('El pais principal es: '.$objPaisPrin->Nombre);
+                $this->mctSucursales->Sucursales->PaisId = $objPaisPrin->Id;
+                $this->mctSucursales->Sucursales->Save();
+            }
+        }
 		if ($this->mctSucursales->EditMode) {
 			//---------------------------------------------------------------------
 			// Si estamos en modo Edicion, entonces se verifican la existencia
@@ -163,7 +216,12 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 				$arrLogxCamb['strDescCamb'] = implode(',',$objResuComp->DifferentFields);
                 $arrLogxCamb['strEnlaEnti'] = __SIST__.'/sucursales_edit.php/'.$this->mctSucursales->Sucursales->Id;
 				LogDeCambios($arrLogxCamb);
-                $this->success('Transacción Exitosa !!!');
+                $_SESSION['FlashMessage'] = ['success','Registro Actualizado Exitosamente !!'];
+                QApplication::Redirect(__SIST__.'/sucursales_edit.php/'.$this->mctSucursales->Sucursales->Id);
+                //$this->success('Transacción Exitosa !!!');
+            } else {
+                $_SESSION['FlashMessage'] = ['warning','No se realizaron cambios al registro !!'];
+                QApplication::Redirect(__SIST__.'/sucursales_edit.php/'.$this->mctSucursales->Sucursales->Id);
 			}
 		} else {
 			$arrLogxCamb['strNombTabl'] = 'Sucursales';
@@ -172,7 +230,11 @@ class SucursalesEditForm extends SucursalesEditFormBase {
 			$arrLogxCamb['strDescCamb'] = "Creado";
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/sucursales_edit.php/'.$this->mctSucursales->Sucursales->Id;
 			LogDeCambios($arrLogxCamb);
-            $this->success('Transacción Exitosa !!!');
+
+            $_SESSION['FlashMessage'] = ['success','Registro Ingresado Exitosamente !!'];
+            QApplication::Redirect(__SIST__.'/sucursales_edit.php/'.$this->mctSucursales->Sucursales->Id);
+
+            //$this->success('Transacción Exitosa !!!');
 		}
 	}
 

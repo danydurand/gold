@@ -55,7 +55,9 @@ abstract class PaisEditFormBase extends QForm {
 	// Controls for Pais's Data Fields
 	protected $lblId;
 	protected $txtNombre;
+	protected $lstDivisa;
 	protected $txtSiglas;
+	protected $chkEsPrincipal;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -124,7 +126,9 @@ abstract class PaisEditFormBase extends QForm {
 		// Call MetaControl's methods to create qcontrols based on Pais's data fields
 		$this->lblId = $this->mctPais->lblId_Create();
 		$this->txtNombre = $this->mctPais->txtNombre_Create();
+		$this->lstDivisa = $this->mctPais->lstDivisa_Create();
 		$this->txtSiglas = $this->mctPais->txtSiglas_Create();
+		$this->chkEsPrincipal = $this->mctPais->chkEsPrincipal_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();

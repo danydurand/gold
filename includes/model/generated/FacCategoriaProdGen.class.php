@@ -20,8 +20,6 @@
 	 * @property double $FranPost the value for fltFranPost (Not Null)
 	 * @property-read FacProducto $_FacProductoAsCodiCate the value for the private _objFacProductoAsCodiCate (Read-Only) if set due to an expansion on the fac_producto.codi_cate reverse relationship
 	 * @property-read FacProducto[] $_FacProductoAsCodiCateArray the value for the private _objFacProductoAsCodiCateArray (Read-Only) if set due to an ExpandAsArray on the fac_producto.codi_cate reverse relationship
-	 * @property-read MasCartaDevo $_MasCartaDevoAsCodiCate the value for the private _objMasCartaDevoAsCodiCate (Read-Only) if set due to an expansion on the mas_carta_devo.codi_cate reverse relationship
-	 * @property-read MasCartaDevo[] $_MasCartaDevoAsCodiCateArray the value for the private _objMasCartaDevoAsCodiCateArray (Read-Only) if set due to an ExpandAsArray on the mas_carta_devo.codi_cate reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class FacCategoriaProdGen extends QBaseClass implements IteratorAggregate {
@@ -70,22 +68,6 @@
 		 * @var FacProducto[] _objFacProductoAsCodiCateArray;
 		 */
 		private $_objFacProductoAsCodiCateArray = null;
-
-		/**
-		 * Private member variable that stores a reference to a single MasCartaDevoAsCodiCate object
-		 * (of type MasCartaDevo), if this FacCategoriaProd object was restored with
-		 * an expansion on the mas_carta_devo association table.
-		 * @var MasCartaDevo _objMasCartaDevoAsCodiCate;
-		 */
-		private $_objMasCartaDevoAsCodiCate;
-
-		/**
-		 * Private member variable that stores a reference to an array of MasCartaDevoAsCodiCate objects
-		 * (of type MasCartaDevo[]), if this FacCategoriaProd object was restored with
-		 * an ExpandAsArray on the mas_carta_devo association table.
-		 * @var MasCartaDevo[] _objMasCartaDevoAsCodiCateArray;
-		 */
-		private $_objMasCartaDevoAsCodiCateArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -645,21 +627,6 @@
 				}
 			}
 
-			// Check for MasCartaDevoAsCodiCate Virtual Binding
-			$strAlias = $strAliasPrefix . 'mascartadevoascodicate__nume_cart';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objExpansionNode = (empty($objExpansionAliasArray['mascartadevoascodicate']) ? null : $objExpansionAliasArray['mascartadevoascodicate']);
-			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
-			if ($blnExpanded && null === $objToReturn->_objMasCartaDevoAsCodiCateArray)
-				$objToReturn->_objMasCartaDevoAsCodiCateArray = array();
-			if (!is_null($objDbRow->GetColumn($strAliasName))) {
-				if ($blnExpanded) {
-					$objToReturn->_objMasCartaDevoAsCodiCateArray[] = MasCartaDevo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'mascartadevoascodicate__', $objExpansionNode, null, $strColumnAliasArray);
-				} elseif (is_null($objToReturn->_objMasCartaDevoAsCodiCate)) {
-					$objToReturn->_objMasCartaDevoAsCodiCate = MasCartaDevo::InstantiateDbRow($objDbRow, $strAliasPrefix . 'mascartadevoascodicate__', $objExpansionNode, null, $strColumnAliasArray);
-				}
-			}
-
 			return $objToReturn;
 		}
 		
@@ -979,22 +946,6 @@
 					 */
 					return $this->_objFacProductoAsCodiCateArray;
 
-				case '_MasCartaDevoAsCodiCate':
-					/**
-					 * Gets the value for the private _objMasCartaDevoAsCodiCate (Read-Only)
-					 * if set due to an expansion on the mas_carta_devo.codi_cate reverse relationship
-					 * @return MasCartaDevo
-					 */
-					return $this->_objMasCartaDevoAsCodiCate;
-
-				case '_MasCartaDevoAsCodiCateArray':
-					/**
-					 * Gets the value for the private _objMasCartaDevoAsCodiCateArray (Read-Only)
-					 * if set due to an ExpandAsArray on the mas_carta_devo.codi_cate reverse relationship
-					 * @return MasCartaDevo[]
-					 */
-					return $this->_objMasCartaDevoAsCodiCateArray;
-
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1084,9 +1035,6 @@
 			$arrTablRela = array();
 			if ($this->CountFacProductosAsCodiCate()) {
 				$arrTablRela[] = 'fac_producto';
-			}
-			if ($this->CountMasCartaDevosAsCodiCate()) {
-				$arrTablRela[] = 'mas_carta_devo';
 			}
 			
 			return $arrTablRela;
@@ -1247,155 +1195,6 @@
 		}
 
 
-		// Related Objects' Methods for MasCartaDevoAsCodiCate
-		//-------------------------------------------------------------------
-
-		/**
-		 * Gets all associated MasCartaDevosAsCodiCate as an array of MasCartaDevo objects
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return MasCartaDevo[]
-		*/
-		public function GetMasCartaDevoAsCodiCateArray($objOptionalClauses = null) {
-			if ((is_null($this->intCodiCate)))
-				return array();
-
-			try {
-				return MasCartaDevo::LoadArrayByCodiCate($this->intCodiCate, $objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Counts all associated MasCartaDevosAsCodiCate
-		 * @return int
-		*/
-		public function CountMasCartaDevosAsCodiCate() {
-			if ((is_null($this->intCodiCate)))
-				return 0;
-
-			return MasCartaDevo::CountByCodiCate($this->intCodiCate);
-		}
-
-		/**
-		 * Associates a MasCartaDevoAsCodiCate
-		 * @param MasCartaDevo $objMasCartaDevo
-		 * @return void
-		*/
-		public function AssociateMasCartaDevoAsCodiCate(MasCartaDevo $objMasCartaDevo) {
-			if ((is_null($this->intCodiCate)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMasCartaDevoAsCodiCate on this unsaved FacCategoriaProd.');
-			if ((is_null($objMasCartaDevo->NumeCart)))
-				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMasCartaDevoAsCodiCate on this FacCategoriaProd with an unsaved MasCartaDevo.');
-
-			// Get the Database Object for this Class
-			$objDatabase = FacCategoriaProd::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`mas_carta_devo`
-				SET
-					`codi_cate` = ' . $objDatabase->SqlVariable($this->intCodiCate) . '
-				WHERE
-					`nume_cart` = ' . $objDatabase->SqlVariable($objMasCartaDevo->NumeCart) . '
-			');
-		}
-
-		/**
-		 * Unassociates a MasCartaDevoAsCodiCate
-		 * @param MasCartaDevo $objMasCartaDevo
-		 * @return void
-		*/
-		public function UnassociateMasCartaDevoAsCodiCate(MasCartaDevo $objMasCartaDevo) {
-			if ((is_null($this->intCodiCate)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiCate on this unsaved FacCategoriaProd.');
-			if ((is_null($objMasCartaDevo->NumeCart)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiCate on this FacCategoriaProd with an unsaved MasCartaDevo.');
-
-			// Get the Database Object for this Class
-			$objDatabase = FacCategoriaProd::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`mas_carta_devo`
-				SET
-					`codi_cate` = null
-				WHERE
-					`nume_cart` = ' . $objDatabase->SqlVariable($objMasCartaDevo->NumeCart) . ' AND
-					`codi_cate` = ' . $objDatabase->SqlVariable($this->intCodiCate) . '
-			');
-		}
-
-		/**
-		 * Unassociates all MasCartaDevosAsCodiCate
-		 * @return void
-		*/
-		public function UnassociateAllMasCartaDevosAsCodiCate() {
-			if ((is_null($this->intCodiCate)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiCate on this unsaved FacCategoriaProd.');
-
-			// Get the Database Object for this Class
-			$objDatabase = FacCategoriaProd::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				UPDATE
-					`mas_carta_devo`
-				SET
-					`codi_cate` = null
-				WHERE
-					`codi_cate` = ' . $objDatabase->SqlVariable($this->intCodiCate) . '
-			');
-		}
-
-		/**
-		 * Deletes an associated MasCartaDevoAsCodiCate
-		 * @param MasCartaDevo $objMasCartaDevo
-		 * @return void
-		*/
-		public function DeleteAssociatedMasCartaDevoAsCodiCate(MasCartaDevo $objMasCartaDevo) {
-			if ((is_null($this->intCodiCate)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiCate on this unsaved FacCategoriaProd.');
-			if ((is_null($objMasCartaDevo->NumeCart)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiCate on this FacCategoriaProd with an unsaved MasCartaDevo.');
-
-			// Get the Database Object for this Class
-			$objDatabase = FacCategoriaProd::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`mas_carta_devo`
-				WHERE
-					`nume_cart` = ' . $objDatabase->SqlVariable($objMasCartaDevo->NumeCart) . ' AND
-					`codi_cate` = ' . $objDatabase->SqlVariable($this->intCodiCate) . '
-			');
-		}
-
-		/**
-		 * Deletes all associated MasCartaDevosAsCodiCate
-		 * @return void
-		*/
-		public function DeleteAllMasCartaDevosAsCodiCate() {
-			if ((is_null($this->intCodiCate)))
-				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMasCartaDevoAsCodiCate on this unsaved FacCategoriaProd.');
-
-			// Get the Database Object for this Class
-			$objDatabase = FacCategoriaProd::GetDatabase();
-
-			// Perform the SQL Query
-			$objDatabase->NonQuery('
-				DELETE FROM
-					`mas_carta_devo`
-				WHERE
-					`codi_cate` = ' . $objDatabase->SqlVariable($this->intCodiCate) . '
-			');
-		}
-
-
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -1543,7 +1342,6 @@
      *
      *
      * @property-read QQReverseReferenceNodeFacProducto $FacProductoAsCodiCate
-     * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiCate
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1561,8 +1359,6 @@
 					return new QQNode('fran_post', 'FranPost', 'Float', $this);
 				case 'FacProductoAsCodiCate':
 					return new QQReverseReferenceNodeFacProducto($this, 'facproductoascodicate', 'reverse_reference', 'codi_cate', 'FacProductoAsCodiCate');
-				case 'MasCartaDevoAsCodiCate':
-					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodicate', 'reverse_reference', 'codi_cate', 'MasCartaDevoAsCodiCate');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('codi_cate', 'CodiCate', 'Integer', $this);
@@ -1584,7 +1380,6 @@
      *
      *
      * @property-read QQReverseReferenceNodeFacProducto $FacProductoAsCodiCate
-     * @property-read QQReverseReferenceNodeMasCartaDevo $MasCartaDevoAsCodiCate
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1602,8 +1397,6 @@
 					return new QQNode('fran_post', 'FranPost', 'double', $this);
 				case 'FacProductoAsCodiCate':
 					return new QQReverseReferenceNodeFacProducto($this, 'facproductoascodicate', 'reverse_reference', 'codi_cate', 'FacProductoAsCodiCate');
-				case 'MasCartaDevoAsCodiCate':
-					return new QQReverseReferenceNodeMasCartaDevo($this, 'mascartadevoascodicate', 'reverse_reference', 'codi_cate', 'MasCartaDevoAsCodiCate');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('codi_cate', 'CodiCate', 'integer', $this);

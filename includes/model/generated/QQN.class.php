@@ -721,12 +721,6 @@
 			return new QQNodeManifiestoExpCkpt('manifiesto_exp_ckpt', null, null);
 		}
 		/**
-		 * @return QQNodeMasCartaDevo
-		 */
-		static public function MasCartaDevo() {
-			return new QQNodeMasCartaDevo('mas_carta_devo', null, null);
-		}
-		/**
 		 * @return QQNodeMasTipoRuta
 		 */
 		static public function MasTipoRuta() {

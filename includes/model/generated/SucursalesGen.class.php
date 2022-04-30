@@ -22,6 +22,7 @@
 	 * @property integer $EstadoId the value for intEstadoId (Not Null)
 	 * @property integer $Zona the value for intZona (Not Null)
 	 * @property boolean $EsExport the value for blnEsExport 
+	 * @property integer $PaisId the value for intPaisId 
 	 * @property boolean $EsExenta the value for blnEsExenta 
 	 * @property boolean $EsPrincipal the value for blnEsPrincipal 
 	 * @property boolean $EsAreaMetropolitana the value for blnEsAreaMetropolitana 
@@ -32,13 +33,14 @@
 	 * @property string $ZonaNc the value for strZonaNc 
 	 * @property double $ComisionVenta the value for fltComisionVenta 
 	 * @property double $ComisionEntrega the value for fltComisionEntrega 
-	 * @property-read string $CreatedAt the value for strCreatedAt (Read-Only Timestamp)
-	 * @property-read string $UpdatedAt the value for strUpdatedAt (Read-Only Timestamp)
-	 * @property-read string $DeletedAt the value for strDeletedAt (Read-Only Timestamp)
+	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
+	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
+	 * @property QDateTime $DeletedAt the value for dttDeletedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
 	 * @property integer $UpdatedBy the value for intUpdatedBy 
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property Estado $Estado the value for the Estado object referenced by intEstadoId (Not Null)
+	 * @property Pais $Pais the value for the Pais object referenced by intPaisId 
 	 * @property-read SdeOperacion $_SdeOperacionAsOperacionDestino the value for the private _objSdeOperacionAsOperacionDestino (Read-Only) if set due to an expansion on the operacion_destino_assn association table
 	 * @property-read SdeOperacion[] $_SdeOperacionAsOperacionDestinoArray the value for the private _objSdeOperacionAsOperacionDestinoArray (Read-Only) if set due to an ExpandAsArray on the operacion_destino_assn association table
 	 * @property-read AliadoComercial $_AliadoComercialAsSucursal the value for the private _objAliadoComercialAsSucursal (Read-Only) if set due to an expansion on the aliado_comercial.sucursal_id reverse relationship
@@ -173,6 +175,14 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column sucursales.pais_id
+		 * @var integer intPaisId
+		 */
+		protected $intPaisId;
+		const PaisIdDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column sucursales.es_exenta
 		 * @var boolean blnEsExenta
 		 */
@@ -256,25 +266,25 @@
 
 		/**
 		 * Protected member variable that maps to the database column sucursales.created_at
-		 * @var string strCreatedAt
+		 * @var QDateTime dttCreatedAt
 		 */
-		protected $strCreatedAt;
+		protected $dttCreatedAt;
 		const CreatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column sucursales.updated_at
-		 * @var string strUpdatedAt
+		 * @var QDateTime dttUpdatedAt
 		 */
-		protected $strUpdatedAt;
+		protected $dttUpdatedAt;
 		const UpdatedAtDefault = null;
 
 
 		/**
 		 * Protected member variable that maps to the database column sucursales.deleted_at
-		 * @var string strDeletedAt
+		 * @var QDateTime dttDeletedAt
 		 */
-		protected $strDeletedAt;
+		protected $dttDeletedAt;
 		const DeletedAtDefault = null;
 
 
@@ -862,6 +872,16 @@
 		 */
 		protected $objEstado;
 
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column sucursales.pais_id.
+		 *
+		 * NOTE: Always use the Pais property getter to correctly retrieve this Pais object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Pais objPais
+		 */
+		protected $objPais;
+
 
 
 		/**
@@ -876,6 +896,7 @@
 			$this->intEstadoId = Sucursales::EstadoIdDefault;
 			$this->intZona = Sucursales::ZonaDefault;
 			$this->blnEsExport = Sucursales::EsExportDefault;
+			$this->intPaisId = Sucursales::PaisIdDefault;
 			$this->blnEsExenta = Sucursales::EsExentaDefault;
 			$this->blnEsPrincipal = Sucursales::EsPrincipalDefault;
 			$this->blnEsAreaMetropolitana = Sucursales::EsAreaMetropolitanaDefault;
@@ -886,9 +907,9 @@
 			$this->strZonaNc = Sucursales::ZonaNcDefault;
 			$this->fltComisionVenta = Sucursales::ComisionVentaDefault;
 			$this->fltComisionEntrega = Sucursales::ComisionEntregaDefault;
-			$this->strCreatedAt = Sucursales::CreatedAtDefault;
-			$this->strUpdatedAt = Sucursales::UpdatedAtDefault;
-			$this->strDeletedAt = Sucursales::DeletedAtDefault;
+			$this->dttCreatedAt = (Sucursales::CreatedAtDefault === null)?null:new QDateTime(Sucursales::CreatedAtDefault);
+			$this->dttUpdatedAt = (Sucursales::UpdatedAtDefault === null)?null:new QDateTime(Sucursales::UpdatedAtDefault);
+			$this->dttDeletedAt = (Sucursales::DeletedAtDefault === null)?null:new QDateTime(Sucursales::DeletedAtDefault);
 			$this->intCreatedBy = Sucursales::CreatedByDefault;
 			$this->intUpdatedBy = Sucursales::UpdatedByDefault;
 			$this->intDeletedBy = Sucursales::DeletedByDefault;
@@ -1240,6 +1261,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'estado_id', $strAliasPrefix . 'estado_id');
 			    $objBuilder->AddSelectItem($strTableName, 'zona', $strAliasPrefix . 'zona');
 			    $objBuilder->AddSelectItem($strTableName, 'es_export', $strAliasPrefix . 'es_export');
+			    $objBuilder->AddSelectItem($strTableName, 'pais_id', $strAliasPrefix . 'pais_id');
 			    $objBuilder->AddSelectItem($strTableName, 'es_exenta', $strAliasPrefix . 'es_exenta');
 			    $objBuilder->AddSelectItem($strTableName, 'es_principal', $strAliasPrefix . 'es_principal');
 			    $objBuilder->AddSelectItem($strTableName, 'es_area_metropolitana', $strAliasPrefix . 'es_area_metropolitana');
@@ -1402,6 +1424,9 @@
 			$strAlias = $strAliasPrefix . 'es_export';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->blnEsExport = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'pais_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intPaisId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'es_exenta';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->blnEsExenta = $objDbRow->GetColumn($strAliasName, 'Bit');
@@ -1434,13 +1459,13 @@
 			$objToReturn->fltComisionEntrega = $objDbRow->GetColumn($strAliasName, 'Float');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strCreatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'updated_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strUpdatedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttUpdatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'deleted_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strDeletedAt = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$objToReturn->dttDeletedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
 			$strAlias = $strAliasPrefix . 'created_by';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intCreatedBy = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1486,6 +1511,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['estado_id']) ? null : $objExpansionAliasArray['estado_id']);
 				$objToReturn->objEstado = Estado::InstantiateDbRow($objDbRow, $strAliasPrefix . 'estado_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for Pais Early Binding
+			$strAlias = $strAliasPrefix . 'pais_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['pais_id']) ? null : $objExpansionAliasArray['pais_id']);
+				$objToReturn->objPais = Pais::InstantiateDbRow($objDbRow, $strAliasPrefix . 'pais_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 
 				
@@ -2143,6 +2175,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of Sucursales objects,
+		 * by PaisId Index(es)
+		 * @param integer $intPaisId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Sucursales[]
+		*/
+		public static function LoadArrayByPaisId($intPaisId, $objOptionalClauses = null) {
+			// Call Sucursales::QueryArray to perform the LoadArrayByPaisId query
+			try {
+				return Sucursales::QueryArray(
+					QQ::Equal(QQN::Sucursales()->PaisId, $intPaisId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Sucursaleses
+		 * by PaisId Index(es)
+		 * @param integer $intPaisId
+		 * @return int
+		*/
+		public static function CountByPaisId($intPaisId) {
+			// Call Sucursales::QueryCount to perform the CountByPaisId query
+			return Sucursales::QueryCount(
+				QQ::Equal(QQN::Sucursales()->PaisId, $intPaisId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -2211,6 +2275,7 @@
 							`estado_id`,
 							`zona`,
 							`es_export`,
+							`pais_id`,
 							`es_exenta`,
 							`es_principal`,
 							`es_area_metropolitana`,
@@ -2221,6 +2286,9 @@
 							`zona_nc`,
 							`comision_venta`,
 							`comision_entrega`,
+							`created_at`,
+							`updated_at`,
+							`deleted_at`,
 							`created_by`,
 							`updated_by`,
 							`deleted_by`
@@ -2231,6 +2299,7 @@
 							' . $objDatabase->SqlVariable($this->intEstadoId) . ',
 							' . $objDatabase->SqlVariable($this->intZona) . ',
 							' . $objDatabase->SqlVariable($this->blnEsExport) . ',
+							' . $objDatabase->SqlVariable($this->intPaisId) . ',
 							' . $objDatabase->SqlVariable($this->blnEsExenta) . ',
 							' . $objDatabase->SqlVariable($this->blnEsPrincipal) . ',
 							' . $objDatabase->SqlVariable($this->blnEsAreaMetropolitana) . ',
@@ -2241,6 +2310,9 @@
 							' . $objDatabase->SqlVariable($this->strZonaNc) . ',
 							' . $objDatabase->SqlVariable($this->fltComisionVenta) . ',
 							' . $objDatabase->SqlVariable($this->fltComisionEntrega) . ',
+							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
+							' . $objDatabase->SqlVariable($this->dttDeletedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -2253,51 +2325,6 @@
 					// Perform an UPDATE query
 
 					// First checking for Optimistic Locking constraints (if applicable)
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`created_at`
-							FROM
-								`sucursales`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strCreatedAt)
-							throw new QOptimisticLockingException('Sucursales');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`updated_at`
-							FROM
-								`sucursales`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strUpdatedAt)
-							throw new QOptimisticLockingException('Sucursales');
-					}
-					if (!$blnForceUpdate) {
-						// Perform the Optimistic Locking check
-						$objResult = $objDatabase->Query('
-							SELECT
-								`deleted_at`
-							FROM
-								`sucursales`
-							WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-						');
-
-						$objRow = $objResult->FetchArray();
-						if ($objRow[0] != $this->strDeletedAt)
-							throw new QOptimisticLockingException('Sucursales');
-					}
 
 					// Perform the UPDATE query
 					$objDatabase->NonQuery('
@@ -2310,6 +2337,7 @@
 							`estado_id` = ' . $objDatabase->SqlVariable($this->intEstadoId) . ',
 							`zona` = ' . $objDatabase->SqlVariable($this->intZona) . ',
 							`es_export` = ' . $objDatabase->SqlVariable($this->blnEsExport) . ',
+							`pais_id` = ' . $objDatabase->SqlVariable($this->intPaisId) . ',
 							`es_exenta` = ' . $objDatabase->SqlVariable($this->blnEsExenta) . ',
 							`es_principal` = ' . $objDatabase->SqlVariable($this->blnEsPrincipal) . ',
 							`es_area_metropolitana` = ' . $objDatabase->SqlVariable($this->blnEsAreaMetropolitana) . ',
@@ -2320,6 +2348,9 @@
 							`zona_nc` = ' . $objDatabase->SqlVariable($this->strZonaNc) . ',
 							`comision_venta` = ' . $objDatabase->SqlVariable($this->fltComisionVenta) . ',
 							`comision_entrega` = ' . $objDatabase->SqlVariable($this->fltComisionEntrega) . ',
+							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
+							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
+							`deleted_at` = ' . $objDatabase->SqlVariable($this->dttDeletedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_by` = ' . $objDatabase->SqlVariable($this->intUpdatedBy) . ',
 							`deleted_by` = ' . $objDatabase->SqlVariable($this->intDeletedBy) . '
@@ -2337,42 +2368,6 @@
 			// Update __blnRestored and any Non-Identity PK Columns (if applicable)
 			$this->__blnRestored = true;
 
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`created_at`
-				FROM
-					`sucursales`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strCreatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`updated_at`
-				FROM
-					`sucursales`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strUpdatedAt = $objRow[0];
-			// Update Local Timestamp
-			$objResult = $objDatabase->Query('
-				SELECT
-					`deleted_at`
-				FROM
-					`sucursales`
-				WHERE
-							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
-			');
-
-			$objRow = $objResult->FetchArray();
-			$this->strDeletedAt = $objRow[0];
 
 			$this->DeleteCache();
 
@@ -2469,6 +2464,7 @@
 			$this->EstadoId = $objReloaded->EstadoId;
 			$this->intZona = $objReloaded->intZona;
 			$this->blnEsExport = $objReloaded->blnEsExport;
+			$this->PaisId = $objReloaded->PaisId;
 			$this->blnEsExenta = $objReloaded->blnEsExenta;
 			$this->blnEsPrincipal = $objReloaded->blnEsPrincipal;
 			$this->blnEsAreaMetropolitana = $objReloaded->blnEsAreaMetropolitana;
@@ -2479,9 +2475,9 @@
 			$this->strZonaNc = $objReloaded->strZonaNc;
 			$this->fltComisionVenta = $objReloaded->fltComisionVenta;
 			$this->fltComisionEntrega = $objReloaded->fltComisionEntrega;
-			$this->strCreatedAt = $objReloaded->strCreatedAt;
-			$this->strUpdatedAt = $objReloaded->strUpdatedAt;
-			$this->strDeletedAt = $objReloaded->strDeletedAt;
+			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
+			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
+			$this->dttDeletedAt = $objReloaded->dttDeletedAt;
 			$this->intCreatedBy = $objReloaded->intCreatedBy;
 			$this->intUpdatedBy = $objReloaded->intUpdatedBy;
 			$this->intDeletedBy = $objReloaded->intDeletedBy;
@@ -2553,6 +2549,13 @@
 					 * @return boolean
 					 */
 					return $this->blnEsExport;
+
+				case 'PaisId':
+					/**
+					 * Gets the value for intPaisId 
+					 * @return integer
+					 */
+					return $this->intPaisId;
 
 				case 'EsExenta':
 					/**
@@ -2626,24 +2629,24 @@
 
 				case 'CreatedAt':
 					/**
-					 * Gets the value for strCreatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttCreatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strCreatedAt;
+					return $this->dttCreatedAt;
 
 				case 'UpdatedAt':
 					/**
-					 * Gets the value for strUpdatedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttUpdatedAt 
+					 * @return QDateTime
 					 */
-					return $this->strUpdatedAt;
+					return $this->dttUpdatedAt;
 
 				case 'DeletedAt':
 					/**
-					 * Gets the value for strDeletedAt (Read-Only Timestamp)
-					 * @return string
+					 * Gets the value for dttDeletedAt 
+					 * @return QDateTime
 					 */
-					return $this->strDeletedAt;
+					return $this->dttDeletedAt;
 
 				case 'CreatedBy':
 					/**
@@ -2679,6 +2682,20 @@
 						if ((!$this->objEstado) && (!is_null($this->intEstadoId)))
 							$this->objEstado = Estado::Load($this->intEstadoId);
 						return $this->objEstado;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Pais':
+					/**
+					 * Gets the value for the Pais object referenced by intPaisId 
+					 * @return Pais
+					 */
+					try {
+						if ((!$this->objPais) && (!is_null($this->intPaisId)))
+							$this->objPais = Pais::Load($this->intPaisId);
+						return $this->objPais;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -3324,6 +3341,20 @@
 						throw $objExc;
 					}
 
+				case 'PaisId':
+					/**
+					 * Sets the value for intPaisId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objPais = null;
+						return ($this->intPaisId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'EsExenta':
 					/**
 					 * Sets the value for blnEsExenta 
@@ -3454,6 +3485,45 @@
 						throw $objExc;
 					}
 
+				case 'CreatedAt':
+					/**
+					 * Sets the value for dttCreatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttCreatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'UpdatedAt':
+					/**
+					 * Sets the value for dttUpdatedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttUpdatedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'DeletedAt':
+					/**
+					 * Sets the value for dttDeletedAt 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttDeletedAt = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'CreatedBy':
 					/**
 					 * Sets the value for intCreatedBy 
@@ -3523,6 +3593,38 @@
 						// Update Local Member Variables
 						$this->objEstado = $mixValue;
 						$this->intEstadoId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'Pais':
+					/**
+					 * Sets the value for the Pais object referenced by intPaisId 
+					 * @param Pais $mixValue
+					 * @return Pais
+					 */
+					if (is_null($mixValue)) {
+						$this->intPaisId = null;
+						$this->objPais = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Pais object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Pais');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Pais object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Pais for this Sucursales');
+
+						// Update Local Member Variables
+						$this->objPais = $mixValue;
+						$this->intPaisId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -8606,6 +8708,7 @@
 			$strToReturn .= '<element name="Estado" type="xsd1:Estado"/>';
 			$strToReturn .= '<element name="Zona" type="xsd:int"/>';
 			$strToReturn .= '<element name="EsExport" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="Pais" type="xsd1:Pais"/>';
 			$strToReturn .= '<element name="EsExenta" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="EsPrincipal" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="EsAreaMetropolitana" type="xsd:boolean"/>';
@@ -8616,9 +8719,9 @@
 			$strToReturn .= '<element name="ZonaNc" type="xsd:string"/>';
 			$strToReturn .= '<element name="ComisionVenta" type="xsd:float"/>';
 			$strToReturn .= '<element name="ComisionEntrega" type="xsd:float"/>';
-			$strToReturn .= '<element name="CreatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="UpdatedAt" type="xsd:string"/>';
-			$strToReturn .= '<element name="DeletedAt" type="xsd:string"/>';
+			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="DeletedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="UpdatedBy" type="xsd:int"/>';
 			$strToReturn .= '<element name="DeletedBy" type="xsd:int"/>';
@@ -8631,6 +8734,7 @@
 			if (!array_key_exists('Sucursales', $strComplexTypeArray)) {
 				$strComplexTypeArray['Sucursales'] = Sucursales::GetSoapComplexTypeXml();
 				Estado::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Pais::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -8660,6 +8764,9 @@
 				$objToReturn->intZona = $objSoapObject->Zona;
 			if (property_exists($objSoapObject, 'EsExport'))
 				$objToReturn->blnEsExport = $objSoapObject->EsExport;
+			if ((property_exists($objSoapObject, 'Pais')) &&
+				($objSoapObject->Pais))
+				$objToReturn->Pais = Pais::GetObjectFromSoapObject($objSoapObject->Pais);
 			if (property_exists($objSoapObject, 'EsExenta'))
 				$objToReturn->blnEsExenta = $objSoapObject->EsExenta;
 			if (property_exists($objSoapObject, 'EsPrincipal'))
@@ -8681,11 +8788,11 @@
 			if (property_exists($objSoapObject, 'ComisionEntrega'))
 				$objToReturn->fltComisionEntrega = $objSoapObject->ComisionEntrega;
 			if (property_exists($objSoapObject, 'CreatedAt'))
-				$objToReturn->strCreatedAt = $objSoapObject->CreatedAt;
+				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if (property_exists($objSoapObject, 'UpdatedAt'))
-				$objToReturn->strUpdatedAt = $objSoapObject->UpdatedAt;
+				$objToReturn->dttUpdatedAt = new QDateTime($objSoapObject->UpdatedAt);
 			if (property_exists($objSoapObject, 'DeletedAt'))
-				$objToReturn->strDeletedAt = $objSoapObject->DeletedAt;
+				$objToReturn->dttDeletedAt = new QDateTime($objSoapObject->DeletedAt);
 			if (property_exists($objSoapObject, 'CreatedBy'))
 				$objToReturn->intCreatedBy = $objSoapObject->CreatedBy;
 			if (property_exists($objSoapObject, 'UpdatedBy'))
@@ -8714,6 +8821,16 @@
 				$objObject->objEstado = Estado::GetSoapObjectFromObject($objObject->objEstado, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intEstadoId = null;
+			if ($objObject->objPais)
+				$objObject->objPais = Pais::GetSoapObjectFromObject($objObject->objPais, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intPaisId = null;
+			if ($objObject->dttCreatedAt)
+				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttUpdatedAt)
+				$objObject->dttUpdatedAt = $objObject->dttUpdatedAt->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttDeletedAt)
+				$objObject->dttDeletedAt = $objObject->dttDeletedAt->qFormat(QDateTime::FormatSoap);
 			return $objObject;
 		}
 
@@ -8735,6 +8852,7 @@
 			$iArray['EstadoId'] = $this->intEstadoId;
 			$iArray['Zona'] = $this->intZona;
 			$iArray['EsExport'] = $this->blnEsExport;
+			$iArray['PaisId'] = $this->intPaisId;
 			$iArray['EsExenta'] = $this->blnEsExenta;
 			$iArray['EsPrincipal'] = $this->blnEsPrincipal;
 			$iArray['EsAreaMetropolitana'] = $this->blnEsAreaMetropolitana;
@@ -8745,9 +8863,9 @@
 			$iArray['ZonaNc'] = $this->strZonaNc;
 			$iArray['ComisionVenta'] = $this->fltComisionVenta;
 			$iArray['ComisionEntrega'] = $this->fltComisionEntrega;
-			$iArray['CreatedAt'] = $this->strCreatedAt;
-			$iArray['UpdatedAt'] = $this->strUpdatedAt;
-			$iArray['DeletedAt'] = $this->strDeletedAt;
+			$iArray['CreatedAt'] = $this->dttCreatedAt;
+			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
+			$iArray['DeletedAt'] = $this->dttDeletedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedBy'] = $this->intUpdatedBy;
 			$iArray['DeletedBy'] = $this->intDeletedBy;
@@ -8832,6 +8950,8 @@
      * @property-read QQNodeEstado $Estado
      * @property-read QQNode $Zona
      * @property-read QQNode $EsExport
+     * @property-read QQNode $PaisId
+     * @property-read QQNodePais $Pais
      * @property-read QQNode $EsExenta
      * @property-read QQNode $EsPrincipal
      * @property-read QQNode $EsAreaMetropolitana
@@ -8908,6 +9028,10 @@
 					return new QQNode('zona', 'Zona', 'Integer', $this);
 				case 'EsExport':
 					return new QQNode('es_export', 'EsExport', 'Bit', $this);
+				case 'PaisId':
+					return new QQNode('pais_id', 'PaisId', 'Integer', $this);
+				case 'Pais':
+					return new QQNodePais('pais_id', 'Pais', 'Integer', $this);
 				case 'EsExenta':
 					return new QQNode('es_exenta', 'EsExenta', 'Bit', $this);
 				case 'EsPrincipal':
@@ -8929,11 +9053,11 @@
 				case 'ComisionEntrega':
 					return new QQNode('comision_entrega', 'ComisionEntrega', 'Float', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'VarChar', $this);
+					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'VarChar', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'DateTime', $this);
 				case 'DeletedAt':
-					return new QQNode('deleted_at', 'DeletedAt', 'VarChar', $this);
+					return new QQNode('deleted_at', 'DeletedAt', 'DateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
 				case 'UpdatedBy':
@@ -9029,6 +9153,8 @@
      * @property-read QQNodeEstado $Estado
      * @property-read QQNode $Zona
      * @property-read QQNode $EsExport
+     * @property-read QQNode $PaisId
+     * @property-read QQNodePais $Pais
      * @property-read QQNode $EsExenta
      * @property-read QQNode $EsPrincipal
      * @property-read QQNode $EsAreaMetropolitana
@@ -9105,6 +9231,10 @@
 					return new QQNode('zona', 'Zona', 'integer', $this);
 				case 'EsExport':
 					return new QQNode('es_export', 'EsExport', 'boolean', $this);
+				case 'PaisId':
+					return new QQNode('pais_id', 'PaisId', 'integer', $this);
+				case 'Pais':
+					return new QQNodePais('pais_id', 'Pais', 'integer', $this);
 				case 'EsExenta':
 					return new QQNode('es_exenta', 'EsExenta', 'boolean', $this);
 				case 'EsPrincipal':
@@ -9126,11 +9256,11 @@
 				case 'ComisionEntrega':
 					return new QQNode('comision_entrega', 'ComisionEntrega', 'double', $this);
 				case 'CreatedAt':
-					return new QQNode('created_at', 'CreatedAt', 'string', $this);
+					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'UpdatedAt':
-					return new QQNode('updated_at', 'UpdatedAt', 'string', $this);
+					return new QQNode('updated_at', 'UpdatedAt', 'QDateTime', $this);
 				case 'DeletedAt':
-					return new QQNode('deleted_at', 'DeletedAt', 'string', $this);
+					return new QQNode('deleted_at', 'DeletedAt', 'QDateTime', $this);
 				case 'CreatedBy':
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
 				case 'UpdatedBy':

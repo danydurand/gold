@@ -26,6 +26,8 @@
 	 * @property integer $DeletedBy the value for intDeletedBy 
 	 * @property-read FacturaPagos $_FacturaPagosAsDivisa the value for the private _objFacturaPagosAsDivisa (Read-Only) if set due to an expansion on the factura_pagos.divisa_id reverse relationship
 	 * @property-read FacturaPagos[] $_FacturaPagosAsDivisaArray the value for the private _objFacturaPagosAsDivisaArray (Read-Only) if set due to an ExpandAsArray on the factura_pagos.divisa_id reverse relationship
+	 * @property-read Pais $_PaisAsDivisa the value for the private _objPaisAsDivisa (Read-Only) if set due to an expansion on the pais.divisa_id reverse relationship
+	 * @property-read Pais[] $_PaisAsDivisaArray the value for the private _objPaisAsDivisaArray (Read-Only) if set due to an ExpandAsArray on the pais.divisa_id reverse relationship
 	 * @property-read Tasas $_TasasAsDivisa the value for the private _objTasasAsDivisa (Read-Only) if set due to an expansion on the tasas.divisa_id reverse relationship
 	 * @property-read Tasas[] $_TasasAsDivisaArray the value for the private _objTasasAsDivisaArray (Read-Only) if set due to an ExpandAsArray on the tasas.divisa_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -125,6 +127,22 @@
 		 * @var FacturaPagos[] _objFacturaPagosAsDivisaArray;
 		 */
 		private $_objFacturaPagosAsDivisaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single PaisAsDivisa object
+		 * (of type Pais), if this Divisas object was restored with
+		 * an expansion on the pais association table.
+		 * @var Pais _objPaisAsDivisa;
+		 */
+		private $_objPaisAsDivisa;
+
+		/**
+		 * Private member variable that stores a reference to an array of PaisAsDivisa objects
+		 * (of type Pais[]), if this Divisas object was restored with
+		 * an ExpandAsArray on the pais association table.
+		 * @var Pais[] _objPaisAsDivisaArray;
+		 */
+		private $_objPaisAsDivisaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single TasasAsDivisa object
@@ -730,6 +748,21 @@
 				}
 			}
 
+			// Check for PaisAsDivisa Virtual Binding
+			$strAlias = $strAliasPrefix . 'paisasdivisa__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['paisasdivisa']) ? null : $objExpansionAliasArray['paisasdivisa']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objPaisAsDivisaArray)
+				$objToReturn->_objPaisAsDivisaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objPaisAsDivisaArray[] = Pais::InstantiateDbRow($objDbRow, $strAliasPrefix . 'paisasdivisa__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objPaisAsDivisa)) {
+					$objToReturn->_objPaisAsDivisa = Pais::InstantiateDbRow($objDbRow, $strAliasPrefix . 'paisasdivisa__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for TasasAsDivisa Virtual Binding
 			$strAlias = $strAliasPrefix . 'tasasasdivisa__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1234,6 +1267,22 @@
 					 */
 					return $this->_objFacturaPagosAsDivisaArray;
 
+				case '_PaisAsDivisa':
+					/**
+					 * Gets the value for the private _objPaisAsDivisa (Read-Only)
+					 * if set due to an expansion on the pais.divisa_id reverse relationship
+					 * @return Pais
+					 */
+					return $this->_objPaisAsDivisa;
+
+				case '_PaisAsDivisaArray':
+					/**
+					 * Gets the value for the private _objPaisAsDivisaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the pais.divisa_id reverse relationship
+					 * @return Pais[]
+					 */
+					return $this->_objPaisAsDivisaArray;
+
 				case '_TasasAsDivisa':
 					/**
 					 * Gets the value for the private _objTasasAsDivisa (Read-Only)
@@ -1378,6 +1427,9 @@
 			$arrTablRela = array();
 			if ($this->CountFacturaPagosesAsDivisa()) {
 				$arrTablRela[] = 'factura_pagos';
+			}
+			if ($this->CountPaisesAsDivisa()) {
+				$arrTablRela[] = 'pais';
 			}
 			if ($this->CountTasasesAsDivisa()) {
 				$arrTablRela[] = 'tasas';
@@ -1535,6 +1587,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`factura_pagos`
+				WHERE
+					`divisa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for PaisAsDivisa
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated PaisesAsDivisa as an array of Pais objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Pais[]
+		*/
+		public function GetPaisAsDivisaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Pais::LoadArrayByDivisaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated PaisesAsDivisa
+		 * @return int
+		*/
+		public function CountPaisesAsDivisa() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Pais::CountByDivisaId($this->intId);
+		}
+
+		/**
+		 * Associates a PaisAsDivisa
+		 * @param Pais $objPais
+		 * @return void
+		*/
+		public function AssociatePaisAsDivisa(Pais $objPais) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePaisAsDivisa on this unsaved Divisas.');
+			if ((is_null($objPais->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociatePaisAsDivisa on this Divisas with an unsaved Pais.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Divisas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pais`
+				SET
+					`divisa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPais->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a PaisAsDivisa
+		 * @param Pais $objPais
+		 * @return void
+		*/
+		public function UnassociatePaisAsDivisa(Pais $objPais) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePaisAsDivisa on this unsaved Divisas.');
+			if ((is_null($objPais->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePaisAsDivisa on this Divisas with an unsaved Pais.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Divisas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pais`
+				SET
+					`divisa_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPais->Id) . ' AND
+					`divisa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all PaisesAsDivisa
+		 * @return void
+		*/
+		public function UnassociateAllPaisesAsDivisa() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePaisAsDivisa on this unsaved Divisas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Divisas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`pais`
+				SET
+					`divisa_id` = null
+				WHERE
+					`divisa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated PaisAsDivisa
+		 * @param Pais $objPais
+		 * @return void
+		*/
+		public function DeleteAssociatedPaisAsDivisa(Pais $objPais) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePaisAsDivisa on this unsaved Divisas.');
+			if ((is_null($objPais->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePaisAsDivisa on this Divisas with an unsaved Pais.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Divisas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pais`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objPais->Id) . ' AND
+					`divisa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated PaisesAsDivisa
+		 * @return void
+		*/
+		public function DeleteAllPaisesAsDivisa() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociatePaisAsDivisa on this unsaved Divisas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Divisas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`pais`
 				WHERE
 					`divisa_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -1867,6 +2068,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeFacturaPagos $FacturaPagosAsDivisa
+     * @property-read QQReverseReferenceNodePais $PaisAsDivisa
      * @property-read QQReverseReferenceNodeTasas $TasasAsDivisa
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -1897,6 +2099,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'Integer', $this);
 				case 'FacturaPagosAsDivisa':
 					return new QQReverseReferenceNodeFacturaPagos($this, 'facturapagosasdivisa', 'reverse_reference', 'divisa_id', 'FacturaPagosAsDivisa');
+				case 'PaisAsDivisa':
+					return new QQReverseReferenceNodePais($this, 'paisasdivisa', 'reverse_reference', 'divisa_id', 'PaisAsDivisa');
 				case 'TasasAsDivisa':
 					return new QQReverseReferenceNodeTasas($this, 'tasasasdivisa', 'reverse_reference', 'divisa_id', 'TasasAsDivisa');
 
@@ -1926,6 +2130,7 @@
      *
      *
      * @property-read QQReverseReferenceNodeFacturaPagos $FacturaPagosAsDivisa
+     * @property-read QQReverseReferenceNodePais $PaisAsDivisa
      * @property-read QQReverseReferenceNodeTasas $TasasAsDivisa
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -1956,6 +2161,8 @@
 					return new QQNode('deleted_by', 'DeletedBy', 'integer', $this);
 				case 'FacturaPagosAsDivisa':
 					return new QQReverseReferenceNodeFacturaPagos($this, 'facturapagosasdivisa', 'reverse_reference', 'divisa_id', 'FacturaPagosAsDivisa');
+				case 'PaisAsDivisa':
+					return new QQReverseReferenceNodePais($this, 'paisasdivisa', 'reverse_reference', 'divisa_id', 'PaisAsDivisa');
 				case 'TasasAsDivisa':
 					return new QQReverseReferenceNodeTasas($this, 'tasasasdivisa', 'reverse_reference', 'divisa_id', 'TasasAsDivisa');
 

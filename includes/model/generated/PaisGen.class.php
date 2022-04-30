@@ -17,7 +17,10 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property string $Nombre the value for strNombre (Not Null)
+	 * @property integer $DivisaId the value for intDivisaId 
 	 * @property string $Siglas the value for strSiglas (Unique)
+	 * @property boolean $EsPrincipal the value for blnEsPrincipal (Not Null)
+	 * @property Divisas $Divisa the value for the Divisas object referenced by intDivisaId 
 	 * @property-read ClienteI $_ClienteI the value for the private _objClienteI (Read-Only) if set due to an expansion on the cliente_i.pais_id reverse relationship
 	 * @property-read ClienteI[] $_ClienteIArray the value for the private _objClienteIArray (Read-Only) if set due to an ExpandAsArray on the cliente_i.pais_id reverse relationship
 	 * @property-read Empresa $_Empresa the value for the private _objEmpresa (Read-Only) if set due to an expansion on the empresa.pais_id reverse relationship
@@ -30,6 +33,8 @@
 	 * @property-read Promocion[] $_PromocionArray the value for the private _objPromocionArray (Read-Only) if set due to an ExpandAsArray on the promocion.pais_id reverse relationship
 	 * @property-read SdeCheckpoint $_SdeCheckpoint the value for the private _objSdeCheckpoint (Read-Only) if set due to an expansion on the sde_checkpoint.pais_id reverse relationship
 	 * @property-read SdeCheckpoint[] $_SdeCheckpointArray the value for the private _objSdeCheckpointArray (Read-Only) if set due to an ExpandAsArray on the sde_checkpoint.pais_id reverse relationship
+	 * @property-read Sucursales $_Sucursales the value for the private _objSucursales (Read-Only) if set due to an expansion on the sucursales.pais_id reverse relationship
+	 * @property-read Sucursales[] $_SucursalesArray the value for the private _objSucursalesArray (Read-Only) if set due to an ExpandAsArray on the sucursales.pais_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class PaisGen extends QBaseClass implements IteratorAggregate {
@@ -56,12 +61,28 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column pais.divisa_id
+		 * @var integer intDivisaId
+		 */
+		protected $intDivisaId;
+		const DivisaIdDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column pais.siglas
 		 * @var string strSiglas
 		 */
 		protected $strSiglas;
 		const SiglasMaxLength = 2;
 		const SiglasDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column pais.es_principal
+		 * @var boolean blnEsPrincipal
+		 */
+		protected $blnEsPrincipal;
+		const EsPrincipalDefault = 0;
 
 
 		/**
@@ -161,6 +182,22 @@
 		private $_objSdeCheckpointArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single Sucursales object
+		 * (of type Sucursales), if this Pais object was restored with
+		 * an expansion on the sucursales association table.
+		 * @var Sucursales _objSucursales;
+		 */
+		private $_objSucursales;
+
+		/**
+		 * Private member variable that stores a reference to an array of Sucursales objects
+		 * (of type Sucursales[]), if this Pais object was restored with
+		 * an ExpandAsArray on the sucursales association table.
+		 * @var Sucursales[] _objSucursalesArray;
+		 */
+		private $_objSucursalesArray = null;
+
+		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
 		 * columns from the run-time database query result for this object).  Used by InstantiateDbRow and
 		 * GetVirtualAttribute.
@@ -182,6 +219,16 @@
 		// PROTECTED MEMBER OBJECTS
 		///////////////////////////////
 
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column pais.divisa_id.
+		 *
+		 * NOTE: Always use the Divisa property getter to correctly retrieve this Divisas object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Divisas objDivisa
+		 */
+		protected $objDivisa;
+
 
 
 		/**
@@ -191,7 +238,9 @@
 		{
 			$this->intId = Pais::IdDefault;
 			$this->strNombre = Pais::NombreDefault;
+			$this->intDivisaId = Pais::DivisaIdDefault;
 			$this->strSiglas = Pais::SiglasDefault;
+			$this->blnEsPrincipal = Pais::EsPrincipalDefault;
 		}
 
 
@@ -535,7 +584,9 @@
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'nombre', $strAliasPrefix . 'nombre');
+			    $objBuilder->AddSelectItem($strTableName, 'divisa_id', $strAliasPrefix . 'divisa_id');
 			    $objBuilder->AddSelectItem($strTableName, 'siglas', $strAliasPrefix . 'siglas');
+			    $objBuilder->AddSelectItem($strTableName, 'es_principal', $strAliasPrefix . 'es_principal');
             }
 		}
 
@@ -667,9 +718,15 @@
 			$strAlias = $strAliasPrefix . 'nombre';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strNombre = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'divisa_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intDivisaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'siglas';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strSiglas = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'es_principal';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnEsPrincipal = $objDbRow->GetColumn($strAliasName, 'Bit');
 
 			if (isset($objPreviousItemArray) && is_array($objPreviousItemArray)) {
 				foreach ($objPreviousItemArray as $objPreviousItem) {
@@ -700,6 +757,13 @@
 			if (!$strAliasPrefix)
 				$strAliasPrefix = 'pais__';
 
+			// Check for Divisa Early Binding
+			$strAlias = $strAliasPrefix . 'divisa_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['divisa_id']) ? null : $objExpansionAliasArray['divisa_id']);
+				$objToReturn->objDivisa = Divisas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'divisa_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
 
 				
 
@@ -790,6 +854,21 @@
 					$objToReturn->_objSdeCheckpointArray[] = SdeCheckpoint::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sdecheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objSdeCheckpoint)) {
 					$objToReturn->_objSdeCheckpoint = SdeCheckpoint::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sdecheckpoint__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for Sucursales Virtual Binding
+			$strAlias = $strAliasPrefix . 'sucursales__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['sucursales']) ? null : $objExpansionAliasArray['sucursales']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objSucursalesArray)
+				$objToReturn->_objSucursalesArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objSucursalesArray[] = Sucursales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sucursales__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objSucursales)) {
+					$objToReturn->_objSucursales = Sucursales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'sucursales__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -902,6 +981,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of Pais objects,
+		 * by DivisaId Index(es)
+		 * @param integer $intDivisaId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Pais[]
+		*/
+		public static function LoadArrayByDivisaId($intDivisaId, $objOptionalClauses = null) {
+			// Call Pais::QueryArray to perform the LoadArrayByDivisaId query
+			try {
+				return Pais::QueryArray(
+					QQ::Equal(QQN::Pais()->DivisaId, $intDivisaId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Paises
+		 * by DivisaId Index(es)
+		 * @param integer $intDivisaId
+		 * @return int
+		*/
+		public static function CountByDivisaId($intDivisaId) {
+			// Call Pais::QueryCount to perform the CountByDivisaId query
+			return Pais::QueryCount(
+				QQ::Equal(QQN::Pais()->DivisaId, $intDivisaId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -934,10 +1045,14 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `pais` (
 							`nombre`,
-							`siglas`
+							`divisa_id`,
+							`siglas`,
+							`es_principal`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->strNombre) . ',
-							' . $objDatabase->SqlVariable($this->strSiglas) . '
+							' . $objDatabase->SqlVariable($this->intDivisaId) . ',
+							' . $objDatabase->SqlVariable($this->strSiglas) . ',
+							' . $objDatabase->SqlVariable($this->blnEsPrincipal) . '
 						)
 					');
 
@@ -954,7 +1069,9 @@
 							`pais`
 						SET
 							`nombre` = ' . $objDatabase->SqlVariable($this->strNombre) . ',
-							`siglas` = ' . $objDatabase->SqlVariable($this->strSiglas) . '
+							`divisa_id` = ' . $objDatabase->SqlVariable($this->intDivisaId) . ',
+							`siglas` = ' . $objDatabase->SqlVariable($this->strSiglas) . ',
+							`es_principal` = ' . $objDatabase->SqlVariable($this->blnEsPrincipal) . '
 						WHERE
 							`id` = ' . $objDatabase->SqlVariable($this->intId) . '
 					');
@@ -1060,7 +1177,9 @@
 
 			// Update $this's local variables to match
 			$this->strNombre = $objReloaded->strNombre;
+			$this->DivisaId = $objReloaded->DivisaId;
 			$this->strSiglas = $objReloaded->strSiglas;
+			$this->blnEsPrincipal = $objReloaded->blnEsPrincipal;
 		}
 
 
@@ -1095,6 +1214,13 @@
 					 */
 					return $this->strNombre;
 
+				case 'DivisaId':
+					/**
+					 * Gets the value for intDivisaId 
+					 * @return integer
+					 */
+					return $this->intDivisaId;
+
 				case 'Siglas':
 					/**
 					 * Gets the value for strSiglas (Unique)
@@ -1102,10 +1228,31 @@
 					 */
 					return $this->strSiglas;
 
+				case 'EsPrincipal':
+					/**
+					 * Gets the value for blnEsPrincipal (Not Null)
+					 * @return boolean
+					 */
+					return $this->blnEsPrincipal;
+
 
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Divisa':
+					/**
+					 * Gets the value for the Divisas object referenced by intDivisaId 
+					 * @return Divisas
+					 */
+					try {
+						if ((!$this->objDivisa) && (!is_null($this->intDivisaId)))
+							$this->objDivisa = Divisas::Load($this->intDivisaId);
+						return $this->objDivisa;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 
 				////////////////////////////
 				// Virtual Object References (Many to Many and Reverse References)
@@ -1208,6 +1355,22 @@
 					 */
 					return $this->_objSdeCheckpointArray;
 
+				case '_Sucursales':
+					/**
+					 * Gets the value for the private _objSucursales (Read-Only)
+					 * if set due to an expansion on the sucursales.pais_id reverse relationship
+					 * @return Sucursales
+					 */
+					return $this->_objSucursales;
+
+				case '_SucursalesArray':
+					/**
+					 * Gets the value for the private _objSucursalesArray (Read-Only)
+					 * if set due to an ExpandAsArray on the sucursales.pais_id reverse relationship
+					 * @return Sucursales[]
+					 */
+					return $this->_objSucursalesArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1248,6 +1411,20 @@
 						throw $objExc;
 					}
 
+				case 'DivisaId':
+					/**
+					 * Sets the value for intDivisaId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objDivisa = null;
+						return ($this->intDivisaId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Siglas':
 					/**
 					 * Sets the value for strSiglas (Unique)
@@ -1261,10 +1438,55 @@
 						throw $objExc;
 					}
 
+				case 'EsPrincipal':
+					/**
+					 * Sets the value for blnEsPrincipal (Not Null)
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnEsPrincipal = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 
 				///////////////////
 				// Member Objects
 				///////////////////
+				case 'Divisa':
+					/**
+					 * Sets the value for the Divisas object referenced by intDivisaId 
+					 * @param Divisas $mixValue
+					 * @return Divisas
+					 */
+					if (is_null($mixValue)) {
+						$this->intDivisaId = null;
+						$this->objDivisa = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Divisas object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Divisas');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Divisas object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved Divisa for this Pais');
+
+						// Update Local Member Variables
+						$this->objDivisa = $mixValue;
+						$this->intDivisaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				default:
 					try {
 						return parent::__set($strName, $mixValue);
@@ -1312,6 +1534,9 @@
 			}
 			if ($this->CountSdeCheckpoints()) {
 				$arrTablRela[] = 'sde_checkpoint';
+			}
+			if ($this->CountSucursaleses()) {
+				$arrTablRela[] = 'sucursales';
 			}
 			
 			return $arrTablRela;
@@ -2217,6 +2442,155 @@
 		}
 
 
+		// Related Objects' Methods for Sucursales
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated Sucursaleses as an array of Sucursales objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Sucursales[]
+		*/
+		public function GetSucursalesArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return Sucursales::LoadArrayByPaisId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated Sucursaleses
+		 * @return int
+		*/
+		public function CountSucursaleses() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return Sucursales::CountByPaisId($this->intId);
+		}
+
+		/**
+		 * Associates a Sucursales
+		 * @param Sucursales $objSucursales
+		 * @return void
+		*/
+		public function AssociateSucursales(Sucursales $objSucursales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateSucursales on this unsaved Pais.');
+			if ((is_null($objSucursales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateSucursales on this Pais with an unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Pais::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`sucursales`
+				SET
+					`pais_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objSucursales->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a Sucursales
+		 * @param Sucursales $objSucursales
+		 * @return void
+		*/
+		public function UnassociateSucursales(Sucursales $objSucursales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateSucursales on this unsaved Pais.');
+			if ((is_null($objSucursales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateSucursales on this Pais with an unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Pais::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`sucursales`
+				SET
+					`pais_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objSucursales->Id) . ' AND
+					`pais_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all Sucursaleses
+		 * @return void
+		*/
+		public function UnassociateAllSucursaleses() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateSucursales on this unsaved Pais.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Pais::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`sucursales`
+				SET
+					`pais_id` = null
+				WHERE
+					`pais_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated Sucursales
+		 * @param Sucursales $objSucursales
+		 * @return void
+		*/
+		public function DeleteAssociatedSucursales(Sucursales $objSucursales) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateSucursales on this unsaved Pais.');
+			if ((is_null($objSucursales->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateSucursales on this Pais with an unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Pais::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`sucursales`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objSucursales->Id) . ' AND
+					`pais_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated Sucursaleses
+		 * @return void
+		*/
+		public function DeleteAllSucursaleses() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateSucursales on this unsaved Pais.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Pais::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`sucursales`
+				WHERE
+					`pais_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -2257,7 +2631,9 @@
 			$strToReturn = '<complexType name="Pais"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Nombre" type="xsd:string"/>';
+			$strToReturn .= '<element name="Divisa" type="xsd1:Divisas"/>';
 			$strToReturn .= '<element name="Siglas" type="xsd:string"/>';
+			$strToReturn .= '<element name="EsPrincipal" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="__blnRestored" type="xsd:boolean"/>';
 			$strToReturn .= '</sequence></complexType>';
 			return $strToReturn;
@@ -2266,6 +2642,7 @@
 		public static function AlterSoapComplexTypeArray(&$strComplexTypeArray) {
 			if (!array_key_exists('Pais', $strComplexTypeArray)) {
 				$strComplexTypeArray['Pais'] = Pais::GetSoapComplexTypeXml();
+				Divisas::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -2284,8 +2661,13 @@
 				$objToReturn->intId = $objSoapObject->Id;
 			if (property_exists($objSoapObject, 'Nombre'))
 				$objToReturn->strNombre = $objSoapObject->Nombre;
+			if ((property_exists($objSoapObject, 'Divisa')) &&
+				($objSoapObject->Divisa))
+				$objToReturn->Divisa = Divisas::GetObjectFromSoapObject($objSoapObject->Divisa);
 			if (property_exists($objSoapObject, 'Siglas'))
 				$objToReturn->strSiglas = $objSoapObject->Siglas;
+			if (property_exists($objSoapObject, 'EsPrincipal'))
+				$objToReturn->blnEsPrincipal = $objSoapObject->EsPrincipal;
 			if (property_exists($objSoapObject, '__blnRestored'))
 				$objToReturn->__blnRestored = $objSoapObject->__blnRestored;
 			return $objToReturn;
@@ -2304,6 +2686,10 @@
 		}
 
 		public static function GetSoapObjectFromObject($objObject, $blnBindRelatedObjects) {
+			if ($objObject->objDivisa)
+				$objObject->objDivisa = Divisas::GetSoapObjectFromObject($objObject->objDivisa, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intDivisaId = null;
 			return $objObject;
 		}
 
@@ -2320,7 +2706,9 @@
 			///////////////////
 			$iArray['Id'] = $this->intId;
 			$iArray['Nombre'] = $this->strNombre;
+			$iArray['DivisaId'] = $this->intDivisaId;
 			$iArray['Siglas'] = $this->strSiglas;
+			$iArray['EsPrincipal'] = $this->blnEsPrincipal;
 			return new ArrayIterator($iArray);
 		}
 
@@ -2360,7 +2748,10 @@
      *
      * @property-read QQNode $Id
      * @property-read QQNode $Nombre
+     * @property-read QQNode $DivisaId
+     * @property-read QQNodeDivisas $Divisa
      * @property-read QQNode $Siglas
+     * @property-read QQNode $EsPrincipal
      *
      *
      * @property-read QQReverseReferenceNodeClienteI $ClienteI
@@ -2369,6 +2760,7 @@
      * @property-read QQReverseReferenceNodeFacVendedor $FacVendedor
      * @property-read QQReverseReferenceNodePromocion $Promocion
      * @property-read QQReverseReferenceNodeSdeCheckpoint $SdeCheckpoint
+     * @property-read QQReverseReferenceNodeSucursales $Sucursales
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2382,8 +2774,14 @@
 					return new QQNode('id', 'Id', 'Integer', $this);
 				case 'Nombre':
 					return new QQNode('nombre', 'Nombre', 'VarChar', $this);
+				case 'DivisaId':
+					return new QQNode('divisa_id', 'DivisaId', 'Integer', $this);
+				case 'Divisa':
+					return new QQNodeDivisas('divisa_id', 'Divisa', 'Integer', $this);
 				case 'Siglas':
 					return new QQNode('siglas', 'Siglas', 'VarChar', $this);
+				case 'EsPrincipal':
+					return new QQNode('es_principal', 'EsPrincipal', 'Bit', $this);
 				case 'ClienteI':
 					return new QQReverseReferenceNodeClienteI($this, 'clientei', 'reverse_reference', 'pais_id', 'ClienteI');
 				case 'Empresa':
@@ -2396,6 +2794,8 @@
 					return new QQReverseReferenceNodePromocion($this, 'promocion', 'reverse_reference', 'pais_id', 'Promocion');
 				case 'SdeCheckpoint':
 					return new QQReverseReferenceNodeSdeCheckpoint($this, 'sdecheckpoint', 'reverse_reference', 'pais_id', 'SdeCheckpoint');
+				case 'Sucursales':
+					return new QQReverseReferenceNodeSucursales($this, 'sucursales', 'reverse_reference', 'pais_id', 'Sucursales');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2413,7 +2813,10 @@
     /**
      * @property-read QQNode $Id
      * @property-read QQNode $Nombre
+     * @property-read QQNode $DivisaId
+     * @property-read QQNodeDivisas $Divisa
      * @property-read QQNode $Siglas
+     * @property-read QQNode $EsPrincipal
      *
      *
      * @property-read QQReverseReferenceNodeClienteI $ClienteI
@@ -2422,6 +2825,7 @@
      * @property-read QQReverseReferenceNodeFacVendedor $FacVendedor
      * @property-read QQReverseReferenceNodePromocion $Promocion
      * @property-read QQReverseReferenceNodeSdeCheckpoint $SdeCheckpoint
+     * @property-read QQReverseReferenceNodeSucursales $Sucursales
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2435,8 +2839,14 @@
 					return new QQNode('id', 'Id', 'integer', $this);
 				case 'Nombre':
 					return new QQNode('nombre', 'Nombre', 'string', $this);
+				case 'DivisaId':
+					return new QQNode('divisa_id', 'DivisaId', 'integer', $this);
+				case 'Divisa':
+					return new QQNodeDivisas('divisa_id', 'Divisa', 'integer', $this);
 				case 'Siglas':
 					return new QQNode('siglas', 'Siglas', 'string', $this);
+				case 'EsPrincipal':
+					return new QQNode('es_principal', 'EsPrincipal', 'boolean', $this);
 				case 'ClienteI':
 					return new QQReverseReferenceNodeClienteI($this, 'clientei', 'reverse_reference', 'pais_id', 'ClienteI');
 				case 'Empresa':
@@ -2449,6 +2859,8 @@
 					return new QQReverseReferenceNodePromocion($this, 'promocion', 'reverse_reference', 'pais_id', 'Promocion');
 				case 'SdeCheckpoint':
 					return new QQReverseReferenceNodeSdeCheckpoint($this, 'sdecheckpoint', 'reverse_reference', 'pais_id', 'SdeCheckpoint');
+				case 'Sucursales':
+					return new QQReverseReferenceNodeSucursales($this, 'sucursales', 'reverse_reference', 'pais_id', 'Sucursales');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

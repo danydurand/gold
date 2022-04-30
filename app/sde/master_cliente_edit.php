@@ -651,7 +651,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     protected function obtenerSaldoDelCliente() {
         $decSaldExce = $this->objMasterCliente->calcularSaldoExcedente();
         $this->txtSaldExce->Text = str2num($decSaldExce);
-        $this->info("El Saldo del Cliente es: ".$decSaldExce);
+        $_SESSION['FlashMessage'] = ['info',"El Saldo del Cliente es: ".$decSaldExce];
+        QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie);
     }
 
     protected function datosParaGraficos() {
@@ -942,7 +943,7 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->EstatusPago,'CONCILIADO');
         $objClauWher[] = QQ::NotEqual(QQN::Facturas()->Estatus,'ANULADA');
         $arrFactPend   = Facturas::QueryArray(QQ::AndCondition($objClauWher));
-        $intCantFact   = count($this->arrFactPend);
+        $intCantFact   = count($arrFactPend);
         if ($intCantFact > 10) {
             $this->dtgFactPend->TotalItemCount = count($arrFactPend);
         }

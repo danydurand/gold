@@ -839,13 +839,6 @@
 		QApplicationBase::$ClassFile['manifiestoexpckptmetacontrol'] = __META_CONTROLS__ . '/ManifiestoExpCkptMetaControl.class.php';
 		QApplicationBase::$ClassFile['manifiestoexpckptdatagrid'] = __META_CONTROLS__ . '/ManifiestoExpCkptDataGrid.class.php';
 
-	// ClassPaths for the MasCartaDevo class
-		QApplicationBase::$ClassFile['mascartadevo'] = __MODEL__ . '/MasCartaDevo.class.php';
-		QApplicationBase::$ClassFile['qqnodemascartadevo'] = __MODEL__ . '/MasCartaDevo.class.php';
-		QApplicationBase::$ClassFile['qqreversereferencenodemascartadevo'] = __MODEL__ . '/MasCartaDevo.class.php';
-		QApplicationBase::$ClassFile['mascartadevometacontrol'] = __META_CONTROLS__ . '/MasCartaDevoMetaControl.class.php';
-		QApplicationBase::$ClassFile['mascartadevodatagrid'] = __META_CONTROLS__ . '/MasCartaDevoDataGrid.class.php';
-
 	// ClassPaths for the MasTipoRuta class
 		QApplicationBase::$ClassFile['mastiporuta'] = __MODEL__ . '/MasTipoRuta.class.php';
 		QApplicationBase::$ClassFile['qqnodemastiporuta'] = __MODEL__ . '/MasTipoRuta.class.php';
