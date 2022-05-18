@@ -7,7 +7,7 @@
 
 	$strPageTitle = 'TarifaExp' . ' - ' . $this->mctTarifaExp->TitleVerb;
     require('inc/header.inc.php');
-	require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
+    require(__APP_INCLUDES__ . '/botonera_edit.inc.php');
 ?>
 <div class="form-controls">
     <div class="container-fluid" data-aos="fade-in">
@@ -17,18 +17,62 @@
             </div>
         </div>
         <div class="row" style="margin-top: 1em;">
-            <div class="col-md-12">
-            <?php $this->lblId->RenderWithName(); ?>
+            <div class="col-md-5">
+                <?php $this->lblId->RenderWithName(); ?>
 				<?php $this->txtNombre->RenderWithName(); ?>
 				<?php $this->lstProducto->RenderWithName(); ?>
 				<?php $this->chkIsPublica->RenderWithName(); ?>
 				<?php $this->calFecha->RenderWithName(); ?>
-				<?php $this->txtMonto->RenderWithName(); ?>
-				<?php $this->txtMinimo->RenderWithName(); ?>
-				<?php //$this->lblCreatedAt->RenderWithName(); ?>
-				<?php //$this->lblUpdatedAt->RenderWithName(); ?>
-				<?php //$this->txtCreatedBy->RenderWithName(); ?>
-				<?php //$this->txtUpdatedBy->RenderWithName(); ?>
+<!--				--><?php //$this->txtMonto->RenderWithName(); ?>
+<!--				--><?php //$this->txtMinimo->RenderWithName(); ?>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php if ($this->mctTarifaExp->EditMode) { ?>
+                            <div class="row titulo">
+                                <div class="col-md-3">
+                                    <?php $this->lblTariDest->Render(); ?>
+                                </div>
+                                <div class="col-md-2">
+                                    <?php $this->lblMontTari->Render(); ?>
+                                </div>
+                                <div class="col-md-2">
+                                    <?php $this->lblMontMini->Render(); ?>
+                                </div>
+                                <div class="col-md-2">
+                                    <?php $this->lblFechVige->Render(); ?>
+                                </div>
+                                <div class="col-md-3">
+                                    <?php $this->lblAcciTari->Render(); ?>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: .3em">
+                                <div class="col-md-3">
+                                    <?php $this->lstTariDest->Render(); ?>
+                                </div>
+                                <div class="col-md-2">
+                                    <?php $this->txtMontTari->Render(); ?>
+                                </div>
+                                <div class="col-md-2">
+                                    <?php $this->txtMontMini->Render(); ?>
+                                </div>
+                                <div class="col-md-2">
+                                    <?php $this->calFechVige->Render(); ?>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <?php $this->btnSaveTari->Render(); ?>
+                                    <?php $this->btnDeleTari->Render(); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php $this->dtgTariDest->Render(); ?>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
 	        </div>
         </div>
     </div>
@@ -59,5 +103,30 @@
         intro.start();
     }
 </script>
-
+<style>
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+        background-color: #4682B4;
+    }
+    .nav-tabs > li > a {
+        color: #4682B4;
+    }
+    .titulo {
+        background-color: #CCCCCC;
+        border-radius: 3px;
+        font-weight: bold;
+        padding: 0.2em;
+        text-align: center;
+    }
+    .form-label {
+        padding: 0px;
+    }
+    .form-name {
+        width: 44%;
+        padding-right: 10px;
+    }
+    .form-field {
+        width: 56%;
+        padding: 1.4px;
+    }
+</style>
 <?php require('inc/footer.inc.php'); ?>

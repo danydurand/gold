@@ -50,14 +50,20 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
     <![endif]-->
 
     <!-- Fusion Charts -->
-    <script src="http://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
-    <script src="http://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+<!--    <script src="http://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>-->
+<!--    <script src="http://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>-->
 
     <!-- AOS -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
     <link href=<?= __VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__ ."/ladda-themeless.min.css"?> rel="stylesheet">
+
+    <!-- ReactJS-->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
 
     <style>
         .navbar-default {
@@ -125,13 +131,12 @@ if ($_SESSION['NombSist'] == 'DESPACHO DE ENVIOS') {
                 <div class="sidebar-nav navbar-collapse">
                     <?= $strHtmlMenu; ?>
                 </div>
-                <!-- /.sidebar-collapse -->
             </div>
-            <!-- /.navbar-static-side -->
         </nav>
 
         <!-- Page Content -->
         <div id="page-wrapper">
+<!--            <div id="root"></div>-->
             <span class="medio_espacio"></span>
 
 

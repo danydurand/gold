@@ -23,15 +23,15 @@
 				<?php $this->lstProducto->RenderWithName(); ?>
 				<?php $this->chkIsPublica->RenderWithName(); ?>
 				<?php $this->calFecha->RenderWithName(); ?>
-				<?php $this->txtMonto->RenderWithName(); ?>
-				<?php $this->txtMinimo->RenderWithName(); ?>
+<!--				--><?php //$this->txtMonto->RenderWithName(); ?>
+<!--				--><?php //$this->txtMinimo->RenderWithName(); ?>
             </div>
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-12">
                         <?php if ($this->mctTarifaExp->EditMode) { ?>
                             <div class="row titulo">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <?php $this->lblTariDest->Render(); ?>
                                 </div>
                                 <div class="col-md-2">
@@ -40,12 +40,15 @@
                                 <div class="col-md-2">
                                     <?php $this->lblMontMini->Render(); ?>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
+                                    <?php $this->lblFechVige->Render(); ?>
+                                </div>
+                                <div class="col-md-3">
                                     <?php $this->lblAcciTari->Render(); ?>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: .3em">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <?php $this->lstTariDest->Render(); ?>
                                 </div>
                                 <div class="col-md-2">
@@ -54,7 +57,10 @@
                                 <div class="col-md-2">
                                     <?php $this->txtMontMini->Render(); ?>
                                 </div>
-                                <div class="col-md-4 text-center">
+                                <div class="col-md-2">
+                                    <?php $this->calFechVige->Render(); ?>
+                                </div>
+                                <div class="col-md-3 text-center">
                                     <?php $this->btnSaveTari->Render(); ?>
                                     <?php $this->btnDeleTari->Render(); ?>
                                 </div>

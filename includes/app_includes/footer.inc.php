@@ -46,5 +46,8 @@
             AOS.init();
         </script>
 
-        </body>
+<!--        <script src=--><?//= __VIRTUAL_DIRECTORY__ .__APP_JS_ASSETS__ ."/reactjs/index.js" ?><!-- type="text/babel"></script>-->
+
+
+            </body>
 </html>

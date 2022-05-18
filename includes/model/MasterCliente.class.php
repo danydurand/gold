@@ -27,6 +27,10 @@ class MasterCliente extends MasterClienteGen {
         return sprintf('%s',  $this->strNombClie);
     }
 
+    public function __toStringCorto($intCantCara=30) {
+        return sprintf('%s',  substr($this->strNombClie,0,$intCantCara));
+    }
+
     public function __saldoExcedente() {
         return str_replace(',','.',$this->SaldoExcedente);
     }

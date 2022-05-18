@@ -2295,7 +2295,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objClieReta->Email           = substr(strtolower($this->txtEmaiRemi->Text),0,191);
             $this->objClieReta->Sexo            = $this->lstSexoClie->SelectedValue;
             $this->objClieReta->FechaNacimiento = strlen($this->calFechNaci->Text)
-                ? new QDateTime($this->calFechNaci->Text)
+                ? new QDateTime(transformaFecha($this->calFechNaci->Text))
                 : null;
             $this->objClieReta->ProfesionId     = $this->lstProfClie->SelectedValue;
             //----------------------------------------------------------------------------------
@@ -2676,6 +2676,14 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function UpdateGuiaFields() {
         $arrResuUpda['TodoOkey'] = true;
         $arrResuUpda['MensErro'] = '';
+        //-------------------------------------------------------------
+        // El destino de la guia, define la tasa de cambio que debera
+        // aplicarse para el calculo de los montos de los conceptos
+        //-------------------------------------------------------------
+        $intIdxxDest = $this->lstSucuDest->SelectedValue;
+        $objDestGuia = Sucursales::Load($intIdxxDest);
+        $strDiviDest = $objDestGuia->Pais->Divisa->Codigo;
+        $decTasaCamb = $strDiviDest == 'EUR' ? $_SESSION['TasaEuro'] : $_SESSION['TasaDola'];
         //-------------------------------------
         // El servicio determina el producto
         //-------------------------------------
@@ -2726,11 +2734,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia->CodigoPostal              = $this->txtPostDest->Text;
             $this->objGuia->TipoExport                = 'COURIER';
             $this->objGuia->ProductoId                = $objProdExpo->Id;
-            //$this->objGuia->AliadoId                  = $this->lstAliaCome->SelectedValue;
             $this->objGuia->ClienteCorpId             = $intClieIdxx;
             $this->objGuia->ReferenciaExp             = $this->txtRefeExpo->Text;
             $this->objGuia->RazonesExp                = $this->txtRazoExpo->Text;
             $this->objGuia->ModoValor                 = $this->lstModoValo->SelectedValue;
+            $this->objGuia->Tasa                      = $decTasaCamb;
 
             if (!$this->blnEditMode) {
                 //------------------------------------------------------------------------
@@ -2739,7 +2747,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $this->objGuia->Numero    = $this->txtNumeGuia->Text;
                 $this->objGuia->Tracking  = $this->txtNumeGuia->Text;
                 $this->objGuia->Fecha     = new QDateTime(QDateTime::Now());
-                $this->objGuia->Tasa      = $this->decTasaDola;
                 $this->objGuia->Alto      = 0;
                 $this->objGuia->Ancho     = 0;
                 $this->objGuia->Largo     = 0;

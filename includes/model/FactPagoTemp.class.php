@@ -27,7 +27,15 @@
 			return sprintf('FactPagoTemp Object %s',  $this->intId);
 		}
 
-                /**
+		public function establecerMontoAbono($decMontAbon) {
+		    $objFactPago = Facturas::Load($this->FacturaId);
+		    if ($objFactPago instanceof Facturas) {
+		        $objFactPago->MontoAbono = $decMontAbon;
+		        $objFactPago->Save();
+            }
+        }
+
+        /**
         * Esta runtina deja registro de la operacion indicada en
         * el log de transacciones
         */

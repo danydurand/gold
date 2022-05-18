@@ -5,36 +5,43 @@ define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
 $_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
+//---------------------------------------------------
+// Transformando fechas de mm/dd/yyyy a yyyy-mm-dd
+//---------------------------------------------------
+$strFechOrig = '05/07/2022';
+m("Fecha Original: $strFechOrig");
+m("Fecha Transformada: ".transformaFecha($strFechOrig));
+
 //--------------------------------------
 // Actualizando montos de las Facturas
 //--------------------------------------
 
-m("Iniciando actualización de las facturas");
-m("=======================================",2);
-$objClauWher   = QQ::Clause();
-$objClauWher[] = QQ::NotEqual(QQN::Facturas()->Estatus,"ANULADA");
-$objClauWher[] = QQ::IsNull(QQN::Facturas()->ClienteRetailId);
-$objClauWher[] = QQ::NotEqual(QQN::Facturas()->ClienteCorpId, 1702);
-$objClauWher[] = QQ::GreaterOrEqual(QQN::Facturas()->Fecha, '2022-01-01');
-$objClauOrde   = QQ::OrderBy(QQN::Facturas()->Id,false);
-$arrFactSist   = Facturas::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
-$intCantFact   = count($arrFactSist);
-$intFactProc   = 0;
-$intFactCamb   = 0;
-m("Se van a procesar $intCantFact facturas",2);
-foreach ($arrFactSist as $objFactSist) {
-    $intFactProc++;
-    $objFactAnte = clone $objFactSist;
-    $objFactSist->ActualizarMontos();
-    $objResuComp = QObjectDiff::Compare($objFactAnte, $objFactSist);
-    if ($objResuComp->FriendlyComparisonStatus == 'different') {
-        m("Factura: $objFactSist->Referencia (Id: $objFactSist->Id)");
-        $intFactCamb++;
-        m(implode(', ',$objResuComp->DifferentFields),2);
-        //break;
-    }
-}
-m("Procesadas: $intFactProc, con Cambios: $intFactCamb");
+//m("Iniciando actualización de las facturas");
+//m("=======================================",2);
+//$objClauWher   = QQ::Clause();
+//$objClauWher[] = QQ::NotEqual(QQN::Facturas()->Estatus,"ANULADA");
+//$objClauWher[] = QQ::IsNull(QQN::Facturas()->ClienteRetailId);
+//$objClauWher[] = QQ::NotEqual(QQN::Facturas()->ClienteCorpId, 1702);
+//$objClauWher[] = QQ::GreaterOrEqual(QQN::Facturas()->Fecha, '2022-01-01');
+//$objClauOrde   = QQ::OrderBy(QQN::Facturas()->Id,false);
+//$arrFactSist   = Facturas::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+//$intCantFact   = count($arrFactSist);
+//$intFactProc   = 0;
+//$intFactCamb   = 0;
+//m("Se van a procesar $intCantFact facturas",2);
+//foreach ($arrFactSist as $objFactSist) {
+//    $intFactProc++;
+//    $objFactAnte = clone $objFactSist;
+//    $objFactSist->ActualizarMontos();
+//    $objResuComp = QObjectDiff::Compare($objFactAnte, $objFactSist);
+//    if ($objResuComp->FriendlyComparisonStatus == 'different') {
+//        m("Factura: $objFactSist->Referencia (Id: $objFactSist->Id)");
+//        $intFactCamb++;
+//        m(implode(', ',$objResuComp->DifferentFields),2);
+//        //break;
+//    }
+//}
+//m("Procesadas: $intFactProc, con Cambios: $intFactCamb");
 
 //-------------------------
 // Validando datos Mobile

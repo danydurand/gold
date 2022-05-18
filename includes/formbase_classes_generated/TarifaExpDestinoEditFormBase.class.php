@@ -58,6 +58,7 @@ abstract class TarifaExpDestinoEditFormBase extends QForm {
 	protected $lstDestino;
 	protected $txtMonto;
 	protected $txtMinimo;
+	protected $calFechaVigencia;
 	protected $calCreatedAt;
 	protected $lstCreatedByObject;
 	protected $calUpdatedAt;
@@ -133,6 +134,7 @@ abstract class TarifaExpDestinoEditFormBase extends QForm {
 		$this->lstDestino = $this->mctTarifaExpDestino->lstDestino_Create();
 		$this->txtMonto = $this->mctTarifaExpDestino->txtMonto_Create();
 		$this->txtMinimo = $this->mctTarifaExpDestino->txtMinimo_Create();
+		$this->calFechaVigencia = $this->mctTarifaExpDestino->calFechaVigencia_Create();
 		$this->calCreatedAt = $this->mctTarifaExpDestino->calCreatedAt_Create();
 		$this->lstCreatedByObject = $this->mctTarifaExpDestino->lstCreatedByObject_Create();
 		$this->calUpdatedAt = $this->mctTarifaExpDestino->calUpdatedAt_Create();

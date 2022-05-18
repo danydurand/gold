@@ -502,7 +502,11 @@
                 //--------------------------------------------------------
                 // No es una Aliado, se utiliza la Tarifa Publica de EXP
                 //--------------------------------------------------------
-                $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
+                $arrTariProd = TarifaExp::TarifaVigente(
+                    $this->ProductoId,
+                    $this->Fecha->__toString('YYYY-MM-DD'),
+                    $this->DestinoId
+                );
             } else {
                 t('La guia pertenece a un Aliado');
                 //---------------------------------------------------------------------------------
@@ -514,16 +518,16 @@
                 $arrTariClie   = TarifaCliente::QueryArray(QQ::AndCondition($objClauWher));
                 if (isset($arrTariClie)) {
                     t('El vector de TarifaCliente tiene: '.count($arrTariClie).' elementos');
-                    $objTariProd   = $arrTariClie[0];
-                    $arrTariProd['monto']  = $objTariProd->TarifaExp->Monto;
-                    $arrTariProd['minimo'] = $objTariProd->TarifaExp->Minimo;
+                    $objTariProd = $arrTariClie[0];
+                    $arrTariProd = TarifaExp::TarifaVigenteAliado($this->ProductoId,$this->ClienteCorpId,$this->Fecha->__toString('YYYY-MM-DD'),$this->DestinoId);
                 } else {
                     t('No se encontro la tarifa del Cliente-Aliado, se aplica tarifa publica');
-                    $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'));
+                    $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId,$this->Fecha->__toString('YYYY-MM-DD'), $this->DestinoId);
                 }
             }
-            $decMontTari = $arrTariProd['monto'];
-            $decPesoMini = $arrTariProd['minimo'];
+            $decMontTari = (float)$arrTariProd['monto'];
+            $decPesoMini = (float)$arrTariProd['minimo'];
+            t("Monto de la Tarifa: $decMontTari, Peso Minimo: $decPesoMini");
             switch ($concepto->ActuaSobre) {
                 case 'kilos':
                     $decPesoTari = $this->Kilos;

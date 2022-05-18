@@ -26,6 +26,8 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     protected $strPassUsua;
     protected $lblPermUsua;
     protected $dtgPermUsua;
+    protected $btnMasxAcci;
+    protected $strAcciAdic;
 
     // Override Form Event Handlers as Needed
     protected function Form_Run() {
@@ -36,13 +38,35 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         QApplication::CheckRemoteAdmin();
     }
 
+    protected function Setup() {
+        $this->mctUsuario = UsuarioMetaControl::CreateFromPathInfo($this);
+        if (strlen(QApplication::PathInfo(1))) {
+            $this->strAcciAdic = QApplication::PathInfo(1);
+        }
+    }
+
     //	protected function Form_Load() {}
+
+    protected function FlashMessage() {
+        if (isset($_SESSION['FlashMessage'])) {
+            list($strTipoMens, $strTextMens) = $_SESSION['FlashMessage'];
+            $this->$strTipoMens($strTextMens);
+            unset($_SESSION['FlashMessage']);
+        }
+    }
+
+
     protected function Form_Create() {
         parent::Form_Create();
 
+        $this->Setup();
+
+        $this->FlashMessage();
+
         // Use the CreateFromPathInfo shortcut (this can also be done manually using the UsuarioMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctUsuario = UsuarioMetaControl::CreateFromPathInfo($this);
+
+//        $this->mctUsuario = UsuarioMetaControl::CreateFromPathInfo($this);
 
         // Call MetaControl's methods to create qcontrols based on Usuario's data fields
         $this->lblCodiUsua = $this->mctUsuario->lblCodiUsua_Create();
@@ -108,6 +132,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $this->lstCajero = $this->mctUsuario->lstCajero_Create();
         $this->btnReseClav_Create();
         $this->btnMasxOpci_Create();
+        $this->btnMasxAcci_Create();
 
         $this->btnLogxCamb->Visible = false;
 
@@ -136,11 +161,56 @@ class UsuarioEditForm extends UsuarioEditFormBase {
 
         $this->txtMotiBloq   = disableControl($this->txtMotiBloq);
         $this->chkSupervisor = disableControl($this->chkSupervisor);
+
+        if (strlen($this->strAcciAdic) > 0) {
+            switch ($this->strAcciAdic) {
+                case 'resetea-clave':
+                    $this->btnReseClav_Click();
+                    break;
+                case 'establecer-clave':
+                    $this->establecerClave();
+                    break;
+                case 'historico':
+                    $this->btnLogxCamb_Click();
+                    break;
+                default:
+                    $this->danger("Accion: ".$this->strAcciAdic." no especificada");
+            }
+        }
     }
 
     //----------------------------
     // Aquí se Crean los Objetos
     //----------------------------
+
+    protected function btnMasxAcci_Create() {
+        $this->btnMasxAcci = new QLabel($this);
+        $this->btnMasxAcci->HtmlEntities = false;
+        $this->btnMasxAcci->CssClass = '';
+
+        $strTextBoto   = TextoIcono('cog fa-fw','Más');
+        $arrOpciDrop   = array();
+
+        if ($this->mctUsuario->EditMode) {
+            $intCodiUsua = $this->mctUsuario->Usuario->CodiUsua;
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/usuario_edit.php/'.$intCodiUsua.'/resetea-clave',
+                TextoIcono(__iRESE__,'Resetear Clave')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/usuario_edit.php/'.$intCodiUsua.'/establecer-clave',
+                TextoIcono(__iCHEC__,'Establecer Clave')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/usuario_edit.php/'.$intCodiUsua.'/historico',
+                TextoIcono(__iHIST__,'Historico')
+            );
+        }
+
+        $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
+        $this->btnMasxAcci->Visible  = $this->mctUsuario->EditMode;
+    }
+
 
     protected function lblPermUsua_Create() {
         $this->lblPermUsua = new QLabel($this);
@@ -237,7 +307,6 @@ class UsuarioEditForm extends UsuarioEditFormBase {
 
     protected function btnLogxCamb_Create() {
         $this->btnLogxCamb = new QButton($this);
-        // $this->btnLogxCamb->Text = '<i class="fa fa-file-text-o fa-lg"></i> Hist';
         $this->btnLogxCamb->Text = TextoIcono(__iHIST__,'Hist','F','lg');
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
@@ -253,6 +322,10 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
+
+    public function establecerClave() {
+        QApplication::Redirect(__SIST__.'/establecer_clave.php/'.$this->mctUsuario->Usuario->CodiUsua);
+    }
 
     public function crearLogin() {
         $strNombUsua = $this->txtNombUsua->Text;
@@ -389,12 +462,16 @@ class UsuarioEditForm extends UsuarioEditFormBase {
             return;
         }
         $strPassUsua = generarCodigo();
-        $this->mctUsuario->Usuario->resetearClave($strPassUsua);
+        list($strTipoMens, $strMensUsua) = $this->mctUsuario->Usuario->resetearClave($strPassUsua);
         $this->txtCantInte->Text = $this->mctUsuario->Usuario->CantInte;
         $this->calFechClav->DateTime = new QDateTime($this->mctUsuario->Usuario->FechClav);
         $this->txtMotiBloq->Text = $this->mctUsuario->Usuario->MotiBloq;
         $this->lstCodiStatObject->SelectedIndex = $this->mctUsuario->Usuario->CodiStat;
-        $this->success('Clave Re-seteada! | El Usuario recibirá un correo con las nuevas credenciales');
+        if ($strTipoMens == 'success') {
+            $strMensUsua .= ' | El Usuario recibirá un correo con las nuevas credenciales';
+        }
+        $_SESSION['FlashMessage'] = [$strTipoMens, $strMensUsua];
+        QApplication::Redirect(__SIST__.'/usuario_edit.php/'.$this->mctUsuario->Usuario->CodiUsua);
     }
 
 

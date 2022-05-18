@@ -101,29 +101,49 @@ try {
                     <table style="width: 100%; border: solid .5mm;">
                         <tr style="background-color: #CCC; font-weight: bold">
                             <td style="width: 55px; text-align: center">GUIA</td>
-                            <td style="width: 185px; text-align: left">CONTENIDO</td>
+                            <td style="width: 160px; text-align: left">CONTENIDO</td>
                             <td style="width: 38px; text-align: center">DEST</td>
                             <td style="width: 35px; text-align: center">PRD</td>
                             <td style="width: 30px; text-align: center">KG</td>
                             <td style="width: 30px; text-align: center">PZS</td>
-                            <td style="width: 95px; text-align: center">A x A x L PL</td>
-                            <td style="width: 70px; text-align: center">A x A x L CM</td>
+                            <td style="width: 95px; text-align: center">A x A x L (PL)</td>
+                            <td style="width: 95px; text-align: center">A x A x L (CM)</td>
                             <td style="width: 32px; text-align: center">PIES3</td>
                             <td style="width: 60px; text-align: right">MONTO</td>
                         </tr>
                         <?php foreach ($arrGuiaFact as $objGuiaFact) { ?>
-                        <tr>
-                            <td style="width: 55px; text-align: center"><?= $objGuiaFact->Guia->Numero ?></td>
-                            <td style="width: 185px; text-align: left"><?= $objGuiaFact->Guia->Contenido ?></td>
-                            <td style="width: 38px; text-align: center"><?= $objGuiaFact->Guia->Destino->Iata ?></td>
-                            <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Producto->Codigo ?></td>
-                            <td style="width: 30px; text-align: center"><?= $objGuiaFact->Guia->Kilos ?></td>
-                            <td style="width: 30px; text-align: center"><?= $objGuiaFact->Guia->Piezas ?></td>
-                            <td style="width: 95px; text-align: center"><?= $objGuiaFact->Guia->__medidasPl() ?></td>
-                            <td style="width: 70px; text-align: center"><?= $objGuiaFact->Guia->__medidas() ?></td>
-                            <td style="width: 32px; text-align: center"><?= $objGuiaFact->Guia->PiesCub ?></td>
-                            <td style="width: 60px; text-align: right"><?= nf($objGuiaFact->Guia->Total) ?></td>
-                        </tr>
+                            <tr>
+                                <td style="width: 55px; text-align: center"><?= $objGuiaFact->Guia->Numero ?></td>
+                                <td style="width: 160px; text-align: left; word-wrap: break-spaces"><?= $objGuiaFact->Guia->Contenido ?></td>
+                                <td style="width: 38px; text-align: center"><?= $objGuiaFact->Guia->Destino->Iata ?></td>
+                                <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Producto->Codigo ?></td>
+                                <td style="width: 30px; text-align: center"><?= $objGuiaFact->Guia->Kilos ?></td>
+                                <td style="width: 30px; text-align: center"><?= $objGuiaFact->Guia->Piezas ?></td>
+                                <td style="width: 95px; text-align: center"><?= $objGuiaFact->Guia->__medidasPl() ?></td>
+                                <td style="width: 95px; text-align: center"><?= $objGuiaFact->Guia->__medidas() ?></td>
+                                <td style="width: 32px; text-align: center"><?= $objGuiaFact->Guia->PiesCub ?></td>
+                                <td style="width: 60px; text-align: right"><?= nf($objGuiaFact->Guia->Total) ?></td>
+                            </tr>
+                            <?php if ($objGuiaFact->Guia->Piezas > 1) { ?>
+                                <tr style="background-color: #CCC; font-weight: bold">
+                                    <td style="" colspan="10">Piezas</td>
+                                </tr>
+                                <?php $arrPiezGuia = $objGuiaFact->Guia->GetGuiaPiezasAsGuiaArray(); ?>
+                                <?php foreach ($arrPiezGuia as $objPiezGuia) { ?>
+                                    <tr>
+                                        <td style="width: 55px; text-align: center"></td>
+                                        <td style="width: 150px; text-align: left; word-wrap: break-spaces"><?= $objPiezGuia->Descripcion ?></td>
+                                        <td style="width: 38px; text-align: center"></td>
+                                        <td style="width: 35px; text-align: center"></td>
+                                        <td style="width: 30px; text-align: center"><?= $objPiezGuia->Kilos ?></td>
+                                        <td style="width: 30px; text-align: center"></td>
+                                        <td style="width: 95px; text-align: center"><?= $objPiezGuia->__medidasPl() ?></td>
+                                        <td style="width: 70px; text-align: center"><?= $objPiezGuia->__medidas() ?></td>
+                                        <td style="width: 32px; text-align: center"></td>
+                                        <td style="width: 60px; text-align: right"></td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } ?>
                         <?php } ?>
                     </table>
                 </td>

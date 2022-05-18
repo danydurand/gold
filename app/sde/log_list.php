@@ -154,8 +154,14 @@ class LogListForm extends LogListFormBase {
 	}
 
     public function btnLogxReto_Click() {
-        $objUltiAcce = PilaAcceso::Pop('D');
-        QApplication::Redirect(__SIST__."/".$objUltiAcce->__toString());
+		$objUltiAcce = PilaAcceso::Pop('D');
+		if (isset($_SESSION['RegiReto'])) {
+			$strPagiRegi = $_SESSION['RegiReto'];
+			unset($_SESSION['RegiReto']);
+		} else {
+			$strPagiRegi = $objUltiAcce->__toString();
+		}
+        QApplication::Redirect(__SIST__."/$strPagiRegi");
     }
 }
 

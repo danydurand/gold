@@ -46,21 +46,33 @@
         }
 
 		public function resetearClave($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
-            $this->PassUsua = md5($strPassUsua);
-            $this->FechClav = new QDateTime("2010-01-01");
-            $this->CantInte = 0;
-            $this->CodiStat = 1;
-            $this->MotiBloq = '';
-            $this->Save();
-            //-------------------------------------
-            // Se deja constancia en el Histórico
-            //-------------------------------------
-            $arrLogxCamb['strNombTabl'] = 'Usuario';
-            $arrLogxCamb['intRefeRegi'] = $this->CodiUsua;
-            $arrLogxCamb['strNombRegi'] = $this->LogiUsua;
-            $arrLogxCamb['strDescCamb'] = "Clave Reseteada";
-            LogDeCambios($arrLogxCamb);
-            $this->RedactarEmailPassword($strPassUsua,$strUrlxSist,$strNombSist);
+		    $arrResuCamb = ['success','Clave Reseteada'];
+		    try {
+		        $strPassUsua    = strtolower($strPassUsua);
+                $this->PassUsua = md5($strPassUsua);
+                $this->FechClav = new QDateTime("2010-01-01");
+                $this->CantInte = 0;
+                $this->CodiStat = 1;
+                $this->MotiBloq = '';
+                $this->Save();
+                //-------------------------------------
+                // Se deja constancia en el Histórico
+                //-------------------------------------
+                $arrLogxCamb['strNombTabl'] = 'Usuario';
+                $arrLogxCamb['intRefeRegi'] = $this->CodiUsua;
+                $arrLogxCamb['strNombRegi'] = $this->LogiUsua;
+                $arrLogxCamb['strDescCamb'] = "Clave Reseteada";
+                LogDeCambios($arrLogxCamb);
+                //------------------------------------------------
+                // Send the Message only in the production sever
+                //------------------------------------------------
+                if ($_SERVER['SERVER_NAME'] != 'gold.dev.com') {
+                    $this->RedactarEmailPassword($strPassUsua, $strUrlxSist, $strNombSist);
+                }
+            } catch (Exception $e) {
+		        $arrResuCamb = ['danger',$e->getMessage()];
+            }
+            return $arrResuCamb;
         }
 
         protected function RedactarEmailPassword($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
@@ -75,7 +87,7 @@
 
             // Also setup HTML message (optional)
             $strBody  = 'Estimado Usuario,<p><br>';
-            $strBody .= 'Desde el Sistema '.$strNombSist.', el personal autorizado ha registrado ';
+            $strBody .= 'El '.$strNombSist.' ha registrado ';
             $strBody .= 'un cambio de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br>';
             $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b><br>';
             if (strlen($strUrlxSist)) {
@@ -97,7 +109,6 @@
             $mixErroOrig = error_reporting();
             error_reporting(0);
             try {
-                // Send the Message (Commented out for obvious reasons)
                 QEmailServer::Send($objMessage);
             } catch (Exception $e) {
                 $objProcEjec = CrearProceso('Correo Reseteo de Clave',true);

@@ -115,7 +115,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
 
         $this->btnExclFact_Create();
 
-
+        $this->aceptarValores(false);
 	}
 
 	//----------------------------
@@ -159,13 +159,30 @@ class RegistrarPago extends PagosCorpEditFormBase {
 
     protected function btnExclFact_Create() {
         $this->btnExclFact = new QButtonP($this);
-        $this->btnExclFact->Text = TextoIcono('times-circle','Excl-Fact','F','lg');
-        //$this->btnExclFact->Visible = false;
+        $this->btnExclFact->Text = TextoIcono('times-circle','Excluir-Fact','F','lg');
         $this->btnExclFact->AddAction(new QClickEvent(), new QAjaxAction('btnExclFact_Click'));
     }
 
     protected function btnCancAbon_Click() {
         $this->editarAbono();
+    }
+
+    protected function aceptarValores($blnAcepValo=true) {
+        if ($blnAcepValo) {
+            $this->lstFormaPago    = enableControl($this->lstFormaPago);
+            $this->calFecha        = enableControl($this->calFecha);
+            $this->txtMontAbon     = enableControl($this->txtMontAbon);
+            $this->lstNotaCred     = enableControl($this->lstNotaCred);
+            $this->txtReferencia   = enableControl($this->txtReferencia);
+            $this->txtObservacion  = enableControl($this->txtObservacion);
+        } else {
+            $this->lstFormaPago    = disableControl($this->lstFormaPago);
+            $this->calFecha        = disableControl($this->calFecha);
+            $this->txtMontAbon     = disableControl($this->txtMontAbon);
+            $this->lstNotaCred     = disableControl($this->lstNotaCred);
+            $this->txtReferencia   = disableControl($this->txtReferencia);
+            $this->txtObservacion  = disableControl($this->txtObservacion);
+        }
     }
 
     protected function btnSaveAbon_Click() {
@@ -201,7 +218,13 @@ class RegistrarPago extends PagosCorpEditFormBase {
             if ($objNotaCred instanceof NotaCreditoCorp) {
                 $this->txtReferencia->Text = $objNotaCred->Referencia;
                 $this->txtMonto->Text      = $objNotaCred->Monto;
-                $this->txtMonto = disableControl($this->txtMonto);
+                $this->txtMonto            = disableControl($this->txtMonto);
+//                $this->info('Monto a Pagar: '.$objNotaCred->Monto);
+                //-------------------------------------------------------------
+                // El monto de la nota de credito sera el monto abonado a la
+                // de la 1era factura que haya seleccionado el Usuario
+                //-------------------------------------------------------------
+                $this->establecerMontoPrimerPago($objNotaCred->Monto);
             } else {
                 t('La ndc no existe');
                 $this->danger('No existe la Nota de Crédito');
@@ -224,12 +247,13 @@ class RegistrarPago extends PagosCorpEditFormBase {
         foreach ($this->arrNotaClie as $objNotaCred) {
             $this->lstNotaCred->AddItem($objNotaCred->__toStringConMonto(), $objNotaCred->Id, $blnSeleRegi);
             if ($blnSeleRegi) {
-                t('Registro seleccinado por defecto');
+                t('Registro seleccionado por defecto');
                 $this->txtReferencia->Text = $objNotaCred->Referencia;
                 t('Referencia: '.$this->txtReferencia->Text);
                 $this->txtMonto->Text = $objNotaCred->__Monto();
                 $this->txtMonto = disableControl($this->txtMonto);
                 $this->txtReferencia = disableControl($this->txtReferencia);
+                $this->lstNotaCred_Change();
             }
         }
         $this->lstNotaCred->Visible = true;
@@ -311,8 +335,6 @@ class RegistrarPago extends PagosCorpEditFormBase {
 
         } catch (Exception $e) {
             t('Excepcion: '.$e->getMessage());
-        } catch (Error $e) {
-            t('Error: '.$e->getMessage());
         }
 
         $this->dtgFactPaga->Refresh();
@@ -321,7 +343,23 @@ class RegistrarPago extends PagosCorpEditFormBase {
 	    sleep(1);
 
         $this->actualizarMontoDelPago();
+        if ($this->contarFacturasSeleccionadas() > 0) {
+            $this->aceptarValores(true);
+        }
+    }
 
+    protected function establecerMontoPrimerPago($decMontPago) {
+	    t('voy a establecer el monto del 1er pago igual al monto de la ndc');
+        $objClauWher[] = QQ::Equal(QQN::FactPagoTemp()->ProcesoId,$this->objProcEjec->Id);
+        $arrPagoTemp   = FactPagoTemp::QueryArray(QQ::AndCondition($objClauWher));
+        if ($arrPagoTemp) {
+            t('tengo el vecto de facturas que seran pagadas');
+            t('La primera factura es: '.$arrPagoTemp[0]->Factura->Referencia);
+            $arrPagoTemp[0]->establecerMontoAbono($decMontPago);
+        }
+        t('Voy a actualizar el monto del pago');
+        $this->actualizarMontoDelPago();
+        $this->dtgFactPaga->Refresh();
     }
 
     protected function actualizarMontoDelPago() {
@@ -467,7 +505,6 @@ class RegistrarPago extends PagosCorpEditFormBase {
             foreach ($arrFactTemp as $objFactTemp) {
                 $objFactTemp->Delete();
             }
-
             $this->dtgFactPaga->Refresh();
             $this->dtgFactClie->Refresh();
             sleep(1);
@@ -480,9 +517,17 @@ class RegistrarPago extends PagosCorpEditFormBase {
             $decTotaPaga = str_replace(',','.',nf($decTotaPaga));
             $this->info('Monto a Pagar: '.$decTotaPaga);
             $this->txtMonto->Text = $decTotaPaga;
+            if ($this->contarFacturasSeleccionadas() == 0) {
+                $this->aceptarValores(false);
+            }
         } else {
             $this->warning('Seleccione Facturas p/excluir del Pago');
         }
+    }
+
+    protected function contarFacturasSeleccionadas() {
+        $objClauWher[] = QQ::Equal(QQN::FactPagoTemp()->ProcesoId,$this->objProcEjec->Id);
+        return FactPagoTemp::QueryCount(QQ::AndCondition($objClauWher));
     }
 
     protected function dtgFactClie_Create() {
@@ -784,7 +829,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
             $objNotaCred = NotaCreditoCorp::Load($this->lstNotaCred->SelectedValue);
             if ($objNotaCred instanceof NotaCreditoCorp) {
                 t('Encontre la NDC y la voy a aplicar');
-                $objNotaCred->Estatus = 'APLICADA';
+                $objNotaCred->Estatus          = 'APLICADA';
                 $objNotaCred->AplicadaEnPagoId = $this->mctPagosCorp->PagosCorp->Id;
                 $objNotaCred->UpdatedAt        = new QDateTime(QDateTime::Now());
                 $objNotaCred->UpdatedBy        = $this->objUsuario->CodiUsua;

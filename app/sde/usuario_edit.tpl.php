@@ -22,7 +22,8 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             <?php $this->btnDelete->Render(); ?>
             <?php $this->btnLogxCamb->Render(); ?>
             <?php $this->btnReseClav->Render(); ?>
-            <?php $this->btnMasxOpci->Render(); ?>
+            <?php $this->btnMasxAcci->Render(); ?>
+<!--            --><?php //$this->btnMasxOpci->Render(); ?>
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-4 pull-right" style="text-align: right; padding-right: 3px; margin-top: -0.25em">
             <?php $this->btnPrimRegi->Render(); ?>

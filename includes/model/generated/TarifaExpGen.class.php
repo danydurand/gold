@@ -20,8 +20,8 @@
 	 * @property integer $ProductoId the value for intProductoId (Not Null)
 	 * @property boolean $IsPublica the value for blnIsPublica 
 	 * @property QDateTime $Fecha the value for dttFecha (Not Null)
-	 * @property double $Monto the value for fltMonto (Not Null)
-	 * @property double $Minimo the value for fltMinimo (Not Null)
+	 * @property double $Monto the value for fltMonto 
+	 * @property double $Minimo the value for fltMinimo 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property integer $CreatedBy the value for intCreatedBy 
@@ -1330,14 +1330,14 @@
 
 				case 'Monto':
 					/**
-					 * Gets the value for fltMonto (Not Null)
+					 * Gets the value for fltMonto 
 					 * @return double
 					 */
 					return $this->fltMonto;
 
 				case 'Minimo':
 					/**
-					 * Gets the value for fltMinimo (Not Null)
+					 * Gets the value for fltMinimo 
 					 * @return double
 					 */
 					return $this->fltMinimo;
@@ -1552,7 +1552,7 @@
 
 				case 'Monto':
 					/**
-					 * Sets the value for fltMonto (Not Null)
+					 * Sets the value for fltMonto 
 					 * @param double $mixValue
 					 * @return double
 					 */
@@ -1565,7 +1565,7 @@
 
 				case 'Minimo':
 					/**
-					 * Sets the value for fltMinimo (Not Null)
+					 * Sets the value for fltMinimo 
 					 * @param double $mixValue
 					 * @return double
 					 */

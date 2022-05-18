@@ -67,30 +67,56 @@ class NotaCreditoCorpListForm extends NotaCreditoCorpListFormBase {
 
 		// Create the Other Columns (note that you can use strings for nota_credito_corp's properties, or you
 		// can traverse down QQN::nota_credito_corp() to display fields that are down the hierarchy)
-		$this->dtgNotaCreditoCorps->MetaAddColumn('Id');
-		$this->dtgNotaCreditoCorps->MetaAddColumn('Referencia');
-		$this->dtgNotaCreditoCorps->MetaAddColumn('Tipo');
-		$this->dtgNotaCreditoCorps->MetaAddColumn(QQN::NotaCreditoCorp()->ClienteCorp);
-		$this->dtgNotaCreditoCorps->MetaAddColumn(QQN::NotaCreditoCorp()->PagoCorp);
-		$this->dtgNotaCreditoCorps->MetaAddColumn(QQN::NotaCreditoCorp()->Factura);
+		$this->dtgNotaCreditoCorps->MetaAddColumn('Id','Width=35');
+		$this->dtgNotaCreditoCorps->MetaAddColumn('Referencia', 'Width=60');
+		$this->dtgNotaCreditoCorps->MetaAddColumn('Tipo', 'Width=70');
+
+		$colNombClie = new QDataGridColumn('CLIENTE','<?= $_FORM->NombClie_Render($_ITEM); ?>');
+		$colNombClie->Width = 130;
+		$this->dtgNotaCreditoCorps->AddColumn($colNombClie);
+
+		$colPagoCorp = new QDataGridColumn('PAGO','<?= $_FORM->PagoCorp_Render($_ITEM); ?>');
+		$colPagoCorp->Width = 160;
+		$this->dtgNotaCreditoCorps->AddColumn($colPagoCorp);
+
+		$this->dtgNotaCreditoCorps->MetaAddColumn(QQN::NotaCreditoCorp()->Factura, 'Width=70');
         $colFechNota = new QDataGridColumn('FECHA','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY"); ?>');
+        $colFechNota->Width = 80;
         $this->dtgNotaCreditoCorps->AddColumn($colFechNota);
+
         $colMontNota = new QDataGridColumn('MONTO','<?= nf($_ITEM->Monto); ?>');
+        $colMontNota->Width = 50;
         $this->dtgNotaCreditoCorps->AddColumn($colMontNota);
-		$this->dtgNotaCreditoCorps->MetaAddColumn('Estatus');
-		$this->dtgNotaCreditoCorps->MetaAddColumn('Observacion');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('Numero');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('MaquinaFiscal');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('FechaImpresion');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('HoraImpresion');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('CreatedAt');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('UpdatedAt');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('CreatedBy');
-		//$this->dtgNotaCreditoCorps->MetaAddColumn('UpdatedBy');
+
+        $colEstaNota = new QDataGridColumn('ESTATUS','<?= $_FORM->EstaNota_Render($_ITEM); ?>');
+        $colEstaNota->Width = 50;
+        $colEstaNota->HtmlEntities = false;
+        $this->dtgNotaCreditoCorps->AddColumn($colEstaNota);
+
+		$colObseNota = new QDataGridColumn('OBSERVACION','<?= $_FORM->ObseNota_Render($_ITEM); ?>');
+		$colObseNota->Width = 90;
+		$this->dtgNotaCreditoCorps->AddColumn($colObseNota);
 
         $this->btnExpoExce_Create();
 
     }
+
+    public function NombClie_Render(NotaCreditoCorp $objNotaCred) {
+		return $objNotaCred->ClienteCorp->__toStringCorto();
+	}
+
+    public function PagoCorp_Render(NotaCreditoCorp $objNotaCred) {
+		return $objNotaCred->PagoCorp->__toStringCorto();
+	}
+
+    public function EstaNota_Render(NotaCreditoCorp $objNotaCred) {
+		$strColoEtiq = $objNotaCred->Estatus == 'DISPONIBLE' ? 'green' : 'blue';
+		return "<span style='color: $strColoEtiq'>$objNotaCred->Estatus</span>";
+	}
+
+    public function ObseNota_Render(NotaCreditoCorp $objNotaCred) {
+		return substr($objNotaCred->Observacion,0,15);
+	}
 
 	public function dtgNotaCreditoCorpsRow_Click($strFormId, $strControlId, $strParameter) {
         $intId = intval($strParameter);

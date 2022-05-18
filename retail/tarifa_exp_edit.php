@@ -21,6 +21,22 @@ require_once(__FORMBASE_CLASSES__ . '/TarifaExpEditFormBase.class.php');
  * @subpackage Drafts
  */
 class TarifaExpEditForm extends TarifaExpEditFormBase {
+    protected $dtgTariDest;
+    protected $lstTariDest;
+    protected $txtMontTari;
+    protected $txtMontMini;
+    protected $calFechVige;
+    protected $btnSaveTari;
+    protected $btnDeleTari;
+    protected $btnAgreTari;
+
+    protected $lblTariDest;
+    protected $lblMontTari;
+    protected $lblMontMini;
+    protected $lblFechVige;
+    protected $lblAcciTari;
+    protected $intTariIdxx;
+
 
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
@@ -49,24 +65,144 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
 		$this->txtMonto     = $this->mctTarifaExp->txtMonto_Create();
 		$this->txtMinimo    = $this->mctTarifaExp->txtMinimo_Create();
 		$this->txtMinimo->Name = 'Peso Mínimo';
-		//$this->lblCreatedAt = $this->mctTarifaExp->lblCreatedAt_Create();
-		//$this->lblUpdatedAt = $this->mctTarifaExp->lblUpdatedAt_Create();
-		//$this->txtCreatedBy = $this->mctTarifaExp->txtCreatedBy_Create();
-		//$this->txtCreatedBy = disableControl($this->txtCreatedBy);
-        //$this->txtUpdatedBy = $this->mctTarifaExp->txtUpdatedBy_Create();
-        //$this->txtUpdatedBy = disableControl($this->txtUpdatedBy);
+	
+        if ($this->mctTarifaExp->EditMode) {
+            $this->lblTariDest_Create();
+            $this->lblMontTari_Create();
+            $this->lblMontMini_Create();
+            $this->lblFechVige_Create();
+            $this->lblAcciTari_Create();
 
-        //if (!$this->mctTarifaExp->EditMode) {
-		//    $this->txtCreatedBy->Text = $this->objUsuario->CodiUsua;
-        //} else {
-        //    $this->txtUpdatedBy->Text = $this->objUsuario->CodiUsua;
-        //}
+            $this->dtgTariDest_Create();
+            $this->lstTariDest_Create();
+            $this->txtMontTari_Create();
+            $this->txtMontMini_Create();
+            $this->calFechVige_Create();
+            $this->btnSaveTari_Create();
+            $this->btnDeleTari_Create();
+        }
 
-	}
+
+    }
 
 	//----------------------------
 	// Aqui se crean los objetos 
 	//----------------------------
+
+    protected function dtgTariDest_Create() {
+
+        // Instantiate the Meta DataGrid
+        $this->dtgTariDest = new TarifaExpDestinoDataGrid($this);
+        $this->dtgTariDest->FontSize = 13;
+        $this->dtgTariDest->ShowFilter = false;
+
+        // Style the DataGrid (if desired)
+        $this->dtgTariDest->CssClass = 'datagrid';
+        $this->dtgTariDest->AlternateRowStyle->CssClass = 'alternate';
+
+        // Add Pagination (if desired)
+        $this->dtgTariDest->Paginator = new QPaginator($this->dtgTariDest);
+        $this->dtgTariDest->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+
+        // Higlight the datagrid rows when mousing over them
+        $this->dtgTariDest->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgTariDest->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
+        $objClauWher[] = QQ::Equal(QQN::TarifaExpDestino()->TarifaId, $this->mctTarifaExp->TarifaExp->Id);
+        $this->dtgTariDest->AdditionalConditions = QQ::AndCondition($objClauWher);
+
+        // Add a click handler for the rows.
+        // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
+        // or $_ITEM->Id to pass the object's id, or any other data grid variable
+        $this->dtgTariDest->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgTariDest->AddRowAction(new QClickEvent(), new QAjaxAction('dtgTariDestRow_Click'));
+
+        // Use the MetaDataGrid functionality to add Columns for this datagrid
+
+        // Create the Other Columns (note that you can use strings for tarifa_aliados's properties, or you
+        // can traverse down QQN::tarifa_aliados() to display fields that are down the hierarchy)
+        $this->dtgTariDest->MetaAddColumn('Id');
+        $this->dtgTariDest->MetaAddColumn(QQN::TarifaExpDestino()->Destino);
+        $this->dtgTariDest->MetaAddColumn('Monto');
+        $this->dtgTariDest->MetaAddColumn('Minimo');
+        $this->dtgTariDest->MetaAddColumn('FechaVigencia');
+        $this->dtgTariDest->MetaAddColumn('CreatedAt','Name=F.Creacion');
+        $colUsuaCrea = new QDataGridColumn('CREAD@ POR','<?= $_ITEM->CreatedByObject->__toString() ?>');
+        $this->dtgTariDest->AddColumn($colUsuaCrea);
+
+    }
+
+    protected function lblTariDest_Create() {
+        $this->lblTariDest = new QLabel($this);
+        $this->lblTariDest->Text = 'Destino';
+    }
+
+    protected function lblMontTari_Create() {
+        $this->lblMontTari = new QLabel($this);
+        $this->lblMontTari->Text = 'Monto';
+    }
+
+    protected function lblMontMini_Create() {
+        $this->lblMontMini = new QLabel($this);
+        $this->lblMontMini->Text = 'P.Minimo';
+    }
+
+    protected function lblFechVige_Create() {
+        $this->lblFechVige = new QLabel($this);
+        $this->lblFechVige->Text = 'F.Vigencia';
+    }
+
+    protected function lblAcciTari_Create() {
+        $this->lblAcciTari = new QLabel($this);
+        $this->lblAcciTari->Text = 'Guardar';
+    }
+
+    protected function lstTariDest_Create() {
+        $this->lstTariDest = new QListBox($this);
+        $this->cargarDestinos();
+    }
+
+    protected function txtMontTari_Create() {
+        $this->txtMontTari = new QTextBox($this);
+        $this->txtMontTari->Width = 80;
+    }
+
+    protected function txtMontMini_Create() {
+        $this->txtMontMini = new QTextBox($this);
+        $this->txtMontMini->Width = 80;
+    }
+
+    protected function calFechVige_Create() {
+        $this->calFechVige = new QTextBox($this);
+        $this->calFechVige->Width = 80;
+    }
+
+    protected function cargarDestinos($intDestIdxx=null) {
+        $this->lstTariDest->RemoveAllItems();
+        $this->lstTariDest->AddItem('- Seleccione -', null);
+        $objClauOrde[] = QQ::OrderBy(QQN::Sucursales()->Nombre);
+        $arrDestExpo   = Sucursales::LoadSucursalesActivas('Nombre','exp');
+        foreach ($arrDestExpo as $objDestExpo) {
+            $blnSeleRegi = $intDestIdxx == $objDestExpo->Id;
+            $this->lstTariDest->AddItem($objDestExpo->__toString(), $objDestExpo->Id, $blnSeleRegi);
+        }
+        $this->lstTariDest->Width = 120;
+    }
+
+    protected function btnSaveTari_Create() {
+        $this->btnSaveTari = new QButtonS($this);
+        $this->btnSaveTari->Text = TextoIcono('save','','F','lg');
+        $this->btnSaveTari->AddAction(new QClickEvent(), new QAjaxAction('btnSaveTari_Click'));
+    }
+
+    protected function btnDeleTari_Create() {
+        $this->btnDeleTari = new QButtonD($this);
+        $this->btnDeleTari->Text = TextoIcono('trash','','F','lg');
+        $this->btnDeleTari->AddAction(new QClickEvent(), new QAjaxAction('btnDeleTari_Click'));
+        $this->btnDeleTari->Visible = false;
+    }
+
+
 
     protected function determinarPosicion() {
         if ($this->mctTarifaExp->TarifaExp && !isset($_SESSION['DataTarifaExp'])) {
@@ -102,6 +238,94 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
     //-----------------------------------
 	// Acciones relativas a los objetos 
 	//-----------------------------------
+
+    protected function dtgTariDestRow_Click($strFormId, $strControlId, $strParameter) {
+        $this->intTariIdxx = intval($strParameter);
+        $objTariDest = TarifaExpDestino::Load($this->intTariIdxx);
+        $this->cargarDestinos($objTariDest->DestinoId);
+        $this->txtMontTari->Text     = $objTariDest->Monto;
+        $this->txtMontMini->Text     = $objTariDest->Minimo;
+        $this->calFechVige->Text     = $objTariDest->FechaVigencia->__toString("DD/MM/YYYY");
+        $this->btnDeleTari->Visible  = true;
+        $this->lblAcciTari->Text     = 'Actualizar';
+    }
+
+    protected function btnDeleTari_Click() {
+        $objTariDest = TarifaExpDestino::Load($this->intTariIdxx);
+        if (isset($objTariDest)) {
+            $objTariDest->Delete();
+            $this->dtgTariDest->Refresh();
+            $this->btnDeleTari->Visible = false;
+            $this->lblAcciTari->Text = 'Guardar';
+            $this->limpiarCamposTarifa();
+            $this->mensaje();
+        }
+    }
+
+    protected function estaRepetido($intDestIdxx) {
+        $objClauWher[] = QQ::Equal(QQN::TarifaExpDestino()->TarifaId, $this->mctTarifaExp->TarifaExp->Id);
+        $objClauWher[] = QQ::Equal(QQN::TarifaExpDestino()->DestinoId, $intDestIdxx);
+        return TarifaExpDestino::QueryCount(QQ::AndCondition($objClauWher));
+    }
+
+
+    protected function btnSaveTari_Click() {
+        $this->mensaje();
+        $intDestIdxx = $this->lstTariDest->SelectedValue;
+        if (is_null($this->intTariIdxx)) {
+            //------------
+            // Insercion
+            //------------
+            if (!$this->estaRepetido($intDestIdxx)) {
+                try {
+                    $objTariDest = new TarifaExpDestino();
+                    $objTariDest->TarifaId      = $this->mctTarifaExp->TarifaExp->Id;
+                    $objTariDest->DestinoId     = $this->lstTariDest->SelectedValue;
+                    $objTariDest->Monto         = (float)$this->txtMontTari->Text;
+                    $objTariDest->Minimo        = (float)$this->txtMontMini->Text;
+                    $objTariDest->FechaVigencia = new QDateTime(transformaFecha($this->calFechVige->Text));
+                    $objTariDest->CreatedAt     = new QDateTime(QDateTime::Now);
+                    $objTariDest->CreatedBy     = $this->objUsuario->CodiUsua;
+                    $objTariDest->Save();
+                    $this->dtgTariDest->Refresh();
+                } catch (Exception $e) {
+                    t('Error: '.$e->getMessage());
+                    $this->danger('Error: '.$e->getMessage());
+                }
+            } else {
+                $this->danger('Ya existe una Tarifa para el Destino seleccionado');
+            }
+        } else {
+            //---------------
+            // Modificacion
+            //---------------
+            try {
+                $objTariDest = TarifaExpDestino::Load($this->intTariIdxx);
+                $objTariDest->TarifaId      = $this->mctTarifaExp->TarifaExp->Id;
+                $objTariDest->DestinoId     = $this->lstTariDest->SelectedValue;
+                $objTariDest->Monto         = (float)$this->txtMontTari->Text;
+                $objTariDest->Minimo        = (float)$this->txtMontMini->Text;
+                $objTariDest->FechaVigencia = new QDateTime(transformaFecha($this->calFechVige->Text));
+                $objTariDest->UpdatedAt     = new QDateTime(QDateTime::Now);
+                $objTariDest->UpdatedBy     = $this->objUsuario->CodiUsua;
+                $objTariDest->Save();
+                $this->btnDeleTari->Visible = false;
+                $this->dtgTariDest->Refresh();
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
+                $this->danger('Error: '.$e->getMessage());
+            }
+        }
+        $this->limpiarCamposTarifa();
+    }
+
+    protected function limpiarCamposTarifa() {
+        $this->cargarDestinos();
+        $this->txtMontTari->Text     = null;
+        $this->txtMontMini->Text     = null;
+        $this->calFechVige->Text = null;
+        $this->intTariIdxx           = null;
+    }
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
@@ -158,14 +382,14 @@ class TarifaExpEditForm extends TarifaExpEditFormBase {
             $this->danger('La Fecha de Vigencia es requerida');
             return false;
         }
-        if (strlen(trim($this->txtMonto->Text)) == 0) {
-            $this->danger('El Monto de la Tarifa es requerido');
-            return false;
-        }
-        if (strlen(trim($this->txtMinimo->Text)) == 0) {
-            $this->danger('El Peso Mínimo es requerido');
-            return false;
-        }
+//        if (strlen(trim($this->txtMonto->Text)) == 0) {
+//            $this->danger('El Monto de la Tarifa es requerido');
+//            return false;
+//        }
+//        if (strlen(trim($this->txtMinimo->Text)) == 0) {
+//            $this->danger('El Peso Mínimo es requerido');
+//            return false;
+//        }
         t('Sali por el true');
         return true;
     }

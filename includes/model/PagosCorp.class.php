@@ -27,6 +27,10 @@
 			return sprintf('%s',  $this->Referencia);
 		}
 
+		public function __toStringCorto($intCantCara=30) {
+			return sprintf('%s',  substr($this->Referencia,3,$intCantCara));
+		}
+
         public function ActualizarMontosDeLasFacturas() {
             //--------------------------------------------
             // Se obtiene las Facturas asociadas al Pago

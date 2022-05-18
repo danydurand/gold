@@ -68,16 +68,16 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="">Forma de Pago</label><br>
-                            <?php $this->lstFormaPago->Render(); ?>
+                            <label for="">Fecha del Pago</label><br>
+                            <?php $this->calFecha->Render(); ?>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="">Fecha del Pago</label><br>
-                            <?php $this->calFecha->Render(); ?>
+                            <label for="">Forma de Pago</label><br>
+                            <?php $this->lstFormaPago->Render(); ?>
                         </div>
                     </div>
                     <div class="col-md-6">

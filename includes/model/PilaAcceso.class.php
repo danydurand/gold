@@ -64,12 +64,13 @@
             if ($strNombProg == $strParaProg) {
                 $strParaProg = '';
             }
+            if ((strlen($strParaProg)) && (!is_numeric($strParaProg))) {
+                return;
+            }
             $objUltiAcce = PilaAcceso::Pop();
             $blnGrabRegi = (!$objUltiAcce || ($objUltiAcce->Programa != $strNombProg));
-            //t('Grabar ? '.$blnGrabRegi);
             if (!$blnGrabRegi) {
                 $blnGrabRegi = (($objUltiAcce->Programa == $strNombProg) && ($objUltiAcce->Parametros != $strParaProg));
-                //t('Grabar ? '.$blnGrabRegi);
             }
             if ($blnGrabRegi) {
                 $strLogiUsua = PilaAcceso::LoginUsuario();

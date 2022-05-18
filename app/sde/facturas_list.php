@@ -106,15 +106,34 @@ class FacturasListForm extends FacturasListFormBase {
         $colMontPend->HorizontalAlign = QHorizontalAlign::Right;
         $colMontPend->Width = 100;
 
-        $colEstaPago = $this->dtgFacturases->MetaAddColumn('EstatusPago');
+        $colEstaPago = new QDataGridColumn('ESTATUS PAGO','<?= $_FORM->EstaPago_Render($_ITEM) ?>');
         $colEstaPago->HorizontalAlign = QHorizontalAlign::Center;
+        $colEstaPago->HtmlEntities = false;
         $colEstaPago->Width = 120;
+        $this->dtgFacturases->AddColumn($colEstaPago);
 
         $this->btnMasxAcci_Create();
 
         $this->btnExpoExce_Create();
         $this->btnExpoExce->Visible = true;
 
+    }
+
+    public function EstaPago_Render(Facturas $objFactCorp) {
+	    switch ($objFactCorp->EstatusPago) {
+            case 'PENDIENTE':
+                $strColoEtiq = 'red';
+                break;
+            case 'PAGOPARCIAL':
+                $strColoEtiq = 'blue';
+                break;
+            case 'CONCILIADO':
+                $strColoEtiq = 'green';
+                break;
+            default:
+                $strColoEtiq = '';
+        }
+        return "<span style='color: $strColoEtiq'>$objFactCorp->EstatusPago</span>";
     }
 
     protected function btnMasxAcci_Create() {

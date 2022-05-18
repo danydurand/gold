@@ -2,6 +2,12 @@
 require_once('mimemail.inc.php');
 
 
+function transformaFecha($strTextFech) {
+    $arrPartFech = explode('/',$strTextFech);
+    list($dia, $mes, $anio) = [$arrPartFech[0], $arrPartFech[1], $arrPartFech[2]];
+    return "$anio-$mes-$dia";
+}
+
 function m($strTextMost, $intCantSalt=1) {
     $strSaltLine = '<br>';
     if ($intCantSalt > 1) {

@@ -83,6 +83,7 @@ abstract class TarifaExpDestinoListFormBase extends QForm {
         $this->dtgTarifaExpDestinos->MetaAddColumn(QQN::TarifaExpDestino()->Destino);
         $this->dtgTarifaExpDestinos->MetaAddColumn('Monto');
         $this->dtgTarifaExpDestinos->MetaAddColumn('Minimo');
+        $this->dtgTarifaExpDestinos->MetaAddColumn('FechaVigencia');
         $this->dtgTarifaExpDestinos->MetaAddColumn('CreatedAt');
         $this->dtgTarifaExpDestinos->MetaAddColumn(QQN::TarifaExpDestino()->CreatedByObject);
         $this->dtgTarifaExpDestinos->MetaAddColumn('UpdatedAt');

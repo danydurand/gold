@@ -31,8 +31,8 @@
 		 * Esta rutina devuelve la tarifa vigente segun un producto
 		 * y una fecha
 		 */
-		public static function TarifaVigente($intCodiProd, $dttFechGuia) {
-            $strCadeSqlx  = "select monto, minimo";
+		public static function TarifaVigente($intCodiProd, $dttFechGuia, $intIdxxDest) {
+            $strCadeSqlx  = "select id";
             $strCadeSqlx .= "  from tarifa_exp ";
             $strCadeSqlx .= " where producto_id = ".$intCodiProd;
             $strCadeSqlx .= "   and fecha <= '".$dttFechGuia."'";
@@ -43,6 +43,17 @@
             $objDbResult = $objDatabase->Query($strCadeSqlx);
             $mixRegistro = $objDbResult->FetchArray();
             if (isset($mixRegistro)) {
+                $intIdxxTari = $mixRegistro['id'];
+                $strCadeSqlx  = "select monto, minimo";
+                $strCadeSqlx .= "  from tarifa_exp_destino ";
+                $strCadeSqlx .= " where tarifa_id = $intIdxxTari";
+                $strCadeSqlx .= "   and destino_id = $intIdxxDest";
+                $strCadeSqlx .= "   and fecha_vigencia <= '".$dttFechGuia."'";
+                $strCadeSqlx .= " order by fecha_vigencia desc ";
+                $strCadeSqlx .= " limit 1";
+                $objDatabase  = TarifaExp::GetDatabase();
+                $objDbResult = $objDatabase->Query($strCadeSqlx);
+                $mixRegistro = $objDbResult->FetchArray();
                 return [
                     'monto' => $mixRegistro['monto'],
                     'minimo' => $mixRegistro['minimo']
@@ -51,6 +62,61 @@
                 return [0,0];
             }
         }
+
+		/**
+		 * Esta rutina devuelve la tarifa vigente segun un producto
+		 * y una fecha
+		 */
+		public static function TarifaVigenteAliado($intCodiProd, $intCodiClie, $dttFechGuia, $intIdxxDest) {
+            $strCadeSqlx  = "select tarifa_exp_id";
+            $strCadeSqlx .= "  from tarifa_cliente ";
+            $strCadeSqlx .= " where producto_id = $intCodiProd";
+            $strCadeSqlx .= "   and cliente_id = $intCodiClie";
+            $strCadeSqlx .= " limit 1";
+            $objDatabase  = TarifaCliente::GetDatabase();
+            $objDbResult = $objDatabase->Query($strCadeSqlx);
+            $mixRegistro = $objDbResult->FetchArray();
+            if (isset($mixRegistro)) {
+                $intIdxxTari = $mixRegistro['tarifa_exp_id'];
+                $strCadeSqlx  = "select monto, minimo";
+                $strCadeSqlx .= "  from tarifa_exp_destino ";
+                $strCadeSqlx .= " where tarifa_id = $intIdxxTari";
+                $strCadeSqlx .= "   and destino_id = $intIdxxDest";
+                $strCadeSqlx .= "   and fecha_vigencia <= '".$dttFechGuia."'";
+                $strCadeSqlx .= " order by fecha_vigencia desc ";
+                $strCadeSqlx .= " limit 1";
+                $objDatabase  = TarifaExpDestino::GetDatabase();
+                $objDbResult = $objDatabase->Query($strCadeSqlx);
+                $mixRegistro = $objDbResult->FetchArray();
+                return [
+                    'monto' => $mixRegistro['monto'],
+                    'minimo' => $mixRegistro['minimo']
+                ];
+            } else {
+                return [0,0];
+            }
+        }
+
+//        public static function TarifaVigente($intCodiProd, $dttFechGuia) {
+//            $strCadeSqlx  = "select monto, minimo";
+//            $strCadeSqlx .= "  from tarifa_exp ";
+//            $strCadeSqlx .= " where producto_id = ".$intCodiProd;
+//            $strCadeSqlx .= "   and fecha <= '".$dttFechGuia."'";
+//            $strCadeSqlx .= "   and is_publica = 1";
+//            $strCadeSqlx .= " order by fecha desc ";
+//            $strCadeSqlx .= " limit 1";
+//            $objDatabase  = TarifaExp::GetDatabase();
+//            $objDbResult = $objDatabase->Query($strCadeSqlx);
+//            $mixRegistro = $objDbResult->FetchArray();
+//            if (isset($mixRegistro)) {
+//                return [
+//                    'monto' => $mixRegistro['monto'],
+//                    'minimo' => $mixRegistro['minimo']
+//                ];
+//            } else {
+//                return [0,0];
+//            }
+//        }
 
         /**
         * Esta runtina deja registro de la operacion indicada en

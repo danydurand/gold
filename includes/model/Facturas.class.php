@@ -63,9 +63,11 @@
         }
 
         public function SumaDeAbonos() {
-            $strCadeSqlx  = "select sum(monto_abonado) as suma_abonos ";
-            $strCadeSqlx .= "  from pagos_corp_detail ";
-            $strCadeSqlx .= " where factura_id = $this->Id ";
+            $strCadeSqlx  = "select if(sum(pagos_corp_detail.monto_abonado),null,0) as suma_abonos ";
+            $strCadeSqlx .= "  from pagos_corp_detail inner join pagos_corp ";
+            $strCadeSqlx .= "    on pagos_corp.id = pagos_corp_detail.pago_corp_id ";
+            $strCadeSqlx .= " where pagos_corp_detail.factura_id = $this->Id ";
+            $strCadeSqlx .= "   and pagos_corp.deleted_at is null ";
             $objDatabase  = $this::GetDatabase();
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $mixRegistro  = $objDbResult->FetchArray();
@@ -98,44 +100,6 @@
                         t("Monto Pendiente es cero, el estatus queda en CONCILIADO");
                         $this->EstatusPago = 'CONCILIADO';
                     }
-                }
-            }
-            t('El status de la factura quedo en: '.$this->EstatusPago);
-            $this->Save();
-		}
-
-        public function ActualizarMontosOld() {
-		    t('========================================');
-		    t('Rutina: ActualizarMontos (en la Factura)');
-
-            t('Voy a buscar los pagos asociados a la factura');
-            $arrPagoFact = $this->GetPagosCorpAsFacturaPagoCorpArray();
-            t('Hay: '.count($arrPagoFact).' pagos asociados');
-            $decTotaFact = 0;
-            foreach ($arrPagoFact as $objPagoFact) {
-                t('Procesando el pago: '.$objPagoFact->Referencia);
-                if (($decTotaFact + $objPagoFact->Monto) > $this->Total) {
-                    $objPagoFact->Monto  = $this->Total;
-                    $objPagoFact->Save();
-                }
-                $decTotaFact += $objPagoFact->Monto;
-            }
-            t('Al salir del ciclo, el Total en Bs es: '.$decTotaFact);
-            $this->MontoCobrado = $decTotaFact;
-            $decMontPend        = $this->Total - $this->MontoCobrado;
-            t('El monto pendiente es de: '.$decMontPend);
-            if ($decMontPend < 0) {
-                t('Como era negativo, lo deje en cero');
-                $decMontPend = 0;
-            }
-            $this->MontoPendiente = $decMontPend;
-            if ($this->MontoPendiente == $this->Total) {
-                t('MontoPendiente y Total son iguales, el Estatus del Pago cambia a Pendiente');
-                $this->EstatusPago = 'PENDIENTE';
-            } else {
-                if (count($arrPagoFact) > 0) {
-                    t('Habiendo pagos.. el estatus queda como PagoParcial');
-                    $this->EstatusPago = 'PAGOPARCIAL';
                 }
             }
             t('El status de la factura quedo en: '.$this->EstatusPago);

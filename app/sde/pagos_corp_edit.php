@@ -325,29 +325,51 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
 
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-        //--------------------------------------------
-        // Se obtiene las Facturas asociadas al Pago
-        //--------------------------------------------
-        //$arrFactAsoc = $this->mctPagosCorp->PagosCorp->GetFacturasAsFacturaPagoCorpArray();
         //------------------------------------------------------
-        // Se borra cualquier nota de credito asociada al pago
+        // Se des-asocian las notas de credito asociada al pago
         //------------------------------------------------------
-        $arrNotaCred = $this->mctPagosCorp->PagosCorp->GetNotaCreditoCorpAsPagoCorpArray();
+        t('Des-asociando la(s) NDC(s) del pago...');
+        $intPagoIdxx   = $this->mctPagosCorp->PagosCorp->Id;
+        $objClauWher[] = QQ::Equal(QQN::NotaCreditoCorp()->AplicadaEnPagoId, $intPagoIdxx);
+        $arrNotaCred   = NotaCreditoCorp::QueryArray(QQ::AndCondition($objClauWher));
+        t('El pago tiene: '.count($arrNotaCred).' notas de credito asociadas...');
         foreach ($arrNotaCred as $objNotaCred) {
-            $objNotaCred->Delete();
+            t('Procesado la NDC: '.$objNotaCred->Referencia.' con estatus: '.$objNotaCred->Estatus);
+            try {
+                $objNotaCred->Estatus          = 'DISPONIBLE';
+                $objNotaCred->AplicadaEnPagoId = null;
+                $objNotaCred->UpdatedAt        = new QDateTime(QDateTime::Now());
+                $objNotaCred->UpdatedBy        = $this->objUsuario->CodiUsua;
+                $objNotaCred->Save();
+                $strTextMens = 'Des-asociada del Pago: '.$this->mctPagosCorp->PagosCorp->Referencia;
+                $objNotaCred->logDeCambios($strTextMens);
+            } catch (Exception $e) {
+                $this->danger($e->getMessage());
+                return;
+            }
+            t('La NDC quedo con estatus: '.$objNotaCred->Estatus);
         }
-        //---------------------
-        // Se elimina el Pago
-        //---------------------
-        $this->mctPagosCorp->DeletePagosCorp();
-        $this->mctPagosCorp->PagosCorp->logDeCambios("Borrado");
+        //---------------------------------------------------------------------------------
+        // Se hace soft delete del pago, para que no cuente como abono de ninguna factura
+        //---------------------------------------------------------------------------------
+        try {
+            $this->mctPagosCorp->PagosCorp->DeletedAt = new QDateTime(QDateTime::Now());
+            $this->mctPagosCorp->PagosCorp->Save();
+            t('Aplicado el SoftDelete al Pago');
+        } catch (Exception $e) {
+            t('Error: '.$e->getMessage());
+            $this->danger($e->getMessage());
+            return;
+        }
         //---------------------------------------------------------------------
         // Se actualiza el monto cobrado de la facturas asociadas
         //---------------------------------------------------------------------
         $this->mctPagosCorp->PagosCorp->ActualizarMontosDeLasFacturas();
-        //foreach ($arrFactAsoc as $objFactAsoc) {
-        //    $objFactAsoc->ActualizarMontos();
-        //}
+        //--------------------------------------------
+        // Se elimina el fisicamente el Pago
+        //--------------------------------------------
+        $this->mctPagosCorp->DeletePagosCorp();
+        $this->mctPagosCorp->PagosCorp->logDeCambios("Borrado");
         //-----------------------------------------
         // Se actaliza ahora el saldo del Cliente
         //-----------------------------------------

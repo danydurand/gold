@@ -69,53 +69,8 @@ class CambiarClave extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click() {
-        //-----------------------------------------------
-        // Se actualizan los campos en la tabla Usuario
-        //-----------------------------------------------
-        $this->objUsuario->PassUsua = md5($this->txtClavNue1->Text);
-        $this->objUsuario->CantInte = 0;
-        $this->objUsuario->FechClav = new QDateTime(QDateTime::Now);
-        $this->objUsuario->Save();
-        //--------------------------------------
-        // Se deja constancia en el Histórico
-        //--------------------------------------
-        $arrLogxCamb['strNombTabl'] = 'Usuario';
-        $arrLogxCamb['intRefeRegi'] = $this->objUsuario->CodiUsua;
-        $arrLogxCamb['strNombRegi'] = $this->objUsuario->LogiUsua;
-        $arrLogxCamb['strDescCamb'] = "Cambio de Clave";
-        LogDeCambios($arrLogxCamb);
-
-        $this->mensaje();
-        $strMensUsua = 'La Clave ha sido cambiada Exitosamente!';
-        //-----------------------------------------------------------------------
-        // El cambio de Clave es notificado por correo el Usuario (Si lo posee)
-        //-----------------------------------------------------------------------
-        if (strlen($this->objUsuario->MailUsua) > 0) {
-            $strEmaiSopo = unserialize($_SESSION['EmaiSopo']);
-            $strLogiUsua = $this->objUsuario->__toString();
-            // Create a new message. Note that you can list multiple
-            // addresses and that QCubed supports Bcc and Cc.
-            $objMessage = new QEmailMessage();
-            $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
-            $objMessage->To = $this->objUsuario->__nombreYCorreo();
-            //$objMessage->Bcc = $strEmaiSopo;
-            $objMessage->Subject = 'Cambio de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
-
-            // Also setup HTML message (optional)
-            $strBody  = 'Estimado Usuario,<p><br>';
-            $strBody .= "El SisCO, ha registrado un cambio de Clave de Acceso, para su Usuario $strLogiUsua.<br>";
-            $strBody .= 'Si Usted desconoce esta transacción, por favor comuníquese a la brevedad<br>';
-            $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br><br>';
-            $strBody .= 'soporte@lufemansoftware.com<br>';
-            $objMessage->HtmlBody = $strBody;
-
-            // Add random/custom email headers
-            $objMessage->SetHeader('x-application', 'SisCO');
-
-            // Send the Message (Commented out for obvious reasons)
-            QEmailServer::Send($objMessage);
-        }
-        $this->success($strMensUsua);
+        list($strTipoMens, $strMensUsua) = $this->objUsuario->resetearClave(trim($this->txtClavNue1->Text));
+        $this->$strTipoMens($strMensUsua);
     }
     
     protected function btnCancel_Click() {

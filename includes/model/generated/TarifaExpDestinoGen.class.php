@@ -20,6 +20,7 @@
 	 * @property integer $DestinoId the value for intDestinoId (Not Null)
 	 * @property double $Monto the value for fltMonto (Not Null)
 	 * @property double $Minimo the value for fltMinimo (Not Null)
+	 * @property QDateTime $FechaVigencia the value for dttFechaVigencia 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt (Not Null)
 	 * @property integer $CreatedBy the value for intCreatedBy (Not Null)
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
@@ -74,6 +75,14 @@
 		 */
 		protected $fltMinimo;
 		const MinimoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column tarifa_exp_destino.fecha_vigencia
+		 * @var QDateTime dttFechaVigencia
+		 */
+		protected $dttFechaVigencia;
+		const FechaVigenciaDefault = null;
 
 
 		/**
@@ -182,6 +191,7 @@
 			$this->intDestinoId = TarifaExpDestino::DestinoIdDefault;
 			$this->fltMonto = TarifaExpDestino::MontoDefault;
 			$this->fltMinimo = TarifaExpDestino::MinimoDefault;
+			$this->dttFechaVigencia = (TarifaExpDestino::FechaVigenciaDefault === null)?null:new QDateTime(TarifaExpDestino::FechaVigenciaDefault);
 			$this->dttCreatedAt = (TarifaExpDestino::CreatedAtDefault === null)?null:new QDateTime(TarifaExpDestino::CreatedAtDefault);
 			$this->intCreatedBy = TarifaExpDestino::CreatedByDefault;
 			$this->dttUpdatedAt = (TarifaExpDestino::UpdatedAtDefault === null)?null:new QDateTime(TarifaExpDestino::UpdatedAtDefault);
@@ -532,6 +542,7 @@
 			    $objBuilder->AddSelectItem($strTableName, 'destino_id', $strAliasPrefix . 'destino_id');
 			    $objBuilder->AddSelectItem($strTableName, 'monto', $strAliasPrefix . 'monto');
 			    $objBuilder->AddSelectItem($strTableName, 'minimo', $strAliasPrefix . 'minimo');
+			    $objBuilder->AddSelectItem($strTableName, 'fecha_vigencia', $strAliasPrefix . 'fecha_vigencia');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'created_by', $strAliasPrefix . 'created_by');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -676,6 +687,9 @@
 			$strAlias = $strAliasPrefix . 'minimo';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltMinimo = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'fecha_vigencia';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->dttFechaVigencia = $objDbRow->GetColumn($strAliasName, 'Date');
 			$strAlias = $strAliasPrefix . 'created_at';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttCreatedAt = $objDbRow->GetColumn($strAliasName, 'DateTime');
@@ -1005,6 +1019,7 @@
 							`destino_id`,
 							`monto`,
 							`minimo`,
+							`fecha_vigencia`,
 							`created_at`,
 							`created_by`,
 							`updated_at`,
@@ -1014,6 +1029,7 @@
 							' . $objDatabase->SqlVariable($this->intDestinoId) . ',
 							' . $objDatabase->SqlVariable($this->fltMonto) . ',
 							' . $objDatabase->SqlVariable($this->fltMinimo) . ',
+							' . $objDatabase->SqlVariable($this->dttFechaVigencia) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -1037,6 +1053,7 @@
 							`destino_id` = ' . $objDatabase->SqlVariable($this->intDestinoId) . ',
 							`monto` = ' . $objDatabase->SqlVariable($this->fltMonto) . ',
 							`minimo` = ' . $objDatabase->SqlVariable($this->fltMinimo) . ',
+							`fecha_vigencia` = ' . $objDatabase->SqlVariable($this->dttFechaVigencia) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							`created_by` = ' . $objDatabase->SqlVariable($this->intCreatedBy) . ',
 							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -1149,6 +1166,7 @@
 			$this->DestinoId = $objReloaded->DestinoId;
 			$this->fltMonto = $objReloaded->fltMonto;
 			$this->fltMinimo = $objReloaded->fltMinimo;
+			$this->dttFechaVigencia = $objReloaded->dttFechaVigencia;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
 			$this->CreatedBy = $objReloaded->CreatedBy;
 			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
@@ -1207,6 +1225,13 @@
 					 * @return double
 					 */
 					return $this->fltMinimo;
+
+				case 'FechaVigencia':
+					/**
+					 * Gets the value for dttFechaVigencia 
+					 * @return QDateTime
+					 */
+					return $this->dttFechaVigencia;
 
 				case 'CreatedAt':
 					/**
@@ -1378,6 +1403,19 @@
 					 */
 					try {
 						return ($this->fltMinimo = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'FechaVigencia':
+					/**
+					 * Sets the value for dttFechaVigencia 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttFechaVigencia = QType::Cast($mixValue, QType::DateTime));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1652,6 +1690,7 @@
 			$strToReturn .= '<element name="Destino" type="xsd1:Sucursales"/>';
 			$strToReturn .= '<element name="Monto" type="xsd:float"/>';
 			$strToReturn .= '<element name="Minimo" type="xsd:float"/>';
+			$strToReturn .= '<element name="FechaVigencia" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="CreatedByObject" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
@@ -1694,6 +1733,8 @@
 				$objToReturn->fltMonto = $objSoapObject->Monto;
 			if (property_exists($objSoapObject, 'Minimo'))
 				$objToReturn->fltMinimo = $objSoapObject->Minimo;
+			if (property_exists($objSoapObject, 'FechaVigencia'))
+				$objToReturn->dttFechaVigencia = new QDateTime($objSoapObject->FechaVigencia);
 			if (property_exists($objSoapObject, 'CreatedAt'))
 				$objToReturn->dttCreatedAt = new QDateTime($objSoapObject->CreatedAt);
 			if ((property_exists($objSoapObject, 'CreatedByObject')) &&
@@ -1730,6 +1771,8 @@
 				$objObject->objDestino = Sucursales::GetSoapObjectFromObject($objObject->objDestino, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intDestinoId = null;
+			if ($objObject->dttFechaVigencia)
+				$objObject->dttFechaVigencia = $objObject->dttFechaVigencia->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttCreatedAt)
 				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objCreatedByObject)
@@ -1761,6 +1804,7 @@
 			$iArray['DestinoId'] = $this->intDestinoId;
 			$iArray['Monto'] = $this->fltMonto;
 			$iArray['Minimo'] = $this->fltMinimo;
+			$iArray['FechaVigencia'] = $this->dttFechaVigencia;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
 			$iArray['CreatedBy'] = $this->intCreatedBy;
 			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
@@ -1809,6 +1853,7 @@
      * @property-read QQNodeSucursales $Destino
      * @property-read QQNode $Monto
      * @property-read QQNode $Minimo
+     * @property-read QQNode $FechaVigencia
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
@@ -1840,6 +1885,8 @@
 					return new QQNode('monto', 'Monto', 'Float', $this);
 				case 'Minimo':
 					return new QQNode('minimo', 'Minimo', 'Float', $this);
+				case 'FechaVigencia':
+					return new QQNode('fecha_vigencia', 'FechaVigencia', 'Date', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'DateTime', $this);
 				case 'CreatedBy':
@@ -1874,6 +1921,7 @@
      * @property-read QQNodeSucursales $Destino
      * @property-read QQNode $Monto
      * @property-read QQNode $Minimo
+     * @property-read QQNode $FechaVigencia
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $CreatedBy
      * @property-read QQNodeUsuario $CreatedByObject
@@ -1905,6 +1953,8 @@
 					return new QQNode('monto', 'Monto', 'double', $this);
 				case 'Minimo':
 					return new QQNode('minimo', 'Minimo', 'double', $this);
+				case 'FechaVigencia':
+					return new QQNode('fecha_vigencia', 'FechaVigencia', 'QDateTime', $this);
 				case 'CreatedAt':
 					return new QQNode('created_at', 'CreatedAt', 'QDateTime', $this);
 				case 'CreatedBy':
