@@ -1,13 +1,16 @@
 <div class="row" style="margin-top: 0px">
     <div class="col-md-12">
         <div class="form-group">
-            <label for="">Referencia Exp</label><br>
+            <?php $this->lblCargArch->Render(); ?>
+            <?php $this->txtCargArch->Render(); ?>
+            <?php $this->lblRefeExpo->Render(); ?>
             <?php $this->txtRefeExpo->Render(); ?>
         </div>
     </div>
     <div class="col-md-12">
         <div class="form-group">
-            <label for="">Razones p/Exportar</label><br>
+            <?php $this->btnImpoPiez->Render(); ?>
+            <?php $this->lblRazoExpo->Render(); ?>
             <?php $this->txtRazoExpo->Render(); ?>
         </div>
     </div>

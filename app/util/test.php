@@ -3,14 +3,36 @@ require_once('qcubed.inc.php');
 
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
-$_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
+
+// Obteniendo el color promedio
+function getColorAverage($color1, $color2) {
+
+    $r1 = substr($color1,0,2);
+    $g1 = substr($color1,2,2);
+    $b1 = substr($color1,4,2);
+
+    $r2 = substr($color2,0,2);
+    $g2 = substr($color2,2,2);
+    $b2 = substr($color2,4,2);
+
+    $ar = (int)(($r1+$r2)/2);
+    $ag = (int)(($g1+$g2)/2);
+    $ab = (int)(($b1+$b2)/2);
+
+    return $ar.$ag.$ab;
+}
+
+getColorAverage("112233", "123456");
+
+
+//$_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 
 //---------------------------------------------------
 // Transformando fechas de mm/dd/yyyy a yyyy-mm-dd
 //---------------------------------------------------
-$strFechOrig = '05/07/2022';
-m("Fecha Original: $strFechOrig");
-m("Fecha Transformada: ".transformaFecha($strFechOrig));
+//$strFechOrig = '05/07/2022';
+//m("Fecha Original: $strFechOrig");
+//m("Fecha Transformada: ".transformaFecha($strFechOrig));
 
 //--------------------------------------
 // Actualizando montos de las Facturas

@@ -1139,9 +1139,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $this->danger('Guia Facturada.  No se puede borrar !!!');
             return;
         }
-        if (!in_array($this->objGuia->ultimoCheckpoint(),['PU','IA'])) {
-            $this->danger('Guia Manifiestada.  No se puede borrar !!!');
-            return;
+        $strUltiCkpt = $this->objGuia->ultimoCheckpoint();
+        if ($strUltiCkpt != '00') {
+            if (!in_array($strUltiCkpt,['PU','IA'])) {
+                $this->danger('Guia Manifiestada.  No se puede borrar !!!');
+                return;
+            }
         }
         try {
             $this->objGuia->Delete();

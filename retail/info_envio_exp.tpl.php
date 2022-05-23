@@ -1,10 +1,4 @@
 <div class="row">
-    <!--<div class="col-md-2">-->
-    <!--    <div class="form-group" style="text-align: center">-->
-    <!--        <label for="">Seguro ?</label><br>-->
-    <!--        --><?php //$this->lstEnviSgro->Render(); ?>
-    <!--    </div>-->
-    <!--</div>-->
     <div class="col-md-4">
         <div class="form-group">
             <label for="">Valor Decla. Especificado</label><br>
@@ -88,7 +82,11 @@
             <div><?php $this->lblTituPiez->Render() ?></div>
         </div>
     </div>
-    <div class="col-sm-4 text-center">
+    <div class="col-sm-3 text-center">
+        <?php $this->btnCargPiez->Render(); ?>
+        <?php $this->btnBorrPiez->Render(); ?>
+    </div>
+    <div class="col-sm-2 text-center">
         <?php $this->lstUnidMedi->Render(); ?>
     </div>
     <div class="col-sm-3 text-center">

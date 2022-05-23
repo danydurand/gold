@@ -92,6 +92,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->txtTotal = $this->mctFacturas->txtTotal_Create();
 		$this->txtMontoDscto = $this->mctFacturas->txtMontoDscto_Create();
 		$this->txtMontoCobrado = $this->mctFacturas->txtMontoCobrado_Create();
+		$this->txtMontoAbono = $this->mctFacturas->txtMontoAbono_Create();
 		$this->txtMontoPendiente = $this->mctFacturas->txtMontoPendiente_Create();
 		$this->txtNumero = $this->mctFacturas->txtNumero_Create();
 		$this->txtMaquinaFiscal = $this->mctFacturas->txtMaquinaFiscal_Create();
@@ -126,6 +127,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         if ($this->objUsuario->LogiUsua != 'ddurand') {
             $this->lstEstaPago       = disableControl($this->lstEstaPago);
             $this->txtMontoCobrado   = disableControl($this->txtMontoCobrado);
+            $this->txtMontoAbono     = disableControl($this->txtMontoAbono);
             $this->txtMontoPendiente = disableControl($this->txtMontoPendiente);
             $this->btnDelete->Visible = false;
         }

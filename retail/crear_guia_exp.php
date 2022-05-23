@@ -77,7 +77,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lstServExpo;
     protected $lstFormPago;
     protected $lstModoValo;
-    //protected $lstAliaCome;
     protected $lstClieCorp;
 
     protected $txtNumeGuia;
@@ -202,7 +201,17 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $arrOpciToma = [];
     protected $objProcOpci;
 
-    
+    protected $btnCargPiez;
+    protected $lblCargArch;
+    protected $txtCargArch;
+    protected $btnImpoPiez;
+    protected $lblRefeExpo;
+    protected $lblRazoExpo;
+    protected $btnBorrPiez;
+    protected $blnErroProc;
+
+
+
     protected function SetupGuia() {
         $intIdxxGuia = QApplication::PathInfo(0);
 
@@ -219,6 +228,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->objProcOpci = CrearProceso($strNombProc);
 
         if ($intIdxxGuia) {
+            t('Existe un Id de la guia, las piezas se van a carga en la tabla temporal');
             $this->objGuia = Guias::Load($intIdxxGuia);
             if (!$this->objGuia) {
                 throw new Exception('Could not find a Guia object with PK arguments: ' . $intIdxxGuia);
@@ -262,9 +272,15 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         } else {
             $this->objGuia = new Guias();
             $this->blnEditMode = false;
-            PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
+            if (!isset($_SESSION['RegrMasi'])) {
+                t('Se trata de una Guia nueva, así que elimine todas las piezas temporales del Usuario');
+                PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
+            } else {
+                t('Vengo llegando de la carga masiva');
+                $intCantRegi = PiezasTemp::CountByProcesoErrorId($this->objProcEjec->Id);
+                t('Hay: '.$intCantRegi.' registros en peizas_temap');
+            }
             GcoTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
-            t('Se trata de una Guia nueva, así que elimine todas las piezas temporales del Usuario');
         }
 
         $this->cargarConceptosOpcionales($this->objGuia);
@@ -275,6 +291,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->objProdExpo = unserialize($_SESSION['ProdExpo']);
         $this->decTasaDola = $_SESSION['TasaDola'];
         $this->decTasaEuro = $_SESSION['TasaEuro'];
+
     }
 
     protected function cargarConceptosOpcionales(Guias $objGuiaProc) {
@@ -385,7 +402,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstModoValo_Create();
         $this->lblUnidMedi_Create();
         $this->lstUnidMedi_Create();
-        //$this->lstAliaCome_Create();
         $this->lstClieCorp_Create();
         $this->txtCantPiez_Create();
 
@@ -397,8 +413,16 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         // Costos del Servicio
         //---------------------
         $this->dtgConcGuia_Create();
+        $this->lblRefeExpo_Create();
         $this->txtRefeExpo_Create();
+        $this->lblRazoExpo_Create();
         $this->txtRazoExpo_Create();
+        $this->lblCargArch_Create();
+        $this->txtCargArch_Create();
+        $this->btnImpoPiez_Create();
+        $this->btnBorrPiez_Create();
+        $this->btnErroProc_Create();
+
 
         //----------------
         // Facturacion
@@ -456,6 +480,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtRepePiez_Create();
         $this->txtPiesPiez_Create();
         $this->txtKiloPiez_Create();
+        $this->btnCargPiez_Create();
         $this->btnSavePiez_Create();
         $this->btnCancPiez_Create();
         $this->btnDelePiez_Create();
@@ -482,6 +507,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->cargarClientesCorp($objSucuUsua->ClienteId);
             $this->lstClieCorp = disableControl($this->lstClieCorp);
         }
+
+        $this->contarCantidadDePiezas();
+
     }
 
 
@@ -816,7 +844,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtValoDecl = new QFloatTextBox($this);
         $this->txtValoDecl->Name = 'Valor Decl.';
         $this->txtValoDecl->Width = 60;
-        $this->txtValoDecl->ToolTip = 'Un monto mayor a cero, implica que el envío se asegura';
         if ($this->blnEditMode) {
             $this->txtValoDecl->Text = $this->objGuia->ValorDeclarado;
         } else {
@@ -870,17 +897,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstUnidMedi->Visible = false;
         $this->lstUnidMedi->AddAction(new QChangeEvent(), new QAjaxAction('lstUnidMedi_Change'));
     }
-
-    //protected function lstAliaCome_Create() {
-    //    $this->lstAliaCome = new QListBox($this);
-    //    $this->lstAliaCome->Name = 'Aliado';
-    //    $this->lstAliaCome->Width = 210;
-    //    if (!$this->blnEditMode) {
-    //        $this->cargarAliados();
-    //    } else {
-    //        $this->cargarAliados($this->objGuia->AliadoId);
-    //    }
-    //}
 
     protected function lstClieCorp_Create() {
         $this->lstClieCorp = new QListBox($this);
@@ -947,6 +963,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
     }
 
+    protected function lblRefeExpo_Create() {
+        $this->lblRefeExpo = new QLabel($this);
+        $this->lblRefeExpo->Text = '<b>Referencia Exp</b>';
+        $this->lblRefeExpo->HtmlEntities = false;
+    }
+
     protected function txtRefeExpo_Create() {
         $this->txtRefeExpo = new QTextBox($this);
         $this->txtRefeExpo->Width = 250;
@@ -954,6 +976,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         if ($this->blnEditMode) {
             $this->txtRefeExpo->Text = $this->objGuia->ReferenciaExp;
         }
+    }
+
+    protected function lblRazoExpo_Create() {
+        $this->lblRazoExpo = new QLabel($this);
+        $this->lblRazoExpo->Text = '<b>Razones p/Exportar</b>';
+        $this->lblRazoExpo->HtmlEntities = false;
     }
 
     protected function txtRazoExpo_Create() {
@@ -966,6 +994,38 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtRazoExpo->Text = $this->objGuia->RazonesExp;
         }
     }
+
+    protected function lblCargArch_Create() {
+        $this->lblCargArch = new QLabel($this);
+        $this->lblCargArch->Text = '<b>Archivo de Piezas</b>';
+        $this->lblCargArch->HtmlEntities = false;
+        $this->lblCargArch->Visible = false;
+    }
+
+    protected function txtCargArch_Create() {
+        $this->txtCargArch = new QFileControl($this);
+        $this->txtCargArch->Required = true;
+        $this->txtCargArch->Width = 300;
+        $this->txtCargArch->Visible = false;
+        $this->txtCargArch->Name = QApplication::Translate('Archivo a Cargar');
+    }
+
+    protected function btnImpoPiez_Create() {
+        $this->btnImpoPiez = new QButtonP($this);
+        $this->btnImpoPiez->Text = '<i class="fa fa-upload fa-lg"></i> Importar';
+        $this->btnImpoPiez->Visible = false;
+        $this->btnImpoPiez->ToolTip = 'Importar Piezas desde el archivo';
+        $this->btnImpoPiez->AddAction(new QClickEvent(), new QServerAction('btnImpoPiez_Click'));
+    }
+
+    protected function btnBorrPiez_Create() {
+        $this->btnBorrPiez = new QButtonD($this);
+        $this->btnBorrPiez->Text = '<i class="fa fa-trash fa-lg"></i>';
+        $this->btnBorrPiez->ToolTip = 'Borrar todas las piezas de la Guia';
+        $this->btnBorrPiez->AddAction(new QClickEvent(), new QConfirmAction('¿ Seguro que desea Borrar todas las Piezas ?'));
+        $this->btnBorrPiez->AddAction(new QClickEvent(), new QServerAction('btnBorrPiez_Click'));
+    }
+
 
     protected function txtTasaDola_Create() {
         $this->txtTasaDola = new QFloatTextBox($this);
@@ -1196,6 +1256,14 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtKiloPiez->Visible = false;
     }
 
+    protected function btnCargPiez_Create() {
+        $this->btnCargPiez = new QButtonP($this);
+        $this->btnCargPiez->Text = '<i class="fa fa-upload fa-lg"></i>';
+        $this->btnCargPiez->Visible = false;
+        $this->btnCargPiez->ToolTip = 'Cargar Piezas Masivamente';
+        $this->btnCargPiez->AddAction(new QClickEvent(), new QAjaxAction('btnCargPiez_Click'));
+    }
+
     protected function btnSavePiez_Create() {
         $this->btnSavePiez = new QButtonP($this);
         $this->btnSavePiez->Text = '<i class="fa fa-floppy-o fa-lg"></i>';
@@ -1294,6 +1362,382 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
     }
 
+    protected function contarCantidadDePiezas() {
+        $this->btnBorrPiez->Visible = $this->txtCantPiez->Text;
+    }
+
+    protected function btnCargPiez_Click() {
+        $this->lblRefeExpo->Visible = !$this->lblRefeExpo->Visible;
+        $this->txtRefeExpo->Visible = !$this->txtRefeExpo->Visible;
+        $this->lblRazoExpo->Visible = !$this->lblRazoExpo->Visible;
+        $this->txtRazoExpo->Visible = !$this->txtRazoExpo->Visible;
+        $this->lblCargArch->Visible = !$this->lblCargArch->Visible;
+        $this->txtCargArch->Visible = !$this->txtCargArch->Visible;
+        $this->btnImpoPiez->Visible = !$this->btnImpoPiez->Visible;
+    }
+
+    protected function btnImpoPiez_Click() {
+        $strNombArch = $this->txtCargArch->FileName;
+        if (strlen($strNombArch) == 0) {
+            $this->danger('Especifique el nombre del archivo que desea Importar');
+            return;
+        }
+        if ($this->lstModoValo->SelectedValue == 'PG') {
+            if (($this->txtValoDecl->Text == 0) || (strlen($this->txtValoDecl->Text) == 0)) {
+                $this->danger('El Valor Declarado de la Guia, es Requerido');
+                return;
+            }
+        }
+        $arrNombArch = explode('.',$strNombArch);
+        $strExteArch = $arrNombArch[1];
+        $arrExteVali = ['xls','xlsx'];
+        if (in_array($strExteArch,$arrExteVali)) {
+            $file = basename(tempnam(getcwd(),'tmp'));
+            $file = $file.'.'.$strExteArch;
+            $filedest = '/tmp/'.$file;
+            copy($_FILES['c52']['tmp_name'],$filedest);
+            $this->CargarPiezas($filedest,$strExteArch);
+        } else {
+            $strExteVali = implode(',',$arrExteVali);
+            $strMensUsua = 'Archivo no corresponde a una extensión válida <b>'.$strExteVali.'</b>';
+            $this->danger($strMensUsua);
+        }
+        $this->btnCargPiez_Click();
+        $this->contarCantidadDePiezas();
+    }
+
+    protected function btnBorrPiez_Click() {
+
+        t('Borrando todas las piezas');
+        $this->blnCambPiez = true;
+        $arrPiezGuia = PiezasTemp::LoadArrayByProcesoErrorId($this->objProcEjec->Id);
+        foreach ($arrPiezGuia as $objPiezGuia) {
+            $objPiezGuia->Delete();
+        }
+
+        t('Piezas borradas');
+        $this->txtCantPiez->Text = 0;
+        if ($this->lstModoValo->SelectedValue == 'PG') {
+            $decValoDecl = $this->txtValoDecl->Text;
+            $this->sumaPiezas($decValoDecl);
+        } else {
+            $this->sumaPiezas();
+        }
+
+        if ($this->txtCantPiez->Text == 0) {
+            // Ya no quedan piezas, por lo tanto se establece el modo insercion
+            $this->blnEditPiez = false;
+        }
+        $this->btnDelePiez->Visible = false;
+
+        $this->dtgPiezTemp->Refresh();
+
+        $this->txtContPiez->Text = '';
+        $this->txtKiloPiez->Text = '';
+        $this->cargarEmpaques();
+        $this->txtAltoPiez->Text = '';
+        $this->txtAnchPiez->Text = '';
+        $this->txtLargPiez->Text = '';
+        $this->txtVoluPiez->Text = '';
+        $this->txtValoPiez->Text = '';
+        $this->txtRepePiez->Text = 1;
+        $this->txtPiesPiez->Text = '';
+
+        $this->contarCantidadDePiezas();
+        t('Listo el borrado de todas las piezas');
+        $this->mostrarCampos('add');
+        $this->success('Transaccion Exitosa.  Piezas borradas !!!');
+
+    }
+
+
+    protected function CargarPiezas($strNombArch,$strExteArch) {
+        t('');
+        t('=====================');
+        t('Rutina: CargarPiezas');
+
+        //-------------------------------------
+        // Se suprimen los errores en pantalla
+        //-------------------------------------
+        $mixErroOrig = error_reporting();
+        error_reporting(0);
+        //-----------------------------------------------------------
+        // Se inician los contadores y otras propiedades
+        //-----------------------------------------------------------
+        $intNumeLine = 1;
+        $intCantErro = 0;
+        $blnErroProc = false;
+        try {
+            //-------------------------------
+            // Se abre el archivo a procesar
+            //-------------------------------
+            $strLibrExce = $strExteArch == 'xls' ? 'SimpleXLS' : 'SimpleXLSX';
+            if ( $xls = $strLibrExce::parseFile($strNombArch) ) {
+
+                $intCantRepe = $xls->dimension()[1] - 1;
+                t('El archivo excel tiene: '.$intCantRepe.' lineas');
+
+            } else {
+                $strMensErro = $strLibrExce::parseError();
+                t('Error leyendo el archivo: '.$strMensErro);
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNombArch;
+                $arrParaErro['MensErro'] = $strMensErro;
+                $arrParaErro['ComeErro'] = 'Error leyendo archivo excel: '.$strMensErro;
+                GrabarError($arrParaErro);
+                $this->danger($strMensErro);
+                return;
+            }
+            //----------------------------------
+            // Se lee el archivo linea a linea
+            //----------------------------------
+            $objEmpqBols = Empaque::LoadByNombre('BOLSA');
+            $blnPrimVezx = true;
+            foreach ($xls->rows() as $arrCampPiez) {
+                if ( (count($arrCampPiez) > 0) && ($intNumeLine > 1) ) {
+                    //----------------------------------------------------------
+                    // Se verifica la existencia de los campos reglamentarios
+                    //----------------------------------------------------------
+                    $intCantCamp = count($arrCampPiez);
+                    if ($intCantCamp != 7) {
+                        $strMensErro = "La linea $intNumeLine no tiene los 7 campos requeridos. Tiene: $intCantCamp";
+                        t($strMensErro);
+                        $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                        $arrParaErro['NumeRefe'] = $strNombArch;
+                        $arrParaErro['MensErro'] = $strMensErro;
+                        $arrParaErro['ComeErro'] = 'Cargando Piezas Masivamente Guia Nro: '.$this->txtNumeGuia->Text;
+                        GrabarError($arrParaErro);
+                        $intCantErro ++;
+                        $blnErroProc = true;
+                        $intNumeLine++;
+                        continue;
+                    }
+                    //-----------------------------------------------------------------------
+                    // Si to-do sale bien, se procede a verificar los datos de cada registro
+                    //-----------------------------------------------------------------------
+                    $arrResuVali = $this->verificarDatosMasivos($arrCampPiez,$intNumeLine);
+                    t('Datos verificados');
+                    $blnTodoOkey = $arrResuVali['TodoOkey'];
+                    $strMensObse = $arrResuVali['TextErro'];
+                    $arrContVali = $arrResuVali['ContVali'];
+                    //-----------------------------------------------
+                    // Variables contenidas en la linea del archivo
+                    //-----------------------------------------------
+                    $strEmpaPiez = $arrContVali['EmpaPiez'];
+                    $strDescCont = substr(limpiarCadena($arrContVali['DescCont']),0,50);
+                    $decAltoPiez = $arrContVali['AltoPiez'];
+                    $decAnchPiez = $arrContVali['AnchPiez'];
+                    $decLargPiez = $arrContVali['LargPiez'];
+                    $decKiloPiez = $arrContVali['KiloPiez'];
+
+                    if ($this->lstModoValo->SelectedValue == 'PP') {
+                        t('Valor Decl por Pieza');
+                        //-------------------------------------
+                        // Valor Declarado definido por Pieza
+                        //-------------------------------------
+                        $decValoDecl = $arrContVali['ValoDecl'];
+                        t('Valor Decl asignado a la pieza: '.$decValoDecl);
+                    } else {
+                        if ($blnPrimVezx) {
+                            $blnPrimVezx = false;
+                            t('Valor Decl por Guia');
+                            //-------------------------------------
+                            // Valor Declarado definido por Guia
+                            //-------------------------------------
+                            $intCantPiez = $intCantRepe;
+                            t('La guia tiene: '.$intCantPiez.' piezas');
+                            $decValoGuia = $this->txtValoDecl->Text;
+                            t('Valor Decl de la guia: '.$decValoGuia);
+                            $decValoDecl = $decValoGuia / $intCantPiez;
+                            t('Valor Decl calculado para la pieza: '.$decValoDecl);
+                        }
+                    }
+                    //-----------------------------------------------------------------------
+                    // Se crea un registro en la tabla piezas_temp para c/linea del archivo
+                    //-----------------------------------------------------------------------
+                    try {
+
+                        if ($this->lstUnidMedi->SelectedValue == 'pl') {
+                            t('transformando plg a cms');
+                            //-------------------------------
+                            // Las pulgadas se llevan a cms
+                            //-------------------------------
+                            $decAltoPiez *= 2.54;
+                            $decAnchPiez *= 2.54;
+                            $decLargPiez *= 2.54;
+                        }
+
+                        t('voy a calcular el volumen de la pieza');
+                        $decVoluPiez = ($decAltoPiez * $decAnchPiez * $decLargPiez) / 5000;
+                        $decPiesPiez = (($decAltoPiez * $decAnchPiez * $decLargPiez) / 1000000) * 35.315;
+
+                        t('El empaque es: '.$strEmpaPiez);
+                        $objEmpqPiez = Empaque::LoadByNombre($strEmpaPiez);
+                        if ($objEmpqPiez instanceof Empaque) {
+                            t('Encontre el Empaque');
+                            $intEmpaPiez = $objEmpqPiez->Id;
+                        } else {
+                            t('Asigne el Empaque por defecto...');
+                            $intEmpaPiez = $objEmpqBols->Id;
+                        }
+
+                        t('voy a asignar valores de la tabla');
+                        $objPiezGuia = new PiezasTemp();
+                        $objPiezGuia->ProcesoErrorId = $this->objProcEjec->Id;
+                        $objPiezGuia->CreatedBy      = $this->objUsuario->CodiUsua;
+                        $objPiezGuia->EmpaqueId      = $intEmpaPiez;
+                        $objPiezGuia->Descripcion    = substr(strtoupper(limpiarCadena($strDescCont)),0,50);
+                        $objPiezGuia->Kilos          = (float)$decKiloPiez;
+                        $objPiezGuia->Alto           = $decAltoPiez;
+                        $objPiezGuia->Ancho          = $decAnchPiez;
+                        $objPiezGuia->Largo          = $decLargPiez;
+                        $objPiezGuia->Volumen        = (float)$decVoluPiez;
+                        $objPiezGuia->ValorDeclarado = $decValoDecl;
+                        $objPiezGuia->PiesCub        = (float)$decPiesPiez;
+                        $objPiezGuia->Save();
+                        t('Salve en PiezasTemp');
+
+                        if ($this->lstModoValo->SelectedValue == 'PG') {
+                            $this->sumaPiezas($decValoDecl);
+                        } else {
+                            $this->sumaPiezas();
+                        }
+                        $this->blnCambPiez = true;
+                    } catch (Exception $e) {
+                        t('Error: '.$e->getMessage());
+                        break;
+                    }
+                }
+                $intNumeLine++;
+            }
+        } catch (Exception $e) {
+            t('Error cargando el archivo: '.$e->getMessage());
+            $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = $strNombArch;
+            $arrParaErro['MensErro'] = $e->getMessage();
+            $arrParaErro['ComeErro'] = 'Falla cargando Piezas Masivas ('.$this->txtNumeGuia->Text.')';
+            GrabarError($arrParaErro);
+            $intCantErro ++;
+            $blnErroProc = true;
+        }
+        //-------------------------------------
+        // Se levantan los errores en pantalla
+        //-------------------------------------
+        error_reporting($mixErroOrig);
+        //-----------------------------------------------------------------
+        // Se inicializan los parámetros del mensaje a mostrar al usuario.
+        //-----------------------------------------------------------------
+        $intNumeLine -= 2;
+        $strTextMens = "Se han cargado: $intNumeLine piezas de manera exitosa | Errores: $intCantErro";
+        if ($blnErroProc) {
+            //----------------------------------------------------------------------------------------------------
+            // Si hay uno o varios errores, se coloca el mensaje como un alerta, se indica la cantidad de errores
+            // existentes y se visualiza el botón para acceder a los detalles de los mismos.
+            //----------------------------------------------------------------------------------------------------
+            $this->btnErroProc->Visible = true;
+            $strTipoMens = 'danger';
+        } else {
+            $strTipoMens = 'success';
+        }
+        //------------------------------------
+        // Se crea el mensaje correspondiente
+        //------------------------------------
+        $this->$strTipoMens($strTextMens);
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->NotificarAdmin = $blnErroProc ? true : false;
+        $this->objProcEjec->Save();
+        //----------------------------------------------
+        // Se deja registro de la transacción realizada
+        //----------------------------------------------
+        $arrLogxCamb['strNombTabl'] = 'ProcesoError';
+        $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
+        $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
+        $arrLogxCamb['strDescCamb'] = 'Ejecutado';
+        $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
+        LogDeCambios($arrLogxCamb);
+
+//        t('El Id del Proceso es: '.$this->objProcEjec->Id);
+//        t('La cantidad de errores: '.$intCantErro);
+        $_SESSION['ProcAnte'] = $this->objProcEjec->Id;
+        $_SESSION['CantErro'] = $intCantErro;
+    }
+
+
+    protected function verificarDatosMasivos($arrCampPiez,$intNumeLine) {
+        t('Verificando datos de la linea: '.$intNumeLine);
+        $arrContVali = [];
+        $blnTodoOkey = true;
+        $strTextErro = '';
+        $arrResuVali = array();
+
+        $strEmpaPiez = trim(strtoupper($arrCampPiez[0]));
+        $arrContVali['EmpaPiez'] = $strEmpaPiez;
+        if (strlen($strEmpaPiez) == 0) {
+            $strTextErro = "Linea $intNumeLine | Col 1 | El Empaque, es Requerido (BOLSA, CAJA, PALETA, etc)";
+            $blnTodoOkey = false;
+        }
+        $strDescCont = strtoupper($arrCampPiez[1]);
+        $arrContVali['DescCont'] = $strDescCont;
+        if (strlen($strDescCont) == 0) {
+            $strTextErro = "Linea $intNumeLine | Col 2 | La Descripcion del Contenido de la Pieza, es Requerida";
+            $blnTodoOkey = false;
+        }
+        $decAltoPiez = (float)$arrCampPiez[2];
+        $arrContVali['AltoPiez'] = $decAltoPiez;
+        if ($blnTodoOkey) {
+            if ($decAltoPiez == 0) {
+                $strTextErro = "Linea $intNumeLine | Col 3 | Alto de la Piezas debe ser un Número mayor a Cero";
+                $blnTodoOkey = false;
+            }
+        }
+        $decAnchPiez = (float)$arrCampPiez[3];
+        $arrContVali['AnchPiez'] = $decAnchPiez;
+        if ($blnTodoOkey) {
+            if ($decAnchPiez == 0) {
+                $strTextErro = "Linea $intNumeLine | Col 4 | Ancho de la Piezas debe ser un Número mayor a Cero";
+                $blnTodoOkey = false;
+            }
+        }
+        $decLargPiez = (float)$arrCampPiez[4];
+        $arrContVali['LargPiez'] = $decLargPiez;
+        if ($blnTodoOkey) {
+            if ($decLargPiez == 0) {
+                $strTextErro = "Linea $intNumeLine | Col 5 | Largo de la Piezas debe ser un Número mayor a Cero";
+                $blnTodoOkey = false;
+            }
+        }
+        $decKiloPiez = (float)$arrCampPiez[5];
+        $arrContVali['KiloPiez'] = $decKiloPiez;
+        if ($blnTodoOkey) {
+            if (strlen($decKiloPiez) > 0) {
+                if (!is_numeric($decKiloPiez)) {
+                    $strTextErro = "Linea $intNumeLine | Col 6 | Los kilos de la debe ser un Número";
+                    $blnTodoOkey = false;
+                }
+            }
+        }
+        $decValoDecl = (float)$arrCampPiez[6];
+        $arrContVali['ValoDecl'] = $decValoDecl;
+        if ($blnTodoOkey) {
+            if (strlen($decValoDecl) > 0) {
+                if (!is_numeric($decValoDecl)) {
+                    $strTextErro = "Linea $intNumeLine | Col 7 | El Valor Declarado debe ser un Número";
+                    $blnTodoOkey = false;
+                }
+            }
+        }
+        $arrResuVali['TodoOkey'] = $blnTodoOkey;
+        $arrResuVali['TextErro'] = $strTextErro;
+        $arrResuVali['ContVali'] = $arrContVali;
+        t('Termine la verificacion.  Errores: '.$strTextErro);
+        return $arrResuVali;
+    }
+
+
     protected function btnSavePiez_Click() {
         $intCantRepe = strlen($this->txtRepePiez->Text) ? (int)$this->txtRepePiez->Text : 1;
         if ($this->lstModoValo->SelectedValue == 'PP') {
@@ -1314,6 +1758,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $decValoDecl = $decValoPiez / $intCantPiez;
         }
         for ($i = 0; $i < $intCantRepe; $i++) {
+            t('Procesando la pieza: '.($i+1));
             if (!$this->blnEditPiez) {
                 //t('Estoy en modo insercion');
                 $objPiezGuia = new PiezasTemp();
@@ -1324,11 +1769,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $objPiezGuia = PiezasTemp::Load($this->intEditPiez);
             }
             try {
+                t('Pasando medidas a variables decimales');
                 $decAltoPiez = strlen($this->txtAltoPiez->Text) ? (float)$this->txtAltoPiez->Text : null;
                 $decAnchPiez = strlen($this->txtAnchPiez->Text) ? (float)$this->txtAnchPiez->Text : null;
                 $decLargPiez = strlen($this->txtLargPiez->Text) ? (float)$this->txtLargPiez->Text : null;
 
                 if ($this->lstUnidMedi->SelectedValue == 'pl') {
+                    t('transformando plg a cms');
                     //-------------------------------
                     // Las pulgadas se llevan a cms
                     //-------------------------------
@@ -1337,9 +1784,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                     $decLargPiez *= 2.54;
                 }
 
+                t('voy a calcular el volumen de la pieza');
                 $decVoluPiez = ($decAltoPiez * $decAnchPiez * $decLargPiez) / 5000;
                 $decPiesPiez = (($decAltoPiez * $decAnchPiez * $decLargPiez) / 1000000) * 35.315;
 
+                t('voy a asignar valores de la tabla');
                 $objPiezGuia->EmpaqueId      = $this->lstEmpaPiez->SelectedValue;
                 $objPiezGuia->Descripcion    = substr(strtoupper(limpiarCadena($this->txtContPiez->Text)),0,50);
                 $objPiezGuia->Kilos          = (float)$this->txtKiloPiez->Text;
@@ -1347,12 +1796,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 $objPiezGuia->Ancho          = $decAnchPiez;
                 $objPiezGuia->Largo          = $decLargPiez;
                 $objPiezGuia->Volumen        = (float)$decVoluPiez;
-                //$objPiezGuia->Volumen        = (float)$this->txtVoluPiez->Text;
                 $objPiezGuia->ValorDeclarado = $decValoDecl;
                 $objPiezGuia->PiesCub        = (float)$decPiesPiez;
-                //$objPiezGuia->PiesCub        = (float)$this->txtPiesPiez->Text;
                 $objPiezGuia->Save();
                 t('Salve en PiezasTemp');
+
                 if ($this->lstModoValo->SelectedValue == 'PG') {
                     $this->sumaPiezas($decValoDecl);
                 } else {
@@ -1378,7 +1826,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtRepePiez->Text = 1;
         $this->txtPiesPiez->Text = '';
 
-        $this->success('Transaccion Exitosa.  Pieza guardada !!!');
+        $this->contarCantidadDePiezas();
+        if (!$this->blnEditPiez) {
+            $this->success('Transaccion Exitosa.  Pieza creada !!!');
+        } else {
+            $this->success('Transaccion Exitosa.  Pieza editada !!!');
+            $this->blnEditPiez = false;
+        }
     }
 
     protected function btnDelePiez_Click() {
@@ -1436,6 +1890,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtValoPiez->Text = '';
         $this->txtRepePiez->Text = 1;
         $this->txtPiesPiez->Text = '';
+
+        $this->contarCantidadDePiezas();
         //t('Listo el borrado');
         $this->mostrarCampos('add');
         $this->success('Transaccion Exitosa.  Pieza borrada !!!');
@@ -1472,8 +1928,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->txtPiesPiez->Visible = !$this->txtPiesPiez->Visible;
             $this->lblUnidMedi->Visible = !$this->lblUnidMedi->Visible;
             $this->lstUnidMedi->Visible = !$this->lstUnidMedi->Visible;
+            $this->btnCargPiez->Visible = !$this->btnCargPiez->Visible;
             $this->btnSavePiez->Visible = !$this->btnSavePiez->Visible;
             $this->btnCancPiez->Visible = !$this->btnCancPiez->Visible;
+            $this->btnCargPiez->Visible = true;
             $this->btnDelePiez->Visible = false;
 
             $this->txtContPiez->Text = '';
@@ -1859,6 +2317,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     }
 
+    protected function btnErroProc_Click() {
+        $_SESSION['PagiBack'] = __SIST__."/crear_guia_exp.php/".$this->objGuia->Id;
+        QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
+    }
 
 
     protected function txtNumeCedu_Blur() {
@@ -2205,19 +2667,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->lstModoValo->AddItem('Por GUIA','PG',$strModoValo=='PG');
         $this->lstModoValo->AddItem('Por PIEZA','PP',$strModoValo=='PP');
     }
-
-    //protected function cargarAliados($intAliaIdxx=null) {
-    //    $this->lstAliaCome->RemoveAllItems();
-    //    $objClauOrde = QQ::OrderBy(QQN::AliadoComercial()->RazonSocial);
-    //    $arrAliaCome = AliadoComercial::LoadAll($objClauOrde);
-    //    $intCantAlia = count($arrAliaCome);
-    //    $this->lstAliaCome->AddItem('- Seleccione - ('.$intCantAlia.')', null);
-    //    foreach ($arrAliaCome as $objAliaCome) {
-    //        $blnSeleRegi = $objAliaCome->Id == $intAliaIdxx;
-    //        $this->lstAliaCome->AddItem($objAliaCome->__toString(), $objAliaCome->Id, $blnSeleRegi);
-    //    }
-    //    $this->lstAliaCome->Width = 210;
-    //}
 
     protected function cargarClientesCorp($intCodiClie=null) {
         if (is_null($intCodiClie)) {
@@ -2660,12 +3109,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtDescCont->Text = $strDescCont;
         $this->txtKiloEnvi->Text = $decSumaKilo;
         $this->txtCantPiez->Text = $intCantPiez;
-        $this->txtAltoEnvi->Text = $decSumaAlto;
-        $this->txtAnchEnvi->Text = $decSumaAnch;
-        $this->txtLargEnvi->Text = $decSumaLarg;
-        $this->txtVoluEnvi->Text = $decSumaVolu;
+        $this->txtAltoEnvi->Text = nf($decSumaAlto);
+        $this->txtAnchEnvi->Text = nf($decSumaAnch);
+        $this->txtLargEnvi->Text = nf($decSumaLarg);
+        $this->txtVoluEnvi->Text = nf($decSumaVolu);
         $this->txtValoDecl->Text = round($decSumaValo,2);
-        $this->txtPiesEnvi->Text = $decSumaPies;
+        $this->txtPiesEnvi->Text = nf($decSumaPies);
     }
 
 

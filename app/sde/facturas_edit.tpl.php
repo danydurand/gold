@@ -73,6 +73,7 @@
             <div class="col-md-4">
                 <?php $this->txtTotal->RenderWithName(); ?>
                 <?php $this->lstEstaPago->RenderWithName(); ?>
+				<?php $this->txtMontoAbono->RenderWithName(); ?>
 				<?php $this->txtMontoCobrado->RenderWithName(); ?>
 				<?php $this->txtMontoPendiente->RenderWithName(); ?>
 	        </div>

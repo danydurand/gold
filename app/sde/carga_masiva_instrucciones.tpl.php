@@ -1,4 +1,4 @@
-<div class="col-xs-12">
+<div class="col-xs-10">
     <div class="panel panel-primary">
         <div class="panel-heading" style="text-align: left">
             Estructura del Archivo y sus Datos

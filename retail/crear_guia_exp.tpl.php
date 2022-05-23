@@ -12,9 +12,7 @@ require('inc/header.inc.php');
             <?php $this->btnSave->Render(); ?>
             <?php $this->btnNextPage->Render(); ?>
             <?php $this->btnPrevPage->Render(); ?>
-            <?php //$this->lblBotoPopu->Render(); ?>
-            <?php //$this->btnMasxAcci->Render(); ?>
-            <?php //$this->btnErroProc->Render(); ?>
+            <?php $this->btnErroProc->Render(); ?>
         </div>
     </div>
     <div class="form-controls">
