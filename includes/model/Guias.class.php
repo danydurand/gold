@@ -27,6 +27,16 @@
 			return sprintf('%s',  $this->strNumero);
 		}
 
+        public static function PiezasDeLasGuias($arrIdxxProc) {
+
+		    $objClauWher   = QQ::Clause();
+		    $objClauWher[] = QQ::In(QQN::GuiaPiezas()->GuiaId, $arrIdxxProc);
+		    $objClauOrde   = QQ::Clause();
+		    $objClauOrde[] = QQ::OrderBy(QQN::GuiaPiezas()->GuiaId);
+		    $arrPiezGuia   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+            return $arrPiezGuia;
+		}
+
         public static function AptasParaFacturarPorAliadoYServicio($intAliaIdxx,$strServImpo,$arrGuiaIdxx,$strFormResp='count') {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$intAliaIdxx);

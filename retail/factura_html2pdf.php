@@ -21,9 +21,42 @@ try {
     $html2pdf = new Html2Pdf('P', 'LETTER', 'es', true, 'UTF-8', array("15", "10", "20", "30"));
     $html2pdf->pdf->SetDisplayMode('fullpage');
     $_SESSION['FactIdxx'] = $intFactIdxx;
+
+    //-----------------
+    // Guias y Piezas
+    //-----------------
+    $arrGuiaFact = $objFactClie->GetFacturaGuiasAsFacturaArray();
+    $arrGuiaProc = [];
+    foreach ($arrGuiaFact as $objGuiaFact) {
+        $arrGuiaProc[] = $objGuiaFact->GuiaId;
+    }
+    $arrPiezGuia = Guias::PiezasDeLasGuias($arrGuiaProc);
+    $intCantPiez = count($arrPiezGuia);
+    $intPiezPagi = $intCantPiez < 30 ? 20 : 35;
+    $intCantPagi = $intCantPiez / $intPiezPagi;
+    $intPartDeci = $intCantPagi - (int) $intCantPagi;
+    if ($intPartDeci > 0) {
+        $intCantPagi = (int)$intCantPagi + 1;
+    }
+    $intNumePagi = 1;
+    $_SESSION['CantPagi'] = $intCantPagi;
+
     ob_start();
-    include dirname(__FILE__).'/rhtml/factura.php';
+    while ($intNumePagi <= $intCantPagi) {
+        $intOffxSetx = $intNumePagi > 1 ? (($intNumePagi - 1) * $intPiezPagi) : 0;
+        $arrPiezImpr = array_slice($arrPiezGuia, $intOffxSetx, $intPiezPagi);
+
+        $_SESSION['PiezImpr'] = $arrPiezImpr;
+        $_SESSION['NumePagi'] = $intNumePagi;
+
+        include dirname(__FILE__) . '/rhtml/factura.php';
+
+        $intNumePagi++;
+    }
+    //$html2pdf->setModeDebug();
+
     $content .= ob_get_clean();
+
     //------------------------------------------------
     // El contenido HTML generado, se exporta a PDF
     //------------------------------------------------

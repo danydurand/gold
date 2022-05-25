@@ -29,6 +29,10 @@ if (!isset($_SESSION['FactIdxx'])) {
 }
 $strLimiDere = '350px';
 $intFactIdxx = $_SESSION['FactIdxx'];
+$arrPiezImpr = $_SESSION['PiezImpr'];
+$intCantPagi = $_SESSION['CantPagi'];
+$intNumePagi = $_SESSION['NumePagi'];
+t('Pagina: '.$intNumePagi.' de '.$intCantPagi);
 $objFactImpr = Facturas::Load($intFactIdxx);
 try {
     $arrGuiaFact = $objFactImpr->GetFacturaGuiasAsFacturaArray();
@@ -39,7 +43,6 @@ try {
     t("Error en impresion de Factura (Id: $intFactIdxx): ".$e->getMessage());
 }
 ?>
-
 <page backtop="10mm" backbottom="10mm" backleft="10mm" backright="10mm">
     <page_header>
         <!---------------------->
@@ -100,121 +103,123 @@ try {
                     <!------------------>
                     <table style="width: 100%; border: solid .5mm;">
                         <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="width: 55px; text-align: center">GUIA</td>
-                            <td style="width: 160px; text-align: left">CONTENIDO</td>
+                            <td style="width: 40px; text-align: center">GUIA</td>
+                            <td style="width: 140px; text-align: left">CONTENIDO</td>
                             <td style="width: 38px; text-align: center">DEST</td>
                             <td style="width: 35px; text-align: center">PRD</td>
                             <td style="width: 30px; text-align: center">KG</td>
                             <td style="width: 30px; text-align: center">PZS</td>
-                            <td style="width: 95px; text-align: center">A x A x L (PL)</td>
-                            <td style="width: 95px; text-align: center">A x A x L (CM)</td>
+                            <td style="width: 120px; text-align: center">A x A x L (PL)</td>
+                            <td style="width: 120px; text-align: center">A x A x L (CM)</td>
                             <td style="width: 32px; text-align: center">PIES3</td>
-                            <td style="width: 60px; text-align: right">MONTO</td>
+                            <td style="width: 45px; text-align: right">MONTO</td>
                         </tr>
                         <?php foreach ($arrGuiaFact as $objGuiaFact) { ?>
-                            <tr>
-                                <td style="width: 55px; text-align: center"><?= $objGuiaFact->Guia->Numero ?></td>
-                                <td style="width: 160px; text-align: left; word-wrap: break-spaces"><?= $objGuiaFact->Guia->Contenido ?></td>
-                                <td style="width: 38px; text-align: center"><?= $objGuiaFact->Guia->Destino->Iata ?></td>
-                                <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Producto->Codigo ?></td>
-                                <td style="width: 30px; text-align: center"><?= $objGuiaFact->Guia->Kilos ?></td>
-                                <td style="width: 30px; text-align: center"><?= $objGuiaFact->Guia->Piezas ?></td>
-                                <td style="width: 95px; text-align: center"><?= $objGuiaFact->Guia->__medidasPl() ?></td>
-                                <td style="width: 95px; text-align: center"><?= $objGuiaFact->Guia->__medidas() ?></td>
+                            <tr style="font-size: 9px">
+                                <td style="width: 40px; text-align: center"><?= $objGuiaFact->Guia->Numero ?></td>
+                                <td style="width: 140px; text-align: left; word-wrap: break-spaces"><?= $objGuiaFact->Guia->Contenido ?></td>
+                                <td style="width: 35px; text-align: center"><?= $objGuiaFact->Guia->Destino->Iata ?></td>
+                                <td style="width: 30px; text-align: center"><?= $objGuiaFact->Guia->Producto->Codigo ?></td>
+                                <td style="width: 20px; text-align: center"><?= $objGuiaFact->Guia->Kilos ?></td>
+                                <td style="width: 25px; text-align: center"><?= $objGuiaFact->Guia->Piezas ?></td>
+                                <td style="width: 120px; text-align: center; font-size: 8.5px"><?= $objGuiaFact->Guia->__medidasPl() ?></td>
+                                <td style="width: 120px; text-align: center"><?= $objGuiaFact->Guia->__medidas() ?></td>
                                 <td style="width: 32px; text-align: center"><?= $objGuiaFact->Guia->PiesCub ?></td>
-                                <td style="width: 60px; text-align: right"><?= nf($objGuiaFact->Guia->Total) ?></td>
+                                <td style="width: 45px; text-align: right"><?= nf($objGuiaFact->Guia->Total) ?></td>
                             </tr>
-                            <?php if ($objGuiaFact->Guia->Piezas > 1) { ?>
-                                <tr style="background-color: #CCC; font-weight: bold">
-                                    <td style="" colspan="10">Piezas</td>
+                            <tr style="background-color: #CCC; font-weight: bold">
+                                <td style="" colspan="10">Piezas</td>
+                            </tr>
+                            <?php foreach ($arrPiezImpr as $objPiezGuia) { ?>
+                                <tr style="font-size: small">
+                                    <td style="width: 40px; text-align: center"></td>
+                                    <td style="width: 140px; text-align: left; word-wrap: break-spaces"><?= $objPiezGuia->Descripcion ?></td>
+                                    <td style="width: 35px; text-align: center"></td>
+                                    <td style="width: 30px; text-align: center"></td>
+                                    <td style="width: 20px; text-align: center"><?= $objPiezGuia->Kilos ?></td>
+                                    <td style="width: 25px; text-align: center"></td>
+                                    <td style="width: 120px; text-align: center"><?= $objPiezGuia->__medidasPl() ?></td>
+                                    <td style="width: 120px; text-align: center"><?= $objPiezGuia->__medidas() ?></td>
+                                    <td style="width: 32px; text-align: center"></td>
+                                    <td style="width: 45px; text-align: right"></td>
                                 </tr>
-                                <?php $arrPiezGuia = $objGuiaFact->Guia->GetGuiaPiezasAsGuiaArray(); ?>
-                                <?php foreach ($arrPiezGuia as $objPiezGuia) { ?>
-                                    <tr>
-                                        <td style="width: 55px; text-align: center"></td>
-                                        <td style="width: 150px; text-align: left; word-wrap: break-spaces"><?= $objPiezGuia->Descripcion ?></td>
-                                        <td style="width: 38px; text-align: center"></td>
-                                        <td style="width: 35px; text-align: center"></td>
-                                        <td style="width: 30px; text-align: center"><?= $objPiezGuia->Kilos ?></td>
-                                        <td style="width: 30px; text-align: center"></td>
-                                        <td style="width: 95px; text-align: center"><?= $objPiezGuia->__medidasPl() ?></td>
-                                        <td style="width: 70px; text-align: center"><?= $objPiezGuia->__medidas() ?></td>
-                                        <td style="width: 32px; text-align: center"></td>
-                                        <td style="width: 60px; text-align: right"></td>
-                                    </tr>
-                                <?php } ?>
                             <?php } ?>
                         <?php } ?>
                     </table>
                 </td>
             </tr>
         </table>
-        <table style="margin-left:377px; font-size: small">
-            <tr>
-                <td style="width: 35%; text-align: right; vertical-align: top">
-                    <!------------------>
-                    <!--   IMPORTES   -->
-                    <!------------------>
-                    <table style="width: 100%; border: solid .5mm;">
-                        <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="width: 100px; text-align: center">CONCEPTO</td>
-                            <td style="width: 80px; text-align: right">MONTO USD</td>
-                            <td style="width: 80px; text-align: right">MONTO Bs</td>
-                        </tr>
-                        <?php foreach ($arrItemFact as $objItemFact) { ?>
-                            <tr>
-                                <td class="concepto"><?= $objItemFact->Concepto->MostrarComo ?>:</td>
-                                <td style="text-align: right"><?= $objItemFact->MontoEnUSD() ?></td>
-                                <td style="text-align: right"><?= nf($objItemFact->Monto) ?></td>
-                            </tr>
-                        <?php } ?>
-                        <tr style="background-color: #CCC; font-weight: bold">
-                            <td style="text-align: center">TOTAL</td>
-                            <td style="text-align: right"><?= $objFactImpr->TotaDola() ?></td>
-                            <td style="text-align: right"><?= nf($objFactImpr->Total) ?></td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <?php if (count($arrPagoFact)) { ?>
-        <table style="margin-top: 24px; width: 100%; border: solid .5mm; font-size: small">
-            <tr style="background-color: #CCC; font-weight: bold">
-                <td style="width: 120px; text-align: left">FORMA PAGO</td>
-                <td style="width: 60px; text-align: center">MONEDA</td>
-                <td style="width: 80px; text-align: center">REF</td>
-                <td style="width: 110px; text-align: left">BANCO</td>
-                <td style="width: 100px; text-align: right">MTO PAGO</td>
-                <td style="width: 80px; text-align: right">MTO USD</td>
-                <td style="width: 100px; text-align: right">MTO EN BSD</td>
-            </tr>
-            <?php $decAcumBoli = 0 ?>
-            <?php $decAcumDola = 0 ?>
-            <?php foreach ($arrPagoFact as $objPagoFact) { ?>
-                <?php $strNombBanc = !is_null($objPagoFact->BancoId) ? $objPagoFact->Banco->Descripcion : null ?>
+        <?php if ($intNumePagi == $intCantPagi) { ?>
+            <table style="margin-left:377px; font-size: small">
                 <tr>
-                    <td style="width: 115px; text-align: left"><?= $objPagoFact->FormaPago->Descripcion ?></td>
-                    <td style="width: 60px; text-align: center"><?= $objPagoFact->Divisa->Codigo ?></td>
-                    <td style="width: 80px; text-align: center"><?= $objPagoFact->Referencia ?></td>
-                    <td style="width: 110px; text-align: left"><?= $strNombBanc ?></td>
-                    <td style="width: 90px; text-align: right"><?= nf($objPagoFact->MontoDivisa) ?></td>
-                    <td style="width: 70px; text-align: right"><?= nf($objPagoFact->MontoUsd) ?></td>
-                    <td style="width: 100px; text-align: right"><?= nf($objPagoFact->MontoBs) ?></td>
+                    <td style="width: 35%; text-align: right; vertical-align: top">
+                        <!------------------>
+                        <!--   IMPORTES   -->
+                        <!------------------>
+                        <table style="width: 100%; border: solid .5mm;">
+                            <tr style="background-color: #CCC; font-weight: bold">
+                                <td style="width: 100px; text-align: center">CONCEPTO</td>
+                                <td style="width: 80px; text-align: right">MONTO USD</td>
+                                <td style="width: 80px; text-align: right">MONTO Bs</td>
+                            </tr>
+                            <?php foreach ($arrItemFact as $objItemFact) { ?>
+                                <tr>
+                                    <td class="concepto"><?= $objItemFact->Concepto->MostrarComo ?>:</td>
+                                    <td style="text-align: right"><?= $objItemFact->MontoEnUSD() ?></td>
+                                    <td style="text-align: right"><?= nf($objItemFact->Monto) ?></td>
+                                </tr>
+                            <?php } ?>
+                            <tr style="background-color: #CCC; font-weight: bold">
+                                <td style="text-align: center">TOTAL</td>
+                                <td style="text-align: right"><?= $objFactImpr->TotaDola() ?></td>
+                                <td style="text-align: right"><?= nf($objFactImpr->Total) ?></td>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
-                <?php $decAcumBoli += $objPagoFact->MontoBs ?>
-                <?php $decAcumDola += $objPagoFact->MontoUsd ?>
+            </table>
+            <?php if (count($arrPagoFact)) { ?>
+            <table style="margin-top: 24px; width: 100%; border: solid .5mm; font-size: small">
+                <tr style="background-color: #CCC; font-weight: bold">
+                    <td style="width: 120px; text-align: left">FORMA PAGO</td>
+                    <td style="width: 60px; text-align: center">MONEDA</td>
+                    <td style="width: 80px; text-align: center">REF</td>
+                    <td style="width: 110px; text-align: left">BANCO</td>
+                    <td style="width: 100px; text-align: right">MTO PAGO</td>
+                    <td style="width: 80px; text-align: right">MTO USD</td>
+                    <td style="width: 100px; text-align: right">MTO EN BSD</td>
+                </tr>
+                <?php $decAcumBoli = 0 ?>
+                <?php $decAcumDola = 0 ?>
+                <?php foreach ($arrPagoFact as $objPagoFact) { ?>
+                    <?php $strNombBanc = !is_null($objPagoFact->BancoId) ? $objPagoFact->Banco->Descripcion : null ?>
+                    <tr>
+                        <td style="width: 115px; text-align: left"><?= $objPagoFact->FormaPago->Descripcion ?></td>
+                        <td style="width: 60px; text-align: center"><?= $objPagoFact->Divisa->Codigo ?></td>
+                        <td style="width: 80px; text-align: center"><?= $objPagoFact->Referencia ?></td>
+                        <td style="width: 110px; text-align: left"><?= $strNombBanc ?></td>
+                        <td style="width: 90px; text-align: right"><?= nf($objPagoFact->MontoDivisa) ?></td>
+                        <td style="width: 70px; text-align: right"><?= nf($objPagoFact->MontoUsd) ?></td>
+                        <td style="width: 100px; text-align: right"><?= nf($objPagoFact->MontoBs) ?></td>
+                    </tr>
+                    <?php $decAcumBoli += $objPagoFact->MontoBs ?>
+                    <?php $decAcumDola += $objPagoFact->MontoUsd ?>
+                <?php } ?>
+                <tr>
+                    <td style="width: 115px; text-align: left"></td>
+                    <td style="width: 60px; text-align: center"></td>
+                    <td style="width: 80px; text-align: center"></td>
+                    <td style="width: 110px; text-align: left"></td>
+                    <td style="width: 90px; text-align: right; font-weight: bold">TOTALES</td>
+                    <td style="width: 70px; text-align: right"><?= nf($decAcumDola) ?></td>
+                    <td style="width: 100px; text-align: right"><?= nf($decAcumBoli) ?></td>
+                </tr>
+            </table>
             <?php } ?>
-            <tr>
-                <td style="width: 115px; text-align: left"></td>
-                <td style="width: 60px; text-align: center"></td>
-                <td style="width: 80px; text-align: center"></td>
-                <td style="width: 110px; text-align: left"></td>
-                <td style="width: 90px; text-align: right; font-weight: bold">TOTALES</td>
-                <td style="width: 70px; text-align: right"><?= nf($decAcumDola) ?></td>
-                <td style="width: 100px; text-align: right"><?= nf($decAcumBoli) ?></td>
-            </tr>
-        </table>
         <?php } ?>
     </page_header>
+    <page_footer>
+        <div style="text-align: center"><?= 'Pagina: '.$intNumePagi.' de: '.$intCantPagi ?></div>
+    </page_footer>
 
 </page>
