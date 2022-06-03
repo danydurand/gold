@@ -29,8 +29,8 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->dtgPiezEnco->Render(); ?>
             </div>
             <div class="col-lg-3">
-                <div class="titulo">Piezas Faltantes</div>
-                <?php $this->txtPiezFalt->Render(); ?>
+<!--                <div class="titulo">Piezas Faltantes</div>-->
+<!--                --><?php //$this->txtPiezFalt->Render(); ?>
             </div>
         </div>
     </div>

@@ -148,12 +148,32 @@ class BuscarPiezaMia extends FormularioBaseKaizen {
         $this->txtPiezFalt->Text = '';
         $arrNumePiez = explode(',', nl2br2($this->txtListPiez->Text));
         $arrNumePiez = LimpiarArreglo($arrNumePiez, false);
-    
+        $intCantFind = count($arrNumePiez);
+        $strCadeSqlx = '';
+        $intPiezProc = 0;
+        foreach ($arrNumePiez as $strNumePiez) {
+            $intPiezProc++;
+            $strCadeSqlx .= "select id";
+            $strCadeSqlx .= "  from scanneo_piezas ";
+            $strCadeSqlx .= " where id_pieza like '%$strNumePiez%'";
+            if (($intCantFind > 1) && ($intPiezProc < $intCantFind)) {
+                $strCadeSqlx .= 'union ';
+            }
+        }
+        t('SQL: '.$strCadeSqlx);
+        $objDatabase = Scanneo::GetDatabase();
+        $objDbResult = $objDatabase->Query($strCadeSqlx);
+        $arrScanIdxx = [];
+        while ($mixRegistro = $objDbResult->FetchArray()) {
+            $arrScanIdxx[] = $mixRegistro['id'];
+        }
+
         $this->objClauWher   = QQ::Clause();
-        $this->objClauWher[] = QQ::In(QQN::ScanneoPiezas()->IdPieza,$arrNumePiez);
+        $this->objClauWher[] = QQ::In(QQN::ScanneoPiezas()->Id,$arrScanIdxx);
     
         $this->dtgPiezEnco->Refresh();
 
+        /*
         $arrPiezScan = array();
         if (count($this->arrPiezScan)) {
             foreach ($this->arrPiezScan as $objPiezScan) {
@@ -161,9 +181,7 @@ class BuscarPiezaMia extends FormularioBaseKaizen {
             }
 
             $intCantFoun = count($arrPiezScan);
-            $intCantFind = count($arrNumePiez);
             if ($intCantFind != $intCantFoun) {
-                t('Hay diferencia');
                 $this->danger('Se encontraron: ' . $intCantFoun . ' de ' . $intCantFind);
                 if (count($this->arrPiezScan)) {
                     foreach ($arrNumePiez as $strNumePiez) {
@@ -173,10 +191,12 @@ class BuscarPiezaMia extends FormularioBaseKaizen {
                     }
                 }
             } else {
-                t('Se encontraron todas las piezas');
-                $this->success('Se encontraron: ' . $intCantFoun . ' piezas');
+                $this->success('Piezas encontradas: ' . $intCantFoun);
             }
         }
+        */
+
+        $this->success('Piezas encontradas: ' . count($arrScanIdxx));
     }
 
 }

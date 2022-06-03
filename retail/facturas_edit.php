@@ -724,7 +724,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgImpoFact->AddColumn($colMostComo);
 
         $colMontConc = new QDataGridColumn($this);
-        $colMontConc->Name = QApplication::Translate('Monto');
+        $colMontConc->Name = QApplication::Translate('Monto Bs');
         $colMontConc->Html = '<?= nf($_ITEM->Monto,2) ?>';
         $colMontConc->Width = 80;
         $colMontConc->HorizontalAlign = QHorizontalAlign::Right;
@@ -778,7 +778,7 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgGuiaFact->AddColumn($colDestGuia);
 
         $colTotaGuia = new QDataGridColumn($this);
-        $colTotaGuia->Name = QApplication::Translate('Total');
+        $colTotaGuia->Name = QApplication::Translate('Total Bs');
         $colTotaGuia->Html = '<?= nf($_ITEM->Guia->Total,2) ?>';
         $colTotaGuia->Width = 50;
         //$colTotaGuia->HorizontalAlign = QHorizontalAlign::Right;

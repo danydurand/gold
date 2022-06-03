@@ -48,6 +48,7 @@
 		public function resetearClave($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
 		    $arrResuCamb = ['success','Clave Reseteada'];
 		    try {
+		        t('Llegando a resetearClave');
 		        $strPassUsua    = strtolower($strPassUsua);
                 $this->PassUsua = md5($strPassUsua);
                 $this->FechClav = new QDateTime("2010-01-01");
@@ -55,6 +56,7 @@
                 $this->CodiStat = 1;
                 $this->MotiBloq = '';
                 $this->Save();
+                t('Reseteo grabado en la base de datos');
                 //-------------------------------------
                 // Se deja constancia en el Histórico
                 //-------------------------------------

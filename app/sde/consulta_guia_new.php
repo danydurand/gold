@@ -165,6 +165,13 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 QApplication::Redirect(__SIST__.'/nota_de_entrega_pdf.php/'.$this->objGuia->Id);
             }
         }
+        if ($strAcciPlus == 'ie') {
+            // Imprimir Etiqueta
+            if ($this->objGuia) {
+                $_SESSION['GuiaEtiq'] = [$this->objGuia->Id];
+                QApplication::Redirect(__SIST__.'/etiqueta_pdf.php');
+            }
+        }
     }
 
     protected function Form_Create() {
@@ -275,17 +282,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         if ($objEditGuia) {
             $this->btnEditGuia->Visible = $objEditGuia->ParaVal1;
         }
-        //-------------------------------------------------------
-        // Si se trata de una Guia Retorno, se muestra un boton
-        // que permite consultar la Guia Original relacionada
-        //-------------------------------------------------------
-        //$this->btnGuiaOrig_Create();
-        //$intPosiCade = strpos($this->objGuia->Observacion,'RETORNO DE LA GUIA: ');
-        //if ($intPosiCade !== false) {
-        //    $strGuiaOrig = substr($this->objGuia->Observacion,20);
-        //    $this->btnGuiaOrig->ActionParameter = $strGuiaOrig;
-        //    $this->btnGuiaOrig->Visible = true;
-        //}
 
     }
 
@@ -339,11 +335,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colKiloPiez->Html = '<?= $_ITEM->Kilos; ?>';
         $this->dtgPiezGuia->AddColumn($colKiloPiez);
 
-        //$colLibrPiez = new QDataGridColumn($this);
-        //$colLibrPiez->Name = QApplication::Translate('Libras');
-        /*$colLibrPiez->Html = '<?= $_ITEM->Libras; ?>';*/
-        //$this->dtgPiezGuia->AddColumn($colLibrPiez);
-
         $colPiesPiez = new QDataGridColumn($this);
         $colPiesPiez->Name = QApplication::Translate('PiesCub');
         $colPiesPiez->Html = '<?= $_ITEM->PiesCub; ?>';
@@ -385,6 +376,10 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ne',
                 TextoIcono('print fa-lg','Imprimir Nota de Entrega')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ie',
+                TextoIcono('clone fa-lg','Imprimir Etiqueta')
             );
         }
 

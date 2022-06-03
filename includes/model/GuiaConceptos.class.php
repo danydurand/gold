@@ -28,7 +28,10 @@
 		}
 
         public function __montoEnUSD() {
-            return nf($this->Monto / $this->Guia->Tasa);
+            t('En GuiaConceptos');
+            t('El monto del concepto es: '.$this->Monto.' y la tasa es: '.$this->Guia->Tasa);
+            t($this->Monto / $this->Guia->Tasa);
+            return ($this->Monto / $this->Guia->Tasa);
         }
 
 		// Override or Create New Load/Count methods

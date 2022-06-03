@@ -844,6 +844,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtValoDecl = new QFloatTextBox($this);
         $this->txtValoDecl->Name = 'Valor Decl.';
         $this->txtValoDecl->Width = 60;
+        $this->txtValoDecl->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtValoDecl->Text = $this->objGuia->ValorDeclarado;
         } else {
@@ -912,6 +913,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtCantPiez_Create() {
         $this->txtCantPiez = new QIntegerTextBox($this);
         $this->txtCantPiez->Width = 60;
+        $this->txtCantPiez->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtCantPiez->Text = $this->objGuia->Piezas;
         }
@@ -1030,6 +1032,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtTasaDola_Create() {
         $this->txtTasaDola = new QFloatTextBox($this);
         $this->txtTasaDola->Width = 100;
+        $this->txtTasaDola->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtTasaDola->Text = nf($this->objGuia->Tasa);
         } else {
@@ -1040,8 +1043,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtTotaGuia_Create() {
         $this->txtTotaGuia = new QFloatTextBox($this);
         $this->txtTotaGuia->Width = 100;
+        $this->txtTotaGuia->CssClass = 'text-right';
         if ($this->blnEditMode) {
-            $this->txtTotaGuia->Text = $this->objGuia->Total;
+            $this->txtTotaGuia->Text = nf($this->objGuia->Total);
         }
     }
 
@@ -1212,6 +1216,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtAltoEnvi_Create() {
         $this->txtAltoEnvi = new QTextBox($this);
         $this->txtAltoEnvi->Width = 60;
+        $this->txtAltoEnvi->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtAltoEnvi->Text = $this->objGuia->Alto;
         }
@@ -1220,6 +1225,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtAnchEnvi_Create() {
         $this->txtAnchEnvi = new QTextBox($this);
         $this->txtAnchEnvi->Width = 60;
+        $this->txtAnchEnvi->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtAnchEnvi->Text = $this->objGuia->Ancho;
         }
@@ -1228,6 +1234,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtLargEnvi_Create() {
         $this->txtLargEnvi = new QTextBox($this);
         $this->txtLargEnvi->Width = 60;
+        $this->txtLargEnvi->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtLargEnvi->Text = $this->objGuia->Largo;
         }
@@ -1236,6 +1243,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtVoluEnvi_Create() {
         $this->txtVoluEnvi = new QTextBox($this);
         $this->txtVoluEnvi->Width = 60;
+        $this->txtVoluEnvi->FontSize = 12;
+        $this->txtVoluEnvi->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtVoluEnvi->Text = $this->objGuia->Volumen;
         }
@@ -1244,6 +1253,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function txtPiesEnvi_Create() {
         $this->txtPiesEnvi = new QTextBox($this);
         $this->txtPiesEnvi->Width = 60;
+        $this->txtPiesEnvi->FontSize = 12;
+        $this->txtPiesEnvi->CssClass = 'text-right';
         if ($this->blnEditMode) {
             $this->txtPiesEnvi->Text = $this->objGuia->PiesCub;
         }
@@ -1253,6 +1264,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtKiloPiez = new QTextBox($this);
         $this->txtKiloPiez->Placeholder = 'Kg';
         $this->txtKiloPiez->Width = 40;
+        $this->txtKiloPiez->CssClass = 'text-right';
         $this->txtKiloPiez->Visible = false;
     }
 
@@ -2115,7 +2127,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function dtgConcGuia_Create() {
         $this->dtgConcGuia = new QDataGrid($this);
-        $this->dtgConcGuia->FontSize = 12;
+        $this->dtgConcGuia->FontSize = 11;
         $this->dtgConcGuia->ShowFilter = false;
 
         $this->dtgConcGuia->SetDataBinder('dtgConcGuia_Bind');
@@ -2138,7 +2150,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function createDtgConcGuiaColumns() {
         $colMostComo = new QDataGridColumn($this);
         $colMostComo->Name = 'CONCEPTO';
-        $colMostComo->Html = '<?= $_ITEM->MostrarComo; ?>';
+        $colMostComo->Html = '<?= substr($_ITEM->MostrarComo,0,15); ?>';
         $colMostComo->Width = 180;
         $colMostComo->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgConcGuia->AddColumn($colMostComo);
@@ -2193,7 +2205,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function dtgPiezTemp_Create() {
         $this->dtgPiezTemp = new QDataGrid($this);
-        $this->dtgPiezTemp->FontSize = 12;
+        $this->dtgPiezTemp->FontSize = 11;
         $this->dtgPiezTemp->ShowFilter = false;
 
         $this->dtgPiezTemp->CssClass = 'datagrid';
@@ -2225,13 +2237,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = 'EMPQ';
         $colDescPiez->Html = '<?= $_ITEM->Empaque ? $_ITEM->Empaque->Siglas : null; ?>';
-        $colDescPiez->Width = 50;
+        $colDescPiez->Width = 30;
         $colDescPiez->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgPiezTemp->AddColumn($colDescPiez);
 
         $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = 'DESCRIPCION';
-        $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
+        $colDescPiez->Html = '<?= substr($_ITEM->Descripcion,0,30); ?>';
         $colDescPiez->Width = 180;
         $colDescPiez->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgPiezTemp->AddColumn($colDescPiez);
@@ -2246,7 +2258,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $colMediPiez = new QDataGridColumn($this);
         $colMediPiez->Name = 'MEDIDAS';
         $colMediPiez->Html = '<?= $_ITEM->__medidas(); ?>';
-        $colMediPiez->Width = 110;
+        $colMediPiez->Width = 125;
         $colMediPiez->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgPiezTemp->AddColumn($colMediPiez);
 

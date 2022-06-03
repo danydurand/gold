@@ -331,7 +331,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function dtgPiezGuia_Create() {
         $this->dtgPiezGuia = new QDataGrid($this);
-        $this->dtgPiezGuia->FontSize = 12;
+        $this->dtgPiezGuia->FontSize = 11.5;
         $this->dtgPiezGuia->ShowFilter = false;
 
         $this->dtgPiezGuia->CssClass = 'datagrid';
@@ -356,15 +356,15 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->dtgPiezGuia->AddColumn($colIdxxPiez);
 
         $colDescPiez = new QDataGridColumn($this);
-        $colDescPiez->Name = 'Empq';
+        $colDescPiez->Name = 'Emp';
         $colDescPiez->Html = '<?= $_ITEM->Empaque ? $_ITEM->Empaque->Siglas : null ; ?>';
         $colDescPiez->Width = 40;
         $this->dtgPiezGuia->AddColumn($colDescPiez);
 
         $colDescPiez = new QDataGridColumn($this);
         $colDescPiez->Name = QApplication::Translate('Contenido');
-        $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
-        $colDescPiez->Width = 370;
+        $colDescPiez->Html = '<?= substr($_ITEM->Descripcion,0,30); ?>';
+        $colDescPiez->Width = 250;
         $this->dtgPiezGuia->AddColumn($colDescPiez);
 
         //if (in_array($this->objGuia->Producto->Codigo,['EXA','NAC'])) {
@@ -1029,7 +1029,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function dtgConcGuia_Create() {
         $this->dtgConcGuia = new QDataGrid($this);
-        $this->dtgConcGuia->FontSize = 12;
+        $this->dtgConcGuia->FontSize = 11;
         $this->dtgConcGuia->ShowFilter = false;
 
         $this->dtgConcGuia->CssClass = 'datagrid';
@@ -1723,8 +1723,8 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function createDtgConcGuiaColumns() {
         $colMostComo = new QDataGridColumn($this);
         $colMostComo->Name = QApplication::Translate('CONCEPTO');
-        $colMostComo->Html = '<?= $_ITEM->MostrarComo; ?>';
-        $colMostComo->Width = 900;
+        $colMostComo->Html = '<?= substr($_ITEM->MostrarComo,0,12); ?>';
+        $colMostComo->Width = 190;
         $colMostComo->HorizontalAlign = QHorizontalAlign::Left;
         $this->dtgConcGuia->AddColumn($colMostComo);
 

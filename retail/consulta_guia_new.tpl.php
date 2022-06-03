@@ -308,7 +308,7 @@ require('inc/header.inc.php');
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="text-align: right">
                             <?php $this->dtgConcGuia->Render(); ?>
                         </div>
                     </div>
