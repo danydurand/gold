@@ -510,7 +510,7 @@ class AliadoEditForm extends FormularioBaseKaizen {
     // Acciones relativas al Cliente
     //----------------------------------
 
-    protected function dtgTariAliaRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgTariClieRow_Click($strFormId, $strControlId, $strParameter) {
         $this->intTariIdxx = intval($strParameter);
         $objTariExpo = TarifaCliente::Load($this->intTariIdxx);
         $this->cargarTarifas($objTariExpo->TarifaExp->Id);
