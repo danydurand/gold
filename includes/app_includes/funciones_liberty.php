@@ -2245,6 +2245,8 @@ function GrabarCheckpointManifiesto($arrDatoCkpt) {
         $objContCkpt->Hora         = date('H:i');
         $objContCkpt->Observacion  = strtoupper($arrDatoCkpt['TextObse']);
         $objContCkpt->UsuarioId    = $objUsuario->CodiUsua;
+        $objContCkpt->CreatedAt    = new QDateTime(QDateTime::Now);
+        $objContCkpt->CreatedBy    = $objUsuario->CodiUsua;
         $objContCkpt->Save();
         $arrResuGrab['CkptMani']   = $objContCkpt;
     } catch (Exception $e) {

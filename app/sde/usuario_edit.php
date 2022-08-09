@@ -28,6 +28,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     protected $dtgPermUsua;
     protected $btnMasxAcci;
     protected $strAcciAdic;
+    protected $blnEstaClav = false;
 
     // Override Form Event Handlers as Needed
     protected function Form_Run() {
@@ -87,6 +88,9 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $this->txtLogiUsua->Width = 80;
 
         $this->txtPassUsua = $this->mctUsuario->txtPassUsua_Create();
+        $this->txtPassUsua->Visible = false;
+        $this->txtPassUsua->SetCustomAttribute('onblur',"this.value=this.value.toLowerCase()");
+
 
         $this->lstCodiStatObject = $this->mctUsuario->lstCodiStatObject_Create();
 
@@ -135,6 +139,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $this->btnMasxAcci_Create();
 
         $this->btnLogxCamb->Visible = false;
+
 
         if (!$this->mctUsuario->EditMode) {
             $this->strPassUsua = generarCodigo();
@@ -324,7 +329,10 @@ class UsuarioEditForm extends UsuarioEditFormBase {
     //-----------------------------------
 
     public function establecerClave() {
-        QApplication::Redirect(__SIST__.'/establecer_clave.php/'.$this->mctUsuario->Usuario->CodiUsua);
+        // QApplication::Redirect(__SIST__.'/establecer_clave.php/'.$this->mctUsuario->Usuario->CodiUsua);
+        $this->txtPassUsua->Text = '';
+        $this->txtPassUsua->Visible = true;
+        $this->blnEstaClav = true;
     }
 
     public function crearLogin() {
@@ -484,6 +492,14 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $objRegiViej = clone $this->mctUsuario->Usuario;
         $this->lstCodiGrupObject->SelectedIndex = 1; //$this->lstGrupo->SelectedIndex;
         try {
+            if ($this->blnEstaClav) {
+                $this->txtPassUsua->Text = md5($this->txtPassUsua->Text);
+                $this->txtPassUsua->Visible = false;
+                $this->txtCantInte->Text = 0;
+                $this->txtMotiBloq->Text = '';
+                $this->lstCodiStatObject->SelectedIndex = 1;
+                $this->blnEstaClav = false;
+            }
             $this->mctUsuario->SaveUsuario();
         } catch (Exception $e) {
             t('Error guardando al Usuario: '.$e->getMessage());

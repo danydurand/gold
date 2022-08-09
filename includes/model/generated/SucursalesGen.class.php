@@ -65,6 +65,8 @@
 	 * @property-read Estadisticas[] $_EstadisticasAsSucursalArray the value for the private _objEstadisticasAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the estadisticas.sucursal_id reverse relationship
 	 * @property-read Facturas $_FacturasAsSucursal the value for the private _objFacturasAsSucursal (Read-Only) if set due to an expansion on the facturas.sucursal_id reverse relationship
 	 * @property-read Facturas[] $_FacturasAsSucursalArray the value for the private _objFacturasAsSucursalArray (Read-Only) if set due to an ExpandAsArray on the facturas.sucursal_id reverse relationship
+	 * @property-read GuiaPiezas $_GuiaPiezasAsLastCkptSucursal the value for the private _objGuiaPiezasAsLastCkptSucursal (Read-Only) if set due to an expansion on the guia_piezas.last_ckpt_sucursal_id reverse relationship
+	 * @property-read GuiaPiezas[] $_GuiaPiezasAsLastCkptSucursalArray the value for the private _objGuiaPiezasAsLastCkptSucursalArray (Read-Only) if set due to an ExpandAsArray on the guia_piezas.last_ckpt_sucursal_id reverse relationship
 	 * @property-read Guias $_GuiasAsDestino the value for the private _objGuiasAsDestino (Read-Only) if set due to an expansion on the guias.destino_id reverse relationship
 	 * @property-read Guias[] $_GuiasAsDestinoArray the value for the private _objGuiasAsDestinoArray (Read-Only) if set due to an ExpandAsArray on the guias.destino_id reverse relationship
 	 * @property-read Guias $_GuiasAsOrigen the value for the private _objGuiasAsOrigen (Read-Only) if set due to an expansion on the guias.origen_id reverse relationship
@@ -503,6 +505,22 @@
 		 * @var Facturas[] _objFacturasAsSucursalArray;
 		 */
 		private $_objFacturasAsSucursalArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaPiezasAsLastCkptSucursal object
+		 * (of type GuiaPiezas), if this Sucursales object was restored with
+		 * an expansion on the guia_piezas association table.
+		 * @var GuiaPiezas _objGuiaPiezasAsLastCkptSucursal;
+		 */
+		private $_objGuiaPiezasAsLastCkptSucursal;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaPiezasAsLastCkptSucursal objects
+		 * (of type GuiaPiezas[]), if this Sucursales object was restored with
+		 * an ExpandAsArray on the guia_piezas association table.
+		 * @var GuiaPiezas[] _objGuiaPiezasAsLastCkptSucursalArray;
+		 */
+		private $_objGuiaPiezasAsLastCkptSucursalArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single GuiasAsDestino object
@@ -1703,6 +1721,21 @@
 				}
 			}
 
+			// Check for GuiaPiezasAsLastCkptSucursal Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiapiezasaslastckptsucursal__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiapiezasaslastckptsucursal']) ? null : $objExpansionAliasArray['guiapiezasaslastckptsucursal']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaPiezasAsLastCkptSucursalArray)
+				$objToReturn->_objGuiaPiezasAsLastCkptSucursalArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaPiezasAsLastCkptSucursalArray[] = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasaslastckptsucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaPiezasAsLastCkptSucursal)) {
+					$objToReturn->_objGuiaPiezasAsLastCkptSucursal = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasaslastckptsucursal__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for GuiasAsDestino Virtual Binding
 			$strAlias = $strAliasPrefix . 'guiasasdestino__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -2899,6 +2932,22 @@
 					 */
 					return $this->_objFacturasAsSucursalArray;
 
+				case '_GuiaPiezasAsLastCkptSucursal':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsLastCkptSucursal (Read-Only)
+					 * if set due to an expansion on the guia_piezas.last_ckpt_sucursal_id reverse relationship
+					 * @return GuiaPiezas
+					 */
+					return $this->_objGuiaPiezasAsLastCkptSucursal;
+
+				case '_GuiaPiezasAsLastCkptSucursalArray':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsLastCkptSucursalArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_piezas.last_ckpt_sucursal_id reverse relationship
+					 * @return GuiaPiezas[]
+					 */
+					return $this->_objGuiaPiezasAsLastCkptSucursalArray;
+
 				case '_GuiasAsDestino':
 					/**
 					 * Gets the value for the private _objGuiasAsDestino (Read-Only)
@@ -3693,6 +3742,9 @@
 			}
 			if ($this->CountFacturasesAsSucursal()) {
 				$arrTablRela[] = 'facturas';
+			}
+			if ($this->CountGuiaPiezasesAsLastCkptSucursal()) {
+				$arrTablRela[] = 'guia_piezas';
 			}
 			if ($this->CountGuiasesAsDestino()) {
 				$arrTablRela[] = 'guias';
@@ -5408,6 +5460,155 @@
 					`facturas`
 				WHERE
 					`sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiaPiezasAsLastCkptSucursal
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaPiezasesAsLastCkptSucursal as an array of GuiaPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public function GetGuiaPiezasAsLastCkptSucursalArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiaPiezas::LoadArrayByLastCkptSucursalId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaPiezasesAsLastCkptSucursal
+		 * @return int
+		*/
+		public function CountGuiaPiezasesAsLastCkptSucursal() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiaPiezas::CountByLastCkptSucursalId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiaPiezasAsLastCkptSucursal
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function AssociateGuiaPiezasAsLastCkptSucursal(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsLastCkptSucursal on this unsaved Sucursales.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsLastCkptSucursal on this Sucursales with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`last_ckpt_sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaPiezasAsLastCkptSucursal
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function UnassociateGuiaPiezasAsLastCkptSucursal(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkptSucursal on this unsaved Sucursales.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkptSucursal on this Sucursales with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`last_ckpt_sucursal_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`last_ckpt_sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaPiezasesAsLastCkptSucursal
+		 * @return void
+		*/
+		public function UnassociateAllGuiaPiezasesAsLastCkptSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkptSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`last_ckpt_sucursal_id` = null
+				WHERE
+					`last_ckpt_sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaPiezasAsLastCkptSucursal
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaPiezasAsLastCkptSucursal(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkptSucursal on this unsaved Sucursales.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkptSucursal on this Sucursales with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`last_ckpt_sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaPiezasesAsLastCkptSucursal
+		 * @return void
+		*/
+		public function DeleteAllGuiaPiezasesAsLastCkptSucursal() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkptSucursal on this unsaved Sucursales.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Sucursales::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
+				WHERE
+					`last_ckpt_sucursal_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
 		}
 
@@ -8982,6 +9183,7 @@
      * @property-read QQReverseReferenceNodeEstadistica $EstadisticaAsSucursal
      * @property-read QQReverseReferenceNodeEstadisticas $EstadisticasAsSucursal
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsSucursal
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsLastCkptSucursal
      * @property-read QQReverseReferenceNodeGuias $GuiasAsDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsOrigen
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsDestino
@@ -9088,6 +9290,8 @@
 					return new QQReverseReferenceNodeEstadisticas($this, 'estadisticasassucursal', 'reverse_reference', 'sucursal_id', 'EstadisticasAsSucursal');
 				case 'FacturasAsSucursal':
 					return new QQReverseReferenceNodeFacturas($this, 'facturasassucursal', 'reverse_reference', 'sucursal_id', 'FacturasAsSucursal');
+				case 'GuiaPiezasAsLastCkptSucursal':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasaslastckptsucursal', 'reverse_reference', 'last_ckpt_sucursal_id', 'GuiaPiezasAsLastCkptSucursal');
 				case 'GuiasAsDestino':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasdestino', 'reverse_reference', 'destino_id', 'GuiasAsDestino');
 				case 'GuiasAsOrigen':
@@ -9185,6 +9389,7 @@
      * @property-read QQReverseReferenceNodeEstadistica $EstadisticaAsSucursal
      * @property-read QQReverseReferenceNodeEstadisticas $EstadisticasAsSucursal
      * @property-read QQReverseReferenceNodeFacturas $FacturasAsSucursal
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsLastCkptSucursal
      * @property-read QQReverseReferenceNodeGuias $GuiasAsDestino
      * @property-read QQReverseReferenceNodeGuias $GuiasAsOrigen
      * @property-read QQReverseReferenceNodeGuiasH $GuiasHAsDestino
@@ -9291,6 +9496,8 @@
 					return new QQReverseReferenceNodeEstadisticas($this, 'estadisticasassucursal', 'reverse_reference', 'sucursal_id', 'EstadisticasAsSucursal');
 				case 'FacturasAsSucursal':
 					return new QQReverseReferenceNodeFacturas($this, 'facturasassucursal', 'reverse_reference', 'sucursal_id', 'FacturasAsSucursal');
+				case 'GuiaPiezasAsLastCkptSucursal':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasaslastckptsucursal', 'reverse_reference', 'last_ckpt_sucursal_id', 'GuiaPiezasAsLastCkptSucursal');
 				case 'GuiasAsDestino':
 					return new QQReverseReferenceNodeGuias($this, 'guiasasdestino', 'reverse_reference', 'destino_id', 'GuiasAsDestino');
 				case 'GuiasAsOrigen':

@@ -58,6 +58,8 @@
 	 * @property-read FacturaNotas[] $_FacturaNotasArray the value for the private _objFacturaNotasArray (Read-Only) if set due to an ExpandAsArray on the factura_notas.nota_entrega_id reverse relationship
 	 * @property-read GuiaCacesa $_GuiaCacesa the value for the private _objGuiaCacesa (Read-Only) if set due to an expansion on the guia_cacesa.nota_entrega_id reverse relationship
 	 * @property-read GuiaCacesa[] $_GuiaCacesaArray the value for the private _objGuiaCacesaArray (Read-Only) if set due to an ExpandAsArray on the guia_cacesa.nota_entrega_id reverse relationship
+	 * @property-read GuiaPiezas $_GuiaPiezas the value for the private _objGuiaPiezas (Read-Only) if set due to an expansion on the guia_piezas.nota_entrega_id reverse relationship
+	 * @property-read GuiaPiezas[] $_GuiaPiezasArray the value for the private _objGuiaPiezasArray (Read-Only) if set due to an ExpandAsArray on the guia_piezas.nota_entrega_id reverse relationship
 	 * @property-read Guias $_Guias the value for the private _objGuias (Read-Only) if set due to an expansion on the guias.nota_entrega_id reverse relationship
 	 * @property-read Guias[] $_GuiasArray the value for the private _objGuiasArray (Read-Only) if set due to an ExpandAsArray on the guias.nota_entrega_id reverse relationship
 	 * @property-read NotaConceptos $_NotaConceptos the value for the private _objNotaConceptos (Read-Only) if set due to an expansion on the nota_conceptos.nota_entrega_id reverse relationship
@@ -390,6 +392,22 @@
 		 * @var GuiaCacesa[] _objGuiaCacesaArray;
 		 */
 		private $_objGuiaCacesaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaPiezas object
+		 * (of type GuiaPiezas), if this NotaEntrega object was restored with
+		 * an expansion on the guia_piezas association table.
+		 * @var GuiaPiezas _objGuiaPiezas;
+		 */
+		private $_objGuiaPiezas;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaPiezas objects
+		 * (of type GuiaPiezas[]), if this NotaEntrega object was restored with
+		 * an ExpandAsArray on the guia_piezas association table.
+		 * @var GuiaPiezas[] _objGuiaPiezasArray;
+		 */
+		private $_objGuiaPiezasArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single Guias object
@@ -1253,6 +1271,21 @@
 					$objToReturn->_objGuiaCacesaArray[] = GuiaCacesa::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiacacesa__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objGuiaCacesa)) {
 					$objToReturn->_objGuiaCacesa = GuiaCacesa::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiacacesa__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiaPiezas Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiapiezas__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiapiezas']) ? null : $objExpansionAliasArray['guiapiezas']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaPiezasArray)
+				$objToReturn->_objGuiaPiezasArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaPiezasArray[] = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezas__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaPiezas)) {
+					$objToReturn->_objGuiaPiezas = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezas__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2229,6 +2262,22 @@
 					 */
 					return $this->_objGuiaCacesaArray;
 
+				case '_GuiaPiezas':
+					/**
+					 * Gets the value for the private _objGuiaPiezas (Read-Only)
+					 * if set due to an expansion on the guia_piezas.nota_entrega_id reverse relationship
+					 * @return GuiaPiezas
+					 */
+					return $this->_objGuiaPiezas;
+
+				case '_GuiaPiezasArray':
+					/**
+					 * Gets the value for the private _objGuiaPiezasArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_piezas.nota_entrega_id reverse relationship
+					 * @return GuiaPiezas[]
+					 */
+					return $this->_objGuiaPiezasArray;
+
 				case '_Guias':
 					/**
 					 * Gets the value for the private _objGuias (Read-Only)
@@ -2921,6 +2970,9 @@
 			if ($this->CountGuiaCacesas()) {
 				$arrTablRela[] = 'guia_cacesa';
 			}
+			if ($this->CountGuiaPiezases()) {
+				$arrTablRela[] = 'guia_piezas';
+			}
 			if ($this->CountGuiases()) {
 				$arrTablRela[] = 'guias';
 			}
@@ -3235,6 +3287,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`guia_cacesa`
+				WHERE
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiaPiezas
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaPiezases as an array of GuiaPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public function GetGuiaPiezasArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiaPiezas::LoadArrayByNotaEntregaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaPiezases
+		 * @return int
+		*/
+		public function CountGuiaPiezases() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiaPiezas::CountByNotaEntregaId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiaPiezas
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function AssociateGuiaPiezas(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezas on this unsaved NotaEntrega.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezas on this NotaEntrega with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaPiezas
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function UnassociateGuiaPiezas(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezas on this unsaved NotaEntrega.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezas on this NotaEntrega with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`nota_entrega_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaPiezases
+		 * @return void
+		*/
+		public function UnassociateAllGuiaPiezases() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezas on this unsaved NotaEntrega.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`nota_entrega_id` = null
+				WHERE
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaPiezas
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaPiezas(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezas on this unsaved NotaEntrega.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezas on this NotaEntrega with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaPiezases
+		 * @return void
+		*/
+		public function DeleteAllGuiaPiezases() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezas on this unsaved NotaEntrega.');
+
+			// Get the Database Object for this Class
+			$objDatabase = NotaEntrega::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
 				WHERE
 					`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -4182,6 +4383,7 @@
      *
      * @property-read QQReverseReferenceNodeFacturaNotas $FacturaNotas
      * @property-read QQReverseReferenceNodeGuiaCacesa $GuiaCacesa
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezas
      * @property-read QQReverseReferenceNodeGuias $Guias
      * @property-read QQReverseReferenceNodeNotaConceptos $NotaConceptos
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsContainer
@@ -4277,6 +4479,8 @@
 					return new QQReverseReferenceNodeFacturaNotas($this, 'facturanotas', 'reverse_reference', 'nota_entrega_id', 'FacturaNotas');
 				case 'GuiaCacesa':
 					return new QQReverseReferenceNodeGuiaCacesa($this, 'guiacacesa', 'reverse_reference', 'nota_entrega_id', 'GuiaCacesa');
+				case 'GuiaPiezas':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezas', 'reverse_reference', 'nota_entrega_id', 'GuiaPiezas');
 				case 'Guias':
 					return new QQReverseReferenceNodeGuias($this, 'guias', 'reverse_reference', 'nota_entrega_id', 'Guias');
 				case 'NotaConceptos':
@@ -4343,6 +4547,7 @@
      *
      * @property-read QQReverseReferenceNodeFacturaNotas $FacturaNotas
      * @property-read QQReverseReferenceNodeGuiaCacesa $GuiaCacesa
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezas
      * @property-read QQReverseReferenceNodeGuias $Guias
      * @property-read QQReverseReferenceNodeNotaConceptos $NotaConceptos
      * @property-read QQReverseReferenceNodeNotaEntregaCkpt $NotaEntregaCkptAsContainer
@@ -4438,6 +4643,8 @@
 					return new QQReverseReferenceNodeFacturaNotas($this, 'facturanotas', 'reverse_reference', 'nota_entrega_id', 'FacturaNotas');
 				case 'GuiaCacesa':
 					return new QQReverseReferenceNodeGuiaCacesa($this, 'guiacacesa', 'reverse_reference', 'nota_entrega_id', 'GuiaCacesa');
+				case 'GuiaPiezas':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezas', 'reverse_reference', 'nota_entrega_id', 'GuiaPiezas');
 				case 'Guias':
 					return new QQReverseReferenceNodeGuias($this, 'guias', 'reverse_reference', 'nota_entrega_id', 'Guias');
 				case 'NotaConceptos':

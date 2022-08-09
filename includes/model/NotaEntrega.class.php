@@ -27,6 +27,13 @@
 			return sprintf('%s-%s',  substr($this->ClienteCorp->NombClie,0,20),$this->Referencia);
 		}
 
+		public function __adelantado() {
+            $strUltiCkpt = $this->ultimoCheckpoint()->Checkpoint->Codigo;
+            $strEstaAdel = ( ($this->Recibidas > 0) && ($strUltiCkpt != 'CR')) ? boldRed('SI') : '';
+			return $strEstaAdel;
+		}
+
+
 		public static function RecibirPiezas($intIdxxProc) {
             $strNombProc = 'Recibiendo Piezas del Proceso: '.$intIdxxProc;
             t($strNombProc);
@@ -220,7 +227,7 @@
                 $arrDatoCkpt['TextObse'] = $strDescCkpt;
                 $arrResuGrab = GrabarCheckpointManifiesto($arrDatoCkpt);
                 if ($arrResuGrab['TodoOkey']) {
-                    $this->RedactarEmailCkptMani($objCkptMani,$arrResuGrab['CkptMani']);
+//                    $this->RedactarEmailCkptMani($objCkptMani,$arrResuGrab['CkptMani']);
                 } else {
                     throw new Exception($arrResuGrab['MotiNook']);
                 }

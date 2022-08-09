@@ -21,6 +21,8 @@ require_once(__FORMBASE_CLASSES__ . '/UsuarioListFormBase.class.php');
  * @subpackage Drafts
  */
 class UsuarioListForm extends UsuarioListFormBase {
+	protected $objUsuario;
+
 	// Override Form Event Handlers as Needed
 	protected function Form_Run() {
 		parent::Form_Run();
@@ -35,6 +37,8 @@ class UsuarioListForm extends UsuarioListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+		$this->objUsuario = unserialize($_SESSION['User']);
+
 		// Instantiate the Meta DataGrid
 		$this->dtgUsuarios = new UsuarioDataGrid($this);
 		$this->dtgUsuarios->FontSize = 13;
@@ -47,6 +51,9 @@ class UsuarioListForm extends UsuarioListFormBase {
 		// Los registros "Borrados" no deben mostrarse
 		$objClauWher   = QQ::Clause();
 		$objClauWher[] = QQ::IsNull(QQN::Usuario()->DeleteAt);
+		if ($this->objUsuario->LogiUsua != 'ddurand') {
+			$objClauWher[] = QQ::NotIn(QQN::Usuario()->LogiUsua,['ddurand','connect','gold']);
+		}
         $this->dtgUsuarios->AdditionalConditions = QQ::AndCondition($objClauWher);
 
 		// Add Pagination (if desired)

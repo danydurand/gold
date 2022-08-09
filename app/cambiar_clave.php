@@ -69,7 +69,7 @@ class CambiarClave extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click() {
-        list($strTipoMens, $strMensUsua) = $this->objUsuario->resetearClave(trim($this->txtClavNue1->Text));
+        list($strTipoMens, $strMensUsua) = $this->objUsuario->resetearClave(trim($this->txtClavNue1->Text), false);
         $this->$strTipoMens($strMensUsua);
     }
     

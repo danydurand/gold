@@ -222,11 +222,12 @@ class MasterCliente extends MasterClienteGen {
     }
 
     public static function generarProxCodigo($intCodiDepe) {
+        t('generando codigo del cliente');
         //-------------------------------------------------------------------
         // Se determina a qué tipo de Cliente se le creará o se le asignará
         // el nuevo Correlativo, según la Cuenta o Cliente del cual dependa.
         //-------------------------------------------------------------------
-        if ($intCodiDepe != 4) {   // El Cliente 4 es GoldCoast
+        if ($intCodiDepe != 4 && (!is_null($intCodiDepe))) {   // El Cliente 4 es GoldCoast
             //---------------------------------------------------------------------------------------------------
             // En este caso, el Cliente a quien se le asignará el nuevo Correlativo, es una Sub-Cuenta o Filiar.
             //---------------------------------------------------------------------------------------------------
@@ -257,6 +258,7 @@ class MasterCliente extends MasterClienteGen {
             // En este caso, el Cliente a quien se le asignará el nuevo Correlativo, es un Cliente Genérico.
             //-----------------------------------------------------------------------------------------------
             $objParaGene = BuscarParametro('CorrGene','ClieMast','TODO',0);
+            t('aja...');
             //---------------------------------------------------
             // Se Cargan los Valores del Parámetro en Variables.
             //---------------------------------------------------

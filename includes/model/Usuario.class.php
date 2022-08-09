@@ -1,5 +1,6 @@
 <?php
 	require(__MODEL_GEN__ . '/UsuarioGen.class.php');
+    use PHPMailer\PHPMailer\PHPMailer;
 
 	/**
 	 * The Usuario class defined here contains any
@@ -45,13 +46,15 @@
             return $arrCodiUsua;
         }
 
-		public function resetearClave($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
+		public function resetearClave($strPassUsua,$blnReseClav=true,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
 		    $arrResuCamb = ['success','Clave Reseteada'];
 		    try {
 		        t('Llegando a resetearClave');
 		        $strPassUsua    = strtolower($strPassUsua);
                 $this->PassUsua = md5($strPassUsua);
-                $this->FechClav = new QDateTime("2010-01-01");
+                if ($blnReseClav) {
+                    $this->FechClav = new QDateTime("2010-01-01");
+                }
                 $this->CantInte = 0;
                 $this->CodiStat = 1;
                 $this->MotiBloq = '';
@@ -69,7 +72,7 @@
                 // Send the Message only in the production sever
                 //------------------------------------------------
                 if ($_SERVER['SERVER_NAME'] != 'gold.dev.com') {
-                    $this->RedactarEmailPassword($strPassUsua, $strUrlxSist, $strNombSist);
+                    $arrResuCamb = $this->RedactarEmailPassword($strPassUsua, $strUrlxSist, $strNombSist);
                 }
             } catch (Exception $e) {
 		        $arrResuCamb = ['danger',$e->getMessage()];
@@ -78,6 +81,56 @@
         }
 
         protected function RedactarEmailPassword($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
+            //---------------------------------
+            // Se Envía el Mensaje por E-mail
+            //---------------------------------
+            $strLogiUsua = $this->LogiUsua;
+            $strBody  = 'Estimado Usuario,<p><br>';
+            $strBody .= 'El '.$strNombSist.' ha registrado ';
+            $strBody .= 'un cambio de Clave de Acceso, para su Usuario "<b style="color:blue">'.$strLogiUsua.'</b>".<br>';
+            $strBody .= 'Su Nueva Clave de Acceso al acceder al sistema es: <b style="color:blue">'.$strPassUsua.'</b><br>';
+            if (strlen($strUrlxSist)) {
+                $strBody .= 'Para acceder al Sistema, diríjase a: <b style="color:blue">'.$strUrlxSist.'<br>';
+            }
+            $strBody .= '<br>';
+            $strBody .= 'Recuerde cambiarla tan pronto como entre al sistema nuevamente. Gracias!<br>';
+            $strBody .= 'Si Usted desconoce esta transacción, por favor comuníquese a la brevedad<br>';
+            $strBody .= 'posible con el Administrador del Sistema a través de la cuenta de correo:<br>';
+            $strBody .= 'soporte@lufemansoftware.com<br>';
+
+            //-------------------------------------
+            // Se suprimen los errores en pantalla
+            //-------------------------------------
+            $mixErroOrig = error_reporting();
+            error_reporting(0);
+            $mail = new PHPMailer();
+            try {
+                $mail->setFrom('noti@goldsist.com', 'GoldCoast - SisCO');
+                $mail->addAddress($this->MailUsua);
+                $mail->Subject  = 'Cambio de Clave ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
+                $mail->msgHTML($strBody);
+                if(!$mail->send()) {
+                    throw new Exception($mail->ErrorInfo);
+                } else {
+                    $arrParaErro = ['success','Clave Reseteada'];
+                }
+            } catch (Exception $e) {
+                $objProcEjec = CrearProceso('Correo Reseteo de Clave',true);
+                $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $this->LogiUsua;
+                $arrParaErro['MensErro'] = $mail->ErrorInfo;
+                $arrParaErro['ComeErro'] = "Fallo el envio de correo al Usuario";
+                GrabarError($arrParaErro);
+                $arrParaErro = ['danger',$mail->ErrorInfo];
+            }
+            //------------------------------------------------
+            // Se levantan nuevamente los errores en pantalla
+            //------------------------------------------------
+            error_reporting($mixErroOrig);
+            return $arrParaErro;
+        }
+
+        protected function RedactarEmailPasswordOld($strPassUsua,$strUrlxSist='http://goldsist.com',$strNombSist='SisCO') {
             //---------------------------------
             // Se Envía el Mensaje por E-mail
             //---------------------------------

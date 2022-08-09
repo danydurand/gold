@@ -17,12 +17,14 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property integer $ProcesoErrorId the value for intProcesoErrorId (Not Null)
+	 * @property integer $RecordId the value for intRecordId 
 	 * @property QDateTime $FechaInicio the value for dttFechaInicio 
 	 * @property QDateTime $FechaFin the value for dttFechaFin 
 	 * @property string $Clase the value for strClase (Not Null)
 	 * @property string $Metodo the value for strMetodo (Not Null)
 	 * @property string $Parametros the value for strParametros 
 	 * @property boolean $Ejecutado the value for blnEjecutado (Not Null)
+	 * @property boolean $IsRunning the value for blnIsRunning 
 	 * @property string $Resultado the value for strResultado 
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
@@ -53,6 +55,14 @@
 		 */
 		protected $intProcesoErrorId;
 		const ProcesoErrorIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column cola.record_id
+		 * @var integer intRecordId
+		 */
+		protected $intRecordId;
+		const RecordIdDefault = null;
 
 
 		/**
@@ -94,7 +104,7 @@
 		 * @var string strParametros
 		 */
 		protected $strParametros;
-		const ParametrosMaxLength = 50;
+		const ParametrosMaxLength = 200;
 		const ParametrosDefault = null;
 
 
@@ -104,6 +114,14 @@
 		 */
 		protected $blnEjecutado;
 		const EjecutadoDefault = 0;
+
+
+		/**
+		 * Protected member variable that maps to the database column cola.is_running
+		 * @var boolean blnIsRunning
+		 */
+		protected $blnIsRunning;
+		const IsRunningDefault = null;
 
 
 		/**
@@ -207,12 +225,14 @@
 		{
 			$this->intId = Cola::IdDefault;
 			$this->intProcesoErrorId = Cola::ProcesoErrorIdDefault;
+			$this->intRecordId = Cola::RecordIdDefault;
 			$this->dttFechaInicio = (Cola::FechaInicioDefault === null)?null:new QDateTime(Cola::FechaInicioDefault);
 			$this->dttFechaFin = (Cola::FechaFinDefault === null)?null:new QDateTime(Cola::FechaFinDefault);
 			$this->strClase = Cola::ClaseDefault;
 			$this->strMetodo = Cola::MetodoDefault;
 			$this->strParametros = Cola::ParametrosDefault;
 			$this->blnEjecutado = Cola::EjecutadoDefault;
+			$this->blnIsRunning = Cola::IsRunningDefault;
 			$this->strResultado = Cola::ResultadoDefault;
 			$this->dttCreatedAt = (Cola::CreatedAtDefault === null)?null:new QDateTime(Cola::CreatedAtDefault);
 			$this->dttUpdatedAt = (Cola::UpdatedAtDefault === null)?null:new QDateTime(Cola::UpdatedAtDefault);
@@ -561,12 +581,14 @@
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'proceso_error_id', $strAliasPrefix . 'proceso_error_id');
+			    $objBuilder->AddSelectItem($strTableName, 'record_id', $strAliasPrefix . 'record_id');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha_inicio', $strAliasPrefix . 'fecha_inicio');
 			    $objBuilder->AddSelectItem($strTableName, 'fecha_fin', $strAliasPrefix . 'fecha_fin');
 			    $objBuilder->AddSelectItem($strTableName, 'clase', $strAliasPrefix . 'clase');
 			    $objBuilder->AddSelectItem($strTableName, 'metodo', $strAliasPrefix . 'metodo');
 			    $objBuilder->AddSelectItem($strTableName, 'parametros', $strAliasPrefix . 'parametros');
 			    $objBuilder->AddSelectItem($strTableName, 'ejecutado', $strAliasPrefix . 'ejecutado');
+			    $objBuilder->AddSelectItem($strTableName, 'is_running', $strAliasPrefix . 'is_running');
 			    $objBuilder->AddSelectItem($strTableName, 'resultado', $strAliasPrefix . 'resultado');
 			    $objBuilder->AddSelectItem($strTableName, 'created_at', $strAliasPrefix . 'created_at');
 			    $objBuilder->AddSelectItem($strTableName, 'updated_at', $strAliasPrefix . 'updated_at');
@@ -703,6 +725,9 @@
 			$strAlias = $strAliasPrefix . 'proceso_error_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intProcesoErrorId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'record_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intRecordId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'fecha_inicio';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->dttFechaInicio = $objDbRow->GetColumn($strAliasName, 'DateTime');
@@ -721,6 +746,9 @@
 			$strAlias = $strAliasPrefix . 'ejecutado';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->blnEjecutado = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'is_running';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnIsRunning = $objDbRow->GetColumn($strAliasName, 'Bit');
 			$strAlias = $strAliasPrefix . 'resultado';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strResultado = $objDbRow->GetColumn($strAliasName, 'Blob');
@@ -1011,12 +1039,14 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `cola` (
 							`proceso_error_id`,
+							`record_id`,
 							`fecha_inicio`,
 							`fecha_fin`,
 							`clase`,
 							`metodo`,
 							`parametros`,
 							`ejecutado`,
+							`is_running`,
 							`resultado`,
 							`created_at`,
 							`updated_at`,
@@ -1024,12 +1054,14 @@
 							`updated_by`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intProcesoErrorId) . ',
+							' . $objDatabase->SqlVariable($this->intRecordId) . ',
 							' . $objDatabase->SqlVariable($this->dttFechaInicio) . ',
 							' . $objDatabase->SqlVariable($this->dttFechaFin) . ',
 							' . $objDatabase->SqlVariable($this->strClase) . ',
 							' . $objDatabase->SqlVariable($this->strMetodo) . ',
 							' . $objDatabase->SqlVariable($this->strParametros) . ',
 							' . $objDatabase->SqlVariable($this->blnEjecutado) . ',
+							' . $objDatabase->SqlVariable($this->blnIsRunning) . ',
 							' . $objDatabase->SqlVariable($this->strResultado) . ',
 							' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -1051,12 +1083,14 @@
 							`cola`
 						SET
 							`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intProcesoErrorId) . ',
+							`record_id` = ' . $objDatabase->SqlVariable($this->intRecordId) . ',
 							`fecha_inicio` = ' . $objDatabase->SqlVariable($this->dttFechaInicio) . ',
 							`fecha_fin` = ' . $objDatabase->SqlVariable($this->dttFechaFin) . ',
 							`clase` = ' . $objDatabase->SqlVariable($this->strClase) . ',
 							`metodo` = ' . $objDatabase->SqlVariable($this->strMetodo) . ',
 							`parametros` = ' . $objDatabase->SqlVariable($this->strParametros) . ',
 							`ejecutado` = ' . $objDatabase->SqlVariable($this->blnEjecutado) . ',
+							`is_running` = ' . $objDatabase->SqlVariable($this->blnIsRunning) . ',
 							`resultado` = ' . $objDatabase->SqlVariable($this->strResultado) . ',
 							`created_at` = ' . $objDatabase->SqlVariable($this->dttCreatedAt) . ',
 							`updated_at` = ' . $objDatabase->SqlVariable($this->dttUpdatedAt) . ',
@@ -1167,12 +1201,14 @@
 
 			// Update $this's local variables to match
 			$this->ProcesoErrorId = $objReloaded->ProcesoErrorId;
+			$this->intRecordId = $objReloaded->intRecordId;
 			$this->dttFechaInicio = $objReloaded->dttFechaInicio;
 			$this->dttFechaFin = $objReloaded->dttFechaFin;
 			$this->strClase = $objReloaded->strClase;
 			$this->strMetodo = $objReloaded->strMetodo;
 			$this->strParametros = $objReloaded->strParametros;
 			$this->blnEjecutado = $objReloaded->blnEjecutado;
+			$this->blnIsRunning = $objReloaded->blnIsRunning;
 			$this->strResultado = $objReloaded->strResultado;
 			$this->dttCreatedAt = $objReloaded->dttCreatedAt;
 			$this->dttUpdatedAt = $objReloaded->dttUpdatedAt;
@@ -1211,6 +1247,13 @@
 					 * @return integer
 					 */
 					return $this->intProcesoErrorId;
+
+				case 'RecordId':
+					/**
+					 * Gets the value for intRecordId 
+					 * @return integer
+					 */
+					return $this->intRecordId;
 
 				case 'FechaInicio':
 					/**
@@ -1253,6 +1296,13 @@
 					 * @return boolean
 					 */
 					return $this->blnEjecutado;
+
+				case 'IsRunning':
+					/**
+					 * Gets the value for blnIsRunning 
+					 * @return boolean
+					 */
+					return $this->blnIsRunning;
 
 				case 'Resultado':
 					/**
@@ -1382,6 +1432,19 @@
 						throw $objExc;
 					}
 
+				case 'RecordId':
+					/**
+					 * Sets the value for intRecordId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intRecordId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'FechaInicio':
 					/**
 					 * Sets the value for dttFechaInicio 
@@ -1455,6 +1518,19 @@
 					 */
 					try {
 						return ($this->blnEjecutado = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'IsRunning':
+					/**
+					 * Sets the value for blnIsRunning 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnIsRunning = QType::Cast($mixValue, QType::Boolean));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1707,12 +1783,14 @@
 			$strToReturn = '<complexType name="Cola"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="ProcesoError" type="xsd1:ProcesoError"/>';
+			$strToReturn .= '<element name="RecordId" type="xsd:int"/>';
 			$strToReturn .= '<element name="FechaInicio" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="FechaFin" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="Clase" type="xsd:string"/>';
 			$strToReturn .= '<element name="Metodo" type="xsd:string"/>';
 			$strToReturn .= '<element name="Parametros" type="xsd:string"/>';
 			$strToReturn .= '<element name="Ejecutado" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="IsRunning" type="xsd:boolean"/>';
 			$strToReturn .= '<element name="Resultado" type="xsd:string"/>';
 			$strToReturn .= '<element name="CreatedAt" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="UpdatedAt" type="xsd:dateTime"/>';
@@ -1748,6 +1826,8 @@
 			if ((property_exists($objSoapObject, 'ProcesoError')) &&
 				($objSoapObject->ProcesoError))
 				$objToReturn->ProcesoError = ProcesoError::GetObjectFromSoapObject($objSoapObject->ProcesoError);
+			if (property_exists($objSoapObject, 'RecordId'))
+				$objToReturn->intRecordId = $objSoapObject->RecordId;
 			if (property_exists($objSoapObject, 'FechaInicio'))
 				$objToReturn->dttFechaInicio = new QDateTime($objSoapObject->FechaInicio);
 			if (property_exists($objSoapObject, 'FechaFin'))
@@ -1760,6 +1840,8 @@
 				$objToReturn->strParametros = $objSoapObject->Parametros;
 			if (property_exists($objSoapObject, 'Ejecutado'))
 				$objToReturn->blnEjecutado = $objSoapObject->Ejecutado;
+			if (property_exists($objSoapObject, 'IsRunning'))
+				$objToReturn->blnIsRunning = $objSoapObject->IsRunning;
 			if (property_exists($objSoapObject, 'Resultado'))
 				$objToReturn->strResultado = $objSoapObject->Resultado;
 			if (property_exists($objSoapObject, 'CreatedAt'))
@@ -1826,12 +1908,14 @@
 			///////////////////
 			$iArray['Id'] = $this->intId;
 			$iArray['ProcesoErrorId'] = $this->intProcesoErrorId;
+			$iArray['RecordId'] = $this->intRecordId;
 			$iArray['FechaInicio'] = $this->dttFechaInicio;
 			$iArray['FechaFin'] = $this->dttFechaFin;
 			$iArray['Clase'] = $this->strClase;
 			$iArray['Metodo'] = $this->strMetodo;
 			$iArray['Parametros'] = $this->strParametros;
 			$iArray['Ejecutado'] = $this->blnEjecutado;
+			$iArray['IsRunning'] = $this->blnIsRunning;
 			$iArray['Resultado'] = $this->strResultado;
 			$iArray['CreatedAt'] = $this->dttCreatedAt;
 			$iArray['UpdatedAt'] = $this->dttUpdatedAt;
@@ -1877,12 +1961,14 @@
      * @property-read QQNode $Id
      * @property-read QQNode $ProcesoErrorId
      * @property-read QQNodeProcesoError $ProcesoError
+     * @property-read QQNode $RecordId
      * @property-read QQNode $FechaInicio
      * @property-read QQNode $FechaFin
      * @property-read QQNode $Clase
      * @property-read QQNode $Metodo
      * @property-read QQNode $Parametros
      * @property-read QQNode $Ejecutado
+     * @property-read QQNode $IsRunning
      * @property-read QQNode $Resultado
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -1907,6 +1993,8 @@
 					return new QQNode('proceso_error_id', 'ProcesoErrorId', 'Integer', $this);
 				case 'ProcesoError':
 					return new QQNodeProcesoError('proceso_error_id', 'ProcesoError', 'Integer', $this);
+				case 'RecordId':
+					return new QQNode('record_id', 'RecordId', 'Integer', $this);
 				case 'FechaInicio':
 					return new QQNode('fecha_inicio', 'FechaInicio', 'DateTime', $this);
 				case 'FechaFin':
@@ -1919,6 +2007,8 @@
 					return new QQNode('parametros', 'Parametros', 'VarChar', $this);
 				case 'Ejecutado':
 					return new QQNode('ejecutado', 'Ejecutado', 'Bit', $this);
+				case 'IsRunning':
+					return new QQNode('is_running', 'IsRunning', 'Bit', $this);
 				case 'Resultado':
 					return new QQNode('resultado', 'Resultado', 'Blob', $this);
 				case 'CreatedAt':
@@ -1951,12 +2041,14 @@
      * @property-read QQNode $Id
      * @property-read QQNode $ProcesoErrorId
      * @property-read QQNodeProcesoError $ProcesoError
+     * @property-read QQNode $RecordId
      * @property-read QQNode $FechaInicio
      * @property-read QQNode $FechaFin
      * @property-read QQNode $Clase
      * @property-read QQNode $Metodo
      * @property-read QQNode $Parametros
      * @property-read QQNode $Ejecutado
+     * @property-read QQNode $IsRunning
      * @property-read QQNode $Resultado
      * @property-read QQNode $CreatedAt
      * @property-read QQNode $UpdatedAt
@@ -1981,6 +2073,8 @@
 					return new QQNode('proceso_error_id', 'ProcesoErrorId', 'integer', $this);
 				case 'ProcesoError':
 					return new QQNodeProcesoError('proceso_error_id', 'ProcesoError', 'integer', $this);
+				case 'RecordId':
+					return new QQNode('record_id', 'RecordId', 'integer', $this);
 				case 'FechaInicio':
 					return new QQNode('fecha_inicio', 'FechaInicio', 'QDateTime', $this);
 				case 'FechaFin':
@@ -1993,6 +2087,8 @@
 					return new QQNode('parametros', 'Parametros', 'string', $this);
 				case 'Ejecutado':
 					return new QQNode('ejecutado', 'Ejecutado', 'boolean', $this);
+				case 'IsRunning':
+					return new QQNode('is_running', 'IsRunning', 'boolean', $this);
 				case 'Resultado':
 					return new QQNode('resultado', 'Resultado', 'string', $this);
 				case 'CreatedAt':

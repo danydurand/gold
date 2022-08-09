@@ -5,6 +5,19 @@
 // Descripcion : Aqui se registran funciones de uso general del Sistema GoldCoast
 //------------------------------------------------------------------------------------
 
+function UpdateLastCheckpoint() {
+    $objDatabase = Guias::GetDatabase();
+    $objDatabase->NonQuery('call sp_update_last_checkpoint()');
+}
+
+function boldRed($strTextTran) {
+    return "<span style='color: red; font-weight: bold'>$strTextTran</span>";
+}
+
+function bold($strTextTran) {
+    return "<span style='color: blue; font-weight: bold'>$strTextTran</span>";
+}
+
 function validateDate($date, $format = 'Y-m-d H:i:s') {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;

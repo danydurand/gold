@@ -829,7 +829,7 @@
         {
             $arrDatoCkpt = array();
             $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-            $arrDatoCkpt['GuiaAnul'] = $this->Anulada();
+            $arrDatoCkpt['GuiaAnul'] = false; //$this->Anulada();
             $arrDatoCkpt['CodiCkpt'] = $objCkptProc->Id;
             $arrDatoCkpt['TextCkpt'] = $strTextObse;
             $arrDatoCkpt['NotiCkpt'] = $objCkptProc->Notificar;
@@ -846,24 +846,26 @@
             $decKiloProm = $objParaPiez->KiloProm;
             $decPiesProm = $objParaPiez->PiesProm;
             $intIdxxPiez = $objParaPiez->IdxxPiez;
+            $intNotaIdxx = $objParaPiez->NotaIdxx;
 
-            //t('Rutina: crearPieza');
-            //t('==================');
             $strNumePiez = completar($intIdxxPiez);
-            //t('Procesando IdPieza: '.$strNumePiez);
             try {
                 $objNuevPiez = new GuiaPiezas();
-                $objNuevPiez->GuiaId      = $this->Id;
-                $objNuevPiez->IdPieza     = $this->Tracking.'-'.$strNumePiez;
-                $objNuevPiez->PiesCub     = $decPiesProm;
-                $objNuevPiez->Kilos       = $decKiloProm;
-                $objNuevPiez->Descripcion = 'N/A';
+                $objNuevPiez->GuiaId        = $this->Id;
+                $objNuevPiez->IdPieza       = $this->Tracking.'-'.$strNumePiez;
+                $objNuevPiez->PiesCub       = $decPiesProm;
+                $objNuevPiez->Kilos         = $decKiloProm;
+                $objNuevPiez->Descripcion   = 'N/A';
+                $objNuevPiez->NotaEntregaId = $intNotaIdxx;
+                $objNuevPiez->CreatedAt     = new QDateTime(QDateTime::Now());
                 $objNuevPiez->Save();
+                /*
                 $strTextObse = trim($objCkptProc->Descripcion).' (Manif.: '.$objNuevPiez->Guia->NotaEntrega->Referencia.')';
                 $arrResuGrab = $this->grabarCheckpointPieza($objNuevPiez, $objCkptProc, $strTextObse);
                 if (!$arrResuGrab['TodoOkey']) {
                     throw new Exception($arrResuGrab['MotiNook']);
                 }
+                */
             } catch (Exception $e) {
                 t('Error: '.$e->getMessage());
                 $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
@@ -871,6 +873,21 @@
                 $arrParaErro['MensErro'] = $e->getMessage();
                 $arrParaErro['ComeErro'] = 'Fallo la creacion de la Pieza de la Guia';
                 GrabarError($arrParaErro);
+            }
+        }
+
+        public function LastCkptCode() {
+            $strCadeSqlx  = "select last_ckpt_code, count(*) as qty";    
+            $strCadeSqlx .= "  from guia_piezas ";    
+            $strCadeSqlx .= " where guia_id = ".$this->Id;
+            $strCadeSqlx .= " group by 1 ";
+            $objDatabase  = Guias::GetDatabase();
+            $objResulSet  = $objDatabase->Query($strCadeSqlx);
+            $mixRegistro  = $objResulSet->FetchArray();
+            if ($mixRegistro['qty'] == $this->Piezas) {
+                return $mixRegistro['last_ckpt_code'];
+            } else {
+                return 'MX';
             }
         }
 
@@ -1426,4 +1443,3 @@
 		}
 */
 	}
-?>

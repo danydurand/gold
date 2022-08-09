@@ -17,8 +17,16 @@
 	 * @subpackage GeneratedDataObjects
 	 * @property-read integer $Id the value for intId (Read-Only PK)
 	 * @property integer $GuiaId the value for intGuiaId (Not Null)
+	 * @property integer $NotaEntregaId the value for intNotaEntregaId 
 	 * @property string $IdPieza the value for strIdPieza (Unique)
 	 * @property double $Kilos the value for fltKilos (Not Null)
+	 * @property integer $LastCkptId the value for intLastCkptId 
+	 * @property string $LastCkptCode the value for strLastCkptCode 
+	 * @property boolean $IsCycleCompleted the value for blnIsCycleCompleted 
+	 * @property integer $LastCkptSucursalId the value for intLastCkptSucursalId 
+	 * @property QDateTime $LastCkptDate the value for dttLastCkptDate 
+	 * @property string $LastCkptHour the value for strLastCkptHour 
+	 * @property string $LastCkptComment the value for strLastCkptComment 
 	 * @property integer $EmpaqueId the value for intEmpaqueId 
 	 * @property double $Libras the value for fltLibras 
 	 * @property double $Largo the value for fltLargo 
@@ -34,6 +42,9 @@
 	 * @property QDateTime $CreatedAt the value for dttCreatedAt 
 	 * @property QDateTime $UpdatedAt the value for dttUpdatedAt 
 	 * @property Guias $Guia the value for the Guias object referenced by intGuiaId (Not Null)
+	 * @property NotaEntrega $NotaEntrega the value for the NotaEntrega object referenced by intNotaEntregaId 
+	 * @property PiezaCheckpoints $LastCkpt the value for the PiezaCheckpoints object referenced by intLastCkptId 
+	 * @property Sucursales $LastCkptSucursal the value for the Sucursales object referenced by intLastCkptSucursalId 
 	 * @property Empaque $Empaque the value for the Empaque object referenced by intEmpaqueId 
 	 * @property GuiaPiezaPod $GuiaPiezaPodAsGuiaPieza the value for the GuiaPiezaPod object that uniquely references this GuiaPiezas
 	 * @property GuiaTransportista $GuiaTransportistaAsGuiaPieza the value for the GuiaTransportista object that uniquely references this GuiaPiezas
@@ -74,6 +85,14 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column guia_piezas.nota_entrega_id
+		 * @var integer intNotaEntregaId
+		 */
+		protected $intNotaEntregaId;
+		const NotaEntregaIdDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column guia_piezas.id_pieza
 		 * @var string strIdPieza
 		 */
@@ -88,6 +107,65 @@
 		 */
 		protected $fltKilos;
 		const KilosDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_id
+		 * @var integer intLastCkptId
+		 */
+		protected $intLastCkptId;
+		const LastCkptIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_code
+		 * @var string strLastCkptCode
+		 */
+		protected $strLastCkptCode;
+		const LastCkptCodeMaxLength = 2;
+		const LastCkptCodeDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.is_cycle_completed
+		 * @var boolean blnIsCycleCompleted
+		 */
+		protected $blnIsCycleCompleted;
+		const IsCycleCompletedDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_sucursal_id
+		 * @var integer intLastCkptSucursalId
+		 */
+		protected $intLastCkptSucursalId;
+		const LastCkptSucursalIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_date
+		 * @var QDateTime dttLastCkptDate
+		 */
+		protected $dttLastCkptDate;
+		const LastCkptDateDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_hour
+		 * @var string strLastCkptHour
+		 */
+		protected $strLastCkptHour;
+		const LastCkptHourMaxLength = 5;
+		const LastCkptHourDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_comment
+		 * @var string strLastCkptComment
+		 */
+		protected $strLastCkptComment;
+		const LastCkptCommentMaxLength = 100;
+		const LastCkptCommentDefault = null;
 
 
 		/**
@@ -335,6 +413,36 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guia_piezas.nota_entrega_id.
+		 *
+		 * NOTE: Always use the NotaEntrega property getter to correctly retrieve this NotaEntrega object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var NotaEntrega objNotaEntrega
+		 */
+		protected $objNotaEntrega;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guia_piezas.last_ckpt_id.
+		 *
+		 * NOTE: Always use the LastCkpt property getter to correctly retrieve this PiezaCheckpoints object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var PiezaCheckpoints objLastCkpt
+		 */
+		protected $objLastCkpt;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guia_piezas.last_ckpt_sucursal_id.
+		 *
+		 * NOTE: Always use the LastCkptSucursal property getter to correctly retrieve this Sucursales object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Sucursales objLastCkptSucursal
+		 */
+		protected $objLastCkptSucursal;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column guia_piezas.empaque_id.
 		 *
 		 * NOTE: Always use the Empaque property getter to correctly retrieve this Empaque object.
@@ -388,8 +496,16 @@
 		{
 			$this->intId = GuiaPiezas::IdDefault;
 			$this->intGuiaId = GuiaPiezas::GuiaIdDefault;
+			$this->intNotaEntregaId = GuiaPiezas::NotaEntregaIdDefault;
 			$this->strIdPieza = GuiaPiezas::IdPiezaDefault;
 			$this->fltKilos = GuiaPiezas::KilosDefault;
+			$this->intLastCkptId = GuiaPiezas::LastCkptIdDefault;
+			$this->strLastCkptCode = GuiaPiezas::LastCkptCodeDefault;
+			$this->blnIsCycleCompleted = GuiaPiezas::IsCycleCompletedDefault;
+			$this->intLastCkptSucursalId = GuiaPiezas::LastCkptSucursalIdDefault;
+			$this->dttLastCkptDate = (GuiaPiezas::LastCkptDateDefault === null)?null:new QDateTime(GuiaPiezas::LastCkptDateDefault);
+			$this->strLastCkptHour = GuiaPiezas::LastCkptHourDefault;
+			$this->strLastCkptComment = GuiaPiezas::LastCkptCommentDefault;
 			$this->intEmpaqueId = GuiaPiezas::EmpaqueIdDefault;
 			$this->fltLibras = GuiaPiezas::LibrasDefault;
 			$this->fltLargo = GuiaPiezas::LargoDefault;
@@ -747,8 +863,16 @@
             } else {
 			    $objBuilder->AddSelectItem($strTableName, 'id', $strAliasPrefix . 'id');
 			    $objBuilder->AddSelectItem($strTableName, 'guia_id', $strAliasPrefix . 'guia_id');
+			    $objBuilder->AddSelectItem($strTableName, 'nota_entrega_id', $strAliasPrefix . 'nota_entrega_id');
 			    $objBuilder->AddSelectItem($strTableName, 'id_pieza', $strAliasPrefix . 'id_pieza');
 			    $objBuilder->AddSelectItem($strTableName, 'kilos', $strAliasPrefix . 'kilos');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_id', $strAliasPrefix . 'last_ckpt_id');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_code', $strAliasPrefix . 'last_ckpt_code');
+			    $objBuilder->AddSelectItem($strTableName, 'is_cycle_completed', $strAliasPrefix . 'is_cycle_completed');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_sucursal_id', $strAliasPrefix . 'last_ckpt_sucursal_id');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_date', $strAliasPrefix . 'last_ckpt_date');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_hour', $strAliasPrefix . 'last_ckpt_hour');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_comment', $strAliasPrefix . 'last_ckpt_comment');
 			    $objBuilder->AddSelectItem($strTableName, 'empaque_id', $strAliasPrefix . 'empaque_id');
 			    $objBuilder->AddSelectItem($strTableName, 'libras', $strAliasPrefix . 'libras');
 			    $objBuilder->AddSelectItem($strTableName, 'largo', $strAliasPrefix . 'largo');
@@ -894,12 +1018,36 @@
 			$strAlias = $strAliasPrefix . 'guia_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intGuiaId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'nota_entrega_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intNotaEntregaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'id_pieza';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strIdPieza = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'kilos';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltKilos = $objDbRow->GetColumn($strAliasName, 'Float');
+			$strAlias = $strAliasPrefix . 'last_ckpt_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intLastCkptId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'last_ckpt_code';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strLastCkptCode = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'is_cycle_completed';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnIsCycleCompleted = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'last_ckpt_sucursal_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intLastCkptSucursalId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'last_ckpt_date';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->dttLastCkptDate = $objDbRow->GetColumn($strAliasName, 'Date');
+			$strAlias = $strAliasPrefix . 'last_ckpt_hour';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strLastCkptHour = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'last_ckpt_comment';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strLastCkptComment = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'empaque_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intEmpaqueId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -978,6 +1126,27 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['guia_id']) ? null : $objExpansionAliasArray['guia_id']);
 				$objToReturn->objGuia = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guia_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for NotaEntrega Early Binding
+			$strAlias = $strAliasPrefix . 'nota_entrega_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['nota_entrega_id']) ? null : $objExpansionAliasArray['nota_entrega_id']);
+				$objToReturn->objNotaEntrega = NotaEntrega::InstantiateDbRow($objDbRow, $strAliasPrefix . 'nota_entrega_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for LastCkpt Early Binding
+			$strAlias = $strAliasPrefix . 'last_ckpt_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['last_ckpt_id']) ? null : $objExpansionAliasArray['last_ckpt_id']);
+				$objToReturn->objLastCkpt = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'last_ckpt_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for LastCkptSucursal Early Binding
+			$strAlias = $strAliasPrefix . 'last_ckpt_sucursal_id__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['last_ckpt_sucursal_id']) ? null : $objExpansionAliasArray['last_ckpt_sucursal_id']);
+				$objToReturn->objLastCkptSucursal = Sucursales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'last_ckpt_sucursal_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for Empaque Early Binding
 			$strAlias = $strAliasPrefix . 'empaque_id__id';
@@ -1286,6 +1455,102 @@
 			);
 		}
 
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by NotaEntregaId Index(es)
+		 * @param integer $intNotaEntregaId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByNotaEntregaId($intNotaEntregaId, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByNotaEntregaId query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->NotaEntregaId, $intNotaEntregaId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by NotaEntregaId Index(es)
+		 * @param integer $intNotaEntregaId
+		 * @return int
+		*/
+		public static function CountByNotaEntregaId($intNotaEntregaId) {
+			// Call GuiaPiezas::QueryCount to perform the CountByNotaEntregaId query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->NotaEntregaId, $intNotaEntregaId)
+			);
+		}
+
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by LastCkptId Index(es)
+		 * @param integer $intLastCkptId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByLastCkptId($intLastCkptId, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByLastCkptId query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->LastCkptId, $intLastCkptId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by LastCkptId Index(es)
+		 * @param integer $intLastCkptId
+		 * @return int
+		*/
+		public static function CountByLastCkptId($intLastCkptId) {
+			// Call GuiaPiezas::QueryCount to perform the CountByLastCkptId query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->LastCkptId, $intLastCkptId)
+			);
+		}
+
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by LastCkptSucursalId Index(es)
+		 * @param integer $intLastCkptSucursalId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByLastCkptSucursalId($intLastCkptSucursalId, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByLastCkptSucursalId query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->LastCkptSucursalId, $intLastCkptSucursalId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by LastCkptSucursalId Index(es)
+		 * @param integer $intLastCkptSucursalId
+		 * @return int
+		*/
+		public static function CountByLastCkptSucursalId($intLastCkptSucursalId) {
+			// Call GuiaPiezas::QueryCount to perform the CountByLastCkptSucursalId query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->LastCkptSucursalId, $intLastCkptSucursalId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -1442,8 +1707,16 @@
 					$objDatabase->NonQuery('
 						INSERT INTO `guia_piezas` (
 							`guia_id`,
+							`nota_entrega_id`,
 							`id_pieza`,
 							`kilos`,
+							`last_ckpt_id`,
+							`last_ckpt_code`,
+							`is_cycle_completed`,
+							`last_ckpt_sucursal_id`,
+							`last_ckpt_date`,
+							`last_ckpt_hour`,
+							`last_ckpt_comment`,
 							`empaque_id`,
 							`libras`,
 							`largo`,
@@ -1460,8 +1733,16 @@
 							`updated_at`
 						) VALUES (
 							' . $objDatabase->SqlVariable($this->intGuiaId) . ',
+							' . $objDatabase->SqlVariable($this->intNotaEntregaId) . ',
 							' . $objDatabase->SqlVariable($this->strIdPieza) . ',
 							' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							' . $objDatabase->SqlVariable($this->intLastCkptId) . ',
+							' . $objDatabase->SqlVariable($this->strLastCkptCode) . ',
+							' . $objDatabase->SqlVariable($this->blnIsCycleCompleted) . ',
+							' . $objDatabase->SqlVariable($this->intLastCkptSucursalId) . ',
+							' . $objDatabase->SqlVariable($this->dttLastCkptDate) . ',
+							' . $objDatabase->SqlVariable($this->strLastCkptHour) . ',
+							' . $objDatabase->SqlVariable($this->strLastCkptComment) . ',
 							' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							' . $objDatabase->SqlVariable($this->fltLargo) . ',
@@ -1492,8 +1773,16 @@
 							`guia_piezas`
 						SET
 							`guia_id` = ' . $objDatabase->SqlVariable($this->intGuiaId) . ',
+							`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intNotaEntregaId) . ',
 							`id_pieza` = ' . $objDatabase->SqlVariable($this->strIdPieza) . ',
 							`kilos` = ' . $objDatabase->SqlVariable($this->fltKilos) . ',
+							`last_ckpt_id` = ' . $objDatabase->SqlVariable($this->intLastCkptId) . ',
+							`last_ckpt_code` = ' . $objDatabase->SqlVariable($this->strLastCkptCode) . ',
+							`is_cycle_completed` = ' . $objDatabase->SqlVariable($this->blnIsCycleCompleted) . ',
+							`last_ckpt_sucursal_id` = ' . $objDatabase->SqlVariable($this->intLastCkptSucursalId) . ',
+							`last_ckpt_date` = ' . $objDatabase->SqlVariable($this->dttLastCkptDate) . ',
+							`last_ckpt_hour` = ' . $objDatabase->SqlVariable($this->strLastCkptHour) . ',
+							`last_ckpt_comment` = ' . $objDatabase->SqlVariable($this->strLastCkptComment) . ',
 							`empaque_id` = ' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							`libras` = ' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							`largo` = ' . $objDatabase->SqlVariable($this->fltLargo) . ',
@@ -1671,8 +1960,16 @@
 
 			// Update $this's local variables to match
 			$this->GuiaId = $objReloaded->GuiaId;
+			$this->NotaEntregaId = $objReloaded->NotaEntregaId;
 			$this->strIdPieza = $objReloaded->strIdPieza;
 			$this->fltKilos = $objReloaded->fltKilos;
+			$this->LastCkptId = $objReloaded->LastCkptId;
+			$this->strLastCkptCode = $objReloaded->strLastCkptCode;
+			$this->blnIsCycleCompleted = $objReloaded->blnIsCycleCompleted;
+			$this->LastCkptSucursalId = $objReloaded->LastCkptSucursalId;
+			$this->dttLastCkptDate = $objReloaded->dttLastCkptDate;
+			$this->strLastCkptHour = $objReloaded->strLastCkptHour;
+			$this->strLastCkptComment = $objReloaded->strLastCkptComment;
 			$this->EmpaqueId = $objReloaded->EmpaqueId;
 			$this->fltLibras = $objReloaded->fltLibras;
 			$this->fltLargo = $objReloaded->fltLargo;
@@ -1721,6 +2018,13 @@
 					 */
 					return $this->intGuiaId;
 
+				case 'NotaEntregaId':
+					/**
+					 * Gets the value for intNotaEntregaId 
+					 * @return integer
+					 */
+					return $this->intNotaEntregaId;
+
 				case 'IdPieza':
 					/**
 					 * Gets the value for strIdPieza (Unique)
@@ -1734,6 +2038,55 @@
 					 * @return double
 					 */
 					return $this->fltKilos;
+
+				case 'LastCkptId':
+					/**
+					 * Gets the value for intLastCkptId 
+					 * @return integer
+					 */
+					return $this->intLastCkptId;
+
+				case 'LastCkptCode':
+					/**
+					 * Gets the value for strLastCkptCode 
+					 * @return string
+					 */
+					return $this->strLastCkptCode;
+
+				case 'IsCycleCompleted':
+					/**
+					 * Gets the value for blnIsCycleCompleted 
+					 * @return boolean
+					 */
+					return $this->blnIsCycleCompleted;
+
+				case 'LastCkptSucursalId':
+					/**
+					 * Gets the value for intLastCkptSucursalId 
+					 * @return integer
+					 */
+					return $this->intLastCkptSucursalId;
+
+				case 'LastCkptDate':
+					/**
+					 * Gets the value for dttLastCkptDate 
+					 * @return QDateTime
+					 */
+					return $this->dttLastCkptDate;
+
+				case 'LastCkptHour':
+					/**
+					 * Gets the value for strLastCkptHour 
+					 * @return string
+					 */
+					return $this->strLastCkptHour;
+
+				case 'LastCkptComment':
+					/**
+					 * Gets the value for strLastCkptComment 
+					 * @return string
+					 */
+					return $this->strLastCkptComment;
 
 				case 'EmpaqueId':
 					/**
@@ -1846,6 +2199,48 @@
 						if ((!$this->objGuia) && (!is_null($this->intGuiaId)))
 							$this->objGuia = Guias::Load($this->intGuiaId);
 						return $this->objGuia;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'NotaEntrega':
+					/**
+					 * Gets the value for the NotaEntrega object referenced by intNotaEntregaId 
+					 * @return NotaEntrega
+					 */
+					try {
+						if ((!$this->objNotaEntrega) && (!is_null($this->intNotaEntregaId)))
+							$this->objNotaEntrega = NotaEntrega::Load($this->intNotaEntregaId);
+						return $this->objNotaEntrega;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkpt':
+					/**
+					 * Gets the value for the PiezaCheckpoints object referenced by intLastCkptId 
+					 * @return PiezaCheckpoints
+					 */
+					try {
+						if ((!$this->objLastCkpt) && (!is_null($this->intLastCkptId)))
+							$this->objLastCkpt = PiezaCheckpoints::Load($this->intLastCkptId);
+						return $this->objLastCkpt;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptSucursal':
+					/**
+					 * Gets the value for the Sucursales object referenced by intLastCkptSucursalId 
+					 * @return Sucursales
+					 */
+					try {
+						if ((!$this->objLastCkptSucursal) && (!is_null($this->intLastCkptSucursalId)))
+							$this->objLastCkptSucursal = Sucursales::Load($this->intLastCkptSucursalId);
+						return $this->objLastCkptSucursal;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2044,6 +2439,20 @@
 						throw $objExc;
 					}
 
+				case 'NotaEntregaId':
+					/**
+					 * Sets the value for intNotaEntregaId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objNotaEntrega = null;
+						return ($this->intNotaEntregaId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'IdPieza':
 					/**
 					 * Sets the value for strIdPieza (Unique)
@@ -2065,6 +2474,99 @@
 					 */
 					try {
 						return ($this->fltKilos = QType::Cast($mixValue, QType::Float));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptId':
+					/**
+					 * Sets the value for intLastCkptId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objLastCkpt = null;
+						return ($this->intLastCkptId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptCode':
+					/**
+					 * Sets the value for strLastCkptCode 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strLastCkptCode = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'IsCycleCompleted':
+					/**
+					 * Sets the value for blnIsCycleCompleted 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnIsCycleCompleted = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptSucursalId':
+					/**
+					 * Sets the value for intLastCkptSucursalId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objLastCkptSucursal = null;
+						return ($this->intLastCkptSucursalId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptDate':
+					/**
+					 * Sets the value for dttLastCkptDate 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttLastCkptDate = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptHour':
+					/**
+					 * Sets the value for strLastCkptHour 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strLastCkptHour = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptComment':
+					/**
+					 * Sets the value for strLastCkptComment 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strLastCkptComment = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2283,6 +2785,102 @@
 						// Update Local Member Variables
 						$this->objGuia = $mixValue;
 						$this->intGuiaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'NotaEntrega':
+					/**
+					 * Sets the value for the NotaEntrega object referenced by intNotaEntregaId 
+					 * @param NotaEntrega $mixValue
+					 * @return NotaEntrega
+					 */
+					if (is_null($mixValue)) {
+						$this->intNotaEntregaId = null;
+						$this->objNotaEntrega = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a NotaEntrega object
+						try {
+							$mixValue = QType::Cast($mixValue, 'NotaEntrega');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED NotaEntrega object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved NotaEntrega for this GuiaPiezas');
+
+						// Update Local Member Variables
+						$this->objNotaEntrega = $mixValue;
+						$this->intNotaEntregaId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'LastCkpt':
+					/**
+					 * Sets the value for the PiezaCheckpoints object referenced by intLastCkptId 
+					 * @param PiezaCheckpoints $mixValue
+					 * @return PiezaCheckpoints
+					 */
+					if (is_null($mixValue)) {
+						$this->intLastCkptId = null;
+						$this->objLastCkpt = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a PiezaCheckpoints object
+						try {
+							$mixValue = QType::Cast($mixValue, 'PiezaCheckpoints');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED PiezaCheckpoints object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved LastCkpt for this GuiaPiezas');
+
+						// Update Local Member Variables
+						$this->objLastCkpt = $mixValue;
+						$this->intLastCkptId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'LastCkptSucursal':
+					/**
+					 * Sets the value for the Sucursales object referenced by intLastCkptSucursalId 
+					 * @param Sucursales $mixValue
+					 * @return Sucursales
+					 */
+					if (is_null($mixValue)) {
+						$this->intLastCkptSucursalId = null;
+						$this->objLastCkptSucursal = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Sucursales object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Sucursales');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Sucursales object
+						if (is_null($mixValue->Id))
+							throw new QCallerException('Unable to set an unsaved LastCkptSucursal for this GuiaPiezas');
+
+						// Update Local Member Variables
+						$this->objLastCkptSucursal = $mixValue;
+						$this->intLastCkptSucursalId = $mixValue->Id;
 
 						// Return $mixValue
 						return $mixValue;
@@ -3271,8 +3869,16 @@
 			$strToReturn = '<complexType name="GuiaPiezas"><sequence>';
 			$strToReturn .= '<element name="Id" type="xsd:int"/>';
 			$strToReturn .= '<element name="Guia" type="xsd1:Guias"/>';
+			$strToReturn .= '<element name="NotaEntrega" type="xsd1:NotaEntrega"/>';
 			$strToReturn .= '<element name="IdPieza" type="xsd:string"/>';
 			$strToReturn .= '<element name="Kilos" type="xsd:float"/>';
+			$strToReturn .= '<element name="LastCkpt" type="xsd1:PiezaCheckpoints"/>';
+			$strToReturn .= '<element name="LastCkptCode" type="xsd:string"/>';
+			$strToReturn .= '<element name="IsCycleCompleted" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="LastCkptSucursal" type="xsd1:Sucursales"/>';
+			$strToReturn .= '<element name="LastCkptDate" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="LastCkptHour" type="xsd:string"/>';
+			$strToReturn .= '<element name="LastCkptComment" type="xsd:string"/>';
 			$strToReturn .= '<element name="Empaque" type="xsd1:Empaque"/>';
 			$strToReturn .= '<element name="Libras" type="xsd:float"/>';
 			$strToReturn .= '<element name="Largo" type="xsd:float"/>';
@@ -3296,6 +3902,9 @@
 			if (!array_key_exists('GuiaPiezas', $strComplexTypeArray)) {
 				$strComplexTypeArray['GuiaPiezas'] = GuiaPiezas::GetSoapComplexTypeXml();
 				Guias::AlterSoapComplexTypeArray($strComplexTypeArray);
+				NotaEntrega::AlterSoapComplexTypeArray($strComplexTypeArray);
+				PiezaCheckpoints::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Empaque::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
@@ -3316,10 +3925,29 @@
 			if ((property_exists($objSoapObject, 'Guia')) &&
 				($objSoapObject->Guia))
 				$objToReturn->Guia = Guias::GetObjectFromSoapObject($objSoapObject->Guia);
+			if ((property_exists($objSoapObject, 'NotaEntrega')) &&
+				($objSoapObject->NotaEntrega))
+				$objToReturn->NotaEntrega = NotaEntrega::GetObjectFromSoapObject($objSoapObject->NotaEntrega);
 			if (property_exists($objSoapObject, 'IdPieza'))
 				$objToReturn->strIdPieza = $objSoapObject->IdPieza;
 			if (property_exists($objSoapObject, 'Kilos'))
 				$objToReturn->fltKilos = $objSoapObject->Kilos;
+			if ((property_exists($objSoapObject, 'LastCkpt')) &&
+				($objSoapObject->LastCkpt))
+				$objToReturn->LastCkpt = PiezaCheckpoints::GetObjectFromSoapObject($objSoapObject->LastCkpt);
+			if (property_exists($objSoapObject, 'LastCkptCode'))
+				$objToReturn->strLastCkptCode = $objSoapObject->LastCkptCode;
+			if (property_exists($objSoapObject, 'IsCycleCompleted'))
+				$objToReturn->blnIsCycleCompleted = $objSoapObject->IsCycleCompleted;
+			if ((property_exists($objSoapObject, 'LastCkptSucursal')) &&
+				($objSoapObject->LastCkptSucursal))
+				$objToReturn->LastCkptSucursal = Sucursales::GetObjectFromSoapObject($objSoapObject->LastCkptSucursal);
+			if (property_exists($objSoapObject, 'LastCkptDate'))
+				$objToReturn->dttLastCkptDate = new QDateTime($objSoapObject->LastCkptDate);
+			if (property_exists($objSoapObject, 'LastCkptHour'))
+				$objToReturn->strLastCkptHour = $objSoapObject->LastCkptHour;
+			if (property_exists($objSoapObject, 'LastCkptComment'))
+				$objToReturn->strLastCkptComment = $objSoapObject->LastCkptComment;
 			if ((property_exists($objSoapObject, 'Empaque')) &&
 				($objSoapObject->Empaque))
 				$objToReturn->Empaque = Empaque::GetObjectFromSoapObject($objSoapObject->Empaque);
@@ -3371,6 +3999,20 @@
 				$objObject->objGuia = Guias::GetSoapObjectFromObject($objObject->objGuia, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intGuiaId = null;
+			if ($objObject->objNotaEntrega)
+				$objObject->objNotaEntrega = NotaEntrega::GetSoapObjectFromObject($objObject->objNotaEntrega, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intNotaEntregaId = null;
+			if ($objObject->objLastCkpt)
+				$objObject->objLastCkpt = PiezaCheckpoints::GetSoapObjectFromObject($objObject->objLastCkpt, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intLastCkptId = null;
+			if ($objObject->objLastCkptSucursal)
+				$objObject->objLastCkptSucursal = Sucursales::GetSoapObjectFromObject($objObject->objLastCkptSucursal, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intLastCkptSucursalId = null;
+			if ($objObject->dttLastCkptDate)
+				$objObject->dttLastCkptDate = $objObject->dttLastCkptDate->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objEmpaque)
 				$objObject->objEmpaque = Empaque::GetSoapObjectFromObject($objObject->objEmpaque, false);
 			else if (!$blnBindRelatedObjects)
@@ -3395,8 +4037,16 @@
 			///////////////////
 			$iArray['Id'] = $this->intId;
 			$iArray['GuiaId'] = $this->intGuiaId;
+			$iArray['NotaEntregaId'] = $this->intNotaEntregaId;
 			$iArray['IdPieza'] = $this->strIdPieza;
 			$iArray['Kilos'] = $this->fltKilos;
+			$iArray['LastCkptId'] = $this->intLastCkptId;
+			$iArray['LastCkptCode'] = $this->strLastCkptCode;
+			$iArray['IsCycleCompleted'] = $this->blnIsCycleCompleted;
+			$iArray['LastCkptSucursalId'] = $this->intLastCkptSucursalId;
+			$iArray['LastCkptDate'] = $this->dttLastCkptDate;
+			$iArray['LastCkptHour'] = $this->strLastCkptHour;
+			$iArray['LastCkptComment'] = $this->strLastCkptComment;
 			$iArray['EmpaqueId'] = $this->intEmpaqueId;
 			$iArray['Libras'] = $this->fltLibras;
 			$iArray['Largo'] = $this->fltLargo;
@@ -3595,8 +4245,19 @@
      * @property-read QQNode $Id
      * @property-read QQNode $GuiaId
      * @property-read QQNodeGuias $Guia
+     * @property-read QQNode $NotaEntregaId
+     * @property-read QQNodeNotaEntrega $NotaEntrega
      * @property-read QQNode $IdPieza
      * @property-read QQNode $Kilos
+     * @property-read QQNode $LastCkptId
+     * @property-read QQNodePiezaCheckpoints $LastCkpt
+     * @property-read QQNode $LastCkptCode
+     * @property-read QQNode $IsCycleCompleted
+     * @property-read QQNode $LastCkptSucursalId
+     * @property-read QQNodeSucursales $LastCkptSucursal
+     * @property-read QQNode $LastCkptDate
+     * @property-read QQNode $LastCkptHour
+     * @property-read QQNode $LastCkptComment
      * @property-read QQNode $EmpaqueId
      * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
@@ -3637,10 +4298,32 @@
 					return new QQNode('guia_id', 'GuiaId', 'Integer', $this);
 				case 'Guia':
 					return new QQNodeGuias('guia_id', 'Guia', 'Integer', $this);
+				case 'NotaEntregaId':
+					return new QQNode('nota_entrega_id', 'NotaEntregaId', 'Integer', $this);
+				case 'NotaEntrega':
+					return new QQNodeNotaEntrega('nota_entrega_id', 'NotaEntrega', 'Integer', $this);
 				case 'IdPieza':
 					return new QQNode('id_pieza', 'IdPieza', 'VarChar', $this);
 				case 'Kilos':
 					return new QQNode('kilos', 'Kilos', 'Float', $this);
+				case 'LastCkptId':
+					return new QQNode('last_ckpt_id', 'LastCkptId', 'Integer', $this);
+				case 'LastCkpt':
+					return new QQNodePiezaCheckpoints('last_ckpt_id', 'LastCkpt', 'Integer', $this);
+				case 'LastCkptCode':
+					return new QQNode('last_ckpt_code', 'LastCkptCode', 'VarChar', $this);
+				case 'IsCycleCompleted':
+					return new QQNode('is_cycle_completed', 'IsCycleCompleted', 'Bit', $this);
+				case 'LastCkptSucursalId':
+					return new QQNode('last_ckpt_sucursal_id', 'LastCkptSucursalId', 'Integer', $this);
+				case 'LastCkptSucursal':
+					return new QQNodeSucursales('last_ckpt_sucursal_id', 'LastCkptSucursal', 'Integer', $this);
+				case 'LastCkptDate':
+					return new QQNode('last_ckpt_date', 'LastCkptDate', 'Date', $this);
+				case 'LastCkptHour':
+					return new QQNode('last_ckpt_hour', 'LastCkptHour', 'VarChar', $this);
+				case 'LastCkptComment':
+					return new QQNode('last_ckpt_comment', 'LastCkptComment', 'VarChar', $this);
 				case 'EmpaqueId':
 					return new QQNode('empaque_id', 'EmpaqueId', 'Integer', $this);
 				case 'Empaque':
@@ -3705,8 +4388,19 @@
      * @property-read QQNode $Id
      * @property-read QQNode $GuiaId
      * @property-read QQNodeGuias $Guia
+     * @property-read QQNode $NotaEntregaId
+     * @property-read QQNodeNotaEntrega $NotaEntrega
      * @property-read QQNode $IdPieza
      * @property-read QQNode $Kilos
+     * @property-read QQNode $LastCkptId
+     * @property-read QQNodePiezaCheckpoints $LastCkpt
+     * @property-read QQNode $LastCkptCode
+     * @property-read QQNode $IsCycleCompleted
+     * @property-read QQNode $LastCkptSucursalId
+     * @property-read QQNodeSucursales $LastCkptSucursal
+     * @property-read QQNode $LastCkptDate
+     * @property-read QQNode $LastCkptHour
+     * @property-read QQNode $LastCkptComment
      * @property-read QQNode $EmpaqueId
      * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
@@ -3747,10 +4441,32 @@
 					return new QQNode('guia_id', 'GuiaId', 'integer', $this);
 				case 'Guia':
 					return new QQNodeGuias('guia_id', 'Guia', 'integer', $this);
+				case 'NotaEntregaId':
+					return new QQNode('nota_entrega_id', 'NotaEntregaId', 'integer', $this);
+				case 'NotaEntrega':
+					return new QQNodeNotaEntrega('nota_entrega_id', 'NotaEntrega', 'integer', $this);
 				case 'IdPieza':
 					return new QQNode('id_pieza', 'IdPieza', 'string', $this);
 				case 'Kilos':
 					return new QQNode('kilos', 'Kilos', 'double', $this);
+				case 'LastCkptId':
+					return new QQNode('last_ckpt_id', 'LastCkptId', 'integer', $this);
+				case 'LastCkpt':
+					return new QQNodePiezaCheckpoints('last_ckpt_id', 'LastCkpt', 'integer', $this);
+				case 'LastCkptCode':
+					return new QQNode('last_ckpt_code', 'LastCkptCode', 'string', $this);
+				case 'IsCycleCompleted':
+					return new QQNode('is_cycle_completed', 'IsCycleCompleted', 'boolean', $this);
+				case 'LastCkptSucursalId':
+					return new QQNode('last_ckpt_sucursal_id', 'LastCkptSucursalId', 'integer', $this);
+				case 'LastCkptSucursal':
+					return new QQNodeSucursales('last_ckpt_sucursal_id', 'LastCkptSucursal', 'integer', $this);
+				case 'LastCkptDate':
+					return new QQNode('last_ckpt_date', 'LastCkptDate', 'QDateTime', $this);
+				case 'LastCkptHour':
+					return new QQNode('last_ckpt_hour', 'LastCkptHour', 'string', $this);
+				case 'LastCkptComment':
+					return new QQNode('last_ckpt_comment', 'LastCkptComment', 'string', $this);
 				case 'EmpaqueId':
 					return new QQNode('empaque_id', 'EmpaqueId', 'integer', $this);
 				case 'Empaque':

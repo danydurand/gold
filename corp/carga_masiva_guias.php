@@ -356,24 +356,35 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('IdPieza');
         $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
-        $colIdxxPiez->Width = 140;
+        $colIdxxPiez->Width = 160;
         $this->dtgPiezMani->AddColumn($colIdxxPiez);
 
+        /*
         $colUbicPiez = new QDataGridColumn($this);
         $colUbicPiez->Name = QApplication::Translate('Ubicacion');
         $colUbicPiez->Html = '<?= $_ITEM->Ubicacion ?>';
         $colUbicPiez->Width = 160;
         $this->dtgPiezMani->AddColumn($colUbicPiez);
+        */
 
+        /*
         $colSucuDest = new QDataGridColumn($this);
         $colSucuDest->Name = QApplication::Translate('Dest');
         $colSucuDest->Html = '<?= $_ITEM->Guia->Destino->Iata ?>';
         $this->dtgPiezMani->AddColumn($colSucuDest);
+        */
 
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->LastCkptCode ?>';
+        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+
+        /*
         $colUltiCkpt = new QDataGridColumn($this);
         $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
         $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
         $this->dtgPiezMani->AddColumn($colUltiCkpt);
+        */
 
         if ($this->objNotaEntr->ServicioImportacion == 'AER') {
             $colKiloPiez = new QDataGridColumn($this);
@@ -790,7 +801,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 //------------------------------------------------------------
                 $blnTodoOkey = $this->crearGuiaMasiva($objGuiaMasi, $objCkptMani);
                 if ($blnTodoOkey) {
-                    // Se incrementa el contador de guías procesadas.
                     $intCantGuia++;
                     t('Procesando la guia: '.$objGuiaMasi->GuiaExte.' | Contador: '.$intCantGuia);
                 } else {
@@ -824,6 +834,24 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $intCantErro++;
             }
         }
+        $strTextObse = trim($objCkptMani->Descripcion).' (Manif.: '.$this->objNotaEntr->Referencia.')';
+        $intCkptIdxx = $objCkptMani->Id;
+        $intSucuIdxx = $this->objUsuario->SucursalId;
+        $intCodiUsua = $this->objUsuario->CodiUsua;
+        $intManiIdxx = $this->objNotaEntr->Id;
+        $strParaSqlx = "$intCkptIdxx,$intSucuIdxx,'$strTextObse',$intCodiUsua,$intManiIdxx";
+        //----------------------------------------------------------------------
+        // Inserting checkpoints for every piece that belongs to the Manifest
+        //----------------------------------------------------------------------
+        $strStorProc = "call sp_update_nota_entrega_status($strParaSqlx)";
+        $objDatabase = NotaEntrega::GetDatabase();
+        $objDatabase->NonQuery($strStorProc);
+        //------------------------------------------
+        // Updating last checkpoint on every piece
+        //------------------------------------------
+        $strStorProc = "call sp_update_last_checkpoint()";
+        $objDatabase->NonQuery($strStorProc);
+
         //if ($intCantGuia > 0) {
             //try {
             //    $strDescCkpt = $objCkptMani->Descripcion;
@@ -1434,6 +1462,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objParaPiez->CkptProc = $objCkptProc;
             $objParaPiez->KiloProm = $decKiloProm;
             $objParaPiez->PiesProm = $decPiesProm;
+            $objParaPiez->NotaIdxx = $objGuiaMasi->NotaEntregaId;
             for ($i = 1; $i <= $objGuia->Piezas; $i++) {
                 $objParaPiez->IdxxPiez = $i;
                 $objGuia->crearPieza($objParaPiez);

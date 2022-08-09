@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="GoldServer">
+  <component name="PublishConfigData" serverName="gold@remoto">
     <serverData>
-      <paths name="GoldServer">
+      <paths name="gold@remoto">
         <serverdata>
           <mappings>
             <mapping deploy="/var/www/html/gold" local="$PROJECT_DIR$" web="/" />

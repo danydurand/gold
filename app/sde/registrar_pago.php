@@ -561,6 +561,7 @@ class RegistrarPago extends PagosCorpEditFormBase {
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::Facturas()->ClienteCorpId,$this->lstClienteCorp->SelectedValue);
             $objClauWher[] = QQ::In(QQN::Facturas()->EstatusPago,array('PENDIENTE','PAGOPARCIAL'));
+            $objClauWher[] = QQ::NotEqual(QQN::Facturas()->Estatus,'ANULADA');
             $objClauWher[] = QQ::NotIn(QQN::Facturas()->Id,$arrFactTemp);
             $objClauOrde   = QQ::Clause();
             $objClauOrde[] = QQ::OrderBy(QQN::Facturas()->Fecha,false);

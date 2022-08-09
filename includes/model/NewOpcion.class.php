@@ -46,10 +46,15 @@
 
         public function HtmlMenuBootstrap($strCodiSist='sde') {
             $objUsuario  = unserialize($_SESSION['User']);
+            if (!defined('__SIST__')) {
+                define('__SIST__', $strCodiSist);
+                t('__SIST__ no estaba definido, quedo con: '.__SIST__);
+            }
+            $strDireProg = '/'.$this->strDirectorio != __SIST__ ? '/'.$this->strDirectorio.'/' : '';
             if ($strCodiSist == 'sde') {
-                $strDireProg = __APP__."/".$this->strDirectorio."/";
-            } else {
-                $strDireProg = __SIST__."/";
+                if ($strDireProg != '/common/') {
+                    $strDireProg = __APP__."/".$this->strDirectorio."/";
+                }
             }
             $strCadeTabu = "\t";
             if ($this->Nivel > 0) {
@@ -57,9 +62,6 @@
                     $strCadeTabu .= "\t";
                 }
             }
-            //t('Opcion: '.$this->Nombre);
-            //t('El nivel es: '.$this->Nivel);
-            //t('Tabuladores: '.$strCadeTabu);
             if (!$this->EsMenu) {
                 //---------------
                 //  PROGRAMA

@@ -8,12 +8,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         </div>
         <div class="hidden-xs hidden-sm col-md-5 col-lg-5" style="text-align: center; margin-left: 4em; margin-top: -0.25em;">
             <?php $this->btnCancel->Render(); ?>
-            <?php $this->btnSave->Render(); ?>
-            <?php //$this->btnBotoImpr->Render(); ?>
-            <?php $this->btnImprGuia->Render(); ?>
             <?php $this->btnImprEtiq->Render(); ?>
-            <?php $this->btnImprEti2->Render(); ?>
-            <?php //$this->btnImprNuev->Render(); ?>
         </div>
         <div class="col-md-3"></div>
     </div>
@@ -26,6 +21,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
             </div>
             <div class="row">
                 <div class="col-md-12" style="margin-top: 1em;">
+                    <?php $this->rdbMostLogo->RenderWithName(); ?>
                     <?php $this->txtListGuia->RenderWithName(); ?>
                 </div>
             </div>

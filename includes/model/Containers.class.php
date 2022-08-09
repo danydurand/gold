@@ -343,7 +343,7 @@
 		    $this->SinGestionar = $objResuEntr->CantSing;
 		    $this->Devueltas    = $objResuEntr->CantDevu;
 		    $this->Pendientes   = $objResuEntr->CantPend;
-		    if ($this->CantidadOk > 0) {
+		    if ( ($this->CantidadOk > 0) || ($this->Devueltas > 0) ) {
                 if ( ($this->CantidadOk + $this->Devueltas) == $this->Piezas) {
                     $this->Estatus = 'CERRAD@';
                 } else {

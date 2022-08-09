@@ -1017,38 +1017,6 @@
 			);
 		}
 
-		/**
-		 * Load an array of ScanneoPiezas objects,
-		 * by IdPieza Index(es)
-		 * @param string $strIdPieza
-		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
-		 * @return ScanneoPiezas[]
-		*/
-		public static function LoadArrayByIdPieza($strIdPieza, $objOptionalClauses = null) {
-			// Call ScanneoPiezas::QueryArray to perform the LoadArrayByIdPieza query
-			try {
-				return ScanneoPiezas::QueryArray(
-					QQ::Equal(QQN::ScanneoPiezas()->IdPieza, $strIdPieza),
-					$objOptionalClauses);
-			} catch (QCallerException $objExc) {
-				$objExc->IncrementOffset();
-				throw $objExc;
-			}
-		}
-
-		/**
-		 * Count ScanneoPiezases
-		 * by IdPieza Index(es)
-		 * @param string $strIdPieza
-		 * @return int
-		*/
-		public static function CountByIdPieza($strIdPieza) {
-			// Call ScanneoPiezas::QueryCount to perform the CountByIdPieza query
-			return ScanneoPiezas::QueryCount(
-				QQ::Equal(QQN::ScanneoPiezas()->IdPieza, $strIdPieza)
-			);
-		}
-
 
 
 		////////////////////////////////////////////////////

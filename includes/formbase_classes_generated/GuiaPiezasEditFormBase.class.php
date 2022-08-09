@@ -55,8 +55,16 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 	// Controls for GuiaPiezas's Data Fields
 	protected $lblId;
 	protected $lstGuia;
+	protected $lstNotaEntrega;
 	protected $txtIdPieza;
 	protected $txtKilos;
+	protected $lstLastCkpt;
+	protected $txtLastCkptCode;
+	protected $chkIsCycleCompleted;
+	protected $lstLastCkptSucursal;
+	protected $calLastCkptDate;
+	protected $txtLastCkptHour;
+	protected $txtLastCkptComment;
 	protected $lstEmpaque;
 	protected $txtLibras;
 	protected $txtLargo;
@@ -145,8 +153,16 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 		// Call MetaControl's methods to create qcontrols based on GuiaPiezas's data fields
 		$this->lblId = $this->mctGuiaPiezas->lblId_Create();
 		$this->lstGuia = $this->mctGuiaPiezas->lstGuia_Create();
+		$this->lstNotaEntrega = $this->mctGuiaPiezas->lstNotaEntrega_Create();
 		$this->txtIdPieza = $this->mctGuiaPiezas->txtIdPieza_Create();
 		$this->txtKilos = $this->mctGuiaPiezas->txtKilos_Create();
+		$this->lstLastCkpt = $this->mctGuiaPiezas->lstLastCkpt_Create();
+		$this->txtLastCkptCode = $this->mctGuiaPiezas->txtLastCkptCode_Create();
+		$this->chkIsCycleCompleted = $this->mctGuiaPiezas->chkIsCycleCompleted_Create();
+		$this->lstLastCkptSucursal = $this->mctGuiaPiezas->lstLastCkptSucursal_Create();
+		$this->calLastCkptDate = $this->mctGuiaPiezas->calLastCkptDate_Create();
+		$this->txtLastCkptHour = $this->mctGuiaPiezas->txtLastCkptHour_Create();
+		$this->txtLastCkptComment = $this->mctGuiaPiezas->txtLastCkptComment_Create();
 		$this->lstEmpaque = $this->mctGuiaPiezas->lstEmpaque_Create();
 		$this->txtLibras = $this->mctGuiaPiezas->txtLibras_Create();
 		$this->txtLargo = $this->mctGuiaPiezas->txtLargo_Create();

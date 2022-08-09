@@ -2,12 +2,11 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="5533226f-ffd8-4996-a888-f8741329a359" name="GoldServer" url="http://192.99.196.246">
-        <fileTransfer host="192.99.196.246" port="22" accessType="SFTP">
+      <webServer id="083b4c43-ffab-4221-a517-062842e8efe0" name="gold@remoto" url="http://mike.vps.co.ve">
+        <fileTransfer accessType="SFTP" host="mike.vps.co.ve" port="22" sshConfigId="7102822d-865a-40e6-adeb-9f7267794e7c" sshConfig="gold@remoto">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
     </option>

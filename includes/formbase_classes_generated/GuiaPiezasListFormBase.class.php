@@ -80,8 +80,16 @@ abstract class GuiaPiezasListFormBase extends QForm {
         // can traverse down QQN::guia_piezas() to display fields that are down the hierarchy)
         $this->dtgGuiaPiezases->MetaAddColumn('Id');
         $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->Guia);
+        $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->NotaEntrega);
         $this->dtgGuiaPiezases->MetaAddColumn('IdPieza');
         $this->dtgGuiaPiezases->MetaAddColumn('Kilos');
+        $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->LastCkpt);
+        $this->dtgGuiaPiezases->MetaAddColumn('LastCkptCode');
+        $this->dtgGuiaPiezases->MetaAddColumn('IsCycleCompleted');
+        $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->LastCkptSucursal);
+        $this->dtgGuiaPiezases->MetaAddColumn('LastCkptDate');
+        $this->dtgGuiaPiezases->MetaAddColumn('LastCkptHour');
+        $this->dtgGuiaPiezases->MetaAddColumn('LastCkptComment');
         $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->Empaque);
         $this->dtgGuiaPiezases->MetaAddColumn('Libras');
         $this->dtgGuiaPiezases->MetaAddColumn('Largo');

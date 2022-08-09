@@ -6,6 +6,9 @@ if (count($arrGuiaIdxx) == 0) {
     echo 'No se especificaron las guias a imprimir';
     return;
 }
+foreach ($arrGuiaIdxx as $id) {
+    t('Id: '.$id);
+}
 $objClauWher = QQ::In(QQN::Guias()->Id, $arrGuiaIdxx);
 $objClauOrde = QQ::OrderBy(QQN::Guias()->Id);
 $arrGuiaSele = Guias::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);

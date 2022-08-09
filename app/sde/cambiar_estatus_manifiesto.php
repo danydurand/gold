@@ -82,36 +82,42 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
         // del Manifiesto
         //--------------------------------------------------------------------------
         if ($this->blnTodoOkey) {
-            $this->cargarCheckpints();
+            $this->cargarCheckpoints();
         }
     }
 
-    protected function cargarCheckpints() {
+    protected function cargarCheckpoints() {
         $objUltiCkpt = $this->objManiProc->ultimoCheckpoint();
-        $arrProxVali = ['TI','TD'];
+        $arrProxVali = [];
         if ($objUltiCkpt instanceof NotaEntregaCkpt) {
             $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
             if ($strUltiCkpt == 'MC') {
-                $arrProxVali = ['TI','TD'];
+                $arrProxVali = ['DF','TI'];
+            }
+            if ($strUltiCkpt == 'DF') {
+                $arrProxVali = ['TI'];
             }
             if ($strUltiCkpt == 'TI') {
-                $arrProxVali = ['TD','IC'];
+                $arrProxVali = ['TD','AF'];
+            }
+            if ($strUltiCkpt == 'TD') {
+                $arrProxVali = ['AF'];
+            }
+            if ($strUltiCkpt == 'AF') {
+                $arrProxVali = ['IC'];
             }
             if ($strUltiCkpt == 'IC') {
                 $arrProxVali = ['CR'];
             }
-            if ($strUltiCkpt == 'CR') {
-                $arrProxVali = [];
-            }
-            if ($strUltiCkpt == 'RA') {
-                $arrProxVali = ['OK'];
-            }
         }
-        $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::In(QQN::Checkpoints()->Codigo,$arrProxVali);
-        $arrCkptVali   = Checkpoints::QueryArray(QQ::AndCondition($objClauWher));
-        foreach ($arrCkptVali as $objCkptVali) {
-            $this->lstCkptMani->AddItem($objCkptVali->__toString(), $objCkptVali->Id);
+        $this->lstCkptMani->RemoveAllItems();
+        if (count($arrProxVali)) {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::Checkpoints()->Codigo,$arrProxVali);
+            $arrCkptVali   = Checkpoints::QueryArray(QQ::AndCondition($objClauWher));
+            foreach ($arrCkptVali as $objCkptVali) {
+                $this->lstCkptMani->AddItem($objCkptVali->__toString(), $objCkptVali->Id);
+            }
         }
     }
 
@@ -148,6 +154,7 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
         $this->dtgCkptMani->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         $this->dtgCkptMani->MetaAddColumn('Id');
+        $this->dtgCkptMani->MetaAddColumn(QQN::NotaEntregaCkpt()->Checkpoint->Codigo,'Name=COD');
         $this->dtgCkptMani->MetaAddColumn(QQN::NotaEntregaCkpt()->Checkpoint);
         $this->dtgCkptMani->MetaAddColumn(QQN::NotaEntregaCkpt()->Sucursal->Iata,'Name=Suc');
         $colFechCkpt = new QDataGridColumn('Fecha','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
@@ -181,17 +188,101 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
     //-----------------------------------
 
     protected function btnErroProc_Click() {
+        $_SESSION['PagiBack'] = __SIST__.'/cambiar_estatus_manifiesto.php/'.$this->objManiProc->Id;
         QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
     }
 
     protected function btnCancel_Click() {
-        if ($_SESSION['PagiBack']) {
+        if (isset($_SESSION['PagiBack'])) {
             $strPagiReto = $_SESSION['PagiBack'];
         } else {
             $objUltiAcce = PilaAcceso::Pop('D');
             $strPagiReto = $objUltiAcce->__toString();
         }
         QApplication::Redirect(__SIST__."/".$strPagiReto);
+    }
+
+
+    protected function btnSave_ClickNew() {
+        $strNombProc = 'Cambiando estatus del Manifiesto: '.$this->objManiProc->Referencia;
+        $this->objProcEjec = CrearProceso($strNombProc);
+        //--------------------------------------
+        // Getting stored procedure parameters 
+        //--------------------------------------
+        $objDatabase = NotaEntrega::GetDatabase();
+        $objCkptMani = Checkpoints::Load($this->lstCkptMani->SelectedValue);
+        $strComeCkpt = trim($this->txtComeCkpt->Text);
+        $strComeCkpt = strlen(trim($strComeCkpt)) ? trim($strComeCkpt) : $objCkptMani->Descripcion;
+        $intCkptIdxx = $this->lstCkptMani->SelectedValue;
+        $intSucuIdxx = $this->objUsuario->SucursalId;
+        $intCodiUsua = $this->objUsuario->CodiUsua;
+        $intManiIdxx = $this->objManiProc->Id;
+        $strParaSqlx = "$intCkptIdxx,$intSucuIdxx,'$strComeCkpt',$intCodiUsua,$intManiIdxx";
+        //---------------------------------------------
+        // Inserting the checkpoint for the Manifest 
+        //---------------------------------------------
+        $arrResuGrab = $this->objManiProc->GrabarCheckpoint($objCkptMani, $this->objProcEjec, $strComeCkpt);
+        if (!$arrResuGrab['TodoOkey']) {
+            $this->danger($arrResuGrab['MotiNook']);
+            return;
+        }
+        //----------------------------------------------------------------------------
+        // Inserting checkpoints for every piece that belongs to the Nota de Entrega
+        //----------------------------------------------------------------------------
+        $strStorProc = "call sp_update_nota_entrega_status($strParaSqlx)";
+        $objDatabase->NonQuery($strStorProc);
+        //------------------------------------------
+        // Updating last checkpoint on every piece
+        //------------------------------------------
+        $strStorProc = "call sp_update_last_checkpoint()";
+        $objDatabase->NonQuery($strStorProc);
+        //--------------------------------------
+        // Updating the process as finished
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal      = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario     = 'Done';
+        $this->objProcEjec->NotificarAdmin = false;
+        $this->objProcEjec->Save();
+
+        $this->success('Estatus Cambiado !!');
+        $this->cargarCheckpoints();
+    }
+
+
+    protected function btnSave_ClickOld1() {
+        $strNombProc = 'Cambiando estatus del Manifiesto: '.$this->objManiProc->Referencia;
+        $this->objProcEjec = CrearProceso($strNombProc);
+
+        $strComeCkpt = trim($this->txtComeCkpt->Text);
+        $objCkptMani = Checkpoints::Load($this->lstCkptMani->SelectedValue);
+        $strComeCkpt = strlen(trim($strComeCkpt)) ? trim($strComeCkpt) : $objCkptMani->Descripcion;
+        $arrResuGrab = $this->objManiProc->GrabarCheckpoint($objCkptMani, $this->objProcEjec, $strComeCkpt);
+        if ($arrResuGrab['TodoOkey']) {
+            
+            $arrParaCola['mani_refe'] = $this->objManiProc->Referencia;
+            $arrParaCola['ckpt_idxx'] = $this->lstCkptMani->SelectedValue;
+            $arrParaCola['ckpt_name'] = $this->lstCkptMani->SelectedName;
+            $arrParaCola['ckpt_text'] = $strComeCkpt;
+            $arrParaCola['sucu_idxx'] = $this->objUsuario->SucursalId;
+
+            $objProcBath  = new Cola();
+            $objProcBath->ProcesoErrorId = $this->objProcEjec->Id;
+            $objProcBath->RecordId       = $this->objManiProc->Id;
+            $objProcBath->Clase          = 'NotaEntrega';
+            $objProcBath->Metodo         = 'ActualizarEstatus';
+            $objProcBath->Parametros     = json_encode($arrParaCola);
+            $objProcBath->Ejecutado      = false;
+            $objProcBath->IsRunning      = false;
+            $objProcBath->CreatedAt      = new QDateTime(QDateTime::Now());
+            $objProcBath->CreatedBy      = $this->objUsuario->CodiUsua;
+            $objProcBath->Save();
+            $this->cargarCheckpoints();
+
+            $this->success('Estatus Cambiado !!');
+        } else {
+            $this->danger($arrResuGrab['MotiNook']);
+        }
+
     }
 
 
@@ -236,7 +327,7 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
                     }
                     $arrDatoCkpt = array();
                     $arrDatoCkpt['NumePiez'] = $objPiezMani->IdPieza;
-                    $arrDatoCkpt['GuiaAnul'] = $objPiezMani->Guia->Anulada();
+                    $arrDatoCkpt['GuiaAnul'] = false; //$objPiezMani->Guia->Anulada();
                     $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
                     $arrDatoCkpt['TextCkpt'] = $strDescCkpt;
                     $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
@@ -290,6 +381,7 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
         } else {
             $this->danger($strTextMens);
         }
+        $this->cargarCheckpoints();
     }
 
 

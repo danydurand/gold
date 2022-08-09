@@ -9,7 +9,7 @@
 #-----------------------------------------------------------------------------------
 
 $strNombHost = gethostname();
-if ($strNombHost == 'tini-s') {
+if ($strNombHost == 'mike') {
     $_SERVER['SERVER_NAME'] = 'goldsist.com';
 } else {
     $_SERVER['SERVER_NAME'] = 'gold.dev.com';

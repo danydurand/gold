@@ -1,28 +1,88 @@
 <?php
 require_once('qcubed.inc.php');
+use PHPMailer\PHPMailer\PHPMailer;
 
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
+//$arrMailProc   = [];
+//$arrMailProc[] = 'danydurand@gmail.com';
+//$arrMailProc[] = 'danydurand171431@hotmail.com';
+//$arrMailProc[] = 'danydurand14@yahoo.com';
+//$arrMailProc[] = 'danydurand@lufemansoftware.com';
+//
+//foreach ($arrMailProc as $strDireMail) {
+//    $objMessage = new QEmailMessage();
+//    $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
+//    $objMessage->To = $strDireMail;
+//    $objMessage->Subject = 'Test Mail QEmailMessage';
+//    $objMessage->HtmlBody = 'This is a Test with QEmailMessage library';
+//    $objMessage->SetHeader('x-application', 'Sistema SisCO');
+//    try {
+//        QEmailServer::Send($objMessage);
+//        echo $strDireMail;
+//    } catch (Exception $e) {
+//        echo $e->getMessage();
+//    }
+//    echo "<br>";
+//}
 
-// Obteniendo el color promedio
-function getColorAverage($color1, $color2) {
 
-    $r1 = substr($color1,0,2);
-    $g1 = substr($color1,2,2);
-    $b1 = substr($color1,4,2);
+$arrMailProc   = [];
+$arrMailProc[] = 'm.tovar@goldcoastus.com';
+$arrMailProc[] = 'danydurand@lufemansoftware.com';
+$arrMailProc[] = 'danydurand171431@hotmail.com';
+$arrMailProc[] = 'danydurand14@yahoo.com';
 
-    $r2 = substr($color2,0,2);
-    $g2 = substr($color2,2,2);
-    $b2 = substr($color2,4,2);
-
-    $ar = (int)(($r1+$r2)/2);
-    $ag = (int)(($g1+$g2)/2);
-    $ab = (int)(($b1+$b2)/2);
-
-    return $ar.$ag.$ab;
+foreach ($arrMailProc as $strDireMail) {
+    $mail = new PHPMailer();
+    $mail->setFrom('noti@tini-s.vps.co.ve', 'Test-Mail');
+    $mail->addAddress($strDireMail);
+    $mail->Subject  = "Prueba de Correo SISPAQ";
+    $mail->Body     = 'Estimado Usuario, esta es una prueba de correo...';
+    $mail->Body    .= 'Por favor re-envie este correo a soporte@lufemansoftware.com';
+    if(!$mail->send()) {
+        echo "Message was not sent.\n";
+        echo "Mailer error: " . $mail->ErrorInfo."\n";
+    } else {
+        echo "$strDireMail<br>";
+    }
 }
 
-getColorAverage("112233", "123456");
+
+// Sending mails
+
+//$to = 'danydurand@gmail.com';
+//$subject = 'This is a Test';
+//$message = 'This is the content of the test e-mail';
+//$message = wordwrap($message,70);
+//$headers = 'From: GoldCoast - SisCO <noti@goldsist.com>' . "\r\n" .
+//    'X-Mailer: PHP/' . phpversion();
+//$result = mail($to, $subject, $message, $headers);
+//echo "result: $result<br>";
+//if (!$result) {
+//    $errorMessage = error_get_last()['message'];
+//    echo "Error: $errorMessage";
+//}
+
+// Obteniendo el color promedio
+//function getColorAverage($color1, $color2) {
+//
+//    $r1 = substr($color1,0,2);
+//    $g1 = substr($color1,2,2);
+//    $b1 = substr($color1,4,2);
+//
+//    $r2 = substr($color2,0,2);
+//    $g2 = substr($color2,2,2);
+//    $b2 = substr($color2,4,2);
+//
+//    $ar = (int)(($r1+$r2)/2);
+//    $ag = (int)(($g1+$g2)/2);
+//    $ab = (int)(($b1+$b2)/2);
+//
+//    return $ar.$ag.$ab;
+//}
+//
+//getColorAverage("112233", "123456");
 
 
 //$_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));

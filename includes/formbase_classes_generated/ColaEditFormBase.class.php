@@ -55,12 +55,14 @@ abstract class ColaEditFormBase extends QForm {
 	// Controls for Cola's Data Fields
 	protected $lblId;
 	protected $lstProcesoError;
+	protected $txtRecordId;
 	protected $calFechaInicio;
 	protected $calFechaFin;
 	protected $txtClase;
 	protected $txtMetodo;
 	protected $txtParametros;
 	protected $chkEjecutado;
+	protected $chkIsRunning;
 	protected $txtResultado;
 	protected $calCreatedAt;
 	protected $calUpdatedAt;
@@ -134,12 +136,14 @@ abstract class ColaEditFormBase extends QForm {
 		// Call MetaControl's methods to create qcontrols based on Cola's data fields
 		$this->lblId = $this->mctCola->lblId_Create();
 		$this->lstProcesoError = $this->mctCola->lstProcesoError_Create();
+		$this->txtRecordId = $this->mctCola->txtRecordId_Create();
 		$this->calFechaInicio = $this->mctCola->calFechaInicio_Create();
 		$this->calFechaFin = $this->mctCola->calFechaFin_Create();
 		$this->txtClase = $this->mctCola->txtClase_Create();
 		$this->txtMetodo = $this->mctCola->txtMetodo_Create();
 		$this->txtParametros = $this->mctCola->txtParametros_Create();
 		$this->chkEjecutado = $this->mctCola->chkEjecutado_Create();
+		$this->chkIsRunning = $this->mctCola->chkIsRunning_Create();
 		$this->txtResultado = $this->mctCola->txtResultado_Create();
 		$this->calCreatedAt = $this->mctCola->calCreatedAt_Create();
 		$this->calUpdatedAt = $this->mctCola->calUpdatedAt_Create();

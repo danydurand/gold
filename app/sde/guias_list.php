@@ -64,6 +64,8 @@ class GuiasListForm extends GuiasListFormBase {
 	protected function Form_Create() {
 		parent::Form_Create();
 
+        // QApplication::$Database[1]->EnableProfiling();
+
         $this->lblTituForm->Text = 'Guias';
         $this->objUsuario = unserialize($_SESSION['User']);
 
@@ -118,8 +120,12 @@ class GuiasListForm extends GuiasListFormBase {
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Kilos, 'Name=Kg');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->PiesCub, 'Name=P3');
+        /*
         $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');
+        */
+        $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->LastCkptCode(); ?>');
         $this->dtgGuiases->AddColumn($colUltiCkpt);
+
         $this->dtgGuiases->MetaAddColumn('NombreRemitente', 'Name=Remitente');
         $this->dtgGuiases->MetaAddColumn('NombreDestinatario','Name=Destinatario');
         $this->dtgGuiases->MetaAddColumn('Total');
@@ -129,6 +135,8 @@ class GuiasListForm extends GuiasListFormBase {
         $this->btnExpoExce_Create();
         // $this->btnImprLote_Create();
         $this->btnExpoExce->Visible = true;
+
+        // QApplication::$Database[1]->OutputProfiling();
 
     }
 

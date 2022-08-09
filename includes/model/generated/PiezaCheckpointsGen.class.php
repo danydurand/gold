@@ -31,6 +31,8 @@
 	 * @property Checkpoints $Checkpoint the value for the Checkpoints object referenced by intCheckpointId (Not Null)
 	 * @property Sucursales $Sucursal the value for the Sucursales object referenced by intSucursalId (Not Null)
 	 * @property Rutas $Ruta the value for the Rutas object referenced by intRutaId 
+	 * @property-read GuiaPiezas $_GuiaPiezasAsLastCkpt the value for the private _objGuiaPiezasAsLastCkpt (Read-Only) if set due to an expansion on the guia_piezas.last_ckpt_id reverse relationship
+	 * @property-read GuiaPiezas[] $_GuiaPiezasAsLastCkptArray the value for the private _objGuiaPiezasAsLastCkptArray (Read-Only) if set due to an ExpandAsArray on the guia_piezas.last_ckpt_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class PiezaCheckpointsGen extends QBaseClass implements IteratorAggregate {
@@ -136,6 +138,22 @@
 		protected $intUpdatedBy;
 		const UpdatedByDefault = null;
 
+
+		/**
+		 * Private member variable that stores a reference to a single GuiaPiezasAsLastCkpt object
+		 * (of type GuiaPiezas), if this PiezaCheckpoints object was restored with
+		 * an expansion on the guia_piezas association table.
+		 * @var GuiaPiezas _objGuiaPiezasAsLastCkpt;
+		 */
+		private $_objGuiaPiezasAsLastCkpt;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaPiezasAsLastCkpt objects
+		 * (of type GuiaPiezas[]), if this PiezaCheckpoints object was restored with
+		 * an ExpandAsArray on the guia_piezas association table.
+		 * @var GuiaPiezas[] _objGuiaPiezasAsLastCkptArray;
+		 */
+		private $_objGuiaPiezasAsLastCkptArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -793,6 +811,21 @@
 
 				
 
+			// Check for GuiaPiezasAsLastCkpt Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiapiezasaslastckpt__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiapiezasaslastckpt']) ? null : $objExpansionAliasArray['guiapiezasaslastckpt']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaPiezasAsLastCkptArray)
+				$objToReturn->_objGuiaPiezasAsLastCkptArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaPiezasAsLastCkptArray[] = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasaslastckpt__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaPiezasAsLastCkpt)) {
+					$objToReturn->_objGuiaPiezasAsLastCkpt = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasaslastckpt__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			return $objToReturn;
 		}
 		
@@ -1379,6 +1412,22 @@
 				// (If restored via a "Many-to" expansion)
 				////////////////////////////
 
+				case '_GuiaPiezasAsLastCkpt':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsLastCkpt (Read-Only)
+					 * if set due to an expansion on the guia_piezas.last_ckpt_id reverse relationship
+					 * @return GuiaPiezas
+					 */
+					return $this->_objGuiaPiezasAsLastCkpt;
+
+				case '_GuiaPiezasAsLastCkptArray':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsLastCkptArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_piezas.last_ckpt_id reverse relationship
+					 * @return GuiaPiezas[]
+					 */
+					return $this->_objGuiaPiezasAsLastCkptArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1715,6 +1764,9 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
+			if ($this->CountGuiaPiezasesAsLastCkpt()) {
+				$arrTablRela[] = 'guia_piezas';
+			}
 			
 			return $arrTablRela;
 		}
@@ -1723,6 +1775,155 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+
+
+		// Related Objects' Methods for GuiaPiezasAsLastCkpt
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaPiezasesAsLastCkpt as an array of GuiaPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public function GetGuiaPiezasAsLastCkptArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return GuiaPiezas::LoadArrayByLastCkptId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaPiezasesAsLastCkpt
+		 * @return int
+		*/
+		public function CountGuiaPiezasesAsLastCkpt() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return GuiaPiezas::CountByLastCkptId($this->intId);
+		}
+
+		/**
+		 * Associates a GuiaPiezasAsLastCkpt
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function AssociateGuiaPiezasAsLastCkpt(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsLastCkpt on this unsaved PiezaCheckpoints.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsLastCkpt on this PiezaCheckpoints with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PiezaCheckpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`last_ckpt_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaPiezasAsLastCkpt
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function UnassociateGuiaPiezasAsLastCkpt(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkpt on this unsaved PiezaCheckpoints.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkpt on this PiezaCheckpoints with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PiezaCheckpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`last_ckpt_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`last_ckpt_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaPiezasesAsLastCkpt
+		 * @return void
+		*/
+		public function UnassociateAllGuiaPiezasesAsLastCkpt() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkpt on this unsaved PiezaCheckpoints.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PiezaCheckpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`last_ckpt_id` = null
+				WHERE
+					`last_ckpt_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaPiezasAsLastCkpt
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaPiezasAsLastCkpt(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkpt on this unsaved PiezaCheckpoints.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkpt on this PiezaCheckpoints with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PiezaCheckpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`last_ckpt_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaPiezasesAsLastCkpt
+		 * @return void
+		*/
+		public function DeleteAllGuiaPiezasesAsLastCkpt() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsLastCkpt on this unsaved PiezaCheckpoints.');
+
+			// Get the Database Object for this Class
+			$objDatabase = PiezaCheckpoints::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
+				WHERE
+					`last_ckpt_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 
 		
@@ -1950,6 +2151,7 @@
      * @property-read QQNode $UpdatedBy
      *
      *
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsLastCkpt
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -1991,6 +2193,8 @@
 					return new QQNode('created_by', 'CreatedBy', 'Integer', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'Integer', $this);
+				case 'GuiaPiezasAsLastCkpt':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasaslastckpt', 'reverse_reference', 'last_ckpt_id', 'GuiaPiezasAsLastCkpt');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2024,6 +2228,7 @@
      * @property-read QQNode $UpdatedBy
      *
      *
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsLastCkpt
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2065,6 +2270,8 @@
 					return new QQNode('created_by', 'CreatedBy', 'integer', $this);
 				case 'UpdatedBy':
 					return new QQNode('updated_by', 'UpdatedBy', 'integer', $this);
+				case 'GuiaPiezasAsLastCkpt':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasaslastckpt', 'reverse_reference', 'last_ckpt_id', 'GuiaPiezasAsLastCkpt');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

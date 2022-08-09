@@ -92,6 +92,8 @@ class SacarARuta extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
+        // QApplication::$Database[1]->EnableProfiling();
+
         $this->SetupValores();
 
         $this->objDefaultWaitIcon = new QWaitIcon($this);
@@ -99,7 +101,6 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->lblTituForm->Text = 'Armar Manif';
 
         $this->dlgMensUsua_Create();
-        t('1');
 
         $this->lstTipoOper_Create();
         $this->lstOperAbie_Create();
@@ -119,20 +120,17 @@ class SacarARuta extends FormularioBaseKaizen {
         $this->dtgPiezMani_Create();
         $this->btnRepoMani_Create();
 
-        t('2');
         $this->txtNuevChof_Create();
         $this->txtNuevCedu_Create();
         $this->btnRegiChof_Create();
         $this->dtgChofSucu_Create();
 
-        t('3');
         $this->lstNuevTipo_Create();
         $this->txtNuevPlac_Create();
         $this->txtNuevDesc_Create();
         $this->btnRegiVehi_Create();
         $this->dtgVehiSucu_Create();
 
-        t('4');
         $this->btnRepoErro_Create();
         $this->btnGestChve_Create();
         $this->btnExpoExce_Create();
@@ -140,14 +138,12 @@ class SacarARuta extends FormularioBaseKaizen {
         //$this->btnTranMobi_Create();
         $this->btnOpciMobi_Create();
 
-        t('5');
         if ($this->blnEditMode) {
             $this->objContaine->ActualizarEstadisticasDeEntrega();
             $this->lstTipoOper_Change();
         }
         $this->lblResuEntr_Create();
 
-        t('6');
         if (!$this->blnEditMode) {
             $objDescCont = Parametros::LoadByIndiceCodigo('DESCCONT','MANIRUTA');
             if ($objDescCont) {
@@ -156,7 +152,8 @@ class SacarARuta extends FormularioBaseKaizen {
                 $this->txtDescCont->Text = 'ARTICULOS VARIOS';
             }
         }
-        t('7');
+
+        // QApplication::$Database[1]->OutputProfiling();
 
     }
 
@@ -708,7 +705,11 @@ class SacarARuta extends FormularioBaseKaizen {
             $this->dtgPiezApta->TotalItemCount = count($arrPiezApta);
             $this->dtgPiezApta->DataSource     = GuiaPiezas::QueryArray(
                 QQ::AndCondition(QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxPiez)),
-                QQ::Clause($this->dtgPiezApta->OrderByClause, $this->dtgPiezApta->LimitClause)
+                QQ::Clause(
+                    $this->dtgPiezApta->OrderByClause, $this->dtgPiezApta->LimitClause,
+                    QQ::Expand(QQN::GuiaPiezas()->Guia),
+                    QQ::Expand(QQN::GuiaPiezas()->NotaEntrega)
+                )
             );
         }
 
@@ -729,7 +730,7 @@ class SacarARuta extends FormularioBaseKaizen {
 
         $colManiGuia = new QDataGridColumn($this);
         $colManiGuia->Name = QApplication::Translate('Manif.');
-        $colManiGuia->Html = '<?= $_ITEM->Guia->NotaEntrega->Referencia ?>';
+        $colManiGuia->Html = '<?= $_ITEM->NotaEntrega->Referencia ?>';
         $colManiGuia->Width = 95;
         $this->dtgPiezApta->AddColumn($colManiGuia);
 
@@ -739,11 +740,11 @@ class SacarARuta extends FormularioBaseKaizen {
         $colDestGuia->Width = 50;
         $this->dtgPiezApta->AddColumn($colDestGuia);
 
-        //$colUltiCkpt = new QDataGridColumn($this);
-        //$colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        /*$colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';*/
-        //$colUltiCkpt->Width = 30;
-        //$this->dtgPiezApta->AddColumn($colUltiCkpt);
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->LastCkptCode ?>';
+        $colUltiCkpt->Width = 30;
+        $this->dtgPiezApta->AddColumn($colUltiCkpt);
 
     }
 
@@ -777,6 +778,8 @@ class SacarARuta extends FormularioBaseKaizen {
             $this->dtgPiezMani->DataSource     = GuiaPiezas::QueryArray(
                 QQ::AndCondition(QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxMani)),
                 QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause)
+                // QQ::Expand(QQN::GuiaPiezas()->Guia),
+                // QQ::Expand(QQN::GuiaPiezas()->NotaEntega)
             );
         }
     }
@@ -788,9 +791,10 @@ class SacarARuta extends FormularioBaseKaizen {
         $colIdxxPiez->Width = 70;
         $this->dtgPiezMani->AddColumn($colIdxxPiez);
 
+        /*
         $colManiGuia = new QDataGridColumn($this);
         $colManiGuia->Name = QApplication::Translate('Manif.');
-        $colManiGuia->Html = '<?= $_ITEM->Guia->NotaEntrega->Referencia ?>';
+        $colManiGuia->Html = '<?= $_ITEM->NotaEntrega->Referencia ?>';
         $colManiGuia->Width = 95;
         $this->dtgPiezMani->AddColumn($colManiGuia);
 
@@ -799,12 +803,6 @@ class SacarARuta extends FormularioBaseKaizen {
         $colServImpo->Html = '<?= $_ITEM->Guia->ServicioImportacion ?>';
         $colServImpo->Width = 30;
         $this->dtgPiezMani->AddColumn($colServImpo);
-
-        //$colDescCont = new QDataGridColumn($this);
-        //$colDescCont->Name = QApplication::Translate('Descripcion');
-        /*$colDescCont->Html = '<?= substr($_ITEM->Descripcion,0,25) ?>';*/
-        //$colDescCont->Width = 130;
-        //$this->dtgPiezMani->AddColumn($colDescCont);
 
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = QApplication::Translate('Kilos');
@@ -818,12 +816,12 @@ class SacarARuta extends FormularioBaseKaizen {
         $colVoluPiez->Width = 30;
         $this->dtgPiezMani->AddColumn($colVoluPiez);
 
-        //$colUltiCkpt = new QDataGridColumn($this);
-        //$colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        /*$colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';*/
-        //$colUltiCkpt->Width = 30;
-        //$this->dtgPiezMani->AddColumn($colUltiCkpt);
-
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->LastCkptCode ?>';
+        $colUltiCkpt->Width = 30;
+        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+        */
     }
 
 

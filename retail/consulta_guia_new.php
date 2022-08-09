@@ -208,6 +208,14 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 $this->ImprimirCombo();
             }
         }
+        if ($strAcciPlus == 'lb') {
+            // Imprimir Etiqueta
+            if ($this->objGuia) {
+                $_SESSION['GuiaEtiq'] = [$this->objGuia->Id];
+                QApplication::Redirect(__SIST__.'/etiqueta_pdf.php');
+            }
+        }
+
     }
 
     protected function Form_Create() {
@@ -382,23 +390,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $colMediPiez->Width = 150;
             $this->dtgPiezGuia->AddColumn($colMediPiez);
 
-            /*
-            $colAltoPiez = new QDataGridColumn($this);
-            $colAltoPiez->Name = QApplication::Translate('Alto');
-            $colAltoPiez->Html = '<?= $_ITEM->Alto; ?>';
-            $this->dtgPiezGuia->AddColumn($colAltoPiez);
-
-            $colAnchPiez = new QDataGridColumn($this);
-            $colAnchPiez->Name = QApplication::Translate('Anch');
-            $colAnchPiez->Html = '<?= $_ITEM->Ancho; ?>';
-            $this->dtgPiezGuia->AddColumn($colAnchPiez);
-
-            $colLargPiez = new QDataGridColumn($this);
-            $colLargPiez->Name = QApplication::Translate('Largo');
-            $colLargPiez->Html = '<?= $_ITEM->Largo; ?>';
-            $this->dtgPiezGuia->AddColumn($colLargPiez);
-            */
-
             $colLibrPiez = new QDataGridColumn($this);
             $colLibrPiez->Name = QApplication::Translate('PiesCub');
             $colLibrPiez->Html = '<?= $_ITEM->PiesCub; ?>';
@@ -447,6 +438,10 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
 
         if (in_array($this->objGuia->Producto->Codigo,['EXA','EXM'])) {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__ . '/consulta_guia_new.php/' . $this->objGuia->Id . '/lb',
+                TextoIcono('clone', 'Etiqueta')
+            );
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__ . '/consulta_guia_new.php/' . $this->objGuia->Id . '/co',
                 TextoIcono('print', 'Acuerdo L.R. y Carta A.D.')
@@ -517,25 +512,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->btnImprPiez->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 's');
     }
 
-    //protected function btnImprPiez_Create() {
-    //    $this->btnImprPiez = new QLabel($this);
-    //    $this->btnImprPiez->HtmlEntities = false;
-    //    $this->btnImprPiez->CssClass = '';
-    //
-    //    $_SESSION['GuiaCamb'] = $this->objGuia->Id;
-    //    $arrOpciDrop = [];
-    //    $strTextBoto = TextoIcono('print','Impr');
-    //
-    //    $objImprGuia = GuiaImprimir::LoadByGuiaId($this->objGuia->Id);
-    //    if ($objImprGuia instanceof GuiaImprimir) {
-    //        if ($objImprGuia->IsImpresa) {
-    //            $strEnlaOpci = __UTIL__.'/descargar_archivo.php?f='.$this->objGuia->__printName();
-    //            $arrOpciDrop[] = OpcionDropDown($strEnlaOpci, TextoIcono('clone', 'Imprimir Guía '));
-    //        }
-    //    }
-    //    $this->btnImprPiez->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 's');
-    //}
-
     protected function lblSistGuia_Create() {
         $this->lblSistGuia = new QLabel($this);
         $this->lblSistGuia->Text = $this->objGuia->sistema();
@@ -544,7 +520,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function btnDeleGuia_Create() {
         $this->btnDeleGuia = new QButtonD($this);
         $this->btnDeleGuia->Text = TextoIcono('trash-o','Borrar','F','lg');
-        $this->btnDeleGuia->ToolTip = 'Permite borrar la Guia';
+        $this->btnDeleGuia->ToolTip = 'Borrar la Guia';
         $this->btnDeleGuia->AddAction(new QClickEvent(), new QConfirmAction('Seguro ?'));
         $this->btnDeleGuia->AddAction(new QClickEvent(), new QAjaxAction('btnDeleGuia_Click'));
     }
@@ -711,8 +687,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblNombRemi->Name = 'Remitente';
         $_SESSION['DataClie'] = serialize(array($this->objGuia->cliente()));
         $this->lblNombRemi->Text = $this->objGuia->NombreRemitente;
-        //$this->lblNombRemi->Text = '<a><span class="enlace">'.$this->objGuia->->CodigoInterno.'</span></a> '.$this->objGuia->NombRemi;
-        //$this->lblNombRemi->AddAction(new QClickEvent(), new QServerAction('lblNombRemi_Click'));
         $this->lblNombRemi->HtmlEntities = false;
     }
 
@@ -733,14 +707,20 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblEmaiRemi_Create() {
         $this->lblEmaiRemi = new QLabel($this);
         $intLogiMost = 30;
-        $strPuntSusp = strlen($this->objGuia->ClienteRetail->Email) > $intLogiMost
-            ? '...'
-            : '';
-        $strDireMail = strlen($this->objGuia->ClienteRetail->Email) > $intLogiMost
-            ? substr($this->objGuia->ClienteRetail->Email,0,$intLogiMost)
-            : $this->objGuia->ClienteRetail->Email;
+        $strDireMail = '';
+        if (!is_null($this->objGuia->ClienteCorpId)) {
+            $strDireMail = $this->objGuia->ClienteCorp->DireMail;
+        } else {
+            if (!is_null($this->objGuia->ClienteRetailId)) {
+                $strDireMail = $this->objGuia->ClienteRetail->EMail;
+            }
+        }
+        $strPuntSusp = strlen($strDireMail) > $intLogiMost ? '...' : '';
+        $strDireMail = strlen($strDireMail) > $intLogiMost
+            ? substr($strDireMail,0,$intLogiMost)
+            : $strDireMail;
         $this->lblEmaiRemi->Text    = $strDireMail.$strPuntSusp;
-        $this->lblEmaiRemi->ToolTip = $this->objGuia->ClienteRetail->Email;
+        $this->lblEmaiRemi->ToolTip = $strDireMail;
     }
 
     protected function lblProfRemi_Create() {
@@ -1238,15 +1218,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         foreach ($arrPiezGuia as $objPiezGuia) {
             t('Procesando: '.$objPiezGuia->IdPieza);
             $arrArchGene[] = $this->ImprimirUna($objPiezGuia);
-            //t('El vector contiene: ');
-            //foreach ($arrArchGene as $strNombArch) {
-            //    t($strNombArch);
-            //}
         }
         $strComaUnix = 'convert '.implode(' ',$arrArchGene)." $strArchGuia";
-        //t('Unix: '.$strComaUnix);
         exec($strComaUnix,$output,$retval);
-        //t('Return value: '.$retval);
         $this->success('La Guia ha sido generada');
     }
 
@@ -1254,7 +1228,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     {
         $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
         try {
-            //t('Imprimiendo: '.$objPiezGuia->IdPieza);
             $_SESSION['PiezGuia'] = serialize($objPiezGuia);
 
             ob_start();
@@ -1390,7 +1363,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         //----------------------------------
         $this->txtTextCome->Visible = !$blnMostPodx;
         $this->btnSaveCome->Visible = !$blnMostPodx;
-        //$this->dtgGuiaCkpt->Visible = !$blnMostPodx;
         $this->dtgRegiTrab->Visible = !$blnMostPodx;
         //------------------------------------------------------------
         // Se ocultan tambien los botones de la consulta de la guia
@@ -1590,7 +1562,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         $colFechCkpt = new QDataGridColumn($this);
         $colFechCkpt->Name = QApplication::Translate('Fecha/Hora');
-        /*$colFechCkpt->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY"); ?>';*/
         $colFechCkpt->Html = '<?= $_FORM->dtgGuiaCkpt_FechHora_Render($_ITEM); ?>';
         $colFechCkpt->Width = 120;
         $this->dtgGuiaCkpt->AddColumn($colFechCkpt);
@@ -1601,11 +1572,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colUsuaCkpt->Width = 15;
         $this->dtgGuiaCkpt->AddColumn($colUsuaCkpt);
 
-        //$colCodiRuta = new QDataGridColumn($this);
-        //$colCodiRuta->Name = QApplication::Translate('Ruta');
-        /*$colCodiRuta->Html = '<?= $_FORM->dtgGuiaCkpt_CodiRuta_Render($_ITEM); ?>';*/
-        //$colCodiRuta->Width = 15;
-        //$this->dtgGuiaCkpt->AddColumn($colCodiRuta);
     }
 
     public function dtgGuiaCkpt_IdxxPiez_Render(PiezaCheckpoints $objPiezCkpt) {
@@ -1617,7 +1583,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $strCodiCkpt = $objPiezCkpt->Checkpoint->Codigo;
         $strTextObse = $objPiezCkpt->Comentario;
         if (strlen($strTextObse) > 0) {
-            //$strTextObse = '('.$strCodiCkpt.') '.limpiarCadena($strTextObse);
             $strTextObse = '('.$strCodiCkpt.') '.$strTextObse;
         }
         return utf8_encode($strTextObse);
@@ -1813,9 +1778,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
     }
 
-    //protected function lblNombRemi_Click() {
-    //    QApplication::Redirect(__SIST__."/master_cliente_edit.php/".$this->objGuia->CodiClie);
-    //}
 }
 
 ConsultaGuiaNew::Run('ConsultaGuiaNew');

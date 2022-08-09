@@ -11,24 +11,33 @@ class ImprimirLotesForm extends FormularioBaseKaizen {
     protected $btnImprEtiq;
     protected $btnImprEti2;
     protected $btnImprNuev;
+    protected $rdbMostLogo;
 
     protected function Form_Create() {
         parent::Form_Create();
-        $this->lblTituForm->Text = QApplication::Translate('Impresión en Lote');
+
+        $this->lblTituForm->Text = QApplication::Translate('Impresiónes en Lote');
+
         $this->txtListGuia_Create();
-        //$this->btnBotoImpr_Create();
-        $this->btnImprGuia_Create();
         $this->btnImprEtiq_Create();
-        $this->btnImprEti2_Create();
-        $this->btnImprNuev_Create();
-        $this->btnSave->Visible = false;
-        $this->btnCancel->Visible = false;
+        $this->rdbMostLogo_Create();
     }
 
     //----------------------------
     // Aquí se Crean los Objetos
     //----------------------------
-         
+
+    protected function rdbMostLogo_Create() {
+        $this->rdbMostLogo = new QRadioButtonList($this);
+        $this->rdbMostLogo->Name = 'Incluir Logo ?';
+        $this->rdbMostLogo->Required = true;
+        $this->rdbMostLogo->HtmlEntities = false;
+        $this->rdbMostLogo->RepeatColumns = 2;
+        $this->rdbMostLogo->AddItem('&nbsp;SI&nbsp;', true, true);
+        $this->rdbMostLogo->AddItem('&nbsp;NO&nbsp;', false);
+    }
+
+
     protected function txtListGuia_Create(){
         $this->txtListGuia = new QTextBox($this);
         $this->txtListGuia->Name = QApplication::Translate('Lista de Guías');
@@ -36,23 +45,6 @@ class ImprimirLotesForm extends FormularioBaseKaizen {
         $this->txtListGuia->Height = 250;
         $this->txtListGuia->Width = 200;
     }
-
-    /*protected function btnBotoImpr_Create() {
-        $this->btnBotoImpr = new QLabel($this);
-        $this->btnBotoImpr->HtmlEntities = false;
-        $this->btnBotoImpr->CssClass = '';
-
-        $strTextBoto   = TextoIcono('wpforms fa-lg','Imprimir');
-        $arrOpciDrop   = array();
-
-        $arrOpciDrop[] = OpcionDropDown('etiqueta_pdf.php',TextoIcono('file-text','Imprimir Guías'));
-        $arrOpciDrop[] = OpcionDropDown('etiqueta_pdf_b.php',TextoIcono('file-text-o','Imprimir Etiquetas T1'));
-        $arrOpciDrop[] = OpcionDropDown('etiqueta_pdf_new.php',TextoIcono('file','Imprimir Etiquetas T2'));
-        $arrOpciDrop[] = OpcionDropDown('etiqueta_pdf_lote.php',TextoIcono('file-o','Imprimir Etiquetas en Lote'));
-
-        $this->btnBotoImpr->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'p');
-        //$this->btnBotoImpr->Visible  = $this->mctMasterCliente->EditMode;
-    }*/
 
     protected function btnImprGuia_Create() {
         $this->btnImprGuia = new QButtonS($this);
@@ -63,8 +55,8 @@ class ImprimirLotesForm extends FormularioBaseKaizen {
     }
 
     protected function btnImprEtiq_Create() {
-        $this->btnImprEtiq = new QButtonW($this);
-        $this->btnImprEtiq->Text = TextoIcono('file-text-o','Etiquetas','F','fa-lg');
+        $this->btnImprEtiq = new QButtonP($this);
+        $this->btnImprEtiq->Text = TextoIcono('clone','Etiquetas','F','fa-lg');
         $this->btnImprEtiq->ActionParameter = 'E';
         $this->btnImprEtiq->AddAction(new QClickEvent(), new QServerAction('procesarGuias'));
         $this->btnImprEtiq->CausesValidation = true;
@@ -91,17 +83,17 @@ class ImprimirLotesForm extends FormularioBaseKaizen {
     //-----------------------------------
 
     protected function Form_Validate() {
-        $strMensAdve = 'Debe indicar algun(os) <b>Número(s) de Guía(s)</b>.';
         $blnTodoOkey = true;
         if (strlen($this->txtListGuia->Text) == 0) {
             $blnTodoOkey = false;
-            $this->mensaje($strMensAdve,'m','d','','hand-stop-o');
+            $this->danger('Debe indicar las guias cuyas impresiones desea procesar');
         }
         return $blnTodoOkey;
     }
 
     protected function procesarGuias($strFormId, $strControlId, $strParameter) {
         $this->lblMensUsua->Text = '';
+        $_SESSION['MostLogo'] = $this->rdbMostLogo->SelectedValue;
         $arrListGuia = explode(',',nl2br2($this->txtListGuia->Text));
         $this->txtListGuia->Text = '';
         //---------------------------------------
@@ -111,32 +103,32 @@ class ImprimirLotesForm extends FormularioBaseKaizen {
         //---------------------------------------------------------------------------
         // Con array_unique se eliminan las guías repetidas en caso de que las haya
         //---------------------------------------------------------------------------
-        $arrGuiaDefi = array();
+        $arrGuiaDefi = [];
         $arrListGuia = array_unique($arrListGuia,SORT_STRING);
         foreach ($arrListGuia as $strNumeGuia) {
-            $objGuia = Guia::Load($strNumeGuia);
+            $objGuia = Guias::LoadByTracking($strNumeGuia);
             if ($objGuia) {
-                $arrGuiaDefi[] = $objGuia->NumeGuia;
+                $arrGuiaDefi[] = $objGuia->Id;
+                t('Guia: '.$objGuia->Tracking.' con el Id: '.$objGuia->Id.'... en el Vector');
             } else {
                 $this->txtListGuia->Text .= $strNumeGuia." (No Existe)".chr(13);
             } 
         }
         switch ($strParameter) {
             case 'E':
-                $_SESSION['arrGuiaLote'] = serialize($arrGuiaDefi);
+                $_SESSION['GuiaEtiq'] = $arrGuiaDefi;
                 QApplication::Redirect('etiqueta_pdf.php');
                 break;
-            case 'E2':
-                $_SESSION['arrGuiaLote'] = serialize($arrGuiaDefi);
-                QApplication::Redirect('etiqueta_pdf_b.php');
-                break;
-            case 'EN':
-                $_SESSION['arrGuiaLote'] = serialize($arrGuiaDefi);
-                QApplication::Redirect('etiqueta_pdf_new.php');
-                break;
+//            case 'E2':
+//                $_SESSION['arrGuiaLote'] = serialize($arrGuiaDefi);
+//                QApplication::Redirect('etiqueta_pdf_b.php');
+//                break;
+//            case 'EN':
+//                $_SESSION['arrGuiaLote'] = serialize($arrGuiaDefi);
+//                QApplication::Redirect('etiqueta_pdf_new.php');
+//                break;
             default:
-                $_SESSION['Dato'] = serialize($arrGuiaDefi);
-                QApplication::Redirect('guia_pdf_lote.php');
+                $this->danger('Opción de Impresión no considerada');
         }
     }
 }

@@ -267,3 +267,90 @@
 [16-Feb-2022 12:22:05 America/Caracas] PHP  15. file() /var/www/html/gold/assets/_core/php/error_dump.php:21
 [15-Mar-2022 17:53:22 America/Caracas] PHP Parse error:  syntax error, unexpected '$strTextMens' (T_VARIABLE) in /var/www/html/gold/app/sde/anular_factura.php on line 148
 [15-Mar-2022 17:53:35 America/Caracas] PHP Parse error:  syntax error, unexpected '$strTextMens' (T_VARIABLE) in /var/www/html/gold/app/sde/anular_factura.php on line 148
+[26-May-2022 09:34:35 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 09:34:35 America/Caracas] PHP Stack trace:
+[26-May-2022 09:34:35 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 09:34:35 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/etiqueta_pdf.php:21
+[26-May-2022 09:34:35 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 09:34:35 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 09:34:35 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[26-May-2022 09:34:35 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 09:34:35 America/Caracas] PHP Stack trace:
+[26-May-2022 09:34:35 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 09:34:35 America/Caracas] PHP   2. QcodoHandleError() /var/www/html/gold/app/sde/etiqueta_pdf.php:21
+[26-May-2022 09:34:35 America/Caracas] PHP   3. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 09:34:35 America/Caracas] PHP   4. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 09:34:35 America/Caracas] PHP   5. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[26-May-2022 13:00:02 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 13:00:02 America/Caracas] PHP Stack trace:
+[26-May-2022 13:00:02 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 13:00:02 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/etiqueta_pdf.php:31
+[26-May-2022 13:00:02 America/Caracas] PHP   3. QcodoHandleError() /var/www/html/gold/app/sde/etiqueta_pdf.php:6
+[26-May-2022 13:00:02 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 13:00:02 America/Caracas] PHP   5. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 13:00:02 America/Caracas] PHP   6. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[26-May-2022 13:00:02 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 13:00:02 America/Caracas] PHP Stack trace:
+[26-May-2022 13:00:02 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 13:00:02 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/etiqueta_pdf.php:31
+[26-May-2022 13:00:02 America/Caracas] PHP   3. QcodoHandleError() /var/www/html/gold/app/sde/etiqueta_pdf.php:6
+[26-May-2022 13:00:02 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 13:00:02 America/Caracas] PHP   5. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 13:00:02 America/Caracas] PHP   6. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[26-May-2022 13:06:07 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 13:06:07 America/Caracas] PHP Stack trace:
+[26-May-2022 13:06:07 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 13:06:07 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/etiqueta_pdf.php:38
+[26-May-2022 13:06:07 America/Caracas] PHP   3. unserialize() /var/www/html/gold/app/sde/rhtml/etiqueta_html.php:6
+[26-May-2022 13:06:07 America/Caracas] PHP   4. QcodoHandleError() /var/www/html/gold/app/sde/rhtml/etiqueta_html.php:6
+[26-May-2022 13:06:07 America/Caracas] PHP   5. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 13:06:07 America/Caracas] PHP   6. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 13:06:07 America/Caracas] PHP   7. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[26-May-2022 13:06:07 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 13:06:07 America/Caracas] PHP Stack trace:
+[26-May-2022 13:06:07 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 13:06:07 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/etiqueta_pdf.php:38
+[26-May-2022 13:06:07 America/Caracas] PHP   3. unserialize() /var/www/html/gold/app/sde/rhtml/etiqueta_html.php:6
+[26-May-2022 13:06:07 America/Caracas] PHP   4. QcodoHandleError() /var/www/html/gold/app/sde/rhtml/etiqueta_html.php:6
+[26-May-2022 13:06:07 America/Caracas] PHP   5. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 13:06:07 America/Caracas] PHP   6. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 13:06:07 America/Caracas] PHP   7. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[26-May-2022 13:07:08 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 13:07:08 America/Caracas] PHP Stack trace:
+[26-May-2022 13:07:08 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 13:07:08 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/etiqueta_pdf.php:38
+[26-May-2022 13:07:08 America/Caracas] PHP   3. QcodoHandleError() /var/www/html/gold/app/sde/etiqueta_pdf.php:16
+[26-May-2022 13:07:08 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 13:07:08 America/Caracas] PHP   5. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 13:07:08 America/Caracas] PHP   6. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[26-May-2022 13:07:08 America/Caracas] PHP Warning:  var_export does not handle circular references in /var/www/html/gold/assets/_core/php/error_dump.php on line 116
+[26-May-2022 13:07:08 America/Caracas] PHP Stack trace:
+[26-May-2022 13:07:08 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/etiqueta_pdf.php:0
+[26-May-2022 13:07:08 America/Caracas] PHP   2. include() /var/www/html/gold/app/sde/etiqueta_pdf.php:38
+[26-May-2022 13:07:08 America/Caracas] PHP   3. QcodoHandleError() /var/www/html/gold/app/sde/etiqueta_pdf.php:16
+[26-May-2022 13:07:08 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[26-May-2022 13:07:08 America/Caracas] PHP   5. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[26-May-2022 13:07:08 America/Caracas] PHP   6. var_export() /var/www/html/gold/assets/_core/php/error_dump.php:116
+[01-Jun-2022 20:59:07 America/Caracas] PHP Parse error:  syntax error, unexpected 've00m0045601882' (T_STRING) in /var/www/html/gold/app/sde/buscar_pieza_mia.php on line 174
+[20-Jul-2022 14:16:12 America/Caracas] PHP Parse error:  syntax error, unexpected '*' in /var/www/html/gold/app/sde/sacar_a_ruta.php on line 744
+[20-Jul-2022 15:59:31 America/Caracas] PHP Parse error:  syntax error, unexpected ')' in /var/www/html/gold/app/sde/sacar_a_ruta.php on line 713
+[23-Jul-2022 09:33:28 America/Caracas] PHP Warning:  file(/var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php(457) : eval()'d code): failed to open stream: No such file or directory in /var/www/html/gold/assets/_core/php/error_dump.php on line 21
+[23-Jul-2022 09:33:28 America/Caracas] PHP Stack trace:
+[23-Jul-2022 09:33:28 America/Caracas] PHP   1. {main}() /var/www/html/gold/app/sde/example_form.php:0
+[23-Jul-2022 09:33:28 America/Caracas] PHP   2. QFormBase::Run() /var/www/html/gold/app/sde/example_form.php:58
+[23-Jul-2022 09:33:28 America/Caracas] PHP   3. QFormBase->Render() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:468
+[23-Jul-2022 09:33:28 America/Caracas] PHP   4. require() /var/www/html/gold/includes/qcubed/_core/base_controls/QFormBase.class.php:1159
+[23-Jul-2022 09:33:28 America/Caracas] PHP   5. QControlBase->Render() /var/www/html/gold/app/sde/example_form.tpl.php:25
+[23-Jul-2022 09:33:28 America/Caracas] PHP   6. QDataGridBase->GetControlHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QControlBase.class.php:1249
+[23-Jul-2022 09:33:28 America/Caracas] PHP   7. QDataGridBase->GetDataGridRowHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:738
+[23-Jul-2022 09:33:28 America/Caracas] PHP   8. QDataGridBase->ParseColumnHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:649
+[23-Jul-2022 09:33:28 America/Caracas] PHP   9. QDataGridBase::ParseHtml() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:430
+[23-Jul-2022 09:33:28 America/Caracas] PHP  10. eval() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:457
+[23-Jul-2022 09:33:28 America/Caracas] PHP  11. DataGridEvalHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:1
+[23-Jul-2022 09:33:28 America/Caracas] PHP  12. QcodoHandleError() /var/www/html/gold/includes/qcubed/_core/base_controls/QDataGridBase.class.php:38
+[23-Jul-2022 09:33:28 America/Caracas] PHP  13. require() /var/www/html/gold/includes/qcubed/_core/error.inc.php:160
+[23-Jul-2022 09:33:28 America/Caracas] PHP  14. require() /var/www/html/gold/assets/_core/php/error_page.php:4
+[23-Jul-2022 09:33:28 America/Caracas] PHP  15. file() /var/www/html/gold/assets/_core/php/error_dump.php:21
+[09-Aug-2022 17:13:32 America/Caracas] PHP Parse error:  syntax error, unexpected '}' in /var/www/html/gold/app/sde/match_scanneo.php on line 207
+[09-Aug-2022 17:14:56 America/Caracas] PHP Parse error:  syntax error, unexpected 'VE00K0000108958' (T_STRING), expecting function (T_FUNCTION) in /var/www/html/gold/app/sde/match_scanneo.php on line 194
+[09-Aug-2022 17:14:56 America/Caracas] PHP Parse error:  syntax error, unexpected 'VE00K0000108958' (T_STRING), expecting function (T_FUNCTION) in /var/www/html/gold/app/sde/match_scanneo.php on line 194

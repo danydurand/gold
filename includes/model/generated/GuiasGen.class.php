@@ -64,7 +64,6 @@
 	 * @property double $Volumen the value for fltVolumen 
 	 * @property double $PiesCub the value for fltPiesCub 
 	 * @property double $MetrosCub the value for fltMetrosCub 
-	 * @property string $NroTula the value for strNroTula 
 	 * @property string $CedulaDestinatario the value for strCedulaDestinatario 
 	 * @property integer $FacturaId the value for intFacturaId 
 	 * @property integer $GuiaPodId the value for intGuiaPodId 
@@ -526,15 +525,6 @@
 		 */
 		protected $fltMetrosCub;
 		const MetrosCubDefault = 0;
-
-
-		/**
-		 * Protected member variable that maps to the database column guias.nro_tula
-		 * @var string strNroTula
-		 */
-		protected $strNroTula;
-		const NroTulaMaxLength = 50;
-		const NroTulaDefault = null;
 
 
 		/**
@@ -1017,7 +1007,6 @@
 			$this->fltVolumen = Guias::VolumenDefault;
 			$this->fltPiesCub = Guias::PiesCubDefault;
 			$this->fltMetrosCub = Guias::MetrosCubDefault;
-			$this->strNroTula = Guias::NroTulaDefault;
 			$this->strCedulaDestinatario = Guias::CedulaDestinatarioDefault;
 			$this->intFacturaId = Guias::FacturaIdDefault;
 			$this->intGuiaPodId = Guias::GuiaPodIdDefault;
@@ -1421,7 +1410,6 @@
 			    $objBuilder->AddSelectItem($strTableName, 'volumen', $strAliasPrefix . 'volumen');
 			    $objBuilder->AddSelectItem($strTableName, 'pies_cub', $strAliasPrefix . 'pies_cub');
 			    $objBuilder->AddSelectItem($strTableName, 'metros_cub', $strAliasPrefix . 'metros_cub');
-			    $objBuilder->AddSelectItem($strTableName, 'nro_tula', $strAliasPrefix . 'nro_tula');
 			    $objBuilder->AddSelectItem($strTableName, 'cedula_destinatario', $strAliasPrefix . 'cedula_destinatario');
 			    $objBuilder->AddSelectItem($strTableName, 'factura_id', $strAliasPrefix . 'factura_id');
 			    $objBuilder->AddSelectItem($strTableName, 'guia_pod_id', $strAliasPrefix . 'guia_pod_id');
@@ -1707,9 +1695,6 @@
 			$strAlias = $strAliasPrefix . 'metros_cub';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->fltMetrosCub = $objDbRow->GetColumn($strAliasName, 'Float');
-			$strAlias = $strAliasPrefix . 'nro_tula';
-			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
-			$objToReturn->strNroTula = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'cedula_destinatario';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strCedulaDestinatario = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -2707,7 +2692,6 @@
 							`volumen`,
 							`pies_cub`,
 							`metros_cub`,
-							`nro_tula`,
 							`cedula_destinatario`,
 							`factura_id`,
 							`guia_pod_id`,
@@ -2770,7 +2754,6 @@
 							' . $objDatabase->SqlVariable($this->fltVolumen) . ',
 							' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							' . $objDatabase->SqlVariable($this->fltMetrosCub) . ',
-							' . $objDatabase->SqlVariable($this->strNroTula) . ',
 							' . $objDatabase->SqlVariable($this->strCedulaDestinatario) . ',
 							' . $objDatabase->SqlVariable($this->intFacturaId) . ',
 							' . $objDatabase->SqlVariable($this->intGuiaPodId) . ',
@@ -2847,7 +2830,6 @@
 							`volumen` = ' . $objDatabase->SqlVariable($this->fltVolumen) . ',
 							`pies_cub` = ' . $objDatabase->SqlVariable($this->fltPiesCub) . ',
 							`metros_cub` = ' . $objDatabase->SqlVariable($this->fltMetrosCub) . ',
-							`nro_tula` = ' . $objDatabase->SqlVariable($this->strNroTula) . ',
 							`cedula_destinatario` = ' . $objDatabase->SqlVariable($this->strCedulaDestinatario) . ',
 							`factura_id` = ' . $objDatabase->SqlVariable($this->intFacturaId) . ',
 							`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intGuiaPodId) . ',
@@ -3071,7 +3053,6 @@
 			$this->fltVolumen = $objReloaded->fltVolumen;
 			$this->fltPiesCub = $objReloaded->fltPiesCub;
 			$this->fltMetrosCub = $objReloaded->fltMetrosCub;
-			$this->strNroTula = $objReloaded->strNroTula;
 			$this->strCedulaDestinatario = $objReloaded->strCedulaDestinatario;
 			$this->intFacturaId = $objReloaded->intFacturaId;
 			$this->GuiaPodId = $objReloaded->GuiaPodId;
@@ -3447,13 +3428,6 @@
 					 * @return double
 					 */
 					return $this->fltMetrosCub;
-
-				case 'NroTula':
-					/**
-					 * Gets the value for strNroTula 
-					 * @return string
-					 */
-					return $this->strNroTula;
 
 				case 'CedulaDestinatario':
 					/**
@@ -4559,19 +4533,6 @@
 					 */
 					try {
 						return ($this->fltMetrosCub = QType::Cast($mixValue, QType::Float));
-					} catch (QCallerException $objExc) {
-						$objExc->IncrementOffset();
-						throw $objExc;
-					}
-
-				case 'NroTula':
-					/**
-					 * Sets the value for strNroTula 
-					 * @param string $mixValue
-					 * @return string
-					 */
-					try {
-						return ($this->strNroTula = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -6562,7 +6523,6 @@
 			$strToReturn .= '<element name="Volumen" type="xsd:float"/>';
 			$strToReturn .= '<element name="PiesCub" type="xsd:float"/>';
 			$strToReturn .= '<element name="MetrosCub" type="xsd:float"/>';
-			$strToReturn .= '<element name="NroTula" type="xsd:string"/>';
 			$strToReturn .= '<element name="CedulaDestinatario" type="xsd:string"/>';
 			$strToReturn .= '<element name="FacturaId" type="xsd:int"/>';
 			$strToReturn .= '<element name="GuiaPod" type="xsd1:GuiaPod"/>';
@@ -6720,8 +6680,6 @@
 				$objToReturn->fltPiesCub = $objSoapObject->PiesCub;
 			if (property_exists($objSoapObject, 'MetrosCub'))
 				$objToReturn->fltMetrosCub = $objSoapObject->MetrosCub;
-			if (property_exists($objSoapObject, 'NroTula'))
-				$objToReturn->strNroTula = $objSoapObject->NroTula;
 			if (property_exists($objSoapObject, 'CedulaDestinatario'))
 				$objToReturn->strCedulaDestinatario = $objSoapObject->CedulaDestinatario;
 			if (property_exists($objSoapObject, 'FacturaId'))
@@ -6891,7 +6849,6 @@
 			$iArray['Volumen'] = $this->fltVolumen;
 			$iArray['PiesCub'] = $this->fltPiesCub;
 			$iArray['MetrosCub'] = $this->fltMetrosCub;
-			$iArray['NroTula'] = $this->strNroTula;
 			$iArray['CedulaDestinatario'] = $this->strCedulaDestinatario;
 			$iArray['FacturaId'] = $this->intFacturaId;
 			$iArray['GuiaPodId'] = $this->intGuiaPodId;
@@ -7038,7 +6995,6 @@
      * @property-read QQNode $Volumen
      * @property-read QQNode $PiesCub
      * @property-read QQNode $MetrosCub
-     * @property-read QQNode $NroTula
      * @property-read QQNode $CedulaDestinatario
      * @property-read QQNode $FacturaId
      * @property-read QQNode $GuiaPodId
@@ -7195,8 +7151,6 @@
 					return new QQNode('pies_cub', 'PiesCub', 'Float', $this);
 				case 'MetrosCub':
 					return new QQNode('metros_cub', 'MetrosCub', 'Float', $this);
-				case 'NroTula':
-					return new QQNode('nro_tula', 'NroTula', 'VarChar', $this);
 				case 'CedulaDestinatario':
 					return new QQNode('cedula_destinatario', 'CedulaDestinatario', 'VarChar', $this);
 				case 'FacturaId':
@@ -7322,7 +7276,6 @@
      * @property-read QQNode $Volumen
      * @property-read QQNode $PiesCub
      * @property-read QQNode $MetrosCub
-     * @property-read QQNode $NroTula
      * @property-read QQNode $CedulaDestinatario
      * @property-read QQNode $FacturaId
      * @property-read QQNode $GuiaPodId
@@ -7479,8 +7432,6 @@
 					return new QQNode('pies_cub', 'PiesCub', 'double', $this);
 				case 'MetrosCub':
 					return new QQNode('metros_cub', 'MetrosCub', 'double', $this);
-				case 'NroTula':
-					return new QQNode('nro_tula', 'NroTula', 'string', $this);
 				case 'CedulaDestinatario':
 					return new QQNode('cedula_destinatario', 'CedulaDestinatario', 'string', $this);
 				case 'FacturaId':

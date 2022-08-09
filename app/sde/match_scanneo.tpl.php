@@ -22,15 +22,12 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 </div>
             </div>
             <div class="row" style="margin-top: 0.7em;">
-                <div class="col-md-5">
-                    <?php $this->txtNumePiez->RenderWithName(); ?>
+                <div class="col-md-4 text-center">
+                    <?php $this->txtNumePiez->Render(); ?>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="titulo" style="margin-bottom: .1em">Manifiestos Pendientes</div>
                     <?php $this->dtgManiPend->Render(); ?>
-                    <!--<br>-->
-                    <!--<div class="titulo" style="margin-bottom: .1em">Piezas x Recibir del Manifiesto</div>-->
-                    <?php //$this->dtgPiezPend->Render(); ?>
                 </div>
             </div>
         </div>

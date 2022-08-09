@@ -161,7 +161,7 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
         $objCheckpoint = Checkpoints::LoadByCodigo('OK');
         foreach ($arrPiezPodx as $objPiezPodx) {
 			//-------------------------------------------------
-			// Se registra un checkpoint "BG" para cada pieza
+			// Se registra un checkpoint para cada pieza
 			//-------------------------------------------------
 			$arrDatoCkpt             = array();
 			$arrDatoCkpt['NumePiez'] = $objPiezPodx->IdPieza;
@@ -179,6 +179,7 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
             }
         }
         $this->dtgGuiaPiezases->Refresh();
+        UpdateLastCheckpoint();
         $this->objManiPods->ActualizarEstadisticasDeEntrega();
         $this->success("Procesadas exitosamente: $intCantGuia | Con Error: $intCantErro");
 	}

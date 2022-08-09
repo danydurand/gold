@@ -393,7 +393,7 @@ class UsuarioEditForm extends UsuarioEditFormBase {
         $strPassUsua = generarCodigo();
         $strUrlxSist = 'http://goldsist.com/retail';
         $strNombSist = 'Retail';
-        $this->mctUsuario->Usuario->resetearClave($strPassUsua,$strUrlxSist,$strNombSist);
+        $this->mctUsuario->Usuario->resetearClave($strPassUsua,true,$strUrlxSist,$strNombSist);
         $this->txtCantInte->Text = $this->mctUsuario->Usuario->CantInte;
         $this->calFechClav->DateTime = new QDateTime($this->mctUsuario->Usuario->FechClav);
         $this->txtMotiBloq->Text = $this->mctUsuario->Usuario->MotiBloq;

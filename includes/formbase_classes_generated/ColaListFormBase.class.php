@@ -80,12 +80,14 @@ abstract class ColaListFormBase extends QForm {
         // can traverse down QQN::cola() to display fields that are down the hierarchy)
         $this->dtgColas->MetaAddColumn('Id');
         $this->dtgColas->MetaAddColumn(QQN::Cola()->ProcesoError);
+        $this->dtgColas->MetaAddColumn('RecordId');
         $this->dtgColas->MetaAddColumn('FechaInicio');
         $this->dtgColas->MetaAddColumn('FechaFin');
         $this->dtgColas->MetaAddColumn('Clase');
         $this->dtgColas->MetaAddColumn('Metodo');
         $this->dtgColas->MetaAddColumn('Parametros');
         $this->dtgColas->MetaAddColumn('Ejecutado');
+        $this->dtgColas->MetaAddColumn('IsRunning');
         $this->dtgColas->MetaAddColumn('Resultado');
         $this->dtgColas->MetaAddColumn('CreatedAt');
         $this->dtgColas->MetaAddColumn('UpdatedAt');

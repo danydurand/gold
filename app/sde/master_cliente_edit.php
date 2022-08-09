@@ -7,6 +7,7 @@ require_once(__APP_INCLUDES__.'/FormularioBaseKaizen.class.php');
 use Spipu\Html2Pdf\Html2Pdf;
 use Spipu\Html2Pdf\Exception\Html2PdfException;
 use Spipu\Html2Pdf\Exception\ExceptionFormatter;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class MasterClienteEditForm extends FormularioBaseKaizen {
     // Objetos del Formulario //
@@ -426,7 +427,8 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         }
         switch ($strTipoAcci) {
             case 'E':
-                $this->RedactarCorreoEdoCta($arrFactPend, $arrNotaDisp,true, $strDestCorr);
+                    $this->RedactarCorreoEdoCta($arrFactPend, $arrNotaDisp,true, $strDestCorr);
+//                    $this->RedactarCorreoEdoCtaOld($arrFactPend, $arrNotaDisp,true, $strDestCorr);
                 if ($strDestCorr == 'U') {
                     $strTextMens = 'El Edo de Cta fue enviado al Usuario solicitante !!!';
                 } else {
@@ -494,7 +496,108 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
 
 
     protected function RedactarCorreoEdoCta($arrFactPend, $arrNotaDisp=null, $blnAgreFact=true, $strDestCorr='U') {
-        t('LLegando a la rutina RedactarCorreoEdoCta con: '.count($arrNotaDisp).' NDCs');
+        t('Nueva rutina RedactarCorreoEdoCta con: '.count($arrNotaDisp).' NDCs');
+        $strDireFrom = 'GoldCoast - SisCO <noti@goldsist.com>';
+        if ($strDestCorr == 'U') {
+            $strEnviAxxx = $this->objUsuario->MailUsua;
+        } else {
+            $strEnviAxxx = $this->objMasterCliente->DireMail;
+        }
+        t('El correo sera enviado a: '.$strEnviAxxx);
+        $strTextSubj = 'Estado de Cuenta al ' . QDateTime::NowToString(QDateTime::FormatDisplayDate);
+        //------------------------------------------------------------------------------------
+        // El programa /rhtml/estado_de_cuenta.php utiliza el vector de Facturas Pendientes
+        // para generar el Estado de Cuenta
+        //------------------------------------------------------------------------------------
+        $_SESSION['ObjeClie'] = serialize($this->objMasterCliente);
+        ob_start();
+        include dirname(__FILE__) . '/rhtml/estado_de_cuenta_completo.php';
+        $strHtmlFact = ob_get_clean();
+        $strHtmlBody = $strHtmlFact;
+
+        t('Ya se genero el HTML');
+
+        //--------------------------
+        // Se agrega la coletilla
+        //--------------------------
+        $strHtmlBody .= '<br><br><br>';
+        $strHtmlBody .= '<small>SISPAQ - SisCO. Desarrollado por Lufeman Software. http://lufemansoftware.com</small>';
+        t('Ya se agrego la coletilla');
+
+        //-------------------------------------
+        // Se suprimen los errores en pantalla
+        //-------------------------------------
+        $mixErroOrig = error_reporting();
+        error_reporting(0);
+        $mail = new PHPMailer();
+        try {
+            $mail->setFrom('noti@goldsist.com', 'GoldCoast - SisCO');
+            $mail->addAddress($strEnviAxxx);
+            $mail->Subject  = $strTextSubj;
+            $mail->msgHTML($strHtmlBody);
+            //-------------------------------------
+            // Se anexan los PDFs de las Facturas
+            //-------------------------------------
+            if ($blnAgreFact) {
+                t('Se ha solicitado el envio de las facturas');
+                /* @var $objFactPend Facturas */
+                foreach ($arrFactPend as $objFactPend) {
+                    t('Procesando la factura: '.$objFactPend->Referencia);
+                    //----------------------------------------------------------------------------------
+                    // La rutina EmitirFactura, genera un PDF por cada Factura y cada archivo generado
+                    // se anexa al correo
+                    //----------------------------------------------------------------------------------
+                    $strOutxFile = '/tmp/'.$this->EmitirFactura($objFactPend);
+                    t('Archivo de factura: '.$strOutxFile);
+                    $mail->addAttachment($strOutxFile);
+                }
+                t('Se terminaron de anexar las facturas');
+            }
+            //-------------------------------------
+            // Se anexan los PDFs de las NDCs
+            //-------------------------------------
+            if ($blnAgreFact) {
+                t('Se ha solicitado el envio de las ndcs');
+                /* @var $objNotaDisp NotaCreditoCorp */
+                foreach ($arrNotaDisp as $objNotaDisp) {
+                    t('Procesando la ndc: '.$objNotaDisp->Referencia);
+                    //----------------------------------------------------------------------------------
+                    // La rutina EmitirNDC, genera un PDF por cada NDC y cada archivo generado
+                    // se anexa al correo
+                    //----------------------------------------------------------------------------------
+                    $strOutxFile = '/tmp/'.$this->EmitirNDCs($objNotaDisp);
+                    t('Archivo de ndc: '.$strOutxFile);
+                    $mail->AddAttachment($strOutxFile);
+                }
+                t('Se terminaron de anexar las ndcs');
+            }
+            $mail->send();
+            //--------------------------------------------
+            // Se deja registro del envio del Edo de Cta
+            //--------------------------------------------
+            $strTextMens = 'Edo de Cta enviado a: '.$strEnviAxxx;
+            $this->objMasterCliente->logDeCambios($strTextMens);
+        } catch (Exception $e) {
+            $strNombProc = 'Envio de Edo de Cuenta al Cliente: '.$this->objMasterCliente->NombClie;
+            $objProcEjec = CrearProceso($strNombProc,true);
+            $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = $this->objMasterCliente->CodiClie;
+            $arrParaErro['MensErro'] = $e->getMessage();
+            $arrParaErro['ComeErro'] = "Fallo el envio del Edo de Cuenta";
+            GrabarError($arrParaErro);
+            t('Error al enviar el Edo de Cta: '.$e->getMessage());
+            $this->danger($e->getMessage());
+        }
+        //------------------------------------------------
+        // Se levantan nuevamente los errores en pantalla
+        //------------------------------------------------
+        error_reporting($mixErroOrig);
+        t('Termine el envio del Edo de Cta (Rutina Nueva)');
+    }
+
+
+    protected function RedactarCorreoEdoCtaOld($arrFactPend, $arrNotaDisp=null, $blnAgreFact=true, $strDestCorr='U') {
+        t('LLegando a la rutina RedactarCorreoEdoCtaOld con: '.count($arrNotaDisp).' NDCs');
         $strDireFrom = 'GoldCoast - SisCO <noti@goldsist.com>';
         if ($strDestCorr == 'U') {
             $strEnviAxxx = $this->objUsuario->MailUsua;
@@ -515,14 +618,6 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         $strHtmlFact = ob_get_clean();
         $strHtmlBody = $strHtmlFact;
 
-        // Antes
-        /*
-        $_SESSION['FactPend'] = serialize($arrFactPend);
-        ob_start();
-        include dirname(__FILE__) . '/rhtml/estado_de_cuenta.php';
-        $strHtmlFact = ob_get_clean();
-        $strHtmlBody = $strHtmlFact;
-        */
         t('Ya se genero el HTML');
 
         //--------------------------
@@ -2322,12 +2417,6 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
         // Si no se ha seleccionado a un Cliente como dependencia, se asume el genérico del Sistema.
         //--------------------------------------------------------------------------------------------
         $intCodiDepe = $this->lstCodiDepe->SelectedValue;
-        //if (is_null($this->lstCodiDepe->SelectedValue)) {
-        //    $intCodiDepe = 4;
-        //} else {
-        //    $intCodiDepe = $this->lstCodiDepe->SelectedValue;
-        //}
-        t('2');
         //--------------------------------------------------------------------------------------------------
         // Cold Coast no tiene Clientes que manejen API, por ese motivo se ha comentado toda esta seccion
         // (ddurand 08/04/2022)

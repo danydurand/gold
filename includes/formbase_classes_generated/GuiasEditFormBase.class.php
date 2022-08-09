@@ -102,7 +102,6 @@ abstract class GuiasEditFormBase extends QForm {
 	protected $txtVolumen;
 	protected $txtPiesCub;
 	protected $txtMetrosCub;
-	protected $txtNroTula;
 	protected $txtCedulaDestinatario;
 	protected $txtFacturaId;
 	protected $lstGuiaPod;
@@ -234,7 +233,6 @@ abstract class GuiasEditFormBase extends QForm {
 		$this->txtVolumen = $this->mctGuias->txtVolumen_Create();
 		$this->txtPiesCub = $this->mctGuias->txtPiesCub_Create();
 		$this->txtMetrosCub = $this->mctGuias->txtMetrosCub_Create();
-		$this->txtNroTula = $this->mctGuias->txtNroTula_Create();
 		$this->txtCedulaDestinatario = $this->mctGuias->txtCedulaDestinatario_Create();
 		$this->txtFacturaId = $this->mctGuias->txtFacturaId_Create();
 		$this->lstGuiaPod = $this->mctGuias->lstGuiaPod_Create();

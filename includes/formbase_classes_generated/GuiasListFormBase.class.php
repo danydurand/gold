@@ -127,7 +127,6 @@ abstract class GuiasListFormBase extends QForm {
         $this->dtgGuiases->MetaAddColumn('Volumen');
         $this->dtgGuiases->MetaAddColumn('PiesCub');
         $this->dtgGuiases->MetaAddColumn('MetrosCub');
-        $this->dtgGuiases->MetaAddColumn('NroTula');
         $this->dtgGuiases->MetaAddColumn('CedulaDestinatario');
         $this->dtgGuiases->MetaAddColumn('FacturaId');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->GuiaPod);

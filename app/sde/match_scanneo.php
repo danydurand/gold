@@ -13,13 +13,13 @@ class MatchScanneo extends FormularioBaseKaizen {
     protected $objDataBase;
     protected $txtNumePiez;  // Piezas Recibidas
     protected $dtgManiPend;  // Manifiestos con Piezas Pendientes
-    protected $dtgPiezPend;  // Piezas Pendientes de un Manifiesto
     protected $objProcEjec;
     protected $btnErroProc;
     protected $intCantPiez;
     protected $arrManiPend;
     protected $intIdxxMani = null;
     protected $btnBuscPiez;
+    protected $arrReceQtys;
 
 
     protected function Form_Create() {
@@ -27,12 +27,8 @@ class MatchScanneo extends FormularioBaseKaizen {
 
         $this->lblTituForm->Text = 'Match Scanneo';
         $_SESSION['ValiRepe'] = Parametros::BuscarParametro('VALIREPE','CKPTREPE','Val1',1);
-        if ($_SESSION['ValiRepe']) {
-            t('Voy a validar Ckpt repetidos');
-        }
         $this->txtNumePiez_Create();
         $this->dtgManiPend_Create();
-        $this->dtgPiezPend_Create();
         $this->btnErroProc_Create();
         $this->btnBuscPiez_Create();
     }
@@ -54,7 +50,7 @@ class MatchScanneo extends FormularioBaseKaizen {
 
     protected function txtNumePiez_Create() {
         $this->txtNumePiez = new QTextBox($this);
-        $this->txtNumePiez->Name = QApplication::Translate('Guias/Piezas');
+        $this->txtNumePiez->Placeholder = QApplication::Translate('Guias/Piezas');
         $this->txtNumePiez->TextMode = QTextMode::MultiLine;
         $this->txtNumePiez->Rows = 20;
         $this->txtNumePiez->Width = 230;
@@ -80,12 +76,6 @@ class MatchScanneo extends FormularioBaseKaizen {
         $this->dtgManiPend->Paginator = new QPaginator($this->dtgManiPend);
         $this->dtgManiPend->ItemsPerPage = 20;
 
-        //$this->dtgManiPend->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        //$this->dtgManiPend->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
-
-        /*$this->dtgManiPend->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
-        //$this->dtgManiPend->AddRowAction(new QClickEvent(), new QAjaxAction('dtgManiPendRow_Click'));
-
         $this->dtgManiPend->SortColumnIndex = 0;
         $this->dtgManiPend->SortDirection   = 1;
 
@@ -98,7 +88,6 @@ class MatchScanneo extends FormularioBaseKaizen {
 
     public function dtgManiPendRow_Click($strFormId, $strControlId, $strParameter) {
         $this->intIdxxMani = intval($strParameter);
-        $this->dtgPiezPend->Refresh();
     }
 
     protected function dtgManiPend_Bind() {
@@ -170,6 +159,7 @@ class MatchScanneo extends FormularioBaseKaizen {
         $colServImpo->Name = QApplication::Translate('S.Impor');
         $colServImpo->Html = '<?= $_ITEM->ServicioImportacion ?>';
         $colServImpo->Width = 70;
+        $colServImpo->HorizontalAlign = QHorizontalAlign::Center;
         $this->dtgManiPend->AddColumn($colServImpo);
 
         $colCantCarg = new QDataGridColumn($this);
@@ -184,103 +174,52 @@ class MatchScanneo extends FormularioBaseKaizen {
         $colCantReci->Width = 70;
         $this->dtgManiPend->AddColumn($colCantReci);
 
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = 'Status';
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint()->Checkpoint->Codigo ?>';
+        $colUltiCkpt->Width = 70;
+        $colUltiCkpt->HorizontalAlign = QHorizontalAlign::Center;
+        $this->dtgManiPend->AddColumn($colUltiCkpt);
+
+        $colEstaAdel = new QDataGridColumn($this);
+        $colEstaAdel->Name = 'Recibio?';
+        $colEstaAdel->Html = '<?= $_FORM->newQty_Render($_ITEM) ?>';
+        $colEstaAdel->Width = 70;
+        $colEstaAdel->HtmlEntities = false;
+        $colEstaAdel->HorizontalAlign = QHorizontalAlign::Center;
+        $this->dtgManiPend->AddColumn($colEstaAdel);
     }
 
-    protected function dtgPiezPend_Create() {
-        $this->dtgPiezPend = new QDataGrid($this);
-        $this->dtgPiezPend->FontSize = 12;
-        $this->dtgPiezPend->ShowFilter = false;
-
-        $this->dtgPiezPend->CssClass = 'datagrid';
-        $this->dtgPiezPend->AlternateRowStyle->CssClass = 'alternate';
-
-        $this->dtgPiezPend->Paginator = new QPaginator($this->dtgPiezPend);
-        $this->dtgPiezPend->ItemsPerPage = 5;
-
-        $this->dtgPiezPend->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgPiezPend->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
-
-        $this->dtgPiezPend->SortColumnIndex = 0;
-        $this->dtgPiezPend->SortDirection   = 1;
-
-        $this->dtgPiezPend->UseAjax = true;
-
-        $this->dtgPiezPend->SetDataBinder('dtgPiezPend_Bind');
-
-        $this->dtgPiezPendColumns();
-    }
-
-    protected function dtgPiezPend_Bind() {
-        /* @var $objPiezMani GuiaPiezas */
-        if (!is_null($this->intIdxxMani)) {
-            $objManiPend = NotaEntrega::Load($this->intIdxxMani);
-            $arrPiezMani = $objManiPend->piezasDeLaNota();
-            $arrIdxxPend = [];
-            $intCantPiez = 0;
-            $intPiezPend = 0;
-            foreach ($arrPiezMani as $objPiezMani) {
-                if (!$objPiezMani->tieneCheckpoint('RA')) {
-                    $arrIdxxPend[] = $objPiezMani->Id;
-                    $intPiezPend++;
-                }
-                $intCantPiez++;
-            }
-
-            t('Se examinaron: '.$intCantPiez.' piezas');
-
-            $objClauWher   = QQ::Clause();
-            $objClauWher[] = QQ::In(QQN::PiezaCheckpoints()->Id,$arrIdxxPend);
-
-            $arrPiezPend   = PiezaCheckpoints::QueryArray(QQ::AndCondition($objClauWher));
-            $this->dtgPiezPend->TotalItemCount = count($arrPiezPend);
-
-            t('Hay: '.count($arrPiezPend).' piezas pendientes');
-
-            // Bind the datasource to the datagrid
-            $this->dtgPiezPend->DataSource = PiezaCheckpoints::QueryArray(
-                QQ::AndCondition($objClauWher),
-                QQ::Clause($this->dtgPiezPend->OrderByClause, $this->dtgPiezPend->LimitClause)
-            );
-        }
-    }
-
-    protected function dtgPiezPendColumns() {
-        $colPiezIdxx = new QDataGridColumn($this);
-        $colPiezIdxx->Name = QApplication::Translate('IdPieza');
-        $colPiezIdxx->Html = '<?= $_ITEM->Pieza->IdPieza ?>';
-        $colPiezIdxx->Width = 160;
-        $this->dtgPiezPend->AddColumn($colPiezIdxx);
-
-        $colCodiCkpt = new QDataGridColumn($this);
-        $colCodiCkpt->Name = QApplication::Translate('Ckpt');
-        $colCodiCkpt->Html = '<?= $_ITEM->Checkpoint->Codigo ?>';
-        $colCodiCkpt->Width = 160;
-        $this->dtgPiezPend->AddColumn($colCodiCkpt);
-
-        $colFechCkpt = new QDataGridColumn($this);
-        $colFechCkpt->Name = QApplication::Translate('Fecha');
-        $colFechCkpt->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>';
-        $colFechCkpt->Width = 80;
-        $this->dtgPiezPend->AddColumn($colFechCkpt);
-
-        $colHoraCkpt = new QDataGridColumn($this);
-        $colHoraCkpt->Name = QApplication::Translate('Hora');
-        $colHoraCkpt->Html = '<?= $_ITEM->Hora ?>';
-        $colHoraCkpt->Width = 80;
-        $this->dtgPiezPend->AddColumn($colHoraCkpt);
-    }
 
     //-----------------------------------
     // Acciones Asociadas a los Objetos
     //-----------------------------------
 
+    public function newQty_Render($objManiPend) {
+        if (count($this->arrReceQtys) > 0) {
+            // t('Comparing Qtys for: ' . $objManiPend->Id . ' Manifest');
+            $intPrevRece = $this->arrReceQtys[$objManiPend->Id];
+            // t('The Manifest had: ' . $intPrevRece);
+            if ($intPrevRece < $objManiPend->Recibidas) {
+                // t('The Manifest has new received pieces');
+                // return boldRed('SI');
+                // return '<i class="fa fa-success fa-lg"></i> ';
+                $strNombImag = __APP_IMAGE_ASSETS__.'/punto_verde.gif';
+                return "<img src='$strNombImag'>";
+            } else {
+                return '';
+            }
+        } else {
+            return '';
+        }
+    }
+    
+    
     protected function txtNumePiez_Change() {
         $this->mensaje();
     }
 
     protected function btnErroProc_Click() {
-        //$_SESSION['PagiBack'] = __SIST__."/match_scanneo.php";
-        //$_SESSION['PagiBack'] = "match_scanneo.php";
         unset($_SESSION['PagiBack']);
         QApplication::Redirect(__SIST__.'/detalle_error_list.php/'.$this->objProcEjec->Id);
     }
@@ -294,11 +233,57 @@ class MatchScanneo extends FormularioBaseKaizen {
         return true;
     }
 
+    protected function keepReceivedQtys($intProcIdxx) {
+        // t('Keeping Received Qtys...');
+        //-----------------------------------------------------------------------------
+        // We save in the database how many received pieces every manifest has
+        // This will allow knowing if there are any new received pieces in each one.
+        //-----------------------------------------------------------------------------
+        $strCadeText = '';
+        foreach ($this->arrManiPend as $objManiPend) {
+            $intCantReci = $objManiPend->Recibidas ? $objManiPend->Recibidas : 0;
+            $strCadeText .= $objManiPend->Id.'|'.$intCantReci.',';
+        }
+        // t('CadeText: '.$strCadeText);
+        $strDescPara = 'Qtys received in Match Scanneo: '.$intProcIdxx.
+        $objParaQtys = new Parametros();
+        $objParaQtys->Indice      = 'ReceQtys';
+        $objParaQtys->Codigo      = $intProcIdxx;
+        $objParaQtys->Descripcion = $strDescPara;
+        $objParaQtys->Texto1      = $strCadeText;
+        $objParaQtys->Save();
+        // t('Parameter created...');
+    }
 
+    protected function getPreviousReceivedQtys($intProcIdxx) {
+        // t('Getting previous received qtys...');
+        //-------------------------------------------------------------
+        // We get the previos received quantities from every manifest
+        //-------------------------------------------------------------
+        $objParaQtys = Parametros::LoadByIndiceCodigo('ReceQtys',$intProcIdxx);
+        if ($objParaQtys) {
+            // t('The parameter exists');
+            $arrPrevRece = explode(',',$objParaQtys->Texto1);
+            // t('The array contains:');
+            t($arrPrevRece);
+            foreach ($arrPrevRece as $strPrevRece) {
+                $arrManiAuxi = explode('|',$strPrevRece);
+                if (count($arrManiAuxi) > 1) {
+                    list($intManiIdxx, $intPrevRece) = explode('|',$strPrevRece);
+                }
+                // t('Manifest: '.$intManiIdxx.' had: '.$intPrevRece);
+                $this->arrReceQtys[$intManiIdxx] = $intPrevRece;
+            }
+        }
+    }
+    
+    
     protected function btnSave_Click() {
         $blnHayxErro = false;
-        $strNombProc = 'Match de Scanneo';
+        $strNombProc = 'Match Scanneo';
         $this->objProcEjec = CrearProceso($strNombProc);
+
+        $this->keepReceivedQtys($this->objProcEjec->Id);
 
         $arrNumePiez = explode(',',nl2br2($this->txtNumePiez->Text));
         $arrNumePiez = array_unique($arrNumePiez);
@@ -323,7 +308,6 @@ class MatchScanneo extends FormularioBaseKaizen {
 
                     $intCantSobr ++;
                     $arrRelaSobr[] = $strPiezArri;
-                    //$this->txtNumePiez->Text = $strPiezArri.' (SOB)'. chr(13);
                     t('La pieza no existe, es un sobrante');
                     continue;
                 }
@@ -357,17 +341,21 @@ class MatchScanneo extends FormularioBaseKaizen {
             }
         }
         $strTextMens = "Total Recibidas: $intContCkpt | Cantidad de Sobrantes: $intCantSobr";
+        //-----------------------------------------------
+        // Last Checkpoint Update in guia_pieces table 
+        //-----------------------------------------------
+        UpdateLastCheckpoint();
         //-------------------------------------------------------------------
         // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
         //-------------------------------------------------------------------
-        //$objCkptMani = Checkpoints::LoadByCodigo('RA');
         /* @var $objManiPend NotaEntrega */
         foreach ($this->arrManiPend as $objManiPend) {
             $objManiPend->ContarActualizarRecibidas();
             //---------------------------------------
             // Se graba el checkpoint al Manifiesto
             //---------------------------------------
-            if ($objManiPend->Recibidas > 0) {
+            $strUltiCkpt = $objManiPend->ultimoCheckpoint()->Checkpoint->Codigo;
+            if (($objManiPend->Recibidas > 0) && ($strUltiCkpt == 'CR')) {
                 $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
                 if (!$arrResuGrab['TodoOkey']) {
                     $blnHayxErro = true;
@@ -397,6 +385,7 @@ class MatchScanneo extends FormularioBaseKaizen {
         } else {
             $this->success($strTextMens);
         }
+        $this->getPreviousReceivedQtys($this->objProcEjec->Id);
         $this->dtgManiPend->Refresh();
     }
 }

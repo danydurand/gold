@@ -77,6 +77,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     protected function Form_Create() {
         parent::Form_Create();
 
+        // QApplication::$Database[1]->EnableProfiling();
+
         $this->objDefaultWaitIcon = new QWaitIcon($this);
 
         $this->strMensProc = '';
@@ -179,6 +181,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
         $this->btnMasxAcci_Create();
 
+        // QApplication::$Database[1]->OutputProfiling();
+
 
     }
 
@@ -200,24 +204,20 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         );
         if ($this->blnEditMode) {
             $_SESSION['PagiBack'] = 'carga_masiva_guias.php/'.$this->objNotaEntr->Id;
-            $blnCambStat = false;
-            if ($this->objUsuario->Sucursal->Iata == 'MIA') {
-                if ( ($this->objNotaEntr->Procesadas > 0) && ($this->objNotaEntr->Recibidas == 0) ) {
-                    $blnCambStat = true;
-                }
+            $blnCambStat = true;
+            if ( ($this->objNotaEntr->Procesadas > 0) && ($this->objNotaEntr->Recibidas == 0) ) {
+                $blnCambStat = true;
             }
             $strUltiCkpt = '';
-            if ($this->objUsuario->Sucursal->Iata != 'MIA') {
-                $objUltiCkpt = $this->objNotaEntr->ultimoCheckpoint();
-                if ($objUltiCkpt instanceof NotaEntregaCkpt) {
-                    $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
-                }
-                if ( ($this->objNotaEntr->Recibidas == 0) && (in_array($strUltiCkpt,['TI','IC']) ) ) {
-                    $blnCambStat = true;
-                }
-                if ( ($this->objNotaEntr->Recibidas > 0) && (in_array($strUltiCkpt,['RA']) ) ) {
-                    $blnCambStat = true;
-                }
+            $objUltiCkpt = $this->objNotaEntr->ultimoCheckpoint();
+            if ($objUltiCkpt instanceof NotaEntregaCkpt) {
+                $strUltiCkpt = $objUltiCkpt->Checkpoint->Codigo;
+            }
+            if ( ($this->objNotaEntr->Recibidas == 0) && (in_array($strUltiCkpt,['TI','IC']) ) ) {
+                $blnCambStat = true;
+            }
+            if ( ($this->objNotaEntr->Recibidas > 0) && (in_array($strUltiCkpt,['RA']) ) ) {
+                $blnCambStat = true;
             }
             if ($blnCambStat) {
                 $arrOpciDrop[] = OpcionDropDown(
@@ -230,7 +230,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                     TextoIcono('list','Hist. Estatus')
                 );
             }
-            //if ( ($strUltiCkpt == 'OK') && ($this->objNotaEntr->Facturable == SinoType::NO) ) {
             if ( ($this->objNotaEntr->Facturable == SinoType::NO) ) {
                 $arrOpciDrop[] = OpcionDropDown(
                     __SIST__.'/transferir_historico.php/'.$this->objNotaEntr->Id,
@@ -242,6 +241,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop);
 
     }
+
 
     protected function dtgGuiaMani_Create() {
         $this->dtgGuiaMani = new QDataGrid($this);
@@ -268,22 +268,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         // Bind the datasource to the datagrid
         $this->dtgGuiaMani->DataSource = Guias::LoadArrayByNotaEntregaId(
             $this->objNotaEntr->Id,
-            QQ::Clause($this->dtgGuiaMani->OrderByClause, $this->dtgGuiaMani->LimitClause)
+            QQ::Clause($this->dtgGuiaMani->OrderByClause, $this->dtgGuiaMani->LimitClause),
+            QQ::Clause(QQ::Expand(QQN::Guias()->Destino))
         );
     }
-
-    //protected function dtgGuiaMani_Bind() {
-    //    $objClauWher   = QQ::Clause();
-    //    $objClauWher[] = QQ::In(QQN::Guias()->Id,$this->objNotaEntr->IdsDeLasGuias());
-    //    $arrGuiaMani   = Guias::QueryArray(QQ::AndCondition($objClauWher));
-    //    $this->dtgGuiaMani->TotalItemCount = count($arrGuiaMani);
-    //
-    //    // Bind the datasource to the datagrid
-    //    $this->dtgGuiaMani->DataSource = Guias::QueryArray(
-    //        QQ::AndCondition($objClauWher),
-    //        QQ::Clause($this->dtgGuiaMani->OrderByClause, $this->dtgGuiaMani->LimitClause)
-    //    );
-    //}
 
     protected function createdtgGuiaManiColumns() {
         $colNumeTrac = new QDataGridColumn($this);
@@ -346,12 +334,14 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     protected function dtgPiezMani_Bind() {
 
-
-        $arrGuiaMani = GuiaPiezas::LoadArrayByManifiestoImp($this->objNotaEntr->Id);
+        // $arrGuiaMani = GuiaPiezas::LoadArrayByManifiestoImp($this->objNotaEntr->Id);
+        $arrGuiaMani = GuiaPiezas::LoadArrayByNotaEntregaId($this->objNotaEntr->Id);
         $this->dtgPiezMani->TotalItemCount = count($arrGuiaMani);
-        $this->dtgPiezMani->DataSource = GuiaPiezas::LoadArrayByManifiestoImp(
+        // $this->dtgPiezMani->DataSource = GuiaPiezas::LoadArrayByManifiestoImp(
+        $this->dtgPiezMani->DataSource = GuiaPiezas::LoadArrayByNotaEntregaId(
             $this->objNotaEntr->Id,
-            QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause)
+            QQ::Clause($this->dtgPiezMani->OrderByClause, $this->dtgPiezMani->LimitClause),
+            QQ::Clause(QQ::Expand(QQN::GuiaPiezas()->Guia->Destino))
         );
 
     }
@@ -366,7 +356,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('IdPieza');
         $colIdxxPiez->Html = '<?= $_ITEM->IdPieza ?>';
-        $colIdxxPiez->Width = 140;
+        $colIdxxPiez->Width = 180;
         $this->dtgPiezMani->AddColumn($colIdxxPiez);
 
         $colUbicPiez = new QDataGridColumn($this);
@@ -381,13 +371,16 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
         $colUltiCkpt = new QDataGridColumn($this);
         $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $colUltiCkpt->Html = '<?= $_ITEM->LastCkptCode ?>';
         $this->dtgPiezMani->AddColumn($colUltiCkpt);
 
-        //$colUltiCkpt = new QDataGridColumn($this);
-        //$colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
-        /*$colUltiCkpt->Html = '<?= $_ITEM->GetVirtualAttribute(\'ulti_ckpt\') ?>';*/
-        //$this->dtgPiezMani->AddColumn($colUltiCkpt);
+        /*
+        $colUltiCkpt = new QDataGridColumn($this);
+        $colUltiCkpt->Name = QApplication::Translate('U.Ckpt');
+        $colUltiCkpt->Html = '<?= $_ITEM->ultimoCheckpoint() ?>';
+        $this->dtgPiezMani->AddColumn($colUltiCkpt);
+        */
+
 
         if ($this->objNotaEntr->ServicioImportacion == 'AER') {
             $colKiloPiez = new QDataGridColumn($this);
@@ -769,8 +762,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
         $strNombProc = 'Creando Guias Gold del Cliente: '.$this->objCliente->NombClie;
         $this->objProcEjec = CrearProceso($strNombProc);
-        //t('Proceso iniciado...');
-
         //-------------------------------------
         // Se suprimen los errores en pantalla
         //-------------------------------------
@@ -801,7 +792,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $objClauWher[] = QQ::Equal(QQN::GuiaCacesa()->NotaEntregaId, $this->objNotaEntr->Id);
         $arrGuiaPend   = GuiaCacesa::QueryArray(QQ::AndCondition($objClauWher));
         $intCantPend   = count($arrGuiaPend);
-        //t('Guias pendientes para procesar: '.$intCantPend);
         if ($intCantPend > 0) {
             foreach ($arrGuiaPend as $objGuiaMasi) {
                 //------------------------------------------------------------
@@ -809,7 +799,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 //------------------------------------------------------------
                 $blnTodoOkey = $this->crearGuiaMasiva($objGuiaMasi, $objCkptMani);
                 if ($blnTodoOkey) {
-                    // Se incrementa el contador de guías procesadas.
                     $intCantGuia++;
                     t('Procesando la guia: '.$objGuiaMasi->GuiaExte.' | Contador: '.$intCantGuia);
                 } else {
@@ -830,10 +819,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $this->objNotaEntr->Procesadas  = $intCantGuia;
         $this->objNotaEntr->PorProcesar = $this->lblNumePend->Text;
         $this->objNotaEntr->Piezas      = $this->objNotaEntr->cantidadDePiezas();
-        //t('Terminando de procesar el Manifiesto.  Por corregir: '.$this->objNotaEntr->PorCorregir);
         $this->objNotaEntr->Save();
         t('Manifiesto actualizado...');
-
         //-----------------------------------------------
         // Se graba el checkpoint al Manifiesto
         //-----------------------------------------------
@@ -843,6 +830,26 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $intCantErro++;
             }
         }
+        //-----------------------------------------------------------
+        // Getting the necesary data to execute the store procedure
+        //-----------------------------------------------------------
+        $strTextObse = trim($objCkptMani->Descripcion).' (Manif.: '.$this->objNotaEntr->Referencia.')';
+        $intCkptIdxx = $objCkptMani->Id;
+        $intSucuIdxx = $this->objUsuario->SucursalId;
+        $intCodiUsua = $this->objUsuario->CodiUsua;
+        $intManiIdxx = $this->objNotaEntr->Id;
+        $strParaSqlx = "$intCkptIdxx,$intSucuIdxx,'$strTextObse',$intCodiUsua,$intManiIdxx";
+        //----------------------------------------------------------------------
+        // Inserting checkpoints for every piece that belongs to the Manifest
+        //----------------------------------------------------------------------
+        $strStorProc = "call sp_update_nota_entrega_status($strParaSqlx)";
+        $objDatabase = NotaEntrega::GetDatabase();
+        $objDatabase->NonQuery($strStorProc);
+        //------------------------------------------
+        // Updating last checkpoint on every piece
+        //------------------------------------------
+        $strStorProc = "call sp_update_last_checkpoint()";
+        $objDatabase->NonQuery($strStorProc);
         //--------------------------------------
         // Se almacena el resultado del proceso
         //--------------------------------------
@@ -1432,6 +1439,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objParaPiez->CkptProc = $objCkptProc;
             $objParaPiez->KiloProm = $decKiloProm;
             $objParaPiez->PiesProm = $decPiesProm;
+            $objParaPiez->NotaIdxx = $objGuia->NotaEntregaId;
             for ($i = 1; $i <= $objGuia->Piezas; $i++) {
                 $objParaPiez->IdxxPiez = $i;
                 $objGuia->crearPieza($objParaPiez);

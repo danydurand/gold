@@ -73,11 +73,13 @@
             $strCadeSqlx .= " where producto_id = $intCodiProd";
             $strCadeSqlx .= "   and cliente_id = $intCodiClie";
             $strCadeSqlx .= " limit 1";
+//            t('Query para identificar la Tarifa: '.$strCadeSqlx);
             $objDatabase  = TarifaCliente::GetDatabase();
             $objDbResult = $objDatabase->Query($strCadeSqlx);
             $mixRegistro = $objDbResult->FetchArray();
             if (isset($mixRegistro)) {
                 $intIdxxTari = $mixRegistro['tarifa_exp_id'];
+//                t('El Id de la Tarifa del Cliente es: '.$intIdxxTari);
                 $strCadeSqlx  = "select monto, minimo";
                 $strCadeSqlx .= "  from tarifa_exp_destino ";
                 $strCadeSqlx .= " where tarifa_id = $intIdxxTari";
@@ -85,6 +87,7 @@
                 $strCadeSqlx .= "   and fecha_vigencia <= '".$dttFechGuia."'";
                 $strCadeSqlx .= " order by fecha_vigencia desc ";
                 $strCadeSqlx .= " limit 1";
+//                t('Query de Tarifa Vigente: '.$strCadeSqlx);
                 $objDatabase  = TarifaExpDestino::GetDatabase();
                 $objDbResult = $objDatabase->Query($strCadeSqlx);
                 $mixRegistro = $objDbResult->FetchArray();

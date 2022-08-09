@@ -2,13 +2,13 @@
 *.png
 *.svg
 ./route/*.scss
-./route/images/*
+./route/images/*.xml
 *.gif
 ./app/sde/*.log
 ./app/sde/tmp??????
 ./corp/tmp??????
 *.json
-/.idea
+.idea/*
 app/sde/containers_list_online.php
 .idea/workspace.xml
 *.pdf

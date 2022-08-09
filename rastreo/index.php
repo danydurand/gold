@@ -18,19 +18,20 @@ class Index extends FormularioBaseKaizen {
     protected $intCantGuia;
     protected $lblPiezGuia;
     protected $dtgPiezGuia;
+    protected $strTipoBusc;
 
     protected function Form_Create() {
         $objUsuario = Usuario::LoadByLogiUsua('ddurand');
         $_SESSION['User'] = serialize($objUsuario);
+        $this->strTipoBusc = Parametros::BP('TipoBusc','RastGuia','Txt1','E');
 
         parent::Form_Create();
 
         $this->lblTituForm->Text = 'Nro de Guía';
-        $this->btnSave->Text     = TextoIcono('search','Buscar','F','lg');
-        $this->btnCancel->Text   = TextoIcono('eraser','Limpiar','F','lg');
+        $this->btnSave->Text     = TextoIcono('search','','F','lg');
+        $this->btnCancel->Text   = TextoIcono('eraser','','F','lg');
 
         $this->txtListGuia_Create();
-
         $this->lblGuiaCons_Create();
         $this->dtgGuiaCons_Create();
 
@@ -48,6 +49,7 @@ class Index extends FormularioBaseKaizen {
     protected function txtListGuia_Create() {
         $this->txtListGuia = new QTextBox($this);
         $this->txtListGuia->Width = 180;
+        $this->txtListGuia->Placeholder = 'Nro de Guia';
     }
 
     public function lblGuiaCons_Create() {
@@ -75,12 +77,6 @@ class Index extends FormularioBaseKaizen {
         $this->dtgGuiaCons = new GuiasDataGrid($this);
         $this->dtgGuiaCons->FontSize = 12;
         $this->dtgGuiaCons->ShowFilter = false;
-
-        //$this->dtgGuiaCons->CssClass = 'datagrid';
-        //$this->dtgGuiaCons->AlternateRowStyle->CssClass = 'alternate';
-
-        //$this->dtgGuiaCons->Paginator = new QPaginator($this->dtgGuiaCons);
-        //$this->dtgGuiaCons->ItemsPerPage = 10; //__FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         $this->dtgGuiaCons->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
         $this->dtgGuiaCons->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
@@ -116,16 +112,21 @@ class Index extends FormularioBaseKaizen {
     protected function dtgGuiaCons_Binder(){
         $strNumeGuia   = trim($this->txtListGuia->Text);
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::Guias()->Id,$strNumeGuia);
-        //$objClauWher[] = QQ::Like(QQN::Guias()->Tracking,'%'.$strNumeGuia.'%');
-        //$objClauWher[] = QQ::IsNotNull(QQN::Guias()->DeletedAt);
-        //$arrGuiaCons   = Guias::QueryArray(QQ::AndCondition($objClauWher));
-
-        //$this->intCantGuia = count($arrGuiaCons);
-        //$this->dtgGuiaCons->TotalItemCount = count($arrGuiaCons);
+        $objClauWher[] = QQ::Equal(QQN::Guias()->Numero,$strNumeGuia);
+        if ($this->strTipoBusc == 'E') {
+            //------------------
+            // Busqueda Exacta
+            //------------------
+            $objClauWher[] = QQ::Equal(QQN::Guias()->Tracking,$strNumeGuia);
+        } else {
+            //----------------------------
+            // Busqueda por Aproximacion
+            //----------------------------
+            $objClauWher[] = QQ::Like(QQN::Guias()->Tracking,'%'.$strNumeGuia.'%');
+        }
 
         // Bind the datasource to the datagrid
-        $this->dtgGuiaCons->DataSource = Guias::QueryArray(QQ::AndCondition($objClauWher));
+        $this->dtgGuiaCons->DataSource = Guias::QueryArray(QQ::OrCondition($objClauWher));
     }
 
     protected function dtgPiezGuia_Create() {
@@ -257,11 +258,6 @@ class Index extends FormularioBaseKaizen {
         $colUsuaCkpt->Width = 15;
         $this->dtgGuiaCkpt->AddColumn($colUsuaCkpt);
 
-        //$colCodiRuta = new QDataGridColumn($this);
-        //$colCodiRuta->Name = QApplication::Translate('Ruta');
-        /*$colCodiRuta->Html = '<?= $_FORM->dtgGuiaCkpt_CodiRuta_Render($_ITEM); ?>';*/
-        //$colCodiRuta->Width = 15;
-        //$this->dtgGuiaCkpt->AddColumn($colCodiRuta);
     }
 
     public function dtgGuiaCkpt_IdxxPiez_Render(PiezaCheckpoints $objPiezCkpt) {
@@ -310,18 +306,22 @@ class Index extends FormularioBaseKaizen {
 
     protected function btnSave_Click() {
         $strNumeGuia   = trim($this->txtListGuia->Text);
-        t('Consultando la guia: '.$strNumeGuia);
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::Guias()->Id,$strNumeGuia);
-        //$objClauWher[] = QQ::Like(QQN::Guias()->Tracking,'%'.$strNumeGuia.'%.');
-        //$objClauWher[] = QQ::IsNotNull(QQN::Guias()->DeletedAt);
-
-        $arrGuiaCons   = Guias::QueryArray(QQ::AndCondition($objClauWher));
-        $intCantGuia   = count($arrGuiaCons);
-        t('El vector tiene: '.count($arrGuiaCons).' elementos...');
+        $objClauWher[] = QQ::Equal(QQN::Guias()->Numero,$strNumeGuia);
+        if ($this->strTipoBusc == 'E') {
+            //------------------
+            // Busqueda Exacta
+            //------------------
+            $objClauWher[] = QQ::Equal(QQN::Guias()->Tracking,$strNumeGuia);
+        } else {
+            //----------------------------
+            // Busqueda por Aproximacion
+            //----------------------------
+            $objClauWher[] = QQ::Like(QQN::Guias()->Tracking,'%'.$strNumeGuia.'%');
+        }
+        $intCantGuia   = Guias::QueryCount(QQ::OrCondition($objClauWher));
 
 		$this->strNumeGuia = '';
-		//$this->lblGuiaCkpt->Text = 'Detalle de la Guia';
         $this->dtgGuiaCons->Refresh();
         $this->dtgPiezGuia->Refresh();
         $this->dtgGuiaCkpt->Refresh();
@@ -334,7 +334,6 @@ class Index extends FormularioBaseKaizen {
             $this->dtgPiezGuia->Visible = true;
             $this->lblPiezGuia->Visible = true;
             $this->lblGuiaCkpt->Visible = true;
-            $this->lblGuiaCkpt->Visible = true;
         } else {
 			$strTextMens = 'No hay registros que satisfagan la condición de búsqueda';
 			$this->danger($strTextMens);
@@ -343,8 +342,8 @@ class Index extends FormularioBaseKaizen {
             $this->dtgPiezGuia->Visible = false;
             $this->lblPiezGuia->Visible = false;
             $this->lblGuiaCkpt->Visible = false;
-            $this->lblGuiaCkpt->Visible = false;
 		}
+
     }
 
     protected function dtgGuiaConsRow_Click($strFormId, $strControlId, $strParameter) {

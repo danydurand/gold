@@ -259,12 +259,12 @@ function t($strTextTraz) {
             $blnTodoOkey = true;
             $strLogiUsua = $objUsuario->LogiUsua;
         } else {
-            if ( ($objUsuario instanceof Chofer) && ($objUsuario->Login == 'ealadejo') ) {
+            if ( ($objUsuario instanceof Chofer) && (in_array($objUsuario->Login,$arrLogiTraz)) ) {
                 $blnTodoOkey = true;
                 $strLogiUsua = $objUsuario->Login;
             }
         }
-        $blnTodoOkey = true;
+        // $blnTodoOkey = true;
         if ($blnTodoOkey) {
             $mixManeArch = fopen(__LOG_DIRECTORY__.'/traza.log','a');
             $arrLineAudi = array();

@@ -166,8 +166,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             }
         }
         if ($strAcciPlus == 'ie') {
-            // Imprimir Etiqueta
+            // Imprimir Etiqueta (con Logo)
             if ($this->objGuia) {
+                $_SESSION['MostLogo'] = true;
+                $_SESSION['GuiaEtiq'] = [$this->objGuia->Id];
+                QApplication::Redirect(__SIST__.'/etiqueta_pdf.php');
+            }
+        }
+        if ($strAcciPlus == 'es') {
+            // Imprimir Etiqueta (sin Logo)
+            if ($this->objGuia) {
+                $_SESSION['MostLogo'] = false;
                 $_SESSION['GuiaEtiq'] = [$this->objGuia->Id];
                 QApplication::Redirect(__SIST__.'/etiqueta_pdf.php');
             }
@@ -379,7 +388,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             );
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/ie',
-                TextoIcono('clone fa-lg','Imprimir Etiqueta')
+                TextoIcono('clone fa-lg','Imprimir Etiqueta (con Logo)')
+            );
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id.'/es',
+                TextoIcono('clone fa-lg','Imprimir Etiqueta (sin Logo)')
             );
         }
 
@@ -562,8 +575,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->lblNombRemi->Name = 'Remitente';
         $_SESSION['DataClie'] = serialize(array($this->objGuia->cliente()));
         $this->lblNombRemi->Text = $this->objGuia->NombreRemitente;
-        //$this->lblNombRemi->Text = '<a><span class="enlace">'.$this->objGuia->->CodigoInterno.'</span></a> '.$this->objGuia->NombRemi;
-        //$this->lblNombRemi->AddAction(new QClickEvent(), new QServerAction('lblNombRemi_Click'));
         $this->lblNombRemi->HtmlEntities = false;
     }
 
