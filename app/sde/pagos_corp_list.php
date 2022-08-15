@@ -81,28 +81,48 @@ class PagosCorpListForm extends PagosCorpListFormBase {
         $this->dtgPagosCorps->AddColumn($this->colPagoSele);
 
         $colIdxxPago = $this->dtgPagosCorps->MetaAddColumn('Id');
-        $colIdxxPago->Width = 10;
-		$colCliePago = $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->ClienteCorp);
+        $colIdxxPago->Width = 8;
+        $colIdxxPago->FilterBoxSize = 3;
+
+		$colCliePago = $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->ClienteCorp->NombClie,'Name=Cliente');
+        $colCliePago->OrderByClause = QQ::OrderBy(QQN::PagosCorp()->ClienteCorp->NombClie);
+        $colCliePago->ReverseOrderByClause = QQ::OrderBy(QQN::PagosCorp()->ClienteCorp->NombClie, false);
 		$colCliePago->Width = 145;
+        $colCliePago->FilterBoxSize = 15;
+        $colCliePago->Filter = QQ::Like(QQN::PagosCorp()->ClienteCorp->NombClie, null);
+        $colCliePago->FilterType = QFilterType::TextFilter;
+        
         $colRefePago = $this->dtgPagosCorps->MetaAddColumn('Referencia');
         $colRefePago->Width = 160;
+        $colRefePago->FilterBoxSize = 20;
+        
         $colCantFact = new QDataGridColumn('C.FACT','<?= $_ITEM->CountFacturasesAsFacturaPagoCorp(); ?>');
         $colCantFact->Width = 40;
         $this->dtgPagosCorps->AddColumn($colCantFact);
-        $colFormPago = $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->FormaPago);
+        
+        $colFormPago = $this->dtgPagosCorps->MetaAddColumn(QQN::PagosCorp()->FormaPago->Descripcion,'Name=Forma Pago');
         $colFormPago->Width = 100;
+        $colFormPago->OrderByClause = QQ::OrderBy(QQN::PagosCorp()->FormaPago->Descripcion);
+        $colFormPago->ReverseOrderByClause = QQ::OrderBy(QQN::PagosCorp()->FormaPago->Descripcion, false);
+        $colFormPago->FilterBoxSize = 12;
+        $colFormPago->Filter = QQ::Like(QQN::PagosCorp()->FormaPago->Descripcion, null);
+        $colFormPago->FilterType = QFilterType::TextFilter;
+        
         $colFechPago = new QDataGridColumn('FECHA','<?= $_FORM->FechPago_Render($_ITEM) ?>');
         $colFechPago->Width = 80;
         $this->dtgPagosCorps->AddColumn($colFechPago);
-        //$this->dtgPagosCorps->MetaAddColumn('Monto');
+        
         $colMontPago = new QDataGridColumn('MONTO','<?= nf($_ITEM->Monto) ?>');
         $colMontPago->Width = 75;
         $this->dtgPagosCorps->AddColumn($colMontPago);
-		$colEstapago = $this->dtgPagosCorps->MetaAddColumn('Estatus');
+		
+        $colEstapago = $this->dtgPagosCorps->MetaAddColumn('Estatus');
 		$colEstapago->Width = 90;
-		$colObsePago = $this->dtgPagosCorps->MetaAddColumn('Observacion');
+		
+        $colObsePago = $this->dtgPagosCorps->MetaAddColumn('Observacion');
 		$colObsePago->Width = 250;
-
+        $colObsePago->FilterBoxSize = 25;
+ 
         $this->btnExpoExce_Create();
         $this->btnConcPago_Create();
         $this->btnIncoPago_Create();

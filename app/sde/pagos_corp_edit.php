@@ -132,19 +132,20 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         $colNumeRefe = new QDataGridColumn($this);
         $colNumeRefe->Name = QApplication::Translate('Referencia');
         $colNumeRefe->Html = '<?= $_ITEM->Referencia ?>';
-        $colNumeRefe->Width = 100;
+        $colNumeRefe->Width = 80;
         $this->dtgFactClie->AddColumn($colNumeRefe);
 
         $colFechFact = new QDataGridColumn($this);
         $colFechFact->Name = QApplication::Translate('Fecha');
         $colFechFact->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>';
         $colFechFact->Width = 80;
+        // $colFechFact->HorizontalAlign = QHorizontalAlign::Center;
         $this->dtgFactClie->AddColumn($colFechFact);
 
         $colEstaPago = new QDataGridColumn($this);
-        $colEstaPago->Name = QApplication::Translate('Estatus del Pago');
+        $colEstaPago->Name = QApplication::Translate('Estatus-Pago');
         $colEstaPago->Html = '<?= $_ITEM->EstatusPago ?>';
-        $colEstaPago->Width = 80;
+        $colEstaPago->Width = 90;
         $this->dtgFactClie->AddColumn($colEstaPago);
 
         $colTotaFact = new QDataGridColumn($this);
