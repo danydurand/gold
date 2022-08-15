@@ -354,8 +354,8 @@ class MatchScanneo extends FormularioBaseKaizen {
             //---------------------------------------
             // Se graba el checkpoint al Manifiesto
             //---------------------------------------
-            $strUltiCkpt = $objManiPend->ultimoCheckpoint()->Checkpoint->Codigo;
-            if (($objManiPend->Recibidas > 0) && ($strUltiCkpt == 'CR')) {
+            // $strUltiCkpt = $objManiPend->ultimoCheckpoint()->Checkpoint->Codigo;
+            if ($objManiPend->Recibidas > 0) {
                 $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
                 if (!$arrResuGrab['TodoOkey']) {
                     $blnHayxErro = true;

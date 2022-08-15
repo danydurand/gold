@@ -284,7 +284,40 @@
             return count($arrCkptMani) > 0 ? $arrCkptMani[0] : null;
         }
 
+
 		public function ContarActualizarRecibidas() {
+            //-----------------------------------------------------------------------------------
+            // Se identifican las piezas y se verifica cuantas han sido Recibidas en el Almacen
+            //-----------------------------------------------------------------------------------
+            $strCadeSqlx  = "select count(*) as cant_reci  ";
+            $strCadeSqlx .= "  from guia_piezas gp inner join pieza_checkpoints pc ";
+            $strCadeSqlx .= "    on gp.id = pc.pieza_id ";
+            $strCadeSqlx .= " where gp.nota_entrega_id = ".$this->Id;
+            $strCadeSqlx .= "   and pc.checkpoint_id = 1 ";
+            
+            // $strCadeSqlx  = "call spu_qty_received_from_manifest($this->Id)";
+
+            $objDatabase  = NotaEntrega::GetDatabase();
+            $objDbResult  = $objDatabase->Query($strCadeSqlx);
+            $mixRegistro  = $objDbResult->FetchArray();
+            $intCantReci  = $mixRegistro['cant_reci'];
+
+            $this->Recibidas = $intCantReci;
+            if ($this->Recibidas > 0) {
+                if ($this->Estatus == 'CREAD@') {
+                    $this->Estatus = 'RECIBID@';
+                    $strMensTran = 'Manifiesto RECIBID@';
+                    $this->logDeCambios($strMensTran);
+                }
+            }
+            try {
+                $this->Save();
+            } catch (Exception $e) {
+                t('Error en ContarActualizarRecibidas: '.$e->getMessage());
+            }
+        }
+
+		public function ContarActualizarRecibidasOld() {
             //-----------------------------------------------------------------------------------
             // Se identifican las piezas y se verifica cuantas han sido Recibidas en el Almacen
             //-----------------------------------------------------------------------------------

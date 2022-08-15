@@ -209,7 +209,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $lblRazoExpo;
     protected $btnBorrPiez;
     protected $blnErroProc;
-
+    protected $objPiezGuia;
 
 
     protected function SetupGuia() {
@@ -1164,6 +1164,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAltoPiez->Width = 45;
         $this->txtAltoPiez->Placeholder = 'cm';
         $this->txtAltoPiez->Visible = false;
+        $this->txtAltoPiez->FontSize = 12;
         //$this->txtAltoPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
     }
 
@@ -1172,6 +1173,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchPiez->Width = 45;
         $this->txtAnchPiez->Placeholder = 'cm';
         $this->txtAnchPiez->Visible = false;
+        $this->txtAnchPiez->FontSize = 12;
         //$this->txtAnchPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
     }
 
@@ -1180,6 +1182,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtLargPiez->Width = 45;
         $this->txtLargPiez->Placeholder = 'cm';
         $this->txtLargPiez->Visible = false;
+        $this->txtLargPiez->FontSize = 12;
         //$this->txtLargPiez->AddAction(new QChangeEvent(), new QAjaxAction('calcularVolumenPies'));
     }
 
@@ -1189,6 +1192,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtVoluPiez->Visible = false;
         $this->txtVoluPiez->Enabled = false;
         $this->txtVoluPiez->ForeColor = 'blue';
+        $this->txtVoluPiez->FontSize = 12;
     }
 
     protected function txtValoPiez_Create() {
@@ -1217,6 +1221,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAltoEnvi = new QTextBox($this);
         $this->txtAltoEnvi->Width = 60;
         $this->txtAltoEnvi->CssClass = 'text-right';
+        $this->txtAltoEnvi->FontSize = 12;
         if ($this->blnEditMode) {
             $this->txtAltoEnvi->Text = $this->objGuia->Alto;
         }
@@ -1226,6 +1231,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAnchEnvi = new QTextBox($this);
         $this->txtAnchEnvi->Width = 60;
         $this->txtAnchEnvi->CssClass = 'text-right';
+        $this->txtAnchEnvi->FontSize = 12;
         if ($this->blnEditMode) {
             $this->txtAnchEnvi->Text = $this->objGuia->Ancho;
         }
@@ -1235,6 +1241,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtLargEnvi = new QTextBox($this);
         $this->txtLargEnvi->Width = 60;
         $this->txtLargEnvi->CssClass = 'text-right';
+        $this->txtLargEnvi->FontSize = 12;
         if ($this->blnEditMode) {
             $this->txtLargEnvi->Text = $this->objGuia->Largo;
         }
@@ -1266,6 +1273,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtKiloPiez->Width = 40;
         $this->txtKiloPiez->CssClass = 'text-right';
         $this->txtKiloPiez->Visible = false;
+        $this->txtKiloPiez->FontSize = 12;
     }
 
     protected function btnCargPiez_Create() {
@@ -1325,9 +1333,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     public function dtgPiezTempRow_Click($strFormId, $strControlId, $strParameter) {
         $id = (int)$strParameter;
         $this->intEditPiez = $id;
-        $objPiezGuia = PiezasTemp::Load($id);
-        if (!is_null($objPiezGuia->PiezaId)) {
-            $objPiezOrig = GuiaPiezas::Load($objPiezGuia->PiezaId);
+        $this->objPiezGuia = PiezasTemp::Load($id);
+        if (!is_null($this->objPiezGuia->PiezaId)) {
+            $objPiezOrig = GuiaPiezas::Load($this->objPiezGuia->PiezaId);
 
             $strCodiCkpt = $objPiezOrig->ultimoCheckpoint();
             if ($strCodiCkpt != 'PU') {
@@ -1337,16 +1345,17 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
         $this->mostrarCampos('edit');
 
-        $this->txtContPiez->Text = $objPiezGuia->Descripcion;
-        $this->txtKiloPiez->Text = $objPiezGuia->Kilos;
-        $this->cargarEmpaques($objPiezGuia->EmpaqueId);
-        $this->txtAltoPiez->Text = $objPiezGuia->Alto;
-        $this->txtAnchPiez->Text = $objPiezGuia->Ancho;
-        $this->txtLargPiez->Text = $objPiezGuia->Largo;
-        $this->txtVoluPiez->Text = $objPiezGuia->Volumen;
-        $this->txtValoPiez->Text = $objPiezGuia->ValorDeclarado;
-        $this->txtPiesPiez->Text = $objPiezGuia->PiesCub;
+        $this->txtContPiez->Text = $this->objPiezGuia->Descripcion;
+        $this->txtKiloPiez->Text = $this->objPiezGuia->Kilos;
+        $this->cargarEmpaques($this->objPiezGuia->EmpaqueId);
+        $this->txtAltoPiez->Text = $this->objPiezGuia->__AltoPl();
+        $this->txtAnchPiez->Text = $this->objPiezGuia->__AnchoPl();
+        $this->txtLargPiez->Text = $this->objPiezGuia->__LargoPl();
+        $this->txtVoluPiez->Text = $this->objPiezGuia->Volumen;
+        $this->txtValoPiez->Text = $this->objPiezGuia->ValorDeclarado;
+        $this->txtPiesPiez->Text = $this->objPiezGuia->PiesCub;
         $this->blnEditPiez       = true;
+        $this->lstUnidMedi->SelectedIndex = 1;
     }
 
     protected function btnSaveProf_Click() {
@@ -2002,7 +2011,19 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->txtAltoPiez->Placeholder = $this->lstUnidMedi->SelectedValue;
         $this->txtAnchPiez->Placeholder = $this->lstUnidMedi->SelectedValue;
         $this->txtLargPiez->Placeholder = $this->lstUnidMedi->SelectedValue;
-        $this->calcularVolumenPies();
+        if ($this->blnEditPiez) {
+            // $objPiezProc = GuiaPiezas::Load($this->objPiezGuia->PiezaId);
+            if ($this->lstUnidMedi->SelectedValue == 'pl') {
+                $this->txtAltoPiez->Text = $this->objPiezGuia->__AltoPl();
+                $this->txtAnchPiez->Text = $this->objPiezGuia->__AnchoPl();
+                $this->txtLargPiez->Text = $this->objPiezGuia->__LargoPl();
+            } else {
+                $this->txtAltoPiez->Text = $this->objPiezGuia->Alto;
+                $this->txtAnchPiez->Text = $this->objPiezGuia->Ancho;
+                $this->txtLargPiez->Text = $this->objPiezGuia->Largo;
+            }
+        }
+        // $this->calcularVolumenPies();
     }
 
     protected function btnCancel_Click() {

@@ -28,19 +28,19 @@
 		}
 
         public function __AltoPl() {
-            return ($this->Alto / 2.54);
+            return nfp($this->Alto / 2.54);
 		}
 
         public function __AnchoPl() {
-            return ($this->Ancho / 2.54);
+            return nfp($this->Ancho / 2.54);
 		}
 
         public function __LargoPl() {
-            return ($this->Largo / 2.54);
+            return nfp($this->Largo / 2.54);
 		}
 
         public function __medidasPl() {
-            return nf($this->__AltoPl()).' x '.nf($this->__AnchoPl()).' x '.nf($this->__LargoPl());
+            return nfp($this->__AltoPl()).' x '.nf($this->__AnchoPl()).' x '.nf($this->__LargoPl());
         }
 
         public function pesoTarifa() {
