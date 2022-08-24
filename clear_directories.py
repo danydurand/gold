@@ -68,7 +68,20 @@ for d in dirs:
             print('Eliminando draft file:',index, f)
             os.remove(f)
 
-
+#-------------------------------------
+# Deleting log file(s)
+#-------------------------------------
+print('\nDeleting log files content...')
+#-------------------------
+# Moving to a directory
+#-------------------------
+print('Moving to HOME')
+os.chdir('/var/www/html/gold/')
+files = ['traza.log', 'mitraza.log', 'traza_chofer.log', 'php_errors.log']
+for f in files:
+    raw = open(f, "r+")
+    raw.seek(0)  
+    raw.truncate()
 
 #--------------------------------
 # Getting the modification time 

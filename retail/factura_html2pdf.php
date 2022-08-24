@@ -32,7 +32,7 @@ try {
     }
     $arrPiezGuia = Guias::PiezasDeLasGuias($arrGuiaProc);
     $intCantPiez = count($arrPiezGuia);
-    $intPiezPagi = $intCantPiez < 30 ? 20 : 35;
+    $intPiezPagi = $intCantPiez < 30 ? 20 : 30;
     $intCantPagi = $intCantPiez / $intPiezPagi;
     $intPartDeci = $intCantPagi - (int) $intCantPagi;
     if ($intPartDeci > 0) {

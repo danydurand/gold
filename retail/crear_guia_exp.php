@@ -214,7 +214,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     protected function SetupGuia() {
         $intIdxxGuia = QApplication::PathInfo(0);
-
         //----------------------------------------------------------
         // En caso de que sea necesario el manejo de multi-piezas
         //----------------------------------------------------------
@@ -228,11 +227,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->objProcOpci = CrearProceso($strNombProc);
 
         if ($intIdxxGuia) {
-            t('Existe un Id de la guia, las piezas se van a carga en la tabla temporal');
             $this->objGuia = Guias::Load($intIdxxGuia);
             if (!$this->objGuia) {
                 throw new Exception('Could not find a Guia object with PK arguments: ' . $intIdxxGuia);
             }
+            t('Existe un Id de la guia, las piezas se van a carga en la tabla temporal');
 
             $this->blnEditMode = true;
             $this->objClieReta = ClientesRetail::Load($this->objGuia->ClienteRetailId);
@@ -2689,13 +2688,13 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
     }
 
-    protected function cargarModalidadesDePago($strFormPago=null) {
+    protected function cargarModalidadesDePago($strFormPago='CRD') {
         $this->lstFormPago->RemoveAllItems();
         $this->lstFormPago->AddItem('PRE-PAGADA','PPD',$strFormPago=='PPD');
         $this->lstFormPago->AddItem('CREDITO','CRD',$strFormPago=='CRD');
     }
 
-    protected function cargarModosValor($strModoValo=null) {
+    protected function cargarModosValor($strModoValo='PG') {
         $this->lstModoValo->RemoveAllItems();
         $this->lstModoValo->AddItem('Por GUIA','PG',$strModoValo=='PG');
         $this->lstModoValo->AddItem('Por PIEZA','PP',$strModoValo=='PP');

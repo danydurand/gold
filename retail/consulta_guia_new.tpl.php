@@ -234,7 +234,7 @@ require('inc/header.inc.php');
                             <?php $this->lblMediEnvi->Render(); ?>
                         </div>
                         <div class="col-md-3">
-                            <div class="titulo-c">Fecha Entrega</div>
+                            <div class="titulo-c">F. Entrega</div>
                         </div>
                         <div class="col-md-3">
                             <?php $this->lblFechEntr->Render(); ?>

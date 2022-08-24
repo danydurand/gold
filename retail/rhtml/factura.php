@@ -133,9 +133,9 @@ try {
                             <?php foreach ($arrPiezImpr as $objPiezGuia) { ?>
                                 <tr style="font-size: small">
                                     <td style="width: 40px; text-align: center"></td>
-                                    <td style="width: 140px; text-align: left; word-wrap: break-spaces"><?= $objPiezGuia->Descripcion ?></td>
-                                    <td style="width: 35px; text-align: center"></td>
-                                    <td style="width: 30px; text-align: center"></td>
+                                    <td style="width: 205px; text-align: left; word-wrap: break-spaces" colspan="3">
+                                        <?= substr($objPiezGuia->Descripcion,0,38) ?>
+                                    </td>
                                     <td style="width: 20px; text-align: center"><?= $objPiezGuia->Kilos ?></td>
                                     <td style="width: 25px; text-align: center"></td>
                                     <td style="width: 120px; text-align: center"><?= $objPiezGuia->__medidasPl() ?></td>

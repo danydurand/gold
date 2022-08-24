@@ -590,7 +590,7 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function lblFechEnt1_Create() {
         $this->lblFechEnt1 = new QLabel($this);
-        $this->lblFechEnt1->Text = 'Fecha Entrega';
+        $this->lblFechEnt1->Text = 'F. Entrega';
         $this->lblFechEnt1->Visible = false;
     }
 
@@ -1694,17 +1694,19 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->dtgConcGuia->AddColumn($colMostComo);
 
         $colMontConc = new QDataGridColumn($this);
-        $colMontConc->Name = QApplication::Translate('MTO $');
+        $colMontConc->Name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTO $';
         $colMontConc->Html = '<?= nf($_ITEM->Monto/$_ITEM->Guia->Tasa); ?>';
         $colMontConc->Width = 250;
         $colMontConc->HorizontalAlign = QHorizontalAlign::Right;
+        $colMontConc->HtmlEntities = false;
         $this->dtgConcGuia->AddColumn($colMontConc);
 
         $colMontConc = new QDataGridColumn($this);
-        $colMontConc->Name = QApplication::Translate('MTO BS');
+        $colMontConc->Name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MTO Bs';
         $colMontConc->Html = '<?= nf($_ITEM->Monto); ?>';
         $colMontConc->Width = 200;
         $colMontConc->HorizontalAlign = QHorizontalAlign::Right;
+        $colMontConc->HtmlEntities = false;
         $this->dtgConcGuia->AddColumn($colMontConc);
 
     }
