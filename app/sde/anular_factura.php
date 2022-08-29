@@ -150,14 +150,14 @@ class AnularFactura extends FormularioBaseKaizen {
             $objNotaFact->logDeCambios($strTextMens);
             $intCantMani++;
         }
-        $strTextMani = "Manifiestos procesados: $intCantMani";
-        t($strTextMani);
+        $strTextMani = "Manifiestos desasociados: $intCantMani";
+        // t($strTextMani);
         //-----------------------------------------------------------------------------
         // Se crear la Nota de Credito correspondiente, cuando haya pagos registrados
         //-----------------------------------------------------------------------------
         $decMontAbon = $this->objFactAnul->MontoAbono;
         if ($decMontAbon > 0) {
-            t('La factura tiene pagos, voy a crear la NDC');
+            // t('La factura tiene pagos, voy a crear la NDC');
             try {
                 $objNotaCorp = new NotaCreditoCorp();
                 $objNotaCorp->Referencia    = NotaCreditoCorp::proxReferencia();
@@ -173,7 +173,7 @@ class AnularFactura extends FormularioBaseKaizen {
                 $objNotaCorp->CreatedAt     = new QDateTime(QDateTime::Now());
                 $objNotaCorp->Save();
                 $strTextLogx = 'Se creo NDC por Anulacion de Factura. Monto: '.$objNotaCorp->Monto;
-                t($strTextLogx);
+                // t($strTextLogx);
                 $objNotaCorp->logDeCambios($strTextLogx);
                 $strTextNdcx = "NDC creada por: $decMontAbon";
             } catch (Exception $e) {
@@ -183,8 +183,16 @@ class AnularFactura extends FormularioBaseKaizen {
                 $objDataBase->TransactionRollBack();
                 return;
             }
+            // t('Anulando los pagos asociados');
+            $arrPagoFact = $this->objFactAnul->GetPagosCorpAsFacturaPagoCorpArray();
+            // t('Hay: '.count($arrPagoFact).' pagos asociados...');
+            t($arrPagoFact);
+            foreach ($arrPagoFact as $objPagoFact) {
+                // t('Procesando pago: '.$objPagoFact->Id.' de la Factura: '. $this->objFactAnul->Id);
+                $objPagoFact->invalidarPago($this->objFactAnul->Id);
+            }
         }
-        t('Voy a anular la factura');
+        // t('Voy a anular la factura');
         //-----------------------------------
         // Datos de Anulacion de la Factura
         //-----------------------------------
@@ -192,6 +200,10 @@ class AnularFactura extends FormularioBaseKaizen {
             $this->objFactAnul->NotaCreditoId = isset($objNotaCorp) ? $objNotaCorp->Id : null;
             $this->objFactAnul->Estatus = 'ANULADA';
             $this->objFactAnul->MotivoAnulacion = $strMotiAnul;
+            $this->objFactAnul->Total = 0;
+            $this->objFactAnul->MontoAbono = 0;
+            $this->objFactAnul->MontoCobrado = 0;
+            $this->objFactAnul->MontoPendiente = 0;
             $this->objFactAnul->AnuladaPor = $this->objUsuario->CodiUsua;
             $this->objFactAnul->FechaHoraAnulacion = new QDateTime(QDateTime::Now);
             $this->objFactAnul->Save();
@@ -207,9 +219,11 @@ class AnularFactura extends FormularioBaseKaizen {
         // Se muestra en pantalla los datos de la anulacion
         //----------------------------------------------------
         $this->mostrarCamposDeAnulacion(true);
-
+        // t('Actualizando Saldo del Cliente...');
+        $this->objFactAnul->ClienteCorp->calcularSaldoExcedente();
         $strTextMens = "Factura Anulada Exitosamente | ".$strTextMani." | ".$strTextNdcx;
         $this->success($strTextMens);
+        // t('Proceso de anulacion culminado !!!');
     }
 }
 

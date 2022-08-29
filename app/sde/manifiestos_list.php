@@ -100,6 +100,7 @@ class ManifiestosList extends NotaEntregaListFormBase {
         //$this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp,'Name=Cliente');
 
         $this->dtgNotaEntregas->MetaAddColumn('Referencia','FilterBoxSize=12');
+        
         $colFechMani = new QDataGridColumn('FECHA','<?= $_FORM->FechMani($_ITEM) ?>');
         $this->dtgNotaEntregas->AddColumn($colFechMani);
         $this->dtgNotaEntregas->MetaAddColumn('Estatus','FilterBoxSize=6');

@@ -36,6 +36,19 @@
         }
 
         public static function proxReferencia() {
+			$objClauWher = QQ::IsNotNull(QQN::NotaCreditoCorp()->Id);
+			$objClauOrde = QQ::Clause();
+			$objClauOrde = QQ::OrderBy(QQN::NotaCreditoCorp()->Id,false);
+			$arrNotaCred = NotaCreditoCorp::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
+			$objLastNote = $arrNotaCred[0];
+			$arrRefeNote = explode('-',$objLastNote->Referencia);
+			$intLastRefe = (int)$arrRefeNote[0];
+            $strYearDhoy = date('Y');
+            $strNumeRefe = str_pad($intLastRefe+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;
+            return $strNumeRefe;
+        }
+
+        public static function proxReferenciaOld() {
             $intCantRegi = NotaCreditoCorp::CountAll();
             $strYearDhoy = date('Y');
             $strNumeRefe = str_pad($intCantRegi+1,5,'0',STR_PAD_LEFT).'-'.$strYearDhoy;

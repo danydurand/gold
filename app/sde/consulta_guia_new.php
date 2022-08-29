@@ -773,7 +773,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function lblNotaEntr_Create() {
         $this->lblNotaEntr = new QLabel($this);
-        $this->lblNotaEntr->Text = $this->objGuia->NotaEntregaId ? $this->objGuia->NotaEntrega->Referencia : null;
+        $this->lblNotaEntr->FontSize = 13;
+        $this->lblNotaEntr->HtmlEntities = false;
+        $this->lblNotaEntr->Text = $this->objGuia->NotaEntregaId 
+            ? $this->objGuia->NotaEntrega->__link()
+            : null;
     }
 
     protected function lblServImpo_Create() {

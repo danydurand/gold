@@ -149,27 +149,35 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         $this->dtgFactClie->AddColumn($colEstaPago);
 
         $colTotaFact = new QDataGridColumn($this);
-        $colTotaFact->Name = QApplication::Translate('Total');
+        $colTotaFact->Name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total';
         $colTotaFact->Html = '<?= nf($_ITEM->Total) ?>';
         $colTotaFact->Width = 70;
+        $colTotaFact->HtmlEntities = false;
+        $colTotaFact->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgFactClie->AddColumn($colTotaFact);
 
         $colMontAbon = new QDataGridColumn($this);
-        $colMontAbon->Name = 'Abono';
+        $colMontAbon->Name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Abono';
         $colMontAbon->Html = '<?= nf($_ITEM->MontoAbono) ?>';
         $colMontAbon->Width = 70;
+        $colMontAbon->HtmlEntities = false;
+        $colMontAbon->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgFactClie->AddColumn($colMontAbon);
 
         $colMontCobr = new QDataGridColumn($this);
-        $colMontCobr->Name = QApplication::Translate('Pagado');
+        $colMontCobr->Name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pagado';
         $colMontCobr->Html = '<?= nf($_ITEM->MontoCobrado) ?>';
         $colMontCobr->Width = 70;
+        $colMontCobr->HtmlEntities = false;
+        $colMontCobr->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgFactClie->AddColumn($colMontCobr);
 
         $colMontPend = new QDataGridColumn($this);
-        $colMontPend->Name = QApplication::Translate('Pendiente');
+        $colMontPend->Name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pendiente';
         $colMontPend->Html = '<?= nf($_ITEM->MontoPendiente) ?>';
         $colMontPend->Width = 70;
+        $colMontPend->HtmlEntities = false;
+        $colMontPend->HorizontalAlign = QHorizontalAlign::Right;
         $this->dtgFactClie->AddColumn($colMontPend);
 
     }

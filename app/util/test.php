@@ -4,29 +4,9 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
-//$arrMailProc   = [];
-//$arrMailProc[] = 'danydurand@gmail.com';
-//$arrMailProc[] = 'danydurand171431@hotmail.com';
-//$arrMailProc[] = 'danydurand14@yahoo.com';
-//$arrMailProc[] = 'danydurand@lufemansoftware.com';
-//
-//foreach ($arrMailProc as $strDireMail) {
-//    $objMessage = new QEmailMessage();
-//    $objMessage->From = 'GoldCoast - SisCO <noti@goldsist.com>';
-//    $objMessage->To = $strDireMail;
-//    $objMessage->Subject = 'Test Mail QEmailMessage';
-//    $objMessage->HtmlBody = 'This is a Test with QEmailMessage library';
-//    $objMessage->SetHeader('x-application', 'Sistema SisCO');
-//    try {
-//        QEmailServer::Send($objMessage);
-//        echo $strDireMail;
-//    } catch (Exception $e) {
-//        echo $e->getMessage();
-//    }
-//    echo "<br>";
-//}
 
 
+/*
 $arrMailProc   = [];
 $arrMailProc[] = 'm.tovar@goldcoastus.com';
 $arrMailProc[] = 'danydurand@lufemansoftware.com';
@@ -47,6 +27,7 @@ foreach ($arrMailProc as $strDireMail) {
         echo "$strDireMail<br>";
     }
 }
+*/
 
 
 // Sending mails

@@ -53,7 +53,7 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
         $objClauOrde   = QQ::Clause();
         $objClauOrde[] = QQ::OrderBy(QQN::NotaEntrega()->Id,false);
         $objClauWher   = QQ::Clause();
-        $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->PorCorregir,0);
+        // $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->PorCorregir,0);
         $objClauWher[] = QQ::Equal(QQN::NotaEntrega()->Facturable,SinoType::SI);
         $this->dtgNotaEntregas->AdditionalClauses = $objClauOrde;
         $this->dtgNotaEntregas->AdditionalConditions = QQ::AndCondition($objClauWher);
@@ -73,7 +73,7 @@ class NotaEntregaListForm extends NotaEntregaListFormBase {
 		// Create the Other Columns (note that you can use strings for nota_entrega's properties, or you
 		// can traverse down QQN::nota_entrega() to display fields that are down the hierarchy)
 		$colIdxxMani = $this->dtgNotaEntregas->MetaAddColumn('Id');
-		$colIdxxMani->FilterType = null;
+		$colIdxxMani->FilterBoxSize = 2;
 
 		$colNombClie = $this->dtgNotaEntregas->MetaAddColumn(QQN::NotaEntrega()->ClienteCorp->NombClie,'Name=Cliente');
         $colNombClie->OrderByClause = QQ::OrderBy(QQN::NotaEntrega()->ClienteCorp->NombClie);

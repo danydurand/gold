@@ -33,6 +33,12 @@
 			return $strEstaAdel;
 		}
 
+        public function __link() {
+            $strTextLink = $this->Referencia.' ('.$this->Id.')';
+            $strLinkMani = '<a href=' . __SIST__ . '/nota_entrega_edit.php/' . $this->Id . ' 
+                    style="color: #0d6aad; text-decoration: none" >'.$strTextLink.'</a>';
+            return $strLinkMani;
+        }
 
 		public static function RecibirPiezas($intIdxxProc) {
             $strNombProc = 'Recibiendo Piezas del Proceso: '.$intIdxxProc;

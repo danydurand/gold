@@ -1415,6 +1415,7 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objGuia->Asegurado             = 0;
             $objGuia->Total                 = 0;
             $objGuia->CreatedBy             = $this->objUsuario->CodiUsua;
+            $objGuia->CreatedAt             = new QDateTime(QDateTime::Now());
             $objGuia->VendedorId            = $this->objCliente->VendedorId;
             $objGuia->TarifaAgenteId        = $objGuiaMasi->TarifaId;
             $objGuia->Alto                  = $objGuiaMasi->Alto;

@@ -55,6 +55,48 @@
         }
 
 
+        public function invalidarPago($intFactIdxx=null) {
+            // t('=====================');
+            // t('Rutina: invalidarPago');
+            if (is_null($intFactIdxx)) {
+                $strEstaPago = 'INCONCILIABLE';
+                // t('No se especificó ninguna factura, se anula o invalida todo');
+                //--------------------------------------------------
+                // In detail table, record must take zero as value
+                //--------------------------------------------------
+                $arrDetaPago = $this->GetPagosCorpDetailAsPagoCorpArray();
+                foreach ($arrDetaPago as $objDetaPago) {
+                    $objDetaPago->leftInZero();
+                }
+                //--------------------------------------------------------
+                // The payment status must take 'INCONCILIABLE' as value
+                //--------------------------------------------------------
+                $this->Estatus = $strEstaPago;
+                $this->Save();
+                //--------------------------
+                // Log transaction record
+                //--------------------------
+                $this->logDeCambios('Pago: ' . $this->Referencia . ' (' . $strEstaPago . ')');
+            } else {
+                // t('Solo se van a invalidar los pagos de la factura con el Id: '.$intFactIdxx);
+                #----------------------------------------------------------------------------------------
+                # In this case, the detail corresponding to the specified bill, must take zero as value
+                #----------------------------------------------------------------------------------------
+                $arrDetaPago = $this->GetPagosCorpDetailAsPagoCorpArray();
+                // t('Hay: '.count($arrDetaPago).' detalles asociados al pago: '.$this->Id);
+                foreach ($arrDetaPago as $objDetaPago) {
+                    // t('Procesando el pago: '.$objDetaPago->Id);
+                    if ($objDetaPago->FacturaId == $intFactIdxx) {
+                        // t('La factura coincide, voy a dejar el detalle del pago en cero');
+                        $objDetaPago->leftInZero();
+                    }
+                }
+            }
+            $this->ActualizarMontosDeLasFacturas();
+        }
+        
+        
+
         public function conciliarPago() {
             t('=====================');
             t('Rutina: conciliarPago');

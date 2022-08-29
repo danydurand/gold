@@ -39,6 +39,12 @@ class MasterCliente extends MasterClienteGen {
         return sprintf('%s - %s', $this->strCodigoInterno, $this->strNombClie);
     }
 
+    protected function __link() {
+        $strLinkClie = '<a href=' . __SIST__ . '/master_cliente_edit.php/' . $this->intCodiClie . ' 
+                style="color: #0d6aad; text-decoration: none" ><i class="fa fa-link"></i> Cliente Corp </a>';
+        return $strLinkClie;
+    }
+
     public static function LoadAliadosActivos($strFormResp='objects') {
         $objClauWher[] = QQ::Equal(QQN::MasterCliente()->EsAliado,true);
         //$objClauWher[] = QQ::Equal(QQN::MasterCliente()->CodiStat,StatusType::ACTIVO);

@@ -137,7 +137,6 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->intCantHist = Log::CountByTablaRef('Facturas',$this->mctFacturas->Facturas->Id);
 
         $this->btnMasxAcci_Create();
-
         //----------------------------------------------------------------------------------
         // Luego de crear todos los elementos del formulario, se ejecuta cualquier acción
         // determinada por el segundo parametro de invocacion del programa (cuando exista)
@@ -160,6 +159,7 @@ class FacturasEditForm extends FacturasEditFormBase {
                     $this->danger("Accion: ".$this->strAcciAdic." no especificada");
             }
         }
+        $this->btnDelete->Visible = false;
     }
 
 	//----------------------------
@@ -267,6 +267,9 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgNotaFact->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
         $this->dtgNotaFact->AddRowAction(new QClickEvent(), new QAjaxAction('dtgNotaFactRow_Click'));
 
+        $this->dtgNotaFact->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgNotaFact->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
         $this->dtgNotaFact->UseAjax = true;
 
         $this->dtgNotaFact->SetDataBinder('dtgNotaFact_Bind');
@@ -342,6 +345,9 @@ class FacturasEditForm extends FacturasEditFormBase {
         $this->dtgPagoFact->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
         $this->dtgPagoFact->AddRowAction(new QClickEvent(), new QAjaxAction('dtgPagoFactRow_Click'));
 
+        $this->dtgPagoFact->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgPagoFact->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+
         $this->dtgPagoFact->UseAjax = true;
 
         $this->dtgPagoFact->SetDataBinder('dtgPagoFact_Bind');
@@ -359,33 +365,48 @@ class FacturasEditForm extends FacturasEditFormBase {
     }
 
     protected function dtgPagoFactColumns() {
+        $colpagoIdxx = new QDataGridColumn($this);
+        $colpagoIdxx->Name = 'Id';
+        $colpagoIdxx->Html = '<?= $_ITEM->Id ?>';
+        $colpagoIdxx->Width = 40;
+        $colpagoIdxx->VerticalAlign = QVerticalAlign::Top;
+        $this->dtgPagoFact->AddColumn($colpagoIdxx);
+
         $colRefePago = new QDataGridColumn($this);
         $colRefePago->Name = QApplication::Translate('Referencia');
-        $colRefePago->Html = '<?= $_ITEM->Referencia ?>';
-        $colRefePago->Width = 150;
+        $colRefePago->Html = '<?= substr($_ITEM->Referencia,0,30); ?>';
+        $colRefePago->Width = 250;
+        $colRefePago->VerticalAlign = QVerticalAlign::Top;
         $this->dtgPagoFact->AddColumn($colRefePago);
 
         $colFechPago = new QDataGridColumn($this);
         $colFechPago->Name = QApplication::Translate('Fecha');
         $colFechPago->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>';
-        $colFechPago->Width = 110;
+        $colFechPago->Width = 85;
+        $colFechPago->VerticalAlign = QVerticalAlign::Top;
         $this->dtgPagoFact->AddColumn($colFechPago);
 
         $colEstaPago = new QDataGridColumn($this);
         $colEstaPago->Name = QApplication::Translate('Estatus');
         $colEstaPago->Html = '<?= $_ITEM->Estatus ?>';
-        $colEstaPago->Width = 110;
+        $colEstaPago->Width = 90;
+        $colEstaPago->VerticalAlign = QVerticalAlign::Top;
         $this->dtgPagoFact->AddColumn($colEstaPago);
 
         $colFormPago = new QDataGridColumn($this);
         $colFormPago->Name = QApplication::Translate('F.Pago');
         $colFormPago->Html = '<?= $_ITEM->FormaPago->__toString() ?>';
+        $colFormPago->Width = 70;
+        $colFormPago->VerticalAlign = QVerticalAlign::Top;
         $this->dtgPagoFact->AddColumn($colFormPago);
 
         $colMontPago = new QDataGridColumn($this);
-        $colMontPago->Name = QApplication::Translate('Monto');
-        /*$colMontPago->Html = '<?= nf($_ITEM->Monto) ?>';*/
+        $colMontPago->Name = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monto';
         $colMontPago->Html = '<?= nf($_FORM->dtgMontAbon_Render($_ITEM)); ?>';
+        $colMontPago->Width = 70;
+        $colMontPago->HtmlEntities = false;
+        $colMontPago->HorizontalAlign = QHorizontalAlign::Right;
+        $colMontPago->VerticalAlign = QVerticalAlign::Top;
         $this->dtgPagoFact->AddColumn($colMontPago);
     }
 
@@ -619,9 +640,6 @@ class FacturasEditForm extends FacturasEditFormBase {
 	}
 
     protected function btnDelete_Click($strFormId, $strControlId, $strParameter) {
-        //----------------------------------------
-        // Se verifica la integridad referencial
-        //----------------------------------------
         $blnTodoOkey = true;
         //--------------------------------------------------------
         // Las notas de entrega asociadas, deben "des-asociarse"
@@ -630,14 +648,11 @@ class FacturasEditForm extends FacturasEditFormBase {
         foreach ($arrNotaFact as $objNotaFact) {
             $objNotaFact->asociandoNotaConFactura(null);
         }
-        //$arrTablRela = $this->mctFacturas->TablasRelacionadasFacturas();
-        //if (count($arrTablRela)) {
-        //    print_r($arrTablRela);
-        //    $this->warning('Existen registro asociados...  No se puede borrar');
-        //    $blnTodoOkey = false;
-        //}
+        $arrPagoFact = $this->mctFacturas->Facturas->GetPagosCorpAsFacturaPagoCorpArray();
+        foreach ($arrPagoFact as $objPagoFact) {
+            $objPagoFact->invalidarPago($this->mctFacturas->Facturas->Id);
+        }
         if ($blnTodoOkey) {
-            // Delegate "Delete" processing to the ArancelMetaControl
             $this->mctFacturas->DeleteFacturas();
             $arrLogxCamb['strNombTabl'] = 'Facturas';
             $arrLogxCamb['intRefeRegi'] = $this->mctFacturas->Facturas->Id;

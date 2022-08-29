@@ -106,7 +106,11 @@ class NotaCreditoCorpListForm extends NotaCreditoCorpListFormBase {
 	}
 
     public function PagoCorp_Render(NotaCreditoCorp $objNotaCred) {
-		return $objNotaCred->PagoCorp->__toStringCorto();
+		if (!(is_null($objNotaCred->PagoCorpId))) {
+			return $objNotaCred->PagoCorp->__toStringCorto();
+		} else {
+			return null;
+		}
 	}
 
     public function EstaNota_Render(NotaCreditoCorp $objNotaCred) {

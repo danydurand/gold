@@ -24,17 +24,30 @@
 		 * @return string a nicely formatted string representation of this object
 		 */
 		public function __toString() {
-			return sprintf('PagosCorpDetail Object %s',  $this->intId);
+			return sprintf('PagosCorpDetail %s',  $this->intId);
 		}
 
-                /**
+		public function leftInZero() {
+			$this->MontoAbonado = 0;
+			$this->Save();
+			//--------------------------
+			// Log transaction record
+			//--------------------------
+			$strLogxTran  = 'Pago: ' . $this->PagoCorp->Referencia;
+			$strLogxTran .= ' Factura: (' . $this->Factura->Referencia . ')';
+			$strLogxTran .= ' llevado a Cero (0);';
+			$this->logDeCambios($strLogxTran);
+		}
+		
+		
+		/**
         * Esta runtina deja registro de la operacion indicada en
         * el log de transacciones
         */
         public function logDeCambios($strMensTran) {
             $arrLogxCamb['strNombTabl'] = 'PagosCorpDetail';
             $arrLogxCamb['intRefeRegi'] = $this->Id;
-            $arrLogxCamb['strNombRegi'] = $this->Nombre;
+            $arrLogxCamb['strNombRegi'] = $this->PagoCorp->Referencia;
             $arrLogxCamb['strDescCamb'] = $strMensTran;
             $arrLogxCamb['strEnlaEnti'] = __SIST__.'/pagos_corp_detail_edit.php/'.$this->Id;
             LogDeCambios($arrLogxCamb);
