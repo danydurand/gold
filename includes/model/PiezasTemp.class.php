@@ -27,18 +27,15 @@
 			return sprintf('PiezasTemp Object %s',  $this->intId);
 		}
 
-		public function __AltoPl()
-		{
+		public function __AltoPl() {
 			return nfp($this->Alto / 2.54);
 		}
 
-		public function __AnchoPl()
-		{
+		public function __AnchoPl() {
 			return nfp($this->Ancho / 2.54);
 		}
 
-		public function __LargoPl()
-		{
+		public function __LargoPl() {
 			return nfp($this->Largo / 2.54);
 		}
 

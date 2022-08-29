@@ -5,6 +5,30 @@ use PHPMailer\PHPMailer\PHPMailer;
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
 
+// $objGuia = Guias::Load(187991);
+
+$objParaExis = Parametros::BP('PiecBack', 187991, 'TODO');
+if ($objParaExis instanceof Parametros) {
+    echo "There are: " . $objParaExis->Valor1 . " pieces in the backup record<br>";
+    $arrPiecBack = explode('*', $objParaExis->Texto1);
+    echo "The array contains: " . count($arrPiecBack) . " elements<br>";
+    foreach ($arrPiecBack as $strPiecJson) {
+        try {
+            $objRecoPiec = new GuiaPiezas();
+            $objPiecRcry = json_decode($strPiecJson);
+            
+            $objPiecRcry->Save();
+            echo "Recovered piece<br>";
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage()."<br>";
+        }
+    }
+}
+
+// $objGuia->createPiecesBackup();
+// echo $objSoapObje = $objGuia->GetSoapComplexTypeXml();
+// echo "<br><br>";
+// echo Guias::GetSoapObjectFromObject($objGuia,true);
 
 /*
 $arrMailProc   = [];

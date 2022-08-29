@@ -125,10 +125,13 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
 
     protected function SetupValores() {
+        $strNumeGuia = QApplication::PathInfo(0);
+        if (!(is_numeric($strNumeGuia))) {
+            QApplication::Redirect(__SIST__.'/'.$strNumeGuia);
+        }
         //-----------------------------------------
         // Obteniendo el # de la Guía a Consultar
         //-----------------------------------------
-        $strNumeGuia = QApplication::PathInfo(0);
         $strAcciPlus = QApplication::PathInfo(1);
         $intGrupImpr = QApplication::PathInfo(2);
         if ($strNumeGuia) {
@@ -146,6 +149,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                     }
                     $_SESSION['StatGuia'] = 'La Guía <b>#'.$strNumeGuia.'</b> ha sido eliminada! ';
                     QApplication::Redirect(__SIST__.'/guia_invalida.php');
+                }
+                if ($this->objGuia->CountGuiaPiezasesAsGuia()) {
+                    $this->objGuia->createPiecesBackup();
                 }
             }
         } else {
@@ -215,7 +221,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
                 QApplication::Redirect(__SIST__.'/etiqueta_pdf.php');
             }
         }
-
+        if ($strAcciPlus == 'rp') {
+            // Recovery Pieces from backup
+            if ($this->objGuia) {
+                $this->objGuia->getPiecesBackup();
+            }
+        }
     }
 
     protected function Form_Create() {
@@ -468,6 +479,13 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/facturas_edit.php/'.$this->objGuia->FacturaId,
                 TextoIcono('gg', 'Ver la Factura')
+            );
+        }
+        $intCantPiez = $this->objGuia->CountGuiaPiezasesAsGuia();
+        if ($intCantPiez != $this->objGuia->Piezas) {
+            $arrOpciDrop[] = OpcionDropDown(
+                __SIST__ . '/consulta_guia_new.php/' . $this->objGuia->Id . '/rp',
+                TextoIcono('recycle', 'Recuperar Piezas')
             );
         }
 

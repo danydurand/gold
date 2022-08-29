@@ -125,7 +125,6 @@
                 <div class="col-sm-8 text-center" style="text-align: left"><?php $this->txtContPiez->Render(); ?></div>
                 <div class="col-sm-2 text-center" style="text-align: left"><?php $this->txtValoPiez->Render(); ?></div>
                 <div class="col-sm-2" style="text-align: right"><?php $this->txtRepePiez->Render(); ?></div>
-                <!--<div class="col-sm-3 text-center">--><?php //$this->btnSavePiez->Render(); $this->btnCancPiez->Render(); $this->btnDelePiez->Render(); ?><!--</div>-->
             </div>
         </div>
         <?php } ?>

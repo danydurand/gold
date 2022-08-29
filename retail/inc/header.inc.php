@@ -8,18 +8,18 @@ include('menu.inc.php');
 $strUbicUsua = '';
 if (isset($_SESSION['SucursalId'])) {
     $objSucuUsua  = Sucursales::Load($_SESSION['SucursalId']);
-    $strUbicUsua .= ' | '.$objSucuUsua->Iata;
+    $strUbicUsua .= ' | ' . $objSucuUsua->Iata;
 }
 if (isset($_SESSION['ReceptoriaId'])) {
     $objReceUsua  = Counter::Load($_SESSION['ReceptoriaId']);
-    $strUbicUsua .= ' | '.$objReceUsua->Siglas;
+    $strUbicUsua .= ' | ' . $objReceUsua->Siglas;
 }
 $strTasaCamb = '';
 if (isset($_SESSION['TasaDola'])) {
-    $strTasaCamb .= ' | USD: '.nf($_SESSION['TasaDola'],2);
+    $strTasaCamb .= ' | USD: ' . nf($_SESSION['TasaDola'], 2);
 }
 if (isset($_SESSION['TasaEuro'])) {
-    $strTasaCamb .= ' | EUR: '.nf($_SESSION['TasaEuro'],2);
+    $strTasaCamb .= ' | EUR: ' . nf($_SESSION['TasaEuro'], 2);
 }
 ?>
 
@@ -31,29 +31,33 @@ if (isset($_SESSION['TasaEuro'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-<?php if (isset($strPageTitle)) { ?>
-	<title><?php _p($strPageTitle); ?></title>
-<?php } ?>
+    <?php if (isset($strPageTitle)) { ?>
+        <title><?php _p($strPageTitle); ?></title>
+    <?php } ?>
 
-	<style type="text/css">@import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles.css");</style>
-	<style type="text/css">@import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles_plus.css");</style>
+    <style type="text/css">
+        @import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles.css");
+    </style>
+    <style type="text/css">
+        @import url("<?php _p(__VIRTUAL_DIRECTORY__ . __APP_CSS_ASSETS__); ?>/styles_plus.css");
+    </style>
 
     <!-- Intro JS -->
-    <link rel="stylesheet" href="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ .'/introjs/introjs.min.css' ?>">
-    <script src="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ .'/introjs/intro.min.js' ?>"></script>
+    <link rel="stylesheet" href="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ . '/introjs/introjs.min.css' ?>">
+    <script src="<?= __VIRTUAL_DIRECTORY__ . __APP_JS_ASSETS__ . '/introjs/intro.min.js' ?>"></script>
 
     <!-- Bootstrap Core CSS -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/bootstrap/dist/css/bootstrap.css"?> rel="stylesheet">
+    <link href=<?= __APP_CSS_ASSETS__ . "/bower_components/bootstrap/dist/css/bootstrap.css" ?> rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/metisMenu/dist/metisMenu.min.css"?> rel="stylesheet">
+    <link href=<?= __APP_CSS_ASSETS__ . "/bower_components/metisMenu/dist/metisMenu.min.css" ?> rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/dist/css/sb-admin-2.css"?> rel="stylesheet">
+    <link href=<?= __APP_CSS_ASSETS__ . "/dist/css/sb-admin-2.css" ?> rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href=<?= __APP_CSS_ASSETS__ ."/bower_components/font-awesome/css/font-awesome.min.css"?> rel="stylesheet" type="text/css">
-    <link href=<?= __APP_CSS_ASSETS__ ."/bootstrap4.css"?> rel="stylesheet" type="text/css">
+    <link href=<?= __APP_CSS_ASSETS__ . "/bower_components/font-awesome/css/font-awesome.min.css" ?> rel="stylesheet" type="text/css">
+    <link href=<?= __APP_CSS_ASSETS__ . "/bootstrap4.css" ?> rel="stylesheet" type="text/css">
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
 
     <!-- AOS -->
@@ -67,15 +71,14 @@ if (isset($_SESSION['TasaEuro'])) {
     <![endif]-->
     <style>
         /*.navbar-default {*/
-            /*background: #A52422;*/
+        /*background: #A52422;*/
         /*}*/
-
     </style>
 
 </head>
 
 <body>
-	<?php $this->RenderBegin() ?>
+    <?php $this->RenderBegin() ?>
 
     <div id="wrapper">
 
@@ -88,30 +91,37 @@ if (isset($_SESSION['TasaEuro'])) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" style="color: white; text-decoration: none" href="<?= __RET__.'/mg.php'?>">GoldCoast | Retail <?= $strUbicUsua ?>&nbsp;<?= $strTasaCamb ?> </a>
+                <?php
+                if ($_SERVER['SERVER_NAME'] == 'goldsist.com') {
+                    $strColoLetr = '';
+                } else {
+                    $strColoLetr = 'yellow';
+                }
+                ?>
+                <a class="navbar-brand" style="color: white; text-decoration: none" href="<?= __RET__ . '/mg.php' ?>">
+                    <span style="color: <?= $strColoLetr ?>">
+                        GoldCoast | Retail <?= $strUbicUsua ?>&nbsp;<?= $strTasaCamb ?>
+                    </span>
+                </a>
             </div>
             <!-- /.navbar-header -->
-            
+
             <ul class="nav navbar-top-links navbar-right">
 
-                <a class="btn btn-sm btn-success"
-                   style="margin-left:.5em"
-                   href="javascript:void(0);"
-                   title="Ayuda"
-                   onclick="javascript:introJs().start();startIntro()">
+                <a class="btn btn-sm btn-success" style="margin-left:.5em" href="javascript:void(0);" title="Ayuda" onclick="javascript:introJs().start();startIntro()">
                     <i class="fa fa-question-circle fa-lg"></i>
                 </a>
 
                 <li><span style="color: white"><i class="fa fa-user fa-fw"></i> <?= $strDatoUsua ?></span></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                         <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href=<?= __RET__."/cambiar_clave.php"?>><i class="fa fa-key fa-fw"></i> Cambiar Clave</a>
+                        <li><a href=<?= __RET__ . "/cambiar_clave.php" ?>><i class="fa fa-key fa-fw"></i> Cambiar Clave</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href=<?= __RET__."/logout.php"?>><i class="fa fa-sign-out fa-fw"></i> Salir</a>
+                        <li><a href=<?= __RET__ . "/logout.php" ?>><i class="fa fa-sign-out fa-fw"></i> Salir</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -132,7 +142,3 @@ if (isset($_SESSION['TasaEuro'])) {
         <!-- Page Content -->
         <div id="page-wrapper">
             <span class="medio_espacio"></span>
-
-
-
-

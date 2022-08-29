@@ -272,12 +272,12 @@ class CrearGuiaExp extends FormularioBaseKaizen {
             $this->objGuia = new Guias();
             $this->blnEditMode = false;
             if (!isset($_SESSION['RegrMasi'])) {
-                t('Se trata de una Guia nueva, así que elimine todas las piezas temporales del Usuario');
+                t('Se trata de una Guia nueva, así voy a eliminar todas las piezas temporales del Usuario');
                 PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
             } else {
                 t('Vengo llegando de la carga masiva');
                 $intCantRegi = PiezasTemp::CountByProcesoErrorId($this->objProcEjec->Id);
-                t('Hay: '.$intCantRegi.' registros en peizas_temap');
+                t('Hay: '.$intCantRegi.' registros en piezas_temp');
             }
             GcoTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
         }
@@ -1027,7 +1027,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->btnBorrPiez->AddAction(new QClickEvent(), new QServerAction('btnBorrPiez_Click'));
     }
 
-
     protected function txtTasaDola_Create() {
         $this->txtTasaDola = new QFloatTextBox($this);
         $this->txtTasaDola->Width = 100;
@@ -1469,7 +1468,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->success('Transaccion Exitosa.  Piezas borradas !!!');
 
     }
-
 
     protected function CargarPiezas($strNombArch,$strExteArch) {
         t('');
@@ -3003,71 +3001,73 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $decSumaValo = 0;
         $decSumaPies = 0;
         $strDescCont = '';
-        $this->objGuia->borrarPiezas();
         $arrPiezTemp = PiezasTemp::LoadArrayByProcesoErrorId($this->objProcEjec->Id);
-        $strDescAnte = '';
-        //t('Hay '.count($arrPiezTemp).' piezas en la tabla temporal');
-        foreach ($arrPiezTemp as $objPiezTemp) {
-            if ($objPiezTemp->Alto > 0) {
-                //t('Procesando pieza: '.$intCantPiez);
-                try {
-                    $objGuiaPiez = new GuiaPiezas();
-                    $objGuiaPiez->GuiaId         = $this->objGuia->Id;
-                    $objGuiaPiez->IdPieza        = $this->objGuia->proximoIdPieza();
-                    $objGuiaPiez->EmpaqueId      = $objPiezTemp->EmpaqueId;
-                    $objGuiaPiez->Descripcion    = substr($objPiezTemp->Descripcion,0,50);
-                    $objGuiaPiez->Kilos          = $objPiezTemp->Kilos;
-                    $objGuiaPiez->Alto           = $objPiezTemp->Alto;
-                    $objGuiaPiez->Ancho          = $objPiezTemp->Ancho;
-                    $objGuiaPiez->Largo          = $objPiezTemp->Largo;
-                    $objGuiaPiez->Volumen        = $objPiezTemp->Volumen;
-                    $objGuiaPiez->ValorDeclarado = $objPiezTemp->ValorDeclarado;
-                    $objGuiaPiez->PiesCub        = $objPiezTemp->PiesCub;
-                    $objGuiaPiez->Save();
-                    //t('Pieza guardada');
-                    if (trim($strDescAnte) != trim($objGuiaPiez->Descripcion)) {
-                        //t('Desc Anterio: '.$strDescAnte.' Descripcion de la Pieza: '.$objGuiaPiez->Descripcion);
-                        $strSepaPiez = '';
-                        if (strlen($strDescCont) > 0) {
-                            $strSepaPiez = ' | ';
+        if (count($arrPiezTemp) > 0) {
+            $this->objGuia->borrarPiezas();
+            $strDescAnte = '';
+            //t('Hay '.count($arrPiezTemp).' piezas en la tabla temporal');
+            foreach ($arrPiezTemp as $objPiezTemp) {
+                if ($objPiezTemp->Alto > 0) {
+                    //t('Procesando pieza: '.$intCantPiez);
+                    try {
+                        $objGuiaPiez = new GuiaPiezas();
+                        $objGuiaPiez->GuiaId         = $this->objGuia->Id;
+                        $objGuiaPiez->IdPieza        = $this->objGuia->proximoIdPieza();
+                        $objGuiaPiez->EmpaqueId      = $objPiezTemp->EmpaqueId;
+                        $objGuiaPiez->Descripcion    = substr($objPiezTemp->Descripcion, 0, 50);
+                        $objGuiaPiez->Kilos          = $objPiezTemp->Kilos;
+                        $objGuiaPiez->Alto           = $objPiezTemp->Alto;
+                        $objGuiaPiez->Ancho          = $objPiezTemp->Ancho;
+                        $objGuiaPiez->Largo          = $objPiezTemp->Largo;
+                        $objGuiaPiez->Volumen        = $objPiezTemp->Volumen;
+                        $objGuiaPiez->ValorDeclarado = $objPiezTemp->ValorDeclarado;
+                        $objGuiaPiez->PiesCub        = $objPiezTemp->PiesCub;
+                        $objGuiaPiez->Save();
+                        //t('Pieza guardada');
+                        if (trim($strDescAnte) != trim($objGuiaPiez->Descripcion)) {
+                            //t('Desc Anterio: '.$strDescAnte.' Descripcion de la Pieza: '.$objGuiaPiez->Descripcion);
+                            $strSepaPiez = '';
+                            if (strlen($strDescCont) > 0) {
+                                $strSepaPiez = ' | ';
+                            }
+                            $strDescCont .= $strSepaPiez . $objGuiaPiez->Descripcion;
+                            $strDescAnte  = $objGuiaPiez->Descripcion;
                         }
-                        $strDescCont .= $strSepaPiez.$objGuiaPiez->Descripcion;
-                        $strDescAnte  = $objGuiaPiez->Descripcion;
+                        $decSumaKilo += $objGuiaPiez->Kilos;
+                        $decSumaAlto += $objGuiaPiez->Alto;
+                        $decSumaAnch += $objGuiaPiez->Ancho;
+                        $decSumaLarg += $objGuiaPiez->Largo;
+                        $decSumaVolu += $objGuiaPiez->Volumen;
+                        $decSumaValo += $objGuiaPiez->ValorDeclarado;
+                        $decSumaPies += $objGuiaPiez->PiesCub;
+                        $intCantPiez++;
+                        t('acumulando...');
+                    } catch (Exception $e) {
+                        t('Error grabando pieza: ' . $e->getMessage());
                     }
-                    $decSumaKilo += $objGuiaPiez->Kilos;
-                    $decSumaAlto += $objGuiaPiez->Alto;
-                    $decSumaAnch += $objGuiaPiez->Ancho;
-                    $decSumaLarg += $objGuiaPiez->Largo;
-                    $decSumaVolu += $objGuiaPiez->Volumen;
-                    $decSumaValo += $objGuiaPiez->ValorDeclarado;
-                    $decSumaPies += $objGuiaPiez->PiesCub;
-                    $intCantPiez++;
-                    t('acumulando...');
-                } catch (Exception $e) {
-                    t('Error grabando pieza: '.$e->getMessage());
                 }
             }
+            //t('Termine la piezas, voy a actualizar la guia');
+            //-------------------------------------------------------------------
+            // Se actualiza la descripcion del contenido y los kilos de la Guia
+            //-------------------------------------------------------------------
+            try {
+                $this->objGuia->Contenido      = substr($strDescCont, 0, 100);
+                $this->objGuia->Piezas         = $intCantPiez;
+                $this->objGuia->Kilos          = $decSumaKilo;
+                $this->objGuia->Alto           = $decSumaAlto;
+                $this->objGuia->Ancho          = $decSumaAnch;
+                $this->objGuia->Largo          = $decSumaLarg;
+                $this->objGuia->Volumen        = $decSumaVolu;
+                $this->objGuia->ValorDeclarado = $decSumaValo;
+                $this->objGuia->PiesCub        = $decSumaPies;
+                $this->objGuia->Save();
+                t('Guia actualizada');
+            } catch (Exception $e) {
+                t('Excepcion: ' . $e->getMessage());
+            }
+            //t('Saliendo del procesamiento de las piezas');
         }
-        //t('Termine la piezas, voy a actualizar la guia');
-        //-------------------------------------------------------------------
-        // Se actualiza la descripcion del contenido y los kilos de la Guia
-        //-------------------------------------------------------------------
-        try {
-            $this->objGuia->Contenido      = substr($strDescCont,0,100);
-            $this->objGuia->Piezas         = $intCantPiez;
-            $this->objGuia->Kilos          = $decSumaKilo;
-            $this->objGuia->Alto           = $decSumaAlto;
-            $this->objGuia->Ancho          = $decSumaAnch;
-            $this->objGuia->Largo          = $decSumaLarg;
-            $this->objGuia->Volumen        = $decSumaVolu;
-            $this->objGuia->ValorDeclarado = $decSumaValo;
-            $this->objGuia->PiesCub        = $decSumaPies;
-            $this->objGuia->Save();
-            t('Guia actualizada');
-        } catch (Exception $e) {
-            t('Excepcion: '.$e->getMessage());
-        }
-        //t('Saliendo del procesamiento de las piezas');
     }
 
 
