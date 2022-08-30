@@ -840,9 +840,11 @@ class RegistrarPago extends PagosCorpEditFormBase {
                 t('NDC aplicada');
             }
         }
-        t('Voy a calcular el saldo excedente del Cliente');
-		$decSaldClie = $this->objClieSele->calcularSaldoExcedente();
+        t('Voy a actualizar el saldo de los Clientes');
+		// $decSaldClie = $this->objClieSele->calcularSaldoExcedente();
+        UpdateCustomersBalance();
 		t('Voy a mostrar el saldo del Cliente en la pantalla');
+        $this->objClieSele = MasterCliente::Load($this->objClieSele->CodiClie);
 		$this->mostrarSaldoCliente($this->objClieSele);
 
 		$this->dtgFactPaga->Refresh();

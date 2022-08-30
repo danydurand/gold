@@ -362,6 +362,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                 }
             }
         }
+        UpdateCustomersBalance();
         $this->cargarClientes();
         $strTextMens = 'Facturacion Exitosa. Manifiestos procesados: '.$intCantMani.' | Facturas emitidas: '.$intCantFact;
         $this->success($strTextMens);

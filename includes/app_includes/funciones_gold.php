@@ -5,6 +5,11 @@
 // Descripcion : Aqui se registran funciones de uso general del Sistema GoldCoast
 //------------------------------------------------------------------------------------
 
+function UpdateCustomersBalance() {
+    $objDatabase = Guias::GetDatabase();
+    $objDatabase->NonQuery('call spu_update_customers_balance()');
+}
+
 function UpdateLastCheckpoint() {
     $objDatabase = Guias::GetDatabase();
     $objDatabase->NonQuery('call sp_update_last_checkpoint()');

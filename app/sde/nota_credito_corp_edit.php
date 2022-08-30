@@ -405,7 +405,8 @@ class NotaCreditoCorpEditForm extends NotaCreditoCorpEditFormBase {
             $this->mctNotaCreditoCorp->NotaCreditoCorp->logDeCambios("Creado");
             $this->success('Transacción Exitosa !!!');
 		}
-		$this->mctNotaCreditoCorp->NotaCreditoCorp->ClienteCorp->calcularSaldoExcedente();
+		// $this->mctNotaCreditoCorp->NotaCreditoCorp->ClienteCorp->calcularSaldoExcedente();
+		UpdateCustomersBalance();
 		$this->mostrarSaldoCliente($this->mctNotaCreditoCorp->NotaCreditoCorp->ClienteCorp);
 	}
 

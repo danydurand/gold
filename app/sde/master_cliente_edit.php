@@ -744,7 +744,10 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
     }
 
     protected function obtenerSaldoDelCliente() {
-        $decSaldExce = $this->objMasterCliente->calcularSaldoExcedente();
+        UpdateCustomersBalance();
+        $this->objMasterCliente = MasterCliente::Load($this->objMasterCliente->CodiClie);
+        $decSaldExce = $this->objMasterCliente->SaldoExcedente;
+        // $decSaldExce = $this->objMasterCliente->calcularSaldoExcedente();
         $this->txtSaldExce->Text = str2num($decSaldExce);
         $_SESSION['FlashMessage'] = ['info',"El Saldo del Cliente es: ".$decSaldExce];
         QApplication::Redirect(__SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie);
@@ -2254,10 +2257,6 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/calcularSaldo',
                 TextoIcono('bank','Calcular Saldo')
             );
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCta',
-            //    TextoIcono('eye','Mostrar Edo Cta')
-            //);
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/mostrarEdoCtaII',
                 TextoIcono('eye','Mostrar Edo Cta')
@@ -2266,18 +2265,10 @@ class MasterClienteEditForm extends FormularioBaseKaizen {
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCta',
                 TextoIcono('paper-plane-o','Enviarme el Edo Cta')
             );
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarmeEdoCtaII',
-            //    TextoIcono('paper-plane-o','Enviarme el Edo Cta II')
-            //);
             $arrOpciDrop[] = OpcionDropDown(
                 __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCta',
                 TextoIcono('paper-plane','Enviar Edo Cta al Cliente')
             );
-            //$arrOpciDrop[] = OpcionDropDown(
-            //    __SIST__.'/master_cliente_edit.php/'.$this->objMasterCliente->CodiClie.'/enviarEdoCtaII',
-            //    TextoIcono('paper-plane','Enviar Edo Cta al Cliente II')
-            //);
         }
 
         $this->btnMasxAcci->Text = CrearDropDownButton($strTextBoto, $arrOpciDrop, 'f');
