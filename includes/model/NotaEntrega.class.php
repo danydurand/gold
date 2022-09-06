@@ -295,14 +295,38 @@
             //-----------------------------------------------------------------------------------
             // Se identifican las piezas y se verifica cuantas han sido Recibidas en el Almacen
             //-----------------------------------------------------------------------------------
+            $objDatabase  = NotaEntrega::GetDatabase();
+            try {
+                $strCadeSqlx  = "call spu_qty_received_from_manifest($this->Id, @cant_reci)";
+                $objDbResult  = $objDatabase->NonQuery($strCadeSqlx);
+                $strCadeSqlx  = "SELECT @cant_reci";
+                $objDbResult  = $objDatabase->Query($strCadeSqlx);
+                $mixRegistro  = $objDbResult->FetchArray();
+                $this->Recibidas = $mixRegistro['@cant_reci'];
+                if ($this->Recibidas > 0) {
+                    if ($this->Estatus == 'CREAD@') {
+                        $this->Estatus = 'RECIBID@';
+                        $strMensTran = 'Manifiesto RECIBID@';
+                        $this->logDeCambios($strMensTran);
+                    }
+                }
+                $this->Save();
+            } catch (Exception $e) {
+                t('Error en ContarActualizarRecibidas: ' . $e->getMessage());
+            }
+        }
+
+        /*
+		public function ContarActualizarRecibidas() {
+            //-----------------------------------------------------------------------------------
+            // Se identifican las piezas y se verifica cuantas han sido Recibidas en el Almacen
+            //-----------------------------------------------------------------------------------
             $strCadeSqlx  = "select count(*) as cant_reci  ";
             $strCadeSqlx .= "  from guia_piezas gp inner join pieza_checkpoints pc ";
             $strCadeSqlx .= "    on gp.id = pc.pieza_id ";
             $strCadeSqlx .= " where gp.nota_entrega_id = ".$this->Id;
             $strCadeSqlx .= "   and pc.checkpoint_id = 1 ";
             
-            // $strCadeSqlx  = "call spu_qty_received_from_manifest($this->Id)";
-
             $objDatabase  = NotaEntrega::GetDatabase();
             $objDbResult  = $objDatabase->Query($strCadeSqlx);
             $mixRegistro  = $objDbResult->FetchArray();
@@ -322,6 +346,7 @@
                 t('Error en ContarActualizarRecibidas: '.$e->getMessage());
             }
         }
+        */
 
 		public function ContarActualizarRecibidasOld() {
             //-----------------------------------------------------------------------------------
@@ -411,11 +436,22 @@
             //-----------------------------------------------------------------------------------------
             // Las guias asociadas a la Nota de Entrega, deben quedar asociadas a la Factura indicada
             //-----------------------------------------------------------------------------------------
+            /*
             $arrGuiaNota = $this->GetGuiasArray();
             foreach ($arrGuiaNota as $objGuiaNota) {
                 $objGuiaNota->FacturaId = $intFactIdxx;
                 $objGuiaNota->Save();
             }
+            */
+
+            try {
+                $objDatabase = self::GetDatabase();
+                $strCadeSqlx = "call spu_asociate_awbs_to_bill($this->Id, $intFactIdxx)";
+                $objDatabase->NonQuery($strCadeSqlx);
+            } catch (Exception $e) {
+                t('Error: '.$e->getMessage());
+            }
+            
             //-------------------------------------------------------------------
             // La Nota de Entrega como tal, tambien queda enlazada a la Factura
             //-------------------------------------------------------------------
@@ -431,9 +467,10 @@
 
 		public function desAsociandoNotaConFactura() {
 		    t('Des-Asociando guias de la nde de la factura');
-            //-----------------------------------------------------------------------------------------
-            // Las guias asociadas a la Nota de Entrega, deben quedar asociadas a la Factura indicada
-            //-----------------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------------
+            // Las guias de la Nota de Entrega, deben quedar desasociadas a la Factura indicada
+            //------------------------------------------------------------------------------------
+            /*
             $arrGuiaNota = $this->GetGuiasArray();
             if (isset($arrGuiaNota)) {
                 t('Hay '.count($arrGuiaNota).' guias para procesar');
@@ -446,6 +483,12 @@
                     }
                 }
             }
+            */
+
+            $objDatabase = self::GetDatabase();
+            $strCadeSqlx = "call spu_asociate_awbs_to_bill($this->Id, null)";
+            $objDatabase->NonQuery($strCadeSqlx);
+
             //-------------------------------------------------------------------
             // La Nota de Entrega como tal, tambien queda enlazada a la Factura
             //-------------------------------------------------------------------
@@ -571,7 +614,7 @@
             t('Cant de guias a procesar de esa nde: '.count($arrGuiaNota));
             $decTotaNdex = 0;
             foreach ($arrGuiaNota as $objGuiaNota) {
-                t('Procesando la guia: '.$objGuiaNota->Tracking);
+                // t('Procesando la guia: '.$objGuiaNota->Tracking);
                 $objGuiaNota->calcularTodoLosConceptos($arrConcCalc);
                 //-------------------------------------------
                 // Acmulado de la Nota de Entrega por Zona

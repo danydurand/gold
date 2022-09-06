@@ -203,7 +203,7 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
     }
 
 
-    protected function btnSave_ClickNew() {
+    protected function btnSave_Click() {
         $strNombProc = 'Cambiando estatus del Manifiesto: '.$this->objManiProc->Referencia;
         $this->objProcEjec = CrearProceso($strNombProc);
         //--------------------------------------
@@ -286,7 +286,7 @@ class CambiarEstatusManifiesto extends FormularioBaseKaizen {
     }
 
 
-    protected function btnSave_Click() {
+    protected function btnSave_ClickOld2() {
         $strNombProc = 'Cambiando estatus del Manifiesto: '.$this->objManiProc->Referencia;
         $this->objProcEjec = CrearProceso($strNombProc);
         //-------------------------------------

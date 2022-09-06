@@ -277,8 +277,8 @@ class MatchScanneo extends FormularioBaseKaizen {
         }
     }
     
-    
-    protected function btnSave_Click() {
+
+    protected function btnSave_ClickOld() {
         $blnHayxErro = false;
         $strNombProc = 'Match Scanneo';
         $this->objProcEjec = CrearProceso($strNombProc);
@@ -317,7 +317,7 @@ class MatchScanneo extends FormularioBaseKaizen {
                 //----------------------------------------------------------
                 $arrDatoCkpt = array();
                 $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-                $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+                $arrDatoCkpt['GuiaAnul'] = false; //$objGuiaPiez->Guia->Anulada();
                 $arrDatoCkpt['CodiCkpt'] = $objCkptMani->Id;
                 $arrDatoCkpt['TextCkpt'] = $objCkptMani->Descripcion;
                 $arrDatoCkpt['CodiRuta'] = '';

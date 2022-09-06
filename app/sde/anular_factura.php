@@ -135,6 +135,7 @@ class AnularFactura extends FormularioBaseKaizen {
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
         t('****************');
         t('Anulando Factura');
+        t('Hora Inicio: '.date('H:i:s'));
         $objDataBase = Facturas::GetDatabase();
         $objDataBase->TransactionBegin();
         $strTextNdcx = '';
@@ -220,7 +221,9 @@ class AnularFactura extends FormularioBaseKaizen {
         //----------------------------------------------------
         $this->mostrarCamposDeAnulacion(true);
         // t('Actualizando Saldo del Cliente...');
-        $this->objFactAnul->ClienteCorp->calcularSaldoExcedente();
+        // $this->objFactAnul->ClienteCorp->calcularSaldoExcedente();
+        UpdateCustomersBalance();
+        t('Hora Final: ' . date('H:i:s'));
         $strTextMens = "Factura Anulada Exitosamente | ".$strTextMani." | ".$strTextNdcx;
         $this->success($strTextMens);
         // t('Proceso de anulacion culminado !!!');

@@ -418,37 +418,37 @@ class Guias extends GuiasGen
     }
 
     public function flete_imp(Conceptos $concepto) {
-        t('Rutina: flete_imp');
+        // t('Rutina: flete_imp');
         $monto = 0;
         $texto = '';
         /* @var $objTariClie TarifaAgentes */
         $objTariClie = $this->ClienteCorp->TarifaAgente;
         $decPesoTari = $this->pesoTarifa();
-        t('Peso usado p/calcular la Tarifa: ' . $decPesoTari);
+        // t('Peso usado p/calcular la Tarifa: ' . $decPesoTari);
         if (is_null($this->TarifaAgenteId)) {
             $this->TarifaAgenteId = $objTariClie->Id;
             $this->Save();
-            t('La guia no tenia tarifa, le acabo de asignar: ' . $this->TarifaAgente->Nombre);
+            // t('La guia no tenia tarifa, le acabo de asignar: ' . $this->TarifaAgente->Nombre);
         }
         $intTariIdxx = $this->TarifaAgenteId;
         $strNombTari = $this->TarifaAgente->Nombre;
         $intZonaIdxx = $this->Destino->Zona;
         $strServImpo = $this->__servImportacion();
-        t("Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
+        // t("Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
         $objPrecTari = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx, $intZonaIdxx, $strServImpo);
         if ($objPrecTari) {
             if ($decPesoTari > 0) {
                 $precio = $objPrecTari->Precio;
                 $minimo = $objPrecTari->MinimoFacturable;
-                t('El minimo es: ' . $minimo);
+                // t('El minimo es: ' . $minimo);
                 if (($minimo > 0) && ($decPesoTari < $minimo)) {
-                    t('Guia: ' . $this->Tracking . ' con peso menor al minimo: ' . $decPesoTari);
+                    // t('Guia: ' . $this->Tracking . ' con peso menor al minimo: ' . $decPesoTari);
                     $decPesoTari = $minimo;
-                    t('El peso quedo en: ' . $decPesoTari);
+                    // t('El peso quedo en: ' . $decPesoTari);
                 } else {
                     if ($minimo == 0) {
                         $decPesoTari = 0;
-                        t('Minimo en cero, no se debe facturar');
+                        // t('Minimo en cero, no se debe facturar');
                     }
                 }
                 $monto  = $precio * $decPesoTari;
@@ -464,13 +464,13 @@ class Guias extends GuiasGen
             $monto = 0;
             $texto  = "No hay Tarifa para Zona: $intZonaIdxx, Servicio: $strServImpo, Precio de Tarifa $strNombTari";
         }
-        t($texto);
+        // t($texto);
 
         return array($monto, $texto);
     }
 
     public function serv_recolecta(Conceptos $concepto) {
-        t('Rutina: serv_recolecta');
+        // t('Rutina: serv_recolecta');
         $monto = 0;
         $texto = '';
         /* @var $objTariClie TarifaAgentes */
@@ -485,18 +485,18 @@ class Guias extends GuiasGen
             return array($monto, $texto);
         }
         $decPesoTari = $this->pesoTarifa();
-        t('El peso usado para calcular la Tarifa sera: ' . $decPesoTari);
+        // t('El peso usado para calcular la Tarifa sera: ' . $decPesoTari);
         if (is_null($this->TarifaAgenteId)) {
             $this->TarifaAgenteId = $objTariPubl->Id;
             $this->Save();
-            t('La guia no tenia tarifa, le acabo de asignar: ' . $this->TarifaAgente->Nombre);
+            // t('La guia no tenia tarifa, le acabo de asignar: ' . $this->TarifaAgente->Nombre);
         }
         $intTariIdxx = $this->TarifaAgenteId;
         $strNombTari = $this->TarifaAgente->Nombre;
         $intZonaIdxx = $this->Origen->Zona;
         $strOrigGuia = $this->Origen->Iata;
         $strServImpo = $this->__servExportacion();
-        t("Origen: $strOrigGuia, Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
+        // t("Origen: $strOrigGuia, Zona: $intZonaIdxx, Servicio: $strServImpo, Tarifa: $strNombTari ($intTariIdxx)");
         $objPrecTari = TarifaAgentesZonas::LoadByTarifaIdZonaServicio($intTariIdxx, $intZonaIdxx, $strServImpo);
         if ($objPrecTari) {
             if ($decPesoTari > 0) {
@@ -531,14 +531,14 @@ class Guias extends GuiasGen
 
 
     public function flete_nac(Conceptos $concepto) {
-        t('Rutina: flete_nac');
+        // t('Rutina: flete_nac');
         $monto = 0;
         $texto = '';
         $objTariClie = $this->ClienteCorp->Tarifa;
         $decPesoTari = $this->Kilos;
-        t('El peso usado para calcular la Tarifa sera: ' . $decPesoTari);
+        // t('El peso usado para calcular la Tarifa sera: ' . $decPesoTari);
         if (is_null($this->TarifaId)) {
-            t('La guia no tenia tarifa, se la acabo de asignar');
+            // t('La guia no tenia tarifa, se la acabo de asignar');
             $this->TarifaId = $objTariClie->Id;
             $this->Save();
         }
@@ -547,7 +547,7 @@ class Guias extends GuiasGen
         //-------------------------------------------------------------------------
         $peso_excedente = round($decPesoTari - $objTariClie->PesoInicial, 0);
         if ($peso_excedente > 0) {
-            t('Las libras de la guia exceden el limite de la tarifa en: ' . $peso_excedente . ' lbs');
+            // t('Las libras de la guia exceden el limite de la tarifa en: ' . $peso_excedente . ' lbs');
             //---------------------------------------------------------------------------
             // La cantidad excedente de kilos, se multiplica por el valor de incremento
             //---------------------------------------------------------------------------
@@ -559,15 +559,15 @@ class Guias extends GuiasGen
             $arrTariPeso   = TarifaPeso::QueryArray(QQ::AndCondition($objClauWher), $objClauOrde);
             $intCantRegi   = count($arrTariPeso);
             $ultimo        = $arrTariPeso[$intCantRegi - 1]->MontoTarifa;
-            t('El ultimo monto de la tarifa por rangos es de: ' . $ultimo);
+            // t('El ultimo monto de la tarifa por rangos es de: ' . $ultimo);
             //----------------------------------------------------------
             // Al monto se le suma la tarifa del ultimo rango de kilos
             //----------------------------------------------------------
             $monto += $ultimo;
-            t('Se suman los valores y se obtiene: ' . $monto);
+            // t('Se suman los valores y se obtiene: ' . $monto);
             $texto = "Libras excendentes: $peso_excedente * incremento: $objTariClie->ValorIncremento + tarifa del ultimo rango: $ultimo totaliza: $monto";
         } else {
-            t('El peso esta en el rango de kilos');
+            // t('El peso esta en el rango de kilos');
             //---------------------------------------------------
             // El monto de la tarifa esta definido en la banda
             //---------------------------------------------------
@@ -578,24 +578,24 @@ class Guias extends GuiasGen
             $arrTariPeso   = TarifaPeso::QueryArray(QQ::AndCondition($objClauWher));
             if (count($arrTariPeso) > 0) {
                 $monto = $arrTariPeso[0]->MontoTarifa;
-                t('El monto es: ' . $monto);
+                // t('El monto es: ' . $monto);
                 $texto = "El monto de la tarifa esta en el rango de peso de la tarifa y arroja: $monto";
             } else {
                 $texto = "No se encontro el rango para la TarifaId: " . $this->TarifaId . " y el peso: " . $this->Kilos;
-                t($texto);
+                // t($texto);
             }
         }
         return array($monto, $texto);
     }
 
     public function flete_exp(Conceptos $concepto) {
-        t('Rutina: flete_exp');
+        // t('Rutina: flete_exp');
         $monto = 0;
         $texto = '';
         /* @var $objClieNaci MasterCliente */
         $objClieNaci = unserialize($_SESSION['ClieNaci']);
         if ($this->ClienteCorpId == $objClieNaci->CodiClie) {
-            t('La guia no pertenece a un Aliado');
+            // t('La guia no pertenece a un Aliado');
             //--------------------------------------------------------
             // No es una Aliado, se utiliza la Tarifa Publica de EXP
             //--------------------------------------------------------
@@ -605,26 +605,26 @@ class Guias extends GuiasGen
                 $this->DestinoId
             );
         } else {
-            t('La guia pertenece a un Aliado');
+            // t('La guia pertenece a un Aliado');
             //---------------------------------------------------------------------------------
             // Se trata de un Aliado, se utiliza la Tarifa de EXP vigente, asociada al Aliado
             //---------------------------------------------------------------------------------
-            t('Aliado Id: ' . $this->ClienteCorpId . ' Producto Id: ' . $this->ProductoId);
+            // t('Aliado Id: ' . $this->ClienteCorpId . ' Producto Id: ' . $this->ProductoId);
             $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ClienteId, $this->ClienteCorpId);
             $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ProductoId, $this->ProductoId);
             $arrTariClie   = TarifaCliente::QueryArray(QQ::AndCondition($objClauWher));
             if (isset($arrTariClie)) {
-                t('El vector de TarifaCliente tiene: ' . count($arrTariClie) . ' elementos');
+                // t('El vector de TarifaCliente tiene: ' . count($arrTariClie) . ' elementos');
                 $objTariProd = $arrTariClie[0];
                 $arrTariProd = TarifaExp::TarifaVigenteAliado($this->ProductoId, $this->ClienteCorpId, $this->Fecha->__toString('YYYY-MM-DD'), $this->DestinoId);
             } else {
-                t('No se encontro la tarifa del Cliente-Aliado, se aplica tarifa publica');
+                // t('No se encontro la tarifa del Cliente-Aliado, se aplica tarifa publica');
                 $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId, $this->Fecha->__toString('YYYY-MM-DD'), $this->DestinoId);
             }
         }
         $decMontTari = (float)$arrTariProd['monto'];
         $decPesoMini = (float)$arrTariProd['minimo'];
-        t("Monto de la Tarifa: $decMontTari, Peso Minimo: $decPesoMini");
+        // t("Monto de la Tarifa: $decMontTari, Peso Minimo: $decPesoMini");
         switch ($concepto->ActuaSobre) {
             case 'kilos':
                 $decPesoTari = $this->Kilos;
@@ -645,32 +645,32 @@ class Guias extends GuiasGen
                 $decPesoTari = $this->Kilos;
         }
         $decPesoTari = $decPesoTari >= $decPesoMini ? $decPesoTari : $decPesoMini;
-        t('El peso usado para calcular la Tarifa sera: ' . $decPesoTari);
+        // t('El peso usado para calcular la Tarifa sera: ' . $decPesoTari);
         $monto = $decPesoTari * $decMontTari;
-        t('Monto de la Tarifa: ' . $monto);
+        // t('Monto de la Tarifa: ' . $monto);
         return array($monto, $texto);
     }
 
 
     public function seguro_exp(Conceptos $concepto) {
-        t('Rutina: seguro_exp');
+        // t('Rutina: seguro_exp');
         $monto = 0;
         $texto = '';
         $decTariSgro = 5;
         $decValoDecl = $this->ValorDeclarado;
-        t('El monto usado para calcular el seguro sera: ' . $decValoDecl);
+        // t('El monto usado para calcular el seguro sera: ' . $decValoDecl);
         $monto = $decValoDecl * $decTariSgro / 100 * $this->Tasa;
-        t('Monto del Seguro: ' . $monto);
+        // t('Monto del Seguro: ' . $monto);
         return array($monto, $texto);
     }
 
     public function calcularTodoLosConceptos($arrConcCalc) {
-        t('');
-        t('================================');
-        t('Rutina: calcularTodoLosConceptos');
-        t('1ero se eliminan los conceptos existentes asociados a la guia');
+        // t('');
+        // t('================================');
+        // t('Rutina: calcularTodoLosConceptos');
+        // t('1ero se eliminan los conceptos existentes asociados a la guia');
         $this->borrarConceptos();
-        t('Ahora se calculan los conceptos de la guia: ' . $this->Id);
+        // t('Ahora se calculan los conceptos de la guia: ' . $this->Id);
         $total = 0;
         foreach ($arrConcCalc as $objConcFact) {
             /* @var $objConcFact Conceptos */
@@ -688,7 +688,7 @@ class Guias extends GuiasGen
                 $guia_concepto->MostrarComo = $objConcFact->MostrarComo;
                 $guia_concepto->Explicacion = $explicacion;
                 $guia_concepto->Save();
-                t('Concepto grabado en la DB');
+                // t('Concepto grabado en la DB');
             } catch (Exception $e) {
                 t('Error: ' . $e->getMessage());
             }
@@ -706,7 +706,7 @@ class Guias extends GuiasGen
         //----------------------------------------------------
         $this->Total = (float)$total;
         $this->Save();
-        t('El total de la guia quedo con: ' . $this->Total);
+        // t('El total de la guia quedo con: ' . $this->Total);
     }
 
     /**
@@ -716,7 +716,7 @@ class Guias extends GuiasGen
         $this->DeleteAllGuiaConceptosesAsGuia();
         $this->Total = 0;
         $this->Save();
-        t('Los conceptos de la guia han sido borrados');
+        // t('Los conceptos de la guia han sido borrados');
     }
 
     public function borrarPiezas() {
@@ -824,38 +824,38 @@ class Guias extends GuiasGen
         $monto = 0;
         $explicacion = '';
 
-        t('Dentro de la Guia, calculando el Concepto: ' . $concepto->Nombre);
-        t('Rutina: calcularConcepto');
+        // t('Dentro de la Guia, calculando el Concepto: ' . $concepto->Nombre);
+        // t('Rutina: calcularConcepto');
         $actua_sobre = $concepto->ActuaSobre;
         $concepto_id = $concepto->Id;
-        t('El Id del Concepto es: ' . $concepto_id);
+        // t('El Id del Concepto es: ' . $concepto_id);
         //------------------------------------------------------------------------------------------
         // Si el concepto tiene una condicion que prela su calculo, aqui se evalua dicha condicion
         //------------------------------------------------------------------------------------------
         $strMetoCond = trim($concepto->Condicion);
         if (strlen($strMetoCond) > 0) {
-            t('Para calcular el concepto, se debe cumplir la condicion: ' . $strMetoCond);
+            // t('Para calcular el concepto, se debe cumplir la condicion: ' . $strMetoCond);
             if (!$this->$strMetoCond()) {
-                t('La condicion no se satisface');
+                // t('La condicion no se satisface');
                 $explicacion = 'El Concepto, no satisface la condicion: ' . $strMetoCond;
                 return array($monto, $explicacion);
             } else {
-                t('La condicion si se satisface');
+                // t('La condicion si se satisface');
             }
         }
         //------------------------------------------------------------------------
         // El "valor" del Concepto determina la forma en que se calcula el monto
         //------------------------------------------------------------------------
         if (is_numeric($concepto->Valor)) {
-            t('Se trata de un valor numerico');
+            // t('Se trata de un valor numerico');
             $valor_base = $this->buscarMontoDelCampoConcepto($concepto);
-            t('El valor del ' . $concepto->Tipo . ' es: ' . $valor_base);
+            // t('El valor del ' . $concepto->Tipo . ' es: ' . $valor_base);
             list($monto, $explicacion) = $this->aplicaComoCantidadPorcentaje($concepto, $valor_base);
         }
         if ($concepto->Valor == 'rango') {
-            t('Se trata de un rango');
+            // t('Se trata de un rango');
             $valor_base = $this->buscarMontoDelCampoConcepto($concepto);
-            t('El valor del ' . $concepto->Tipo . ' es: ' . $valor_base);
+            // t('El valor del ' . $concepto->Tipo . ' es: ' . $valor_base);
             //----------------------------------------------------------------------------
             // El monto del concepto se ubica en la tabla concepto_rangos y la búsqueda
             // debe hacerse usando el campo actua_sobre
@@ -878,31 +878,31 @@ class Guias extends GuiasGen
                 $monto = 0;
                 $explicacion = "No hay rangos definidos para: " . $concepto->Nombre;
             }
-            t($explicacion);
+            // t($explicacion);
         }
         if ($concepto->Valor == 'metodo') {
-            t('Se trata de un metodo');
+            // t('Se trata de un metodo');
             $metodo = trim($concepto->Metodo);
             if (!empty($metodo)) {
                 try {
-                    t("Calculando metodo $metodo...");
+                    // t("Calculando metodo $metodo...");
                     list($monto, $explicacion) = $this->$metodo($concepto);
                 } catch (Exception $e) {
-                    t("Exception:" . $e->getMessage());
-                    t("El metodo $metodo no existe en la Guia");
+                    // t("Exception:" . $e->getMessage());
+                    // t("El metodo $metodo no existe en la Guia");
                     $explicacion = "Metodo $metodo... Indefinido";
                 }
             } else {
-                t("El metodo $metodo no ha sido declarado en el concepto");
+                // t("El metodo $metodo no ha sido declarado en el concepto");
                 $monto = 0;
                 $explicacion = "Metodo $metodo... no declarado en el concepto";
             }
         }
         if ($concepto->AplicarTasa) {
-            t('Se debe aplicar la tasa: ' . $this->Tasa . ' de cambio para llevar a Bs');
+            // t('Se debe aplicar la tasa: ' . $this->Tasa . ' de cambio para llevar a Bs');
             $monto *= $this->Tasa;
         }
-        t('Saliendo de la Guia, despues de haber calculado el concepto...');
+        // t('Saliendo de la Guia, despues de haber calculado el concepto...');
         return array($monto, $explicacion);
     }
 

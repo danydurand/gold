@@ -214,10 +214,11 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-        t('*********************************');
-        t('Comenzando la Emision de Facturas');
         /* @var $objManiClie NotaEntrega */
         /* @var $objClieSele MasterCliente */
+        t('*********************************');
+        t('Comenzando la Emision de Facturas');
+        t('Hora Inicio: '.date('H:i:s'));
         //----------------------
         // Clientes a Facturar
         //----------------------
@@ -235,7 +236,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         $arrConcFact   = Conceptos::QueryArray(QQ::AndCondition($objClauWher));
         t('Cantidad de Conceptos a facturar: '.count($arrConcIdxx));
         //----------------------------------------------------------------------------------------
-        // El vector arrNotaEntr contiene los Manifiestos de los Clientes, aptos para facturar
+        // El vector $arrNotaEntr contiene los Manifiestos de los Clientes, aptos para facturar
         // que adicionalmente coinciden con el rango de fechas especificado por el Usuario
         //----------------------------------------------------------------------------------------
         t('Cantidad de Manifiestos aptos para facturar es: '.count($this->arrNotaEntr));
@@ -259,6 +260,8 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
         t('Emitiendo Facturas...');
         foreach ($arrClieSele as $objClieSele) {
             t('Creando factura para el Cliente: '.$objClieSele->NombClie);
+            $objDatabase = Facturas::GetDatabase();
+            $objDatabase->TransactionBegin();
             foreach ($arrServImpo as $strServImpo) {
                 $intManiServ = NotaEntrega::AptasParaFacturarPorClienteYServicio($objClieSele->CodiClie,$strServImpo,$arrManiIdxx);
                 t('Manifiestos aptos para facturar del Servicio '.$strServImpo.': '.$intManiServ);
@@ -284,7 +287,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                         $objFactClie->CreatedAt        = new QDateTime(QDateTime::Now());
                         $objFactClie->CreatedBy        = $this->objUsuario->CodiUsua;
                         $objFactClie->Save();
-                        t('Se creo la Factura Id: '.$objFactClie->Id);
+                        t('Se creo la Factura Id: '.$objFactClie->Id.' Referencia: '.$objFactClie->Referencia);
                     } catch (Exception $e) {
                         $blnTodoOkey = false;
                         $strTextErro = 'Error creando la factura: '.$e->getMessage();
@@ -296,13 +299,12 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                         // Se seleccionan y procesan los manifiestos del Cliente
                         //---------------------------------------------------------
                         t('Seleccionando los Manifiestos del Cliente');
-                        $objDatabase = Facturas::GetDatabase();
                         $arrManiClie = NotaEntrega::AptasParaFacturarPorClienteYServicio($objClieSele->CodiClie,$strServImpo,$arrManiIdxx,'array');
                         $decSumaNota = 0;
                         $intCantMani = 0;
                         foreach ($arrManiClie as $objManiClie) {
-                            $objDatabase->TransactionBegin();
 
+                            t('Voy a calcular todos los conceptos del Manifiesto: '.$objManiClie->Referencia);
                             $objManiClie->calcularTodoLosConceptos($arrConcFact);
                             $intCantMani ++;
 
@@ -311,6 +313,7 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                             $objNotaFact->FacturaId     = $objFactClie->Id;
                             $objNotaFact->NotaEntregaId = $objManiClie->Id;
                             $objNotaFact->Total         = $objManiClie->Total;
+                            $objNotaFact->CreatedAt     = new QDateTime(QDateTime::Now());
                             $objNotaFact->Save();
                             t('Manifiesto asociado');
                             $decSumaNota += $objNotaFact->Total;
@@ -346,7 +349,6 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                                 }
                             }
                             t("Se procesaron los conceptos del Manifiesto\n");
-                            $objDatabase->TransactionCommit();
                         }
                         //-----------------------------------------------------------------------------------------
                         // Se actualiza el total de la factura con la sumatoria de los totales de sus manifiestos
@@ -361,8 +363,10 @@ class EmitirFacturaCorp extends FormularioBaseKaizen {
                     }
                 }
             }
+            $objDatabase->TransactionCommit();
         }
         UpdateCustomersBalance();
+        t('Hora Final: ' . date('H:i:s'));
         $this->cargarClientes();
         $strTextMens = 'Facturacion Exitosa. Manifiestos procesados: '.$intCantMani.' | Facturas emitidas: '.$intCantFact;
         $this->success($strTextMens);

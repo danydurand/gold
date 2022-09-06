@@ -574,7 +574,6 @@ class FacturasEditForm extends FacturasEditFormBase {
         $arrLogxCamb['strDescCamb'] = 'Impresa';
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/facturas_edit.php/'.$this->mctFacturas->Facturas->Id;
         LogDeCambios($arrLogxCamb);
-
         QApplication::Redirect(__SIST__.'/factura_html2pdf.php?intIdxxFact=' . $this->mctFacturas->Facturas->Id);
     }
 

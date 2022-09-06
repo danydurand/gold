@@ -382,8 +382,9 @@ class PagosCorpEditForm extends PagosCorpEditFormBase {
         //-----------------------------------------
         // Se actaliza ahora el saldo del Cliente
         //-----------------------------------------
-        $objClieFact = MasterCliente::Load($this->lstClienteCorp->SelectedValue);
-        $objClieFact->calcularSaldoExcedente();
+        UpdateCustomersBalance();
+        // $objClieFact = MasterCliente::Load($this->lstClienteCorp->SelectedValue);
+        // $objClieFact->calcularSaldoExcedente();
         $this->RedirectToListPage();
     }
 }
