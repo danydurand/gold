@@ -739,6 +739,12 @@
 			return new QQNodeMasterCliente('master_cliente', null, null);
 		}
 		/**
+		 * @return QQNodeMatchPieces
+		 */
+		static public function MatchPieces() {
+			return new QQNodeMatchPieces('match_pieces', null, null);
+		}
+		/**
 		 * @return QQNodeMensajeYamaguchi
 		 */
 		static public function MensajeYamaguchi() {

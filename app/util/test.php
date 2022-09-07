@@ -5,25 +5,43 @@ use PHPMailer\PHPMailer\PHPMailer;
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
 
-// $objGuia = Guias::Load(187991);
 
-$objParaExis = Parametros::BP('PiecBack', 187991, 'TODO');
-if ($objParaExis instanceof Parametros) {
-    echo "There are: " . $objParaExis->Valor1 . " pieces in the backup record<br>";
-    $arrPiecBack = explode('*', $objParaExis->Texto1);
-    echo "The array contains: " . count($arrPiecBack) . " elements<br>";
-    foreach ($arrPiecBack as $strPiecJson) {
-        try {
-            $objRecoPiec = new GuiaPiezas();
-            $objPiecRcry = json_decode($strPiecJson);
-            
-            $objPiecRcry->Save();
-            echo "Recovered piece<br>";
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage()."<br>";
-        }
-    }
+//----------------------------------------------------------------------------------
+// Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
+//----------------------------------------------------------------------------------
+
+
+$objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
+$objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
+$arrManiSist = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+foreach ($arrManiSist as $objManiSist) {
+   $objManiSist->ContarActualizarRecibidas();
+   echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
+   echo "<br>";
 }
+
+
+//---------------------------------------
+// Testing the pieces recovery process 
+//---------------------------------------
+
+// $objParaExis = Parametros::BP('PiecBack', 187991, 'TODO');
+// if ($objParaExis instanceof Parametros) {
+//     echo "There are: " . $objParaExis->Valor1 . " pieces in the backup record<br>";
+//     $arrPiecBack = explode('*', $objParaExis->Texto1);
+//     echo "The array contains: " . count($arrPiecBack) . " elements<br>";
+//     foreach ($arrPiecBack as $strPiecJson) {
+//         try {
+//             $objRecoPiec = new GuiaPiezas();
+//             $objPiecRcry = json_decode($strPiecJson);
+            
+//             $objPiecRcry->Save();
+//             echo "Recovered piece<br>";
+//         } catch (Exception $e) {
+//             echo 'Error: ' . $e->getMessage()."<br>";
+//         }
+//     }
+// }
 
 // $objGuia->createPiecesBackup();
 // echo $objSoapObje = $objGuia->GetSoapComplexTypeXml();
@@ -68,27 +86,6 @@ foreach ($arrMailProc as $strDireMail) {
 //    $errorMessage = error_get_last()['message'];
 //    echo "Error: $errorMessage";
 //}
-
-// Obteniendo el color promedio
-//function getColorAverage($color1, $color2) {
-//
-//    $r1 = substr($color1,0,2);
-//    $g1 = substr($color1,2,2);
-//    $b1 = substr($color1,4,2);
-//
-//    $r2 = substr($color2,0,2);
-//    $g2 = substr($color2,2,2);
-//    $b2 = substr($color2,4,2);
-//
-//    $ar = (int)(($r1+$r2)/2);
-//    $ag = (int)(($g1+$g2)/2);
-//    $ab = (int)(($b1+$b2)/2);
-//
-//    return $ar.$ag.$ab;
-//}
-//
-//getColorAverage("112233", "123456");
-
 
 //$_SESSION['User'] = serialize(Usuario::LoadByLogiUsua('ddurand'));
 

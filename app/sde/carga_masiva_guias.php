@@ -100,6 +100,16 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 }
             }
         }
+        if (strlen(QApplication::PathInfo(1)) > 0) {
+            $strAcciAdic = QApplication::PathInfo(1);
+            if ($strAcciAdic == 'actualizarRecibidas') {
+                if ($this->objNotaEntr instanceof NotaEntrega) {
+                    $this->objNotaEntr->ContarActualizarRecibidas();
+                    QApplication::Redirect(__SIST__.'/carga_masiva_guias.php/'.$this->objNotaEntr->Id);
+                }
+            }
+        }
+
         if ($this->blnEditMode) {
             $this->lblTituForm->Text = 'Consulta de Manifiesto';
         } else {
@@ -234,6 +244,12 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $arrOpciDrop[] = OpcionDropDown(
                     __SIST__.'/transferir_historico.php/'.$this->objNotaEntr->Id,
                     TextoIcono('folder-o','Trans. a Histórico')
+                );
+            }
+            if ($this->objUsuario->LogiUsua == 'ddurand') {
+                $arrOpciDrop[] = OpcionDropDown(
+                    __SIST__.'/carga_masiva_guias.php/'.$this->objNotaEntr->Id.'/actualizarRecibidas',
+                    TextoIcono('recycle','Actualizar Recibidas')
                 );
             }
         }

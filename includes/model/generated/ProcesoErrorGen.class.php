@@ -28,6 +28,8 @@
 	 * @property-read Cola[] $_ColaArray the value for the private _objColaArray (Read-Only) if set due to an ExpandAsArray on the cola.proceso_error_id reverse relationship
 	 * @property-read GcoTemp $_GcoTemp the value for the private _objGcoTemp (Read-Only) if set due to an expansion on the gco_temp.proceso_error_id reverse relationship
 	 * @property-read GcoTemp[] $_GcoTempArray the value for the private _objGcoTempArray (Read-Only) if set due to an ExpandAsArray on the gco_temp.proceso_error_id reverse relationship
+	 * @property-read MatchPieces $_MatchPieces the value for the private _objMatchPieces (Read-Only) if set due to an expansion on the match_pieces.proceso_error_id reverse relationship
+	 * @property-read MatchPieces[] $_MatchPiecesArray the value for the private _objMatchPiecesArray (Read-Only) if set due to an ExpandAsArray on the match_pieces.proceso_error_id reverse relationship
 	 * @property-read PiezaRecibida $_PiezaRecibida the value for the private _objPiezaRecibida (Read-Only) if set due to an expansion on the pieza_recibida.proceso_error_id reverse relationship
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaArray the value for the private _objPiezaRecibidaArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.proceso_error_id reverse relationship
 	 * @property-read PiezasTemp $_PiezasTemp the value for the private _objPiezasTemp (Read-Only) if set due to an expansion on the piezas_temp.proceso_error_id reverse relationship
@@ -145,6 +147,22 @@
 		 * @var GcoTemp[] _objGcoTempArray;
 		 */
 		private $_objGcoTempArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single MatchPieces object
+		 * (of type MatchPieces), if this ProcesoError object was restored with
+		 * an expansion on the match_pieces association table.
+		 * @var MatchPieces _objMatchPieces;
+		 */
+		private $_objMatchPieces;
+
+		/**
+		 * Private member variable that stores a reference to an array of MatchPieces objects
+		 * (of type MatchPieces[]), if this ProcesoError object was restored with
+		 * an ExpandAsArray on the match_pieces association table.
+		 * @var MatchPieces[] _objMatchPiecesArray;
+		 */
+		private $_objMatchPiecesArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single PiezaRecibida object
@@ -781,6 +799,21 @@
 				}
 			}
 
+			// Check for MatchPieces Virtual Binding
+			$strAlias = $strAliasPrefix . 'matchpieces__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['matchpieces']) ? null : $objExpansionAliasArray['matchpieces']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objMatchPiecesArray)
+				$objToReturn->_objMatchPiecesArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objMatchPiecesArray[] = MatchPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'matchpieces__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objMatchPieces)) {
+					$objToReturn->_objMatchPieces = MatchPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'matchpieces__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for PiezaRecibida Virtual Binding
 			$strAlias = $strAliasPrefix . 'piezarecibida__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -1212,6 +1245,22 @@
 					 */
 					return $this->_objGcoTempArray;
 
+				case '_MatchPieces':
+					/**
+					 * Gets the value for the private _objMatchPieces (Read-Only)
+					 * if set due to an expansion on the match_pieces.proceso_error_id reverse relationship
+					 * @return MatchPieces
+					 */
+					return $this->_objMatchPieces;
+
+				case '_MatchPiecesArray':
+					/**
+					 * Gets the value for the private _objMatchPiecesArray (Read-Only)
+					 * if set due to an ExpandAsArray on the match_pieces.proceso_error_id reverse relationship
+					 * @return MatchPieces[]
+					 */
+					return $this->_objMatchPiecesArray;
+
 				case '_PiezaRecibida':
 					/**
 					 * Gets the value for the private _objPiezaRecibida (Read-Only)
@@ -1414,6 +1463,9 @@
 			}
 			if ($this->CountGcoTemps()) {
 				$arrTablRela[] = 'gco_temp';
+			}
+			if ($this->CountMatchPieceses()) {
+				$arrTablRela[] = 'match_pieces';
 			}
 			if ($this->CountPiezaRecibidas()) {
 				$arrTablRela[] = 'pieza_recibida';
@@ -1723,6 +1775,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`gco_temp`
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for MatchPieces
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated MatchPieceses as an array of MatchPieces objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return MatchPieces[]
+		*/
+		public function GetMatchPiecesArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return MatchPieces::LoadArrayByProcesoErrorId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated MatchPieceses
+		 * @return int
+		*/
+		public function CountMatchPieceses() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return MatchPieces::CountByProcesoErrorId($this->intId);
+		}
+
+		/**
+		 * Associates a MatchPieces
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function AssociateMatchPieces(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMatchPieces on this unsaved ProcesoError.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMatchPieces on this ProcesoError with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a MatchPieces
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function UnassociateMatchPieces(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPieces on this unsaved ProcesoError.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPieces on this ProcesoError with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all MatchPieceses
+		 * @return void
+		*/
+		public function UnassociateAllMatchPieceses() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPieces on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated MatchPieces
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function DeleteAssociatedMatchPieces(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPieces on this unsaved ProcesoError.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPieces on this ProcesoError with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`match_pieces`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated MatchPieceses
+		 * @return void
+		*/
+		public function DeleteAllMatchPieceses() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPieces on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`match_pieces`
 				WHERE
 					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -2211,6 +2412,7 @@
      *
      * @property-read QQReverseReferenceNodeCola $Cola
      * @property-read QQReverseReferenceNodeGcoTemp $GcoTemp
+     * @property-read QQReverseReferenceNodeMatchPieces $MatchPieces
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
 
@@ -2244,6 +2446,8 @@
 					return new QQReverseReferenceNodeCola($this, 'cola', 'reverse_reference', 'proceso_error_id', 'Cola');
 				case 'GcoTemp':
 					return new QQReverseReferenceNodeGcoTemp($this, 'gcotemp', 'reverse_reference', 'proceso_error_id', 'GcoTemp');
+				case 'MatchPieces':
+					return new QQReverseReferenceNodeMatchPieces($this, 'matchpieces', 'reverse_reference', 'proceso_error_id', 'MatchPieces');
 				case 'PiezaRecibida':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':
@@ -2276,6 +2480,7 @@
      *
      * @property-read QQReverseReferenceNodeCola $Cola
      * @property-read QQReverseReferenceNodeGcoTemp $GcoTemp
+     * @property-read QQReverseReferenceNodeMatchPieces $MatchPieces
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
 
@@ -2309,6 +2514,8 @@
 					return new QQReverseReferenceNodeCola($this, 'cola', 'reverse_reference', 'proceso_error_id', 'Cola');
 				case 'GcoTemp':
 					return new QQReverseReferenceNodeGcoTemp($this, 'gcotemp', 'reverse_reference', 'proceso_error_id', 'GcoTemp');
+				case 'MatchPieces':
+					return new QQReverseReferenceNodeMatchPieces($this, 'matchpieces', 'reverse_reference', 'proceso_error_id', 'MatchPieces');
 				case 'PiezaRecibida':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':

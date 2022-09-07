@@ -5,6 +5,16 @@
 // Descripcion : Aqui se registran funciones de uso general del Sistema GoldCoast
 //------------------------------------------------------------------------------------
 
+
+function formatPeriod($endtime, $starttime) {
+    $duration = $endtime - $starttime;
+    $hours = (int) ($duration / 60 / 60);
+    $minutes = (int) ($duration / 60) - $hours * 60;
+    $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
+    return ($hours == 0 ? "00" : $hours) . ":" . ($minutes == 0 ? "00" : ($minutes < 10 ? "0" . $minutes : $minutes)) . ":" . ($seconds == 0 ? "00" : ($seconds < 10 ? "0" . $seconds : $seconds));
+}
+
+
 function UpdateCustomersBalance() {
     $objDatabase = Guias::GetDatabase();
     $objDatabase->NonQuery('call spu_update_customers_balance()');
@@ -102,27 +112,27 @@ function transformar($strNumeGuia) {
             $intPosiDosp = strpos($strNumeGuia,':');
             $strLastPart = substr($strNumeGuia,$intPosiDosp+1);
             if ($strLastPart == '114') {
-                t('Caso Stephy ATC');
+                // t('Caso Stephy ATC');
                 return caso_stephy_atc($strNumeGuia);
             } else {
-                t('Caso Stephy GOLD');
+                // t('Caso Stephy GOLD');
                 return caso_stephy($strNumeGuia);
             }
         }
         if ( ($intCantGuio == 2) && ($intCantDosp == 0) ) {
-            t('Caso Dos Guiones');
+            // t('Caso Dos Guiones');
             return caso_citrino($strNumeGuia);
         }
         if ($intCantGuio == 0) {
-            t('Caso Sin Pieza');
+            // t('Caso Sin Pieza');
             return caso_sin_pieza($strNumeGuia);
         }
         if ( ($intCantGuio == 1) && ($intCantDiag == 1) ) {
-            t('Caso con un guión y una diagonal');
+            // t('Caso con un guión y una diagonal');
             return caso_con_guion_y_diagonal($strNumeGuia);
         }
         if ($intCantGuio == 1) {
-            t('Caso con un guión');
+            // t('Caso con un guión');
             return caso_con_guion($strNumeGuia);
         }
         return $strNumeGuia;

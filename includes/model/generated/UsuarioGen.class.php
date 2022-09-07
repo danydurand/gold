@@ -91,6 +91,8 @@
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsCodiUsuaArray the value for the private _objHistoriaClienteAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.codi_usua reverse relationship
 	 * @property-read ManifiestoExpCkpt $_ManifiestoExpCkptAsCreatedBy the value for the private _objManifiestoExpCkptAsCreatedBy (Read-Only) if set due to an expansion on the manifiesto_exp_ckpt.created_by reverse relationship
 	 * @property-read ManifiestoExpCkpt[] $_ManifiestoExpCkptAsCreatedByArray the value for the private _objManifiestoExpCkptAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_ckpt.created_by reverse relationship
+	 * @property-read MatchPieces $_MatchPiecesAsCreatedBy the value for the private _objMatchPiecesAsCreatedBy (Read-Only) if set due to an expansion on the match_pieces.created_by reverse relationship
+	 * @property-read MatchPieces[] $_MatchPiecesAsCreatedByArray the value for the private _objMatchPiecesAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the match_pieces.created_by reverse relationship
 	 * @property-read MotivoEliminacion $_MotivoEliminacionAsUser the value for the private _objMotivoEliminacionAsUser (Read-Only) if set due to an expansion on the motivo_eliminacion.user_id reverse relationship
 	 * @property-read MotivoEliminacion[] $_MotivoEliminacionAsUserArray the value for the private _objMotivoEliminacionAsUserArray (Read-Only) if set due to an ExpandAsArray on the motivo_eliminacion.user_id reverse relationship
 	 * @property-read NotaCredito $_NotaCreditoAsCreadaPor the value for the private _objNotaCreditoAsCreadaPor (Read-Only) if set due to an expansion on the nota_credito.creada_por reverse relationship
@@ -727,6 +729,22 @@
 		 * @var ManifiestoExpCkpt[] _objManifiestoExpCkptAsCreatedByArray;
 		 */
 		private $_objManifiestoExpCkptAsCreatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single MatchPiecesAsCreatedBy object
+		 * (of type MatchPieces), if this Usuario object was restored with
+		 * an expansion on the match_pieces association table.
+		 * @var MatchPieces _objMatchPiecesAsCreatedBy;
+		 */
+		private $_objMatchPiecesAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of MatchPiecesAsCreatedBy objects
+		 * (of type MatchPieces[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the match_pieces association table.
+		 * @var MatchPieces[] _objMatchPiecesAsCreatedByArray;
+		 */
+		private $_objMatchPiecesAsCreatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single MotivoEliminacionAsUser object
@@ -2200,6 +2218,21 @@
 					$objToReturn->_objManifiestoExpCkptAsCreatedByArray[] = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckptascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objManifiestoExpCkptAsCreatedBy)) {
 					$objToReturn->_objManifiestoExpCkptAsCreatedBy = ManifiestoExpCkpt::InstantiateDbRow($objDbRow, $strAliasPrefix . 'manifiestoexpckptascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for MatchPiecesAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'matchpiecesascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['matchpiecesascreatedby']) ? null : $objExpansionAliasArray['matchpiecesascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objMatchPiecesAsCreatedByArray)
+				$objToReturn->_objMatchPiecesAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objMatchPiecesAsCreatedByArray[] = MatchPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'matchpiecesascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objMatchPiecesAsCreatedBy)) {
+					$objToReturn->_objMatchPiecesAsCreatedBy = MatchPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'matchpiecesascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3745,6 +3778,22 @@
 					 */
 					return $this->_objManifiestoExpCkptAsCreatedByArray;
 
+				case '_MatchPiecesAsCreatedBy':
+					/**
+					 * Gets the value for the private _objMatchPiecesAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the match_pieces.created_by reverse relationship
+					 * @return MatchPieces
+					 */
+					return $this->_objMatchPiecesAsCreatedBy;
+
+				case '_MatchPiecesAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objMatchPiecesAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the match_pieces.created_by reverse relationship
+					 * @return MatchPieces[]
+					 */
+					return $this->_objMatchPiecesAsCreatedByArray;
+
 				case '_MotivoEliminacionAsUser':
 					/**
 					 * Gets the value for the private _objMotivoEliminacionAsUser (Read-Only)
@@ -4613,6 +4662,9 @@
 			}
 			if ($this->CountManifiestoExpCkptsAsCreatedBy()) {
 				$arrTablRela[] = 'manifiesto_exp_ckpt';
+			}
+			if ($this->CountMatchPiecesesAsCreatedBy()) {
+				$arrTablRela[] = 'match_pieces';
 			}
 			if ($this->CountMotivoEliminacionsAsUser()) {
 				$arrTablRela[] = 'motivo_eliminacion';
@@ -8728,6 +8780,155 @@
 		}
 
 
+		// Related Objects' Methods for MatchPiecesAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated MatchPiecesesAsCreatedBy as an array of MatchPieces objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return MatchPieces[]
+		*/
+		public function GetMatchPiecesAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return MatchPieces::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated MatchPiecesesAsCreatedBy
+		 * @return int
+		*/
+		public function CountMatchPiecesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return MatchPieces::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a MatchPiecesAsCreatedBy
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function AssociateMatchPiecesAsCreatedBy(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMatchPiecesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMatchPiecesAsCreatedBy on this Usuario with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a MatchPiecesAsCreatedBy
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function UnassociateMatchPiecesAsCreatedBy(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsCreatedBy on this Usuario with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all MatchPiecesesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllMatchPiecesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated MatchPiecesAsCreatedBy
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function DeleteAssociatedMatchPiecesAsCreatedBy(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsCreatedBy on this Usuario with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`match_pieces`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated MatchPiecesesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllMatchPiecesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`match_pieces`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for MotivoEliminacionAsUser
 		//-------------------------------------------------------------------
 
@@ -12443,6 +12644,7 @@
      * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsUpdatedBy
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
      * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
+     * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsCreatedBy
      * @property-read QQReverseReferenceNodeMotivoEliminacion $MotivoEliminacionAsUser
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsCreadaPor
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntrega
@@ -12573,6 +12775,8 @@
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
 				case 'ManifiestoExpCkptAsCreatedBy':
 					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckptascreatedby', 'reverse_reference', 'created_by', 'ManifiestoExpCkptAsCreatedBy');
+				case 'MatchPiecesAsCreatedBy':
+					return new QQReverseReferenceNodeMatchPieces($this, 'matchpiecesascreatedby', 'reverse_reference', 'created_by', 'MatchPiecesAsCreatedBy');
 				case 'MotivoEliminacionAsUser':
 					return new QQReverseReferenceNodeMotivoEliminacion($this, 'motivoeliminacionasuser', 'reverse_reference', 'user_id', 'MotivoEliminacionAsUser');
 				case 'NotaCreditoAsCreadaPor':
@@ -12685,6 +12889,7 @@
      * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsUpdatedBy
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
      * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
+     * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsCreatedBy
      * @property-read QQReverseReferenceNodeMotivoEliminacion $MotivoEliminacionAsUser
      * @property-read QQReverseReferenceNodeNotaCredito $NotaCreditoAsCreadaPor
      * @property-read QQReverseReferenceNodeNotaEntrega $NotaEntrega
@@ -12815,6 +13020,8 @@
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
 				case 'ManifiestoExpCkptAsCreatedBy':
 					return new QQReverseReferenceNodeManifiestoExpCkpt($this, 'manifiestoexpckptascreatedby', 'reverse_reference', 'created_by', 'ManifiestoExpCkptAsCreatedBy');
+				case 'MatchPiecesAsCreatedBy':
+					return new QQReverseReferenceNodeMatchPieces($this, 'matchpiecesascreatedby', 'reverse_reference', 'created_by', 'MatchPiecesAsCreatedBy');
 				case 'MotivoEliminacionAsUser':
 					return new QQReverseReferenceNodeMotivoEliminacion($this, 'motivoeliminacionasuser', 'reverse_reference', 'user_id', 'MotivoEliminacionAsUser');
 				case 'NotaCreditoAsCreadaPor':

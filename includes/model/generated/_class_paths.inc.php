@@ -860,6 +860,13 @@
 		QApplicationBase::$ClassFile['masterclientemetacontrol'] = __META_CONTROLS__ . '/MasterClienteMetaControl.class.php';
 		QApplicationBase::$ClassFile['masterclientedatagrid'] = __META_CONTROLS__ . '/MasterClienteDataGrid.class.php';
 
+	// ClassPaths for the MatchPieces class
+		QApplicationBase::$ClassFile['matchpieces'] = __MODEL__ . '/MatchPieces.class.php';
+		QApplicationBase::$ClassFile['qqnodematchpieces'] = __MODEL__ . '/MatchPieces.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodematchpieces'] = __MODEL__ . '/MatchPieces.class.php';
+		QApplicationBase::$ClassFile['matchpiecesmetacontrol'] = __META_CONTROLS__ . '/MatchPiecesMetaControl.class.php';
+		QApplicationBase::$ClassFile['matchpiecesdatagrid'] = __META_CONTROLS__ . '/MatchPiecesDataGrid.class.php';
+
 	// ClassPaths for the MensajeYamaguchi class
 		QApplicationBase::$ClassFile['mensajeyamaguchi'] = __MODEL__ . '/MensajeYamaguchi.class.php';
 		QApplicationBase::$ClassFile['qqnodemensajeyamaguchi'] = __MODEL__ . '/MensajeYamaguchi.class.php';

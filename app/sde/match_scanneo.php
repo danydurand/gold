@@ -197,13 +197,8 @@ class MatchScanneo extends FormularioBaseKaizen {
 
     public function newQty_Render($objManiPend) {
         if (count($this->arrReceQtys) > 0) {
-            // t('Comparing Qtys for: ' . $objManiPend->Id . ' Manifest');
             $intPrevRece = $this->arrReceQtys[$objManiPend->Id];
-            // t('The Manifest had: ' . $intPrevRece);
             if ($intPrevRece < $objManiPend->Recibidas) {
-                // t('The Manifest has new received pieces');
-                // return boldRed('SI');
-                // return '<i class="fa fa-success fa-lg"></i> ';
                 $strNombImag = __APP_IMAGE_ASSETS__.'/punto_verde.gif';
                 return "<img src='$strNombImag'>";
             } else {
@@ -234,17 +229,15 @@ class MatchScanneo extends FormularioBaseKaizen {
     }
 
     protected function keepReceivedQtys($intProcIdxx) {
-        // t('Keeping Received Qtys...');
         //-----------------------------------------------------------------------------
         // We save in the database how many received pieces every manifest has
-        // This will allow knowing if there are any new received pieces in each one.
+        // This will allows knowing if there are any new received pieces in each one.
         //-----------------------------------------------------------------------------
         $strCadeText = '';
         foreach ($this->arrManiPend as $objManiPend) {
             $intCantReci = $objManiPend->Recibidas ? $objManiPend->Recibidas : 0;
             $strCadeText .= $objManiPend->Id.'|'.$intCantReci.',';
         }
-        // t('CadeText: '.$strCadeText);
         $strDescPara = 'Qtys received in Match Scanneo: '.$intProcIdxx.
         $objParaQtys = new Parametros();
         $objParaQtys->Indice      = 'ReceQtys';
@@ -252,33 +245,381 @@ class MatchScanneo extends FormularioBaseKaizen {
         $objParaQtys->Descripcion = $strDescPara;
         $objParaQtys->Texto1      = $strCadeText;
         $objParaQtys->Save();
-        // t('Parameter created...');
     }
 
     protected function getPreviousReceivedQtys($intProcIdxx) {
-        // t('Getting previous received qtys...');
         //-------------------------------------------------------------
         // We get the previos received quantities from every manifest
         //-------------------------------------------------------------
         $objParaQtys = Parametros::LoadByIndiceCodigo('ReceQtys',$intProcIdxx);
         if ($objParaQtys) {
-            // t('The parameter exists');
             $arrPrevRece = explode(',',$objParaQtys->Texto1);
-            // t('The array contains:');
             t($arrPrevRece);
             foreach ($arrPrevRece as $strPrevRece) {
                 $arrManiAuxi = explode('|',$strPrevRece);
                 if (count($arrManiAuxi) > 1) {
                     list($intManiIdxx, $intPrevRece) = explode('|',$strPrevRece);
                 }
-                // t('Manifest: '.$intManiIdxx.' had: '.$intPrevRece);
                 $this->arrReceQtys[$intManiIdxx] = $intPrevRece;
             }
         }
     }
     
 
+    protected function btnSave_Click() {
+        $time_start = microtime(true);
+
+        $objDataBase = MatchPieces::GetDatabase();
+        $intCodiUsua  = $this->objUsuario->CodiUsua;
+        //------------------------------------------------
+        // Deleting previous records related to the User
+        //------------------------------------------------
+        // t('Deleting previous records related to the User...');
+        $strCadeSqlx  = "call spu_delete_user_records($intCodiUsua)";
+        $objDataBase->NonQuery($strCadeSqlx);
+
+        $blnHayxErro = false;
+        $strNombProc = 'Match Scanneo';
+        $this->objProcEjec = CrearProceso($strNombProc);
+        $intProcIdxx = $this->objProcEjec->Id;
+
+        $this->keepReceivedQtys($intProcIdxx);
+
+        $arrNumePiez = explode(',', nl2br2($this->txtNumePiez->Text));
+        $arrNumePiez = array_unique($arrNumePiez);
+        $arrNumePiez = array_map('transformar', $arrNumePiez);
+
+        $intCantReci = 0;
+        $intCantSobr = 0;
+        $intUsuaIdxx = $this->objUsuario->CodiUsua;
+        $this->txtNumePiez->Text = '';
+        $objCkptMani = Checkpoints::LoadByCodigo('RA');
+
+        //----------------------------------------------------------------
+        // Every single piece must be inserted in the match_pieces table
+        //----------------------------------------------------------------
+        // t('Inserting pieces in match_pieces table...');
+        $strCadeSqlx  = "insert ";
+        $strCadeSqlx .= "  into match_pieces ";
+        $strCadeSqlx .= "       (proceso_error_id, id_pieza, is_leftover, is_cycle_completed, created_at, created_by) ";
+        $strCadeSqlx .= "values ";
+        foreach ($arrNumePiez as $strPiezArri) {
+            if (strlen($strPiezArri) > 0) {
+                $strPiezArri = trim($strPiezArri);
+                $strCadeSqlx .= "($intProcIdxx, '$strPiezArri', 0, 0, current_date(), $intUsuaIdxx),";
+                $intCantReci++;
+            }
+        }
+        $strCadeSqlx = substr($strCadeSqlx,0,strlen($strCadeSqlx)-1);
+        $objDataBase->NonQuery($strCadeSqlx);
+
+        // t('Detecting leftover, completed and pieces ids...');
+        //------------------------------------------------------------------------
+        // Detecting leftover and completed pieces. Counting each of those types 
+        //------------------------------------------------------------------------
+        $strCadeSqlx  = "call spu_detect_leftover_and_pieces_ids($intProcIdxx, @leftover_qty, @cycle_completed_qty)";
+        $objDataBase->NonQuery($strCadeSqlx);
+        $strCadeSqlx  = "select @leftover_qty, @cycle_completed_qty";
+        $objDbResult  = $objDataBase->Query($strCadeSqlx);
+        $mixRegistro  = $objDbResult->FetchArray();
+        $intCantSobr  = $mixRegistro['@leftover_qty'];
+        $intCantOkey  = $mixRegistro['@cycle_completed_qty'];
+        $intCantReci -= ($intCantSobr + $intCantOkey);
+        //------------------------------------------------------
+        // Inserting received checkpoint to the rest of pieces
+        //------------------------------------------------------
+        // t('Inserting received checkpoint to the rest of pieces');
+        $intCodiCkpt  = $objCkptMani->Id;
+        $intCodiSucu  = $this->objUsuario->SucursalId;
+        $strTextCkpt  = $objCkptMani->Descripcion;
+        try {
+            $strCadeSqlx  = "call spu_insert_received_checkpoint($intCodiCkpt, $intCodiSucu, '$strTextCkpt', $intCodiUsua, $intProcIdxx) ";
+            $objDataBase->NonQuery($strCadeSqlx);
+        } catch (Exception $e) {
+            t('Error: '.$e->getMessage());
+        }
+        $strTextMens = "Total Recibidas: $intCantReci | Cantidad de Sobrantes: $intCantSobr";
+        //---------------------------------------------------------------------------------------
+        // The leftover pieces must be register in error detail table to be watched by the User
+        //---------------------------------------------------------------------------------------
+        // t('Inserting leftover and completed pieces in error table');
+        $strCadeSqlx  = "call spu_insert_pieces_with_error_in_error_table($intProcIdxx)";
+        $objDataBase->NonQuery($strCadeSqlx);
+        //-----------------------------------------------
+        // Last Checkpoint Update in guia_pieces table 
+        //-----------------------------------------------
+        // t('Updating last checkpoint...');
+        UpdateLastCheckpoint();
+        //-------------------------------------------------------------------
+        // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
+        //-------------------------------------------------------------------
+        // t('Updating received quantities...');
+        foreach ($this->arrManiPend as $objManiPend) {
+            $objManiPend->ContarActualizarRecibidas();
+            //---------------------------------------
+            // Se graba el checkpoint al Manifiesto
+            //---------------------------------------
+            if ($objManiPend->Recibidas > 0) {
+                $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+                if (!$arrResuGrab['TodoOkey']) {
+                    $blnHayxErro = true;
+                }
+            }
+        }
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->NotificarAdmin = false;
+        $this->objProcEjec->Save();
+        //----------------------------------------------
+        // Se deja registro de la transacción realizada
+        //----------------------------------------------
+        $arrLogxCamb['strNombTabl'] = 'ProcesoError';
+        $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
+        $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
+        $arrLogxCamb['strDescCamb'] = $strTextMens;
+        $arrLogxCamb['strEnlaEnti'] = __SIST__ . '/proceso_error_list.php/' . $this->objProcEjec->Id;
+        LogDeCambios($arrLogxCamb);
+
+        $this->getPreviousReceivedQtys($this->objProcEjec->Id);
+        $this->dtgManiPend->Refresh();
+
+        $time_end = microtime(true);
+
+        $time = formatPeriod($time_end,$time_start);
+        $strTextMens .= " ($time)";
+
+        $blnHayxErro = $intCantSobr;
+        if ($blnHayxErro) {
+            $this->btnErroProc->Visible = true;
+            $this->warning($strTextMens);
+        } else {
+            $this->success($strTextMens);
+        }
+        // t('Process finished: '. date('H:i:s'));
+    }
+
+
     protected function btnSave_ClickOld() {
+        // t('Executing Match Scanneo');
+        // t('=======================');
+
+        $time_start = microtime(true);
+
+        t('Begining time: '.date('H:i:s'));
+
+        $objDataBase = MatchPieces::GetDatabase();
+        $intCodiUsua  = $this->objUsuario->CodiUsua;   
+
+        //------------------------------------------------
+        // Deleting previous records related to the User
+        //------------------------------------------------
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Deleting previous records related to the User...');
+        $strCadeSqlx  = "delete ";
+        $strCadeSqlx .= "  from match_pieces ";
+        $strCadeSqlx .= " where created_by = $intCodiUsua ";
+        $objDataBase->NonQuery($strCadeSqlx);
+
+        $blnHayxErro = false;
+        $strNombProc = 'Match Scanneo';
+        $this->objProcEjec = CrearProceso($strNombProc);
+        $intProcIdxx = $this->objProcEjec->Id;
+
+        $this->keepReceivedQtys($intProcIdxx);
+
+        $arrNumePiez = explode(',', nl2br2($this->txtNumePiez->Text));
+        $arrNumePiez = array_unique($arrNumePiez);
+        $arrNumePiez = array_map('transformar', $arrNumePiez);
+
+        $intCantReci = 0;
+        $intCantSobr = 0;
+        $this->txtNumePiez->Text = '';
+        $objCkptMani = Checkpoints::LoadByCodigo('RA');
+
+        //----------------------------------------------------------------
+        // Every single piece must be inserted in the match_pieces table
+        //----------------------------------------------------------------
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Inserting pieces in match_pieces table...');
+        foreach ($arrNumePiez as $strPiezArri) {
+            if (strlen($strPiezArri) > 0) {
+                // t("Processing: " . $strPiezArri);
+                $objMatcPice = new MatchPieces();
+                $objMatcPice->ProcesoErrorId   = $intProcIdxx;
+                $objMatcPice->IdPieza          = $strPiezArri;
+                $objMatcPice->IsLeftover       = false;
+                $objMatcPice->IsCycleCompleted = false;
+                $objMatcPice->CreatedAt        = new QDateTime(QDateTime::Now());
+                $objMatcPice->CreatedBy        = $this->objUsuario->CodiUsua;
+                $objMatcPice->Save();
+                $intCantReci++;
+            }
+        }
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Detecting leftover pieces...');
+        //----------------------------
+        // Detecting leftover pieces
+        //----------------------------
+        $strCadeSqlx  = "update match_pieces ";
+        $strCadeSqlx .= "   set is_leftover = 1 ";
+        $strCadeSqlx .= " where proceso_error_id = $intProcIdxx ";
+        $strCadeSqlx .= "   and id_pieza not in (select id_pieza ";
+        $strCadeSqlx .= "                          from guia_piezas)";
+        $objDataBase->NonQuery($strCadeSqlx);
+        //---------------------------
+        // Counting leftover pieces
+        //---------------------------
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Counting leftover pieces...');
+        $strCadeSqlx  = "select count(*) as cant_sobr ";
+        $strCadeSqlx .= "  from match_pieces ";
+        $strCadeSqlx .= " where is_leftover = 1 ";
+        $strCadeSqlx .= "   and proceso_error_id = $intProcIdxx ";
+        $objDbResult  = $objDataBase->Query($strCadeSqlx);
+        $mixRegistro  = $objDbResult->FetchArray();
+        $intCantSobr  = $mixRegistro['cant_sobr'];
+        $intCantReci -= $intCantSobr;
+        //-----------------------------------
+        // Getting the existent pieces' ids
+        //-----------------------------------
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Getting the existent pieces\' ids');
+        $strCadeSqlx  = "update match_pieces";
+        $strCadeSqlx .= "   set match_pieces.pieza_id = (select guia_piezas.id ";
+        $strCadeSqlx .= "                                  from guia_piezas ";
+        $strCadeSqlx .= "                                 where guia_piezas.id_pieza = match_pieces.id_pieza), ";
+        $strCadeSqlx .= "   set match_pieces.is_cycle_completed = (select guia_piezas.is_cycle_completed ";
+        $strCadeSqlx .= "                                            from guia_piezas ";
+        $strCadeSqlx .= "                                           where guia_piezas.id_pieza = match_pieces.id_pieza) ";
+        $strCadeSqlx .= " where match_pieces.proceso_error_id = $intProcIdxx ";
+        $strCadeSqlx .= "   and match_pieces.is_leftover = 0 ";
+        $objDataBase->NonQuery($strCadeSqlx);
+        //------------------------------------------------------
+        // Inserting received checkpoint to the rest of pieces
+        //------------------------------------------------------
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Inserting received checkpoint to the rest of pieces');
+        
+        $intCodiCkpt  = $objCkptMani->Id;
+        $intCodiSucu  = $this->objUsuario->SucursalId;
+        $strTextCkpt  = $objCkptMani->Descripcion;
+
+        $strCadeSqlx  = "insert ";
+        $strCadeSqlx .= "  into pieza_checkpoints ";
+        $strCadeSqlx .= "       (pieza_id, checkpoint_id, sucursal_id, fecha, hora, comentario, created_at, created_by) ";
+        $strCadeSqlx .= "select match_pieces.pieza_id, ";
+        $strCadeSqlx .= "       $intCodiCkpt, ";
+        $strCadeSqlx .= "       $intCodiSucu, ";
+        $strCadeSqlx .= "       CURRENT_DATE(), ";
+        $strCadeSqlx .= "       SUBSTR(CURTIME(),1,5), ";
+        $strCadeSqlx .= "       '$strTextCkpt', ";
+        $strCadeSqlx .= "       CURRENT_DATE(), ";
+        $strCadeSqlx .= "       $intCodiUsua ";
+        $strCadeSqlx .= "  from match_pieces ";
+        $strCadeSqlx .= " where match_pieces.proceso_error_id = $intProcIdxx ";
+        $strCadeSqlx .= "   and match_pieces.is_leftover = 0 ";
+        $strCadeSqlx .= "   and match_pieces.pieza_id is not null ";
+        $objDataBase->NonQuery($strCadeSqlx);
+
+        $strTextMens = "Total Recibidas: $intCantReci | Cantidad de Sobrantes: $intCantSobr";
+        //---------------------------------------------------------------------------------------
+        // The leftover pieces must be register in error detail table to be watched by the User
+        //---------------------------------------------------------------------------------------
+        $strCadeSqlx  = "insert ";
+        $strCadeSqlx .= "  into detalle_error ";
+        $strCadeSqlx .= "       (proceso_id, referencia, mensaje_error, comentario) ";
+        $strCadeSqlx .= "select $intProcIdxx, ";
+        $strCadeSqlx .= "       id_pieza, ";
+        $strCadeSqlx .= "       'La Pieza NO Existe - Sobrante', ";
+        $strCadeSqlx .= "       'Match Scanneo' ";
+        $strCadeSqlx .= "  from match_pieces ";
+        $strCadeSqlx .= " where match_pieces.proceso_error_id = $intProcIdxx ";
+        $strCadeSqlx .= "   and match_pieces.is_leftover = 1 ";
+        $objDataBase->NonQuery($strCadeSqlx);
+        //-------------------------------------------------------------------------------------------------------
+        // The pieces which cycle is complete, must be register in error detail table to be watched by the User
+        //-------------------------------------------------------------------------------------------------------
+        t('Partial time: ' . date('H:i:s'));
+        t('Inserting cycle completed pieces in error table');
+        $strCadeSqlx  = "insert ";
+        $strCadeSqlx .= "  into detalle_error ";
+        $strCadeSqlx .= "       (proceso_id, referencia, mensaje_error, comentario) ";
+        $strCadeSqlx .= "select $intProcIdxx, ";
+        $strCadeSqlx .= "       id_pieza, ";
+        $strCadeSqlx .= "       'Pieza Entregada - No Admite Incidencias', ";
+        $strCadeSqlx .= "       'Match Scanneo' ";
+        $strCadeSqlx .= "  from match_pieces ";
+        $strCadeSqlx .= " where match_pieces.proceso_error_id = $intProcIdxx ";
+        $strCadeSqlx .= "   and match_pieces.is_cycle_completed = 1 ";
+        $objDataBase->NonQuery($strCadeSqlx);
+        //-----------------------------------------------
+        // Last Checkpoint Update in guia_pieces table 
+        //-----------------------------------------------
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Updating last checkpoint...');
+        UpdateLastCheckpoint();
+        //-------------------------------------------------------------------
+        // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
+        //-------------------------------------------------------------------
+        // t('Partial time: ' . date('H:i:s'));
+        // t('Updating received quantities...');
+        foreach ($this->arrManiPend as $objManiPend) {
+            $objManiPend->ContarActualizarRecibidas();
+            //---------------------------------------
+            // Se graba el checkpoint al Manifiesto
+            //---------------------------------------
+            if ($objManiPend->Recibidas > 0) {
+                $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+                if (!$arrResuGrab['TodoOkey']) {
+                    $blnHayxErro = true;
+                }
+            }
+        }
+        //--------------------------------------
+        // Se almacena el resultado del proceso
+        //--------------------------------------
+        $this->objProcEjec->HoraFinal  = new QDateTime(QDateTime::Now);
+        $this->objProcEjec->Comentario = $strTextMens;
+        $this->objProcEjec->NotificarAdmin = false;
+        $this->objProcEjec->Save();
+        //----------------------------------------------
+        // Se deja registro de la transacción realizada
+        //----------------------------------------------
+        $arrLogxCamb['strNombTabl'] = 'ProcesoError';
+        $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
+        $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
+        $arrLogxCamb['strDescCamb'] = $strTextMens;
+        $arrLogxCamb['strEnlaEnti'] = __SIST__ . '/proceso_error_list.php/' . $this->objProcEjec->Id;
+        LogDeCambios($arrLogxCamb);
+
+        $this->getPreviousReceivedQtys($this->objProcEjec->Id);
+        $this->dtgManiPend->Refresh();
+
+        $time_end = microtime(true);
+
+        $time = formatPeriod($time_end,$time_start);
+        $strTextMens .= " ($time)";
+
+        $blnHayxErro = $intCantSobr;
+        if ($blnHayxErro) {
+            $this->btnErroProc->Visible = true;
+            $this->warning($strTextMens);
+        } else {
+            $this->success($strTextMens);
+        }
+        t('Process finished: '. date('H:i:s'));
+    }
+
+
+    protected function btnSave_ClickOld2() {
+        $time_start = microtime(true);
+
+        t('Begining time: '.date('H:i:s'));
+
+
         $blnHayxErro = false;
         $strNombProc = 'Match Scanneo';
         $this->objProcEjec = CrearProceso($strNombProc);
@@ -295,8 +636,8 @@ class MatchScanneo extends FormularioBaseKaizen {
         $intCantSobr = 0;
         $arrRelaSobr = [];
         foreach ($arrNumePiez as $strPiezArri) {
-            t("Procesando: ".$strPiezArri);
             if (strlen($strPiezArri) > 0) {
+                // t("Procesando: ".$strPiezArri);
                 $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strPiezArri);
                 if (!$objGuiaPiez) {
                     $blnHayxErro = true;
@@ -308,7 +649,7 @@ class MatchScanneo extends FormularioBaseKaizen {
 
                     $intCantSobr ++;
                     $arrRelaSobr[] = $strPiezArri;
-                    t('La pieza no existe, es un sobrante');
+                    // t('La pieza no existe, es un sobrante');
                     continue;
                 }
                 //t('La pieza existe en la BD');
@@ -379,14 +720,24 @@ class MatchScanneo extends FormularioBaseKaizen {
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
 
+
+        $this->getPreviousReceivedQtys($this->objProcEjec->Id);
+        $this->dtgManiPend->Refresh();
+
+        $time_end = microtime(true);
+
+        // $time = $time_end - $time_start;
+        $time = formatPeriod($time_end, $time_start);
+
+        $strTextMens .= " ($time)";
+
         if ($blnHayxErro) {
             $this->btnErroProc->Visible = true;
             $this->warning($strTextMens);
         } else {
             $this->success($strTextMens);
         }
-        $this->getPreviousReceivedQtys($this->objProcEjec->Id);
-        $this->dtgManiPend->Refresh();
+        t('Process finished: ' . date('H:i:s'));
     }
 }
 

@@ -56,6 +56,8 @@
 	 * @property-read ManifiestoExp[] $_ManifiestoExpAsPiezaArray the value for the private _objManifiestoExpAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the manifiesto_exp_pieza_assn association table
 	 * @property-read SdeContenedor $_SdeContenedorAsGuia the value for the private _objSdeContenedorAsGuia (Read-Only) if set due to an expansion on the sde_contenedor_guia_assn association table
 	 * @property-read SdeContenedor[] $_SdeContenedorAsGuiaArray the value for the private _objSdeContenedorAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the sde_contenedor_guia_assn association table
+	 * @property-read MatchPieces $_MatchPiecesAsPieza the value for the private _objMatchPiecesAsPieza (Read-Only) if set due to an expansion on the match_pieces.pieza_id reverse relationship
+	 * @property-read MatchPieces[] $_MatchPiecesAsPiezaArray the value for the private _objMatchPiecesAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the match_pieces.pieza_id reverse relationship
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsPieza the value for the private _objPiezaCheckpointsAsPieza (Read-Only) if set due to an expansion on the pieza_checkpoints.pieza_id reverse relationship
 	 * @property-read PiezaCheckpoints[] $_PiezaCheckpointsAsPiezaArray the value for the private _objPiezaCheckpointsAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints.pieza_id reverse relationship
 	 * @property-read ScanneoPiezas $_ScanneoPiezasAsGuiaPieza the value for the private _objScanneoPiezasAsGuiaPieza (Read-Only) if set due to an expansion on the scanneo_piezas.guia_pieza_id reverse relationship
@@ -346,6 +348,22 @@
 		 * @var SdeContenedor[] _objSdeContenedorAsGuiaArray;
 		 */
 		private $_objSdeContenedorAsGuiaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single MatchPiecesAsPieza object
+		 * (of type MatchPieces), if this GuiaPiezas object was restored with
+		 * an expansion on the match_pieces association table.
+		 * @var MatchPieces _objMatchPiecesAsPieza;
+		 */
+		private $_objMatchPiecesAsPieza;
+
+		/**
+		 * Private member variable that stores a reference to an array of MatchPiecesAsPieza objects
+		 * (of type MatchPieces[]), if this GuiaPiezas object was restored with
+		 * an ExpandAsArray on the match_pieces association table.
+		 * @var MatchPieces[] _objMatchPiecesAsPiezaArray;
+		 */
+		private $_objMatchPiecesAsPiezaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single PiezaCheckpointsAsPieza object
@@ -1251,6 +1269,21 @@
 				}
 			}
 
+
+			// Check for MatchPiecesAsPieza Virtual Binding
+			$strAlias = $strAliasPrefix . 'matchpiecesaspieza__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['matchpiecesaspieza']) ? null : $objExpansionAliasArray['matchpiecesaspieza']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objMatchPiecesAsPiezaArray)
+				$objToReturn->_objMatchPiecesAsPiezaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objMatchPiecesAsPiezaArray[] = MatchPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'matchpiecesaspieza__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objMatchPiecesAsPieza)) {
+					$objToReturn->_objMatchPiecesAsPieza = MatchPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'matchpiecesaspieza__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
 
 			// Check for PiezaCheckpointsAsPieza Virtual Binding
 			$strAlias = $strAliasPrefix . 'piezacheckpointsaspieza__id';
@@ -2366,6 +2399,22 @@
 					 */
 					return $this->_objSdeContenedorAsGuiaArray;
 
+				case '_MatchPiecesAsPieza':
+					/**
+					 * Gets the value for the private _objMatchPiecesAsPieza (Read-Only)
+					 * if set due to an expansion on the match_pieces.pieza_id reverse relationship
+					 * @return MatchPieces
+					 */
+					return $this->_objMatchPiecesAsPieza;
+
+				case '_MatchPiecesAsPiezaArray':
+					/**
+					 * Gets the value for the private _objMatchPiecesAsPiezaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the match_pieces.pieza_id reverse relationship
+					 * @return MatchPieces[]
+					 */
+					return $this->_objMatchPiecesAsPiezaArray;
+
 				case '_PiezaCheckpointsAsPieza':
 					/**
 					 * Gets the value for the private _objPiezaCheckpointsAsPieza (Read-Only)
@@ -3027,6 +3076,9 @@
 		 */
 		public function TablasRelacionadas() {
 			$arrTablRela = array();
+			if ($this->CountMatchPiecesesAsPieza()) {
+				$arrTablRela[] = 'match_pieces';
+			}
 			if ($this->CountPiezaCheckpointsesAsPieza()) {
 				$arrTablRela[] = 'pieza_checkpoints';
 			}
@@ -3041,6 +3093,155 @@
 		// ASSOCIATED OBJECTS' METHODS
 		///////////////////////////////
 
+
+
+		// Related Objects' Methods for MatchPiecesAsPieza
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated MatchPiecesesAsPieza as an array of MatchPieces objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return MatchPieces[]
+		*/
+		public function GetMatchPiecesAsPiezaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return MatchPieces::LoadArrayByPiezaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated MatchPiecesesAsPieza
+		 * @return int
+		*/
+		public function CountMatchPiecesesAsPieza() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return MatchPieces::CountByPiezaId($this->intId);
+		}
+
+		/**
+		 * Associates a MatchPiecesAsPieza
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function AssociateMatchPiecesAsPieza(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMatchPiecesAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateMatchPiecesAsPieza on this GuiaPiezas with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a MatchPiecesAsPieza
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function UnassociateMatchPiecesAsPieza(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsPieza on this GuiaPiezas with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`pieza_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . ' AND
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all MatchPiecesesAsPieza
+		 * @return void
+		*/
+		public function UnassociateAllMatchPiecesesAsPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsPieza on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`match_pieces`
+				SET
+					`pieza_id` = null
+				WHERE
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated MatchPiecesAsPieza
+		 * @param MatchPieces $objMatchPieces
+		 * @return void
+		*/
+		public function DeleteAssociatedMatchPiecesAsPieza(MatchPieces $objMatchPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objMatchPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsPieza on this GuiaPiezas with an unsaved MatchPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`match_pieces`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objMatchPieces->Id) . ' AND
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated MatchPiecesesAsPieza
+		 * @return void
+		*/
+		public function DeleteAllMatchPiecesesAsPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateMatchPiecesAsPieza on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`match_pieces`
+				WHERE
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
 
 
 		// Related Objects' Methods for PiezaCheckpointsAsPieza
@@ -4281,6 +4482,7 @@
      *
      * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
      * @property-read QQReverseReferenceNodeGuiaTransportista $GuiaTransportistaAsGuiaPieza
+     * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsGuiaPieza
 
@@ -4366,6 +4568,8 @@
 					return new QQReverseReferenceNodeGuiaPiezaPod($this, 'guiapiezapodasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaPiezaPodAsGuiaPieza');
 				case 'GuiaTransportistaAsGuiaPieza':
 					return new QQReverseReferenceNodeGuiaTransportista($this, 'guiatransportistaasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaTransportistaAsGuiaPieza');
+				case 'MatchPiecesAsPieza':
+					return new QQReverseReferenceNodeMatchPieces($this, 'matchpiecesaspieza', 'reverse_reference', 'pieza_id', 'MatchPiecesAsPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
 				case 'ScanneoPiezasAsGuiaPieza':
@@ -4424,6 +4628,7 @@
      *
      * @property-read QQReverseReferenceNodeGuiaPiezaPod $GuiaPiezaPodAsGuiaPieza
      * @property-read QQReverseReferenceNodeGuiaTransportista $GuiaTransportistaAsGuiaPieza
+     * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsGuiaPieza
 
@@ -4509,6 +4714,8 @@
 					return new QQReverseReferenceNodeGuiaPiezaPod($this, 'guiapiezapodasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaPiezaPodAsGuiaPieza');
 				case 'GuiaTransportistaAsGuiaPieza':
 					return new QQReverseReferenceNodeGuiaTransportista($this, 'guiatransportistaasguiapieza', 'reverse_reference', 'guia_pieza_id', 'GuiaTransportistaAsGuiaPieza');
+				case 'MatchPiecesAsPieza':
+					return new QQReverseReferenceNodeMatchPieces($this, 'matchpiecesaspieza', 'reverse_reference', 'pieza_id', 'MatchPiecesAsPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
 				case 'ScanneoPiezasAsGuiaPieza':
