@@ -111,7 +111,7 @@ class MatchScanneo extends FormularioBaseKaizen {
                 $arrIdxxMani[] = $objManiNaci->ContainerId;
             }
         }
-        $dttFechLimi = SumaRestaDiasAFecha(date('Y-m-d'),60,'-');
+        $dttFechLimi = SumaRestaDiasAFecha(date('Y-m-d'),50,'-');
         //--------------------------------------------------------------------------------------
         // Adicionalmente, se deben considerar los Manifiestos ya Procesados, con diferencias
         // entre la cantidad de piezas recibidas y la cantidad de piezas total del Manifiesto
@@ -345,26 +345,30 @@ class MatchScanneo extends FormularioBaseKaizen {
         // t('Inserting leftover and completed pieces in error table');
         $strCadeSqlx  = "call spu_insert_pieces_with_error_in_error_table($intProcIdxx)";
         $objDataBase->NonQuery($strCadeSqlx);
-        //-----------------------------------------------
-        // Last Checkpoint Update in guia_pieces table 
-        //-----------------------------------------------
-        // t('Updating last checkpoint...');
-        UpdateLastCheckpoint();
-        //-------------------------------------------------------------------
-        // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
-        //-------------------------------------------------------------------
-        // t('Updating received quantities...');
-        foreach ($this->arrManiPend as $objManiPend) {
-            $objManiPend->ContarActualizarRecibidas();
-            //---------------------------------------
-            // Se graba el checkpoint al Manifiesto
-            //---------------------------------------
-            if ($objManiPend->Recibidas > 0) {
-                $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
-                if (!$arrResuGrab['TodoOkey']) {
-                    $blnHayxErro = true;
+        if ($intCantReci > 0) {
+            //-----------------------------------------------
+            // Last Checkpoint Update in guia_pieces table 
+            //-----------------------------------------------
+            // t('Updating last checkpoint...');
+            UpdateLastCheckpoint();
+            //-------------------------------------------------------------------
+            // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
+            //-------------------------------------------------------------------
+            // t('Updating received quantities...');
+            foreach ($this->arrManiPend as $objManiPend) {
+                $objManiPend->ContarActualizarRecibidas();
+                //---------------------------------------
+                // Se graba el checkpoint al Manifiesto
+                //---------------------------------------
+                if ($objManiPend->Recibidas > 0) {
+                    $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+                    if (!$arrResuGrab['TodoOkey']) {
+                        $blnHayxErro = true;
+                    }
                 }
             }
+            $this->getPreviousReceivedQtys($this->objProcEjec->Id);
+            $this->dtgManiPend->Refresh();
         }
         //--------------------------------------
         // Se almacena el resultado del proceso
@@ -376,20 +380,17 @@ class MatchScanneo extends FormularioBaseKaizen {
         //----------------------------------------------
         // Se deja registro de la transacción realizada
         //----------------------------------------------
+        $time_end = microtime(true);
+
+        $time = formatPeriod($time_end, $time_start);
+        $strTextMens .= " (Tiempo => $time)";
+
         $arrLogxCamb['strNombTabl'] = 'ProcesoError';
         $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
         $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
         $arrLogxCamb['strDescCamb'] = $strTextMens;
         $arrLogxCamb['strEnlaEnti'] = __SIST__ . '/proceso_error_list.php/' . $this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
-
-        $this->getPreviousReceivedQtys($this->objProcEjec->Id);
-        $this->dtgManiPend->Refresh();
-
-        $time_end = microtime(true);
-
-        $time = formatPeriod($time_end,$time_start);
-        $strTextMens .= " ($time)";
 
         $blnHayxErro = $intCantSobr;
         if ($blnHayxErro) {

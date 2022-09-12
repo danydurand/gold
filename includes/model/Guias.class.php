@@ -52,21 +52,28 @@ class Guias extends GuiasGen
                 $strPiecJson .= strlen($strPiecJson) > 0 ? '*' : '';
                 $strPiecJson .= $objPiecAwbx->getJson();
                 $intPiecQnty ++;
+                if ($intPiecQnty > 94) {
+                    break;
+                }
             }
             // t('Pieces quantity: '.$intPiecQnty);
             //----------------------------------------------
             // Create a backup record in parameters table
             //----------------------------------------------
-            $objParaPiez = new Parametros();
-            $objParaPiez->Indice = 'PiecBack';
-            $objParaPiez->Codigo = $this->Id;
-            $objParaPiez->Descripcion = 'Awb Pieces Backup';
-            $objParaPiez->Texto1 = $strPiecJson;
-            $objParaPiez->Texto2 = $this->Tracking;
-            $objParaPiez->Texto3 = $this->Numero;
-            $objParaPiez->Valor1 = $intPiecQnty; 
-            $objParaPiez->Save();
-            // t('Backup created...');
+            try {
+                $objParaPiez = new Parametros();
+                $objParaPiez->Indice = 'PiecBack';
+                $objParaPiez->Codigo = $this->Id;
+                $objParaPiez->Descripcion = 'Awb Pieces Backup';
+                $objParaPiez->Texto1 = $strPiecJson;
+                $objParaPiez->Texto2 = $this->Tracking;
+                $objParaPiez->Texto3 = $this->Numero;
+                $objParaPiez->Valor1 = $intPiecQnty;
+                $objParaPiez->Save();
+                // t('Backup created...');
+            } catch (Exception $e) {
+                t('Error creating pieces backup: '.$e->getMessage());
+            }
         }
     }
 

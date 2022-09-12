@@ -85,7 +85,7 @@ class GuiasListForm extends GuiasListFormBase {
 
 		// Add Pagination (if desired)
 		$this->dtgGuiases->Paginator = new QPaginator($this->dtgGuiases);
-		$this->dtgGuiases->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+		$this->dtgGuiases->ItemsPerPage = 13;
 
         $this->dtgGuiases->SortColumnIndex = 1;
         $this->dtgGuiases->SortDirection = 1;
@@ -144,6 +144,53 @@ class GuiasListForm extends GuiasListFormBase {
         $this->btnFactGuia_Create();
 
     }
+
+    protected function dtgGuias_Bind() {
+        if (isset($_SESSION['CritCons'])) {
+            t('Hay un criterio..');
+            $this->objClauWher = unserialize($_SESSION['CritCons']);
+            unset($_SESSION['CritCons']);
+        } else {
+            if (!$this->blnHayxCond) {
+                $dttFechDhoy = new QDateTime(QDateTime::Now);
+                t('Fecha de Hoy: ' . $dttFechDhoy->__toString("YYYY-MM-DD"));
+
+                $this->objClauWher   = QQ::Clause();
+                $this->objClauWher[] = QQ::In(QQN::Guias()->ProductoId, $this->arrCodiProd);
+                $this->objClauWher[] = QQ::Equal(QQN::Guias()->CreatedBy, $this->objUsuario->CodiUsua);
+                //$this->objClauWher[] = QQ::Equal(QQN::Guias()->Fecha,$dttFechDhoy->__toString("YYYY-MM-DD"));
+            }
+        }
+
+        $this->dtgGuiases->TotalItemCount = Guias::QueryCount(QQ::AndCondition($this->objClauWher));
+
+        $arrGuiaNaci = Guias::QueryArray(
+            QQ::AndCondition($this->objClauWher),
+            QQ::Clause(
+                $this->dtgGuiases->OrderByClause,
+                $this->dtgGuiases->LimitClause
+            )
+        );
+
+        $this->dtgGuiases->DataSource = $arrGuiaNaci;
+        $_SESSION['DataGuia'] = serialize($arrGuiaNaci);
+
+        //------------------------------------------------------------------------
+        // Query que obtiene todas las guías de la lista sin límite de paginación
+        //------------------------------------------------------------------------
+
+        $arrGuiaLote = Guias::QueryArray(
+            QQ::AndCondition($this->objClauWher),
+            QQ::Clause($this->dtgGuiases->OrderByClause)
+        );
+
+        $this->arrGuiaLote = array();
+
+        foreach ($arrGuiaLote as $objGuiaLote) {
+            $this->arrGuiaLote[] = $objGuiaLote->Id;
+        }
+    }
+
 
 
     protected function btnNuevRegi_Create() {
@@ -221,52 +268,6 @@ class GuiasListForm extends GuiasListFormBase {
 
     protected function btnGuiaExpo_Click() {
         QApplication::Redirect(__SIST__.'/crear_guia_exp.php');
-    }
-
-    protected function dtgGuias_Bind() {
-        if (isset($_SESSION['CritCons'])) {
-            t('Hay un criterio..');
-            $this->objClauWher = unserialize($_SESSION['CritCons']);
-            unset($_SESSION['CritCons']);
-        } else {
-            if (!$this->blnHayxCond) {
-                $dttFechDhoy = new QDateTime(QDateTime::Now);
-                t('Fecha de Hoy: '.$dttFechDhoy->__toString("YYYY-MM-DD"));
-
-                $this->objClauWher   = QQ::Clause();
-                $this->objClauWher[] = QQ::In(QQN::Guias()->ProductoId,$this->arrCodiProd);
-                $this->objClauWher[] = QQ::Equal(QQN::Guias()->CreatedBy,$this->objUsuario->CodiUsua);
-                //$this->objClauWher[] = QQ::Equal(QQN::Guias()->Fecha,$dttFechDhoy->__toString("YYYY-MM-DD"));
-            }
-        }
-
-        $this->dtgGuiases->TotalItemCount = Guias::QueryCount(QQ::AndCondition($this->objClauWher));
-
-        $arrGuiaNaci = Guias::QueryArray(
-            QQ::AndCondition($this->objClauWher),
-            QQ::Clause(
-                $this->dtgGuiases->OrderByClause,
-                $this->dtgGuiases->LimitClause
-            )
-        );
-
-        $this->dtgGuiases->DataSource = $arrGuiaNaci;
-        $_SESSION['DataGuia'] = serialize($arrGuiaNaci);
-
-        //------------------------------------------------------------------------
-        // Query que obtiene todas las guías de la lista sin límite de paginación
-        //------------------------------------------------------------------------
-
-        $arrGuiaLote = Guias::QueryArray(
-            QQ::AndCondition($this->objClauWher),
-            QQ::Clause($this->dtgGuiases->OrderByClause)
-        );
-
-        $this->arrGuiaLote = array();
-
-        foreach($arrGuiaLote as $objGuiaLote) {
-            $this->arrGuiaLote[] = $objGuiaLote->Id;
-        }
     }
 
     public function dtgGuiases_Total_Render(Guias $objGuia) {

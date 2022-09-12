@@ -27,7 +27,6 @@
 			return sprintf('%s',  $this->strDescripcion);
 		}
 
-
 		// Override or Create New Load/Count methods
 		// (For obvious reasons, these methods are commented out...
 		// but feel free to use these as a starting point)
@@ -43,16 +42,6 @@
 			);
 		}
 
-		public static function LoadBySample($strParam1, $intParam2, $objOptionalClauses = null) {
-			// This will return a single Checkpoints object
-			return Checkpoints::QuerySingle(
-				QQ::AndCondition(
-					QQ::Equal(QQN::Checkpoints()->Param1, $strParam1),
-					QQ::GreaterThan(QQN::Checkpoints()->Param2, $intParam2)
-				),
-				$objOptionalClauses
-			);
-		}
 
 		public static function CountBySample($strParam1, $intParam2, $objOptionalClauses = null) {
 			// This will return a count of Checkpoints objects

@@ -1,3 +1,4 @@
+-- Active: 1642856890701@@127.0.0.1@3306@gold
 drop view v_por_recibir_en_almacen;
 create view v_por_recibir_en_almacen as
 select gp.*, g.nota_entrega_id 

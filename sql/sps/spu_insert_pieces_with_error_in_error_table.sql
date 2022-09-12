@@ -3,9 +3,9 @@ delimiter |
 drop procedure if exists spu_insert_pieces_with_error_in_error_table;
 create procedure spu_insert_pieces_with_error_in_error_table(process_id integer)
 begin
-    /*---------------------------------------------------------------------------------------*/
-    /* The leftover pieces must be register in error detail table to be watched by the User  */
-    /*---------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------*/
+    /* The leftover pieces must be registered in the error detail table to be watched by the User  */
+    /*---------------------------------------------------------------------------------------------*/
     insert 
       into detalle_error 
            (proceso_id, referencia, mensaje_error, comentario) 
@@ -16,9 +16,9 @@ begin
       from match_pieces 
      where match_pieces.proceso_error_id = process_id
        and match_pieces.is_leftover = 1; 
-    /*------------------------------------------------------------------------------------------------------*/
-    /* The pieces which cycle is complete, must be register in error detail table to be watched by the User */
-    /*------------------------------------------------------------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------*/
+    /* The pieces which cycle is complete, must be registered in the error detail table to be watched by the User */
+    /*------------------------------------------------------------------------------------------------------------*/
     insert 
       into detalle_error 
            (proceso_id, referencia, mensaje_error, comentario) 

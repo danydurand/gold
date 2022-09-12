@@ -231,7 +231,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
     protected function Form_Create() {
         parent::Form_Create();
-
         $this->SetupValores();
 
         $this->determinarPosicion();
@@ -341,7 +340,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
 
         $this->btnImprPiez_Create();
 
-
     }
 
     //----------------------------
@@ -356,6 +354,9 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->dtgPiezGuia->CssClass = 'datagrid';
         $this->dtgPiezGuia->AlternateRowStyle->CssClass = 'alternate';
 
+        $this->dtgPiezGuia->Paginator = new QPaginator($this->dtgPiezGuia);
+        $this->dtgPiezGuia->ItemsPerPage = 5;
+
         $this->dtgPiezGuia->UseAjax = true;
 
         $this->dtgPiezGuia->SetDataBinder('dtgPiezGuia_Bind');
@@ -364,7 +365,21 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     }
 
     protected function dtgPiezGuia_Bind() {
-        $this->dtgPiezGuia->DataSource = $this->objGuia->GetGuiaPiezasAsGuiaArray();
+
+        $objCondicion   = QQ::Clause();
+        $objCondicion[] = QQ::Equal(QQN::GuiaPiezas()->GuiaId, $this->objGuia->Id);
+
+        $this->dtgPiezGuia->TotalItemCount = GuiaPiezas::QueryCount(QQ::AndCondition($objCondicion));
+
+        $arrPiezGuia = GuiaPiezas::QueryArray(
+            QQ::AndCondition($objCondicion),
+            QQ::Clause(
+                QQ::OrderBy(QQN::GuiaPiezas()->IdPieza),
+                $this->dtgPiezGuia->LimitClause
+            )
+        );
+        $this->dtgPiezGuia->DataSource = $arrPiezGuia;
+
     }
 
     protected function createDtgPiezGuiaColumns() {
@@ -1001,11 +1016,33 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->dtgGuiaCkpt->CssClass = 'datagrid';
         $this->dtgGuiaCkpt->AlternateRowStyle->CssClass = 'alternate';
 
+        $this->dtgGuiaCkpt->Paginator = new QPaginator($this->dtgGuiaCkpt);
+        $this->dtgGuiaCkpt->ItemsPerPage = 10;
+
         $this->dtgGuiaCkpt->UseAjax = true;
 
         $this->dtgGuiaCkpt->SetDataBinder('dtgGuiaCkpt_Bind');
 
         $this->createDtgGuiaCkptColumns();
+    }
+
+    protected function dtgGuiaCkpt_Bind()
+    {
+
+        $objCondicion = QQ::Clause();
+        $objCondicion[] = QQ::Equal(QQN::PiezaCheckpoints()->Pieza->GuiaId, $this->objGuia->Id);
+
+        $this->dtgGuiaCkpt->TotalItemCount = PiezaCheckpoints::QueryCount(QQ::AndCondition($objCondicion));
+
+        $arrGuiaCkpt = PiezaCheckpoints::QueryArray(
+            QQ::AndCondition($objCondicion),
+            QQ::Clause(
+                QQ::OrderBy(QQN::PiezaCheckpoints()->Id, false),
+                $this->dtgGuiaCkpt->LimitClause
+            )
+        );
+        $this->dtgGuiaCkpt->DataSource = $arrGuiaCkpt;
+
     }
 
     // ---- Información de Actividad(es) ---- //
@@ -1018,12 +1055,40 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $this->dtgRegiTrab->CssClass = 'datagrid';
         $this->dtgRegiTrab->AlternateRowStyle->CssClass = 'alternate';
 
+        $this->dtgRegiTrab->SortColumnIndex = 3;
+        $this->dtgRegiTrab->SortDirection = 1;
+
+        $this->dtgRegiTrab->Paginator = new QPaginator($this->dtgRegiTrab);
+        $this->dtgRegiTrab->ItemsPerPage = 10;
+
         $this->dtgRegiTrab->UseAjax = true;
 
         $this->dtgRegiTrab->SetDataBinder('dtgRegiTrab_Bind');
 
         $this->createDtgRegiTrabColumns();
     }
+
+    protected function dtgRegiTrab_Bind() {
+
+        $objCondicion   = QQ::Clause();
+        $objCondicion[] = QQ::Equal(QQN::RegistroTrabajo()->GuiaId, $this->objGuia->Id);
+
+        $this->dtgRegiTrab->TotalItemCount = RegistroTrabajo::QueryCount(QQ::AndCondition($objCondicion));
+
+        $arrRegiTrab = RegistroTrabajo::QueryArray(
+            QQ::AndCondition($objCondicion),
+            QQ::Clause(
+                QQ::OrderBy(
+                    QQN::RegistroTrabajo()->Fecha, false,
+                    QQN::RegistroTrabajo()->Hora, false
+                ),
+                $this->dtgRegiTrab->LimitClause
+            )
+        );
+        $this->dtgRegiTrab->DataSource = $arrRegiTrab;
+    }
+
+
 
     protected function dtgConcGuia_Create() {
         $this->dtgConcGuia = new QDataGrid($this);
@@ -1543,23 +1608,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         }
     }
 
-    protected function dtgGuiaCkpt_Bind() {
-        $objCondicion = QQ::Clause();
-        $objCondicion[] = QQ::Equal(QQN::PiezaCheckpoints()->Pieza->GuiaId,$this->objGuia->Id);
-        $objClauses = array();
-        if ($objClause = $this->dtgGuiaCkpt->OrderByClause)
-            array_push($objClauses, $objClause);
-        if ($objClause = $this->dtgGuiaCkpt->LimitClause)
-            array_push($objClauses, $objClause);
-        $this->dtgGuiaCkpt->DataSource = PiezaCheckpoints::QueryArray(
-            QQ::AndCondition($objCondicion),
-            QQ::Clause(
-                QQ::OrderBy(
-                    QQN::PiezaCheckpoints()->Id,false
-                )
-            )
-        );
-    }
 
     protected function createDtgGuiaCkptColumns() {
         $colIdxxPiez = new QDataGridColumn($this);
@@ -1641,20 +1689,6 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             return $objRegiTrab->Usuario->__toString();
         else
             return null;
-    }
-
-    protected function dtgRegiTrab_Bind() {
-        $objCondicion = QQ::Clause();
-        $objCondicion[] = QQ::Equal(QQN::RegistroTrabajo()->GuiaId, $this->objGuia->Id);
-        $this->dtgRegiTrab->DataSource = RegistroTrabajo::QueryArray(
-            QQ::AndCondition($objCondicion),
-            QQ::Clause(QQ::OrderBy(
-                QQN::RegistroTrabajo()->Fecha,
-                false,
-                QQN::RegistroTrabajo()->Hora,
-                false)
-            )
-        );
     }
 
     protected function createDtgRegiTrabColumns() {
