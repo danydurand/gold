@@ -55,6 +55,8 @@
                 if ($strDireProg != '/common/') {
                     $strDireProg = __APP__."/".$this->strDirectorio."/";
                 }
+            } else {
+                $strDireProg = __SIST__ .'/';
             }
             $strCadeTabu = "\t";
             if ($this->Nivel > 0) {

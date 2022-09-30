@@ -22,5 +22,17 @@
         </div>
     </div>
 </div>
-
-
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <?php $this->lblCostExtr->Render(); ?>
+            <?php $this->txtCostExtr->Render(); ?>
+        </div>
+    </div>
+    <div class="col-md-6 text-right">
+        <div class="form-group">
+            <?php $this->lblMontExtr->Render(); ?>
+            <?php $this->txtMontExtr->Render(); ?>
+        </div>
+    </div>
+</div>

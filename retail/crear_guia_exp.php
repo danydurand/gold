@@ -211,6 +211,11 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected $blnErroProc;
     protected $objPiezGuia;
 
+    protected $lblCostExtr;
+    protected $txtCostExtr;
+    protected $lblMontExtr;
+    protected $txtMontExtr;
+
 
     protected function SetupGuia() {
         $intIdxxGuia = QApplication::PathInfo(0);
@@ -508,6 +513,14 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         }
 
         $this->contarCantidadDePiezas();
+        $this->lstUnidMedi_Change();
+
+        list($decExtrCost, $strExtrCost) = $this->objGuia->ReadExtraCost();
+
+        $this->lblCostExtr_Create();
+        $this->txtCostExtr_Create($strExtrCost);
+        $this->lblMontExtr_Create();
+        $this->txtMontExtr_Create($decExtrCost);
 
     }
 
@@ -892,8 +905,8 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function lstUnidMedi_Create() {
         $this->lstUnidMedi = new QListBox($this);
         $this->lstUnidMedi->Name = 'Unid. Medida';
+        $this->lstUnidMedi->AddItem('pl','pl',!$this->blnEditMode);
         $this->lstUnidMedi->AddItem('cm','cm');
-        $this->lstUnidMedi->AddItem('pl','pl');
         $this->lstUnidMedi->Visible = false;
         $this->lstUnidMedi->AddAction(new QChangeEvent(), new QAjaxAction('lstUnidMedi_Change'));
     }
@@ -1065,6 +1078,7 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     public function lblTituPiez_Click() {
         $this->mostrarCampos('add');
+        $this->lstUnidMedi_Change();
     }
 
     protected function lblContPiez_Create() {
@@ -1304,6 +1318,35 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->btnDelePiez->AddAction(new QClickEvent(), new QServerAction('btnDelePiez_Click'));
     }
 
+    protected function lblCostExtr_Create() {
+        $this->lblCostExtr = new QLabel($this);
+        $this->lblCostExtr->Text = '<b>Monto Adic.</b>';
+        $this->lblCostExtr->HtmlEntities = false;;
+    }
+
+    protected function txtCostExtr_Create($strExtrCost) {
+        $this->txtCostExtr = new QTextBox($this);
+        $this->txtCostExtr->Text = strlen($strExtrCost) ? trim($strExtrCost) : 'Costo Extra';
+        $this->txtCostExtr->Width = 100;
+    }
+
+    protected function lblMontExtr_Create() {
+        $this->lblMontExtr = new QLabel($this);
+        $this->lblMontExtr->Text = '<b>Monto en $</b>';
+        $this->lblMontExtr->HtmlEntities = false;
+    }
+
+    protected function txtMontExtr_Create($decExtrCost) {
+        $this->txtMontExtr = new QTextBox($this);
+        $this->txtMontExtr->Name = 'Monto Extra';
+        $this->txtMontExtr->Text = $decExtrCost > 0 ? $decExtrCost : 0;
+        $this->txtMontExtr->CssClass = 'text-right';
+        $this->txtMontExtr->Width = 80;
+    }
+
+    //-------------
+    // Actions
+    //-------------
     protected function calcularVolumenPies() {
         $decAltoPiez = strlen($this->txtAltoPiez->Text) ? (float)$this->txtAltoPiez->Text : null;
         $decAnchPiez = strlen($this->txtAnchPiez->Text) ? (float)$this->txtAnchPiez->Text : null;
@@ -2321,9 +2364,9 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
     public function colMarcarSeleccion(GcoTemp $objConcTemp, QCheckBox $ctl) {
         /* @var $objConcOpci Conceptos */
-        t('Voy a evaluar si '.$objConcTemp->Concepto->Nombre.' ('.$objConcTemp->ConceptoId.') esta en el vector');
+        // t('Voy a evaluar si '.$objConcTemp->Concepto->Nombre.' ('.$objConcTemp->ConceptoId.') esta en el vector');
         foreach ($this->arrOpciToma as $objConcOpci) {
-            t('Comparando con: '.$objConcOpci->Id);
+            // t('Comparando con: '.$objConcOpci->Id);
             if ($objConcOpci->Id == $objConcTemp->ConceptoId) {
                 $ctl->Checked = true;
                 break;
@@ -2829,6 +2872,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
     protected function btnSave_Click() {
         t('=================');
         t('Guardando la Guia');
+
+        $objDatabase = Guias::GetDatabase();
+        $objDatabase->TransactionBegin();
+
         $this->GestionarClientes();
         //---------------------------------------------------
         // Se guarda la guia en la base de datos
@@ -2950,7 +2997,10 @@ class CrearGuiaExp extends FormularioBaseKaizen {
 
         if ($blnTodoOkey) {
             PiezasTemp::EliminarDelUsuario($this->objUsuario->CodiUsua);
+            $objDatabase->TransactionCommit();
             QApplication::Redirect(__SIST__.'/consulta_guia_new.php/'.$this->objGuia->Id);
+        } else {
+            $objDatabase->TransactionRollBack();
         }
     }
 
@@ -3086,6 +3136,32 @@ class CrearGuiaExp extends FormularioBaseKaizen {
                 t('El mensaje de regreso es: '.$strTextMens);
                 if ($strTextMens != 'OK') {
                     t('Error asociando concepto opcional: '.$strTextMens);
+                }
+            }
+        }
+        //--------------------------------------------------------------------------
+        // If there is an aditional cost (registered manually) it is asociated to
+        // the Awb in this point
+        //--------------------------------------------------------------------------
+        if (strlen($this->txtMontExtr->Text) && ($this->txtMontExtr->Text > 0)) {
+            //-------------------------------------------------
+            // Getting the only one possible "manual" Concept
+            //-------------------------------------------------
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Equal(QQN::Conceptos()->EsFijo,false);
+            $objClauWher[] = QQ::Equal(QQN::Conceptos()->Activo,true);
+            $objClauWher[] = QQ::Equal(QQN::Conceptos()->Valor,"manual");
+            $objConcManu   = Conceptos::QuerySingle(QQ::AndCondition($objClauWher));
+            if ($objConcManu) {
+                $intConcManu = $objConcManu->Id;
+                $strTextMens = $this->objGuia->AsociarConceptoOpcional($intConcManu, $this->objUsuario->CodiUsua);
+                if ($strTextMens != 'OK') {
+                    t('Error asociando concepto opcional: ' . $strTextMens);
+                } else {
+                    $decExtrCost = (float)$this->txtMontExtr->Text;
+                    $strExtrCost = strtoupper($this->txtCostExtr->Text);
+                    $this->objGuia->WriteExtraCost($decExtrCost, $strExtrCost);
+                    t('Parametro del Costo Extra, creado');
                 }
             }
         }

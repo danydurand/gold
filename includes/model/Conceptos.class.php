@@ -34,7 +34,7 @@
             //--------------------------------------------
             $arrGuiaConc = GuiaConceptos::LoadArrayByGuiaId($intGuiaIdxx);
             foreach ($arrGuiaConc as $objGuiaConc) {
-                if (!$objGuiaConc->Concepto->EsFijo) {
+                if ((!$objGuiaConc->Concepto->EsFijo) && (!($objGuiaConc->Concepto->Valor == 'manual'))) {
                     $arrTomaGuia[] = $objGuiaConc->Concepto;
                 }
             }
@@ -48,6 +48,7 @@
             $objClauWher   = QQ::Clause();
             $objClauWher[] = QQ::Equal(QQN::Conceptos()->EsFijo,false);
             $objClauWher[] = QQ::Equal(QQN::Conceptos()->Activo,true);
+            $objClauWher[] = QQ::NotEqual(QQN::Conceptos()->Valor,"manual");
             $arrConcDisp   = Conceptos::QueryArray(QQ::AndCondition($objClauWher));
             return $arrConcDisp;
 		}

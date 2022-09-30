@@ -254,7 +254,6 @@ class MatchScanneo extends FormularioBaseKaizen {
         $objParaQtys = Parametros::LoadByIndiceCodigo('ReceQtys',$intProcIdxx);
         if ($objParaQtys) {
             $arrPrevRece = explode(',',$objParaQtys->Texto1);
-            t($arrPrevRece);
             foreach ($arrPrevRece as $strPrevRece) {
                 $arrManiAuxi = explode('|',$strPrevRece);
                 if (count($arrManiAuxi) > 1) {
@@ -275,8 +274,14 @@ class MatchScanneo extends FormularioBaseKaizen {
         // Deleting previous records related to the User
         //------------------------------------------------
         // t('Deleting previous records related to the User...');
-        $strCadeSqlx  = "call spu_delete_user_records($intCodiUsua)";
-        $objDataBase->NonQuery($strCadeSqlx);
+        try {
+            $strCadeSqlx  = "call spu_delete_user_records($intCodiUsua)";
+            $objDataBase->NonQuery($strCadeSqlx);
+        } catch (Exception $e) {
+            t('Error deleting previous pieces from the User: ' . $e->getMessage());
+            $this->danger('Deleting pieces: '.$e->getMessage());
+            return;
+        }
 
         $blnHayxErro = false;
         $strNombProc = 'Match Scanneo';
@@ -295,10 +300,10 @@ class MatchScanneo extends FormularioBaseKaizen {
         $this->txtNumePiez->Text = '';
         $objCkptMani = Checkpoints::LoadByCodigo('RA');
 
+        $objDataBase->TransactionBegin();
         //----------------------------------------------------------------
         // Every single piece must be inserted in the match_pieces table
         //----------------------------------------------------------------
-        // t('Inserting pieces in match_pieces table...');
         $strCadeSqlx  = "insert ";
         $strCadeSqlx .= "  into match_pieces ";
         $strCadeSqlx .= "       (proceso_error_id, id_pieza, is_leftover, is_cycle_completed, created_at, created_by) ";
@@ -310,25 +315,36 @@ class MatchScanneo extends FormularioBaseKaizen {
                 $intCantReci++;
             }
         }
-        $strCadeSqlx = substr($strCadeSqlx,0,strlen($strCadeSqlx)-1);
-        $objDataBase->NonQuery($strCadeSqlx);
-
-        // t('Detecting leftover, completed and pieces ids...');
+        $strCadeSqlx = substr($strCadeSqlx, 0, strlen($strCadeSqlx) - 1);
+        try {
+            $objDataBase->NonQuery($strCadeSqlx);
+        } catch (Exception $e) {
+            t('Error inserting pieces in match_pieces table: '.$e->getMessage());
+            $this->danger('Inserting pieces: '.$e->getMessage());
+            $objDataBase->TransactionRollBack();
+            return;
+        }
         //------------------------------------------------------------------------
         // Detecting leftover and completed pieces. Counting each of those types 
         //------------------------------------------------------------------------
-        $strCadeSqlx  = "call spu_detect_leftover_and_pieces_ids($intProcIdxx, @leftover_qty, @cycle_completed_qty)";
-        $objDataBase->NonQuery($strCadeSqlx);
-        $strCadeSqlx  = "select @leftover_qty, @cycle_completed_qty";
-        $objDbResult  = $objDataBase->Query($strCadeSqlx);
-        $mixRegistro  = $objDbResult->FetchArray();
-        $intCantSobr  = $mixRegistro['@leftover_qty'];
-        $intCantOkey  = $mixRegistro['@cycle_completed_qty'];
-        $intCantReci -= ($intCantSobr + $intCantOkey);
+        try {
+            $strCadeSqlx  = "call spu_detect_leftover_and_pieces_ids($intProcIdxx, @leftover_qty, @cycle_completed_qty)";
+            $objDataBase->NonQuery($strCadeSqlx);
+            $strCadeSqlx  = "select @leftover_qty, @cycle_completed_qty";
+            $objDbResult  = $objDataBase->Query($strCadeSqlx);
+            $mixRegistro  = $objDbResult->FetchArray();
+            $intCantSobr  = $mixRegistro['@leftover_qty'];
+            $intCantOkey  = $mixRegistro['@cycle_completed_qty'];
+            $intCantReci -= ($intCantSobr + $intCantOkey);
+        } catch (Exception $e) {
+            t('Error detecting leftover and completed pieces: ' . $e->getMessage());
+            $this->danger('Inserting pieces: ' . $e->getMessage());
+            $objDataBase->TransactionRollBack();
+            return;
+        }
         //------------------------------------------------------
         // Inserting received checkpoint to the rest of pieces
         //------------------------------------------------------
-        // t('Inserting received checkpoint to the rest of pieces');
         $intCodiCkpt  = $objCkptMani->Id;
         $intCodiSucu  = $this->objUsuario->SucursalId;
         $strTextCkpt  = $objCkptMani->Descripcion;
@@ -336,34 +352,60 @@ class MatchScanneo extends FormularioBaseKaizen {
             $strCadeSqlx  = "call spu_insert_received_checkpoint($intCodiCkpt, $intCodiSucu, '$strTextCkpt', $intCodiUsua, $intProcIdxx) ";
             $objDataBase->NonQuery($strCadeSqlx);
         } catch (Exception $e) {
-            t('Error: '.$e->getMessage());
+            t('Error inserting checkpoints: ' . $e->getMessage());
+            $this->danger('Error inserting checkpoints: '.$e->getMessage());
+            $objDataBase->TransactionRollBack();
+            return;
         }
         $strTextMens = "Total Recibidas: $intCantReci | Cantidad de Sobrantes: $intCantSobr";
         //---------------------------------------------------------------------------------------
         // The leftover pieces must be register in error detail table to be watched by the User
         //---------------------------------------------------------------------------------------
-        // t('Inserting leftover and completed pieces in error table');
-        $strCadeSqlx  = "call spu_insert_pieces_with_error_in_error_table($intProcIdxx)";
-        $objDataBase->NonQuery($strCadeSqlx);
+        try {
+            $strCadeSqlx  = "call spu_insert_pieces_with_error_in_error_table($intProcIdxx)";
+            $objDataBase->NonQuery($strCadeSqlx);
+        } catch (Exception $e) {
+            t('Error inserting pieces with error in error table: ' . $e->getMessage());
+            $this->danger('Error inserting pieces with error in error table: '.$e->getMessage());
+            $objDataBase->TransactionRollBack();
+            return;
+        }        
+
+        $objDataBase->TransactionCommit();
+
+
         if ($intCantReci > 0) {
             //-----------------------------------------------
             // Last Checkpoint Update in guia_pieces table 
             //-----------------------------------------------
-            // t('Updating last checkpoint...');
-            UpdateLastCheckpoint();
+            try {
+                UpdateLastCheckpoint();
+            } catch (Exception $e) {
+                t('Error updating last checkpoints: ' . $e->getMessage());
+                $this->danger('Error updating last checkpoints: ' . $e->getMessage());
+            }
             //-------------------------------------------------------------------
             // Ahora, se actualiza la cantidad de Recibidas de cada manifiesto
             //-------------------------------------------------------------------
-            // t('Updating received quantities...');
             foreach ($this->arrManiPend as $objManiPend) {
-                $objManiPend->ContarActualizarRecibidas();
+                try {
+                    $objManiPend->ContarActualizarRecibidas();
+                } catch (Exception $e) {
+                    t('Error counting received pieces: ' . $e->getMessage());
+                    $this->danger('Error counting received pieces: ' . $e->getMessage());
+                }
                 //---------------------------------------
                 // Se graba el checkpoint al Manifiesto
                 //---------------------------------------
                 if ($objManiPend->Recibidas > 0) {
-                    $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
-                    if (!$arrResuGrab['TodoOkey']) {
-                        $blnHayxErro = true;
+                    try {
+                        $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+                        if (!$arrResuGrab['TodoOkey']) {
+                            $blnHayxErro = true;
+                        }
+                    } catch (Exception $e) {
+                        t('Error inserting checkpoint to Manifest: ' . $e->getMessage());
+                        $this->danger('Error inserting checkpoint to Manifest: ' . $e->getMessage());
                     }
                 }
             }
@@ -399,7 +441,6 @@ class MatchScanneo extends FormularioBaseKaizen {
         } else {
             $this->success($strTextMens);
         }
-        // t('Process finished: '. date('H:i:s'));
     }
 
 

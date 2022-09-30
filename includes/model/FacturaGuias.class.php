@@ -61,7 +61,7 @@
                         $objItemFact = new FacturaItems();
                         $objItemFact->FacturaId   = $this->FacturaId;
                         $objItemFact->ConceptoId  = $objConcGuia->ConceptoId;
-                        $objItemFact->MostrarComo = $objConcGuia->Concepto->MostrarComo;
+                        $objItemFact->MostrarComo = $objConcGuia->MostrarComo;
                         $objItemFact->Monto       = $objConcGuia->Monto;
                         $objItemFact->Save();
                     } catch (Exception $e) {

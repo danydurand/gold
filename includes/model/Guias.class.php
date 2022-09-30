@@ -186,9 +186,46 @@ class Guias extends GuiasGen
         return $this->Alto . ' x ' . $this->Ancho . ' x ' . $this->Largo;
     }
 
-
+    public function ReadExtraCost() {
+        $decExtrCost = 0;
+        $strExtrCost = '';
+        $objExtrCost = Parametros::BP('ExtrCost', $this->Id, "TODO");
+        if ($objExtrCost instanceof Parametros) {
+            $decExtrCost = $objExtrCost->Valor1;
+            $strExtrCost = $objExtrCost->Texto1;
+        }
+        return [$decExtrCost, $strExtrCost];
+    }
+    
+    public function WriteExtraCost($decExtrCost, $strExtrCost) {
+        $objExtrCost = Parametros::BP('ExtrCost', $this->Id, "TODO");
+        if (!($objExtrCost instanceof Parametros)) {
+            $objExtrCost = new Parametros();
+            $objExtrCost->Indice = 'ExtrCost';
+            $objExtrCost->Codigo = $this->Id;
+            $objExtrCost->Descripcion = 'Costo Extra Guia Nro: '.$this->Numero;
+        }
+        $objExtrCost->Valor1 = $decExtrCost;
+        $objExtrCost->Texto1 = $strExtrCost;
+        $objExtrCost->Save();
+        return [$decExtrCost, $strExtrCost];
+    }
+    
+    public function DeleteExtraCost() {
+        $objExtrCost = Parametros::BP('ExtrCost', $this->Id, "TODO");
+        if ($objExtrCost instanceof Parametros) {
+            $objExtrCost->Delete();
+        }
+    }
+    
+    
+    
     public function borrarConceptosOpcionales() {
         $this->DeleteAllGuiaConceptosOpcionalesesAsGuia();
+        //-----------------------------------------------------------------------------
+        // Just in case there is a manual cost related to the Awb in Parameters table
+        //-----------------------------------------------------------------------------
+        $this->DeleteExtraCost();
     }
 
 
@@ -616,17 +653,26 @@ class Guias extends GuiasGen
             //---------------------------------------------------------------------------------
             // Se trata de un Aliado, se utiliza la Tarifa de EXP vigente, asociada al Aliado
             //---------------------------------------------------------------------------------
-            // t('Aliado Id: ' . $this->ClienteCorpId . ' Producto Id: ' . $this->ProductoId);
+            t('Aliado Id: ' . $this->ClienteCorpId . ' Producto Id: ' . $this->ProductoId);
             $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ClienteId, $this->ClienteCorpId);
             $objClauWher[] = QQ::Equal(QQN::TarifaCliente()->ProductoId, $this->ProductoId);
             $arrTariClie   = TarifaCliente::QueryArray(QQ::AndCondition($objClauWher));
             if (isset($arrTariClie)) {
-                // t('El vector de TarifaCliente tiene: ' . count($arrTariClie) . ' elementos');
-                $objTariProd = $arrTariClie[0];
-                $arrTariProd = TarifaExp::TarifaVigenteAliado($this->ProductoId, $this->ClienteCorpId, $this->Fecha->__toString('YYYY-MM-DD'), $this->DestinoId);
+                t('El vector de TarifaCliente tiene: ' . count($arrTariClie) . ' elementos');
+                // $objTariProd = $arrTariClie[0];
+                $arrTariProd = TarifaExp::TarifaVigenteAliado(
+                    $this->ProductoId, 
+                    $this->ClienteCorpId, 
+                    $this->Fecha->__toString('YYYY-MM-DD'), 
+                    $this->DestinoId
+                );
             } else {
-                // t('No se encontro la tarifa del Cliente-Aliado, se aplica tarifa publica');
-                $arrTariProd = TarifaExp::TarifaVigente($this->ProductoId, $this->Fecha->__toString('YYYY-MM-DD'), $this->DestinoId);
+                t('No se encontro la tarifa del Cliente-Aliado, se aplica tarifa publica');
+                $arrTariProd = TarifaExp::TarifaVigente(
+                    $this->ProductoId, 
+                    $this->Fecha->__toString('YYYY-MM-DD'), 
+                    $this->DestinoId
+                );
             }
         }
         $decMontTari = (float)$arrTariProd['monto'];
@@ -686,13 +732,17 @@ class Guias extends GuiasGen
             // Una vez calculado, se registra el concepto en la tabla correspondiente
             //-------------------------------------------------------------------------
             try {
+                $strMostComo = $objConcFact->MostrarComo;
+                if ($objConcFact->Valor == 'manual') {
+                    $strMostComo = $explicacion;
+                }
                 $guia_concepto = new GuiaConceptos();
                 $guia_concepto->GuiaId      = $this->Id;
                 $guia_concepto->ConceptoId  = $objConcFact->Id;
                 $guia_concepto->Tipo        = $objConcFact->AplicaComo;
                 $guia_concepto->Valor       = is_numeric($objConcFact->Valor) ? $objConcFact->Valor : null;
                 $guia_concepto->Monto       = $monto;
-                $guia_concepto->MostrarComo = $objConcFact->MostrarComo;
+                $guia_concepto->MostrarComo = $strMostComo;
                 $guia_concepto->Explicacion = $explicacion;
                 $guia_concepto->Save();
                 // t('Concepto grabado en la DB');
@@ -904,6 +954,10 @@ class Guias extends GuiasGen
                 $monto = 0;
                 $explicacion = "Metodo $metodo... no declarado en el concepto";
             }
+        }
+        if ($concepto->Valor == 'manual') {
+            t('Se trata de un monto manual');
+            list($monto, $explicacion) = $this->ReadExtraCost();
         }
         if ($concepto->AplicarTasa) {
             // t('Se debe aplicar la tasa: ' . $this->Tasa . ' de cambio para llevar a Bs');

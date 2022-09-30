@@ -585,8 +585,8 @@ class ConceptosEditForm extends ConceptosEditFormBase {
         if ($blnTodoOkey) {
             $mixValoCamp = $this->txtValor->Text;
             if (!is_numeric($mixValoCamp)) {
-                if (!in_array($mixValoCamp,['metodo','rango'])) {
-                    $strTextMens = 'El Valor del Concepto debe ser: "metodo", "rango" o "un numero"';
+                if (!in_array($mixValoCamp,['metodo','rango', 'manual'])) {
+                    $strTextMens = 'El Valor del Concepto debe ser: "metodo", "rango", "manual" o "un numero"';
                     $this->danger($strTextMens);
                     return false;
                 }
