@@ -78,17 +78,19 @@ class Index extends FormularioBaseKaizen {
         $this->dtgGuiaCons->FontSize = 12;
         $this->dtgGuiaCons->ShowFilter = false;
 
+        /*
         $this->dtgGuiaCons->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
         $this->dtgGuiaCons->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         $this->dtgGuiaCons->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
         $this->dtgGuiaCons->AddRowAction(new QClickEvent(), new QAjaxAction('dtgGuiaConsRow_Click'));
+        */
 
         $colNumeGuia = $this->dtgGuiaCons->MetaAddColumn('Tracking');
         $colNumeGuia->Name = 'GUIA';
 
-        $colFechGuia = new QDataGridColumn('FECHA','<?= $_ITEM->Fecha->__toString("DD/MM/YYYY") ?>');
-        $this->dtgGuiaCons->AddColumn($colFechGuia);
+        $colRefeEmba = new QDataGridColumn('EMBARQUE','<?= $_ITEM->NotaEntrega->Referencia ?>');
+        $this->dtgGuiaCons->AddColumn($colRefeEmba);
 
         $colSucuOrig = $this->dtgGuiaCons->MetaAddColumn(QQN::Guias()->Origen->Nombre);
         $colSucuOrig->Name = 'ORIGEN';
@@ -149,7 +151,10 @@ class Index extends FormularioBaseKaizen {
 
     protected function dtgPiezGuia_Bind() {
         if (strlen($this->strNumeGuia)) {
-            $objGuia = Guias::Load($this->strNumeGuia);
+            $objGuia = Guias::LoadByNumero($this->strNumeGuia);
+            if (!($objGuia instanceof Guias)) {
+                $objGuia = Guias::LoadByTracking($this->strNumeGuia);
+            }
             $this->dtgPiezGuia->DataSource = $objGuia->GetGuiaPiezasAsGuiaArray();
         }
     }
@@ -158,13 +163,20 @@ class Index extends FormularioBaseKaizen {
         $colIdxxPiez = new QDataGridColumn($this);
         $colIdxxPiez->Name = QApplication::Translate('Pieza');
         $colIdxxPiez->Html = '<?= $_FORM->dtgPiezGuia_IdxxPiez_Render($_ITEM); ?>';
+        $colIdxxPiez->Width = 50;
         $this->dtgPiezGuia->AddColumn($colIdxxPiez);
 
         $colDescPiez = new QDataGridColumn($this);
-        $colDescPiez->Name = QApplication::Translate('Contenido');
-        $colDescPiez->Html = '<?= $_ITEM->Descripcion; ?>';
-        $colDescPiez->Width = 200;
+        $colDescPiez->Name = QApplication::Translate('Ult. Estatus');
+        $colDescPiez->Html = '<?= $_ITEM->LastCkptComment; ?>';
+        $colDescPiez->Width = 300;
         $this->dtgPiezGuia->AddColumn($colDescPiez);
+
+        $colFechHora = new QDataGridColumn($this);
+        $colFechHora->Name = QApplication::Translate('Fec/Hora Estatus');
+        $colFechHora->Html = '<?= $_FORM->dtgPiezGuia_FechaHora_UltCkpt_Render($_ITEM); ?>';
+        $colFechHora->Width = 120;
+        $this->dtgPiezGuia->AddColumn($colFechHora);
 
         $colKiloPiez = new QDataGridColumn($this);
         $colKiloPiez->Name = QApplication::Translate('Kilos');
@@ -212,13 +224,21 @@ class Index extends FormularioBaseKaizen {
 
     protected function dtgGuiaCkpt_Bind() {
         if (strlen($this->strNumeGuia)) {
-            $objCondicion = QQ::Clause();
-            $objCondicion[] = QQ::Equal(QQN::PiezaCheckpoints()->Pieza->GuiaId,$this->strNumeGuia);
+            $objCondicion   = QQ::Clause();
+
+            $objGuia = Guias::LoadByNumero($this->strNumeGuia);
+            if (!($objGuia instanceof Guias)) {
+                $objGuia = Guias::LoadByTracking($this->strNumeGuia);
+            }
+            $objCondicion[] = QQ::Equal(QQN::PiezaCheckpoints()->Pieza->GuiaId,$objGuia->Id);
+            // $objCondicion[] = QQ::Equal(QQN::PiezaCheckpoints()->Pieza->GuiaId,$this->strNumeGuia);
+
             $objClauses = array();
             if ($objClause = $this->dtgGuiaCkpt->OrderByClause)
                 array_push($objClauses, $objClause);
             if ($objClause = $this->dtgGuiaCkpt->LimitClause)
                 array_push($objClauses, $objClause);
+
             $this->dtgGuiaCkpt->DataSource = PiezaCheckpoints::QueryArray(
                 QQ::AndCondition($objCondicion),
                 QQ::Clause(
@@ -248,8 +268,8 @@ class Index extends FormularioBaseKaizen {
         $this->dtgGuiaCkpt->AddColumn($colTextObse);
 
         $colFechCkpt = new QDataGridColumn($this);
-        $colFechCkpt->Name = QApplication::Translate('Fecha/Hora');
-        $colFechCkpt->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY"); ?>';
+        $colFechCkpt->Name = QApplication::Translate('Fecha y Hora');
+        $colFechCkpt->Html = '<?= $_FORM->dtgGuiaCkpt_FechHora_Render($_ITEM); ?>';
         $this->dtgGuiaCkpt->AddColumn($colFechCkpt);
 
         $colUsuaCkpt = new QDataGridColumn($this);
@@ -260,9 +280,18 @@ class Index extends FormularioBaseKaizen {
 
     }
 
+    public function dtgGuiaCkpt_FechHora_Render(PiezaCheckpoints $objPiezCkpt) {
+        return $objPiezCkpt->Fecha . " " . $objPiezCkpt->Hora;
+    }
+
     public function dtgGuiaCkpt_IdxxPiez_Render(PiezaCheckpoints $objPiezCkpt) {
         $strIdxxPiez = explode('-',$objPiezCkpt->Pieza->IdPieza)[1];
         return utf8_encode($strIdxxPiez);
+    }
+
+
+    public function dtgPiezGuia_FechaHora_UltCkpt_Render(GuiaPiezas $objGuiaPiez) {
+        return $objGuiaPiez->LastCkptDate." ".$objGuiaPiez->LastCkptHour;
     }
 
     public function dtgGuiaCkpt_TextObse_Render(PiezaCheckpoints $objPiezCkpt) {
@@ -319,21 +348,22 @@ class Index extends FormularioBaseKaizen {
             //----------------------------
             $objClauWher[] = QQ::Like(QQN::Guias()->Tracking,'%'.$strNumeGuia.'%');
         }
-        $intCantGuia   = Guias::QueryCount(QQ::OrCondition($objClauWher));
+        $intCantGuia = Guias::QueryCount(QQ::OrCondition($objClauWher));
 
-		$this->strNumeGuia = '';
         $this->dtgGuiaCons->Refresh();
+		$this->strNumeGuia = $strNumeGuia;
         $this->dtgPiezGuia->Refresh();
         $this->dtgGuiaCkpt->Refresh();
         $this->mensaje();
 		if ($intCantGuia > 0) {
-			$strTextMens = 'Haga <b>Click</b> sobre la Guía, para obtener mas detalles';
-			$this->info($strTextMens);
+            // $strTextMens = 'Haga <b>Click</b> sobre la Guía, para obtener mas detalles';
+            // $this->info($strTextMens);
             $this->dtgGuiaCons->Visible = true;
             $this->lblGuiaCons->Visible = true;
             $this->dtgPiezGuia->Visible = true;
             $this->lblPiezGuia->Visible = true;
             $this->lblGuiaCkpt->Visible = true;
+            $this->dtgGuiaCkpt->Visible = true;
         } else {
 			$strTextMens = 'No hay registros que satisfagan la condición de búsqueda';
 			$this->danger($strTextMens);
@@ -347,13 +377,11 @@ class Index extends FormularioBaseKaizen {
     }
 
     protected function dtgGuiaConsRow_Click($strFormId, $strControlId, $strParameter) {
-        $this->strNumeGuia = $strParameter;
-        $this->dtgPiezGuia->Refresh();
-        $this->dtgPiezGuia->Visible = true;
-        $this->dtgGuiaCkpt->Refresh();
-        $this->dtgGuiaCkpt->Visible = true;
-        $this->lblGuiaCkpt->Text = 'Detalle del Tránsito de cada pieza de la Guía';
-        $this->lblGuiaCkpt->Visible = true;
+        // $this->strNumeGuia = $strParameter;
+        // $this->dtgPiezGuia->Refresh();
+        // $this->dtgPiezGuia->Visible = true;
+        // $this->dtgGuiaCkpt->Refresh();
+        // $this->dtgGuiaCkpt->Visible = true;
     }
 
     protected function btnCancel_Click() {
@@ -370,4 +398,5 @@ class Index extends FormularioBaseKaizen {
 
 }
 
-Index::Run('Index','index.tpl.php');
+// Index::Run('Index','index.tpl.php');
+Index::Run('Index');

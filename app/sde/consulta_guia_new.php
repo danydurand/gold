@@ -1137,12 +1137,12 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colTextObse = new QDataGridColumn($this);
         $colTextObse->Name = QApplication::Translate('Comentario');
         $colTextObse->Html = '<?= $_FORM->dtgGuiaCkpt_TextObse_Render($_ITEM); ?>';
-        $colTextObse->Width = 350;
+        $colTextObse->Width = 300;
         $this->dtgGuiaCkpt->AddColumn($colTextObse);
 
         $colFechCkpt = new QDataGridColumn($this);
-        $colFechCkpt->Name = QApplication::Translate('Fecha/Hora');
-        $colFechCkpt->Html = '<?= $_ITEM->Fecha->__toString("DD/MM/YYYY"); ?>';
+        $colFechCkpt->Name = QApplication::Translate('Fecha y Hora');
+        $colFechCkpt->Html = '<?= $_FORM->dtgGuiaCkpt_FechHora_Render($_ITEM); ?>';
         $this->dtgGuiaCkpt->AddColumn($colFechCkpt);
 
         $colUsuaCkpt = new QDataGridColumn($this);
@@ -1157,6 +1157,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colCodiRuta->Width = 15;
         $this->dtgGuiaCkpt->AddColumn($colCodiRuta);
     }
+
+    public function dtgGuiaCkpt_FechHora_Render(PiezaCheckpoints $objPiezCkpt) {
+        return $objPiezCkpt->Fecha . " " . $objPiezCkpt->Hora;
+    }
+
 
     public function dtgGuiaCkpt_IdxxPiez_Render(PiezaCheckpoints $objPiezCkpt) {
         $strIdxxPiez = explode('-',$objPiezCkpt->Pieza->IdPieza)[1];

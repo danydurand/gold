@@ -772,6 +772,8 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
     }
 
     protected function btnSave_Click() {
+        $time_start = microtime(true);
+
         t('==============================');
         t('Creando Guias Gold en el SisCO');
         $this->objCliente = MasterCliente::Load($this->lstClieCarg->SelectedValue);
@@ -797,6 +799,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $this->danger("No existe el Checkpoint $strCodiCkpt");
             return;
         }
+        $time_end = microtime(true);
+        $time = formatPeriod($time_end, $time_start);
+        t('**********');
+        t('Parcial 1: '.$time);
         //-----------------------------------------------------------
         // Se identifican las Guias Masivas pendientes por procesar
         //-----------------------------------------------------------
@@ -822,6 +828,10 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 }
             }
         }
+        $time_end = microtime(true);
+        $time = formatPeriod($time_end, $time_start);
+        t('**********');
+        t('Parcial 2: ' . $time);
         //------------------------------------------------
         // Se levantan nuevamente los errores en pantalla
         //------------------------------------------------
@@ -846,6 +856,12 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                 $intCantErro++;
             }
         }
+
+        $time_end = microtime(true);
+        $time = formatPeriod($time_end, $time_start);
+        t('**********');
+        t('Parcial 3: ' . $time);
+        
         //-----------------------------------------------------------
         // Getting the necesary data to execute the store procedure
         //-----------------------------------------------------------
@@ -861,11 +877,23 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         $strStorProc = "call sp_update_nota_entrega_status($strParaSqlx)";
         $objDatabase = NotaEntrega::GetDatabase();
         $objDatabase->NonQuery($strStorProc);
+
+        $time_end = microtime(true);
+        $time = formatPeriod($time_end, $time_start);
+        t('**********');
+        t('Parcial 4: ' . $time);
+        
         //------------------------------------------
         // Updating last checkpoint on every piece
         //------------------------------------------
         $strStorProc = "call sp_update_last_checkpoint()";
         $objDatabase->NonQuery($strStorProc);
+
+        $time_end = microtime(true);
+        $time = formatPeriod($time_end, $time_start);
+        t('**********');
+        t('Parcial 5: ' . $time);
+
         //--------------------------------------
         // Se almacena el resultado del proceso
         //--------------------------------------
@@ -877,10 +905,16 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
         //----------------------------------------------
         // Se deja registro de la transacción realizada
         //----------------------------------------------
+        $time_end = microtime(true);
+        $time = formatPeriod($time_end, $time_start);
+        $strTiemProc = " (Tiempo => $time)";
+        t('**********');
+        t('Parcial 6: ' . $time);
+
         $arrLogxCamb['strNombTabl'] = 'ProcesoError';
         $arrLogxCamb['intRefeRegi'] = $this->objProcEjec->Id;
         $arrLogxCamb['strNombRegi'] = $this->objProcEjec->Nombre;
-        $arrLogxCamb['strDescCamb'] = 'Ejecutado';
+        $arrLogxCamb['strDescCamb'] = 'Carga de Manifiesto '.$strTiemProc;
         $arrLogxCamb['strEnlaEnti'] = __SIST__.'/proceso_error_list.php/'.$this->objProcEjec->Id;
         LogDeCambios($arrLogxCamb);
 
@@ -1442,7 +1476,6 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
             $objGuia->PiesCub               = $objGuiaMasi->PiesCub;
             $objGuia->NotaEntregaId         = $objGuiaMasi->NotaEntregaId;
             $objGuia->Save();
-            //t('Guia: '.$objGuia->Numero.' creada en la BD');
             //------------------------------------------------------------------
             // Una vez creada la guia, se crean las piezas con pesos promedios
             //------------------------------------------------------------------

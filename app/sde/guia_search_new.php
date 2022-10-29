@@ -10,6 +10,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     // Zona 1
     protected $txtNumeGuia;
     protected $txtGuiaExte;
+    protected $txtGuiaScan;
     protected $txtNumeMast;
     protected $txtCodiInte;
     protected $txtNombBusc;
@@ -65,6 +66,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         
         $this->txtNumeGuia_Create();
         $this->txtGuiaExte_Create();
+        $this->txtGuiaScan_Create();
         $this->txtCodiInte_Create();
         $this->txtNombBusc_Create();
         $this->lstCodiClie_Create();
@@ -120,7 +122,13 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtGuiaExte = new QTextBox($this);
         $this->txtGuiaExte->Name = QApplication::Translate('Guía Cliente');
         $this->txtGuiaExte->Width = 181;
-        $this->txtGuiaExte->AddAction(new QFocusOutEvent(), new QAjaxAction('txtGuiaExte_FocusOut'));
+    }
+
+    protected function txtGuiaScan_Create() {
+        $this->txtGuiaScan = new QTextBox($this);
+        $this->txtGuiaScan->Name = QApplication::Translate('Scanneo');
+        $this->txtGuiaScan->Width = 181;
+        $this->txtGuiaScan->AddAction(new QFocusOutEvent(), new QAjaxAction('txtGuiaScan_FocusOut'));
     }
 
     protected function txtCodiInte_Create() {
@@ -367,9 +375,9 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     // Acciones Asociadas a los Objetos
     //-----------------------------------
 
-    protected function txtGuiaExte_FocusOut() {
-        if (strlen($this->txtGuiaExte->Text) > 0) {
-            $this->txtGuiaExte->Text = transformar($this->txtGuiaExte->Text);
+    protected function txtGuiaScan_FocusOut() {
+        if (strlen($this->txtGuiaScan->Text) > 0) {
+            $this->txtGuiaScan->Text = transformar($this->txtGuiaScan->Text);
         }
     }
 
@@ -534,16 +542,25 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
             }
         }
         if ($blnTodoOkey) {
-            //--------------------------------------------------------------------------------------------------
-            // Se Arma el SQL para la busqueda de registros, comenzando con la determinación del tipo de envío.
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------
+            // Se Arma el SQL para la busqueda de registros
+            //------------------------------------------------
             if (strlen($this->txtNumeGuia->Text)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->Numero,DejarSoloLosNumeros($this->txtNumeGuia->Text));
-                $strCadeSqlx  .= " and numero = '".$this->txtNumeGuia->Text."'";
+                $strCadeSqlx  .= " and numero = '". DejarSoloLosNumeros($this->txtNumeGuia->Text)."'";
             }
             if (strlen($this->txtGuiaExte->Text)) {
-                $objClausula[] = QQ::Like(QQN::Guias()->Tracking,"%".$this->txtGuiaExte->Text."%");
+                $objClausula[] = QQ::Equal(QQN::Guias()->Tracking,$this->txtGuiaExte->Text);
                 $strCadeSqlx  .= " and tracking = '".$this->txtGuiaExte->Text."'";
+            }
+            if (strlen($this->txtGuiaScan->Text)) {
+                $objWherPiez   = QQ::Clause();
+                $objWherPiez[] = QQ::Equal(QQN::GuiaPiezas()->IdPieza, $this->txtGuiaScan->Text);
+                $objPiezBusc   = GuiaPiezas::QuerySingle(QQ::AndCondition($objWherPiez));
+                if ($objPiezBusc instanceof GuiaPiezas) {
+                    $objClausula[] = QQ::Equal(QQN::Guias()->Id,$objPiezBusc->GuiaId);
+                    $strCadeSqlx  .= " and guia_id = ".$objPiezBusc->GuiaId;
+                }
             }
             if (!is_null($this->lstCodiClie->SelectedValue) && (!$this->chkInclSubc->Checked)) {
                 $objClausula[] = QQ::Equal(QQN::Guias()->ClienteCorpId,$this->lstCodiClie->SelectedValue);
@@ -654,6 +671,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 return;
             }
             if (count($objClausula) > 1){
+
                 $intHayxRegi = Guias::QueryCount(QQ::AndCondition($objClausula));
                 if ($intHayxRegi > 0) {
                     if ($intHayxRegi > 3500 && $strParameter != 'K') {

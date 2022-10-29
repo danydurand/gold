@@ -1000,13 +1000,6 @@ class Guias extends GuiasGen
             $objNuevPiez->NotaEntregaId = $intNotaIdxx;
             $objNuevPiez->CreatedAt     = new QDateTime(QDateTime::Now());
             $objNuevPiez->Save();
-            /*
-                $strTextObse = trim($objCkptProc->Descripcion).' (Manif.: '.$objNuevPiez->Guia->NotaEntrega->Referencia.')';
-                $arrResuGrab = $this->grabarCheckpointPieza($objNuevPiez, $objCkptProc, $strTextObse);
-                if (!$arrResuGrab['TodoOkey']) {
-                    throw new Exception($arrResuGrab['MotiNook']);
-                }
-                */
         } catch (Exception $e) {
             t('Error: ' . $e->getMessage());
             $arrParaErro['ProcIdxx'] = $objProcEjec->Id;
