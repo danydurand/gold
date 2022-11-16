@@ -624,7 +624,8 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     protected function lblTeleDest_Create() {
         $this->lblTeleDest = new QLabel($this);
         $this->lblTeleDest->Name = 'Tlf. Destinatario';
-        $this->lblTeleDest->Text = $this->objGuia->TelefonoDestinatario;
+        $this->lblTeleDest->Text = $this->objGuia->TelefonoDestinatario();
+        $this->lblTeleDest->ToolTip = 'Todos los Telefonos: '.$this->objGuia->TelefonoDestinatario;
     }
 
     // -------- Costos del Servicio -------- //
@@ -669,10 +670,17 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
     // ------ Información del Envío ------- //
 
     protected function lblNumeGuia_Create() {
+        $strNumeTrac = $this->objGuia->Tracking;
         $this->lblNumeGuia = new QLabel($this);
         $this->lblNumeGuia->Name = 'Guía #';
-        $this->lblNumeGuia->Text = $this->objGuia->Tracking;
+        $this->lblNumeGuia->Text = $strNumeTrac;
         $this->lblNumeGuia->HtmlEntities = false;
+        $this->lblNumeGuia->Width = 125;
+        $this->lblNumeGuia->FontBold = true;
+        $this->lblNumeGuia->ForeColor = 'blue';
+        if (strlen($strNumeTrac) > 15) {
+            $this->lblNumeGuia->FontSize = 12;
+        }
     }
 
     protected function lblFechGuia_Create() {

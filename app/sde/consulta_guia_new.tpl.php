@@ -138,7 +138,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                         <div class="col-md-3">
                             <div class="titulo-c">Guía (<?= $this->lblSistGuia->Text ?>)#</div>
                         </div>
-                        <div class="col-md-3 text-left enlace">
+                        <div class="col-md-3 text-left">
                             <?php $this->lblNumeGuia->Render(); ?>
                         </div>
                         <div class="col-md-3">
@@ -280,11 +280,6 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                     </div>
                 </div>
             </div>
-            <!--<div class="row" style="margin-top: 0.3em">-->
-            <!--    <div class="col-md-12" style="border-radius: 3px; padding: 0.1em">-->
-            <!--        <div class="titulo">Comentario</div>-->
-            <!--    </div>-->
-            <!--</div>-->
             <div class="row" style="margin-top: 0.5em; margin-bottom: 0.5em;">
                 <div class="col-md-11">
                     <?php $this->txtTextCome->Render(); ?>

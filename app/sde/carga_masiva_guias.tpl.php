@@ -82,7 +82,10 @@ require(__APP_INCLUDES__ . '/header.inc.php');
         <?php } ?>
         <?php if ($this->lblNumeCarg->Text == 0) { ?>
         <div class="row" style="margin-top: 1em;">
-            <?php include('carga_masiva_instrucciones.tpl.php'); ?>
+            <div class="col-md-1"></div>
+            <div class="col-md-11">
+                <?php include('carga_masiva_instrucciones.tpl.php'); ?>
+            </div>
         </div>
         <?php } ?>
         <?php if ($this->lblNumeAjus->Text > 0) { ?>

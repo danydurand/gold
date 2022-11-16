@@ -35,7 +35,7 @@
 	 * @property string $EmailRemitente the value for strEmailRemitente 
 	 * @property string $NombreDestinatario the value for strNombreDestinatario (Not Null)
 	 * @property string $DireccionDestinatario the value for strDireccionDestinatario (Not Null)
-	 * @property string $TelefonoDestinatario the value for strTelefonoDestinatario (Not Null)
+	 * @property string $TelefonoDestinatario the value for strTelefonoDestinatario 
 	 * @property string $TelefonoMovilDestinatario the value for strTelefonoMovilDestinatario 
 	 * @property string $EmailDestinatario the value for strEmailDestinatario 
 	 * @property string $SexoDestinatario the value for strSexoDestinatario 
@@ -290,7 +290,7 @@
 		 * @var string strTelefonoDestinatario
 		 */
 		protected $strTelefonoDestinatario;
-		const TelefonoDestinatarioMaxLength = 50;
+		const TelefonoDestinatarioMaxLength = 150;
 		const TelefonoDestinatarioDefault = null;
 
 
@@ -3228,7 +3228,7 @@
 
 				case 'TelefonoDestinatario':
 					/**
-					 * Gets the value for strTelefonoDestinatario (Not Null)
+					 * Gets the value for strTelefonoDestinatario 
 					 * @return string
 					 */
 					return $this->strTelefonoDestinatario;
@@ -4158,7 +4158,7 @@
 
 				case 'TelefonoDestinatario':
 					/**
-					 * Sets the value for strTelefonoDestinatario (Not Null)
+					 * Sets the value for strTelefonoDestinatario 
 					 * @param string $mixValue
 					 * @return string
 					 */

@@ -68,7 +68,7 @@ class InventarioAlmacen extends FormularioBaseKaizen {
 		$this->txtNumeSeri->Required = true;
 		$this->txtNumeSeri->TextMode = QTextMode::MultiLine;
 		$this->txtNumeSeri->Height = 200;
-		$this->txtNumeSeri->Width = 220;
+		$this->txtNumeSeri->Width = 300;
 	}
 
 	//-----------------------------------
@@ -76,106 +76,94 @@ class InventarioAlmacen extends FormularioBaseKaizen {
 	//-----------------------------------
 
 	protected function btnSave_Click() {
-		$this->objDataBase = QApplication::$Database[1];
-		//$objUsuario = unserialize($_SESSION['User']);
+		$objDataBase = QApplication::$Database[1];
 
 		$arrGuiaOkey = explode(',',nl2br2($this->txtNumeSeri->Text));
-        $arrGuiaOkey = array_unique($arrGuiaOkey,SORT_STRING);
+        $arrGuiaOkey = LimpiarArreglo($arrGuiaOkey,false);
         $arrGuiaOkey = array_map('transformar',$arrGuiaOkey);
 
         $this->txtNumeSeri->Text = '';
 
-		$blnTodoOkey = true;
-		//$objCheckpoint = Checkpoints::LoadByCodigo($this->lstIdenAlma->SelectedValue);
 		$objCheckpoint = Checkpoints::LoadByCodigo('IA');
 		if (!$objCheckpoint) {
-		    t('No se ha definido el ckpt En Almacen: '.$this->lstIdenAlma->SelectedValue);
-            $strMensUsua = QApplication::Translate('No se ha definido el Checkpoint "En Almacen"');
-            $this->mensaje($strMensUsua,'','d','i','hand-stop-o');
-			$blnTodoOkey = false;
+            $this->danger('No se ha definido el Checkpoint "Inventario de Almacen"');
+			return;
 		}
-		if ($blnTodoOkey) {
-			$intContGuia = 0;
-			$intContCkpt = 0;
-			foreach ($arrGuiaOkey as $strNumeSeri) {
-				if (strlen($strNumeSeri)) {
-					$blnTodoOkey = true;
-					//-----------------------------------------------------------------
-					// Se procesa una a una las piezas proporcionadas por el Usuario
-					//-----------------------------------------------------------------
-					$objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
-					if (!$objGuiaPiez) {
-						$this->txtNumeSeri->Text .= $strNumeSeri." (Esta Guia No Existe)".chr(13);
-						$blnTodoOkey = false;
-					} else {
-					    if ($objGuiaPiez->Guia->Anulada()) {
-					        //----------------------------
-                            // La Guía ha sido eliminada.
-                            //----------------------------
-                            $this->txtNumeSeri->Text .= $strNumeSeri." (Esta Guia Fue Eliminada)".chr(13);
-                            $blnTodoOkey = false;
-                        } else {
-                            if ($objGuiaPiez->tieneCheckpoint('OK')) {
-                                if ($this->lstElimPodx->SelectedValue == 'S') {
-                                    if (!is_null($objGuiaPiez->Guia->GuiaPodId)) {
-                                        $objGuiaPiez->Guia->GuiaPod->Delete();
-                                    }
-                                    //----------------------------------------------------------------------------
-                                    // Este movimiento debe quedar grabado en el Registro de Trabajo de la Guia
-                                    //----------------------------------------------------------------------------
-                                    $objCheckModi = Checkpoints::LoadByCodigo('MG');
-                                    $objUsuario   = unserialize($_SESSION['User']);
-                                    if ($objCheckModi && $objUsuario) {
-                                        $arrParaRegi['NumeGuia'] = $objGuiaPiez->GuiaId;
-                                        $arrParaRegi['CodiCkpt'] = $objCheckModi->Id;
-                                        $arrParaRegi['TextMens'] = 'Se elimino POD de la Guia por Inventario de Almacen';
-                                        $arrParaRegi['CodiUsua'] = $this->objUsuario->CodiUsua;
-                                        $arrParaRegi['CodiEsta'] = $this->objUsuario->SucursalId;
-                                        CrearRegistroDeTrabajo($arrParaRegi);
-                                    }
-                                } else {
-                                    $blnTodoOkey = false;
-                                }
-                            }
-                        }
-					}
-					if ($blnTodoOkey) {
-						//-------------------------------------------------------------
-						// La Ubicacion Fisica de la Guia debe actualizarse
-						//-------------------------------------------------------------
-						$objGuiaPiez->Ubicacion = $this->txtUbicAlma->Text;
-						$objGuiaPiez->Save();
-						
-						$intContGuia ++;
-						//---------------------------------------------
-						// Se graba el checkpoint correspondiente
-						//---------------------------------------------
-						$arrDatoCkpt = array();
-						$arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-                        $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
-						$arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-						$arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion." (".$this->txtUbicAlma->Text.")";
-						$arrDatoCkpt['CodiRuta'] = '';
-                        $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
-                        $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-						if ($arrResuGrab['TodoOkey']) {
-							$intContCkpt ++;
-						} else {
-							$this->txtNumeSeri->Text .= $strNumeSeri." ".$arrResuGrab['MotiNook'].chr(13);
-							$blnTodoOkey = false;
+		$intContGuia = 0;
+		$intContCkpt = 0;
+		$objCkptModi = Checkpoints::LoadByCodigo('MG');
+		$objUsuario  = unserialize($_SESSION['User']);
+
+		foreach ($arrGuiaOkey as $strNumeSeri) {
+			//-----------------------------------------------------------------
+			// Se procesa una a una las piezas proporcionadas por el Usuario
+			//-----------------------------------------------------------------
+			$intContGuia++;
+			$objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
+			if (!$objGuiaPiez) {
+				$this->txtNumeSeri->Text .= $strNumeSeri." (Esta Pieza No Existe)".chr(13);
+				continue;
+			} else {
+				if ($objGuiaPiez->LastCkptCode == 'OK') {
+					if ($this->lstElimPodx->SelectedValue == 'S') {
+						if (!is_null($objGuiaPiez->Guia->GuiaPodId)) {
+							$objGuiaPiez->Guia->GuiaPod->Delete();
+						}
+						//----------------------------------------------------------------------------
+						// Este movimiento debe quedar grabado en el Registro de Trabajo de la Guia
+						//----------------------------------------------------------------------------
+						if ($objCkptModi && $objUsuario) {
+							$arrParaRegi['NumeGuia'] = $objGuiaPiez->GuiaId;
+							$arrParaRegi['CodiCkpt'] = $objCkptModi->Id;
+							$arrParaRegi['TextMens'] = 'Se elimino POD de la Guia por Inventario de Almacen';
+							$arrParaRegi['CodiUsua'] = $this->objUsuario->CodiUsua;
+							$arrParaRegi['CodiEsta'] = $this->objUsuario->SucursalId;
+							CrearRegistroDeTrabajo($arrParaRegi);
 						}
 					}
 				}
 			}
-			if ($blnTodoOkey && ($intContGuia == $intContCkpt)) {
-				$strMensUsua = sprintf('El Proceso culmino Exitosamente. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-				$this->mensaje($strMensUsua,'','','i','check');
+			//-------------------------------------------------------------
+			// La Ubicacion Fisica de la Pieza debe actualizarse
+			//-------------------------------------------------------------
+			$objGuiaPiez->Ubicacion = $this->txtUbicAlma->Text;
+			if (is_null($objGuiaPiez->FirstInventory)) {
+				$objGuiaPiez->FirstInventory = new QDateTime(QDateTime::Now());
+			}
+			$objGuiaPiez->Save();
+			//---------------------------------------------
+			// Se graba el checkpoint correspondiente
+			//---------------------------------------------
+			$arrDatoCkpt = array();
+			$arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+			$arrDatoCkpt['GuiaAnul'] = false; //$objGuiaPiez->Guia->Anulada();
+			$arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+			$arrDatoCkpt['TextCkpt'] = $objCheckpoint->Descripcion." (".$this->txtUbicAlma->Text.")";
+			$arrDatoCkpt['CodiRuta'] = '';
+			$arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+			$arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+			if ($arrResuGrab['TodoOkey']) {
+				$intContCkpt ++;
 			} else {
-				$strMensUsua = sprintf('Hubo Errores en la Transaccion. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-				$this->mensaje($strMensUsua,'','d','i','hand-stop-o');
+				$this->txtNumeSeri->Text .= $strNumeSeri." ".$arrResuGrab['MotiNook'].chr(13);
+				continue;
 			}
 		}
+		//------------------------------------------
+		// Updating last checkpoint on every piece
+		//------------------------------------------
+		$strStorProc = "call sp_update_last_checkpoint()";
+		$objDataBase->NonQuery($strStorProc);
+
+		if ($intContGuia == $intContCkpt) {
+			$strMensUsua = "El Proceso culmino Exitosamente. Piezas procesadas ($intContGuia) | Checkpoints ($intContCkpt)";
+			$this->success($strMensUsua);
+		} else {
+			$strMensUsua = "Hubo Errores en la Transaccion. Guias procesadas ($intContGuia) | Checkpoints ($intContCkpt)";
+			$this->danger($strMensUsua);
+		}
 	}
+
 }
 
 InventarioAlmacen::Run('InventarioAlmacen');

@@ -28,6 +28,11 @@ class Guias extends GuiasGen
         return sprintf('%s',  $this->strNumero);
     }
 
+    public function TelefonoDestinatario() {
+        return trim(explode('/',$this->TelefonoDestinatario)[0]);
+    }
+    
+    
     public function createPiecesBackup() {
         // t('Rutine: createPiecesBackup');
         // t('==========================');

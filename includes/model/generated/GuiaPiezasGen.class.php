@@ -27,6 +27,10 @@
 	 * @property QDateTime $LastCkptDate the value for dttLastCkptDate 
 	 * @property string $LastCkptHour the value for strLastCkptHour 
 	 * @property string $LastCkptComment the value for strLastCkptComment 
+	 * @property integer $LastCkptUserId the value for intLastCkptUserId 
+	 * @property string $LastCkptUserLogin the value for strLastCkptUserLogin 
+	 * @property QDateTime $FirstInventory the value for dttFirstInventory 
+	 * @property integer $LastCkptRutaId the value for intLastCkptRutaId 
 	 * @property integer $EmpaqueId the value for intEmpaqueId 
 	 * @property double $Libras the value for fltLibras 
 	 * @property double $Largo the value for fltLargo 
@@ -168,6 +172,39 @@
 		protected $strLastCkptComment;
 		const LastCkptCommentMaxLength = 100;
 		const LastCkptCommentDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_user_id
+		 * @var integer intLastCkptUserId
+		 */
+		protected $intLastCkptUserId;
+		const LastCkptUserIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_user_login
+		 * @var string strLastCkptUserLogin
+		 */
+		protected $strLastCkptUserLogin;
+		const LastCkptUserLoginMaxLength = 8;
+		const LastCkptUserLoginDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.first_inventory
+		 * @var QDateTime dttFirstInventory
+		 */
+		protected $dttFirstInventory;
+		const FirstInventoryDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.last_ckpt_ruta_id
+		 * @var integer intLastCkptRutaId
+		 */
+		protected $intLastCkptRutaId;
+		const LastCkptRutaIdDefault = null;
 
 
 		/**
@@ -524,6 +561,10 @@
 			$this->dttLastCkptDate = (GuiaPiezas::LastCkptDateDefault === null)?null:new QDateTime(GuiaPiezas::LastCkptDateDefault);
 			$this->strLastCkptHour = GuiaPiezas::LastCkptHourDefault;
 			$this->strLastCkptComment = GuiaPiezas::LastCkptCommentDefault;
+			$this->intLastCkptUserId = GuiaPiezas::LastCkptUserIdDefault;
+			$this->strLastCkptUserLogin = GuiaPiezas::LastCkptUserLoginDefault;
+			$this->dttFirstInventory = (GuiaPiezas::FirstInventoryDefault === null)?null:new QDateTime(GuiaPiezas::FirstInventoryDefault);
+			$this->intLastCkptRutaId = GuiaPiezas::LastCkptRutaIdDefault;
 			$this->intEmpaqueId = GuiaPiezas::EmpaqueIdDefault;
 			$this->fltLibras = GuiaPiezas::LibrasDefault;
 			$this->fltLargo = GuiaPiezas::LargoDefault;
@@ -891,6 +932,10 @@
 			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_date', $strAliasPrefix . 'last_ckpt_date');
 			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_hour', $strAliasPrefix . 'last_ckpt_hour');
 			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_comment', $strAliasPrefix . 'last_ckpt_comment');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_user_id', $strAliasPrefix . 'last_ckpt_user_id');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_user_login', $strAliasPrefix . 'last_ckpt_user_login');
+			    $objBuilder->AddSelectItem($strTableName, 'first_inventory', $strAliasPrefix . 'first_inventory');
+			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_ruta_id', $strAliasPrefix . 'last_ckpt_ruta_id');
 			    $objBuilder->AddSelectItem($strTableName, 'empaque_id', $strAliasPrefix . 'empaque_id');
 			    $objBuilder->AddSelectItem($strTableName, 'libras', $strAliasPrefix . 'libras');
 			    $objBuilder->AddSelectItem($strTableName, 'largo', $strAliasPrefix . 'largo');
@@ -1066,6 +1111,18 @@
 			$strAlias = $strAliasPrefix . 'last_ckpt_comment';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strLastCkptComment = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'last_ckpt_user_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intLastCkptUserId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'last_ckpt_user_login';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strLastCkptUserLogin = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'first_inventory';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->dttFirstInventory = $objDbRow->GetColumn($strAliasName, 'Date');
+			$strAlias = $strAliasPrefix . 'last_ckpt_ruta_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intLastCkptRutaId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'empaque_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intEmpaqueId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1584,6 +1641,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by LastCkptUserId Index(es)
+		 * @param integer $intLastCkptUserId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByLastCkptUserId($intLastCkptUserId, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByLastCkptUserId query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->LastCkptUserId, $intLastCkptUserId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by LastCkptUserId Index(es)
+		 * @param integer $intLastCkptUserId
+		 * @return int
+		*/
+		public static function CountByLastCkptUserId($intLastCkptUserId) {
+			// Call GuiaPiezas::QueryCount to perform the CountByLastCkptUserId query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->LastCkptUserId, $intLastCkptUserId)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -1750,6 +1839,10 @@
 							`last_ckpt_date`,
 							`last_ckpt_hour`,
 							`last_ckpt_comment`,
+							`last_ckpt_user_id`,
+							`last_ckpt_user_login`,
+							`first_inventory`,
+							`last_ckpt_ruta_id`,
 							`empaque_id`,
 							`libras`,
 							`largo`,
@@ -1776,6 +1869,10 @@
 							' . $objDatabase->SqlVariable($this->dttLastCkptDate) . ',
 							' . $objDatabase->SqlVariable($this->strLastCkptHour) . ',
 							' . $objDatabase->SqlVariable($this->strLastCkptComment) . ',
+							' . $objDatabase->SqlVariable($this->intLastCkptUserId) . ',
+							' . $objDatabase->SqlVariable($this->strLastCkptUserLogin) . ',
+							' . $objDatabase->SqlVariable($this->dttFirstInventory) . ',
+							' . $objDatabase->SqlVariable($this->intLastCkptRutaId) . ',
 							' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							' . $objDatabase->SqlVariable($this->fltLargo) . ',
@@ -1816,6 +1913,10 @@
 							`last_ckpt_date` = ' . $objDatabase->SqlVariable($this->dttLastCkptDate) . ',
 							`last_ckpt_hour` = ' . $objDatabase->SqlVariable($this->strLastCkptHour) . ',
 							`last_ckpt_comment` = ' . $objDatabase->SqlVariable($this->strLastCkptComment) . ',
+							`last_ckpt_user_id` = ' . $objDatabase->SqlVariable($this->intLastCkptUserId) . ',
+							`last_ckpt_user_login` = ' . $objDatabase->SqlVariable($this->strLastCkptUserLogin) . ',
+							`first_inventory` = ' . $objDatabase->SqlVariable($this->dttFirstInventory) . ',
+							`last_ckpt_ruta_id` = ' . $objDatabase->SqlVariable($this->intLastCkptRutaId) . ',
 							`empaque_id` = ' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							`libras` = ' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							`largo` = ' . $objDatabase->SqlVariable($this->fltLargo) . ',
@@ -2003,6 +2104,10 @@
 			$this->dttLastCkptDate = $objReloaded->dttLastCkptDate;
 			$this->strLastCkptHour = $objReloaded->strLastCkptHour;
 			$this->strLastCkptComment = $objReloaded->strLastCkptComment;
+			$this->intLastCkptUserId = $objReloaded->intLastCkptUserId;
+			$this->strLastCkptUserLogin = $objReloaded->strLastCkptUserLogin;
+			$this->dttFirstInventory = $objReloaded->dttFirstInventory;
+			$this->intLastCkptRutaId = $objReloaded->intLastCkptRutaId;
 			$this->EmpaqueId = $objReloaded->EmpaqueId;
 			$this->fltLibras = $objReloaded->fltLibras;
 			$this->fltLargo = $objReloaded->fltLargo;
@@ -2120,6 +2225,34 @@
 					 * @return string
 					 */
 					return $this->strLastCkptComment;
+
+				case 'LastCkptUserId':
+					/**
+					 * Gets the value for intLastCkptUserId 
+					 * @return integer
+					 */
+					return $this->intLastCkptUserId;
+
+				case 'LastCkptUserLogin':
+					/**
+					 * Gets the value for strLastCkptUserLogin 
+					 * @return string
+					 */
+					return $this->strLastCkptUserLogin;
+
+				case 'FirstInventory':
+					/**
+					 * Gets the value for dttFirstInventory 
+					 * @return QDateTime
+					 */
+					return $this->dttFirstInventory;
+
+				case 'LastCkptRutaId':
+					/**
+					 * Gets the value for intLastCkptRutaId 
+					 * @return integer
+					 */
+					return $this->intLastCkptRutaId;
 
 				case 'EmpaqueId':
 					/**
@@ -2616,6 +2749,58 @@
 					 */
 					try {
 						return ($this->strLastCkptComment = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptUserId':
+					/**
+					 * Sets the value for intLastCkptUserId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intLastCkptUserId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptUserLogin':
+					/**
+					 * Sets the value for strLastCkptUserLogin 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strLastCkptUserLogin = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'FirstInventory':
+					/**
+					 * Sets the value for dttFirstInventory 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttFirstInventory = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'LastCkptRutaId':
+					/**
+					 * Sets the value for intLastCkptRutaId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						return ($this->intLastCkptRutaId = QType::Cast($mixValue, QType::Integer));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -4080,6 +4265,10 @@
 			$strToReturn .= '<element name="LastCkptDate" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="LastCkptHour" type="xsd:string"/>';
 			$strToReturn .= '<element name="LastCkptComment" type="xsd:string"/>';
+			$strToReturn .= '<element name="LastCkptUserId" type="xsd:int"/>';
+			$strToReturn .= '<element name="LastCkptUserLogin" type="xsd:string"/>';
+			$strToReturn .= '<element name="FirstInventory" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="LastCkptRutaId" type="xsd:int"/>';
 			$strToReturn .= '<element name="Empaque" type="xsd1:Empaque"/>';
 			$strToReturn .= '<element name="Libras" type="xsd:float"/>';
 			$strToReturn .= '<element name="Largo" type="xsd:float"/>';
@@ -4149,6 +4338,14 @@
 				$objToReturn->strLastCkptHour = $objSoapObject->LastCkptHour;
 			if (property_exists($objSoapObject, 'LastCkptComment'))
 				$objToReturn->strLastCkptComment = $objSoapObject->LastCkptComment;
+			if (property_exists($objSoapObject, 'LastCkptUserId'))
+				$objToReturn->intLastCkptUserId = $objSoapObject->LastCkptUserId;
+			if (property_exists($objSoapObject, 'LastCkptUserLogin'))
+				$objToReturn->strLastCkptUserLogin = $objSoapObject->LastCkptUserLogin;
+			if (property_exists($objSoapObject, 'FirstInventory'))
+				$objToReturn->dttFirstInventory = new QDateTime($objSoapObject->FirstInventory);
+			if (property_exists($objSoapObject, 'LastCkptRutaId'))
+				$objToReturn->intLastCkptRutaId = $objSoapObject->LastCkptRutaId;
 			if ((property_exists($objSoapObject, 'Empaque')) &&
 				($objSoapObject->Empaque))
 				$objToReturn->Empaque = Empaque::GetObjectFromSoapObject($objSoapObject->Empaque);
@@ -4214,6 +4411,8 @@
 				$objObject->intLastCkptSucursalId = null;
 			if ($objObject->dttLastCkptDate)
 				$objObject->dttLastCkptDate = $objObject->dttLastCkptDate->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttFirstInventory)
+				$objObject->dttFirstInventory = $objObject->dttFirstInventory->qFormat(QDateTime::FormatSoap);
 			if ($objObject->objEmpaque)
 				$objObject->objEmpaque = Empaque::GetSoapObjectFromObject($objObject->objEmpaque, false);
 			else if (!$blnBindRelatedObjects)
@@ -4248,6 +4447,10 @@
 			$iArray['LastCkptDate'] = $this->dttLastCkptDate;
 			$iArray['LastCkptHour'] = $this->strLastCkptHour;
 			$iArray['LastCkptComment'] = $this->strLastCkptComment;
+			$iArray['LastCkptUserId'] = $this->intLastCkptUserId;
+			$iArray['LastCkptUserLogin'] = $this->strLastCkptUserLogin;
+			$iArray['FirstInventory'] = $this->dttFirstInventory;
+			$iArray['LastCkptRutaId'] = $this->intLastCkptRutaId;
 			$iArray['EmpaqueId'] = $this->intEmpaqueId;
 			$iArray['Libras'] = $this->fltLibras;
 			$iArray['Largo'] = $this->fltLargo;
@@ -4459,6 +4662,10 @@
      * @property-read QQNode $LastCkptDate
      * @property-read QQNode $LastCkptHour
      * @property-read QQNode $LastCkptComment
+     * @property-read QQNode $LastCkptUserId
+     * @property-read QQNode $LastCkptUserLogin
+     * @property-read QQNode $FirstInventory
+     * @property-read QQNode $LastCkptRutaId
      * @property-read QQNode $EmpaqueId
      * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
@@ -4526,6 +4733,14 @@
 					return new QQNode('last_ckpt_hour', 'LastCkptHour', 'VarChar', $this);
 				case 'LastCkptComment':
 					return new QQNode('last_ckpt_comment', 'LastCkptComment', 'VarChar', $this);
+				case 'LastCkptUserId':
+					return new QQNode('last_ckpt_user_id', 'LastCkptUserId', 'Integer', $this);
+				case 'LastCkptUserLogin':
+					return new QQNode('last_ckpt_user_login', 'LastCkptUserLogin', 'VarChar', $this);
+				case 'FirstInventory':
+					return new QQNode('first_inventory', 'FirstInventory', 'Date', $this);
+				case 'LastCkptRutaId':
+					return new QQNode('last_ckpt_ruta_id', 'LastCkptRutaId', 'Integer', $this);
 				case 'EmpaqueId':
 					return new QQNode('empaque_id', 'EmpaqueId', 'Integer', $this);
 				case 'Empaque':
@@ -4605,6 +4820,10 @@
      * @property-read QQNode $LastCkptDate
      * @property-read QQNode $LastCkptHour
      * @property-read QQNode $LastCkptComment
+     * @property-read QQNode $LastCkptUserId
+     * @property-read QQNode $LastCkptUserLogin
+     * @property-read QQNode $FirstInventory
+     * @property-read QQNode $LastCkptRutaId
      * @property-read QQNode $EmpaqueId
      * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
@@ -4672,6 +4891,14 @@
 					return new QQNode('last_ckpt_hour', 'LastCkptHour', 'string', $this);
 				case 'LastCkptComment':
 					return new QQNode('last_ckpt_comment', 'LastCkptComment', 'string', $this);
+				case 'LastCkptUserId':
+					return new QQNode('last_ckpt_user_id', 'LastCkptUserId', 'integer', $this);
+				case 'LastCkptUserLogin':
+					return new QQNode('last_ckpt_user_login', 'LastCkptUserLogin', 'string', $this);
+				case 'FirstInventory':
+					return new QQNode('first_inventory', 'FirstInventory', 'QDateTime', $this);
+				case 'LastCkptRutaId':
+					return new QQNode('last_ckpt_ruta_id', 'LastCkptRutaId', 'integer', $this);
 				case 'EmpaqueId':
 					return new QQNode('empaque_id', 'EmpaqueId', 'integer', $this);
 				case 'Empaque':

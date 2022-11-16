@@ -93,6 +93,7 @@ class FacturasEditForm extends FacturasEditFormBase {
 		$this->txtMontoDscto = $this->mctFacturas->txtMontoDscto_Create();
 		$this->txtMontoCobrado = $this->mctFacturas->txtMontoCobrado_Create();
 		$this->txtMontoAbono = $this->mctFacturas->txtMontoAbono_Create();
+		$this->txtMontoAbono->Name = 'Ultimo Abono';
 		$this->txtMontoPendiente = $this->mctFacturas->txtMontoPendiente_Create();
 		$this->txtNumero = $this->mctFacturas->txtNumero_Create();
 		$this->txtMaquinaFiscal = $this->mctFacturas->txtMaquinaFiscal_Create();

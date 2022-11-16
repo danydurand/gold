@@ -1253,10 +1253,9 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
                         continue;
                     }
                     //-----------------------------------------------------------------------
-                    // Si to-do sale bien, se procede a verificar los datos de cada registro
+                    // Se procede a verificar los datos de cada registro
                     //-----------------------------------------------------------------------
                     $arrResuVali = $this->verificarDatosMasivos($arrCampClie,$intNumeLine);
-                    t('Datos verificados');
                     $blnTodoOkey = $arrResuVali['TodoOkey'];
                     $blnDestOkey = $arrResuVali['DestOkey'];
                     $strMensObse = $arrResuVali['TextErro'];

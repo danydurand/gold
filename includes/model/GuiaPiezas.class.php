@@ -242,7 +242,18 @@
 
         public static function EnEstaUbicacion($strEstaUbic) {
             $objClauWher   = QQ::Clause();
-            $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->Ubicacion,"%".trim($strEstaUbic)."%");
+            $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->Ubicacion,trim($strEstaUbic));
+            $arrPiezUbic   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
+            $arrGuiaIdxx   = [];
+            foreach ($arrPiezUbic as $objPiezUbic) {
+                $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
+            }
+            return $arrGuiaIdxx;
+        }
+
+        public static function EnAlmacen() {
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->LastCkptCode,'IA');
             $arrPiezUbic   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
             $arrGuiaIdxx   = [];
             foreach ($arrPiezUbic as $objPiezUbic) {

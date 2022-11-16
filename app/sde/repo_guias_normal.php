@@ -36,7 +36,13 @@ $arrEnca2XLS = array(
     'Remitente',
     'Destinatario',
     'Id-Pieza',
+    'Ubicacion',
+    'Fecha',
+    'Hora',
+    'Usuario',
     'Ult. Ckpt',
+    'Dias desde Ult-Ckpt',
+    'Dias en Almacen',
 );
 $strCadeAudi = implode($strSepaColu,$arrEnca2XLS);
 fputs($mixManeArch,$strCadeAudi.$strSepaColu."\n");
@@ -55,7 +61,13 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
     $strNombRemi = quitaCaracter($strSepaColu,$mixRegistro['remitente']);
     $strNombDest = quitaCaracter($strSepaColu,$mixRegistro['nombre_destinatario']);
     $strIdxxPiez = $mixRegistro['id_pieza'];
+    $strUbicFisi = $mixRegistro['ubicacion'];
+    $strFechCkpt = $mixRegistro['fecha'];
+    $strHoraCkpt = $mixRegistro['hora'];
+    $strLogiUsua = $mixRegistro['logi_usua'];
     $strUltiCkpt = $mixRegistro['codigo_ckpt'];
+    $strDiasCkpt = $mixRegistro['last_ckpt_days'];
+    $strDiasAlma = $mixRegistro['inventory_days'];
     $arrLineArch = array(
         $strNumeGuia,
         $strFechGuia,
@@ -68,7 +80,13 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
         $strNombRemi,
         $strNombDest,
         $strIdxxPiez,
-        $strUltiCkpt
+        $strUbicFisi,
+        $strFechCkpt,
+        $strHoraCkpt,
+        $strLogiUsua,
+        $strUltiCkpt,
+        $strDiasCkpt,
+        $strDiasAlma
     );
     //----------------------------------------------------------------------
     // El vector generado, se lleva al archivo plano

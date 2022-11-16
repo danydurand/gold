@@ -63,7 +63,7 @@
         }
 
         public function SumaDeAbonos() {
-            $strCadeSqlx  = "select if(sum(pagos_corp_detail.monto_abonado),null,0) as suma_abonos ";
+            $strCadeSqlx  = "select sum(if(pagos_corp_detail.monto_abonado=null,0,pagos_corp_detail.monto_abonado)) as suma_abonos ";
             $strCadeSqlx .= "  from pagos_corp_detail inner join pagos_corp ";
             $strCadeSqlx .= "    on pagos_corp.id = pagos_corp_detail.pago_corp_id ";
             $strCadeSqlx .= " where pagos_corp_detail.factura_id = $this->Id ";
@@ -80,7 +80,7 @@
 
             $this->MontoCobrado = $this->SumaDeAbonos();
             t("El total de los abonos es: $this->MontoCobrado");
-            $decMontPend        = $this->Total - $this->MontoCobrado;
+            $decMontPend = $this->Total - $this->MontoCobrado;
             t("Total ($this->Total) - Abonos ($this->MontoCobrado): ".$decMontPend);
             if ($decMontPend < 0) {
                 t('Como era negativo, lo deje en cero');

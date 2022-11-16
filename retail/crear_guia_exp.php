@@ -2354,7 +2354,6 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         $this->colConcSele->Width = 30;
         $this->colConcSele->SetCheckboxCallback($this,'colMarcarSeleccion');
         $this->dtgConcOpci->AddColumn($this->colConcSele);
-        //$this->dtgConcOpci->AddAction(new QClickEvent(), new QAjaxAction('colConcSele_Click'));
 
         $this->dtgConcOpci->SetDataBinder('dtgConcOpci_Bind');
 

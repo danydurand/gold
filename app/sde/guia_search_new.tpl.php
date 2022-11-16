@@ -38,6 +38,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->calFechInic->RenderWithName(); ?>
                 <?php $this->calFechFina->RenderWithName(); ?>
                 <?php $this->txtUbicFisi->RenderWithName(); ?>
+                <?php $this->chkEnxxAlma->RenderWithName(); ?>
                 <?php $this->lstCodiOrig->RenderWithName(); ?>
             </div>
             <div class="col-xs-12 col-md-4">

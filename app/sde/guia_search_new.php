@@ -33,13 +33,13 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $calEntrInic;
     protected $calEntrFina;
     protected $rdbTienPodx;
-    protected $chkPesoVolu;
     protected $txtUsuaCrea;
     protected $txtUbicFisi;
     protected $btnExceNorm;
     protected $btnExceReta;
     protected $btnExceFact;
     protected $lstReceOrig;
+    protected $chkEnxxAlma;
 
     // Zona 3
     protected $lstTariIdxx;
@@ -79,6 +79,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->lstFormPago_Create();
         $this->lstCodiOrig_Create();
         $this->lstReceOrig_Create();
+        $this->chkEnxxAlma_Create();
 
         $this->lstCodiDest_Create();
         $this->lstReceDest_Create();
@@ -324,6 +325,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtUbicFisi->Width = 150;
     }
 
+    protected function chkEnxxAlma_Create() {
+        $this->chkEnxxAlma = new QCheckBox($this);
+        $this->chkEnxxAlma->Name = QApplication::Translate('En Almacen ?');
+        $this->chkEnxxAlma->Checked = false;
+    }
+
     protected function chkMostQuer_Create() {
         $this->chkMostQuer = new QCheckBox($this);
         $this->chkMostQuer->Name = QApplication::Translate('Mostrar Query ?');
@@ -481,7 +488,8 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         // En esta vista residen las guias y sus piezas con informacion general
         //-----------------------------------------------------------------------
         $strCadeSqlx  = "select * ";
-        $strCadeSqlx .= "  from v_info_guia_y_piezas ";
+        // $strCadeSqlx .= "  from v_info_guia_y_piezas ";
+        $strCadeSqlx .= "  from v_info_awbs_and_pieces ";
         $strCadeSqlx .= " where 1 = 1 ";
 
         $objClausula = QQ::Clause();
@@ -620,7 +628,19 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $arrGuiaIdxx   = GuiaPiezas::EnEstaUbicacion($this->txtUbicFisi->Text);
                 $objClausula[] = QQ::In(QQN::Guias()->Id,$arrGuiaIdxx);
                 $strCadeSqlx  .= " and guia_id in (".implode(',',$arrGuiaIdxx).")";
+                $arrGuiaIdxx   = GuiaPiezas::EnAlmacen();
+                $objClausula[] = QQ::In(QQN::Guias()->Id, $arrGuiaIdxx);
+                $strCadeSqlx  .= " and codigo_ckpt = 'IA' ";
             }
+            if ($this->chkEnxxAlma->Checked) {
+                //----------------------------------------------------------------------------
+                // Se identifican las piezas cuyo ultimo checkpoint es 'IA'
+                //----------------------------------------------------------------------------
+                $arrGuiaIdxx   = GuiaPiezas::EnAlmacen();
+                $objClausula[] = QQ::In(QQN::Guias()->Id, $arrGuiaIdxx);
+                $strCadeSqlx  .= " and codigo_ckpt = 'IA' ";
+            }
+
             if (!is_null($this->lstCodiOrig->SelectedValue)) {
                 $objClausula[]= QQ::Equal(QQN::Guias()->OrigenId,$this->lstCodiOrig->SelectedValue);
                 $strCadeSqlx  .= " and origen_id = '".$this->lstCodiOrig->SelectedValue."'";
