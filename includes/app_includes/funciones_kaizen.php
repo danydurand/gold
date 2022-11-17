@@ -103,6 +103,11 @@ function BorrarLineasEnBlanco($arrVectEntr) {
     return $arrVectSali;
 }
 
+/**
+ * This rutine delete blank lines, delete every non-number character and 
+ * delete repeated records.  It returns a cleaned array
+ * @return array
+ */
 function LimpiarArreglo($arrVectEntr,$blnSoloNume=true) {
     //--------------------------------
     // Se eliminan líneas en blanco

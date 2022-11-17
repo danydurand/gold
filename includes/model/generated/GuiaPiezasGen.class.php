@@ -1673,6 +1673,38 @@
 			);
 		}
 
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by LastCkptCode Index(es)
+		 * @param string $strLastCkptCode
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByLastCkptCode($strLastCkptCode, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByLastCkptCode query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->LastCkptCode, $strLastCkptCode),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by LastCkptCode Index(es)
+		 * @param string $strLastCkptCode
+		 * @return int
+		*/
+		public static function CountByLastCkptCode($strLastCkptCode) {
+			// Call GuiaPiezas::QueryCount to perform the CountByLastCkptCode query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->LastCkptCode, $strLastCkptCode)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////

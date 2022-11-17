@@ -229,17 +229,25 @@ class Incidencias extends FormularioBaseKaizen {
                 }
             }
         }
+        //------------------------------------------
+        // Updating last checkpoint on every piece
+        //------------------------------------------
+        $objDataBase = QApplication::$Database[1];
+        $strStorProc = "call sp_update_last_checkpoint()";
+        $objDataBase->NonQuery($strStorProc);
+
         if ($intContGuia == $intContCkpt) {
             if ($strTipoInci == 'GESTION') {
                 $strMensUsua = sprintf('Proceso Exitoso. Guias procesadas (%s)',$intContGuia);
             } else {
                 $strMensUsua = sprintf('Proceso Exitoso. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
             }
-            $this->mensaje($strMensUsua,'i','m','l', __iCHEC__);
+            $this->success($strMensUsua);
         } else {
             $strMensUsua = sprintf('Proceso con Errores. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-            $this->mensaje($strMensUsua,'i','d','l',__iHAND__);
+            $this->danger($strMensUsua);
         }
+
     }
 
 }

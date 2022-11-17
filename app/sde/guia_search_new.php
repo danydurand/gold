@@ -51,6 +51,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
     protected $txtSepaColu;
     protected $chkConxDesc;
     protected $txtGuiaTran;
+    protected $lstLastCkpt;
     protected $chkMostQuer;
 
 
@@ -92,6 +93,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtRefeFact_Create();
         $this->txtGuiaTran_Create();
         $this->txtUbicFisi_Create();
+        $this->lstLastCkpt_Create();
         $this->chkMostQuer_Create();
         $this->chkInclSubc_Create();
 
@@ -127,14 +129,14 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
 
     protected function txtGuiaScan_Create() {
         $this->txtGuiaScan = new QTextBox($this);
-        $this->txtGuiaScan->Name = QApplication::Translate('Scanneo');
+        $this->txtGuiaScan->Name = QApplication::Translate('Scanneo/Pieza');
         $this->txtGuiaScan->Width = 181;
         $this->txtGuiaScan->AddAction(new QFocusOutEvent(), new QAjaxAction('txtGuiaScan_FocusOut'));
     }
 
     protected function txtCodiInte_Create() {
         $this->txtCodiInte = new QTextBox($this);
-        $this->txtCodiInte->Name = 'Cliente por Código';
+        $this->txtCodiInte->Name = 'Busc. Cliente x Código';
         $this->txtCodiInte->Width = 100;
         $this->txtCodiInte->Placeholder = 'Buscar Código';
         $this->txtCodiInte->AddAction(new QBlurEvent(), new QAjaxAction('txtCodiInte_Blur'));
@@ -142,7 +144,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
 
     protected function txtNombBusc_Create() {
         $this->txtNombBusc = new QTextBox($this);
-        $this->txtNombBusc->Name = 'Cliente por Nombre';
+        $this->txtNombBusc->Name = 'Busc. Cliente x Nombre';
         $this->txtNombBusc->Width = 180;
         $this->txtNombBusc->Placeholder = 'Buscar Nombre';
         $this->txtNombBusc->AddAction(new QBlurEvent(), new QAjaxAction('txtNombBusc_Blur'));
@@ -317,6 +319,19 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         $this->txtGuiaTran->Name = 'Guia-Transportista';
         $this->txtGuiaTran->Width = 100;
     }
+
+    protected function lstLastCkpt_Create() {
+        $this->lstLastCkpt = new QListBox($this);
+        $this->lstLastCkpt->Name = 'Ultimo Checkpoint';
+        $arrListCkpt = Checkpoints::LoadAll(QQ::OrderBy(QQN::Checkpoints()->Descripcion));
+        $intCantRegi = count($arrListCkpt);
+        $this->lstLastCkpt->AddItem('- Seleccione - (' . $intCantRegi . ')');
+        foreach ($arrListCkpt as $objCkptSist) {
+            $this->lstLastCkpt->AddItem($objCkptSist->__toString(), $objCkptSist->Codigo);
+        }
+        $this->lstLastCkpt->Width = 180;
+    }
+
 
     protected function txtUbicFisi_Create() {
         $this->txtUbicFisi = new QTextBox($this);
@@ -684,6 +699,16 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $objClausula[] = QQ::Equal(QQN::Guias()->Id,$intGuiaTran);
                 $strCadeSqlx  .= " and guia_id = $intGuiaTran";
             }
+            if (!is_null($this->lstLastCkpt->SelectedValue)) {
+                $strCodiCkpt = $this->lstLastCkpt->SelectedValue;
+                //----------------------------------------------------------------------------------
+                // Se identifican las piezas cuyo ultimo checkpoint sea el indicado por el Usuario
+                //----------------------------------------------------------------------------------
+                $arrPiecIdxx   = GuiaPiezas::WhichLastCheckpointIs($strCodiCkpt);
+                $objClausula[] = QQ::In(QQN::Guias()->Id, $arrPiecIdxx);
+                $strCadeSqlx  .= " and codigo_ckpt = '$strCodiCkpt'";
+            }
+
             $objClausula[] = QQ::IsNull(QQN::Guias()->DeletedBy);
             $strCadeSqlx  .= " and deleted_by IS NULL ";
             if ($this->chkMostQuer->Checked) {

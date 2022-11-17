@@ -48,6 +48,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                 <?php $this->txtUsuaPodx->RenderWithName(); ?>
                 <?php $this->txtRefeFact->RenderWithName(); ?>
                 <?php $this->txtGuiaTran->RenderWithName(); ?>
+                <?php $this->lstLastCkpt->RenderWithName(); ?>
                 <?php $this->chkMostQuer->RenderWithName(); ?>
             </div>
         </div>

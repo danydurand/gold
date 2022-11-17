@@ -26,7 +26,7 @@
 		public function __toString() {
 			return sprintf('%s',  $this->strIdPieza);
 		}
-
+        
         public function __AltoPl() {
             return nfp($this->Alto / 2.54);
 		}
@@ -258,6 +258,24 @@
             $arrGuiaIdxx   = [];
             foreach ($arrPiezUbic as $objPiezUbic) {
                 $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
+            }
+            return $arrGuiaIdxx;
+        }
+
+        public static function WhichLastCheckpointIs($strCodiCkpt) {
+            $objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->LastCkptCode,$strCodiCkpt);
+            $arrPiezCkpt   = GuiaPiezas::QueryArray(
+                QQ::AndCondition($objClauWher),
+                QQ::Clause(
+                    $objClauSele,
+                    QQ::Distinct()
+                )
+            );
+            $arrGuiaIdxx = [];
+            foreach ($arrPiezCkpt as $objPiezCkpt) {
+                $arrGuiaIdxx[] = $objPiezCkpt->GuiaId;
             }
             return $arrGuiaIdxx;
         }

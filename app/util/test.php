@@ -4,21 +4,35 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
+$objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
+$objClauWher   = QQ::Clause();
+$objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->LastCkptCode, 'IA');
+$arrPiezCkpt   = GuiaPiezas::QueryArray(
+    QQ::AndCondition($objClauWher),
+    QQ::Clause(
+        $objClauSele,
+        QQ::Distinct(),
+        QQ::LimitInfo(2)
+    )
+);
+print_r($arrPiezCkpt);
+print("=========================");
+print_r(array_column($arrPiezCkpt, 'intId'));
+print("=========================");
 
 
 //----------------------------------------------------------------------------------
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
 //----------------------------------------------------------------------------------
 
-
-$objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
-$objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
-$arrManiSist = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
-foreach ($arrManiSist as $objManiSist) {
-   $objManiSist->ContarActualizarRecibidas();
-   echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
-   echo "<br>";
-}
+// $objClauWher[] = QQ::NotEqual(QQN::NotaEntrega()->Piezas,QQN::NotaEntrega()->Recibidas);
+// $objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Procesadas,0);
+// $arrManiSist = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher));
+// foreach ($arrManiSist as $objManiSist) {
+//    $objManiSist->ContarActualizarRecibidas();
+//    echo "Manifiesto: ".$objManiSist->Referencia.' Total Piezas: '.$objManiSist->Piezas.' Recibidas: '.$objManiSist->Recibidas;
+//    echo "<br>";
+// }
 
 
 //---------------------------------------

@@ -130,7 +130,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
         /*$this->dtgSucuAsoc->RowActionParameterHtml = '<?= $_ITEM->Id ?>';*/
         //$this->dtgSucuAsoc->AddRowAction(new QClickEvent(), new QAjaxAction('dtgSucuAsocRow_Click'));
 
-        $this->dtgSucuAsoc->SortColumnIndex = 1;
+        $this->dtgSucuAsoc->SortColumnIndex = 2;
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
@@ -150,9 +150,7 @@ class SdeOperacionEditForm extends SdeOperacionEditFormBase {
 
     public function colMarcarSeleccion(Sucursales $objSucursal, QCheckBox $ctl) {
         /* @var $objConcOpci Conceptos */
-        t('Voy a evaluar si '.$objSucursal->Nombre.' ('.$objSucursal->Id.') esta en el vector');
         foreach ($this->arrSucuSele as $objSucuSele) {
-            t('Comparando con: '.$objSucuSele->Id);
             if ($objSucuSele->Id == $objSucursal->Id) {
                 $ctl->Checked = true;
                 break;

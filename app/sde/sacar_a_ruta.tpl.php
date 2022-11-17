@@ -83,7 +83,7 @@ require(__APP_INCLUDES__ . '/header.inc.php');
                                 <?php $this->txtListNume->Render(); ?>
                             </div>
                             <div class="col-md-9">
-                                <div class="title">Piezas Aptas para Manifestar</div>
+                                <div class="title">Listas para Sacar a Ruta</div>
                                 <?php $this->dtgPiezApta->Render(); ?>
                             </div>
                         </div>
