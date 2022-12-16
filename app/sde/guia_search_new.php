@@ -583,6 +583,9 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 if ($objPiezBusc instanceof GuiaPiezas) {
                     $objClausula[] = QQ::Equal(QQN::Guias()->Id,$objPiezBusc->GuiaId);
                     $strCadeSqlx  .= " and guia_id = ".$objPiezBusc->GuiaId;
+                } else {
+                    $objClausula[] = QQ::Equal(QQN::Guias()->Id, -1);
+                    $strCadeSqlx  .= " and guia_id = - 1";
                 }
             }
             if (!is_null($this->lstCodiClie->SelectedValue) && (!$this->chkInclSubc->Checked)) {
@@ -708,69 +711,69 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $objClausula[] = QQ::In(QQN::Guias()->Id, $arrPiecIdxx);
                 $strCadeSqlx  .= " and codigo_ckpt = '$strCodiCkpt'";
             }
-
             $objClausula[] = QQ::IsNull(QQN::Guias()->DeletedBy);
             $strCadeSqlx  .= " and deleted_by IS NULL ";
             if ($this->chkMostQuer->Checked) {
                 echo $strCadeSqlx;
                 return;
             }
-            if (count($objClausula) > 1){
-
-                $intHayxRegi = Guias::QueryCount(QQ::AndCondition($objClausula));
-                if ($intHayxRegi > 0) {
-                    if ($intHayxRegi > 3500 && $strParameter != 'K') {
-                        unset($_SESSION['Criterio']);
-                        $strMensMost = 'Existen +3500 registros que satisfacen la consulta. Por favor sea más específico.
-                        ';
-                    } else {
-                        switch ($strParameter) {
-                            case 'B':
-                                $_SESSION['CritCons'] = serialize($objClausula);
-                                $_SESSION['TablCrit'] = 'Guias';
-                                $_SESSION['ProgEspe'] = basename($_SERVER['SCRIPT_FILENAME']);
-                                QApplication::Redirect('guias_list.php');
-                                break;
-                            case 'N':
-                                //--------------------------
-                                // Formato de Guias Normal
-                                //--------------------------
-                                $_SESSION['SepaColu'] = ';';
-                                $_SESSION['SepaColu'] = '|';
-                                $_SESSION['CondWher'] = serialize($objClausula);
-                                $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
-                                QApplication::Redirect('repo_guias_normal.php');
-                                break;
-                            case 'F':
-                                //----------------------
-                                // Formato Facturacion
-                                //----------------------
-                                $_SESSION['SepaColu'] = '|';
-                                $_SESSION['CondWher'] = serialize($objClausula);
-                                $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
-                                QApplication::Redirect('repo_guias_facturacion.php');
-                                break;
-                            case 'R':
-                                //-------------------
-                                // Reporte en Excel
-                                //-------------------
-                                $_SESSION['SepaColu'] = '|';
-                                $_SESSION['CondWher'] = serialize($objClausula);
-                                $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
-                                QApplication::Redirect('repo_guias_xls_sql.php');
-                                break;
-                            default:
-                                $strMensMost = 'No se ha definido el Formato del Reporte!';
-                                break;
-                        }
-                    }
-                } else {
-                    unset($_SESSION['Criterio']);
-                    $strMensMost = 'No existen registros que satisfagan las condiciones!';
-                }
-            } else {
+            if (count($objClausula) == 0){
                 unset($_SESSION['Criterio']);
                 $strMensMost = 'Debe proporcionar al menos un Criterio de Búsqueda!';
+                $this->danger($strMensMost);
+                return;
+            }
+            $intHayxRegi = Guias::QueryCount(QQ::AndCondition($objClausula));
+            if ($intHayxRegi == 0) {
+                unset($_SESSION['Criterio']);
+                $strMensMost = 'No existen registros que satisfagan las condiciones!';
+                $this->danger($strMensMost);
+                return;
+            }
+            if ($intHayxRegi > 3500 && $strParameter != 'K') {
+                unset($_SESSION['Criterio']);
+                $strMensMost = 'Existen +3500 registros que satisfacen la consulta. Por favor sea más específico.';
+                $this->danger($strMensMost);
+                return;
+            } 
+            switch ($strParameter) {
+                case 'B':
+                    $_SESSION['CritCons'] = serialize($objClausula);
+                    $_SESSION['TablCrit'] = 'Guias';
+                    $_SESSION['ProgEspe'] = basename($_SERVER['SCRIPT_FILENAME']);
+                    QApplication::Redirect('guias_list.php');
+                    break;
+                case 'N':
+                    //--------------------------
+                    // Formato de Guias Normal
+                    //--------------------------
+                    $_SESSION['SepaColu'] = ';';
+                    $_SESSION['SepaColu'] = '|';
+                    $_SESSION['CondWher'] = serialize($objClausula);
+                    $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
+                    QApplication::Redirect('repo_guias_normal.php');
+                    break;
+                case 'F':
+                    //----------------------
+                    // Formato Facturacion
+                    //----------------------
+                    $_SESSION['SepaColu'] = '|';
+                    $_SESSION['CondWher'] = serialize($objClausula);
+                    $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
+                    QApplication::Redirect('repo_guias_facturacion.php');
+                    break;
+                case 'R':
+                    //-------------------
+                    // Reporte en Excel
+                    //-------------------
+                    $_SESSION['SepaColu'] = '|';
+                    $_SESSION['CondWher'] = serialize($objClausula);
+                    $_SESSION['CritSqlx'] = serialize($strCadeSqlx);
+                    QApplication::Redirect('repo_guias_xls_sql.php');
+                    break;
+                default:
+                    $strMensMost = 'No se ha definido el Formato del Reporte!';
+                    break;
             }
         }
         $this->danger($strMensMost);

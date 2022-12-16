@@ -88,57 +88,41 @@ function LoginPropuesto($strCadeNomb, $strCadeApel) {
  * @return string
  */
 function transformar($strNumeGuia) {
-    if (strlen(trim($strNumeGuia))) {
-        $intLongCade = strlen($strNumeGuia);
-        $intCantDosp = 0;
-        for ($i=0; $i<$intLongCade; $i++) {
-            if ($strNumeGuia[$i] == ':') {
-                $intCantDosp++;
-            }
-        }
-        $intCantGuio = 0;
-        for ($i=0; $i<$intLongCade; $i++) {
-            if ($strNumeGuia[$i] == '-') {
-                $intCantGuio++;
-            }
-        }
-        $intCantDiag = 0;
-        for ($i=0; $i<$intLongCade; $i++) {
-            if ($strNumeGuia[$i] == '/') {
-                $intCantDiag++;
-            }
-        }
-        if ( ($intCantDosp == 1) && ($intCantGuio == 2) ) {
-            $intPosiDosp = strpos($strNumeGuia,':');
-            $strLastPart = substr($strNumeGuia,$intPosiDosp+1);
-            if ($strLastPart == '114') {
-                // t('Caso Stephy ATC');
-                return caso_stephy_atc($strNumeGuia);
-            } else {
-                // t('Caso Stephy GOLD');
-                return caso_stephy($strNumeGuia);
-            }
-        }
-        if ( ($intCantGuio == 2) && ($intCantDosp == 0) ) {
-            // t('Caso Dos Guiones');
-            return caso_citrino($strNumeGuia);
-        }
-        if ($intCantGuio == 0) {
-            // t('Caso Sin Pieza');
-            return caso_sin_pieza($strNumeGuia);
-        }
-        if ( ($intCantGuio == 1) && ($intCantDiag == 1) ) {
-            // t('Caso con un guión y una diagonal');
-            return caso_con_guion_y_diagonal($strNumeGuia);
-        }
-        if ($intCantGuio == 1) {
-            // t('Caso con un guión');
-            return caso_con_guion($strNumeGuia);
-        }
-        return $strNumeGuia;
-    } else {
+    if (strlen(trim($strNumeGuia)) == 0) {
         return '';
     }
+    $intCantDosp = substr_count($strNumeGuia, ':');
+    $intCantGuio = substr_count($strNumeGuia, '-');
+    $intCantDiag = substr_count($strNumeGuia, '/');
+
+    if ( ($intCantDosp == 1) && ($intCantGuio == 2) ) {
+        $intPosiDosp = strpos($strNumeGuia,':');
+        $strLastPart = substr($strNumeGuia,$intPosiDosp+1);
+        if ($strLastPart == '114') {
+            // t('Caso Stephy ATC');
+            return caso_stephy_atc($strNumeGuia);
+        } else {
+            // t('Caso Stephy GOLD');
+            return caso_stephy($strNumeGuia);
+        }
+    }
+    if ( ($intCantGuio == 2) && ($intCantDosp == 0) ) {
+        // t('Caso Dos Guiones');
+        return caso_citrino($strNumeGuia);
+    }
+    if ($intCantGuio == 0) {
+        // t('Caso Sin Pieza');
+        return caso_sin_pieza($strNumeGuia);
+    }
+    if ( ($intCantGuio == 1) && ($intCantDiag == 1) ) {
+        // t('Caso con un guión y una diagonal');
+        return caso_con_guion_y_diagonal($strNumeGuia);
+    }
+    if ($intCantGuio == 1) {
+        // t('Caso con un guión');
+        return caso_con_guion($strNumeGuia);
+    }
+    return $strNumeGuia;
 }
 
 function caso_citrino($strNumeGuia) {
@@ -177,14 +161,18 @@ function caso_con_guion_y_diagonal($strNumeGuia) {
 }
 
 function caso_con_guion($strNumeGuia) {
-    $strIdxxPiez = explode('-',$strNumeGuia)[1];
-    $intLong2dpa = strlen($strIdxxPiez);
+    $strPrimPart = explode('-', $strNumeGuia)[0];
+    $strIdxxPiez = explode('-', $strNumeGuia)[1];
+    $intLong2dap = strlen($strIdxxPiez);
     $blnTienUnap = stripos($strIdxxPiez,'p');
-    if ( ($intLong2dpa == 3) && ($blnTienUnap) ) {
+    if ( ($intLong2dap == 3) && ($blnTienUnap) ) {
+        // t('Long de 2pa palabra: 3 y tiene una p');
         return $strNumeGuia;
     }
+    $blnPrimNume = todos_son_numericos($strPrimPart);
     $blnTodoNume = todos_son_numericos($strIdxxPiez);
-    if ( ($intLong2dpa == 3) && ($blnTodoNume) ) {
+    if ( ($intLong2dap == 3) && ($blnTodoNume) && ($blnPrimNume)) {
+        // t('Long de 2pa palabra: 3 y todos son numericos');
         return $strNumeGuia;
     }
     return trim($strNumeGuia).'-001';
@@ -192,6 +180,7 @@ function caso_con_guion($strNumeGuia) {
 
 function todos_son_numericos($strCadeComp) {
     for ($i = 0; $i < strlen($strCadeComp); $i++) {
+        t('Vou a evaluar si '. $strCadeComp[$i].' es numerico');
         if (!is_numeric($strCadeComp[$i])) {
             return false;
         }

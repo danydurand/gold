@@ -397,17 +397,21 @@ class MatchScanneo extends FormularioBaseKaizen {
                 //---------------------------------------
                 // Se graba el checkpoint al Manifiesto
                 //---------------------------------------
-                if ($objManiPend->Recibidas > 0) {
-                    try {
-                        $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
-                        if (!$arrResuGrab['TodoOkey']) {
-                            $blnHayxErro = true;
-                        }
-                    } catch (Exception $e) {
-                        t('Error inserting checkpoint to Manifest: ' . $e->getMessage());
-                        $this->danger('Error inserting checkpoint to Manifest: ' . $e->getMessage());
-                    }
-                }
+                //------------------------------------------------------------------
+                // According with Maria Isabel, the manifest doesn't have to take
+                // the checkpoint (30/11/2022)
+                //------------------------------------------------------------------
+                // if ($objManiPend->Recibidas > 0) {
+                //     try {
+                //         $arrResuGrab = $objManiPend->GrabarCheckpoint($objCkptMani, $this->objProcEjec);
+                //         if (!$arrResuGrab['TodoOkey']) {
+                //             $blnHayxErro = true;
+                //         }
+                //     } catch (Exception $e) {
+                //         t('Error inserting checkpoint to Manifest: ' . $e->getMessage());
+                //         $this->danger('Error inserting checkpoint to Manifest: ' . $e->getMessage());
+                //     }
+                // }
             }
             $this->getPreviousReceivedQtys($this->objProcEjec->Id);
             $this->dtgManiPend->Refresh();

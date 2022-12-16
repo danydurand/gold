@@ -93,7 +93,7 @@ class Incidencias extends FormularioBaseKaizen {
 
     protected function txtNumeSeri_Create() {
         $this->txtNumeSeri = new QTextBox($this);
-        $this->txtNumeSeri->Name = QApplication::Translate("Nro de Guias");
+        $this->txtNumeSeri->Name = QApplication::Translate("Scanneo/Piezas");
         $this->txtNumeSeri->Required = true;
         $this->txtNumeSeri->TextMode = QTextMode::MultiLine;
         $this->txtNumeSeri->Height = 250;
@@ -152,6 +152,8 @@ class Incidencias extends FormularioBaseKaizen {
 
 
     protected function btnSave_Click() {
+        $mixInitTime = microtime(true);
+
         $this->objDataBase = QApplication::$Database[1];
         $this->objUsuario  = unserialize($_SESSION['User']);
         $this->arrGuiaSina = array();
@@ -161,9 +163,6 @@ class Incidencias extends FormularioBaseKaizen {
         $arrNumePiez = explode(',',nl2br2($this->txtNumeSeri->Text));
         $arrNumePiez = array_unique($arrNumePiez);
         $arrGuiaOkey = array_map('transformar',$arrNumePiez);
-
-        //$arrGuiaOkey = explode(',',nl2br2($this->txtNumeSeri->Text));
-        //$arrGuiaOkey = LimpiarArreglo($arrGuiaOkey,false);
 
         $this->txtNumeSeri->Text = '';
 
@@ -215,7 +214,7 @@ class Incidencias extends FormularioBaseKaizen {
                 //-------------------------
                 $arrDatoCkpt = array();
                 $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
-                $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+                $arrDatoCkpt['GuiaAnul'] = false; //$objGuiaPiez->Guia->Anulada();
                 $arrDatoCkpt['CodiCkpt'] = $intCodiCkpt;
                 $arrDatoCkpt['TextCkpt'] = $this->txtTextObse->Text;
                 $arrDatoCkpt['CodiRuta'] = '';
@@ -236,15 +235,111 @@ class Incidencias extends FormularioBaseKaizen {
         $strStorProc = "call sp_update_last_checkpoint()";
         $objDataBase->NonQuery($strStorProc);
 
+        $mixFiniTime = microtime(true);
+        $mixTotaTime = formatPeriod($mixFiniTime, $mixInitTime);
+
         if ($intContGuia == $intContCkpt) {
-            if ($strTipoInci == 'GESTION') {
-                $strMensUsua = sprintf('Proceso Exitoso. Guias procesadas (%s)',$intContGuia);
-            } else {
-                $strMensUsua = sprintf('Proceso Exitoso. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
-            }
+            $strMensUsua = sprintf('Registros procesados (%s) | Tiempo => (%s)', $intContGuia, $mixTotaTime);
             $this->success($strMensUsua);
         } else {
-            $strMensUsua = sprintf('Proceso con Errores. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
+            $strMensUsua = sprintf('Registros procesados (%s) | Checkpoints procesados (%s) | Tiempo => (%s)', $intContGuia, $intContCkpt, $mixTotaTime);
+            $this->danger($strMensUsua);
+        }
+
+    }
+
+    protected function btnSaveOld_Click() {
+        $mixInitTime = microtime(true);
+
+        $this->objDataBase = QApplication::$Database[1];
+        $this->objUsuario  = unserialize($_SESSION['User']);
+        $this->arrGuiaSina = array();
+
+        $strTipoInci = $this->rdbTipoInci->SelectedValue;
+
+        $arrNumePiez = explode(',',nl2br2($this->txtNumeSeri->Text));
+        $arrNumePiez = array_unique($arrNumePiez);
+        $arrGuiaOkey = array_map('transformar',$arrNumePiez);
+
+        $this->txtNumeSeri->Text = '';
+
+        $intCodiCkpt = null;
+        if ($strTipoInci == "INCIDENCIA") {   // Incidencia Operativa
+            $intCodiCkpt = $this->lstListCkpt->SelectedValue;
+            $objCkptProc = Checkpoints::Load($intCodiCkpt);
+        } else {
+            $objCkptProc = Checkpoints::LoadByCodigo('GI');  // Gestion Interna
+            $intCodiCkpt = $objCkptProc->Id;
+        }
+
+        $intContGuia = 0;
+        $intContCkpt = 0;
+        //-----------------------------------------------------------------------
+        // Se procesan una a una las Guias proporcionadas por el Usuario
+        //-----------------------------------------------------------------------
+        foreach ($arrGuiaOkey as $strNumeSeri) {
+            if (strlen($strNumeSeri) == 0) {
+                continue;
+            }
+            $intContGuia++;
+            $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
+            if (!$objGuiaPiez) {
+                $this->txtNumeSeri->Text .= $strNumeSeri." (No Existe)".chr(13);
+                continue;
+            } else {
+                $arrSepuProc = $objGuiaPiez->Guia->SePuedeProcesar();
+                if (!$arrSepuProc['TodoOkey']) {
+                    $strTextVali = $arrSepuProc['MensUsua'];
+                    $this->txtNumeSeri->Text .= $strNumeSeri . ' ' . $strTextVali . chr(13);
+                    continue;
+                }
+            }
+            if ($strTipoInci == 'GESTION') {
+                //------------------------------------
+                // Incidencia de Gestion Interna
+                //------------------------------------
+                $arrParaRegi['CodiCkpt'] = $intCodiCkpt;
+                $arrParaRegi['TextMens'] = strtoupper($this->txtTextObse->Text).' ('.$strNumeSeri.')';
+                $arrParaRegi['NumeGuia'] = $objGuiaPiez->GuiaId;
+                $arrParaRegi['CodiUsua'] = $this->objUsuario->CodiUsua;
+                $arrParaRegi['CodiEsta'] = $this->objUsuario->SucursalId;
+                CrearRegistroDeTrabajo($arrParaRegi);
+                $intContCkpt ++;
+            } else {
+                //-------------------------
+                // Incidencia Operativa
+                //-------------------------
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+                $arrDatoCkpt['GuiaAnul'] = false; //$objGuiaPiez->Guia->Anulada();
+                $arrDatoCkpt['CodiCkpt'] = $intCodiCkpt;
+                $arrDatoCkpt['TextCkpt'] = $this->txtTextObse->Text;
+                $arrDatoCkpt['CodiRuta'] = '';
+                $arrDatoCkpt['NotiCkpt'] = $objCkptProc->Notificar;
+
+                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                if ($arrResuGrab['TodoOkey']) {
+                    $intContCkpt ++;
+                } else {
+                    $this->txtNumeSeri->Text .= $strNumeSeri." (".$arrResuGrab['MotiNook'].")".chr(13);
+                }
+            }
+        }
+        //------------------------------------------
+        // Updating last checkpoint on every piece
+        //------------------------------------------
+        $objDataBase = QApplication::$Database[1];
+        $strStorProc = "call sp_update_last_checkpoint()";
+        $objDataBase->NonQuery($strStorProc);
+
+        $mixFiniTime = microtime(true);
+        $mixTotaTime = formatPeriod($mixFiniTime, $mixInitTime);
+
+        if ($intContGuia == $intContCkpt) {
+            $strMensUsua = sprintf('Registros procesados (%s) | Tiempo => (%s)',$intContGuia, $mixTotaTime);
+            $this->success($strMensUsua);
+        } else {
+            $strMensUsua = sprintf('Registros procesados (%s) | Checkpoints procesados (%s) | Tiempo => (%s)',$intContGuia, $intContCkpt, $mixTotaTime);
             $this->danger($strMensUsua);
         }
 

@@ -2927,7 +2927,19 @@ class CrearGuiaExp extends FormularioBaseKaizen {
         // Se calculan los Importes y Conceptos
         //---------------------------------------
         if ($blnTodoOkey) {
-            $arrConcActi = Conceptos::conceptosActivos($this->objGuia->Producto->Codigo);
+            $arrConcAuxi = Conceptos::conceptosActivos($this->objGuia->Producto->Codigo);
+            //--------------------------------------------------------------------------
+            // Medida de emergencia para subsanar un requerimiento de ultima hora:
+            // Las guias que van hacia España, no deben incluir los gastos de manejo
+            // (ddurand 08/12/2022)
+            //--------------------------------------------------------------------------
+            $arrConcActi = [];
+            foreach($arrConcAuxi as $objConcAuxi) {
+                if (($this->objGuia->Destino->Iata == 'MAD') && ($objConcAuxi->Id == 13)) {
+                    continue;
+                }
+                $arrConcActi[] = $objConcAuxi;
+            }
             t('Conceptos Fijos a calcular: '.count($arrConcActi));
             //----------------------------------------------------------
             // Se agregan los Conceptos Opcionales asociados a la guia

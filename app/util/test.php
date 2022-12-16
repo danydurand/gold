@@ -4,22 +4,32 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
-$objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
-$objClauWher   = QQ::Clause();
-$objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->LastCkptCode, 'IA');
-$arrPiezCkpt   = GuiaPiezas::QueryArray(
-    QQ::AndCondition($objClauWher),
-    QQ::Clause(
-        $objClauSele,
-        QQ::Distinct(),
-        QQ::LimitInfo(2)
-    )
-);
-print_r($arrPiezCkpt);
-print("=========================");
-print_r(array_column($arrPiezCkpt, 'intId'));
-print("=========================");
+// $objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
+// $objClauWher   = QQ::Clause();
+// $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->LastCkptCode, 'IA');
+// $arrPiezCkpt   = GuiaPiezas::QueryArray(
+//     QQ::AndCondition($objClauWher),
+//     QQ::Clause(
+//         $objClauSele,
+//         QQ::Distinct(),
+//         QQ::LimitInfo(2)
+//     )
+// );
+// print_r($arrPiezCkpt[0]);
 
+// $objClauSele = QQ::Select(QQN::GuiaPiezas()->GuiaId);
+// $objOptiClau = QQ::Clause(
+//     // $objClauSele,
+//     QQ::Distinct(),
+//     QQ::LimitInfo(2)
+// );
+
+// $arrPiezCkpt = GuiaPiezas::LoadArrayByLastCkptCode('RG', $objOptiClau);
+
+// foreach ($arrPiezCkpt as $objGuiaPiec) {
+//     print($objGuiaPiec);
+//     print("==========================<br>");
+// }
 
 //----------------------------------------------------------------------------------
 // Sincerar la cantidad de piezas de cada manifiesto así como contar las recibidas
@@ -261,25 +271,30 @@ foreach ($arrMailProc as $strDireMail) {
 // Interpretaciones
 //-------------------
 
-//$strNumeGuia = '9170122-001';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
-//
-//$strNumeGuia = '';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
-//
-//$strNumeGuia = '';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
-//
-//$strNumeGuia = '';
-//echo 'Guia Original: '.$strNumeGuia."<br>";
-//echo 'Se interpreta así: '.transformar($strNumeGuia);
-//echo "<br><br>";
+$strNumeGuia = '9170122-001';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
+
+$strNumeGuia = 'OHAPU-730';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
+
+$strNumeGuia = '309004-1/001-001:200';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
+
+$strNumeGuia = '168945-1/001-001:114';
+echo 'Guia Original: '.$strNumeGuia."<br>";
+echo 'Se interpreta así: '.transformar($strNumeGuia);
+echo "<br><br>";
+
+// $strNumeGuia = '';
+// echo 'Guia Original: '.$strNumeGuia."<br>";
+// echo 'Se interpreta así: '.transformar($strNumeGuia);
+// echo "<br><br>";
 
 //-----------------------------
 // Ultima Tasa de Cambio USD

@@ -1287,9 +1287,6 @@ class SacarARuta extends FormularioBaseKaizen {
         t('Comenzando el Sacar a Ruta');
         $this->objDataBase = QApplication::$Database[1];
         $strTipoRuta = $this->lstTipoOper->SelectedValue == 0 ? "URBANA" : "EXTRA-URBANA";
-        //------------------------------------------------------
-        // Se graba o actualiza el contenedor en la tabla guia
-        //------------------------------------------------------
         if ($strTipoRuta == "URBANA") {
             //---------------------------------------------------------------
             // Si la Ruta es "Urbana" y no se ha especificado un Contenedor
@@ -1302,6 +1299,9 @@ class SacarARuta extends FormularioBaseKaizen {
         } else {
             $objContenedor = $this->objContaine;
         }
+        //------------------------------------------------------
+        // Se graba o actualiza el contenedor en la tabla guia
+        //------------------------------------------------------
         try {
             if (!$objContenedor) {
                 $objContenedor = new Containers();
@@ -1340,12 +1340,8 @@ class SacarARuta extends FormularioBaseKaizen {
             } else {
                 $objCheckpoint = Checkpoints::LoadByCodigo('TR');
             }
-            //t('El ckpt es: '.$objCheckpoint->Codigo);
             $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
-            //---------------------------------------------------------------------------
-            // Con array_unique se eliminan las guias repetidas en caso de que las haya
-            //---------------------------------------------------------------------------
-            $this->arrListNume = LimpiarArreglo($this->arrListNume, false);
+            $this->arrListNume = array_unique($this->arrListNume);
             $this->arrListNume = array_map('transformar',$this->arrListNume);
             $this->txtListNume->Text = '';
 
@@ -1359,6 +1355,9 @@ class SacarARuta extends FormularioBaseKaizen {
             $objDatabase = Containers::GetDatabase();
             $objDatabase->TransactionBegin();
             foreach ($this->arrListNume as $strNumeSeri) {
+                if (strlen($strNumeSeri) == 0) {
+                    continue;
+                }
                 t('Procesando: '.$strNumeSeri);
                 //-----------------------------------------------------------------------
                 // Se procesa una a una las Guias/Valijas proporcionadas por el Usuario
@@ -1368,11 +1367,11 @@ class SacarARuta extends FormularioBaseKaizen {
                     //--------------------------------------------------
                     // The piece has to have a Ready to Go checkpoint
                     //--------------------------------------------------
-                    if (!$objGuiaPiez->tieneCheckpoint('RG')) {
-                        $this->txtListNume->Text .= $strNumeSeri . " (E)" . chr(13);
-                        $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza, 'NO ESTA LISTA PARA SALIR A RUTA');
-                        continue;
-                    }
+                    // if (!$objGuiaPiez->IsReadyToGo()) {
+                    //     $this->txtListNume->Text .= $strNumeSeri . " (E)" . chr(13);
+                    //     $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza, 'NO ESTA LISTA PARA SALIR A RUTA');
+                    //     continue;
+                    // }
                     if ($strTipoRuta == 'EXTRA-URBANA') {
                         //--------------------------------------------------------------------------------
                         // Antes de asociar la Guia al Contenedor, se debe verificar que el destino

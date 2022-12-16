@@ -27,6 +27,28 @@
 			return sprintf('%s',  $this->strIdPieza);
 		}
         
+        /**
+         * The business rule is this:
+         * If the Piece's Customer is GoldCoast (id = 4) and
+         * the piece has the RG checkpoint, then is Ready to Go
+         */
+        public function IsReadyToGo() {
+            $blnClieGold = $this->NotaEntrega->ClienteCorpId == 4;
+            if (!$blnClieGold) {
+                //-------------------------------------------------------------------
+                // If the piece's Customer is not GoldCoast, we don't need
+                // to validate if it has the RG checkpoint.  The piece is Ready to Go
+                //-------------------------------------------------------------------
+                return true;
+            } 
+            //----------------------------------------------------------------------------
+            // If we are at this point in the routine, it means that the Customer is
+            // Gold Coast, and therefore we need to check if the piece has RG checkpoint
+            //----------------------------------------------------------------------------
+            return $this->tieneCheckpoint('RG');
+        }
+        
+        
         public function __AltoPl() {
             return nfp($this->Alto / 2.54);
 		}
@@ -252,33 +274,43 @@
         }
 
         public static function EnAlmacen() {
-            $objClauWher   = QQ::Clause();
-            $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->LastCkptCode,'IA');
-            $arrPiezUbic   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
-            $arrGuiaIdxx   = [];
-            foreach ($arrPiezUbic as $objPiezUbic) {
-                $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
-            }
-            return $arrGuiaIdxx;
+            // $objClauWher   = QQ::Clause();
+            // $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->LastCkptCode,'IA');
+            // $arrPiezUbic   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
+            // $arrGuiaIdxx   = [];
+            // foreach ($arrPiezUbic as $objPiezUbic) {
+            //     $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
+            // }
+            return GuiaPiezas::WhichLastCheckpointIs('IA');
         }
 
         public static function WhichLastCheckpointIs($strCodiCkpt) {
-            $objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
-            $objClauWher   = QQ::Clause();
-            $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->LastCkptCode,$strCodiCkpt);
-            $arrPiezCkpt   = GuiaPiezas::QueryArray(
-                QQ::AndCondition($objClauWher),
-                QQ::Clause(
-                    $objClauSele,
-                    QQ::Distinct()
-                )
-            );
+            $objClauSele = QQ::Select(QQN::GuiaPiezas()->GuiaId);
+            $arrPiezCkpt = GuiaPiezas::LoadArrayByLastCkptCode($strCodiCkpt, $objClauSele);
             $arrGuiaIdxx = [];
             foreach ($arrPiezCkpt as $objPiezCkpt) {
                 $arrGuiaIdxx[] = $objPiezCkpt->GuiaId;
             }
             return $arrGuiaIdxx;
         }
+
+        // public static function WhichLastCheckpointIs($strCodiCkpt) {
+        //     $objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
+        //     $objClauWher   = QQ::Clause();
+        //     $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->LastCkptCode,$strCodiCkpt);
+        //     $arrPiezCkpt   = GuiaPiezas::QueryArray(
+        //         QQ::AndCondition($objClauWher),
+        //         QQ::Clause(
+        //             $objClauSele,
+        //             QQ::Distinct()
+        //         )
+        //     );
+        //     $arrGuiaIdxx = [];
+        //     foreach ($arrPiezCkpt as $objPiezCkpt) {
+        //         $arrGuiaIdxx[] = $objPiezCkpt->GuiaId;
+        //     }
+        //     return $arrGuiaIdxx;
+        // }
 
         public static function LoadArrayPorRecibirEnAlmacen($intManiIdxx, $objOptionalClauses=null) {
             // Performing the load manually (instead of using QCubed Query)

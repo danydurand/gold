@@ -296,7 +296,7 @@ class Index extends FormularioBaseKaizen {
 
     public function dtgGuiaCkpt_TextObse_Render(PiezaCheckpoints $objPiezCkpt) {
         $strCodiCkpt = $objPiezCkpt->Checkpoint->Codigo;
-        $strTextObse = $objPiezCkpt->Checkpoint->DescripcionRastreo;
+        $strTextObse = $objPiezCkpt->Comentario;
         if (strlen($strTextObse) > 0) {
             $strTextObse = '('.$strCodiCkpt.') '.limpiarCadena($strTextObse);
         }
