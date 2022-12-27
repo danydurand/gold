@@ -15,9 +15,19 @@ abstract class FormularioBaseKaizen extends QForm {
     protected $btnSave;
     protected $btnCancel;
 
+    protected function FlashMessage() {
+        if (isset($_SESSION['FlashMessage'])) {
+            list($strTipoMens, $strTextMens) = $_SESSION['FlashMessage'];
+            $this->$strTipoMens($strTextMens);
+            unset($_SESSION['FlashMessage']);
+        }
+    }
+
     protected function Form_Create() {
 
         $this->objUsuario = unserialize($_SESSION['User']);
+
+        $this->FlashMessage();
 
         $this->lblTituForm_Create();
         $this->lblMensUsua_Create();

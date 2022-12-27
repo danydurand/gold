@@ -151,7 +151,103 @@ class Incidencias extends FormularioBaseKaizen {
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Plan de accion:
+    // 1.- Se borran la piezas anteriores del Usuario de la tabla process_pieces
+    //     spu_delete_records_from_process_pieces($intCodiUsua)
+    // 2.- Se graban en la tabla process_pieces las piezas actuales que se van a procesar
+    //     ProcessPieces::GrabarPiezas($intProcIdxx, $arrPiecProc)
+    // 3.- Se graba el checkpoint indicado para cada pieza
+    //     Si se trata de un checkpoint operativo:
+    //     spu_insert_checkpoint($intCodiCkpt, $intCodiSucu, '$strTextCkpt', $intProcIdxx)
+    //     Si se trata de un checkpoint administrativo o de gestion interna:
+    //     spu_insert_intern_checkpoint($intCodiCkpt, $intCodiSucu, '$strTextCkpt', $intProcIdxx)
+    // 4.- Grabar en detalle_error las piezas con errores durante el proceso.
+    //--------------------------------------------------------------------------------------
+
     protected function btnSave_Click() {
+        $this->objDataBase = QApplication::$Database[1];
+        $this->objUsuario  = unserialize($_SESSION['User']);
+        $this->arrGuiaSina = array();
+
+        $strTipoInci = $this->rdbTipoInci->SelectedValue;
+        $arrGuiaOkey = explode(',',nl2br2($this->txtNumeSeri->Text));
+        $arrGuiaOkey = LimpiarArreglo($arrGuiaOkey,false);
+        $this->txtNumeSeri->Text = '';
+
+        $intCodiCkpt = null;
+        if ($strTipoInci == "INCIDENCIA") {   // Incidencia Operativa
+            $intCodiCkpt = $this->lstListCkpt->SelectedValue;
+            $objCkptProc = Checkpoints::Load($intCodiCkpt);
+        } else {
+            $objCkptProc = Checkpoints::LoadByCodigo('GI');  // Gestion Interna
+            $intCodiCkpt = $objCkptProc->Id;
+        }
+
+        $intContGuia = 0;
+        $intContCkpt = 0;
+        //-----------------------------------------------------------------------
+        // Se procesan una a una las Guias proporcionadas por el Usuario
+        //-----------------------------------------------------------------------
+        foreach ($arrGuiaOkey as $strNumeSeri) {
+            $intContGuia++;
+            $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
+            if (!$objGuiaPiez) {
+                $this->txtNumeSeri->Text .= $strNumeSeri." (No Existe)".chr(13);
+                continue;
+            } else {
+                $arrSepuProc = $objGuiaPiez->Guia->SePuedeProcesar();
+                if (!$arrSepuProc['TodoOkey']) {
+                    $strTextVali = $arrSepuProc['MensUsua'];
+                    $this->txtNumeSeri->Text .= $strNumeSeri . ' ' . $strTextVali . chr(13);
+                    continue;
+                }
+            }
+            if ($strTipoInci == 'GESTION') {
+                //------------------------------------
+                // Incidencia de Gestion Interna
+                //------------------------------------
+                $arrParaRegi['CodiCkpt'] = $intCodiCkpt;
+                $arrParaRegi['TextMens'] = strtoupper($this->txtTextObse->Text).' ('.$strNumeSeri.')';
+                $arrParaRegi['NumeGuia'] = $objGuiaPiez->GuiaId;
+                $arrParaRegi['CodiUsua'] = $this->objUsuario->CodiUsua;
+                $arrParaRegi['CodiEsta'] = $this->objUsuario->SucursalId;
+                CrearRegistroDeTrabajo($arrParaRegi);
+                $intContCkpt ++;
+            } else {
+                //-------------------------
+                // Incidencia Operativa
+                //-------------------------
+                $arrDatoCkpt = array();
+                $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+                $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+                $arrDatoCkpt['CodiCkpt'] = $intCodiCkpt;
+                $arrDatoCkpt['TextCkpt'] = $this->txtTextObse->Text;
+                $arrDatoCkpt['CodiRuta'] = '';
+                $arrDatoCkpt['NotiCkpt'] = $objCkptProc->Notificar;
+
+                $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+                if ($arrResuGrab['TodoOkey']) {
+                    $intContCkpt ++;
+                } else {
+                    $this->txtNumeSeri->Text .= $strNumeSeri." (".$arrResuGrab['MotiNook'].")".chr(13);
+                }
+            }
+        }
+        if ($intContGuia == $intContCkpt) {
+            if ($strTipoInci == 'GESTION') {
+                $strMensUsua = sprintf('Proceso Exitoso. Guias procesadas (%s)',$intContGuia);
+            } else {
+                $strMensUsua = sprintf('Proceso Exitoso. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
+            }
+            $this->success($strMensUsua);
+        } else {
+            $strMensUsua = sprintf('Proceso con Errores. Guias procesadas (%s)  Checkpoints procesados (%s)',$intContGuia,$intContCkpt);
+            $this->danger($strMensUsua);
+        }
+    }
+
+    protected function btnSave_ClickOld() {
         $this->objDataBase = QApplication::$Database[1];
         $this->objUsuario  = unserialize($_SESSION['User']);
         $this->arrGuiaSina = array();

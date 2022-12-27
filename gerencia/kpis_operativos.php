@@ -2,6 +2,37 @@
 require_once('qcubed.inc.php');
 $strTituPagi = "KPIs Operativos";
 
+$dttFechDhoy   = FechaDeHoy();
+$dttFechLimi   = SumaRestaDiasAFecha($dttFechDhoy, 30, '-');
+$objDatabase   = Parametro::GetDatabase();
+$objClauOrde   = QQ::Clause();
+$objClauOrde[] = QQ::OrderBy(QQN::NotaEntrega()->Id, false);
+$objClauWher   = QQ::Clause();
+$objClauWher[] = QQ::GreaterThan(QQN::NotaEntrega()->Fecha, $dttFechLimi);
+$arrNotaEntr   = NotaEntrega::QueryArray(QQ::AndCondition($objClauWher),$objClauOrde);
+$strListMani   = '
+    <ul class="ui-nodisc-icon" data-role="listview" data-inset="true" data-split-icon="bullets" data-split-theme="d" 
+        data-filter="true" data-filter-placeholder="Filtrar...">
+    ';
+foreach ($arrNotaEntr as $objNotaEntr) {
+    $strNombImag = __RUTA_IMAGE__ . '/icons-svg/clock-white.svg';
+    if ($objNotaEntr->Piezas == $objNotaEntr->Recibidas) {
+        $strNombImag = __RUTA_IMAGE__ . '/icons-svg/check-white.svg';
+    }
+    $strListMani .= '
+        <li>
+            <a href="#" data-rel="dialog">
+                <img src="' . $strNombImag . '" width="40px" height="40px" style="margin-top: 3em; margin-left: 1em">
+                <p style="font-size:14px">REF : ' . $objNotaEntr->Referencia . '</p>
+                <p style="font-size:14px">Cliente : ' . $objNotaEntr->ClienteCorp->NombClie . '</p>
+                <p style="font-size:14px">Total Piezas : ' . $objNotaEntr->Piezas . '</p>
+                <p style="font-size:14px">Recibidas : ' . $objNotaEntr->Recibidas . '</p>
+            </a>
+        </li>
+    ';
+}
+$strListMani .= '</ul>';
+
 $objDatabase   = Parametro::GetDatabase();
 $objClauOrde   = QQ::Clause();
 $objClauOrde[] = QQ::OrderBy(QQN::Parametros()->Valor1);
@@ -35,10 +66,11 @@ foreach ($arrQuerMobi as $objQuerMobi) {
     ';
 }
 
+$strHtmlCtrl   = '';
+/*
 $objClauOrde   = QQ::Clause();
 $objClauOrde[] = QQ::OrderBy(QQN::Parametros()->Valor1);
 $arrQuerMobi   = Parametros::LoadArrayByIndice('QRYCTRL',$objClauOrde);
-$strHtmlCtrl   = '';
 foreach ($arrQuerMobi as $objQuerMobi) {
     $strCadeSqlx  = trim($objQuerMobi->Texto1);
     $objDbResult  = $objDatabase->Query($strCadeSqlx);
@@ -50,6 +82,7 @@ foreach ($arrQuerMobi as $objQuerMobi) {
     </li>
     ';
 }
+*/
 ?>
 <?php include('layout/header.inc.php') ?>
 
@@ -60,6 +93,12 @@ foreach ($arrQuerMobi as $objQuerMobi) {
     <div data-role="content" style="min-height: 380px;">
         <div class="ui-nodisc-icon" data-role="collapsible-set" data-inset="true" data-theme="a" style="font-size:14px">
             <div data-role="collapsible" data-collapsed="false" data-theme="a">
+                <h3>MANIFIESTOS</h3>
+                <ul data-role="listview" data-inset="true">
+                    <?= $strListMani ?>
+                </ul>
+            </div>
+            <div data-role="collapsible" data-collapsed="true" data-theme="a">
                 <h3>KPIs DE HOY</h3>
                 <ul data-role="listview" data-inset="true">
                     <?= $strHtmlDhoy ?>
@@ -71,12 +110,12 @@ foreach ($arrQuerMobi as $objQuerMobi) {
                     <?= $strCadeHtml ?>
                 </ul>
             </div>
-            <div data-role="collapsible" data-collapsed="true" data-theme="a">
+            <!-- <div data-role="collapsible" data-collapsed="true" data-theme="a">
                 <h3>KPIs CTRL</h3>
                 <ul data-role="listview" data-inset="true">
                     <?= $strHtmlCtrl ?>
                 </ul>
-            </div>
+            </div> -->
         </div>
     </div>
 

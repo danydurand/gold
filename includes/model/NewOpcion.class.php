@@ -55,8 +55,6 @@
                 if ($strDireProg != '/common/') {
                     $strDireProg = __APP__."/".$this->strDirectorio."/";
                 }
-            } else {
-                $strDireProg = __SIST__ .'/';
             }
             $strCadeTabu = "\t";
             if ($this->Nivel > 0) {
@@ -79,20 +77,15 @@
                 //---------------
                 //  MENU
                 //---------------
-                // echo "Aqui estoy con ".$this->strName."<br>\n";
                 $strHtmlMenu  = $strCadeTabu."<li>\n";
                 if (strlen($this->strImagen) > 0) {
-                    // echo "El menu tiene imagen<br>\n";
                     $strHtmlMenu .= $strCadeTabu."\t<a href='#'><i class='fa ".$this->strImagen."'></i> ".$this->strNombre."<span class='fa arrow'></span></a>\n";
                 } else {
-                    // echo "No hay imagen asociada el menu<br>\n";
                     $strHtmlMenu .= $strCadeTabu."\t<a href='#'>".$this->strNombre."</a>\n";
                 }
-                // $strHtmlMenu .= "\t<li><a href='".$strDireProg."'>".$this->strName."</a>\n";
                 //---------------------------------------------------------
                 // La Clase del Menu, se determina en funcion de su nivel
                 //---------------------------------------------------------
-                // echo "El nivel es: ".$this->intLevel."<br>\n";
                 switch ($this->intNivel) {
                     case 0:
                         $strClasMenu = 'second';

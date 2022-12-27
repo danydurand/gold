@@ -774,16 +774,14 @@ class CargaMasivaGuias extends FormularioBaseKaizen {
 
     //--------------------------------------------------------------------------------------
     // Plan de accion:
-    // 1.- Se borran la piezas anteriores del Usuario de la tabla process_pieces
-    //     spu_delete_records_from_process_pieces($intCodiUsua)
-    // 2.- Se graban en la tabla process_pieces las piezas actuales que se van a procesar
-    //     ProcessPieces::GrabarPiezas($intProcIdxx, $arrPiecProc)
-    // 3.- Se asocian las piezas al contenedor 
-    //     spu_associate_pieces_to_container_exp($intProcIdxx)
-    //     - Las piezas deben existir en la tabla guia_piezas
-    //     - Las piezas no deben no deben estar entregadas
-    //     - Las piezas no deben repetirse dentro del container
-    // 4.- Se graba el checkpoint de Exportacion para cada pieza
+    // 1.- Se crea una guia por cada registro en la tabla guia_cacesa 
+    //     - Que no esten procesadas
+    //     - Que no requieran ajustes
+    //     - Que pertenezcan a la nota de entrega que se esta procesando
+    //     spu_create_awb_from_guia_cacesa($intManiIdxx)
+    // 2.- Se crean las piezas de cada guía recien creada
+    //     spu_create_awb_pieces($intManiIdxx)
+    // 3.- Se graba el checkpoint indicado para cada pieza
     //     spu_insert_checkpoint($intCodiCkpt, $intCodiSucu, '$strTextCkpt', $intProcIdxx)
     // 5.- Grabar en detalle_error las piezas con errores durante el proceso.
     //--------------------------------------------------------------------------------------

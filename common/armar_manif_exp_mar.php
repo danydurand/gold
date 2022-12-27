@@ -764,62 +764,212 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         return true;
     }
 
-    //protected function procesarValija($strNumeSeri, $objCheckpoint, $objContenedor) {
-    //    //---------------------------------------------------
-    //    // Si no es una Pieza, se chequea que sea una Valija
-    //    //---------------------------------------------------
-    //    $objValija = Containers::LoadByNumero($strNumeSeri);
-    //    if ($objValija) {
-    //        if (!$objValija->IsContainersAsContainerContainerAssociated($objContenedor)) {
-    //            //-----------------------------------------------
-    //            // Se establece la relación "contenedor-valija"
-    //            //-----------------------------------------------
-    //            $objValija->AssociateContainersAsContainerContainer($objContenedor);
-    //            //---------------------------------------------
-    //            // Se registra un checkpoint para la Valija
-    //            //---------------------------------------------
-    //            $arrDatoCkpt = array();
-    //            $arrDatoCkpt['NumeCont'] = $objContenedor->Id;
-    //            $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-    //            $arrDatoCkpt['TextObse'] = $objCheckpoint->Descripcion;
-    //            $arrResuGrab = GrabarCheckpointContenedorNew($arrDatoCkpt);
-    //            if ($arrResuGrab['TodoOkey']) {
-    //                $intContVali ++;
-    //            } else {
-    //                $this->arrGuiaErro[] = array($objValija->Numero,$arrResuGrab['MotiNook']);
-    //            }
-    //        }
-    //        $arrPiezVali = $objValija->GetGuiaPiezasAsContainerPiezaArray();
-    //        $strDescCkpt  = $objCheckpoint->Descripcion.' | Precinto: '.$objContenedor->Numero.' | ';
-    //        $strDescCkpt .= 'Transpor: '.$objContenedor->Transportista->Nombre.' | ';
-    //        $strDescCkpt .= 'Chofer: '.$objContenedor->Chofer->__toString();
-    //        foreach ($arrPiezVali as $objPiezVali) {
-    //            //----------------------------------------------------------
-    //            // Se registra un checkpoint para cada pieza de la Valija
-    //            //----------------------------------------------------------
-    //            $arrDatoCkpt = array();
-    //            $arrDatoCkpt['NumePiez'] = $objPiezVali->Id;
-    //            $arrDatoCkpt['GuiaAnul'] = $objPiezVali->Guia->Anulada();
-    //            $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
-    //            $arrDatoCkpt['TextCkpt'] = $strDescCkpt;
-    //            $arrDatoCkpt['CodiRuta'] = $intCodiRuta;
-    //            $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
-    //            $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
-    //            if ($arrResuGrab['TodoOkey']) {
-    //                $intContCkpt ++;
-    //            } else {
-    //                $this->arrGuiaErro[] = array($objGuiaPiez->IdPieza,$arrResuGrab['MotiNook']);
-    //            }
-    //            $intContGuia ++;
-    //        }
-    //        $intContVali ++;
-    //    } else {
-    //        $this->txtListNume->Text .= $strNumeSeri." (E)".chr(13);
-    //        $this->arrGuiaErro[] = array($strNumeSeri,$strNumeSeri." (No Existe Guia/Valija)");
-    //    }
-    //}
 
     protected function btnSave_Click() {
+        t('===============================');
+        t('Comenzando Exportacion Maritima');
+
+        $mixInitTime = microtime(true);
+
+        $strAcciProg = $this->blnEditMode ? 'Editando' : 'Creando';
+        $strNombProc = $strAcciProg.' Manif Exp MAR: '.$this->txtNumeBook->Text;
+        $this->objProcEjec = CrearProceso($strNombProc);
+
+        $objCheckpoint = Checkpoints::LoadByCodigo('EX');
+        if (!($objCheckpoint instanceof Checkpoints)) {
+            $strTextMens = 'El checkpoint de exportacion <b>EX</b> No Existe !!!';
+            $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+            $arrParaErro['NumeRefe'] = 'EX';
+            $arrParaErro['MensErro'] = 'EL CKPT DF NO EXISTE';
+            $arrParaErro['ComeErro'] = $strTextMens;
+            GrabarError($arrParaErro);
+            $this->danger($strTextMens);
+            return;
+        }
+        t('El ckpt es: '.$objCheckpoint->Codigo);
+
+        if (!$this->blnEditMode) {
+            t('Creando el manifiesto');
+            $strNumeBlxx = trim($this->txtNumeBlxx->Text);
+            if (strlen($strNumeBlxx) > 0) {
+                t('El Nro de BL existe');
+                $objClauWher = QQ::Equal(QQN::ManifiestoExp()->NroBl,$strNumeBlxx);
+            } else {
+                t('El Booking existe');
+                $strNumeBook = trim($this->txtNumeBook->Text);
+                $objClauWher = QQ::Equal(QQN::ManifiestoExp()->Booking,$strNumeBook);
+            }
+            $objContenedor = ManifiestoExp::QuerySingle(QQ::AndCondition($objClauWher));
+        } else {
+            t('Actualizando el manifiesto');
+            $objContenedor = $this->objManifies;
+        }
+
+        try {
+            if (!$objContenedor) {
+                t('Manifiesto nuevo');
+                $objContenedor = new ManifiestoExp();
+                $objContenedor->Numero        = ManifiestoExp::proxReferencia();
+                $objContenedor->FechaCreacion = new QDateTime(QDateTime::Now());
+                $objContenedor->OrigenId      = $this->lstOrigMani->SelectedValue;
+                $objContenedor->CreatedBy     = $this->objUsuario->CodiUsua;
+                $objContenedor->CreatedAt     = new QDateTime(QDateTime::Now());
+                $objContenedor->Valijas       = 0;
+                $objContenedor->Piezas        = 0;
+                $objContenedor->Kilos         = 0;
+                $objContenedor->Libras        = 0;
+                $objContenedor->PiesCub       = 0;
+                $objContenedor->Volumen       = 0;
+                $objContenedor->Valor         = 0;
+            }
+            $objContenedor->DestinoId     = $this->lstDestMani->SelectedValue;
+            $objContenedor->FechaDespacho = new QDateTime($this->calFechDesp->DateTime);
+            $objContenedor->NroBl         = $this->txtNumeBlxx->Text;
+            $objContenedor->Booking       = $this->txtNumeBook->Text;
+            $objContenedor->UpdatedBy     = $this->objUsuario->CodiUsua;
+            $objContenedor->UpdatedAt     = new QDateTime(QDateTime::Now());
+            $objContenedor->Save();
+            t('Manifiesto Exp MAR salvado en la BD');
+        } catch (Exception $e) {
+            t('Error creando Manifiesto Exp MAR: '.$e->getMessage());
+            $this->danger($e->getMessage());
+            return;
+        }
+
+        if (strlen($this->txtListNume->Text) == 0) {
+            $this->info('Se actualizo el Manifiesto | No se proceso ninguna Pieza');
+            return;
+        }
+
+        $this->arrListNume = explode(',',nl2br2($this->txtListNume->Text));
+        $this->arrListNume = LimpiarArreglo($this->arrListNume,false);
+        $this->txtListNume->Text = '';
+
+        $intContCkpt = 0;
+        $objDatabase = ManifiestoExp::GetDatabase();
+        $objDatabase->TransactionBegin();
+
+        //--------------------------------------------------------------------------------------
+        // Plan de accion:
+        // 1.- Se borran la piezas anteriores del Usuario de la tabla process_pieces
+        //     spu_delete_records_from_process_pieces($intCodiUsua)
+        // 2.- Se graban en la tabla process_pieces las piezas actuales que se van a procesar
+        //     ProcessPieces::GrabarPiezas($intProcIdxx, $arrPiecProc)
+        // 3.- Se asocian las piezas al contenedor 
+        //     spu_associate_pieces_to_container_exp($intProcIdxx)
+        //     - Las piezas deben existir en la tabla guia_piezas
+        //     - Las piezas no deben no deben estar entregadas
+        //     - Las piezas no deben repetirse dentro del container
+        // 4.- Se graba el checkpoint de Exportacion para cada pieza
+        //     spu_insert_checkpoint($intCodiCkpt, $intCodiSucu, '$strTextCkpt', $intProcIdxx)
+        // 5.- Grabar en detalle_error las piezas con errores durante el proceso.
+        //--------------------------------------------------------------------------------------
+
+        foreach ($this->arrListNume as $strNumeSeri) {
+            t('Procesando: '.$strNumeSeri);
+            $objGuiaPiez = GuiaPiezas::LoadByIdPieza($strNumeSeri);
+            if (!$objGuiaPiez) {
+                t('La pieza no existe en la base de datos: '.$strNumeSeri);
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNumeSeri;
+                $arrParaErro['MensErro'] = 'LA PIEZA NO EXISTE';
+                $arrParaErro['ComeErro'] = 'CHEQUEANDO LA EXISTENCIA DE LA PIEZA';
+                GrabarError($arrParaErro);
+                continue;
+            }
+            t('La pieza existe');
+            $arrSepuProc = $objGuiaPiez->Guia->SePuedeProcesar();
+            if (!$arrSepuProc['TodoOkey']) {
+                t('La guia no se puede procesar: '.$arrSepuProc['MensUsua']);
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNumeSeri;
+                $arrParaErro['MensErro'] = $arrSepuProc['MensUsua'];
+                $arrParaErro['ComeErro'] = 'VERIFICANDO QUE LA GUIA SE PUEDA PROCESAR';
+                GrabarError($arrParaErro);
+                continue;
+            }
+            //--------------------------------------------------------------------------------
+            // Antes de asociar la Guia al Manifiesto, se debe verificar que el destino
+            // de la Guia, coincida con algunos de los Destinos de la Operacion seleccionada
+            //---------------------------------------------------------------------------------
+            if ($objContenedor->IsGuiaPiezasAsPiezaAssociated($objGuiaPiez)) {
+                t('La pieza ya estaba asociada al Manifiesto');
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNumeSeri;
+                $arrParaErro['MensErro'] = 'PREVIAMENTE ASOCIADA AL MANIFIESTO';
+                $arrParaErro['ComeErro'] = 'ASOCIANDO LA PIEZA AL MANIFIESTO';
+                GrabarError($arrParaErro);
+                continue;
+            }
+            t('La pieza no estaba asociada');
+            //---------------------------------------------
+            // Se establece la relacion "contenedor-guia"
+            //---------------------------------------------
+            $objContenedor->AssociateGuiaPiezasAsPieza($objGuiaPiez);
+            t('Ya asocie la pieza');
+            //---------------------------------------------
+            // Se registra el checkpoint correspondiente
+            //---------------------------------------------
+            $strDescCkpt  = $objCheckpoint->Descripcion.' | BOOKING: '.$objContenedor->Booking;
+            $arrDatoCkpt = array();
+            $arrDatoCkpt['NumePiez'] = $objGuiaPiez->IdPieza;
+            $arrDatoCkpt['GuiaAnul'] = $objGuiaPiez->Guia->Anulada();
+            $arrDatoCkpt['CodiCkpt'] = $objCheckpoint->Id;
+            $arrDatoCkpt['TextCkpt'] = $strDescCkpt;
+            $arrDatoCkpt['CodiRuta'] = null;
+            $arrDatoCkpt['NotiCkpt'] = $objCheckpoint->Notificar;
+            $arrResuGrab = GrabarCheckpointOptimizado($arrDatoCkpt);
+            if ($arrResuGrab['TodoOkey']) {
+                t('Se grabo el checkpoint a la pieza');
+                $intContCkpt ++;
+            } else {
+                t('Hubo algun error: '.$arrResuGrab['MotiNook']);
+                $arrParaErro['ProcIdxx'] = $this->objProcEjec->Id;
+                $arrParaErro['NumeRefe'] = $strNumeSeri;
+                $arrParaErro['MensErro'] = $arrResuGrab['MotiNook'];
+                $arrParaErro['ComeErro'] = 'GRABANDO CHECKPOINT DE EXPORTACION';
+                GrabarError($arrParaErro);
+            }
+        }
+        $this->dtgPiezMani->Refresh();
+        $this->dtgPiezApta->Refresh();
+        t('Termine de procesar la piezas');
+        $objContenedor->actualizarTotales();
+        $this->txtNumeMani->Text = $objContenedor->Numero;
+        $this->txtCantVali->Text = $objContenedor->Valijas;
+        $this->txtCantPiez->Text = $objContenedor->Piezas;
+        $this->txtCantVolu->Text = $objContenedor->Volumen;
+        $this->txtCantPies->Text = $objContenedor->PiesCub;
+        $this->txtCreaPorx->Text = $objContenedor->__creator();
+        $this->txtModiPorx->Text = $objContenedor->__updater();
+        t('Se actualizaron los totales en el manifiesto');
+        $objDatabase->TransactionCommit();
+        $intCantErro = DetalleError::CountByProcesoId($this->objProcEjec->Id);
+
+        $mixFiniTime = microtime(true);
+        $mixTotaTime = formatPeriod($mixFiniTime, $mixInitTime);
+
+        $strMensUsua = sprintf('Checkpoints (%s) | Errores (%s) | Tiempo: ', 
+            $intContCkpt, $intCantErro, $mixTotaTime);
+        if ($intCantErro == 0) {
+            // $this->success($strMensUsua);
+            $_SESSION['FlashMessage'] = ['success', $strMensUsua];
+        } else {
+            // $this->warning($strMensUsua);
+            $_SESSION['FlashMessage'] = ['warning', $strMensUsua];
+            $this->btnRepoErro->Visible = true;
+        }
+
+        $this->objManifies = $objContenedor;
+        $this->blnEditMode = true;
+        $this->btnRepoMani->Visible = true;
+
+
+        QApplication::Redirect('/common/armar_manif_exp_mar.php/'.$objContenedor->Id);
+        $this->opcionesDeImpresion();
+    }
+
+    protected function btnSave_ClickOld() {
         t('===============================');
         t('Comenzando Exportacion Maritima');
 
@@ -899,7 +1049,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         // Con array_unique se eliminan las piezas repetidas en caso de que las haya
         //---------------------------------------------------------------------------
         $this->arrListNume = LimpiarArreglo($this->arrListNume,false);
-        $this->arrListNume = array_map('transformar',$this->arrListNume);
+        // $this->arrListNume = array_map('transformar',$this->arrListNume);
         $this->txtListNume->Text = '';
 
         $intContCkpt = 0;
