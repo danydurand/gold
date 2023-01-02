@@ -652,11 +652,11 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
             }
             if ($this->chkEnxxAlma->Checked) {
                 //----------------------------------------------------------------------------
-                // Se identifican las piezas cuyo ultimo checkpoint es 'IA'
+                // Se identifican las piezas cuyo ultimo checkpoint es 'IA' o 'RG'
                 //----------------------------------------------------------------------------
                 $arrGuiaIdxx   = GuiaPiezas::EnAlmacen();
                 $objClausula[] = QQ::In(QQN::Guias()->Id, $arrGuiaIdxx);
-                $strCadeSqlx  .= " and codigo_ckpt = 'IA' ";
+                $strCadeSqlx  .= " and codigo_ckpt in ('IA','RG') ";
             }
 
             if (!is_null($this->lstCodiOrig->SelectedValue)) {
@@ -707,7 +707,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 //----------------------------------------------------------------------------------
                 // Se identifican las piezas cuyo ultimo checkpoint sea el indicado por el Usuario
                 //----------------------------------------------------------------------------------
-                $arrPiecIdxx   = GuiaPiezas::WhichLastCheckpointIs($strCodiCkpt);
+                $arrPiecIdxx   = GuiaPiezas::WhichLastCheckpointIs([$strCodiCkpt]);
                 $objClausula[] = QQ::In(QQN::Guias()->Id, $arrPiecIdxx);
                 $strCadeSqlx  .= " and codigo_ckpt = '$strCodiCkpt'";
             }

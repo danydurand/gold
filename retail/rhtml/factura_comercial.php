@@ -185,7 +185,7 @@ for ($i = 0; $i < $intCantPagi; $i++) {
                             <?= $objPiezGuia->Empaque ? $objPiezGuia->Empaque->Siglas : 'BOX' ?>
                         </td>
                         <td class="recuadro contenido" style="width: 36%">
-                            <?= $objPiezGuia->Descripcion ?>
+                            <?= trim(substr($objPiezGuia->Descripcion,0,37)) ?>
                         </td>
                         <td class="recuadro contenido" style="width: 17%; text-align: center">
                             VENEZUELA

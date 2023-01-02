@@ -274,43 +274,21 @@
         }
 
         public static function EnAlmacen() {
-            // $objClauWher   = QQ::Clause();
-            // $objClauWher[] = QQ::Like(QQN::GuiaPiezas()->LastCkptCode,'IA');
-            // $arrPiezUbic   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher));
-            // $arrGuiaIdxx   = [];
-            // foreach ($arrPiezUbic as $objPiezUbic) {
-            //     $arrGuiaIdxx[] = $objPiezUbic->GuiaId;
-            // }
-            return GuiaPiezas::WhichLastCheckpointIs('IA');
+            return GuiaPiezas::WhichLastCheckpointIs(['IA','RG']);
         }
 
-        public static function WhichLastCheckpointIs($strCodiCkpt) {
-            $objClauSele = QQ::Select(QQN::GuiaPiezas()->GuiaId);
-            $arrPiezCkpt = GuiaPiezas::LoadArrayByLastCkptCode($strCodiCkpt, $objClauSele);
-            $arrGuiaIdxx = [];
+        public static function WhichLastCheckpointIs($arrSearCkpt) {
+            $objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
+            $objClauWher   = QQ::Clause();
+            $objClauWher[] = QQ::In(QQN::GuiaPiezas()->LastCkptCode,$arrSearCkpt);
+            $arrPiezCkpt   = GuiaPiezas::QueryArray(QQ::AndCondition($objClauWher), $objClauSele);
+            $arrGuiaIdxx   = [];
             foreach ($arrPiezCkpt as $objPiezCkpt) {
                 $arrGuiaIdxx[] = $objPiezCkpt->GuiaId;
             }
             return $arrGuiaIdxx;
         }
 
-        // public static function WhichLastCheckpointIs($strCodiCkpt) {
-        //     $objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
-        //     $objClauWher   = QQ::Clause();
-        //     $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->LastCkptCode,$strCodiCkpt);
-        //     $arrPiezCkpt   = GuiaPiezas::QueryArray(
-        //         QQ::AndCondition($objClauWher),
-        //         QQ::Clause(
-        //             $objClauSele,
-        //             QQ::Distinct()
-        //         )
-        //     );
-        //     $arrGuiaIdxx = [];
-        //     foreach ($arrPiezCkpt as $objPiezCkpt) {
-        //         $arrGuiaIdxx[] = $objPiezCkpt->GuiaId;
-        //     }
-        //     return $arrGuiaIdxx;
-        // }
 
         public static function LoadArrayPorRecibirEnAlmacen($intManiIdxx, $objOptionalClauses=null) {
             // Performing the load manually (instead of using QCubed Query)
