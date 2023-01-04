@@ -74,7 +74,9 @@ class Incidencias extends FormularioBaseKaizen {
         $this->lstListCkpt = new QListBox($this);
         $this->lstListCkpt->Name = QApplication::Translate("Checkpoint");
         $this->lstListCkpt->Width = 250;
-        $arrCkptTipo = Checkpoints::LoadArrayByTipo('INCIDENCIA');
+        $arrCkptTipo = Checkpoints::LoadArrayByTipo('INCIDENCIA', 
+            QQ::Clause(QQ::OrderBy(QQN::Checkpoints()->Descripcion))
+        );
         $intCantCkpt = count($arrCkptTipo);
         $this->lstListCkpt->AddItem(QApplication::Translate('- Seleccione Uno - ('.$intCantCkpt.')'),null);
         foreach ($arrCkptTipo as $objCkpt) {
@@ -162,7 +164,11 @@ class Incidencias extends FormularioBaseKaizen {
 
         $arrNumePiez = explode(',',nl2br2($this->txtNumeSeri->Text));
         $arrNumePiez = array_unique($arrNumePiez);
-        $arrGuiaOkey = array_map('transformar',$arrNumePiez);
+        if (count($this->arrPiezInci) == 0) {
+            $arrGuiaOkey = array_map('transformar',$arrNumePiez);
+        } else {
+            $arrGuiaOkey = $arrNumePiez;
+        }
 
         $this->txtNumeSeri->Text = '';
 

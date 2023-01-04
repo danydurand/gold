@@ -18,7 +18,7 @@ try {
     $strNombArch = 'MANI_EXPO_'.$objManiCarg->Booking.'.pdf';
     $strNombForm = 'manifiesto_exportacion_html.php';
 
-    $html2pdf = new Html2Pdf('L', 'Letter', 'es', true, 'UTF-8', array("15", "10", "20", "20"));
+    $html2pdf = new Html2Pdf('L', 'Letter', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
     $html2pdf->pdf->SetDisplayMode('fullpage');
     $_SESSION['ManiIdxx'] = $intManiIdxx;
     ob_start();

@@ -34,6 +34,8 @@
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaArray the value for the private _objPiezaRecibidaArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.proceso_error_id reverse relationship
 	 * @property-read PiezasTemp $_PiezasTemp the value for the private _objPiezasTemp (Read-Only) if set due to an expansion on the piezas_temp.proceso_error_id reverse relationship
 	 * @property-read PiezasTemp[] $_PiezasTempArray the value for the private _objPiezasTempArray (Read-Only) if set due to an ExpandAsArray on the piezas_temp.proceso_error_id reverse relationship
+	 * @property-read ProcessPieces $_ProcessPieces the value for the private _objProcessPieces (Read-Only) if set due to an expansion on the process_pieces.proceso_error_id reverse relationship
+	 * @property-read ProcessPieces[] $_ProcessPiecesArray the value for the private _objProcessPiecesArray (Read-Only) if set due to an ExpandAsArray on the process_pieces.proceso_error_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
 	 */
 	class ProcesoErrorGen extends QBaseClass implements IteratorAggregate {
@@ -195,6 +197,22 @@
 		 * @var PiezasTemp[] _objPiezasTempArray;
 		 */
 		private $_objPiezasTempArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ProcessPieces object
+		 * (of type ProcessPieces), if this ProcesoError object was restored with
+		 * an expansion on the process_pieces association table.
+		 * @var ProcessPieces _objProcessPieces;
+		 */
+		private $_objProcessPieces;
+
+		/**
+		 * Private member variable that stores a reference to an array of ProcessPieces objects
+		 * (of type ProcessPieces[]), if this ProcesoError object was restored with
+		 * an ExpandAsArray on the process_pieces association table.
+		 * @var ProcessPieces[] _objProcessPiecesArray;
+		 */
+		private $_objProcessPiecesArray = null;
 
 		/**
 		 * Protected array of virtual attributes for this object (e.g. extra/other calculated and/or non-object bound
@@ -844,6 +862,21 @@
 				}
 			}
 
+			// Check for ProcessPieces Virtual Binding
+			$strAlias = $strAliasPrefix . 'processpieces__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['processpieces']) ? null : $objExpansionAliasArray['processpieces']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objProcessPiecesArray)
+				$objToReturn->_objProcessPiecesArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objProcessPiecesArray[] = ProcessPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processpieces__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objProcessPieces)) {
+					$objToReturn->_objProcessPieces = ProcessPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processpieces__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			return $objToReturn;
 		}
 		
@@ -1293,6 +1326,22 @@
 					 */
 					return $this->_objPiezasTempArray;
 
+				case '_ProcessPieces':
+					/**
+					 * Gets the value for the private _objProcessPieces (Read-Only)
+					 * if set due to an expansion on the process_pieces.proceso_error_id reverse relationship
+					 * @return ProcessPieces
+					 */
+					return $this->_objProcessPieces;
+
+				case '_ProcessPiecesArray':
+					/**
+					 * Gets the value for the private _objProcessPiecesArray (Read-Only)
+					 * if set due to an ExpandAsArray on the process_pieces.proceso_error_id reverse relationship
+					 * @return ProcessPieces[]
+					 */
+					return $this->_objProcessPiecesArray;
+
 
 				case '__Restored':
 					return $this->__blnRestored;
@@ -1472,6 +1521,9 @@
 			}
 			if ($this->CountPiezasTemps()) {
 				$arrTablRela[] = 'piezas_temp';
+			}
+			if ($this->CountProcessPieceses()) {
+				$arrTablRela[] = 'process_pieces';
 			}
 			
 			return $arrTablRela;
@@ -2228,6 +2280,155 @@
 		}
 
 
+		// Related Objects' Methods for ProcessPieces
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ProcessPieceses as an array of ProcessPieces objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ProcessPieces[]
+		*/
+		public function GetProcessPiecesArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ProcessPieces::LoadArrayByProcesoErrorId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ProcessPieceses
+		 * @return int
+		*/
+		public function CountProcessPieceses() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ProcessPieces::CountByProcesoErrorId($this->intId);
+		}
+
+		/**
+		 * Associates a ProcessPieces
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function AssociateProcessPieces(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessPieces on this unsaved ProcesoError.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessPieces on this ProcesoError with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ProcessPieces
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function UnassociateProcessPieces(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPieces on this unsaved ProcesoError.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPieces on this ProcesoError with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ProcessPieceses
+		 * @return void
+		*/
+		public function UnassociateAllProcessPieceses() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPieces on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`proceso_error_id` = null
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ProcessPieces
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function DeleteAssociatedProcessPieces(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPieces on this unsaved ProcesoError.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPieces on this ProcesoError with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_pieces`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . ' AND
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ProcessPieceses
+		 * @return void
+		*/
+		public function DeleteAllProcessPieceses() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPieces on this unsaved ProcesoError.');
+
+			// Get the Database Object for this Class
+			$objDatabase = ProcesoError::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_pieces`
+				WHERE
+					`proceso_error_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		
 		///////////////////////////////
 		// METHODS TO EXTRACT INFO ABOUT THE CLASS
@@ -2415,6 +2616,7 @@
      * @property-read QQReverseReferenceNodeMatchPieces $MatchPieces
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
+     * @property-read QQReverseReferenceNodeProcessPieces $ProcessPieces
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2452,6 +2654,8 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':
 					return new QQReverseReferenceNodePiezasTemp($this, 'piezastemp', 'reverse_reference', 'proceso_error_id', 'PiezasTemp');
+				case 'ProcessPieces':
+					return new QQReverseReferenceNodeProcessPieces($this, 'processpieces', 'reverse_reference', 'proceso_error_id', 'ProcessPieces');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'Integer', $this);
@@ -2483,6 +2687,7 @@
      * @property-read QQReverseReferenceNodeMatchPieces $MatchPieces
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibida
      * @property-read QQReverseReferenceNodePiezasTemp $PiezasTemp
+     * @property-read QQReverseReferenceNodeProcessPieces $ProcessPieces
 
      * @property-read QQNode $_PrimaryKeyNode
      **/
@@ -2520,6 +2725,8 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibida', 'reverse_reference', 'proceso_error_id', 'PiezaRecibida');
 				case 'PiezasTemp':
 					return new QQReverseReferenceNodePiezasTemp($this, 'piezastemp', 'reverse_reference', 'proceso_error_id', 'PiezasTemp');
+				case 'ProcessPieces':
+					return new QQReverseReferenceNodeProcessPieces($this, 'processpieces', 'reverse_reference', 'proceso_error_id', 'ProcessPieces');
 
 				case '_PrimaryKeyNode':
 					return new QQNode('id', 'Id', 'integer', $this);

@@ -1126,6 +1126,13 @@
 		QApplicationBase::$ClassFile['procesoerrormetacontrol'] = __META_CONTROLS__ . '/ProcesoErrorMetaControl.class.php';
 		QApplicationBase::$ClassFile['procesoerrordatagrid'] = __META_CONTROLS__ . '/ProcesoErrorDataGrid.class.php';
 
+	// ClassPaths for the ProcessPieces class
+		QApplicationBase::$ClassFile['processpieces'] = __MODEL__ . '/ProcessPieces.class.php';
+		QApplicationBase::$ClassFile['qqnodeprocesspieces'] = __MODEL__ . '/ProcessPieces.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeprocesspieces'] = __MODEL__ . '/ProcessPieces.class.php';
+		QApplicationBase::$ClassFile['processpiecesmetacontrol'] = __META_CONTROLS__ . '/ProcessPiecesMetaControl.class.php';
+		QApplicationBase::$ClassFile['processpiecesdatagrid'] = __META_CONTROLS__ . '/ProcessPiecesDataGrid.class.php';
+
 	// ClassPaths for the ProductoReembolso class
 		QApplicationBase::$ClassFile['productoreembolso'] = __MODEL__ . '/ProductoReembolso.class.php';
 		QApplicationBase::$ClassFile['qqnodeproductoreembolso'] = __MODEL__ . '/ProductoReembolso.class.php';

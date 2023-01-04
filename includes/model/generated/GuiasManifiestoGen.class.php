@@ -20,7 +20,12 @@
 	 * @property string $Numero the value for strNumero (Not Null)
 	 * @property string $Tracking the value for strTracking (Not Null)
 	 * @property string $Remitente the value for strRemitente (Not Null)
+	 * @property string $DireccionRemitente the value for strDireccionRemitente 
 	 * @property string $Destinatario the value for strDestinatario (Not Null)
+	 * @property string $Aliado the value for strAliado 
+	 * @property string $DireccionDestinatario the value for strDireccionDestinatario 
+	 * @property string $Telefono the value for strTelefono 
+	 * @property string $Email the value for strEmail 
 	 * @property string $Descripcion the value for strDescripcion (Not Null)
 	 * @property integer $Piezas the value for intPiezas (Not Null)
 	 * @property double $Peso the value for fltPeso (Not Null)
@@ -94,6 +99,15 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column guias_manifiesto.direccion_remitente
+		 * @var string strDireccionRemitente
+		 */
+		protected $strDireccionRemitente;
+		const DireccionRemitenteMaxLength = 500;
+		const DireccionRemitenteDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column guias_manifiesto.destinatario
 		 * @var string strDestinatario
 		 */
@@ -103,11 +117,47 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column guias_manifiesto.aliado
+		 * @var string strAliado
+		 */
+		protected $strAliado;
+		const AliadoMaxLength = 100;
+		const AliadoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias_manifiesto.direccion_destinatario
+		 * @var string strDireccionDestinatario
+		 */
+		protected $strDireccionDestinatario;
+		const DireccionDestinatarioMaxLength = 500;
+		const DireccionDestinatarioDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias_manifiesto.telefono
+		 * @var string strTelefono
+		 */
+		protected $strTelefono;
+		const TelefonoMaxLength = 100;
+		const TelefonoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias_manifiesto.email
+		 * @var string strEmail
+		 */
+		protected $strEmail;
+		const EmailMaxLength = 100;
+		const EmailDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column guias_manifiesto.descripcion
 		 * @var string strDescripcion
 		 */
 		protected $strDescripcion;
-		const DescripcionMaxLength = 100;
+		const DescripcionMaxLength = 150;
 		const DescripcionDefault = null;
 
 
@@ -195,7 +245,12 @@
 			$this->strNumero = GuiasManifiesto::NumeroDefault;
 			$this->strTracking = GuiasManifiesto::TrackingDefault;
 			$this->strRemitente = GuiasManifiesto::RemitenteDefault;
+			$this->strDireccionRemitente = GuiasManifiesto::DireccionRemitenteDefault;
 			$this->strDestinatario = GuiasManifiesto::DestinatarioDefault;
+			$this->strAliado = GuiasManifiesto::AliadoDefault;
+			$this->strDireccionDestinatario = GuiasManifiesto::DireccionDestinatarioDefault;
+			$this->strTelefono = GuiasManifiesto::TelefonoDefault;
+			$this->strEmail = GuiasManifiesto::EmailDefault;
 			$this->strDescripcion = GuiasManifiesto::DescripcionDefault;
 			$this->intPiezas = GuiasManifiesto::PiezasDefault;
 			$this->fltPeso = GuiasManifiesto::PesoDefault;
@@ -550,7 +605,12 @@
 			    $objBuilder->AddSelectItem($strTableName, 'numero', $strAliasPrefix . 'numero');
 			    $objBuilder->AddSelectItem($strTableName, 'tracking', $strAliasPrefix . 'tracking');
 			    $objBuilder->AddSelectItem($strTableName, 'remitente', $strAliasPrefix . 'remitente');
+			    $objBuilder->AddSelectItem($strTableName, 'direccion_remitente', $strAliasPrefix . 'direccion_remitente');
 			    $objBuilder->AddSelectItem($strTableName, 'destinatario', $strAliasPrefix . 'destinatario');
+			    $objBuilder->AddSelectItem($strTableName, 'aliado', $strAliasPrefix . 'aliado');
+			    $objBuilder->AddSelectItem($strTableName, 'direccion_destinatario', $strAliasPrefix . 'direccion_destinatario');
+			    $objBuilder->AddSelectItem($strTableName, 'telefono', $strAliasPrefix . 'telefono');
+			    $objBuilder->AddSelectItem($strTableName, 'email', $strAliasPrefix . 'email');
 			    $objBuilder->AddSelectItem($strTableName, 'descripcion', $strAliasPrefix . 'descripcion');
 			    $objBuilder->AddSelectItem($strTableName, 'piezas', $strAliasPrefix . 'piezas');
 			    $objBuilder->AddSelectItem($strTableName, 'peso', $strAliasPrefix . 'peso');
@@ -699,9 +759,24 @@
 			$strAlias = $strAliasPrefix . 'remitente';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strRemitente = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'direccion_remitente';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strDireccionRemitente = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'destinatario';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDestinatario = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'aliado';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strAliado = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'direccion_destinatario';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strDireccionDestinatario = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'telefono';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strTelefono = $objDbRow->GetColumn($strAliasName, 'VarChar');
+			$strAlias = $strAliasPrefix . 'email';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->strEmail = $objDbRow->GetColumn($strAliasName, 'VarChar');
 			$strAlias = $strAliasPrefix . 'descripcion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strDescripcion = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -958,7 +1033,12 @@
 							`numero`,
 							`tracking`,
 							`remitente`,
+							`direccion_remitente`,
 							`destinatario`,
+							`aliado`,
+							`direccion_destinatario`,
+							`telefono`,
+							`email`,
 							`descripcion`,
 							`piezas`,
 							`peso`,
@@ -971,7 +1051,12 @@
 							' . $objDatabase->SqlVariable($this->strNumero) . ',
 							' . $objDatabase->SqlVariable($this->strTracking) . ',
 							' . $objDatabase->SqlVariable($this->strRemitente) . ',
+							' . $objDatabase->SqlVariable($this->strDireccionRemitente) . ',
 							' . $objDatabase->SqlVariable($this->strDestinatario) . ',
+							' . $objDatabase->SqlVariable($this->strAliado) . ',
+							' . $objDatabase->SqlVariable($this->strDireccionDestinatario) . ',
+							' . $objDatabase->SqlVariable($this->strTelefono) . ',
+							' . $objDatabase->SqlVariable($this->strEmail) . ',
 							' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							' . $objDatabase->SqlVariable($this->fltPeso) . ',
@@ -997,7 +1082,12 @@
 							`numero` = ' . $objDatabase->SqlVariable($this->strNumero) . ',
 							`tracking` = ' . $objDatabase->SqlVariable($this->strTracking) . ',
 							`remitente` = ' . $objDatabase->SqlVariable($this->strRemitente) . ',
+							`direccion_remitente` = ' . $objDatabase->SqlVariable($this->strDireccionRemitente) . ',
 							`destinatario` = ' . $objDatabase->SqlVariable($this->strDestinatario) . ',
+							`aliado` = ' . $objDatabase->SqlVariable($this->strAliado) . ',
+							`direccion_destinatario` = ' . $objDatabase->SqlVariable($this->strDireccionDestinatario) . ',
+							`telefono` = ' . $objDatabase->SqlVariable($this->strTelefono) . ',
+							`email` = ' . $objDatabase->SqlVariable($this->strEmail) . ',
 							`descripcion` = ' . $objDatabase->SqlVariable($this->strDescripcion) . ',
 							`piezas` = ' . $objDatabase->SqlVariable($this->intPiezas) . ',
 							`peso` = ' . $objDatabase->SqlVariable($this->fltPeso) . ',
@@ -1119,7 +1209,12 @@
 			$this->strNumero = $objReloaded->strNumero;
 			$this->strTracking = $objReloaded->strTracking;
 			$this->strRemitente = $objReloaded->strRemitente;
+			$this->strDireccionRemitente = $objReloaded->strDireccionRemitente;
 			$this->strDestinatario = $objReloaded->strDestinatario;
+			$this->strAliado = $objReloaded->strAliado;
+			$this->strDireccionDestinatario = $objReloaded->strDireccionDestinatario;
+			$this->strTelefono = $objReloaded->strTelefono;
+			$this->strEmail = $objReloaded->strEmail;
 			$this->strDescripcion = $objReloaded->strDescripcion;
 			$this->intPiezas = $objReloaded->intPiezas;
 			$this->fltPeso = $objReloaded->fltPeso;
@@ -1181,12 +1276,47 @@
 					 */
 					return $this->strRemitente;
 
+				case 'DireccionRemitente':
+					/**
+					 * Gets the value for strDireccionRemitente 
+					 * @return string
+					 */
+					return $this->strDireccionRemitente;
+
 				case 'Destinatario':
 					/**
 					 * Gets the value for strDestinatario (Not Null)
 					 * @return string
 					 */
 					return $this->strDestinatario;
+
+				case 'Aliado':
+					/**
+					 * Gets the value for strAliado 
+					 * @return string
+					 */
+					return $this->strAliado;
+
+				case 'DireccionDestinatario':
+					/**
+					 * Gets the value for strDireccionDestinatario 
+					 * @return string
+					 */
+					return $this->strDireccionDestinatario;
+
+				case 'Telefono':
+					/**
+					 * Gets the value for strTelefono 
+					 * @return string
+					 */
+					return $this->strTelefono;
+
+				case 'Email':
+					/**
+					 * Gets the value for strEmail 
+					 * @return string
+					 */
+					return $this->strEmail;
 
 				case 'Descripcion':
 					/**
@@ -1347,6 +1477,19 @@
 						throw $objExc;
 					}
 
+				case 'DireccionRemitente':
+					/**
+					 * Sets the value for strDireccionRemitente 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strDireccionRemitente = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Destinatario':
 					/**
 					 * Sets the value for strDestinatario (Not Null)
@@ -1355,6 +1498,58 @@
 					 */
 					try {
 						return ($this->strDestinatario = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Aliado':
+					/**
+					 * Sets the value for strAliado 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strAliado = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'DireccionDestinatario':
+					/**
+					 * Sets the value for strDireccionDestinatario 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strDireccionDestinatario = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Telefono':
+					/**
+					 * Sets the value for strTelefono 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strTelefono = QType::Cast($mixValue, QType::String));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'Email':
+					/**
+					 * Sets the value for strEmail 
+					 * @param string $mixValue
+					 * @return string
+					 */
+					try {
+						return ($this->strEmail = QType::Cast($mixValue, QType::String));
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -1557,7 +1752,12 @@
 			$strToReturn .= '<element name="Numero" type="xsd:string"/>';
 			$strToReturn .= '<element name="Tracking" type="xsd:string"/>';
 			$strToReturn .= '<element name="Remitente" type="xsd:string"/>';
+			$strToReturn .= '<element name="DireccionRemitente" type="xsd:string"/>';
 			$strToReturn .= '<element name="Destinatario" type="xsd:string"/>';
+			$strToReturn .= '<element name="Aliado" type="xsd:string"/>';
+			$strToReturn .= '<element name="DireccionDestinatario" type="xsd:string"/>';
+			$strToReturn .= '<element name="Telefono" type="xsd:string"/>';
+			$strToReturn .= '<element name="Email" type="xsd:string"/>';
 			$strToReturn .= '<element name="Descripcion" type="xsd:string"/>';
 			$strToReturn .= '<element name="Piezas" type="xsd:int"/>';
 			$strToReturn .= '<element name="Peso" type="xsd:float"/>';
@@ -1598,8 +1798,18 @@
 				$objToReturn->strTracking = $objSoapObject->Tracking;
 			if (property_exists($objSoapObject, 'Remitente'))
 				$objToReturn->strRemitente = $objSoapObject->Remitente;
+			if (property_exists($objSoapObject, 'DireccionRemitente'))
+				$objToReturn->strDireccionRemitente = $objSoapObject->DireccionRemitente;
 			if (property_exists($objSoapObject, 'Destinatario'))
 				$objToReturn->strDestinatario = $objSoapObject->Destinatario;
+			if (property_exists($objSoapObject, 'Aliado'))
+				$objToReturn->strAliado = $objSoapObject->Aliado;
+			if (property_exists($objSoapObject, 'DireccionDestinatario'))
+				$objToReturn->strDireccionDestinatario = $objSoapObject->DireccionDestinatario;
+			if (property_exists($objSoapObject, 'Telefono'))
+				$objToReturn->strTelefono = $objSoapObject->Telefono;
+			if (property_exists($objSoapObject, 'Email'))
+				$objToReturn->strEmail = $objSoapObject->Email;
 			if (property_exists($objSoapObject, 'Descripcion'))
 				$objToReturn->strDescripcion = $objSoapObject->Descripcion;
 			if (property_exists($objSoapObject, 'Piezas'))
@@ -1655,7 +1865,12 @@
 			$iArray['Numero'] = $this->strNumero;
 			$iArray['Tracking'] = $this->strTracking;
 			$iArray['Remitente'] = $this->strRemitente;
+			$iArray['DireccionRemitente'] = $this->strDireccionRemitente;
 			$iArray['Destinatario'] = $this->strDestinatario;
+			$iArray['Aliado'] = $this->strAliado;
+			$iArray['DireccionDestinatario'] = $this->strDireccionDestinatario;
+			$iArray['Telefono'] = $this->strTelefono;
+			$iArray['Email'] = $this->strEmail;
 			$iArray['Descripcion'] = $this->strDescripcion;
 			$iArray['Piezas'] = $this->intPiezas;
 			$iArray['Peso'] = $this->fltPeso;
@@ -1705,7 +1920,12 @@
      * @property-read QQNode $Numero
      * @property-read QQNode $Tracking
      * @property-read QQNode $Remitente
+     * @property-read QQNode $DireccionRemitente
      * @property-read QQNode $Destinatario
+     * @property-read QQNode $Aliado
+     * @property-read QQNode $DireccionDestinatario
+     * @property-read QQNode $Telefono
+     * @property-read QQNode $Email
      * @property-read QQNode $Descripcion
      * @property-read QQNode $Piezas
      * @property-read QQNode $Peso
@@ -1735,8 +1955,18 @@
 					return new QQNode('tracking', 'Tracking', 'VarChar', $this);
 				case 'Remitente':
 					return new QQNode('remitente', 'Remitente', 'VarChar', $this);
+				case 'DireccionRemitente':
+					return new QQNode('direccion_remitente', 'DireccionRemitente', 'VarChar', $this);
 				case 'Destinatario':
 					return new QQNode('destinatario', 'Destinatario', 'VarChar', $this);
+				case 'Aliado':
+					return new QQNode('aliado', 'Aliado', 'VarChar', $this);
+				case 'DireccionDestinatario':
+					return new QQNode('direccion_destinatario', 'DireccionDestinatario', 'VarChar', $this);
+				case 'Telefono':
+					return new QQNode('telefono', 'Telefono', 'VarChar', $this);
+				case 'Email':
+					return new QQNode('email', 'Email', 'VarChar', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'VarChar', $this);
 				case 'Piezas':
@@ -1770,7 +2000,12 @@
      * @property-read QQNode $Numero
      * @property-read QQNode $Tracking
      * @property-read QQNode $Remitente
+     * @property-read QQNode $DireccionRemitente
      * @property-read QQNode $Destinatario
+     * @property-read QQNode $Aliado
+     * @property-read QQNode $DireccionDestinatario
+     * @property-read QQNode $Telefono
+     * @property-read QQNode $Email
      * @property-read QQNode $Descripcion
      * @property-read QQNode $Piezas
      * @property-read QQNode $Peso
@@ -1800,8 +2035,18 @@
 					return new QQNode('tracking', 'Tracking', 'string', $this);
 				case 'Remitente':
 					return new QQNode('remitente', 'Remitente', 'string', $this);
+				case 'DireccionRemitente':
+					return new QQNode('direccion_remitente', 'DireccionRemitente', 'string', $this);
 				case 'Destinatario':
 					return new QQNode('destinatario', 'Destinatario', 'string', $this);
+				case 'Aliado':
+					return new QQNode('aliado', 'Aliado', 'string', $this);
+				case 'DireccionDestinatario':
+					return new QQNode('direccion_destinatario', 'DireccionDestinatario', 'string', $this);
+				case 'Telefono':
+					return new QQNode('telefono', 'Telefono', 'string', $this);
+				case 'Email':
+					return new QQNode('email', 'Email', 'string', $this);
 				case 'Descripcion':
 					return new QQNode('descripcion', 'Descripcion', 'string', $this);
 				case 'Piezas':

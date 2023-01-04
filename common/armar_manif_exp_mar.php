@@ -765,7 +765,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
     }
 
 
-    protected function btnSave_Click() {
+    protected function btnSave_ClickNew() {
         t('===============================');
         t('Comenzando Exportacion Maritima');
 
@@ -969,7 +969,7 @@ class ArmarManifExpMar extends FormularioBaseKaizen {
         $this->opcionesDeImpresion();
     }
 
-    protected function btnSave_ClickOld() {
+    protected function btnSave_Click() {
         t('===============================');
         t('Comenzando Exportacion Maritima');
 

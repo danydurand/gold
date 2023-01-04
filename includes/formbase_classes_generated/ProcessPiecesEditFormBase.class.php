@@ -1,26 +1,26 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the GuiasManifiesto class.  It uses the code-generated
- * GuiasManifiestoMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a GuiasManifiesto columns.
+ * of the ProcessPieces class.  It uses the code-generated
+ * ProcessPiecesMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a ProcessPieces columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both guias_manifiesto_edit.php AND
- * guias_manifiesto_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both process_pieces_edit.php AND
+ * process_pieces_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class GuiasManifiestoEditFormBase extends QForm {
-	// Local instance of the GuiasManifiestoMetaControl
+abstract class ProcessPiecesEditFormBase extends QForm {
+	// Local instance of the ProcessPiecesMetaControl
 	/**
-	 * @var GuiasManifiestoMetaControlGen mctGuiasManifiesto
+	 * @var ProcessPiecesMetaControlGen mctProcessPieces
 	 */
-	protected $mctGuiasManifiesto;
+	protected $mctProcessPieces;
 	protected $lblMensUsua;
 	protected $lblNotiUsua;
 	protected $lblTituForm;
@@ -52,24 +52,15 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
     protected $lblOtraNoti;
 
 
-	// Controls for GuiasManifiesto's Data Fields
-	protected $txtManifiestoId;
-	protected $lstGuia;
-	protected $txtNumero;
-	protected $txtTracking;
-	protected $txtRemitente;
-	protected $txtDireccionRemitente;
-	protected $txtDestinatario;
-	protected $txtAliado;
-	protected $txtDireccionDestinatario;
-	protected $txtTelefono;
-	protected $txtEmail;
-	protected $txtDescripcion;
-	protected $txtPiezas;
-	protected $txtPeso;
-	protected $txtValor;
+	// Controls for ProcessPieces's Data Fields
+	protected $lblId;
+	protected $lstProcesoError;
+	protected $txtIdPieza;
+	protected $lstPieza;
+	protected $chkIsProcessed;
+	protected $txtErrorMessage;
 	protected $calCreatedAt;
-	protected $txtCreatedBy;
+	protected $lstCreatedByObject;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
 
@@ -102,9 +93,9 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
 
         $this->objUsuario = unserialize($_SESSION['User']);
 
-        // Use the CreateFromPathInfo shortcut (this can also be done manually using the GuiasManifiestoMetaControl constructor)
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the ProcessPiecesMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctGuiasManifiesto = GuiasManifiestoMetaControl::CreateFromPathInfo($this);
+        $this->mctProcessPieces = ProcessPiecesMetaControl::CreateFromPathInfo($this);
 
         $this->determinarPosicion();
 
@@ -135,24 +126,15 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
 
         $this->verificarNavegacion();
 
-		// Call MetaControl's methods to create qcontrols based on GuiasManifiesto's data fields
-		$this->txtManifiestoId = $this->mctGuiasManifiesto->txtManifiestoId_Create();
-		$this->lstGuia = $this->mctGuiasManifiesto->lstGuia_Create();
-		$this->txtNumero = $this->mctGuiasManifiesto->txtNumero_Create();
-		$this->txtTracking = $this->mctGuiasManifiesto->txtTracking_Create();
-		$this->txtRemitente = $this->mctGuiasManifiesto->txtRemitente_Create();
-		$this->txtDireccionRemitente = $this->mctGuiasManifiesto->txtDireccionRemitente_Create();
-		$this->txtDestinatario = $this->mctGuiasManifiesto->txtDestinatario_Create();
-		$this->txtAliado = $this->mctGuiasManifiesto->txtAliado_Create();
-		$this->txtDireccionDestinatario = $this->mctGuiasManifiesto->txtDireccionDestinatario_Create();
-		$this->txtTelefono = $this->mctGuiasManifiesto->txtTelefono_Create();
-		$this->txtEmail = $this->mctGuiasManifiesto->txtEmail_Create();
-		$this->txtDescripcion = $this->mctGuiasManifiesto->txtDescripcion_Create();
-		$this->txtPiezas = $this->mctGuiasManifiesto->txtPiezas_Create();
-		$this->txtPeso = $this->mctGuiasManifiesto->txtPeso_Create();
-		$this->txtValor = $this->mctGuiasManifiesto->txtValor_Create();
-		$this->calCreatedAt = $this->mctGuiasManifiesto->calCreatedAt_Create();
-		$this->txtCreatedBy = $this->mctGuiasManifiesto->txtCreatedBy_Create();
+		// Call MetaControl's methods to create qcontrols based on ProcessPieces's data fields
+		$this->lblId = $this->mctProcessPieces->lblId_Create();
+		$this->lstProcesoError = $this->mctProcessPieces->lstProcesoError_Create();
+		$this->txtIdPieza = $this->mctProcessPieces->txtIdPieza_Create();
+		$this->lstPieza = $this->mctProcessPieces->lstPieza_Create();
+		$this->chkIsProcessed = $this->mctProcessPieces->chkIsProcessed_Create();
+		$this->txtErrorMessage = $this->mctProcessPieces->txtErrorMessage_Create();
+		$this->calCreatedAt = $this->mctProcessPieces->calCreatedAt_Create();
+		$this->lstCreatedByObject = $this->mctProcessPieces->lstCreatedByObject_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();
@@ -165,17 +147,17 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
 	//-----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctGuiasManifiesto->GuiasManifiesto && !isset($_SESSION['DataGuiasManifiesto'])) {
-            $_SESSION['DataGuiasManifiesto'] = serialize(array($this->mctGuiasManifiesto->GuiasManifiesto));
+        if ($this->mctProcessPieces->ProcessPieces && !isset($_SESSION['DataProcessPieces'])) {
+            $_SESSION['DataProcessPieces'] = serialize(array($this->mctProcessPieces->ProcessPieces));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataGuiasManifiesto']);
+        $this->arrDataTabl = unserialize($_SESSION['DataProcessPieces']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctGuiasManifiesto->GuiasManifiesto->Id) {
+            if ($objTable->Id == $this->mctProcessPieces->ProcessPieces->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -186,7 +168,7 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
 
 	protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'GuiasManifiesto';
+        $this->lblTituForm->Text = 'ProcessPieces';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 	}
 
@@ -218,7 +200,7 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
         $this->btnNuevRegi->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevRegi->HtmlEntities = false;
         $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevRegi->Visible = $this->mctGuiasManifiesto->EditMode;
+        $this->btnNuevRegi->Visible = $this->mctProcessPieces->EditMode;
     }
 
     protected function btnProxRegi_Create() {
@@ -285,9 +267,9 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
         $this->btnDelete->Text = '<i class="fa fa-trash-o fa-lg"></i> Borrar';
         $this->btnDelete->CssClass = 'btn btn-danger btn-sm';
         $this->btnDelete->HtmlEntities = false;
-		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiasManifiesto'))));
+		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('ProcessPieces'))));
 		$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-		$this->btnDelete->Visible = $this->mctGuiasManifiesto->EditMode;
+		$this->btnDelete->Visible = $this->mctProcessPieces->EditMode;
 	}
 
     protected function btnLogxCamb_Create() {
@@ -296,7 +278,7 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('GuiasManifiesto',$this->mctGuiasManifiesto->GuiasManifiesto->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('ProcessPieces',$this->mctProcessPieces->ProcessPieces->Id);
     }
 
     //-------------------------
@@ -317,7 +299,7 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
         $this->btnNuevSmal->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevSmal->HtmlEntities = false;
         $this->btnNuevSmal->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevSmal->Visible = $this->mctGuiasManifiesto->EditMode;
+        $this->btnNuevSmal->Visible = $this->mctProcessPieces->EditMode;
     }
 
     protected function btnGuarSmal_Create() {
@@ -337,7 +319,7 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
         $this->btnBorrSmal->HtmlEntities = false;
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiaRoxanne'))));
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-        $this->btnBorrSmal->Visible = $this->mctGuiasManifiesto->EditMode;
+        $this->btnBorrSmal->Visible = $this->mctProcessPieces->EditMode;
     }
 
     protected function btnHistSmal_Create() {
@@ -418,26 +400,26 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/guias_manifiesto_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_pieces_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/guias_manifiesto_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_pieces_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/guias_manifiesto_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_pieces_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/guias_manifiesto_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_pieces_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function verificarNavegacion() {
-        if ($this->mctGuiasManifiesto->EditMode) {
+        if ($this->mctProcessPieces->EditMode) {
             $this->btnRegiAnte->Enabled = !($this->intPosiRegi == 0);
             $this->btnPrimRegi->Enabled = !($this->intPosiRegi == 0);
             $this->btnProxRegi->Enabled = !($this->intPosiRegi == $this->intCantRegi - 1);
@@ -461,8 +443,8 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-		// Delegate "Save" processing to the GuiasManifiestoMetaControl
-		$this->mctGuiasManifiesto->SaveGuiasManifiesto();
+		// Delegate "Save" processing to the ProcessPiecesMetaControl
+		$this->mctProcessPieces->SaveProcessPieces();
 		$this->RedirectToListPage();
 	}
 
@@ -471,36 +453,34 @@ abstract class GuiasManifiestoEditFormBase extends QForm {
 		// Se verifica la integridad referencial
 		//----------------------------------------
 		$blnTodoOkey = true;
-		$arrTablRela = $this->mctGuiasManifiesto->TablasRelacionadasGuiasManifiesto();
+		$arrTablRela = $this->mctProcessPieces->TablasRelacionadasProcessPieces();
 		if (count($arrTablRela)) {
 			$strTablRela = implode(',',$arrTablRela);
 				
-			//$this->txtManifiestoId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
-				
-			//$this->lstGuia->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
+			//$this->lblId->Warning = sprintf('Existen registros relacionados en %s',$strTablRela);
             $this->mensaje(sprintf('Existen registros relacionados en %s',$strTablRela),'m','d','hand-stop-o');
 			$blnTodoOkey = false;
 		}
 		if ($blnTodoOkey) {
-			// Delegate "Delete" processing to the GuiasManifiestoMetaControl
-			$this->mctGuiasManifiesto->DeleteGuiasManifiesto();
+			// Delegate "Delete" processing to the ProcessPiecesMetaControl
+			$this->mctProcessPieces->DeleteProcessPieces();
 			$this->RedirectToListPage();
 		}
 	}
 
     protected function btnLogxCamb_Click() {
-        $_SESSION['RegiRefe'] = $this->mctGuiasManifiesto->GuiasManifiesto->Id;
-        $_SESSION['TablRefe'] = 'GuiasManifiesto';
-        $_SESSION['RegiReto'] = 'guias_manifiesto_edit.php/'.$this->mctGuiasManifiesto->GuiasManifiesto->Id;
+        $_SESSION['RegiRefe'] = $this->mctProcessPieces->ProcessPieces->Id;
+        $_SESSION['TablRefe'] = 'ProcessPieces';
+        $_SESSION['RegiReto'] = 'process_pieces_edit.php/'.$this->mctProcessPieces->ProcessPieces->Id;
         QApplication::Redirect(__SIST__.'/log_list.php');
     }
 
     protected function btnVolvList_Click() {
-        QApplication::Redirect(__SIST__.'/guias_manifiesto_list.php');
+        QApplication::Redirect(__SIST__.'/process_pieces_list.php');
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/guias_manifiesto_edit.php');
+        QApplication::Redirect(__SIST__.'/process_pieces_edit.php');
     }
 
 

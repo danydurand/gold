@@ -1,21 +1,21 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do the List All functionality
- * of the GuiasManifiesto class.  It uses the code-generated
- * GuiasManifiestoDataGrid control which has meta-methods to help with
- * easily creating/defining GuiasManifiesto columns.
+ * of the ProcessPieces class.  It uses the code-generated
+ * ProcessPiecesDataGrid control which has meta-methods to help with
+ * easily creating/defining ProcessPieces columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  *
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both guias_manifiesto_list.php AND
- * guias_manifiesto_list.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both process_pieces_list.php AND
+ * process_pieces_list.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class GuiasManifiestoListFormBase extends QForm {
+abstract class ProcessPiecesListFormBase extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $lblTituForm;
@@ -24,11 +24,11 @@ abstract class GuiasManifiestoListFormBase extends QForm {
     protected $btnExpoExce;
     protected $lblOtraNoti;
 
-    // Local instance of the Meta DataGrid to list GuiasManifiestos
+    // Local instance of the Meta DataGrid to list ProcessPieceses
     /**
-     * @var GuiasManifiestoDataGrid dtgGuiasManifiestos
+     * @var ProcessPiecesDataGrid dtgProcessPieceses
      */
-    protected $dtgGuiasManifiestos;
+    protected $dtgProcessPieceses;
 
     // Create QForm Event Handlers as Needed
 
@@ -52,49 +52,40 @@ abstract class GuiasManifiestoListFormBase extends QForm {
         $this->btnFiltAvan_Create();
 
         // Instantiate the Meta DataGrid
-        $this->dtgGuiasManifiestos = new GuiasManifiestoDataGrid($this);
+        $this->dtgProcessPieceses = new ProcessPiecesDataGrid($this);
 
         // Style the DataGrid (if desired)
-        $this->dtgGuiasManifiestos->CssClass = 'datagrid';
-        $this->dtgGuiasManifiestos->AlternateRowStyle->CssClass = 'alternate';
-        $this->dtgGuiasManifiestos->FontSize = 13;
-        $this->dtgGuiasManifiestos->ShowFilter = false;
+        $this->dtgProcessPieceses->CssClass = 'datagrid';
+        $this->dtgProcessPieceses->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgProcessPieceses->FontSize = 13;
+        $this->dtgProcessPieceses->ShowFilter = false;
 
         // Add Pagination (if desired)
-        $this->dtgGuiasManifiestos->Paginator = new QPaginator($this->dtgGuiasManifiestos);
-        $this->dtgGuiasManifiestos->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgProcessPieceses->Paginator = new QPaginator($this->dtgProcessPieceses);
+        $this->dtgProcessPieceses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         // Higlight the datagrid rows when mousing over them
-        $this->dtgGuiasManifiestos->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgGuiasManifiestos->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgProcessPieceses->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgProcessPieceses->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         // Add a click handler for the rows.
         // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
         // or $_ITEM->Id to pass the object's id, or any other data grid variable
-        $this->dtgGuiasManifiestos->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-        $this->dtgGuiasManifiestos->AddRowAction(new QClickEvent(), new QAjaxAction('dtgGuiasManifiestosRow_Click'));
+        $this->dtgProcessPieceses->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgProcessPieceses->AddRowAction(new QClickEvent(), new QAjaxAction('dtgProcessPiecesesRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
-        // Create the Other Columns (note that you can use strings for guias_manifiesto's properties, or you
-        // can traverse down QQN::guias_manifiesto() to display fields that are down the hierarchy)
-        $this->dtgGuiasManifiestos->MetaAddColumn('ManifiestoId');
-        $this->dtgGuiasManifiestos->MetaAddColumn(QQN::GuiasManifiesto()->Guia);
-        $this->dtgGuiasManifiestos->MetaAddColumn('Numero');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Tracking');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Remitente');
-        $this->dtgGuiasManifiestos->MetaAddColumn('DireccionRemitente');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Destinatario');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Aliado');
-        $this->dtgGuiasManifiestos->MetaAddColumn('DireccionDestinatario');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Telefono');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Email');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Descripcion');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Piezas');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Peso');
-        $this->dtgGuiasManifiestos->MetaAddColumn('Valor');
-        $this->dtgGuiasManifiestos->MetaAddColumn('CreatedAt');
-        $this->dtgGuiasManifiestos->MetaAddColumn('CreatedBy');
+        // Create the Other Columns (note that you can use strings for process_pieces's properties, or you
+        // can traverse down QQN::process_pieces() to display fields that are down the hierarchy)
+        $this->dtgProcessPieceses->MetaAddColumn('Id');
+        $this->dtgProcessPieceses->MetaAddColumn(QQN::ProcessPieces()->ProcesoError);
+        $this->dtgProcessPieceses->MetaAddColumn('IdPieza');
+        $this->dtgProcessPieceses->MetaAddColumn(QQN::ProcessPieces()->Pieza);
+        $this->dtgProcessPieceses->MetaAddColumn('IsProcessed');
+        $this->dtgProcessPieceses->MetaAddColumn('ErrorMessage');
+        $this->dtgProcessPieceses->MetaAddColumn('CreatedAt');
+        $this->dtgProcessPieceses->MetaAddColumn(QQN::ProcessPieces()->CreatedByObject);
 
         $this->btnExpoExce_Create();
 
@@ -102,7 +93,7 @@ abstract class GuiasManifiestoListFormBase extends QForm {
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'GuiasManifiestos';
+        $this->lblTituForm->Text = 'ProcessPieceses';
     }
 
     protected function lblMensUsua_Create() {
@@ -140,7 +131,7 @@ abstract class GuiasManifiestoListFormBase extends QForm {
     }
 
     protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgGuiasManifiestos);
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgProcessPieceses);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoExce->HtmlEntities = false;
@@ -149,16 +140,16 @@ abstract class GuiasManifiestoListFormBase extends QForm {
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/guias_manifiesto_edit.php');
+        QApplication::Redirect(__SIST__.'/process_pieces_edit.php');
     }
 
     protected function btnFiltAvan_Click() {
-        $this->dtgGuiasManifiestos->ShowFilter = !$this->dtgGuiasManifiestos->ShowFilter;
+        $this->dtgProcessPieceses->ShowFilter = !$this->dtgProcessPieceses->ShowFilter;
     }
 
-    public function dtgGuiasManifiestosRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgProcessPiecesesRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
-      QApplication::Redirect("guias_manifiesto_edit.php/$intId");
+      QApplication::Redirect("process_pieces_edit.php/$intId");
     }
 
 

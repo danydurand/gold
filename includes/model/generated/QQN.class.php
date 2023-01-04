@@ -967,6 +967,12 @@
 			return new QQNodeProcesoError('proceso_error', null, null);
 		}
 		/**
+		 * @return QQNodeProcessPieces
+		 */
+		static public function ProcessPieces() {
+			return new QQNodeProcessPieces('process_pieces', null, null);
+		}
+		/**
 		 * @return QQNodeProductoReembolso
 		 */
 		static public function ProductoReembolso() {

@@ -111,6 +111,8 @@
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaAsCreatedByArray the value for the private _objPiezaRecibidaAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.created_by reverse relationship
 	 * @property-read PiezaRecibida $_PiezaRecibidaAsUpdatedBy the value for the private _objPiezaRecibidaAsUpdatedBy (Read-Only) if set due to an expansion on the pieza_recibida.updated_by reverse relationship
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaAsUpdatedByArray the value for the private _objPiezaRecibidaAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.updated_by reverse relationship
+	 * @property-read ProcessPieces $_ProcessPiecesAsCreatedBy the value for the private _objProcessPiecesAsCreatedBy (Read-Only) if set due to an expansion on the process_pieces.created_by reverse relationship
+	 * @property-read ProcessPieces[] $_ProcessPiecesAsCreatedByArray the value for the private _objProcessPiecesAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the process_pieces.created_by reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajo the value for the private _objRegistroTrabajo (Read-Only) if set due to an expansion on the registro_trabajo.usuario_id reverse relationship
 	 * @property-read RegistroTrabajo[] $_RegistroTrabajoArray the value for the private _objRegistroTrabajoArray (Read-Only) if set due to an ExpandAsArray on the registro_trabajo.usuario_id reverse relationship
 	 * @property-read Scanneo $_ScanneoAsCreatedBy the value for the private _objScanneoAsCreatedBy (Read-Only) if set due to an expansion on the scanneo.created_by reverse relationship
@@ -889,6 +891,22 @@
 		 * @var PiezaRecibida[] _objPiezaRecibidaAsUpdatedByArray;
 		 */
 		private $_objPiezaRecibidaAsUpdatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ProcessPiecesAsCreatedBy object
+		 * (of type ProcessPieces), if this Usuario object was restored with
+		 * an expansion on the process_pieces association table.
+		 * @var ProcessPieces _objProcessPiecesAsCreatedBy;
+		 */
+		private $_objProcessPiecesAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ProcessPiecesAsCreatedBy objects
+		 * (of type ProcessPieces[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the process_pieces association table.
+		 * @var ProcessPieces[] _objProcessPiecesAsCreatedByArray;
+		 */
+		private $_objProcessPiecesAsCreatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single RegistroTrabajo object
@@ -2368,6 +2386,21 @@
 					$objToReturn->_objPiezaRecibidaAsUpdatedByArray[] = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPiezaRecibidaAsUpdatedBy)) {
 					$objToReturn->_objPiezaRecibidaAsUpdatedBy = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ProcessPiecesAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'processpiecesascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['processpiecesascreatedby']) ? null : $objExpansionAliasArray['processpiecesascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objProcessPiecesAsCreatedByArray)
+				$objToReturn->_objProcessPiecesAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objProcessPiecesAsCreatedByArray[] = ProcessPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processpiecesascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objProcessPiecesAsCreatedBy)) {
+					$objToReturn->_objProcessPiecesAsCreatedBy = ProcessPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processpiecesascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3938,6 +3971,22 @@
 					 */
 					return $this->_objPiezaRecibidaAsUpdatedByArray;
 
+				case '_ProcessPiecesAsCreatedBy':
+					/**
+					 * Gets the value for the private _objProcessPiecesAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the process_pieces.created_by reverse relationship
+					 * @return ProcessPieces
+					 */
+					return $this->_objProcessPiecesAsCreatedBy;
+
+				case '_ProcessPiecesAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objProcessPiecesAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the process_pieces.created_by reverse relationship
+					 * @return ProcessPieces[]
+					 */
+					return $this->_objProcessPiecesAsCreatedByArray;
+
 				case '_RegistroTrabajo':
 					/**
 					 * Gets the value for the private _objRegistroTrabajo (Read-Only)
@@ -4692,6 +4741,9 @@
 			}
 			if ($this->CountPiezaRecibidasAsUpdatedBy()) {
 				$arrTablRela[] = 'pieza_recibida';
+			}
+			if ($this->CountProcessPiecesesAsCreatedBy()) {
+				$arrTablRela[] = 'process_pieces';
 			}
 			if ($this->CountRegistroTrabajos()) {
 				$arrTablRela[] = 'registro_trabajo';
@@ -10270,6 +10322,155 @@
 		}
 
 
+		// Related Objects' Methods for ProcessPiecesAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ProcessPiecesesAsCreatedBy as an array of ProcessPieces objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ProcessPieces[]
+		*/
+		public function GetProcessPiecesAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return ProcessPieces::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ProcessPiecesesAsCreatedBy
+		 * @return int
+		*/
+		public function CountProcessPiecesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return ProcessPieces::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ProcessPiecesAsCreatedBy
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function AssociateProcessPiecesAsCreatedBy(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessPiecesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessPiecesAsCreatedBy on this Usuario with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ProcessPiecesAsCreatedBy
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function UnassociateProcessPiecesAsCreatedBy(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsCreatedBy on this Usuario with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ProcessPiecesesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllProcessPiecesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ProcessPiecesAsCreatedBy
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function DeleteAssociatedProcessPiecesAsCreatedBy(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsCreatedBy on this Usuario with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_pieces`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ProcessPiecesesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllProcessPiecesesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_pieces`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for RegistroTrabajo
 		//-------------------------------------------------------------------
 
@@ -12654,6 +12855,7 @@
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
+     * @property-read QQReverseReferenceNodeProcessPieces $ProcessPiecesAsCreatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeScanneo $ScanneoAsCreatedBy
      * @property-read QQReverseReferenceNodeScanneo $ScanneoAsUpdatedBy
@@ -12795,6 +12997,8 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaascreatedby', 'reverse_reference', 'created_by', 'PiezaRecibidaAsCreatedBy');
 				case 'PiezaRecibidaAsUpdatedBy':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
+				case 'ProcessPiecesAsCreatedBy':
+					return new QQReverseReferenceNodeProcessPieces($this, 'processpiecesascreatedby', 'reverse_reference', 'created_by', 'ProcessPiecesAsCreatedBy');
 				case 'RegistroTrabajo':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajo', 'reverse_reference', 'usuario_id', 'RegistroTrabajo');
 				case 'ScanneoAsCreatedBy':
@@ -12899,6 +13103,7 @@
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
+     * @property-read QQReverseReferenceNodeProcessPieces $ProcessPiecesAsCreatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeScanneo $ScanneoAsCreatedBy
      * @property-read QQReverseReferenceNodeScanneo $ScanneoAsUpdatedBy
@@ -13040,6 +13245,8 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaascreatedby', 'reverse_reference', 'created_by', 'PiezaRecibidaAsCreatedBy');
 				case 'PiezaRecibidaAsUpdatedBy':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
+				case 'ProcessPiecesAsCreatedBy':
+					return new QQReverseReferenceNodeProcessPieces($this, 'processpiecesascreatedby', 'reverse_reference', 'created_by', 'ProcessPiecesAsCreatedBy');
 				case 'RegistroTrabajo':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajo', 'reverse_reference', 'usuario_id', 'RegistroTrabajo');
 				case 'ScanneoAsCreatedBy':

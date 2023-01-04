@@ -75,9 +75,12 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
 		$arrIdxxPiez = [];
 		$arrPiezMani = $this->objManiPods->GetGuiaPiezasAsContainerPiezaArray();
         foreach ($arrPiezMani as $objPiezMani) {
-        	if (!$objPiezMani->tieneCheckpoint('OK')) {
+        	if ($objPiezMani->LastCkptCode == 'TR') {
                 $arrIdxxPiez[] = $objPiezMani->Id;
             }
+        	// if (!in_array($objPiezMani->LastCkptCode, ['OK','DV'])) {
+            //     $arrIdxxPiez[] = $objPiezMani->Id;
+            // }
 		}
         $objClauWher   = QQ::Clause();
         $objClauWher[] = QQ::In(QQN::GuiaPiezas()->Id,$arrIdxxPiez);
@@ -109,6 +112,7 @@ class GuiaPiezasListForm extends GuiaPiezasListFormBase {
         //$this->dtgGuiaPiezases->MetaAddColumn('Id');
 		$this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->Guia->Tracking,'Name=Guia Cliente');
 		$this->dtgGuiaPiezases->MetaAddColumn('IdPieza');
+		$this->dtgGuiaPiezases->MetaAddColumn('LastCkptCode','Name=Ult. Ckpt');
 		/*$colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint() ?>');*/
 		//$this->dtgGuiaPiezases->AddColumn($colUltiCkpt);
 		$colGuiaTran = new QDataGridColumn('G-Tran','<?= $_ITEM->GuiaTransportista() ?>');

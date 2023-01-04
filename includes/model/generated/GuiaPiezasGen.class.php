@@ -64,6 +64,8 @@
 	 * @property-read MatchPieces[] $_MatchPiecesAsPiezaArray the value for the private _objMatchPiecesAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the match_pieces.pieza_id reverse relationship
 	 * @property-read PiezaCheckpoints $_PiezaCheckpointsAsPieza the value for the private _objPiezaCheckpointsAsPieza (Read-Only) if set due to an expansion on the pieza_checkpoints.pieza_id reverse relationship
 	 * @property-read PiezaCheckpoints[] $_PiezaCheckpointsAsPiezaArray the value for the private _objPiezaCheckpointsAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the pieza_checkpoints.pieza_id reverse relationship
+	 * @property-read ProcessPieces $_ProcessPiecesAsPieza the value for the private _objProcessPiecesAsPieza (Read-Only) if set due to an expansion on the process_pieces.pieza_id reverse relationship
+	 * @property-read ProcessPieces[] $_ProcessPiecesAsPiezaArray the value for the private _objProcessPiecesAsPiezaArray (Read-Only) if set due to an ExpandAsArray on the process_pieces.pieza_id reverse relationship
 	 * @property-read ScanneoPiezas $_ScanneoPiezasAsGuiaPieza the value for the private _objScanneoPiezasAsGuiaPieza (Read-Only) if set due to an expansion on the scanneo_piezas.guia_pieza_id reverse relationship
 	 * @property-read ScanneoPiezas[] $_ScanneoPiezasAsGuiaPiezaArray the value for the private _objScanneoPiezasAsGuiaPiezaArray (Read-Only) if set due to an ExpandAsArray on the scanneo_piezas.guia_pieza_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -417,6 +419,22 @@
 		 * @var PiezaCheckpoints[] _objPiezaCheckpointsAsPiezaArray;
 		 */
 		private $_objPiezaCheckpointsAsPiezaArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ProcessPiecesAsPieza object
+		 * (of type ProcessPieces), if this GuiaPiezas object was restored with
+		 * an expansion on the process_pieces association table.
+		 * @var ProcessPieces _objProcessPiecesAsPieza;
+		 */
+		private $_objProcessPiecesAsPieza;
+
+		/**
+		 * Private member variable that stores a reference to an array of ProcessPiecesAsPieza objects
+		 * (of type ProcessPieces[]), if this GuiaPiezas object was restored with
+		 * an ExpandAsArray on the process_pieces association table.
+		 * @var ProcessPieces[] _objProcessPiecesAsPiezaArray;
+		 */
+		private $_objProcessPiecesAsPiezaArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single ScanneoPiezasAsGuiaPieza object
@@ -1354,6 +1372,21 @@
 					$objToReturn->_objPiezaCheckpointsAsPiezaArray[] = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsaspieza__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPiezaCheckpointsAsPieza)) {
 					$objToReturn->_objPiezaCheckpointsAsPieza = PiezaCheckpoints::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezacheckpointsaspieza__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ProcessPiecesAsPieza Virtual Binding
+			$strAlias = $strAliasPrefix . 'processpiecesaspieza__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['processpiecesaspieza']) ? null : $objExpansionAliasArray['processpiecesaspieza']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objProcessPiecesAsPiezaArray)
+				$objToReturn->_objProcessPiecesAsPiezaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objProcessPiecesAsPiezaArray[] = ProcessPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processpiecesaspieza__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objProcessPiecesAsPieza)) {
+					$objToReturn->_objProcessPiecesAsPieza = ProcessPieces::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processpiecesaspieza__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2596,6 +2629,22 @@
 					 */
 					return $this->_objPiezaCheckpointsAsPiezaArray;
 
+				case '_ProcessPiecesAsPieza':
+					/**
+					 * Gets the value for the private _objProcessPiecesAsPieza (Read-Only)
+					 * if set due to an expansion on the process_pieces.pieza_id reverse relationship
+					 * @return ProcessPieces
+					 */
+					return $this->_objProcessPiecesAsPieza;
+
+				case '_ProcessPiecesAsPiezaArray':
+					/**
+					 * Gets the value for the private _objProcessPiecesAsPiezaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the process_pieces.pieza_id reverse relationship
+					 * @return ProcessPieces[]
+					 */
+					return $this->_objProcessPiecesAsPiezaArray;
+
 				case '_ScanneoPiezasAsGuiaPieza':
 					/**
 					 * Gets the value for the private _objScanneoPiezasAsGuiaPieza (Read-Only)
@@ -3299,6 +3348,9 @@
 			if ($this->CountPiezaCheckpointsesAsPieza()) {
 				$arrTablRela[] = 'pieza_checkpoints';
 			}
+			if ($this->CountProcessPiecesesAsPieza()) {
+				$arrTablRela[] = 'process_pieces';
+			}
 			if ($this->CountScanneoPiezasesAsGuiaPieza()) {
 				$arrTablRela[] = 'scanneo_piezas';
 			}
@@ -3604,6 +3656,155 @@
 			$objDatabase->NonQuery('
 				DELETE FROM
 					`pieza_checkpoints`
+				WHERE
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ProcessPiecesAsPieza
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ProcessPiecesesAsPieza as an array of ProcessPieces objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ProcessPieces[]
+		*/
+		public function GetProcessPiecesAsPiezaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ProcessPieces::LoadArrayByPiezaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ProcessPiecesesAsPieza
+		 * @return int
+		*/
+		public function CountProcessPiecesesAsPieza() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ProcessPieces::CountByPiezaId($this->intId);
+		}
+
+		/**
+		 * Associates a ProcessPiecesAsPieza
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function AssociateProcessPiecesAsPieza(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessPiecesAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessPiecesAsPieza on this GuiaPiezas with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ProcessPiecesAsPieza
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function UnassociateProcessPiecesAsPieza(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsPieza on this GuiaPiezas with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`pieza_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . ' AND
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ProcessPiecesesAsPieza
+		 * @return void
+		*/
+		public function UnassociateAllProcessPiecesesAsPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsPieza on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_pieces`
+				SET
+					`pieza_id` = null
+				WHERE
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ProcessPiecesAsPieza
+		 * @param ProcessPieces $objProcessPieces
+		 * @return void
+		*/
+		public function DeleteAssociatedProcessPiecesAsPieza(ProcessPieces $objProcessPieces) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsPieza on this unsaved GuiaPiezas.');
+			if ((is_null($objProcessPieces->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsPieza on this GuiaPiezas with an unsaved ProcessPieces.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_pieces`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessPieces->Id) . ' AND
+					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ProcessPiecesesAsPieza
+		 * @return void
+		*/
+		public function DeleteAllProcessPiecesesAsPieza() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessPiecesAsPieza on this unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = GuiaPiezas::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_pieces`
 				WHERE
 					`pieza_id` = ' . $objDatabase->SqlVariable($this->intId) . '
 			');
@@ -4723,6 +4924,7 @@
      * @property-read QQReverseReferenceNodeGuiaTransportista $GuiaTransportistaAsGuiaPieza
      * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
+     * @property-read QQReverseReferenceNodeProcessPieces $ProcessPiecesAsPieza
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsGuiaPieza
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -4819,6 +5021,8 @@
 					return new QQReverseReferenceNodeMatchPieces($this, 'matchpiecesaspieza', 'reverse_reference', 'pieza_id', 'MatchPiecesAsPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
+				case 'ProcessPiecesAsPieza':
+					return new QQReverseReferenceNodeProcessPieces($this, 'processpiecesaspieza', 'reverse_reference', 'pieza_id', 'ProcessPiecesAsPieza');
 				case 'ScanneoPiezasAsGuiaPieza':
 					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasguiapieza', 'reverse_reference', 'guia_pieza_id', 'ScanneoPiezasAsGuiaPieza');
 
@@ -4881,6 +5085,7 @@
      * @property-read QQReverseReferenceNodeGuiaTransportista $GuiaTransportistaAsGuiaPieza
      * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsPieza
      * @property-read QQReverseReferenceNodePiezaCheckpoints $PiezaCheckpointsAsPieza
+     * @property-read QQReverseReferenceNodeProcessPieces $ProcessPiecesAsPieza
      * @property-read QQReverseReferenceNodeScanneoPiezas $ScanneoPiezasAsGuiaPieza
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -4977,6 +5182,8 @@
 					return new QQReverseReferenceNodeMatchPieces($this, 'matchpiecesaspieza', 'reverse_reference', 'pieza_id', 'MatchPiecesAsPieza');
 				case 'PiezaCheckpointsAsPieza':
 					return new QQReverseReferenceNodePiezaCheckpoints($this, 'piezacheckpointsaspieza', 'reverse_reference', 'pieza_id', 'PiezaCheckpointsAsPieza');
+				case 'ProcessPiecesAsPieza':
+					return new QQReverseReferenceNodeProcessPieces($this, 'processpiecesaspieza', 'reverse_reference', 'pieza_id', 'ProcessPiecesAsPieza');
 				case 'ScanneoPiezasAsGuiaPieza':
 					return new QQReverseReferenceNodeScanneoPiezas($this, 'scanneopiezasasguiapieza', 'reverse_reference', 'guia_pieza_id', 'ScanneoPiezasAsGuiaPieza');
 
