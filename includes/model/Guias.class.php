@@ -28,6 +28,72 @@ class Guias extends GuiasGen
         return sprintf('%s',  $this->strNumero);
     }
 
+    public function __rtg() {
+        return $this->IsReadyToGo ? 'SI' : 'NO';
+    }
+
+    /**
+     * The business rule is this:
+     * If the Awb's Customer is GoldCoast (id = 4) and
+     * the awb is marked as Ready to Go, then is Ready to Go
+     */
+    public function IsReadyToGo()
+    {
+        $blnClieGold = $this->NotaEntrega->ClienteCorpId == 4;
+        if (!$blnClieGold) {
+            //-----------------------------------------------------------------------------
+            // If the awb's Customer is not GoldCoast, we don't need
+            // to validate if it is marked as Ready to Go.  The piece is ready by default
+            //-----------------------------------------------------------------------------
+            return true;
+        }
+        //-----------------------------------------------------------------------------------
+        // If we are at this point in the routine, it means that the Customer is 
+        // Gold Coast, and therefore we need to check if the piece is marked as ready to go
+        //-----------------------------------------------------------------------------------
+        return $this->IsReadyToGo;
+    }
+
+    public function __readyToGoStatus() {
+        $strMensRtgx = '';
+        $strTipoMens = 'success';
+        if ($this->IsReadyToGo()) {
+            $intDiasRtgx = DiasTranscurridos(FechaDeHoy(), $this->ReadyToGoDate->qFormat("YYYY-MM-DD"));
+            $strMensRtgx = "Ready To Go | $intDiasRtgx día(s)";
+            if ($intDiasRtgx > 5) {
+                $strTipoMens = 'danger';
+                $intQtyxPiec = $this->__qtyPiecesWithoutTR();
+                if (is_numeric($intQtyxPiec) && ($intQtyxPiec > 0)) {
+                    $strMensRtgx .= " | $intQtyxPiec pieza(s) sin TR";
+                } else {
+                    if (!is_numeric($intQtyxPiec)) {
+                        $strMensRtgx = $intQtyxPiec;
+                    } else {
+                        $strMensRtgx = '';
+                    }
+                }
+            }
+        }
+        return [$strMensRtgx, $strTipoMens];
+    }
+    
+    public function __qtyPiecesWithoutTR() {
+        $objDataBase = $this::GetDatabase();
+        try {
+            $strCadeSqlx = "call spu_qty_pieces_without_tr($this->Id, @qty_pieces)";
+            $objDataBase->NonQuery($strCadeSqlx);
+            $strCadeSqlx  = "select @qty_pieces";
+            $objDbResult  = $objDataBase->Query($strCadeSqlx);
+            $mixRegistro  = $objDbResult->FetchArray();
+            return $mixRegistro['@qty_pieces'];
+        } catch (Exception $e) {
+            t('Error counting pieces without TR: ' . $e->getMessage());
+            return $e->getMessage();
+        }
+    }
+    
+    
+    
     public function TelefonoDestinatario() {
         return trim(explode('/',$this->TelefonoDestinatario)[0]);
     }

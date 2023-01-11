@@ -26,26 +26,30 @@
 		public function __toString() {
 			return sprintf('%s',  $this->strIdPieza);
 		}
-        
+
+        public function __rtg() {
+            return $this->IsReadyToGo ? 'SI' : 'NO';
+        }
+
         /**
          * The business rule is this:
          * If the Piece's Customer is GoldCoast (id = 4) and
-         * the piece has the RG checkpoint, then is Ready to Go
+         * the piece is marked as Ready to Go, then is Ready to Go
          */
         public function IsReadyToGo() {
             $blnClieGold = $this->NotaEntrega->ClienteCorpId == 4;
             if (!$blnClieGold) {
-                //-------------------------------------------------------------------
+                //--------------------------------------------------------------------------
                 // If the piece's Customer is not GoldCoast, we don't need
-                // to validate if it has the RG checkpoint.  The piece is Ready to Go
-                //-------------------------------------------------------------------
+                // to validate if it has the RG checkpoint.  The piece is ready by default
+                //--------------------------------------------------------------------------
                 return true;
             } 
-            //----------------------------------------------------------------------------
-            // If we are at this point in the routine, it means that the Customer is
-            // Gold Coast, and therefore we need to check if the piece has RG checkpoint
-            //----------------------------------------------------------------------------
-            return $this->tieneCheckpoint('RG');
+            //-----------------------------------------------------------------------------------
+            // If we are at this point in the routine, it means that the Customer is 
+            // Gold Coast, and therefore we need to check if the piece is marked as ready to go
+            //-----------------------------------------------------------------------------------
+            return $this->IsReadyToGo;
         }
         
         
@@ -274,7 +278,7 @@
         }
 
         public static function EnAlmacen() {
-            return GuiaPiezas::WhichLastCheckpointIs(['IA','RG']);
+            return GuiaPiezas::WhichLastCheckpointIs(['IA','DV']);
         }
 
         public static function WhichLastCheckpointIs($arrSearCkpt) {

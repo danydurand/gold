@@ -1126,6 +1126,13 @@
 		QApplicationBase::$ClassFile['procesoerrormetacontrol'] = __META_CONTROLS__ . '/ProcesoErrorMetaControl.class.php';
 		QApplicationBase::$ClassFile['procesoerrordatagrid'] = __META_CONTROLS__ . '/ProcesoErrorDataGrid.class.php';
 
+	// ClassPaths for the ProcessAwbs class
+		QApplicationBase::$ClassFile['processawbs'] = __MODEL__ . '/ProcessAwbs.class.php';
+		QApplicationBase::$ClassFile['qqnodeprocessawbs'] = __MODEL__ . '/ProcessAwbs.class.php';
+		QApplicationBase::$ClassFile['qqreversereferencenodeprocessawbs'] = __MODEL__ . '/ProcessAwbs.class.php';
+		QApplicationBase::$ClassFile['processawbsmetacontrol'] = __META_CONTROLS__ . '/ProcessAwbsMetaControl.class.php';
+		QApplicationBase::$ClassFile['processawbsdatagrid'] = __META_CONTROLS__ . '/ProcessAwbsDataGrid.class.php';
+
 	// ClassPaths for the ProcessPieces class
 		QApplicationBase::$ClassFile['processpieces'] = __MODEL__ . '/ProcessPieces.class.php';
 		QApplicationBase::$ClassFile['qqnodeprocesspieces'] = __MODEL__ . '/ProcessPieces.class.php';

@@ -120,9 +120,10 @@ class GuiasListForm extends GuiasListFormBase {
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Piezas, 'Name=Pzas');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Kilos, 'Name=Kg');
         $this->dtgGuiases->MetaAddColumn(QQN::Guias()->PiesCub, 'Name=P3');
-        /*
-        $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->ultimoCheckpoint(); ?>');
-        */
+        
+        $colReadTogo = new QDataGridColumn('RTG','<?= $_ITEM->__rtg(); ?>');
+        $this->dtgGuiases->AddColumn($colReadTogo);
+
         $colUltiCkpt = new QDataGridColumn('U.Ckpt','<?= $_ITEM->LastCkptCode(); ?>');
         $this->dtgGuiases->AddColumn($colUltiCkpt);
 
@@ -143,73 +144,73 @@ class GuiasListForm extends GuiasListFormBase {
     protected function btnImprLote_Create() {
         $this->btnImprLote = new QButtonOP($this);
         $this->btnImprLote->Text = TextoIcono('print fa-lg', 'NDE');
-        $this->btnImprLote->AddAction(new QClickEvent(), new QAjaxAction('btnImprLote_Click'));
+        // $this->btnImprLote->AddAction(new QClickEvent(), new QAjaxAction('btnImprLote_Click'));
     }
 
-    protected function btnImprLote_Click() {
-        $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
-        try {
-            $strNombArch = 'NDE_' . $this->objUsuario->LogiUsua . '.pdf';
+    // protected function btnImprLote_Click() {
+    //     $html2pdf = new Html2Pdf('L', 'LETTER', 'es', true, 'UTF-8', array("10", "10", "10", "10"));
+    //     try {
+    //         $strNombArch = 'NDE_' . $this->objUsuario->LogiUsua . '.pdf';
 
-            $intPiezPorl = 10;
-            $arrLoteGuia = unserialize($_SESSION['DataGuia']);
-            t('Cantidad de guías: '.count($arrLoteGuia));
-            $arrLotePiez = [];
-            foreach($arrLoteGuia as $objGuiaLote) {
-                t('Procesando la guia: '.$objGuiaLote->Tracking);
-                $arrPiezGuia = $objGuiaLote->GetGuiaPiezasArray();
-                t('La guia tiene: '.$objGuiaLote->CountGuiaPiezas());
-                // foreach($arrPiezGuia as $objPiezGuia) {
-                //     t('Pieza: '.$objPiezGuia->IdPieza);
-                //     $arrLotePiez[] = $objPiezGuia;
-                // }
-            }
-            $intCantPiez = count($arrLotePiez);
-            t('Cantidad de piezas: '.$intCantPiez);
-            $intCantLote = $intCantPiez / $intPiezPorl;
+    //         $intPiezPorl = 10;
+    //         $arrLoteGuia = unserialize($_SESSION['DataGuia']);
+    //         t('Cantidad de guías: '.count($arrLoteGuia));
+    //         $arrLotePiez = [];
+    //         foreach($arrLoteGuia as $objGuiaLote) {
+    //             t('Procesando la guia: '.$objGuiaLote->Tracking);
+    //             $arrPiezGuia = $objGuiaLote->GetGuiaPiezasArray();
+    //             t('La guia tiene: '.$objGuiaLote->CountGuiaPiezas());
+    //             // foreach($arrPiezGuia as $objPiezGuia) {
+    //             //     t('Pieza: '.$objPiezGuia->IdPieza);
+    //             //     $arrLotePiez[] = $objPiezGuia;
+    //             // }
+    //         }
+    //         $intCantPiez = count($arrLotePiez);
+    //         t('Cantidad de piezas: '.$intCantPiez);
+    //         $intCantLote = $intCantPiez / $intPiezPorl;
 
-            $intNumeLote = 1;
-            while ($intNumeLote <= $intCantLote) {
-                t('Procesando el lote: '.$intNumeLote);
-                $k = ($intNumeLote - 1) * $intPiezPorl;
-                t('El valor de k es: '.$k);
-                $arrLoteActu = [];
-                for ($i=0; $i < $intPiezPorl; $i++) {
-                    t('Posicion del vector que voy a chequear: '.($k+$i));
-                    if ($intCantPiez < ($k + $i)) {
-                        t('Esa posicion si existe, asi que la voy a asignar');
-                        $arrLoteActu[] = $arrLotePiez[$k + $i];
-                    } else {
-                        break;
-                    }
-                }
+    //         $intNumeLote = 1;
+    //         while ($intNumeLote <= $intCantLote) {
+    //             t('Procesando el lote: '.$intNumeLote);
+    //             $k = ($intNumeLote - 1) * $intPiezPorl;
+    //             t('El valor de k es: '.$k);
+    //             $arrLoteActu = [];
+    //             for ($i=0; $i < $intPiezPorl; $i++) {
+    //                 t('Posicion del vector que voy a chequear: '.($k+$i));
+    //                 if ($intCantPiez < ($k + $i)) {
+    //                     t('Esa posicion si existe, asi que la voy a asignar');
+    //                     $arrLoteActu[] = $arrLotePiez[$k + $i];
+    //                 } else {
+    //                     break;
+    //                 }
+    //             }
 
-                // ob_start();
-                // foreach ($arrLoteActu as $objPiezGuia) {
-                //     $_SESSION['LoteActu'] = serialize($arrLoteActu);
-                //     include dirname(__FILE__) . '/rhtml/hoja_entrega_lote_html.php';
-                // }
-                // $content = ob_get_clean();
-                $intNumeLote++;
-            }
-            return;
-            // $html2pdf->setModeDebug();
-            $html2pdf->pdf->SetDisplayMode('fullpage');
-            $html2pdf->writeHTML($content);
-            $html2pdf->output($strNombArch);
-        } catch (Html2PdfException $e) {
-            $html2pdf->clean();
-            $formatter = new ExceptionFormatter($e);
-            echo $formatter->getHtmlMessage();
-        } catch (Exception $e) {
-            $html2pdf->clean();
-            echo $e->getMessage();
-        } catch (Error $e) {
-            $html2pdf->clean();
-            echo $e->getMessage();
-        }
+    //             // ob_start();
+    //             // foreach ($arrLoteActu as $objPiezGuia) {
+    //             //     $_SESSION['LoteActu'] = serialize($arrLoteActu);
+    //             //     include dirname(__FILE__) . '/rhtml/hoja_entrega_lote_html.php';
+    //             // }
+    //             // $content = ob_get_clean();
+    //             $intNumeLote++;
+    //         }
+    //         return;
+    //         // $html2pdf->setModeDebug();
+    //         $html2pdf->pdf->SetDisplayMode('fullpage');
+    //         $html2pdf->writeHTML($content);
+    //         $html2pdf->output($strNombArch);
+    //     } catch (Html2PdfException $e) {
+    //         $html2pdf->clean();
+    //         $formatter = new ExceptionFormatter($e);
+    //         echo $formatter->getHtmlMessage();
+    //     } catch (Exception $e) {
+    //         $html2pdf->clean();
+    //         echo $e->getMessage();
+    //     } catch (Error $e) {
+    //         $html2pdf->clean();
+    //         echo $e->getMessage();
+    //     }
 
-    }
+    // }
     
     protected function dtgGuias_Bind() {
         if (isset($_SESSION['CritCons'])) {

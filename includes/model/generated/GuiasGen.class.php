@@ -68,6 +68,9 @@
 	 * @property integer $FacturaId the value for intFacturaId 
 	 * @property integer $GuiaPodId the value for intGuiaPodId 
 	 * @property integer $NotaEntregaId the value for intNotaEntregaId 
+	 * @property boolean $IsReadyToGo the value for blnIsReadyToGo 
+	 * @property QDateTime $ReadyToGoDate the value for dttReadyToGoDate 
+	 * @property integer $ReadyToGoUserId the value for intReadyToGoUserId 
 	 * @property string $Observacion the value for strObservacion 
 	 * @property string $ReferenciaExp the value for strReferenciaExp 
 	 * @property string $RazonesExp the value for strRazonesExp 
@@ -90,6 +93,7 @@
 	 * @property Counter $ReceptoriaDestino the value for the Counter object referenced by intReceptoriaDestinoId 
 	 * @property GuiaPod $GuiaPod the value for the GuiaPod object referenced by intGuiaPodId 
 	 * @property NotaEntrega $NotaEntrega the value for the NotaEntrega object referenced by intNotaEntregaId 
+	 * @property Usuario $ReadyToGoUser the value for the Usuario object referenced by intReadyToGoUserId 
 	 * @property EstadisticaDeGuias $EstadisticaDeGuias the value for the EstadisticaDeGuias object that uniquely references this Guias
 	 * @property GuiaImprimir $GuiaImprimirAsGuia the value for the GuiaImprimir object that uniquely references this Guias
 	 * @property-read Manifiesto $_ManifiestoAsManiGuia the value for the private _objManifiestoAsManiGuia (Read-Only) if set due to an expansion on the mani_guia_assn association table
@@ -106,6 +110,8 @@
 	 * @property-read GuiasManifiesto[] $_GuiasManifiestoAsGuiaArray the value for the private _objGuiasManifiestoAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the guias_manifiesto.guia_id reverse relationship
 	 * @property-read Notificacion $_NotificacionAsGuia the value for the private _objNotificacionAsGuia (Read-Only) if set due to an expansion on the notificacion.guia_id reverse relationship
 	 * @property-read Notificacion[] $_NotificacionAsGuiaArray the value for the private _objNotificacionAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the notificacion.guia_id reverse relationship
+	 * @property-read ProcessAwbs $_ProcessAwbsAsGuia the value for the private _objProcessAwbsAsGuia (Read-Only) if set due to an expansion on the process_awbs.guia_id reverse relationship
+	 * @property-read ProcessAwbs[] $_ProcessAwbsAsGuiaArray the value for the private _objProcessAwbsAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the process_awbs.guia_id reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajoAsGuia the value for the private _objRegistroTrabajoAsGuia (Read-Only) if set due to an expansion on the registro_trabajo.guia_id reverse relationship
 	 * @property-read RegistroTrabajo[] $_RegistroTrabajoAsGuiaArray the value for the private _objRegistroTrabajoAsGuiaArray (Read-Only) if set due to an ExpandAsArray on the registro_trabajo.guia_id reverse relationship
 	 * @property-read boolean $__Restored whether or not this object was restored from the database (as opposed to created new)
@@ -561,6 +567,30 @@
 
 
 		/**
+		 * Protected member variable that maps to the database column guias.is_ready_to_go
+		 * @var boolean blnIsReadyToGo
+		 */
+		protected $blnIsReadyToGo;
+		const IsReadyToGoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias.ready_to_go_date
+		 * @var QDateTime dttReadyToGoDate
+		 */
+		protected $dttReadyToGoDate;
+		const ReadyToGoDateDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guias.ready_to_go_user_id
+		 * @var integer intReadyToGoUserId
+		 */
+		protected $intReadyToGoUserId;
+		const ReadyToGoUserIdDefault = null;
+
+
+		/**
 		 * Protected member variable that maps to the database column guias.observacion
 		 * @var string strObservacion
 		 */
@@ -748,6 +778,22 @@
 		private $_objNotificacionAsGuiaArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single ProcessAwbsAsGuia object
+		 * (of type ProcessAwbs), if this Guias object was restored with
+		 * an expansion on the process_awbs association table.
+		 * @var ProcessAwbs _objProcessAwbsAsGuia;
+		 */
+		private $_objProcessAwbsAsGuia;
+
+		/**
+		 * Private member variable that stores a reference to an array of ProcessAwbsAsGuia objects
+		 * (of type ProcessAwbs[]), if this Guias object was restored with
+		 * an ExpandAsArray on the process_awbs association table.
+		 * @var ProcessAwbs[] _objProcessAwbsAsGuiaArray;
+		 */
+		private $_objProcessAwbsAsGuiaArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single RegistroTrabajoAsGuia object
 		 * (of type RegistroTrabajo), if this Guias object was restored with
 		 * an expansion on the registro_trabajo association table.
@@ -916,6 +962,16 @@
 		protected $objNotaEntrega;
 
 		/**
+		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guias.ready_to_go_user_id.
+		 *
+		 * NOTE: Always use the ReadyToGoUser property getter to correctly retrieve this Usuario object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Usuario objReadyToGoUser
+		 */
+		protected $objReadyToGoUser;
+
+		/**
 		 * Protected member variable that contains the object which points to
 		 * this object by the reference in the unique database column estadistica_de_guias.guia_id.
 		 *
@@ -1011,6 +1067,9 @@
 			$this->intFacturaId = Guias::FacturaIdDefault;
 			$this->intGuiaPodId = Guias::GuiaPodIdDefault;
 			$this->intNotaEntregaId = Guias::NotaEntregaIdDefault;
+			$this->blnIsReadyToGo = Guias::IsReadyToGoDefault;
+			$this->dttReadyToGoDate = (Guias::ReadyToGoDateDefault === null)?null:new QDateTime(Guias::ReadyToGoDateDefault);
+			$this->intReadyToGoUserId = Guias::ReadyToGoUserIdDefault;
 			$this->strObservacion = Guias::ObservacionDefault;
 			$this->strReferenciaExp = Guias::ReferenciaExpDefault;
 			$this->strRazonesExp = Guias::RazonesExpDefault;
@@ -1414,6 +1473,9 @@
 			    $objBuilder->AddSelectItem($strTableName, 'factura_id', $strAliasPrefix . 'factura_id');
 			    $objBuilder->AddSelectItem($strTableName, 'guia_pod_id', $strAliasPrefix . 'guia_pod_id');
 			    $objBuilder->AddSelectItem($strTableName, 'nota_entrega_id', $strAliasPrefix . 'nota_entrega_id');
+			    $objBuilder->AddSelectItem($strTableName, 'is_ready_to_go', $strAliasPrefix . 'is_ready_to_go');
+			    $objBuilder->AddSelectItem($strTableName, 'ready_to_go_date', $strAliasPrefix . 'ready_to_go_date');
+			    $objBuilder->AddSelectItem($strTableName, 'ready_to_go_user_id', $strAliasPrefix . 'ready_to_go_user_id');
 			    $objBuilder->AddSelectItem($strTableName, 'observacion', $strAliasPrefix . 'observacion');
 			    $objBuilder->AddSelectItem($strTableName, 'referencia_exp', $strAliasPrefix . 'referencia_exp');
 			    $objBuilder->AddSelectItem($strTableName, 'razones_exp', $strAliasPrefix . 'razones_exp');
@@ -1707,6 +1769,15 @@
 			$strAlias = $strAliasPrefix . 'nota_entrega_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intNotaEntregaId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'is_ready_to_go';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnIsReadyToGo = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'ready_to_go_date';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->dttReadyToGoDate = $objDbRow->GetColumn($strAliasName, 'Date');
+			$strAlias = $strAliasPrefix . 'ready_to_go_user_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intReadyToGoUserId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'observacion';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->strObservacion = $objDbRow->GetColumn($strAliasName, 'VarChar');
@@ -1855,6 +1926,13 @@
 				$objExpansionNode = (empty($objExpansionAliasArray['nota_entrega_id']) ? null : $objExpansionAliasArray['nota_entrega_id']);
 				$objToReturn->objNotaEntrega = NotaEntrega::InstantiateDbRow($objDbRow, $strAliasPrefix . 'nota_entrega_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
+			// Check for ReadyToGoUser Early Binding
+			$strAlias = $strAliasPrefix . 'ready_to_go_user_id__codi_usua';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['ready_to_go_user_id']) ? null : $objExpansionAliasArray['ready_to_go_user_id']);
+				$objToReturn->objReadyToGoUser = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ready_to_go_user_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
 
 			// Check for EstadisticaDeGuias Unique ReverseReference Binding
 			$strAlias = $strAliasPrefix . 'estadisticadeguias__guia_id';
@@ -1991,6 +2069,21 @@
 					$objToReturn->_objNotificacionAsGuiaArray[] = Notificacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notificacionasguia__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objNotificacionAsGuia)) {
 					$objToReturn->_objNotificacionAsGuia = Notificacion::InstantiateDbRow($objDbRow, $strAliasPrefix . 'notificacionasguia__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ProcessAwbsAsGuia Virtual Binding
+			$strAlias = $strAliasPrefix . 'processawbsasguia__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['processawbsasguia']) ? null : $objExpansionAliasArray['processawbsasguia']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objProcessAwbsAsGuiaArray)
+				$objToReturn->_objProcessAwbsAsGuiaArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objProcessAwbsAsGuiaArray[] = ProcessAwbs::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processawbsasguia__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objProcessAwbsAsGuia)) {
+					$objToReturn->_objProcessAwbsAsGuia = ProcessAwbs::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processawbsasguia__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -2582,6 +2675,70 @@
 			);
 		}
 
+		/**
+		 * Load an array of Guias objects,
+		 * by ReadyToGoUserId Index(es)
+		 * @param integer $intReadyToGoUserId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Guias[]
+		*/
+		public static function LoadArrayByReadyToGoUserId($intReadyToGoUserId, $objOptionalClauses = null) {
+			// Call Guias::QueryArray to perform the LoadArrayByReadyToGoUserId query
+			try {
+				return Guias::QueryArray(
+					QQ::Equal(QQN::Guias()->ReadyToGoUserId, $intReadyToGoUserId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Guiases
+		 * by ReadyToGoUserId Index(es)
+		 * @param integer $intReadyToGoUserId
+		 * @return int
+		*/
+		public static function CountByReadyToGoUserId($intReadyToGoUserId) {
+			// Call Guias::QueryCount to perform the CountByReadyToGoUserId query
+			return Guias::QueryCount(
+				QQ::Equal(QQN::Guias()->ReadyToGoUserId, $intReadyToGoUserId)
+			);
+		}
+
+		/**
+		 * Load an array of Guias objects,
+		 * by IsReadyToGo Index(es)
+		 * @param boolean $blnIsReadyToGo
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Guias[]
+		*/
+		public static function LoadArrayByIsReadyToGo($blnIsReadyToGo, $objOptionalClauses = null) {
+			// Call Guias::QueryArray to perform the LoadArrayByIsReadyToGo query
+			try {
+				return Guias::QueryArray(
+					QQ::Equal(QQN::Guias()->IsReadyToGo, $blnIsReadyToGo),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count Guiases
+		 * by IsReadyToGo Index(es)
+		 * @param boolean $blnIsReadyToGo
+		 * @return int
+		*/
+		public static function CountByIsReadyToGo($blnIsReadyToGo) {
+			// Call Guias::QueryCount to perform the CountByIsReadyToGo query
+			return Guias::QueryCount(
+				QQ::Equal(QQN::Guias()->IsReadyToGo, $blnIsReadyToGo)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -2696,6 +2853,9 @@
 							`factura_id`,
 							`guia_pod_id`,
 							`nota_entrega_id`,
+							`is_ready_to_go`,
+							`ready_to_go_date`,
+							`ready_to_go_user_id`,
 							`observacion`,
 							`referencia_exp`,
 							`razones_exp`,
@@ -2758,6 +2918,9 @@
 							' . $objDatabase->SqlVariable($this->intFacturaId) . ',
 							' . $objDatabase->SqlVariable($this->intGuiaPodId) . ',
 							' . $objDatabase->SqlVariable($this->intNotaEntregaId) . ',
+							' . $objDatabase->SqlVariable($this->blnIsReadyToGo) . ',
+							' . $objDatabase->SqlVariable($this->dttReadyToGoDate) . ',
+							' . $objDatabase->SqlVariable($this->intReadyToGoUserId) . ',
 							' . $objDatabase->SqlVariable($this->strObservacion) . ',
 							' . $objDatabase->SqlVariable($this->strReferenciaExp) . ',
 							' . $objDatabase->SqlVariable($this->strRazonesExp) . ',
@@ -2834,6 +2997,9 @@
 							`factura_id` = ' . $objDatabase->SqlVariable($this->intFacturaId) . ',
 							`guia_pod_id` = ' . $objDatabase->SqlVariable($this->intGuiaPodId) . ',
 							`nota_entrega_id` = ' . $objDatabase->SqlVariable($this->intNotaEntregaId) . ',
+							`is_ready_to_go` = ' . $objDatabase->SqlVariable($this->blnIsReadyToGo) . ',
+							`ready_to_go_date` = ' . $objDatabase->SqlVariable($this->dttReadyToGoDate) . ',
+							`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intReadyToGoUserId) . ',
 							`observacion` = ' . $objDatabase->SqlVariable($this->strObservacion) . ',
 							`referencia_exp` = ' . $objDatabase->SqlVariable($this->strReferenciaExp) . ',
 							`razones_exp` = ' . $objDatabase->SqlVariable($this->strRazonesExp) . ',
@@ -3057,6 +3223,9 @@
 			$this->intFacturaId = $objReloaded->intFacturaId;
 			$this->GuiaPodId = $objReloaded->GuiaPodId;
 			$this->NotaEntregaId = $objReloaded->NotaEntregaId;
+			$this->blnIsReadyToGo = $objReloaded->blnIsReadyToGo;
+			$this->dttReadyToGoDate = $objReloaded->dttReadyToGoDate;
+			$this->ReadyToGoUserId = $objReloaded->ReadyToGoUserId;
 			$this->strObservacion = $objReloaded->strObservacion;
 			$this->strReferenciaExp = $objReloaded->strReferenciaExp;
 			$this->strRazonesExp = $objReloaded->strRazonesExp;
@@ -3457,6 +3626,27 @@
 					 */
 					return $this->intNotaEntregaId;
 
+				case 'IsReadyToGo':
+					/**
+					 * Gets the value for blnIsReadyToGo 
+					 * @return boolean
+					 */
+					return $this->blnIsReadyToGo;
+
+				case 'ReadyToGoDate':
+					/**
+					 * Gets the value for dttReadyToGoDate 
+					 * @return QDateTime
+					 */
+					return $this->dttReadyToGoDate;
+
+				case 'ReadyToGoUserId':
+					/**
+					 * Gets the value for intReadyToGoUserId 
+					 * @return integer
+					 */
+					return $this->intReadyToGoUserId;
+
 				case 'Observacion':
 					/**
 					 * Gets the value for strObservacion 
@@ -3706,6 +3896,20 @@
 						throw $objExc;
 					}
 
+				case 'ReadyToGoUser':
+					/**
+					 * Gets the value for the Usuario object referenced by intReadyToGoUserId 
+					 * @return Usuario
+					 */
+					try {
+						if ((!$this->objReadyToGoUser) && (!is_null($this->intReadyToGoUserId)))
+							$this->objReadyToGoUser = Usuario::Load($this->intReadyToGoUserId);
+						return $this->objReadyToGoUser;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'EstadisticaDeGuias':
 					/**
 					 * Gets the value for the EstadisticaDeGuias object that uniquely references this Guias
@@ -3859,6 +4063,22 @@
 					 * @return Notificacion[]
 					 */
 					return $this->_objNotificacionAsGuiaArray;
+
+				case '_ProcessAwbsAsGuia':
+					/**
+					 * Gets the value for the private _objProcessAwbsAsGuia (Read-Only)
+					 * if set due to an expansion on the process_awbs.guia_id reverse relationship
+					 * @return ProcessAwbs
+					 */
+					return $this->_objProcessAwbsAsGuia;
+
+				case '_ProcessAwbsAsGuiaArray':
+					/**
+					 * Gets the value for the private _objProcessAwbsAsGuiaArray (Read-Only)
+					 * if set due to an ExpandAsArray on the process_awbs.guia_id reverse relationship
+					 * @return ProcessAwbs[]
+					 */
+					return $this->_objProcessAwbsAsGuiaArray;
 
 				case '_RegistroTrabajoAsGuia':
 					/**
@@ -4592,6 +4812,46 @@
 						throw $objExc;
 					}
 
+				case 'IsReadyToGo':
+					/**
+					 * Sets the value for blnIsReadyToGo 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnIsReadyToGo = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ReadyToGoDate':
+					/**
+					 * Sets the value for dttReadyToGoDate 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttReadyToGoDate = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ReadyToGoUserId':
+					/**
+					 * Sets the value for intReadyToGoUserId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objReadyToGoUser = null;
+						return ($this->intReadyToGoUserId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'Observacion':
 					/**
 					 * Sets the value for strObservacion 
@@ -5129,6 +5389,38 @@
 					}
 					break;
 
+				case 'ReadyToGoUser':
+					/**
+					 * Sets the value for the Usuario object referenced by intReadyToGoUserId 
+					 * @param Usuario $mixValue
+					 * @return Usuario
+					 */
+					if (is_null($mixValue)) {
+						$this->intReadyToGoUserId = null;
+						$this->objReadyToGoUser = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Usuario object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Usuario');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Usuario object
+						if (is_null($mixValue->CodiUsua))
+							throw new QCallerException('Unable to set an unsaved ReadyToGoUser for this Guias');
+
+						// Update Local Member Variables
+						$this->objReadyToGoUser = $mixValue;
+						$this->intReadyToGoUserId = $mixValue->CodiUsua;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
 				case 'EstadisticaDeGuias':
 					/**
 					 * Sets the value for the EstadisticaDeGuias object referenced by objEstadisticaDeGuias (Unique)
@@ -5254,6 +5546,9 @@
 			}
 			if ($this->CountNotificacionsAsGuia()) {
 				$arrTablRela[] = 'notificacion';
+			}
+			if ($this->CountProcessAwbsesAsGuia()) {
+				$arrTablRela[] = 'process_awbs';
 			}
 			if ($this->CountRegistroTrabajosAsGuia()) {
 				$arrTablRela[] = 'registro_trabajo';
@@ -6165,6 +6460,155 @@
 		}
 
 
+		// Related Objects' Methods for ProcessAwbsAsGuia
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ProcessAwbsesAsGuia as an array of ProcessAwbs objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ProcessAwbs[]
+		*/
+		public function GetProcessAwbsAsGuiaArray($objOptionalClauses = null) {
+			if ((is_null($this->intId)))
+				return array();
+
+			try {
+				return ProcessAwbs::LoadArrayByGuiaId($this->intId, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ProcessAwbsesAsGuia
+		 * @return int
+		*/
+		public function CountProcessAwbsesAsGuia() {
+			if ((is_null($this->intId)))
+				return 0;
+
+			return ProcessAwbs::CountByGuiaId($this->intId);
+		}
+
+		/**
+		 * Associates a ProcessAwbsAsGuia
+		 * @param ProcessAwbs $objProcessAwbs
+		 * @return void
+		*/
+		public function AssociateProcessAwbsAsGuia(ProcessAwbs $objProcessAwbs) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessAwbsAsGuia on this unsaved Guias.');
+			if ((is_null($objProcessAwbs->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessAwbsAsGuia on this Guias with an unsaved ProcessAwbs.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_awbs`
+				SET
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessAwbs->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ProcessAwbsAsGuia
+		 * @param ProcessAwbs $objProcessAwbs
+		 * @return void
+		*/
+		public function UnassociateProcessAwbsAsGuia(ProcessAwbs $objProcessAwbs) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsGuia on this unsaved Guias.');
+			if ((is_null($objProcessAwbs->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsGuia on this Guias with an unsaved ProcessAwbs.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_awbs`
+				SET
+					`guia_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessAwbs->Id) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ProcessAwbsesAsGuia
+		 * @return void
+		*/
+		public function UnassociateAllProcessAwbsesAsGuia() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsGuia on this unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_awbs`
+				SET
+					`guia_id` = null
+				WHERE
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ProcessAwbsAsGuia
+		 * @param ProcessAwbs $objProcessAwbs
+		 * @return void
+		*/
+		public function DeleteAssociatedProcessAwbsAsGuia(ProcessAwbs $objProcessAwbs) {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsGuia on this unsaved Guias.');
+			if ((is_null($objProcessAwbs->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsGuia on this Guias with an unsaved ProcessAwbs.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_awbs`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessAwbs->Id) . ' AND
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ProcessAwbsesAsGuia
+		 * @return void
+		*/
+		public function DeleteAllProcessAwbsesAsGuia() {
+			if ((is_null($this->intId)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsGuia on this unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Guias::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_awbs`
+				WHERE
+					`guia_id` = ' . $objDatabase->SqlVariable($this->intId) . '
+			');
+		}
+
+
 		// Related Objects' Methods for RegistroTrabajoAsGuia
 		//-------------------------------------------------------------------
 
@@ -6527,6 +6971,9 @@
 			$strToReturn .= '<element name="FacturaId" type="xsd:int"/>';
 			$strToReturn .= '<element name="GuiaPod" type="xsd1:GuiaPod"/>';
 			$strToReturn .= '<element name="NotaEntrega" type="xsd1:NotaEntrega"/>';
+			$strToReturn .= '<element name="IsReadyToGo" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="ReadyToGoDate" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="ReadyToGoUser" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="Observacion" type="xsd:string"/>';
 			$strToReturn .= '<element name="ReferenciaExp" type="xsd:string"/>';
 			$strToReturn .= '<element name="RazonesExp" type="xsd:string"/>';
@@ -6557,6 +7004,7 @@
 				Counter::AlterSoapComplexTypeArray($strComplexTypeArray);
 				GuiaPod::AlterSoapComplexTypeArray($strComplexTypeArray);
 				NotaEntrega::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Usuario::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
 
@@ -6690,6 +7138,13 @@
 			if ((property_exists($objSoapObject, 'NotaEntrega')) &&
 				($objSoapObject->NotaEntrega))
 				$objToReturn->NotaEntrega = NotaEntrega::GetObjectFromSoapObject($objSoapObject->NotaEntrega);
+			if (property_exists($objSoapObject, 'IsReadyToGo'))
+				$objToReturn->blnIsReadyToGo = $objSoapObject->IsReadyToGo;
+			if (property_exists($objSoapObject, 'ReadyToGoDate'))
+				$objToReturn->dttReadyToGoDate = new QDateTime($objSoapObject->ReadyToGoDate);
+			if ((property_exists($objSoapObject, 'ReadyToGoUser')) &&
+				($objSoapObject->ReadyToGoUser))
+				$objToReturn->ReadyToGoUser = Usuario::GetObjectFromSoapObject($objSoapObject->ReadyToGoUser);
 			if (property_exists($objSoapObject, 'Observacion'))
 				$objToReturn->strObservacion = $objSoapObject->Observacion;
 			if (property_exists($objSoapObject, 'ReferenciaExp'))
@@ -6780,6 +7235,12 @@
 				$objObject->objNotaEntrega = NotaEntrega::GetSoapObjectFromObject($objObject->objNotaEntrega, false);
 			else if (!$blnBindRelatedObjects)
 				$objObject->intNotaEntregaId = null;
+			if ($objObject->dttReadyToGoDate)
+				$objObject->dttReadyToGoDate = $objObject->dttReadyToGoDate->qFormat(QDateTime::FormatSoap);
+			if ($objObject->objReadyToGoUser)
+				$objObject->objReadyToGoUser = Usuario::GetSoapObjectFromObject($objObject->objReadyToGoUser, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intReadyToGoUserId = null;
 			if ($objObject->dttCreatedAt)
 				$objObject->dttCreatedAt = $objObject->dttCreatedAt->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttUpdatedAt)
@@ -6853,6 +7314,9 @@
 			$iArray['FacturaId'] = $this->intFacturaId;
 			$iArray['GuiaPodId'] = $this->intGuiaPodId;
 			$iArray['NotaEntregaId'] = $this->intNotaEntregaId;
+			$iArray['IsReadyToGo'] = $this->blnIsReadyToGo;
+			$iArray['ReadyToGoDate'] = $this->dttReadyToGoDate;
+			$iArray['ReadyToGoUserId'] = $this->intReadyToGoUserId;
 			$iArray['Observacion'] = $this->strObservacion;
 			$iArray['ReferenciaExp'] = $this->strReferenciaExp;
 			$iArray['RazonesExp'] = $this->strRazonesExp;
@@ -7001,6 +7465,10 @@
      * @property-read QQNodeGuiaPod $GuiaPod
      * @property-read QQNode $NotaEntregaId
      * @property-read QQNodeNotaEntrega $NotaEntrega
+     * @property-read QQNode $IsReadyToGo
+     * @property-read QQNode $ReadyToGoDate
+     * @property-read QQNode $ReadyToGoUserId
+     * @property-read QQNodeUsuario $ReadyToGoUser
      * @property-read QQNode $Observacion
      * @property-read QQNode $ReferenciaExp
      * @property-read QQNode $RazonesExp
@@ -7021,6 +7489,7 @@
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
      * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsGuia
+     * @property-read QQReverseReferenceNodeProcessAwbs $ProcessAwbsAsGuia
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsGuia
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -7163,6 +7632,14 @@
 					return new QQNode('nota_entrega_id', 'NotaEntregaId', 'Integer', $this);
 				case 'NotaEntrega':
 					return new QQNodeNotaEntrega('nota_entrega_id', 'NotaEntrega', 'Integer', $this);
+				case 'IsReadyToGo':
+					return new QQNode('is_ready_to_go', 'IsReadyToGo', 'Bit', $this);
+				case 'ReadyToGoDate':
+					return new QQNode('ready_to_go_date', 'ReadyToGoDate', 'Date', $this);
+				case 'ReadyToGoUserId':
+					return new QQNode('ready_to_go_user_id', 'ReadyToGoUserId', 'Integer', $this);
+				case 'ReadyToGoUser':
+					return new QQNodeUsuario('ready_to_go_user_id', 'ReadyToGoUser', 'Integer', $this);
 				case 'Observacion':
 					return new QQNode('observacion', 'Observacion', 'VarChar', $this);
 				case 'ReferenciaExp':
@@ -7199,6 +7676,8 @@
 					return new QQReverseReferenceNodeGuiasManifiesto($this, 'guiasmanifiestoasguia', 'reverse_reference', 'guia_id', 'GuiasManifiestoAsGuia');
 				case 'NotificacionAsGuia':
 					return new QQReverseReferenceNodeNotificacion($this, 'notificacionasguia', 'reverse_reference', 'guia_id', 'NotificacionAsGuia');
+				case 'ProcessAwbsAsGuia':
+					return new QQReverseReferenceNodeProcessAwbs($this, 'processawbsasguia', 'reverse_reference', 'guia_id', 'ProcessAwbsAsGuia');
 				case 'RegistroTrabajoAsGuia':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajoasguia', 'reverse_reference', 'guia_id', 'RegistroTrabajoAsGuia');
 
@@ -7282,6 +7761,10 @@
      * @property-read QQNodeGuiaPod $GuiaPod
      * @property-read QQNode $NotaEntregaId
      * @property-read QQNodeNotaEntrega $NotaEntrega
+     * @property-read QQNode $IsReadyToGo
+     * @property-read QQNode $ReadyToGoDate
+     * @property-read QQNode $ReadyToGoUserId
+     * @property-read QQNodeUsuario $ReadyToGoUser
      * @property-read QQNode $Observacion
      * @property-read QQNode $ReferenciaExp
      * @property-read QQNode $RazonesExp
@@ -7302,6 +7785,7 @@
      * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsGuia
      * @property-read QQReverseReferenceNodeGuiasManifiesto $GuiasManifiestoAsGuia
      * @property-read QQReverseReferenceNodeNotificacion $NotificacionAsGuia
+     * @property-read QQReverseReferenceNodeProcessAwbs $ProcessAwbsAsGuia
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajoAsGuia
 
      * @property-read QQNode $_PrimaryKeyNode
@@ -7444,6 +7928,14 @@
 					return new QQNode('nota_entrega_id', 'NotaEntregaId', 'integer', $this);
 				case 'NotaEntrega':
 					return new QQNodeNotaEntrega('nota_entrega_id', 'NotaEntrega', 'integer', $this);
+				case 'IsReadyToGo':
+					return new QQNode('is_ready_to_go', 'IsReadyToGo', 'boolean', $this);
+				case 'ReadyToGoDate':
+					return new QQNode('ready_to_go_date', 'ReadyToGoDate', 'QDateTime', $this);
+				case 'ReadyToGoUserId':
+					return new QQNode('ready_to_go_user_id', 'ReadyToGoUserId', 'integer', $this);
+				case 'ReadyToGoUser':
+					return new QQNodeUsuario('ready_to_go_user_id', 'ReadyToGoUser', 'integer', $this);
 				case 'Observacion':
 					return new QQNode('observacion', 'Observacion', 'string', $this);
 				case 'ReferenciaExp':
@@ -7480,6 +7972,8 @@
 					return new QQReverseReferenceNodeGuiasManifiesto($this, 'guiasmanifiestoasguia', 'reverse_reference', 'guia_id', 'GuiasManifiestoAsGuia');
 				case 'NotificacionAsGuia':
 					return new QQReverseReferenceNodeNotificacion($this, 'notificacionasguia', 'reverse_reference', 'guia_id', 'NotificacionAsGuia');
+				case 'ProcessAwbsAsGuia':
+					return new QQReverseReferenceNodeProcessAwbs($this, 'processawbsasguia', 'reverse_reference', 'guia_id', 'ProcessAwbsAsGuia');
 				case 'RegistroTrabajoAsGuia':
 					return new QQReverseReferenceNodeRegistroTrabajo($this, 'registrotrabajoasguia', 'reverse_reference', 'guia_id', 'RegistroTrabajoAsGuia');
 

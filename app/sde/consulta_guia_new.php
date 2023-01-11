@@ -292,6 +292,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
             $this->btnEditGuia->Visible = $objEditGuia->ParaVal1;
         }
 
+        list($strMensRtgx, $strTipoMens) = $this->objGuia->__readyToGoStatus();
+        if (strlen($strMensRtgx)) {
+            $this->$strTipoMens($strMensRtgx);
+        }
+
     }
 
     //----------------------------
@@ -322,6 +327,11 @@ class ConsultaGuiaNew extends FormularioBaseKaizen {
         $colIdxxPiez->Name = QApplication::Translate('Pieza');
         $colIdxxPiez->Html = '<?= $_FORM->dtgPiezGuia_IdxxPiez_Render($_ITEM); ?>';
         $this->dtgPiezGuia->AddColumn($colIdxxPiez);
+
+        $colReadTogo = new QDataGridColumn($this);
+        $colReadTogo->Name = 'RTG';
+        $colReadTogo->Html = '<?= $_ITEM->__rtg(); ?>';
+        $this->dtgPiezGuia->AddColumn($colReadTogo);
 
         $colGuiaTran = new QDataGridColumn($this);
         $colGuiaTran->Name = QApplication::Translate('G.Tran');

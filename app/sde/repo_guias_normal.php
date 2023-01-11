@@ -43,6 +43,9 @@ $arrEnca2XLS = array(
     'Ult. Ckpt',
     'Dias desde Ult-Ckpt',
     'Dias en Almacen',
+    'RTG',
+    'F. RTG',
+    'Dias RTG'
 );
 $strCadeAudi = implode($strSepaColu,$arrEnca2XLS);
 fputs($mixManeArch,$strCadeAudi.$strSepaColu."\n");
@@ -68,6 +71,10 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
     $strUltiCkpt = $mixRegistro['codigo_ckpt'];
     $strDiasCkpt = $mixRegistro['last_ckpt_days'];
     $strDiasAlma = $mixRegistro['inventory_days'];
+    $strReadTogo = $mixRegistro['rtg'];
+    $strFechRtgx = $mixRegistro['ready_to_go_date'];
+    $strDiasRtgx = $mixRegistro['rtg_days'];
+    
     $arrLineArch = array(
         $strNumeGuia,
         $strFechGuia,
@@ -86,7 +93,10 @@ while ($mixRegistro = $objDbResult->FetchArray()) {
         $strLogiUsua,
         $strUltiCkpt,
         $strDiasCkpt,
-        $strDiasAlma
+        $strDiasAlma,
+        $strReadTogo,
+        $strFechRtgx,
+        $strDiasRtgx
     );
     //----------------------------------------------------------------------
     // El vector generado, se lleva al archivo plano

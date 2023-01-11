@@ -69,6 +69,9 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 	protected $txtLastCkptUserLogin;
 	protected $calFirstInventory;
 	protected $txtLastCkptRutaId;
+	protected $chkIsReadyToGo;
+	protected $calReadyToGoDate;
+	protected $lstReadyToGoUser;
 	protected $lstEmpaque;
 	protected $txtLibras;
 	protected $txtLargo;
@@ -171,6 +174,9 @@ abstract class GuiaPiezasEditFormBase extends QForm {
 		$this->txtLastCkptUserLogin = $this->mctGuiaPiezas->txtLastCkptUserLogin_Create();
 		$this->calFirstInventory = $this->mctGuiaPiezas->calFirstInventory_Create();
 		$this->txtLastCkptRutaId = $this->mctGuiaPiezas->txtLastCkptRutaId_Create();
+		$this->chkIsReadyToGo = $this->mctGuiaPiezas->chkIsReadyToGo_Create();
+		$this->calReadyToGoDate = $this->mctGuiaPiezas->calReadyToGoDate_Create();
+		$this->lstReadyToGoUser = $this->mctGuiaPiezas->lstReadyToGoUser_Create();
 		$this->lstEmpaque = $this->mctGuiaPiezas->lstEmpaque_Create();
 		$this->txtLibras = $this->mctGuiaPiezas->txtLibras_Create();
 		$this->txtLargo = $this->mctGuiaPiezas->txtLargo_Create();

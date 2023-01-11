@@ -31,6 +31,9 @@
 	 * @property string $LastCkptUserLogin the value for strLastCkptUserLogin 
 	 * @property QDateTime $FirstInventory the value for dttFirstInventory 
 	 * @property integer $LastCkptRutaId the value for intLastCkptRutaId 
+	 * @property boolean $IsReadyToGo the value for blnIsReadyToGo 
+	 * @property QDateTime $ReadyToGoDate the value for dttReadyToGoDate 
+	 * @property integer $ReadyToGoUserId the value for intReadyToGoUserId 
 	 * @property integer $EmpaqueId the value for intEmpaqueId 
 	 * @property double $Libras the value for fltLibras 
 	 * @property double $Largo the value for fltLargo 
@@ -49,6 +52,7 @@
 	 * @property NotaEntrega $NotaEntrega the value for the NotaEntrega object referenced by intNotaEntregaId 
 	 * @property PiezaCheckpoints $LastCkpt the value for the PiezaCheckpoints object referenced by intLastCkptId 
 	 * @property Sucursales $LastCkptSucursal the value for the Sucursales object referenced by intLastCkptSucursalId 
+	 * @property Usuario $ReadyToGoUser the value for the Usuario object referenced by intReadyToGoUserId 
 	 * @property Empaque $Empaque the value for the Empaque object referenced by intEmpaqueId 
 	 * @property GuiaPiezaPod $GuiaPiezaPodAsGuiaPieza the value for the GuiaPiezaPod object that uniquely references this GuiaPiezas
 	 * @property GuiaTransportista $GuiaTransportistaAsGuiaPieza the value for the GuiaTransportista object that uniquely references this GuiaPiezas
@@ -207,6 +211,30 @@
 		 */
 		protected $intLastCkptRutaId;
 		const LastCkptRutaIdDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.is_ready_to_go
+		 * @var boolean blnIsReadyToGo
+		 */
+		protected $blnIsReadyToGo;
+		const IsReadyToGoDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.ready_to_go_date
+		 * @var QDateTime dttReadyToGoDate
+		 */
+		protected $dttReadyToGoDate;
+		const ReadyToGoDateDefault = null;
+
+
+		/**
+		 * Protected member variable that maps to the database column guia_piezas.ready_to_go_user_id
+		 * @var integer intReadyToGoUserId
+		 */
+		protected $intReadyToGoUserId;
+		const ReadyToGoUserIdDefault = null;
 
 
 		/**
@@ -516,6 +544,16 @@
 
 		/**
 		 * Protected member variable that contains the object pointed by the reference
+		 * in the database column guia_piezas.ready_to_go_user_id.
+		 *
+		 * NOTE: Always use the ReadyToGoUser property getter to correctly retrieve this Usuario object.
+		 * (Because this class implements late binding, this variable reference MAY be null.)
+		 * @var Usuario objReadyToGoUser
+		 */
+		protected $objReadyToGoUser;
+
+		/**
+		 * Protected member variable that contains the object pointed by the reference
 		 * in the database column guia_piezas.empaque_id.
 		 *
 		 * NOTE: Always use the Empaque property getter to correctly retrieve this Empaque object.
@@ -583,6 +621,9 @@
 			$this->strLastCkptUserLogin = GuiaPiezas::LastCkptUserLoginDefault;
 			$this->dttFirstInventory = (GuiaPiezas::FirstInventoryDefault === null)?null:new QDateTime(GuiaPiezas::FirstInventoryDefault);
 			$this->intLastCkptRutaId = GuiaPiezas::LastCkptRutaIdDefault;
+			$this->blnIsReadyToGo = GuiaPiezas::IsReadyToGoDefault;
+			$this->dttReadyToGoDate = (GuiaPiezas::ReadyToGoDateDefault === null)?null:new QDateTime(GuiaPiezas::ReadyToGoDateDefault);
+			$this->intReadyToGoUserId = GuiaPiezas::ReadyToGoUserIdDefault;
 			$this->intEmpaqueId = GuiaPiezas::EmpaqueIdDefault;
 			$this->fltLibras = GuiaPiezas::LibrasDefault;
 			$this->fltLargo = GuiaPiezas::LargoDefault;
@@ -954,6 +995,9 @@
 			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_user_login', $strAliasPrefix . 'last_ckpt_user_login');
 			    $objBuilder->AddSelectItem($strTableName, 'first_inventory', $strAliasPrefix . 'first_inventory');
 			    $objBuilder->AddSelectItem($strTableName, 'last_ckpt_ruta_id', $strAliasPrefix . 'last_ckpt_ruta_id');
+			    $objBuilder->AddSelectItem($strTableName, 'is_ready_to_go', $strAliasPrefix . 'is_ready_to_go');
+			    $objBuilder->AddSelectItem($strTableName, 'ready_to_go_date', $strAliasPrefix . 'ready_to_go_date');
+			    $objBuilder->AddSelectItem($strTableName, 'ready_to_go_user_id', $strAliasPrefix . 'ready_to_go_user_id');
 			    $objBuilder->AddSelectItem($strTableName, 'empaque_id', $strAliasPrefix . 'empaque_id');
 			    $objBuilder->AddSelectItem($strTableName, 'libras', $strAliasPrefix . 'libras');
 			    $objBuilder->AddSelectItem($strTableName, 'largo', $strAliasPrefix . 'largo');
@@ -1141,6 +1185,15 @@
 			$strAlias = $strAliasPrefix . 'last_ckpt_ruta_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intLastCkptRutaId = $objDbRow->GetColumn($strAliasName, 'Integer');
+			$strAlias = $strAliasPrefix . 'is_ready_to_go';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->blnIsReadyToGo = $objDbRow->GetColumn($strAliasName, 'Bit');
+			$strAlias = $strAliasPrefix . 'ready_to_go_date';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->dttReadyToGoDate = $objDbRow->GetColumn($strAliasName, 'Date');
+			$strAlias = $strAliasPrefix . 'ready_to_go_user_id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objToReturn->intReadyToGoUserId = $objDbRow->GetColumn($strAliasName, 'Integer');
 			$strAlias = $strAliasPrefix . 'empaque_id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
 			$objToReturn->intEmpaqueId = $objDbRow->GetColumn($strAliasName, 'Integer');
@@ -1240,6 +1293,13 @@
 			if (!is_null($objDbRow->GetColumn($strAliasName))) {
 				$objExpansionNode = (empty($objExpansionAliasArray['last_ckpt_sucursal_id']) ? null : $objExpansionAliasArray['last_ckpt_sucursal_id']);
 				$objToReturn->objLastCkptSucursal = Sucursales::InstantiateDbRow($objDbRow, $strAliasPrefix . 'last_ckpt_sucursal_id__', $objExpansionNode, null, $strColumnAliasArray);
+			}
+			// Check for ReadyToGoUser Early Binding
+			$strAlias = $strAliasPrefix . 'ready_to_go_user_id__codi_usua';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				$objExpansionNode = (empty($objExpansionAliasArray['ready_to_go_user_id']) ? null : $objExpansionAliasArray['ready_to_go_user_id']);
+				$objToReturn->objReadyToGoUser = Usuario::InstantiateDbRow($objDbRow, $strAliasPrefix . 'ready_to_go_user_id__', $objExpansionNode, null, $strColumnAliasArray);
 			}
 			// Check for Empaque Early Binding
 			$strAlias = $strAliasPrefix . 'empaque_id__id';
@@ -1738,6 +1798,70 @@
 			);
 		}
 
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by ReadyToGoUserId Index(es)
+		 * @param integer $intReadyToGoUserId
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByReadyToGoUserId($intReadyToGoUserId, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByReadyToGoUserId query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->ReadyToGoUserId, $intReadyToGoUserId),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by ReadyToGoUserId Index(es)
+		 * @param integer $intReadyToGoUserId
+		 * @return int
+		*/
+		public static function CountByReadyToGoUserId($intReadyToGoUserId) {
+			// Call GuiaPiezas::QueryCount to perform the CountByReadyToGoUserId query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->ReadyToGoUserId, $intReadyToGoUserId)
+			);
+		}
+
+		/**
+		 * Load an array of GuiaPiezas objects,
+		 * by IsReadyToGo Index(es)
+		 * @param boolean $blnIsReadyToGo
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public static function LoadArrayByIsReadyToGo($blnIsReadyToGo, $objOptionalClauses = null) {
+			// Call GuiaPiezas::QueryArray to perform the LoadArrayByIsReadyToGo query
+			try {
+				return GuiaPiezas::QueryArray(
+					QQ::Equal(QQN::GuiaPiezas()->IsReadyToGo, $blnIsReadyToGo),
+					$objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Count GuiaPiezases
+		 * by IsReadyToGo Index(es)
+		 * @param boolean $blnIsReadyToGo
+		 * @return int
+		*/
+		public static function CountByIsReadyToGo($blnIsReadyToGo) {
+			// Call GuiaPiezas::QueryCount to perform the CountByIsReadyToGo query
+			return GuiaPiezas::QueryCount(
+				QQ::Equal(QQN::GuiaPiezas()->IsReadyToGo, $blnIsReadyToGo)
+			);
+		}
+
 
 
 		////////////////////////////////////////////////////
@@ -1908,6 +2032,9 @@
 							`last_ckpt_user_login`,
 							`first_inventory`,
 							`last_ckpt_ruta_id`,
+							`is_ready_to_go`,
+							`ready_to_go_date`,
+							`ready_to_go_user_id`,
 							`empaque_id`,
 							`libras`,
 							`largo`,
@@ -1938,6 +2065,9 @@
 							' . $objDatabase->SqlVariable($this->strLastCkptUserLogin) . ',
 							' . $objDatabase->SqlVariable($this->dttFirstInventory) . ',
 							' . $objDatabase->SqlVariable($this->intLastCkptRutaId) . ',
+							' . $objDatabase->SqlVariable($this->blnIsReadyToGo) . ',
+							' . $objDatabase->SqlVariable($this->dttReadyToGoDate) . ',
+							' . $objDatabase->SqlVariable($this->intReadyToGoUserId) . ',
 							' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							' . $objDatabase->SqlVariable($this->fltLargo) . ',
@@ -1982,6 +2112,9 @@
 							`last_ckpt_user_login` = ' . $objDatabase->SqlVariable($this->strLastCkptUserLogin) . ',
 							`first_inventory` = ' . $objDatabase->SqlVariable($this->dttFirstInventory) . ',
 							`last_ckpt_ruta_id` = ' . $objDatabase->SqlVariable($this->intLastCkptRutaId) . ',
+							`is_ready_to_go` = ' . $objDatabase->SqlVariable($this->blnIsReadyToGo) . ',
+							`ready_to_go_date` = ' . $objDatabase->SqlVariable($this->dttReadyToGoDate) . ',
+							`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intReadyToGoUserId) . ',
 							`empaque_id` = ' . $objDatabase->SqlVariable($this->intEmpaqueId) . ',
 							`libras` = ' . $objDatabase->SqlVariable($this->fltLibras) . ',
 							`largo` = ' . $objDatabase->SqlVariable($this->fltLargo) . ',
@@ -2173,6 +2306,9 @@
 			$this->strLastCkptUserLogin = $objReloaded->strLastCkptUserLogin;
 			$this->dttFirstInventory = $objReloaded->dttFirstInventory;
 			$this->intLastCkptRutaId = $objReloaded->intLastCkptRutaId;
+			$this->blnIsReadyToGo = $objReloaded->blnIsReadyToGo;
+			$this->dttReadyToGoDate = $objReloaded->dttReadyToGoDate;
+			$this->ReadyToGoUserId = $objReloaded->ReadyToGoUserId;
 			$this->EmpaqueId = $objReloaded->EmpaqueId;
 			$this->fltLibras = $objReloaded->fltLibras;
 			$this->fltLargo = $objReloaded->fltLargo;
@@ -2318,6 +2454,27 @@
 					 * @return integer
 					 */
 					return $this->intLastCkptRutaId;
+
+				case 'IsReadyToGo':
+					/**
+					 * Gets the value for blnIsReadyToGo 
+					 * @return boolean
+					 */
+					return $this->blnIsReadyToGo;
+
+				case 'ReadyToGoDate':
+					/**
+					 * Gets the value for dttReadyToGoDate 
+					 * @return QDateTime
+					 */
+					return $this->dttReadyToGoDate;
+
+				case 'ReadyToGoUserId':
+					/**
+					 * Gets the value for intReadyToGoUserId 
+					 * @return integer
+					 */
+					return $this->intReadyToGoUserId;
 
 				case 'EmpaqueId':
 					/**
@@ -2472,6 +2629,20 @@
 						if ((!$this->objLastCkptSucursal) && (!is_null($this->intLastCkptSucursalId)))
 							$this->objLastCkptSucursal = Sucursales::Load($this->intLastCkptSucursalId);
 						return $this->objLastCkptSucursal;
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ReadyToGoUser':
+					/**
+					 * Gets the value for the Usuario object referenced by intReadyToGoUserId 
+					 * @return Usuario
+					 */
+					try {
+						if ((!$this->objReadyToGoUser) && (!is_null($this->intReadyToGoUserId)))
+							$this->objReadyToGoUser = Usuario::Load($this->intReadyToGoUserId);
+						return $this->objReadyToGoUser;
 					} catch (QCallerException $objExc) {
 						$objExc->IncrementOffset();
 						throw $objExc;
@@ -2887,6 +3058,46 @@
 						throw $objExc;
 					}
 
+				case 'IsReadyToGo':
+					/**
+					 * Sets the value for blnIsReadyToGo 
+					 * @param boolean $mixValue
+					 * @return boolean
+					 */
+					try {
+						return ($this->blnIsReadyToGo = QType::Cast($mixValue, QType::Boolean));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ReadyToGoDate':
+					/**
+					 * Sets the value for dttReadyToGoDate 
+					 * @param QDateTime $mixValue
+					 * @return QDateTime
+					 */
+					try {
+						return ($this->dttReadyToGoDate = QType::Cast($mixValue, QType::DateTime));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
+				case 'ReadyToGoUserId':
+					/**
+					 * Sets the value for intReadyToGoUserId 
+					 * @param integer $mixValue
+					 * @return integer
+					 */
+					try {
+						$this->objReadyToGoUser = null;
+						return ($this->intReadyToGoUserId = QType::Cast($mixValue, QType::Integer));
+					} catch (QCallerException $objExc) {
+						$objExc->IncrementOffset();
+						throw $objExc;
+					}
+
 				case 'EmpaqueId':
 					/**
 					 * Sets the value for intEmpaqueId 
@@ -3196,6 +3407,38 @@
 						// Update Local Member Variables
 						$this->objLastCkptSucursal = $mixValue;
 						$this->intLastCkptSucursalId = $mixValue->Id;
+
+						// Return $mixValue
+						return $mixValue;
+					}
+					break;
+
+				case 'ReadyToGoUser':
+					/**
+					 * Sets the value for the Usuario object referenced by intReadyToGoUserId 
+					 * @param Usuario $mixValue
+					 * @return Usuario
+					 */
+					if (is_null($mixValue)) {
+						$this->intReadyToGoUserId = null;
+						$this->objReadyToGoUser = null;
+						return null;
+					} else {
+						// Make sure $mixValue actually is a Usuario object
+						try {
+							$mixValue = QType::Cast($mixValue, 'Usuario');
+						} catch (QInvalidCastException $objExc) {
+							$objExc->IncrementOffset();
+							throw $objExc;
+						}
+
+						// Make sure $mixValue is a SAVED Usuario object
+						if (is_null($mixValue->CodiUsua))
+							throw new QCallerException('Unable to set an unsaved ReadyToGoUser for this GuiaPiezas');
+
+						// Update Local Member Variables
+						$this->objReadyToGoUser = $mixValue;
+						$this->intReadyToGoUserId = $mixValue->CodiUsua;
 
 						// Return $mixValue
 						return $mixValue;
@@ -4502,6 +4745,9 @@
 			$strToReturn .= '<element name="LastCkptUserLogin" type="xsd:string"/>';
 			$strToReturn .= '<element name="FirstInventory" type="xsd:dateTime"/>';
 			$strToReturn .= '<element name="LastCkptRutaId" type="xsd:int"/>';
+			$strToReturn .= '<element name="IsReadyToGo" type="xsd:boolean"/>';
+			$strToReturn .= '<element name="ReadyToGoDate" type="xsd:dateTime"/>';
+			$strToReturn .= '<element name="ReadyToGoUser" type="xsd1:Usuario"/>';
 			$strToReturn .= '<element name="Empaque" type="xsd1:Empaque"/>';
 			$strToReturn .= '<element name="Libras" type="xsd:float"/>';
 			$strToReturn .= '<element name="Largo" type="xsd:float"/>';
@@ -4528,6 +4774,7 @@
 				NotaEntrega::AlterSoapComplexTypeArray($strComplexTypeArray);
 				PiezaCheckpoints::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Sucursales::AlterSoapComplexTypeArray($strComplexTypeArray);
+				Usuario::AlterSoapComplexTypeArray($strComplexTypeArray);
 				Empaque::AlterSoapComplexTypeArray($strComplexTypeArray);
 			}
 		}
@@ -4579,6 +4826,13 @@
 				$objToReturn->dttFirstInventory = new QDateTime($objSoapObject->FirstInventory);
 			if (property_exists($objSoapObject, 'LastCkptRutaId'))
 				$objToReturn->intLastCkptRutaId = $objSoapObject->LastCkptRutaId;
+			if (property_exists($objSoapObject, 'IsReadyToGo'))
+				$objToReturn->blnIsReadyToGo = $objSoapObject->IsReadyToGo;
+			if (property_exists($objSoapObject, 'ReadyToGoDate'))
+				$objToReturn->dttReadyToGoDate = new QDateTime($objSoapObject->ReadyToGoDate);
+			if ((property_exists($objSoapObject, 'ReadyToGoUser')) &&
+				($objSoapObject->ReadyToGoUser))
+				$objToReturn->ReadyToGoUser = Usuario::GetObjectFromSoapObject($objSoapObject->ReadyToGoUser);
 			if ((property_exists($objSoapObject, 'Empaque')) &&
 				($objSoapObject->Empaque))
 				$objToReturn->Empaque = Empaque::GetObjectFromSoapObject($objSoapObject->Empaque);
@@ -4646,6 +4900,12 @@
 				$objObject->dttLastCkptDate = $objObject->dttLastCkptDate->qFormat(QDateTime::FormatSoap);
 			if ($objObject->dttFirstInventory)
 				$objObject->dttFirstInventory = $objObject->dttFirstInventory->qFormat(QDateTime::FormatSoap);
+			if ($objObject->dttReadyToGoDate)
+				$objObject->dttReadyToGoDate = $objObject->dttReadyToGoDate->qFormat(QDateTime::FormatSoap);
+			if ($objObject->objReadyToGoUser)
+				$objObject->objReadyToGoUser = Usuario::GetSoapObjectFromObject($objObject->objReadyToGoUser, false);
+			else if (!$blnBindRelatedObjects)
+				$objObject->intReadyToGoUserId = null;
 			if ($objObject->objEmpaque)
 				$objObject->objEmpaque = Empaque::GetSoapObjectFromObject($objObject->objEmpaque, false);
 			else if (!$blnBindRelatedObjects)
@@ -4684,6 +4944,9 @@
 			$iArray['LastCkptUserLogin'] = $this->strLastCkptUserLogin;
 			$iArray['FirstInventory'] = $this->dttFirstInventory;
 			$iArray['LastCkptRutaId'] = $this->intLastCkptRutaId;
+			$iArray['IsReadyToGo'] = $this->blnIsReadyToGo;
+			$iArray['ReadyToGoDate'] = $this->dttReadyToGoDate;
+			$iArray['ReadyToGoUserId'] = $this->intReadyToGoUserId;
 			$iArray['EmpaqueId'] = $this->intEmpaqueId;
 			$iArray['Libras'] = $this->fltLibras;
 			$iArray['Largo'] = $this->fltLargo;
@@ -4899,6 +5162,10 @@
      * @property-read QQNode $LastCkptUserLogin
      * @property-read QQNode $FirstInventory
      * @property-read QQNode $LastCkptRutaId
+     * @property-read QQNode $IsReadyToGo
+     * @property-read QQNode $ReadyToGoDate
+     * @property-read QQNode $ReadyToGoUserId
+     * @property-read QQNodeUsuario $ReadyToGoUser
      * @property-read QQNode $EmpaqueId
      * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
@@ -4975,6 +5242,14 @@
 					return new QQNode('first_inventory', 'FirstInventory', 'Date', $this);
 				case 'LastCkptRutaId':
 					return new QQNode('last_ckpt_ruta_id', 'LastCkptRutaId', 'Integer', $this);
+				case 'IsReadyToGo':
+					return new QQNode('is_ready_to_go', 'IsReadyToGo', 'Bit', $this);
+				case 'ReadyToGoDate':
+					return new QQNode('ready_to_go_date', 'ReadyToGoDate', 'Date', $this);
+				case 'ReadyToGoUserId':
+					return new QQNode('ready_to_go_user_id', 'ReadyToGoUserId', 'Integer', $this);
+				case 'ReadyToGoUser':
+					return new QQNodeUsuario('ready_to_go_user_id', 'ReadyToGoUser', 'Integer', $this);
 				case 'EmpaqueId':
 					return new QQNode('empaque_id', 'EmpaqueId', 'Integer', $this);
 				case 'Empaque':
@@ -5060,6 +5335,10 @@
      * @property-read QQNode $LastCkptUserLogin
      * @property-read QQNode $FirstInventory
      * @property-read QQNode $LastCkptRutaId
+     * @property-read QQNode $IsReadyToGo
+     * @property-read QQNode $ReadyToGoDate
+     * @property-read QQNode $ReadyToGoUserId
+     * @property-read QQNodeUsuario $ReadyToGoUser
      * @property-read QQNode $EmpaqueId
      * @property-read QQNodeEmpaque $Empaque
      * @property-read QQNode $Libras
@@ -5136,6 +5415,14 @@
 					return new QQNode('first_inventory', 'FirstInventory', 'QDateTime', $this);
 				case 'LastCkptRutaId':
 					return new QQNode('last_ckpt_ruta_id', 'LastCkptRutaId', 'integer', $this);
+				case 'IsReadyToGo':
+					return new QQNode('is_ready_to_go', 'IsReadyToGo', 'boolean', $this);
+				case 'ReadyToGoDate':
+					return new QQNode('ready_to_go_date', 'ReadyToGoDate', 'QDateTime', $this);
+				case 'ReadyToGoUserId':
+					return new QQNode('ready_to_go_user_id', 'ReadyToGoUserId', 'integer', $this);
+				case 'ReadyToGoUser':
+					return new QQNodeUsuario('ready_to_go_user_id', 'ReadyToGoUser', 'integer', $this);
 				case 'EmpaqueId':
 					return new QQNode('empaque_id', 'EmpaqueId', 'integer', $this);
 				case 'Empaque':

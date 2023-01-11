@@ -27,6 +27,7 @@
             return sprintf('%s',  $this->strNumeGuia);
         }
 
+        
         /**
          * Esta rutina devuelve el ultimo checkpoint publico asociado a la guía
          *

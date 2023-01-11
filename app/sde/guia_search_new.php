@@ -503,8 +503,7 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
         // En esta vista residen las guias y sus piezas con informacion general
         //-----------------------------------------------------------------------
         $strCadeSqlx  = "select * ";
-        // $strCadeSqlx .= "  from v_info_guia_y_piezas ";
-        $strCadeSqlx .= "  from v_info_awbs_and_pieces ";
+        $strCadeSqlx .= "  from v_info_awbs_and_pieces ";   
         $strCadeSqlx .= " where 1 = 1 ";
 
         $objClausula = QQ::Clause();
@@ -651,12 +650,12 @@ class GuiaSearchNewForm extends FormularioBaseKaizen {
                 $strCadeSqlx  .= " and codigo_ckpt = 'IA' ";
             }
             if ($this->chkEnxxAlma->Checked) {
-                //----------------------------------------------------------------------------
-                // Se identifican las piezas cuyo ultimo checkpoint es 'IA' o 'RG'
-                //----------------------------------------------------------------------------
+                //----------------------------------------------------------
+                // Se identifican las piezas cuyo ultimo checkpoint es 'IA' 
+                //----------------------------------------------------------
                 $arrGuiaIdxx   = GuiaPiezas::EnAlmacen();
                 $objClausula[] = QQ::In(QQN::Guias()->Id, $arrGuiaIdxx);
-                $strCadeSqlx  .= " and codigo_ckpt in ('IA','RG') ";
+                $strCadeSqlx  .= " and codigo_ckpt in ('IA','DV') ";
             }
 
             if (!is_null($this->lstCodiOrig->SelectedValue)) {

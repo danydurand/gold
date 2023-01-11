@@ -355,3 +355,4 @@
 [09-Aug-2022 17:14:56 America/Caracas] PHP Parse error:  syntax error, unexpected 'VE00K0000108958' (T_STRING), expecting function (T_FUNCTION) in /var/www/html/gold/app/sde/match_scanneo.php on line 194
 [09-Aug-2022 17:14:56 America/Caracas] PHP Parse error:  syntax error, unexpected 'VE00K0000108958' (T_STRING), expecting function (T_FUNCTION) in /var/www/html/gold/app/sde/match_scanneo.php on line 194
 [26-Aug-2022 13:55:01 America/Caracas] PHP Parse error:  syntax error, unexpected '$this' (T_VARIABLE) in /var/www/html/gold/app/sde/consulta_guia_new.php on line 777
+[07-Jan-2023 17:36:16 America/Caracas] PHP Parse error:  syntax error, unexpected '}' in /var/www/html/gold/app/sde/ready_to_go.php on line 203

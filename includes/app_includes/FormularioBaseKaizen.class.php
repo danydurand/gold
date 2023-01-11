@@ -14,6 +14,7 @@ abstract class FormularioBaseKaizen extends QForm {
 
     protected $btnSave;
     protected $btnCancel;
+    protected $btnShowErro;
 
     protected function FlashMessage() {
         if (isset($_SESSION['FlashMessage'])) {
@@ -36,6 +37,7 @@ abstract class FormularioBaseKaizen extends QForm {
 
         $this->btnSave_Create();
         $this->btnCancel_Create();
+        $this->btnShowErro_Create();
 
     }
 
@@ -89,6 +91,13 @@ abstract class FormularioBaseKaizen extends QForm {
         $this->btnCancel->CssClass = 'btn btn-warning btn-sm';
         $this->btnCancel->HtmlEntities = 'false';
         $this->btnCancel->CausesValidation = false;
+    }
+
+    protected function btnShowErro_Create() {
+        $this->btnShowErro = new QButtonD($this);
+        $this->btnShowErro->Text = TextoIcono('eye', 'Error(es)', 'F', 'lg');
+        $this->btnShowErro->AddAction(new QClickEvent(), new QServerAction('btnShowErro_Click'));
+        $this->btnShowErro->Visible = false;
     }
 
     protected function oinfo($strTextMens) {

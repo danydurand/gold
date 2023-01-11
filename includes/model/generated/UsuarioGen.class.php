@@ -87,6 +87,10 @@
 	 * @property-read GuiaConceptosOpcionales[] $_GuiaConceptosOpcionalesAsCreatedByArray the value for the private _objGuiaConceptosOpcionalesAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos_opcionales.created_by reverse relationship
 	 * @property-read GuiaConceptosOpcionales $_GuiaConceptosOpcionalesAsUpdatedBy the value for the private _objGuiaConceptosOpcionalesAsUpdatedBy (Read-Only) if set due to an expansion on the guia_conceptos_opcionales.updated_by reverse relationship
 	 * @property-read GuiaConceptosOpcionales[] $_GuiaConceptosOpcionalesAsUpdatedByArray the value for the private _objGuiaConceptosOpcionalesAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the guia_conceptos_opcionales.updated_by reverse relationship
+	 * @property-read GuiaPiezas $_GuiaPiezasAsReadyToGoUser the value for the private _objGuiaPiezasAsReadyToGoUser (Read-Only) if set due to an expansion on the guia_piezas.ready_to_go_user_id reverse relationship
+	 * @property-read GuiaPiezas[] $_GuiaPiezasAsReadyToGoUserArray the value for the private _objGuiaPiezasAsReadyToGoUserArray (Read-Only) if set due to an ExpandAsArray on the guia_piezas.ready_to_go_user_id reverse relationship
+	 * @property-read Guias $_GuiasAsReadyToGoUser the value for the private _objGuiasAsReadyToGoUser (Read-Only) if set due to an expansion on the guias.ready_to_go_user_id reverse relationship
+	 * @property-read Guias[] $_GuiasAsReadyToGoUserArray the value for the private _objGuiasAsReadyToGoUserArray (Read-Only) if set due to an ExpandAsArray on the guias.ready_to_go_user_id reverse relationship
 	 * @property-read HistoriaCliente $_HistoriaClienteAsCodiUsua the value for the private _objHistoriaClienteAsCodiUsua (Read-Only) if set due to an expansion on the historia_cliente.codi_usua reverse relationship
 	 * @property-read HistoriaCliente[] $_HistoriaClienteAsCodiUsuaArray the value for the private _objHistoriaClienteAsCodiUsuaArray (Read-Only) if set due to an ExpandAsArray on the historia_cliente.codi_usua reverse relationship
 	 * @property-read ManifiestoExpCkpt $_ManifiestoExpCkptAsCreatedBy the value for the private _objManifiestoExpCkptAsCreatedBy (Read-Only) if set due to an expansion on the manifiesto_exp_ckpt.created_by reverse relationship
@@ -111,6 +115,8 @@
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaAsCreatedByArray the value for the private _objPiezaRecibidaAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.created_by reverse relationship
 	 * @property-read PiezaRecibida $_PiezaRecibidaAsUpdatedBy the value for the private _objPiezaRecibidaAsUpdatedBy (Read-Only) if set due to an expansion on the pieza_recibida.updated_by reverse relationship
 	 * @property-read PiezaRecibida[] $_PiezaRecibidaAsUpdatedByArray the value for the private _objPiezaRecibidaAsUpdatedByArray (Read-Only) if set due to an ExpandAsArray on the pieza_recibida.updated_by reverse relationship
+	 * @property-read ProcessAwbs $_ProcessAwbsAsCreatedBy the value for the private _objProcessAwbsAsCreatedBy (Read-Only) if set due to an expansion on the process_awbs.created_by reverse relationship
+	 * @property-read ProcessAwbs[] $_ProcessAwbsAsCreatedByArray the value for the private _objProcessAwbsAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the process_awbs.created_by reverse relationship
 	 * @property-read ProcessPieces $_ProcessPiecesAsCreatedBy the value for the private _objProcessPiecesAsCreatedBy (Read-Only) if set due to an expansion on the process_pieces.created_by reverse relationship
 	 * @property-read ProcessPieces[] $_ProcessPiecesAsCreatedByArray the value for the private _objProcessPiecesAsCreatedByArray (Read-Only) if set due to an ExpandAsArray on the process_pieces.created_by reverse relationship
 	 * @property-read RegistroTrabajo $_RegistroTrabajo the value for the private _objRegistroTrabajo (Read-Only) if set due to an expansion on the registro_trabajo.usuario_id reverse relationship
@@ -701,6 +707,38 @@
 		private $_objGuiaConceptosOpcionalesAsUpdatedByArray = null;
 
 		/**
+		 * Private member variable that stores a reference to a single GuiaPiezasAsReadyToGoUser object
+		 * (of type GuiaPiezas), if this Usuario object was restored with
+		 * an expansion on the guia_piezas association table.
+		 * @var GuiaPiezas _objGuiaPiezasAsReadyToGoUser;
+		 */
+		private $_objGuiaPiezasAsReadyToGoUser;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiaPiezasAsReadyToGoUser objects
+		 * (of type GuiaPiezas[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the guia_piezas association table.
+		 * @var GuiaPiezas[] _objGuiaPiezasAsReadyToGoUserArray;
+		 */
+		private $_objGuiaPiezasAsReadyToGoUserArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single GuiasAsReadyToGoUser object
+		 * (of type Guias), if this Usuario object was restored with
+		 * an expansion on the guias association table.
+		 * @var Guias _objGuiasAsReadyToGoUser;
+		 */
+		private $_objGuiasAsReadyToGoUser;
+
+		/**
+		 * Private member variable that stores a reference to an array of GuiasAsReadyToGoUser objects
+		 * (of type Guias[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the guias association table.
+		 * @var Guias[] _objGuiasAsReadyToGoUserArray;
+		 */
+		private $_objGuiasAsReadyToGoUserArray = null;
+
+		/**
 		 * Private member variable that stores a reference to a single HistoriaClienteAsCodiUsua object
 		 * (of type HistoriaCliente), if this Usuario object was restored with
 		 * an expansion on the historia_cliente association table.
@@ -891,6 +929,22 @@
 		 * @var PiezaRecibida[] _objPiezaRecibidaAsUpdatedByArray;
 		 */
 		private $_objPiezaRecibidaAsUpdatedByArray = null;
+
+		/**
+		 * Private member variable that stores a reference to a single ProcessAwbsAsCreatedBy object
+		 * (of type ProcessAwbs), if this Usuario object was restored with
+		 * an expansion on the process_awbs association table.
+		 * @var ProcessAwbs _objProcessAwbsAsCreatedBy;
+		 */
+		private $_objProcessAwbsAsCreatedBy;
+
+		/**
+		 * Private member variable that stores a reference to an array of ProcessAwbsAsCreatedBy objects
+		 * (of type ProcessAwbs[]), if this Usuario object was restored with
+		 * an ExpandAsArray on the process_awbs association table.
+		 * @var ProcessAwbs[] _objProcessAwbsAsCreatedByArray;
+		 */
+		private $_objProcessAwbsAsCreatedByArray = null;
 
 		/**
 		 * Private member variable that stores a reference to a single ProcessPiecesAsCreatedBy object
@@ -2209,6 +2263,36 @@
 				}
 			}
 
+			// Check for GuiaPiezasAsReadyToGoUser Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiapiezasasreadytogouser__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiapiezasasreadytogouser']) ? null : $objExpansionAliasArray['guiapiezasasreadytogouser']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiaPiezasAsReadyToGoUserArray)
+				$objToReturn->_objGuiaPiezasAsReadyToGoUserArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiaPiezasAsReadyToGoUserArray[] = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasasreadytogouser__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiaPiezasAsReadyToGoUser)) {
+					$objToReturn->_objGuiaPiezasAsReadyToGoUser = GuiaPiezas::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiapiezasasreadytogouser__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for GuiasAsReadyToGoUser Virtual Binding
+			$strAlias = $strAliasPrefix . 'guiasasreadytogouser__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['guiasasreadytogouser']) ? null : $objExpansionAliasArray['guiasasreadytogouser']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objGuiasAsReadyToGoUserArray)
+				$objToReturn->_objGuiasAsReadyToGoUserArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objGuiasAsReadyToGoUserArray[] = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasasreadytogouser__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objGuiasAsReadyToGoUser)) {
+					$objToReturn->_objGuiasAsReadyToGoUser = Guias::InstantiateDbRow($objDbRow, $strAliasPrefix . 'guiasasreadytogouser__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
 			// Check for HistoriaClienteAsCodiUsua Virtual Binding
 			$strAlias = $strAliasPrefix . 'historiaclienteascodiusua__id';
 			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
@@ -2386,6 +2470,21 @@
 					$objToReturn->_objPiezaRecibidaAsUpdatedByArray[] = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				} elseif (is_null($objToReturn->_objPiezaRecibidaAsUpdatedBy)) {
 					$objToReturn->_objPiezaRecibidaAsUpdatedBy = PiezaRecibida::InstantiateDbRow($objDbRow, $strAliasPrefix . 'piezarecibidaasupdatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				}
+			}
+
+			// Check for ProcessAwbsAsCreatedBy Virtual Binding
+			$strAlias = $strAliasPrefix . 'processawbsascreatedby__id';
+			$strAliasName = !empty($strColumnAliasArray[$strAlias]) ? $strColumnAliasArray[$strAlias] : $strAlias;
+			$objExpansionNode = (empty($objExpansionAliasArray['processawbsascreatedby']) ? null : $objExpansionAliasArray['processawbsascreatedby']);
+			$blnExpanded = ($objExpansionNode && $objExpansionNode->ExpandAsArray);
+			if ($blnExpanded && null === $objToReturn->_objProcessAwbsAsCreatedByArray)
+				$objToReturn->_objProcessAwbsAsCreatedByArray = array();
+			if (!is_null($objDbRow->GetColumn($strAliasName))) {
+				if ($blnExpanded) {
+					$objToReturn->_objProcessAwbsAsCreatedByArray[] = ProcessAwbs::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processawbsascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
+				} elseif (is_null($objToReturn->_objProcessAwbsAsCreatedBy)) {
+					$objToReturn->_objProcessAwbsAsCreatedBy = ProcessAwbs::InstantiateDbRow($objDbRow, $strAliasPrefix . 'processawbsascreatedby__', $objExpansionNode, null, $strColumnAliasArray);
 				}
 			}
 
@@ -3779,6 +3878,38 @@
 					 */
 					return $this->_objGuiaConceptosOpcionalesAsUpdatedByArray;
 
+				case '_GuiaPiezasAsReadyToGoUser':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsReadyToGoUser (Read-Only)
+					 * if set due to an expansion on the guia_piezas.ready_to_go_user_id reverse relationship
+					 * @return GuiaPiezas
+					 */
+					return $this->_objGuiaPiezasAsReadyToGoUser;
+
+				case '_GuiaPiezasAsReadyToGoUserArray':
+					/**
+					 * Gets the value for the private _objGuiaPiezasAsReadyToGoUserArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guia_piezas.ready_to_go_user_id reverse relationship
+					 * @return GuiaPiezas[]
+					 */
+					return $this->_objGuiaPiezasAsReadyToGoUserArray;
+
+				case '_GuiasAsReadyToGoUser':
+					/**
+					 * Gets the value for the private _objGuiasAsReadyToGoUser (Read-Only)
+					 * if set due to an expansion on the guias.ready_to_go_user_id reverse relationship
+					 * @return Guias
+					 */
+					return $this->_objGuiasAsReadyToGoUser;
+
+				case '_GuiasAsReadyToGoUserArray':
+					/**
+					 * Gets the value for the private _objGuiasAsReadyToGoUserArray (Read-Only)
+					 * if set due to an ExpandAsArray on the guias.ready_to_go_user_id reverse relationship
+					 * @return Guias[]
+					 */
+					return $this->_objGuiasAsReadyToGoUserArray;
+
 				case '_HistoriaClienteAsCodiUsua':
 					/**
 					 * Gets the value for the private _objHistoriaClienteAsCodiUsua (Read-Only)
@@ -3970,6 +4101,22 @@
 					 * @return PiezaRecibida[]
 					 */
 					return $this->_objPiezaRecibidaAsUpdatedByArray;
+
+				case '_ProcessAwbsAsCreatedBy':
+					/**
+					 * Gets the value for the private _objProcessAwbsAsCreatedBy (Read-Only)
+					 * if set due to an expansion on the process_awbs.created_by reverse relationship
+					 * @return ProcessAwbs
+					 */
+					return $this->_objProcessAwbsAsCreatedBy;
+
+				case '_ProcessAwbsAsCreatedByArray':
+					/**
+					 * Gets the value for the private _objProcessAwbsAsCreatedByArray (Read-Only)
+					 * if set due to an ExpandAsArray on the process_awbs.created_by reverse relationship
+					 * @return ProcessAwbs[]
+					 */
+					return $this->_objProcessAwbsAsCreatedByArray;
 
 				case '_ProcessPiecesAsCreatedBy':
 					/**
@@ -4706,6 +4853,12 @@
 			if ($this->CountGuiaConceptosOpcionalesesAsUpdatedBy()) {
 				$arrTablRela[] = 'guia_conceptos_opcionales';
 			}
+			if ($this->CountGuiaPiezasesAsReadyToGoUser()) {
+				$arrTablRela[] = 'guia_piezas';
+			}
+			if ($this->CountGuiasesAsReadyToGoUser()) {
+				$arrTablRela[] = 'guias';
+			}
 			if ($this->CountHistoriaClientesAsCodiUsua()) {
 				$arrTablRela[] = 'historia_cliente';
 			}
@@ -4741,6 +4894,9 @@
 			}
 			if ($this->CountPiezaRecibidasAsUpdatedBy()) {
 				$arrTablRela[] = 'pieza_recibida';
+			}
+			if ($this->CountProcessAwbsesAsCreatedBy()) {
+				$arrTablRela[] = 'process_awbs';
 			}
 			if ($this->CountProcessPiecesesAsCreatedBy()) {
 				$arrTablRela[] = 'process_pieces';
@@ -8534,6 +8690,304 @@
 		}
 
 
+		// Related Objects' Methods for GuiaPiezasAsReadyToGoUser
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiaPiezasesAsReadyToGoUser as an array of GuiaPiezas objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return GuiaPiezas[]
+		*/
+		public function GetGuiaPiezasAsReadyToGoUserArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return GuiaPiezas::LoadArrayByReadyToGoUserId($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiaPiezasesAsReadyToGoUser
+		 * @return int
+		*/
+		public function CountGuiaPiezasesAsReadyToGoUser() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return GuiaPiezas::CountByReadyToGoUserId($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a GuiaPiezasAsReadyToGoUser
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function AssociateGuiaPiezasAsReadyToGoUser(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsReadyToGoUser on this unsaved Usuario.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiaPiezasAsReadyToGoUser on this Usuario with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiaPiezasAsReadyToGoUser
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function UnassociateGuiaPiezasAsReadyToGoUser(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsReadyToGoUser on this unsaved Usuario.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsReadyToGoUser on this Usuario with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`ready_to_go_user_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiaPiezasesAsReadyToGoUser
+		 * @return void
+		*/
+		public function UnassociateAllGuiaPiezasesAsReadyToGoUser() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsReadyToGoUser on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guia_piezas`
+				SET
+					`ready_to_go_user_id` = null
+				WHERE
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiaPiezasAsReadyToGoUser
+		 * @param GuiaPiezas $objGuiaPiezas
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiaPiezasAsReadyToGoUser(GuiaPiezas $objGuiaPiezas) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsReadyToGoUser on this unsaved Usuario.');
+			if ((is_null($objGuiaPiezas->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsReadyToGoUser on this Usuario with an unsaved GuiaPiezas.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuiaPiezas->Id) . ' AND
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiaPiezasesAsReadyToGoUser
+		 * @return void
+		*/
+		public function DeleteAllGuiaPiezasesAsReadyToGoUser() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiaPiezasAsReadyToGoUser on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guia_piezas`
+				WHERE
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for GuiasAsReadyToGoUser
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated GuiasesAsReadyToGoUser as an array of Guias objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return Guias[]
+		*/
+		public function GetGuiasAsReadyToGoUserArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return Guias::LoadArrayByReadyToGoUserId($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated GuiasesAsReadyToGoUser
+		 * @return int
+		*/
+		public function CountGuiasesAsReadyToGoUser() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return Guias::CountByReadyToGoUserId($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a GuiasAsReadyToGoUser
+		 * @param Guias $objGuias
+		 * @return void
+		*/
+		public function AssociateGuiasAsReadyToGoUser(Guias $objGuias) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasAsReadyToGoUser on this unsaved Usuario.');
+			if ((is_null($objGuias->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateGuiasAsReadyToGoUser on this Usuario with an unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias`
+				SET
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuias->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a GuiasAsReadyToGoUser
+		 * @param Guias $objGuias
+		 * @return void
+		*/
+		public function UnassociateGuiasAsReadyToGoUser(Guias $objGuias) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasAsReadyToGoUser on this unsaved Usuario.');
+			if ((is_null($objGuias->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasAsReadyToGoUser on this Usuario with an unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias`
+				SET
+					`ready_to_go_user_id` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuias->Id) . ' AND
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all GuiasesAsReadyToGoUser
+		 * @return void
+		*/
+		public function UnassociateAllGuiasesAsReadyToGoUser() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasAsReadyToGoUser on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`guias`
+				SET
+					`ready_to_go_user_id` = null
+				WHERE
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated GuiasAsReadyToGoUser
+		 * @param Guias $objGuias
+		 * @return void
+		*/
+		public function DeleteAssociatedGuiasAsReadyToGoUser(Guias $objGuias) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasAsReadyToGoUser on this unsaved Usuario.');
+			if ((is_null($objGuias->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasAsReadyToGoUser on this Usuario with an unsaved Guias.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objGuias->Id) . ' AND
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated GuiasesAsReadyToGoUser
+		 * @return void
+		*/
+		public function DeleteAllGuiasesAsReadyToGoUser() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateGuiasAsReadyToGoUser on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`guias`
+				WHERE
+					`ready_to_go_user_id` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
 		// Related Objects' Methods for HistoriaClienteAsCodiUsua
 		//-------------------------------------------------------------------
 
@@ -10318,6 +10772,155 @@
 					`pieza_recibida`
 				WHERE
 					`updated_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+
+		// Related Objects' Methods for ProcessAwbsAsCreatedBy
+		//-------------------------------------------------------------------
+
+		/**
+		 * Gets all associated ProcessAwbsesAsCreatedBy as an array of ProcessAwbs objects
+		 * @param QQClause[] $objOptionalClauses additional optional QQClause objects for this query
+		 * @return ProcessAwbs[]
+		*/
+		public function GetProcessAwbsAsCreatedByArray($objOptionalClauses = null) {
+			if ((is_null($this->intCodiUsua)))
+				return array();
+
+			try {
+				return ProcessAwbs::LoadArrayByCreatedBy($this->intCodiUsua, $objOptionalClauses);
+			} catch (QCallerException $objExc) {
+				$objExc->IncrementOffset();
+				throw $objExc;
+			}
+		}
+
+		/**
+		 * Counts all associated ProcessAwbsesAsCreatedBy
+		 * @return int
+		*/
+		public function CountProcessAwbsesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				return 0;
+
+			return ProcessAwbs::CountByCreatedBy($this->intCodiUsua);
+		}
+
+		/**
+		 * Associates a ProcessAwbsAsCreatedBy
+		 * @param ProcessAwbs $objProcessAwbs
+		 * @return void
+		*/
+		public function AssociateProcessAwbsAsCreatedBy(ProcessAwbs $objProcessAwbs) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessAwbsAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objProcessAwbs->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call AssociateProcessAwbsAsCreatedBy on this Usuario with an unsaved ProcessAwbs.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_awbs`
+				SET
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessAwbs->Id) . '
+			');
+		}
+
+		/**
+		 * Unassociates a ProcessAwbsAsCreatedBy
+		 * @param ProcessAwbs $objProcessAwbs
+		 * @return void
+		*/
+		public function UnassociateProcessAwbsAsCreatedBy(ProcessAwbs $objProcessAwbs) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objProcessAwbs->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsCreatedBy on this Usuario with an unsaved ProcessAwbs.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_awbs`
+				SET
+					`created_by` = null
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessAwbs->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Unassociates all ProcessAwbsesAsCreatedBy
+		 * @return void
+		*/
+		public function UnassociateAllProcessAwbsesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				UPDATE
+					`process_awbs`
+				SET
+					`created_by` = null
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes an associated ProcessAwbsAsCreatedBy
+		 * @param ProcessAwbs $objProcessAwbs
+		 * @return void
+		*/
+		public function DeleteAssociatedProcessAwbsAsCreatedBy(ProcessAwbs $objProcessAwbs) {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsCreatedBy on this unsaved Usuario.');
+			if ((is_null($objProcessAwbs->Id)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsCreatedBy on this Usuario with an unsaved ProcessAwbs.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_awbs`
+				WHERE
+					`id` = ' . $objDatabase->SqlVariable($objProcessAwbs->Id) . ' AND
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
+			');
+		}
+
+		/**
+		 * Deletes all associated ProcessAwbsesAsCreatedBy
+		 * @return void
+		*/
+		public function DeleteAllProcessAwbsesAsCreatedBy() {
+			if ((is_null($this->intCodiUsua)))
+				throw new QUndefinedPrimaryKeyException('Unable to call UnassociateProcessAwbsAsCreatedBy on this unsaved Usuario.');
+
+			// Get the Database Object for this Class
+			$objDatabase = Usuario::GetDatabase();
+
+			// Perform the SQL Query
+			$objDatabase->NonQuery('
+				DELETE FROM
+					`process_awbs`
+				WHERE
+					`created_by` = ' . $objDatabase->SqlVariable($this->intCodiUsua) . '
 			');
 		}
 
@@ -12843,6 +13446,8 @@
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
      * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsCreatedBy
      * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsUpdatedBy
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsReadyToGoUser
+     * @property-read QQReverseReferenceNodeGuias $GuiasAsReadyToGoUser
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
      * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
      * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsCreatedBy
@@ -12855,6 +13460,7 @@
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
+     * @property-read QQReverseReferenceNodeProcessAwbs $ProcessAwbsAsCreatedBy
      * @property-read QQReverseReferenceNodeProcessPieces $ProcessPiecesAsCreatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeScanneo $ScanneoAsCreatedBy
@@ -12973,6 +13579,10 @@
 					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesascreatedby', 'reverse_reference', 'created_by', 'GuiaConceptosOpcionalesAsCreatedBy');
 				case 'GuiaConceptosOpcionalesAsUpdatedBy':
 					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasupdatedby', 'reverse_reference', 'updated_by', 'GuiaConceptosOpcionalesAsUpdatedBy');
+				case 'GuiaPiezasAsReadyToGoUser':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasasreadytogouser', 'reverse_reference', 'ready_to_go_user_id', 'GuiaPiezasAsReadyToGoUser');
+				case 'GuiasAsReadyToGoUser':
+					return new QQReverseReferenceNodeGuias($this, 'guiasasreadytogouser', 'reverse_reference', 'ready_to_go_user_id', 'GuiasAsReadyToGoUser');
 				case 'HistoriaClienteAsCodiUsua':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
 				case 'ManifiestoExpCkptAsCreatedBy':
@@ -12997,6 +13607,8 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaascreatedby', 'reverse_reference', 'created_by', 'PiezaRecibidaAsCreatedBy');
 				case 'PiezaRecibidaAsUpdatedBy':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
+				case 'ProcessAwbsAsCreatedBy':
+					return new QQReverseReferenceNodeProcessAwbs($this, 'processawbsascreatedby', 'reverse_reference', 'created_by', 'ProcessAwbsAsCreatedBy');
 				case 'ProcessPiecesAsCreatedBy':
 					return new QQReverseReferenceNodeProcessPieces($this, 'processpiecesascreatedby', 'reverse_reference', 'created_by', 'ProcessPiecesAsCreatedBy');
 				case 'RegistroTrabajo':
@@ -13091,6 +13703,8 @@
      * @property-read QQReverseReferenceNodeGuiaCkpt $GuiaCkptAsCodiUsua
      * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsCreatedBy
      * @property-read QQReverseReferenceNodeGuiaConceptosOpcionales $GuiaConceptosOpcionalesAsUpdatedBy
+     * @property-read QQReverseReferenceNodeGuiaPiezas $GuiaPiezasAsReadyToGoUser
+     * @property-read QQReverseReferenceNodeGuias $GuiasAsReadyToGoUser
      * @property-read QQReverseReferenceNodeHistoriaCliente $HistoriaClienteAsCodiUsua
      * @property-read QQReverseReferenceNodeManifiestoExpCkpt $ManifiestoExpCkptAsCreatedBy
      * @property-read QQReverseReferenceNodeMatchPieces $MatchPiecesAsCreatedBy
@@ -13103,6 +13717,7 @@
      * @property-read QQReverseReferenceNodePagoFacturaPmn $PagoFacturaPmnAsCreadoPor
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsCreatedBy
      * @property-read QQReverseReferenceNodePiezaRecibida $PiezaRecibidaAsUpdatedBy
+     * @property-read QQReverseReferenceNodeProcessAwbs $ProcessAwbsAsCreatedBy
      * @property-read QQReverseReferenceNodeProcessPieces $ProcessPiecesAsCreatedBy
      * @property-read QQReverseReferenceNodeRegistroTrabajo $RegistroTrabajo
      * @property-read QQReverseReferenceNodeScanneo $ScanneoAsCreatedBy
@@ -13221,6 +13836,10 @@
 					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesascreatedby', 'reverse_reference', 'created_by', 'GuiaConceptosOpcionalesAsCreatedBy');
 				case 'GuiaConceptosOpcionalesAsUpdatedBy':
 					return new QQReverseReferenceNodeGuiaConceptosOpcionales($this, 'guiaconceptosopcionalesasupdatedby', 'reverse_reference', 'updated_by', 'GuiaConceptosOpcionalesAsUpdatedBy');
+				case 'GuiaPiezasAsReadyToGoUser':
+					return new QQReverseReferenceNodeGuiaPiezas($this, 'guiapiezasasreadytogouser', 'reverse_reference', 'ready_to_go_user_id', 'GuiaPiezasAsReadyToGoUser');
+				case 'GuiasAsReadyToGoUser':
+					return new QQReverseReferenceNodeGuias($this, 'guiasasreadytogouser', 'reverse_reference', 'ready_to_go_user_id', 'GuiasAsReadyToGoUser');
 				case 'HistoriaClienteAsCodiUsua':
 					return new QQReverseReferenceNodeHistoriaCliente($this, 'historiaclienteascodiusua', 'reverse_reference', 'codi_usua', 'HistoriaClienteAsCodiUsua');
 				case 'ManifiestoExpCkptAsCreatedBy':
@@ -13245,6 +13864,8 @@
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaascreatedby', 'reverse_reference', 'created_by', 'PiezaRecibidaAsCreatedBy');
 				case 'PiezaRecibidaAsUpdatedBy':
 					return new QQReverseReferenceNodePiezaRecibida($this, 'piezarecibidaasupdatedby', 'reverse_reference', 'updated_by', 'PiezaRecibidaAsUpdatedBy');
+				case 'ProcessAwbsAsCreatedBy':
+					return new QQReverseReferenceNodeProcessAwbs($this, 'processawbsascreatedby', 'reverse_reference', 'created_by', 'ProcessAwbsAsCreatedBy');
 				case 'ProcessPiecesAsCreatedBy':
 					return new QQReverseReferenceNodeProcessPieces($this, 'processpiecesascreatedby', 'reverse_reference', 'created_by', 'ProcessPiecesAsCreatedBy');
 				case 'RegistroTrabajo':

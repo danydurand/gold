@@ -94,6 +94,9 @@ abstract class GuiaPiezasListFormBase extends QForm {
         $this->dtgGuiaPiezases->MetaAddColumn('LastCkptUserLogin');
         $this->dtgGuiaPiezases->MetaAddColumn('FirstInventory');
         $this->dtgGuiaPiezases->MetaAddColumn('LastCkptRutaId');
+        $this->dtgGuiaPiezases->MetaAddColumn('IsReadyToGo');
+        $this->dtgGuiaPiezases->MetaAddColumn('ReadyToGoDate');
+        $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->ReadyToGoUser);
         $this->dtgGuiaPiezases->MetaAddColumn(QQN::GuiaPiezas()->Empaque);
         $this->dtgGuiaPiezases->MetaAddColumn('Libras');
         $this->dtgGuiaPiezases->MetaAddColumn('Largo');

@@ -967,6 +967,12 @@
 			return new QQNodeProcesoError('proceso_error', null, null);
 		}
 		/**
+		 * @return QQNodeProcessAwbs
+		 */
+		static public function ProcessAwbs() {
+			return new QQNodeProcessAwbs('process_awbs', null, null);
+		}
+		/**
 		 * @return QQNodeProcessPieces
 		 */
 		static public function ProcessPieces() {

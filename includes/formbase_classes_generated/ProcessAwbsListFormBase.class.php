@@ -1,21 +1,21 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do the List All functionality
- * of the Guias class.  It uses the code-generated
- * GuiasDataGrid control which has meta-methods to help with
- * easily creating/defining Guias columns.
+ * of the ProcessAwbs class.  It uses the code-generated
+ * ProcessAwbsDataGrid control which has meta-methods to help with
+ * easily creating/defining ProcessAwbs columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  *
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both guias_list.php AND
- * guias_list.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both process_awbs_list.php AND
+ * process_awbs_list.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class GuiasListFormBase extends QForm {
+abstract class ProcessAwbsListFormBase extends QForm {
     protected $lblMensUsua;
     protected $lblNotiUsua;
     protected $lblTituForm;
@@ -24,11 +24,11 @@ abstract class GuiasListFormBase extends QForm {
     protected $btnExpoExce;
     protected $lblOtraNoti;
 
-    // Local instance of the Meta DataGrid to list Guiases
+    // Local instance of the Meta DataGrid to list ProcessAwbses
     /**
-     * @var GuiasDataGrid dtgGuiases
+     * @var ProcessAwbsDataGrid dtgProcessAwbses
      */
-    protected $dtgGuiases;
+    protected $dtgProcessAwbses;
 
     // Create QForm Event Handlers as Needed
 
@@ -52,99 +52,40 @@ abstract class GuiasListFormBase extends QForm {
         $this->btnFiltAvan_Create();
 
         // Instantiate the Meta DataGrid
-        $this->dtgGuiases = new GuiasDataGrid($this);
+        $this->dtgProcessAwbses = new ProcessAwbsDataGrid($this);
 
         // Style the DataGrid (if desired)
-        $this->dtgGuiases->CssClass = 'datagrid';
-        $this->dtgGuiases->AlternateRowStyle->CssClass = 'alternate';
-        $this->dtgGuiases->FontSize = 13;
-        $this->dtgGuiases->ShowFilter = false;
+        $this->dtgProcessAwbses->CssClass = 'datagrid';
+        $this->dtgProcessAwbses->AlternateRowStyle->CssClass = 'alternate';
+        $this->dtgProcessAwbses->FontSize = 13;
+        $this->dtgProcessAwbses->ShowFilter = false;
 
         // Add Pagination (if desired)
-        $this->dtgGuiases->Paginator = new QPaginator($this->dtgGuiases);
-        $this->dtgGuiases->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
+        $this->dtgProcessAwbses->Paginator = new QPaginator($this->dtgProcessAwbses);
+        $this->dtgProcessAwbses->ItemsPerPage = __FORM_DRAFTS_FORM_LIST_ITEMS_PER_PAGE__;
 
         // Higlight the datagrid rows when mousing over them
-        $this->dtgGuiases->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
-        $this->dtgGuiases->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
+        $this->dtgProcessAwbses->AddRowAction(new QMouseOverEvent(), new QCssClassAction('selectedStyle'));
+        $this->dtgProcessAwbses->AddRowAction(new QMouseOutEvent(), new QCssClassAction());
 
         // Add a click handler for the rows.
         // We can use $_CONTROL->CurrentRowIndex to pass the row index to dtgPersonsRow_Click()
         // or $_ITEM->Id to pass the object's id, or any other data grid variable
-        $this->dtgGuiases->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
-        $this->dtgGuiases->AddRowAction(new QClickEvent(), new QAjaxAction('dtgGuiasesRow_Click'));
+        $this->dtgProcessAwbses->RowActionParameterHtml = '<?= $_ITEM->Id ?>';
+        $this->dtgProcessAwbses->AddRowAction(new QClickEvent(), new QAjaxAction('dtgProcessAwbsesRow_Click'));
 
         // Use the MetaDataGrid functionality to add Columns for this datagrid
 
-        // Create the Other Columns (note that you can use strings for guias's properties, or you
-        // can traverse down QQN::guias() to display fields that are down the hierarchy)
-        $this->dtgGuiases->MetaAddColumn('Id');
-        $this->dtgGuiases->MetaAddColumn('Numero');
-        $this->dtgGuiases->MetaAddColumn('Tracking');
-        $this->dtgGuiases->MetaAddColumn('Fecha');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteRetail);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteCorp);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ClienteInt);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Origen);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Destino);
-        $this->dtgGuiases->MetaAddColumn('ServicioEntrega');
-        $this->dtgGuiases->MetaAddColumn('ServicioImportacion');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Producto);
-        $this->dtgGuiases->MetaAddColumn('FormaPago');
-        $this->dtgGuiases->MetaAddColumn('NombreRemitente');
-        $this->dtgGuiases->MetaAddColumn('DireccionRemitente');
-        $this->dtgGuiases->MetaAddColumn('TelefonoRemitente');
-        $this->dtgGuiases->MetaAddColumn('TelefonoMovilRemitente');
-        $this->dtgGuiases->MetaAddColumn('EmailRemitente');
-        $this->dtgGuiases->MetaAddColumn('NombreDestinatario');
-        $this->dtgGuiases->MetaAddColumn('DireccionDestinatario');
-        $this->dtgGuiases->MetaAddColumn('TelefonoDestinatario');
-        $this->dtgGuiases->MetaAddColumn('TelefonoMovilDestinatario');
-        $this->dtgGuiases->MetaAddColumn('EmailDestinatario');
-        $this->dtgGuiases->MetaAddColumn('SexoDestinatario');
-        $this->dtgGuiases->MetaAddColumn('Contenido');
-        $this->dtgGuiases->MetaAddColumn('Piezas');
-        $this->dtgGuiases->MetaAddColumn('ValorDeclarado');
-        $this->dtgGuiases->MetaAddColumn('ModoValor');
-        $this->dtgGuiases->MetaAddColumn('TipoExport');
-        $this->dtgGuiases->MetaAddColumn('Asegurado');
-        $this->dtgGuiases->MetaAddColumn('Total');
-        $this->dtgGuiases->MetaAddColumn('Estado');
-        $this->dtgGuiases->MetaAddColumn('Ciudad');
-        $this->dtgGuiases->MetaAddColumn('CodigoPostal');
-        $this->dtgGuiases->MetaAddColumn('Tasa');
-        $this->dtgGuiases->MetaAddColumn('Ubicacion');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Vendedor);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->Tarifa);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->TarifaAgente);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaOrigen);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReceptoriaDestino);
-        $this->dtgGuiases->MetaAddColumn('Kilos');
-        $this->dtgGuiases->MetaAddColumn('Libras');
-        $this->dtgGuiases->MetaAddColumn('Largo');
-        $this->dtgGuiases->MetaAddColumn('Ancho');
-        $this->dtgGuiases->MetaAddColumn('Alto');
-        $this->dtgGuiases->MetaAddColumn('Volumen');
-        $this->dtgGuiases->MetaAddColumn('PiesCub');
-        $this->dtgGuiases->MetaAddColumn('MetrosCub');
-        $this->dtgGuiases->MetaAddColumn('CedulaDestinatario');
-        $this->dtgGuiases->MetaAddColumn('FacturaId');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->GuiaPod);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->NotaEntrega);
-        $this->dtgGuiases->MetaAddColumn('IsReadyToGo');
-        $this->dtgGuiases->MetaAddColumn('ReadyToGoDate');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->ReadyToGoUser);
-        $this->dtgGuiases->MetaAddColumn('Observacion');
-        $this->dtgGuiases->MetaAddColumn('ReferenciaExp');
-        $this->dtgGuiases->MetaAddColumn('RazonesExp');
-        $this->dtgGuiases->MetaAddColumn('CreatedAt');
-        $this->dtgGuiases->MetaAddColumn('UpdatedAt');
-        $this->dtgGuiases->MetaAddColumn('DeletedAt');
-        $this->dtgGuiases->MetaAddColumn('CreatedBy');
-        $this->dtgGuiases->MetaAddColumn('UpdatedBy');
-        $this->dtgGuiases->MetaAddColumn('DeletedBy');
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->EstadisticaDeGuias);
-        $this->dtgGuiases->MetaAddColumn(QQN::Guias()->GuiaImprimirAsGuia);
+        // Create the Other Columns (note that you can use strings for process_awbs's properties, or you
+        // can traverse down QQN::process_awbs() to display fields that are down the hierarchy)
+        $this->dtgProcessAwbses->MetaAddColumn('Id');
+        $this->dtgProcessAwbses->MetaAddColumn(QQN::ProcessAwbs()->ProcesoError);
+        $this->dtgProcessAwbses->MetaAddColumn('Tracking');
+        $this->dtgProcessAwbses->MetaAddColumn(QQN::ProcessAwbs()->Guia);
+        $this->dtgProcessAwbses->MetaAddColumn('IsProcessed');
+        $this->dtgProcessAwbses->MetaAddColumn('ErrorMessage');
+        $this->dtgProcessAwbses->MetaAddColumn('CreatedAt');
+        $this->dtgProcessAwbses->MetaAddColumn(QQN::ProcessAwbs()->CreatedByObject);
 
         $this->btnExpoExce_Create();
 
@@ -152,7 +93,7 @@ abstract class GuiasListFormBase extends QForm {
 
     protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'Guiases';
+        $this->lblTituForm->Text = 'ProcessAwbses';
     }
 
     protected function lblMensUsua_Create() {
@@ -190,7 +131,7 @@ abstract class GuiasListFormBase extends QForm {
     }
 
     protected function btnExpoExce_Create() {
-        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgGuiases);
+        $this->btnExpoExce = new QDataGridExporterButton($this, $this->dtgProcessAwbses);
         $this->btnExpoExce->DownloadFormat = QDataGridExporterButton::EXPORT_AS_XLS;
         $this->btnExpoExce->Text = '<i class="fa fa-download fa-lg"></i> XLS';
         $this->btnExpoExce->HtmlEntities = false;
@@ -199,16 +140,16 @@ abstract class GuiasListFormBase extends QForm {
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/guias_edit.php');
+        QApplication::Redirect(__SIST__.'/process_awbs_edit.php');
     }
 
     protected function btnFiltAvan_Click() {
-        $this->dtgGuiases->ShowFilter = !$this->dtgGuiases->ShowFilter;
+        $this->dtgProcessAwbses->ShowFilter = !$this->dtgProcessAwbses->ShowFilter;
     }
 
-    public function dtgGuiasesRow_Click($strFormId, $strControlId, $strParameter) {
+    public function dtgProcessAwbsesRow_Click($strFormId, $strControlId, $strParameter) {
       $intId = intval($strParameter);
-      QApplication::Redirect("guias_edit.php/$intId");
+      QApplication::Redirect("process_awbs_edit.php/$intId");
     }
 
 

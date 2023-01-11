@@ -1243,8 +1243,7 @@ class SacarARuta extends FormularioBaseKaizen {
         return true;
     }
 
-    protected function Form_Validate()
-    {
+    protected function Form_Validate() {
         if (is_null($this->lstTipoOper->SelectedValue)) {
             $this->danger('Debe seleccionar un Tipo de Ruta/Operacion');
             return false;

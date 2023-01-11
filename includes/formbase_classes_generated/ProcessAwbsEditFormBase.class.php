@@ -1,26 +1,26 @@
 <?php
 /**
  * This is a quick-and-dirty draft QForm object to do Create, Edit, and Delete functionality
- * of the Guias class.  It uses the code-generated
- * GuiasMetaControl class, which has meta-methods to help with
- * easily creating/defining controls to modify the fields of a Guias columns.
+ * of the ProcessAwbs class.  It uses the code-generated
+ * ProcessAwbsMetaControl class, which has meta-methods to help with
+ * easily creating/defining controls to modify the fields of a ProcessAwbs columns.
  *
  * Any display customizations and presentation-tier logic can be implemented
  * here by overriding existing or implementing new methods, properties and variables.
  * 
  * NOTE: This file is overwritten on any code regenerations.  If you want to make
- * permanent changes, it is STRONGLY RECOMMENDED to move both guias_edit.php AND
- * guias_edit.tpl.php out of this Form Drafts directory.
+ * permanent changes, it is STRONGLY RECOMMENDED to move both process_awbs_edit.php AND
+ * process_awbs_edit.tpl.php out of this Form Drafts directory.
  *
  * @package My QCubed Application
  * @subpackage FormBaseObjects
  */
-abstract class GuiasEditFormBase extends QForm {
-	// Local instance of the GuiasMetaControl
+abstract class ProcessAwbsEditFormBase extends QForm {
+	// Local instance of the ProcessAwbsMetaControl
 	/**
-	 * @var GuiasMetaControlGen mctGuias
+	 * @var ProcessAwbsMetaControlGen mctProcessAwbs
 	 */
-	protected $mctGuias;
+	protected $mctProcessAwbs;
 	protected $lblMensUsua;
 	protected $lblNotiUsua;
 	protected $lblTituForm;
@@ -52,77 +52,17 @@ abstract class GuiasEditFormBase extends QForm {
     protected $lblOtraNoti;
 
 
-	// Controls for Guias's Data Fields
+	// Controls for ProcessAwbs's Data Fields
 	protected $lblId;
-	protected $txtNumero;
+	protected $lstProcesoError;
 	protected $txtTracking;
-	protected $calFecha;
-	protected $lstClienteRetail;
-	protected $lstClienteCorp;
-	protected $lstClienteInt;
-	protected $lstOrigen;
-	protected $lstDestino;
-	protected $txtServicioEntrega;
-	protected $txtServicioImportacion;
-	protected $lstProducto;
-	protected $txtFormaPago;
-	protected $txtNombreRemitente;
-	protected $txtDireccionRemitente;
-	protected $txtTelefonoRemitente;
-	protected $txtTelefonoMovilRemitente;
-	protected $txtEmailRemitente;
-	protected $txtNombreDestinatario;
-	protected $txtDireccionDestinatario;
-	protected $txtTelefonoDestinatario;
-	protected $txtTelefonoMovilDestinatario;
-	protected $txtEmailDestinatario;
-	protected $txtSexoDestinatario;
-	protected $txtContenido;
-	protected $txtPiezas;
-	protected $txtValorDeclarado;
-	protected $txtModoValor;
-	protected $txtTipoExport;
-	protected $chkAsegurado;
-	protected $txtTotal;
-	protected $txtEstado;
-	protected $txtCiudad;
-	protected $txtCodigoPostal;
-	protected $txtTasa;
-	protected $txtUbicacion;
-	protected $lstVendedor;
-	protected $lstTarifa;
-	protected $lstTarifaAgente;
-	protected $lstReceptoriaOrigen;
-	protected $lstReceptoriaDestino;
-	protected $txtKilos;
-	protected $txtLibras;
-	protected $txtLargo;
-	protected $txtAncho;
-	protected $txtAlto;
-	protected $txtVolumen;
-	protected $txtPiesCub;
-	protected $txtMetrosCub;
-	protected $txtCedulaDestinatario;
-	protected $txtFacturaId;
-	protected $lstGuiaPod;
-	protected $lstNotaEntrega;
-	protected $chkIsReadyToGo;
-	protected $calReadyToGoDate;
-	protected $lstReadyToGoUser;
-	protected $txtObservacion;
-	protected $txtReferenciaExp;
-	protected $txtRazonesExp;
+	protected $lstGuia;
+	protected $chkIsProcessed;
+	protected $txtErrorMessage;
 	protected $calCreatedAt;
-	protected $calUpdatedAt;
-	protected $calDeletedAt;
-	protected $txtCreatedBy;
-	protected $txtUpdatedBy;
-	protected $txtDeletedBy;
+	protected $lstCreatedByObject;
 
 	// Other ListBoxes (if applicable) via Unique ReverseReferences and ManyToMany References
-	protected $lstEstadisticaDeGuias;
-	protected $lstGuiaImprimirAsGuia;
-	protected $dtgManifiestosAsManiGuia;
 
 	// Other Controls
 	/**
@@ -153,9 +93,9 @@ abstract class GuiasEditFormBase extends QForm {
 
         $this->objUsuario = unserialize($_SESSION['User']);
 
-        // Use the CreateFromPathInfo shortcut (this can also be done manually using the GuiasMetaControl constructor)
+        // Use the CreateFromPathInfo shortcut (this can also be done manually using the ProcessAwbsMetaControl constructor)
         // MAKE SURE we specify "$this" as the MetaControl's (and thus all subsequent controls') parent
-        $this->mctGuias = GuiasMetaControl::CreateFromPathInfo($this);
+        $this->mctProcessAwbs = ProcessAwbsMetaControl::CreateFromPathInfo($this);
 
         $this->determinarPosicion();
 
@@ -186,75 +126,15 @@ abstract class GuiasEditFormBase extends QForm {
 
         $this->verificarNavegacion();
 
-		// Call MetaControl's methods to create qcontrols based on Guias's data fields
-		$this->lblId = $this->mctGuias->lblId_Create();
-		$this->txtNumero = $this->mctGuias->txtNumero_Create();
-		$this->txtTracking = $this->mctGuias->txtTracking_Create();
-		$this->calFecha = $this->mctGuias->calFecha_Create();
-		$this->lstClienteRetail = $this->mctGuias->lstClienteRetail_Create();
-		$this->lstClienteCorp = $this->mctGuias->lstClienteCorp_Create();
-		$this->lstClienteInt = $this->mctGuias->lstClienteInt_Create();
-		$this->lstOrigen = $this->mctGuias->lstOrigen_Create();
-		$this->lstDestino = $this->mctGuias->lstDestino_Create();
-		$this->txtServicioEntrega = $this->mctGuias->txtServicioEntrega_Create();
-		$this->txtServicioImportacion = $this->mctGuias->txtServicioImportacion_Create();
-		$this->lstProducto = $this->mctGuias->lstProducto_Create();
-		$this->txtFormaPago = $this->mctGuias->txtFormaPago_Create();
-		$this->txtNombreRemitente = $this->mctGuias->txtNombreRemitente_Create();
-		$this->txtDireccionRemitente = $this->mctGuias->txtDireccionRemitente_Create();
-		$this->txtTelefonoRemitente = $this->mctGuias->txtTelefonoRemitente_Create();
-		$this->txtTelefonoMovilRemitente = $this->mctGuias->txtTelefonoMovilRemitente_Create();
-		$this->txtEmailRemitente = $this->mctGuias->txtEmailRemitente_Create();
-		$this->txtNombreDestinatario = $this->mctGuias->txtNombreDestinatario_Create();
-		$this->txtDireccionDestinatario = $this->mctGuias->txtDireccionDestinatario_Create();
-		$this->txtTelefonoDestinatario = $this->mctGuias->txtTelefonoDestinatario_Create();
-		$this->txtTelefonoMovilDestinatario = $this->mctGuias->txtTelefonoMovilDestinatario_Create();
-		$this->txtEmailDestinatario = $this->mctGuias->txtEmailDestinatario_Create();
-		$this->txtSexoDestinatario = $this->mctGuias->txtSexoDestinatario_Create();
-		$this->txtContenido = $this->mctGuias->txtContenido_Create();
-		$this->txtPiezas = $this->mctGuias->txtPiezas_Create();
-		$this->txtValorDeclarado = $this->mctGuias->txtValorDeclarado_Create();
-		$this->txtModoValor = $this->mctGuias->txtModoValor_Create();
-		$this->txtTipoExport = $this->mctGuias->txtTipoExport_Create();
-		$this->chkAsegurado = $this->mctGuias->chkAsegurado_Create();
-		$this->txtTotal = $this->mctGuias->txtTotal_Create();
-		$this->txtEstado = $this->mctGuias->txtEstado_Create();
-		$this->txtCiudad = $this->mctGuias->txtCiudad_Create();
-		$this->txtCodigoPostal = $this->mctGuias->txtCodigoPostal_Create();
-		$this->txtTasa = $this->mctGuias->txtTasa_Create();
-		$this->txtUbicacion = $this->mctGuias->txtUbicacion_Create();
-		$this->lstVendedor = $this->mctGuias->lstVendedor_Create();
-		$this->lstTarifa = $this->mctGuias->lstTarifa_Create();
-		$this->lstTarifaAgente = $this->mctGuias->lstTarifaAgente_Create();
-		$this->lstReceptoriaOrigen = $this->mctGuias->lstReceptoriaOrigen_Create();
-		$this->lstReceptoriaDestino = $this->mctGuias->lstReceptoriaDestino_Create();
-		$this->txtKilos = $this->mctGuias->txtKilos_Create();
-		$this->txtLibras = $this->mctGuias->txtLibras_Create();
-		$this->txtLargo = $this->mctGuias->txtLargo_Create();
-		$this->txtAncho = $this->mctGuias->txtAncho_Create();
-		$this->txtAlto = $this->mctGuias->txtAlto_Create();
-		$this->txtVolumen = $this->mctGuias->txtVolumen_Create();
-		$this->txtPiesCub = $this->mctGuias->txtPiesCub_Create();
-		$this->txtMetrosCub = $this->mctGuias->txtMetrosCub_Create();
-		$this->txtCedulaDestinatario = $this->mctGuias->txtCedulaDestinatario_Create();
-		$this->txtFacturaId = $this->mctGuias->txtFacturaId_Create();
-		$this->lstGuiaPod = $this->mctGuias->lstGuiaPod_Create();
-		$this->lstNotaEntrega = $this->mctGuias->lstNotaEntrega_Create();
-		$this->chkIsReadyToGo = $this->mctGuias->chkIsReadyToGo_Create();
-		$this->calReadyToGoDate = $this->mctGuias->calReadyToGoDate_Create();
-		$this->lstReadyToGoUser = $this->mctGuias->lstReadyToGoUser_Create();
-		$this->txtObservacion = $this->mctGuias->txtObservacion_Create();
-		$this->txtReferenciaExp = $this->mctGuias->txtReferenciaExp_Create();
-		$this->txtRazonesExp = $this->mctGuias->txtRazonesExp_Create();
-		$this->calCreatedAt = $this->mctGuias->calCreatedAt_Create();
-		$this->calUpdatedAt = $this->mctGuias->calUpdatedAt_Create();
-		$this->calDeletedAt = $this->mctGuias->calDeletedAt_Create();
-		$this->txtCreatedBy = $this->mctGuias->txtCreatedBy_Create();
-		$this->txtUpdatedBy = $this->mctGuias->txtUpdatedBy_Create();
-		$this->txtDeletedBy = $this->mctGuias->txtDeletedBy_Create();
-			$this->lstEstadisticaDeGuias = $this->mctGuias->lstEstadisticaDeGuias_Create();
-			$this->lstGuiaImprimirAsGuia = $this->mctGuias->lstGuiaImprimirAsGuia_Create();
-			$this->dtgManifiestosAsManiGuia = $this->mctGuias->dtgManifiestosAsManiGuia_Create();
+		// Call MetaControl's methods to create qcontrols based on ProcessAwbs's data fields
+		$this->lblId = $this->mctProcessAwbs->lblId_Create();
+		$this->lstProcesoError = $this->mctProcessAwbs->lstProcesoError_Create();
+		$this->txtTracking = $this->mctProcessAwbs->txtTracking_Create();
+		$this->lstGuia = $this->mctProcessAwbs->lstGuia_Create();
+		$this->chkIsProcessed = $this->mctProcessAwbs->chkIsProcessed_Create();
+		$this->txtErrorMessage = $this->mctProcessAwbs->txtErrorMessage_Create();
+		$this->calCreatedAt = $this->mctProcessAwbs->calCreatedAt_Create();
+		$this->lstCreatedByObject = $this->mctProcessAwbs->lstCreatedByObject_Create();
 
 		$this->btnSave_Create();
 		$this->btnCancel_Create();
@@ -267,17 +147,17 @@ abstract class GuiasEditFormBase extends QForm {
 	//-----------------------------
 
     protected function determinarPosicion() {
-        if ($this->mctGuias->Guias && !isset($_SESSION['DataGuias'])) {
-            $_SESSION['DataGuias'] = serialize(array($this->mctGuias->Guias));
+        if ($this->mctProcessAwbs->ProcessAwbs && !isset($_SESSION['DataProcessAwbs'])) {
+            $_SESSION['DataProcessAwbs'] = serialize(array($this->mctProcessAwbs->ProcessAwbs));
         }
-        $this->arrDataTabl = unserialize($_SESSION['DataGuias']);
+        $this->arrDataTabl = unserialize($_SESSION['DataProcessAwbs']);
         $this->intCantRegi = count($this->arrDataTabl);
         //-------------------------------------------------------------------------------
         // Se determina la posicion del registro actual, dentro del vector de registros
         //-------------------------------------------------------------------------------
         $intContRegi = 0;
         foreach ($this->arrDataTabl as $objTable) {
-            if ($objTable->Id == $this->mctGuias->Guias->Id) {
+            if ($objTable->Id == $this->mctProcessAwbs->ProcessAwbs->Id) {
                 $this->intPosiRegi = $intContRegi;
                 break;
             } else {
@@ -288,7 +168,7 @@ abstract class GuiasEditFormBase extends QForm {
 
 	protected function lblTituForm_Create() {
         $this->lblTituForm = new QLabel($this);
-        $this->lblTituForm->Text = 'Guias';
+        $this->lblTituForm->Text = 'ProcessAwbs';
         $this->lblTituForm->Text .= ' ('.($this->intPosiRegi+1).'/'.$this->intCantRegi.')';
 	}
 
@@ -320,7 +200,7 @@ abstract class GuiasEditFormBase extends QForm {
         $this->btnNuevRegi->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevRegi->HtmlEntities = false;
         $this->btnNuevRegi->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevRegi->Visible = $this->mctGuias->EditMode;
+        $this->btnNuevRegi->Visible = $this->mctProcessAwbs->EditMode;
     }
 
     protected function btnProxRegi_Create() {
@@ -387,9 +267,9 @@ abstract class GuiasEditFormBase extends QForm {
         $this->btnDelete->Text = '<i class="fa fa-trash-o fa-lg"></i> Borrar';
         $this->btnDelete->CssClass = 'btn btn-danger btn-sm';
         $this->btnDelete->HtmlEntities = false;
-		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('Guias'))));
+		$this->btnDelete->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('ProcessAwbs'))));
 		$this->btnDelete->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-		$this->btnDelete->Visible = $this->mctGuias->EditMode;
+		$this->btnDelete->Visible = $this->mctProcessAwbs->EditMode;
 	}
 
     protected function btnLogxCamb_Create() {
@@ -398,7 +278,7 @@ abstract class GuiasEditFormBase extends QForm {
         $this->btnLogxCamb->CssClass = 'btn btn-default btn-sm';
         $this->btnLogxCamb->HtmlEntities = false;
         $this->btnLogxCamb->AddAction(new QClickEvent(), new QAjaxAction('btnLogxCamb_Click'));
-        $this->btnLogxCamb->Visible = Log::CountByTablaRef('Guias',$this->mctGuias->Guias->Id);
+        $this->btnLogxCamb->Visible = Log::CountByTablaRef('ProcessAwbs',$this->mctProcessAwbs->ProcessAwbs->Id);
     }
 
     //-------------------------
@@ -419,7 +299,7 @@ abstract class GuiasEditFormBase extends QForm {
         $this->btnNuevSmal->CssClass = 'btn btn-primary btn-sm';
         $this->btnNuevSmal->HtmlEntities = false;
         $this->btnNuevSmal->AddAction(new QClickEvent(), new QServerAction('btnNuevRegi_Click'));
-        $this->btnNuevSmal->Visible = $this->mctGuias->EditMode;
+        $this->btnNuevSmal->Visible = $this->mctProcessAwbs->EditMode;
     }
 
     protected function btnGuarSmal_Create() {
@@ -439,7 +319,7 @@ abstract class GuiasEditFormBase extends QForm {
         $this->btnBorrSmal->HtmlEntities = false;
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QConfirmAction(sprintf(QApplication::Translate('Are you SURE you want to DELETE this %s?'), QApplication::Translate('GuiaRoxanne'))));
         $this->btnBorrSmal->AddAction(new QClickEvent(), new QAjaxAction('btnDelete_Click'));
-        $this->btnBorrSmal->Visible = $this->mctGuias->EditMode;
+        $this->btnBorrSmal->Visible = $this->mctProcessAwbs->EditMode;
     }
 
     protected function btnHistSmal_Create() {
@@ -498,16 +378,7 @@ abstract class GuiasEditFormBase extends QForm {
 
 		// Custom Validation Rules
 		// TODO: Be sure to set $blnToReturn to false if any custom validation fails!
-		// Check for records that may violate Unique Clauses
-			if (($objGuias = Guias::LoadByNumero($this->txtNumero->Text)) && ($objGuias->Id != $this->mctGuias->Guias->Id )){
-				$blnToReturn = false;
-				$this->txtNumero->Warning = QApplication::Translate("Already in Use");
-			}
-			if (($objGuias = Guias::LoadByTracking($this->txtTracking->Text)) && ($objGuias->Id != $this->mctGuias->Guias->Id )){
-				$blnToReturn = false;
-				$this->txtTracking->Warning = QApplication::Translate("Already in Use");
-			}
-
+		
 		$blnFocused = false;
 		foreach ($this->GetErrorControls() as $objControl) {
 			// Set Focus to the top-most invalid control
@@ -529,26 +400,26 @@ abstract class GuiasEditFormBase extends QForm {
 
     protected function btnProxRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi+1];
-        QApplication::Redirect(__SIST__.'/guias_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_awbs_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnRegiAnte_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intPosiRegi-1];
-        QApplication::Redirect(__SIST__.'/guias_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_awbs_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnPrimRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[0];
-        QApplication::Redirect(__SIST__.'/guias_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_awbs_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function btnUltiRegi_Click() {
         $objRegiTabl = $this->arrDataTabl[$this->intCantRegi-1];
-        QApplication::Redirect(__SIST__.'/guias_edit.php/'.$objRegiTabl->Id);
+        QApplication::Redirect(__SIST__.'/process_awbs_edit.php/'.$objRegiTabl->Id);
     }
 
     protected function verificarNavegacion() {
-        if ($this->mctGuias->EditMode) {
+        if ($this->mctProcessAwbs->EditMode) {
             $this->btnRegiAnte->Enabled = !($this->intPosiRegi == 0);
             $this->btnPrimRegi->Enabled = !($this->intPosiRegi == 0);
             $this->btnProxRegi->Enabled = !($this->intPosiRegi == $this->intCantRegi - 1);
@@ -572,8 +443,8 @@ abstract class GuiasEditFormBase extends QForm {
     }
 
 	protected function btnSave_Click($strFormId, $strControlId, $strParameter) {
-		// Delegate "Save" processing to the GuiasMetaControl
-		$this->mctGuias->SaveGuias();
+		// Delegate "Save" processing to the ProcessAwbsMetaControl
+		$this->mctProcessAwbs->SaveProcessAwbs();
 		$this->RedirectToListPage();
 	}
 
@@ -582,7 +453,7 @@ abstract class GuiasEditFormBase extends QForm {
 		// Se verifica la integridad referencial
 		//----------------------------------------
 		$blnTodoOkey = true;
-		$arrTablRela = $this->mctGuias->TablasRelacionadasGuias();
+		$arrTablRela = $this->mctProcessAwbs->TablasRelacionadasProcessAwbs();
 		if (count($arrTablRela)) {
 			$strTablRela = implode(',',$arrTablRela);
 				
@@ -591,25 +462,25 @@ abstract class GuiasEditFormBase extends QForm {
 			$blnTodoOkey = false;
 		}
 		if ($blnTodoOkey) {
-			// Delegate "Delete" processing to the GuiasMetaControl
-			$this->mctGuias->DeleteGuias();
+			// Delegate "Delete" processing to the ProcessAwbsMetaControl
+			$this->mctProcessAwbs->DeleteProcessAwbs();
 			$this->RedirectToListPage();
 		}
 	}
 
     protected function btnLogxCamb_Click() {
-        $_SESSION['RegiRefe'] = $this->mctGuias->Guias->Id;
-        $_SESSION['TablRefe'] = 'Guias';
-        $_SESSION['RegiReto'] = 'guias_edit.php/'.$this->mctGuias->Guias->Id;
+        $_SESSION['RegiRefe'] = $this->mctProcessAwbs->ProcessAwbs->Id;
+        $_SESSION['TablRefe'] = 'ProcessAwbs';
+        $_SESSION['RegiReto'] = 'process_awbs_edit.php/'.$this->mctProcessAwbs->ProcessAwbs->Id;
         QApplication::Redirect(__SIST__.'/log_list.php');
     }
 
     protected function btnVolvList_Click() {
-        QApplication::Redirect(__SIST__.'/guias_list.php');
+        QApplication::Redirect(__SIST__.'/process_awbs_list.php');
     }
 
     protected function btnNuevRegi_Click() {
-        QApplication::Redirect(__SIST__.'/guias_edit.php');
+        QApplication::Redirect(__SIST__.'/process_awbs_edit.php');
     }
 
 

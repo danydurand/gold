@@ -4,6 +4,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 define ('__SIST__', '/app/'.$_SESSION['Sistema']);
 
+
 // $objClauSele   = QQ::Select(QQN::GuiaPiezas()->GuiaId);
 // $objClauWher   = QQ::Clause();
 // $objClauWher[] = QQ::Equal(QQN::GuiaPiezas()->LastCkptCode, 'IA');
@@ -271,25 +272,25 @@ foreach ($arrMailProc as $strDireMail) {
 // Interpretaciones
 //-------------------
 
-$strNumeGuia = '9170122-001';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
+// $strNumeGuia = '9170122-001';
+// echo 'Guia Original: '.$strNumeGuia."<br>";
+// echo 'Se interpreta así: '.transformar($strNumeGuia);
+// echo "<br><br>";
 
-$strNumeGuia = 'OHAPU-730';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
+// $strNumeGuia = 'OHAPU-730';
+// echo 'Guia Original: '.$strNumeGuia."<br>";
+// echo 'Se interpreta así: '.transformar($strNumeGuia);
+// echo "<br><br>";
 
-$strNumeGuia = '309004-1/001-001:200';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
+// $strNumeGuia = '309004-1/001-001:200';
+// echo 'Guia Original: '.$strNumeGuia."<br>";
+// echo 'Se interpreta así: '.transformar($strNumeGuia);
+// echo "<br><br>";
 
-$strNumeGuia = '168945-1/001-001:114';
-echo 'Guia Original: '.$strNumeGuia."<br>";
-echo 'Se interpreta así: '.transformar($strNumeGuia);
-echo "<br><br>";
+// $strNumeGuia = '168945-1/001-001:114';
+// echo 'Guia Original: '.$strNumeGuia."<br>";
+// echo 'Se interpreta así: '.transformar($strNumeGuia);
+// echo "<br><br>";
 
 // $strNumeGuia = '';
 // echo 'Guia Original: '.$strNumeGuia."<br>";
